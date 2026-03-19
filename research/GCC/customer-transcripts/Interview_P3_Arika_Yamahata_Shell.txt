@@ -1,0 +1,153 @@
+﻿Interview_P3_Arika_Yamahata_Shell.mp4
+
+
+Yeah. So I I I can give you maybe just a little bit of background about myself first and um just around the uh the research and and about the this um this uh 30 minute session. So um so again, thanks very much for your time. My name is David Denham. Um I'm a product manager on the workday recruiting team based here in Dublin in Ireland. Uh been with the recruiting team for about three and a half years now. And um yeah, so I'm conducting basically these 30 minute uh interviews or conversations to learn about how hiring is run in the Gulf Cooperation Council or GCC region. So those countries in the in the GCC region and basically to understand how workday can better support um support that it's something I know workday is growing in in the region at the moment as well. So um so yeah, we're just trying to understand from from our customers um kind of the the current state of play and then you know understand any opportunities to to help uh improve it. So your your candidate feedback like I mentioned will be highly valuable uh to help improve the the product to help meet those those local needs um in the region. So um hopefully that makes sense just in terms of the the the purpose of the of the the meeting. Does does that make sense?
+Yeah. Yeah, it very much does. Though I think the disclaimer that I have, David, is I could give you to some specific insights on the country but where I do
+have expertise on is on on the very much global because in nature
+that's um that the scope that I manage I I look after the resourcing exper recruitment experience
+for the entirety of shells so not just the GCC countries
+perfect okay again I think that that would be useful because um I think even with the customers I've I've spoken to so far there's some some needs there that are more global in nature and then some things that are more specific to to the region. So be it things like legal um or compliance um considerations or could be things like communication channels like WhatsApp or SMS things like that. So yeah absolutely. So um I I would say um although yeah I think probably the the core focus will be GCC if there's anything that is you know more globally focused that that's okay as well. Um so so yeah maybe Could you could you tell me a bit bit more about your your role there?
+Yeah, so I'm currently the product owner for talent and resourcing. So that means I work with my team to manage the talent and resourcing landscape and majority of that chunk has a lot to do with workday and we actually try to maximize um utilizing workday for our talent and resourcing um needs in the company. So I think in workday that specifically transl ates to the core talent functionalities and then for rec recruitment that's the talent acquisition suite
+and we've for for both these SKUs we've been using them since 2020.
+Mhm.
+So we are five years strong um with workday.
+Great. And um yeah so so it sounds like you're you're um you're you're you're using uh a few of the skills from from workday including talent acquisition which is which is great. Um what what other teams like would you work um with the talent acquisition teams there or what other teams would you typically work with there?
+So I do work with the entire integrated resourcing community or the organization wherein our recruiter sourcers our map they also include our center of excellence for resourcing as well in that organization. Then we also have our operation team supporting the scheduling of assessments and also the actual hiring or extension of offers and making sure that they are on on seat by day one. So it's a lot of interfaces actually um from from the recruit the resourcing core specific space. Um but also in in my in the organization I sit in that's what we call the HR digital space. So I do have
+dev ops members or analysts that report directly to me but I also have some DevOps engineer that sit on the IT space but overall we are we make up this one scrum team and in this big scrum team recruitment is one of the portfolios that we deal with.
+Okay. Okay, that makes sense. So it's quite varied in terms of all the different teams you interface with uh by the sensor. Uh and I think you mentioned offers I think uh that's one of the areas my my team um actually looks looks after directly as well. So uh yeah. would be keen, you know, if there's any um any opportunities with in in that space as well. Uh yeah, no, that makes total sense and again thanks for the thanks for the the context. Um yeah, so so maybe um I suppose just just kind of very very simple question to get started like what what do you what do you like about workday recruiting today and maybe where does it where does it fall short? Um and again maybe take it into account the the GCC countries um you know if there's any any specifics uh around around those?
+Yeah. So overall I I do think workday recruiting um really does help us manage the end to end candidate journey and I also just want to point out as well um external resourcing um and our internal our internal change job movements they are dealt with um by separate teams where In the external ambit it's really our recruiters and sourcers and then in the internal ones it's driven by our line managers. So that's a key difference that I just um need to point out because I think in the peer companies that I've spoken to they get surprised that oh line managers get to drive internal resourcing um and then then there that's there's that clear delineation that we have in Shell that I find um apparently it's very very much unique um in in our company. So I do we do appreciate work being able to accommodate
+um those these types of recruiting instructions. That's how to be just really specific. We're able to different the workday is able to accommodate how we want to
+um fulfill our people's strategy from a resourcing perspective whether it's internal talent or external talent management. Um and of course when what we're also in the process of having that full integration in terms of after you know after you
+uh secure your talent um how do you develop them so it's that end to end
+suite of how you build by borrow um and I believe workday is a key lever to enabling that so I really like that I think for my organization specifically where we've encountered
+is um difficulties and challenges with workday is its reporting
+functionality
+yeah
+so I've shared this I think with other calls with Linda um Gareth um that we did have to resort building a dashboard separately um in care of PowerBI
+because the dashboard
+capabilities of workday was not able to accommodate what we we needed um for for the organization and because we wanted um we we wanted to have that quick overview of the types of um recruitment instructions um coupled with our big lines of businesses
+um the location and management lab etc etc. So
+um we did need to to sort of um move away um from work day because I think at the point of 2022 2023
+the reporting capabilities and the cap capabilities and the dashboard capabil of work they were were not yet as mature and I think it's also not a space wherein um it's it's still at the place that we could move however how we of course even if we are in the PowerBI space
+we still need to keep that discipline on making sure our requisition data candidate data are all up to date real time so that falls into our users whether they're recruiters or specialists whoever
+yes uh you know that that makes sense. Um it is feedback I've I've heard previously as well. So it is something you know I think we'll we'll um you know discuss with our reporting team as well just to just to understand you know what their kind of roadmap plans are to to improve um that. Um so it sounds like a few a few things there in terms of like reporting needs like overviews of types of instructions um different different kind of lines of businesses location management level, things like that. So, there's very, it sounds like there's quite specific things you need that you need to export out of out of workday into PowerBI at the moment um in order to kind of get quick and easy access to. So, that makes yeah that that makes total sense. And I suppose who with those type of reports um would they be for leadership or like what uh who would the audience
+across the board I would say. So, even from our operational team so the actual recruiters and sourcers and their their needs.
+Um, having that granular view per requisition and per candidate on
+how much time it takes for you to review someone and move them to this to the next stage, etc. up to having that bigger overview on a on an annual basis or on a monthly basis, which business lines of business do we have a high high demand on? We have that everything in in in the PowerBI dashboard.
+Yeah. No, that that makes total sense. So, you have a few different kind of ST holders there. But the by the sounds of it um as the the consumers of those dashboards uh you know that makes total sense I suppose just um relating to the GCC region are there any reports that would be specific for those? Um I know for example one thing I've heard in the past is um nationalization quotas. I know for some of the countries there I'm not sure if that's something that that you know the the teams there need to need to review or is is there any specific reports that would be specific to any of those countries or would it be more of a global thing
+for well for sure we have a global thing that we we look into and I think to also know what David the the GCC countries do fall into a type of recruitment uh a a recruitment instruction or a a specific recruitment group that we call franchise and the franchise group
+um companies or countries that operate wherein shell um has a a share together with another entity um that's where it it falls. So
+in the GCC areas we do have lots of joint ventures etc. So that's why I I just need to point out that the GCC countries belong into this franchise country and Italy why do we classify we have to separate them from the global
+um uh recruitment type is because they do follow different a different model operating model. Um because their organization from a share perspective it could be different from a typical shell entity.
+Um so in these franchise countries their operational setup could differ. So for example in one country could just have one recruiter and then they use agencies. So they don't really follow they it's not that they they don't want to follow the the global standard but it's because they their operating model actually requires them to operate on a very different manner. Um, and there's also very local variances that we're not able to
+roll up to from a global perspective. So, I just had to to point that out. And when it comes to reporting, I am sure they also have
+um reporting local specific reportings from their end um that they they they need to fulfill especially from a legal perspective. I won't just be able to give the the specifics um but I would ec work day on that specific instance because I've also seen this in other countries
+workday would just be a data source and then they'd also have to do some manual um bits on their end especially from a from a franchise perspective
+wherein the number of openings that we manage externally posted and internally internal they're also very few
+um they're already few o overall based on what we've seen year by year so far. But I'm sure for the for these countries because they're they're franchise countries, it's the the the number or the demand that they have would be a lot smaller. So I think that also allows them to have a little bit of more of a manual
+um manual management of the the reports that they need to to manage to fulfill for from a legal from a local government requirement perspective.
+Okay. Okay. No, that makes sense. Um and yeah, so it sounds like they they have a you know slightly different operating model you know with those franchises
+uh there's fewer openings I think you mentioned as well overall would do you know if the nature of those openings would would they be different like in terms of the the skill sets you know for other regions or is it just the volumes are are just lower?
+Um so I would say overall there I mean the volumes are overall definitely low. Yes. Yeah.
+Um, but if I because I that's also the beauty of our dashboard. We're able to
+to zoom in quite um quite fast. I do just need to remember um what the countries are. So I believe they're uh wait there's there's bar.
+It just also loads a little bit. We don't have barin. Um we don't have any I don't think we have any footprint rather we have Wait, we have Oman. Um, I'm just also checking if we do have for the year Qatar, Saudi, and UAE.
+So, I do I don't think for the year we do have
+any significant demand for for the space actually.
+Okay.
+Um, David, so I'm just think going to check his a little bit of a historical context. So, I don't think
+it's quite captured because
+yeah
+if they're not here it might it might mean that they are again operating
+yeah
+on on their own local context as well
+yeah no that that's totally fine and and no worries at all like you know if you don't have numbers uh around that um yeah and I suppose another thing I was curious about was um I suppose localization in terms of things like language support um you know things like um We know I know some global uh some different countries have different resume formats, different address formats, things like that. I was just curious um is is that something that that's come up for is that something you've seen in terms of any any global challenges or anything you know you see with the the GCC countries I know for example um you know Arabic and English would be you know commonly spoken in in some of them.
+Um have you come across any localization um pain points um with with with any
+yeah
+I think for for offers specifically the Arabic countries I think work day docks in specifically we we had challenge and not only with the Arabic letters right um that's also true for Mandarin at the time that it was just only accommodating your typical alpha numeric
+characters but I think for the Mandarin one we we've got to solve it but we do have those
+um issue come up when we were trying to actually utilize um workday docs um to migrate how we automate our offer letters and that was a pain point and that was obviously a blocker because it would just be squares rather than the actual characters.
+Um in terms of the the the CV format um I or um or anything else I think that I could recall at least when I I by the way I also just um got high I I officially was on seat last year of August. So my Yeah. So it's it's still pretty much new, but these are the things that I've already
+um noticed. Uh aside from the characters, I I do think in terms of um we we don't have any issue on the CVs.
+Um but we just because it's still pretty much within our control. If for example, if there are questions that we are supposed to ask or we're not supposed to ask, then it's very much manageable with workday when editing our questionnaires, right?
+Um where we do have um I would say pro specific to the GCC countries. My suspicion is um because I I don't think we have an active demand based on the system.
+So if they have anything because at at times David in my experience also I because I've I've also had a stint in Pakistan.
+Mhm.
+So in a franchise country because if does you don't you're not subject to follow 100% of the global process.
+Yeah.
+And for good reasons as well. It could be a budget budgetary constraint or your operating model just you know can't afford it. Then for for these countries I suspect they are dealing with this offline. Um I don't think they have a a different system. I do have other countries in Europe that are classified under franchise system that were that operate or use a different application system or a different ideas for their for for their internship or whatn not that we're actually trying to take out because we're trying to push everyone to really utilize our investment in workday.
+So for the GCC country specifically, I don't think we have that issue but it is still a concern for franchise in general that they are doing things
+um outside the the system if they're dealing it with it via email because emails do always have that risk of CVS getting out of the out of hand um accidentally
+sharing it um to to others etc. So that's where our
+forever ongoing concern is the the space of compliance with managing candidate data.
+Yeah.
+Gotcha. Okay. So you know trying to like it sounds like trying to
+trying to keep things like emails within the system better from a compliance point of view. Um you know maybe if people recruiters out sick, someone else maybe, you know, can can follow up as well um on on on that record. So um makes total sense. Um I was curious as well in terms of communication channels with with candidates. I w I wondered if you know like what would be the typical channel like I know you know different countries. I know um for example I know Japan
+Japan I think line and email and I think in in uh in in here in Europe, things like WhatsApp would be very, you know, very widely used. Would you know in the GCC region like what would typically be be used there to communicate?
+I think it's it's emails and actual phone uh text because yeah, I'm also referring back to my my state in Pakistan. I I don't I know that they're not, you know, part of the GCC
+um officially, but within that region, what I have also come to learn is
+texting and email are still pretty much um use. I don't think they they do have a messaging app. And also
+because of all the um the scam the scamming gimmicks around, we try to also keep it official. So, we just avoid the company name being compromised.
+Um because we still have lots of um
+scammers uh that posts as someone from Shell. Um even in in Linked and we try to be careful because of course people add us in We just have to be vigilant. So from a messaging perspective, actually I don't think we're also supposed to use WhatsApp for our European recruiting counterparts because it's WhatsApp also has been um classified as something that we just we can't use for official business um um purposes which is actually a shame because we we we are we saw um hired hired score right and it there's an integration so What we try instead is of course like again email, text or just um yeah trying to to to communicate directly with with the candidate because we
+want to assure them that throughout there you're talking to someone authorized from Shell.
+Yeah. Uh yeah. No, that that again I think that makes total sense. I think it's uh also interesting. I know one of the future enhancements my team is looking at is um two-way birectional email with with in workday. So to be able to ingest emails into workday that's you know something we've heard in uh regions like Japan as well uh you know and again I think it probably rel relates back to one of your previous points around compliance and you know keeping everything in the system. So um that makes sense and it sounds like from a shell perspective you know that's kind of a policy in terms of not using not using WhatsApp. So again I think that's that's that's useful to useful context.
+Yeah. So we try to also um I mean we could also use our mobile. There's there's no strict rules about it as long as we're able to of course verify our I our identity and of course eventually course them through the proper the work contact and business email contact. Um but we also try to use MS teams. Um we do have our official numbers there. So even if you're not a recruiter that's also what we are asked to use um if we're representing Shell and we need to contact someone external.
+Yeah. Yeah. Yeah. No, that that makes sense. Um yeah, maybe just in the the few minutes we have left, uh I know you mentioned reporting like that seemed to be kind of a key um opportunity area there. Are there any other areas and I suppose just thinking of the the the GCC again be it around legislation or um you know things like uh you know restrictions around contacting candidates you know I know sometimes that's that's the case for for different regions or any other considerations we should be aware of. of you know as we're thinking about the the GCC region
+I think um this is al this is probably applicable for all the so not only the GCC countries because globally in in Shell
+um because arguably we do have a a good brand reputation so
+we do attract lots of candidates and I think the struggle is really being able to know um across all of the hundreds of CV that we we get knowing immedi who we should be paying attention to. So that's why I mentioned earlier we're looking at hiring score etc.
+Um because we're trying to understand if that would be helpful because we do have a high application volume but we do have a low number of of job openings.
+Yes.
+Um so that is one way we're thinking of dealing with but I would say it's not super urgent as it used to be because again we do have a
+a few number of jobs. jobs compared to the past 3 years. But that is something that I I keep on parroing back because I I think in the ver in the face of AI that is something that we're
+that a good opportunity. Um
+right. So that is what we we have um as an item on you know where we could
+improve on or what we're we're looking into at least on in terms of digital opportunities for resourcing.
+Great. Yeah. Know And I think it's it's something I've heard very commonly from customers that kind of pre-screening stage where you're getting loads of loads of CVs coming in um where hard score Yeah. and AI can can can really help there. So um yeah, it makes total sense and I think that you know I'm sure the the the number of countries that you know Shell Shell is in um will have kind of varying volumes as well. I think you mentioned like probably for GCC it's lower volumes for maybe for other other regions it's higher volumes. I think again maybe that's where higher score could could assist. Um, yeah, that that makes total sense. Yeah.
+Y
+and David, maybe an additional because GCC countries mostly are situated in the Asian region, right? So,
+and also in the Middle East wherein they're so conservative. So, there is a mass difference that I've observed wherein for your western counterparts there is that big of bigger of an obligation to make sure you have your ethnicity targets, your gender targets
+in the GCC region. I I'm not I'm not saying that it doesn't happen, but it really is a more meek and conservative approach to it. So, it's not as
+um demanding. That's why the at least from where I sit the demand to act upon those requirements largely lies on the the western countries.
+Um but we do get some from from the Asia region like with Malaysia on their um their their ethnicity concerns as well based on their legal legislation. We also try to act on that
+but we try to again streamline where possible because we can only harness the or we can only evolve with market standard if everything is um or most of the things are very streamlined and so we try to avoid country variances as much as we can but of course we honor them where we need we really need to.
+Yeah. Yeah. That that that makes total sense. Um May maybe just one last one. H you mentioned I suppose the you know you know they might have obligations for ethnicity targets and things like that in in GCC. Do you know if uh or would you happen to know off hand? Do would that be a use case where they'd need to export into the likes of PowerBI or do you know how they report on that? Like is it something they're able to do within workday recruiting? I was just curious.
+I'm not I'm sure not. I'm not I'm very sure it's not workday but I am I my suspicion it's going to be more of Excel, not PowerBI because in in in the current climate that Shell is in, we are really big on um taking out um manual work and I think for such a small volume, they won't be able to
+use PowerBI because the data is really is really small. I don't think they even hit 100 in a year. So that's very much, you know, crunchable within Excel. So I would say they would do it. It would almost be a waste of investment if they invested into a new tool. And again, we really discourage
+any country, even if they're franchise, to buy a buy a new tool for to serve their very um fixed volume um for for their country because that's still money spent by the company. And again, we're just trying to focus everything on workday because if you have everything in workday, you can report it um
+from different um cuts of data.
+Yeah. Okay. Yeah. That that again makes sense and probably goes back a little bit to um some of the earlier topics in in terms of um not just reporting but also like keeping things in the in the one system as well. Um
+yeah.
+Yeah. No, that that makes sense. And sorry, I know we're we're just over so I'll I'll
+Yeah, no worries.
+I I I'll let you go. Is there anything else before we finish up you wanted to share?
+No, I I think that's it for now, but David, I if you think of anything and I didn't cover it, you can just let me know when we need to. speak again. I would be happy to oblige. Of course.
+Yeah. No, I really appreciate it. Again, it was super super valuable uh context and thanks again for kind of talking through those different different use cases. Really really appreciate it.
+Thank you, David. Nice to again meet you.
+Nice to meet you, too. See you. Bye. Bye.
+Chat
+🕌
+GCC Product-Market Fit Research - Recruiting
+11 sources
+The provided sources offer a comprehensive analysis of the Recruiting Technology market within the Gulf Cooperation Council (GCC) for 2024-2025. They highlight how nationalization policies, such as Saudization and Emiratization, act as primary drivers for the adoption of sophisticated Applicant Tracking Systems (ATS) to ensure regulatory compliance. The research identifies a significant shift toward AI-driven automation, mobile-first candidate experiences, and a heavy reliance on WhatsApp as the dominant communication channel. Competitive analysis compares global enterprise solutions like Workday, SAP, and Oracle against regional specialists like Bayt.com and Talentera that offer superior Arabic localization. Furthermore, expert interviews and PESTEL data outline the challenges of data sovereignty, complex labor laws, and the unique demographic duality of a young national workforce alongside a massive expatriate population. Physical data residency and hyperlocal compliance features are presented as essential requirements for technology providers looking to succeed in this rapidly expanding market.
+How do Saudization and Emiratization policies impact recruiting software requirements?
+Why is WhatsApp integration considered essential for hiring in the GCC?
+How do regional ATS competitors like Talentera compare to global giants?
+11 sources
+Studio
+Audio Overview
+Slide Deck
+Video Overview
+Mind Map
+Reports
+Flashcards
+Quiz
+Infographic
+Data Table
+Prompt for Interview slide141d ago
+The Talent Journey in Workday
+10 sources · 166d ago
+Human Capital Management
+10 sources · 166d ago
+NotebookLM can be inaccurate; please double check its responses.

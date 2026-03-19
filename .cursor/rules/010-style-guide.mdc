@@ -1,0 +1,152 @@
+---
+description: Style guide and product context for all Product Manager Agent outputs
+alwaysApply: true
+---
+
+# Product Manager Agent Style Guide
+
+## Language & Style
+
+### British English
+- Use British spelling throughout: analyse (not analyze), optimise (not optimize), realise (not realize), colour (not color), labour (not labor), centre (not center)
+- Date format: DD Month YYYY (e.g., 17 March 2026)
+- Use -ise endings: prioritise, recognise, summarise, visualise
+
+### Punctuation & Formatting
+- **No em-dashes (—)**: Use hyphens (-) or commas for parenthetical statements
+- Use single quotes for emphasis unless nested quotes required
+- Use bullet points (•) for lists, not numbered lists by default
+
+### Tone
+- Avoid AI-sounding patterns that signal generation
+- Professional, direct, data-driven
+- No unnecessary superlatives or marketing language
+
+## Product Context
+
+### Workday Acquisitions (Assumed Integrated)
+
+**HiredScore** (acquired, assumed integrated)
+- AI-powered candidate screening and matching
+- High-volume candidate prioritisation
+- Built into Workday Recruiting workflows
+- Activate for customers; do not treat as separate add-on
+
+**Paradox** (acquired, assumed integrated)
+- Conversational AI for candidate engagement
+- Interview scheduling automation
+- Self-service interview booking
+- Embedded in Workday Recruiting UI
+
+### Jobs Board Strategy
+
+**Workday does NOT build direct job board integrations.**
+
+Instead, Workday partners with **Broadbean** (certified partner) for job distribution.
+
+**When you find job board gaps:**
+1. Search Broadbean's website (broadbean.com) to verify if the local/regional job board is supported
+2. If Broadbean supports it, Workday has coverage via partnership
+3. If Broadbean does NOT support it, flag as a gap with recommendation to request Broadbean add it
+4. Common Broadbean-supported regions: UK, US, EMEA, APAC, GCC
+
+**Example Job Boards:**
+- GCC: Bayt.com, GulfTalent, Naukrigulf (check Broadbean support)
+- UK: Reed, Totaljobs, CV-Library
+- US: Indeed, LinkedIn, Monster
+- APAC: JobStreet, SEEK
+
+**Do NOT recommend Workday build native job board integrations.** Always check Broadbean first, then recommend partnership expansion if needed.
+
+## Research & Analysis Standards
+
+### Citations
+- Use authoritative sources: government sites, Statista, Gartner, Forrester, McKinsey, Deloitte, Mondaq
+- Include URLs where available
+- For customer quotes, cite participant anonymously (P1, P2, P3) with company name
+
+### Participant Anonymization
+- **Customer interviews:** Always anonymize participant names as P1, P2, P3, etc.
+- **Preserve:** Company name and job title (e.g., "P1 - Senior Recruiter, Accenture")
+- **Apply consistently:** Reports, slide decks, triangulation matrices, quotes, all documentation
+- **Format examples:** "P1 (Accenture)", "P2 - HR Director, Baker Hughes", "P3 - Talent Acquisition Lead, Shell"
+
+### Product Recommendations
+- Assume HiredScore and Paradox are integrated; recommend activation, not integration
+- For job boards, check Broadbean coverage first
+- Prioritise native Workday capabilities over third-party tools where feasible
+
+## Deck Generation
+
+### Slide Content
+- Use British English spelling throughout
+- Replace em-dashes with hyphens or commas
+- Keep bullets concise; avoid run-on sentences
+- **Product Implication** (PESTEL and similar slides): Bold, same font size as bullet text above, highlighted bright yellow (FFFF00). Format as separate paragraph below bullet lists, starting with "Product implication:"
+
+### Formatting
+- Content position: Body text `top_inches: 1.2` (not 1.6) to avoid excess gap below title
+- Title case for slide titles
+- Sentence case for bullet points
+- Numbers: use commas for thousands (e.g., 9,922 not 9922)
+- Percentages: 79% (no space before %)
+
+### Speaker Notes (MANDATORY for content slides)
+- Add `speaker_notes` to every content slide except: TITLE, Section Title, Bumper Slide
+- Format: Bullet-pointed presenter guidance, then a "References:" section with live, working URLs
+- Example:
+```
+"speaker_notes": "• Key point to emphasise.\n• Second talking point.\n\nReferences:\n• Source name: https://example.com/live-link"
+```
+
+### Chart Styling
+- **One label per bar:** Use exactly one series for simple bar/column charts so each category has one bar and one Y-axis label. For stacked bars, use `bar_stacked`.
+- **Font sizes:** Always set `category_axis_font_size_pt: 9`, `value_axis_font_size_pt: 9`, `title_font_size_pt: 10` to keep chart text readable
+
+### Table Styling
+- **Font size:** Use 7-9pt for table content to maximize readability while fitting content (7pt for dense content like SWOT)
+- **Headers:** Navy background (`ink` color) with white text (`paper` color)
+- **Header height:** Use `header_height_inches: 0.25` for compact headers (especially SWOT analysis)
+- **SWOT Analysis tables:** Use two separate tables (one for Strengths/Weaknesses, one for Opportunities/Threats) to ensure both have proper header formatting
+- **Positioning:** Start first table at `top_inches: 1.0`; position second table at `top_inches: 3.15` for proper spacing
+- **Table heights:** Use `height_inches: 2.1` for SWOT tables to accommodate content
+- **Example SWOT structure:**
+```json
+{
+  "tables": [
+    {
+      "rows": [["Strengths", "Weaknesses"], ["content...", "content..."]],
+      "top_inches": 1.0,
+      "height_inches": 2.1,
+      "font_size_pt": 7,
+      "header_row": true,
+      "header_bg_color": "ink",
+      "header_font_color": "paper",
+      "header_height_inches": 0.25
+    },
+    {
+      "rows": [["Opportunities", "Threats"], ["content...", "content..."]],
+      "top_inches": 3.15,
+      "height_inches": 2.1,
+      "font_size_pt": 7,
+      "header_row": true,
+      "header_bg_color": "ink",
+      "header_font_color": "paper",
+      "header_height_inches": 0.25
+    }
+  ]
+}
+```
+
+---
+
+## Application
+
+This rule applies to:
+- All PMF research reports
+- Slide deck generation
+- PRD documents
+- Roadmap recommendations
+- Internal documentation
+
+Always apply these standards unless explicitly instructed otherwise by the user.

@@ -1,0 +1,133 @@
+﻿Interview_P2_Mahboob_Khan_Baker_Hughes.mp4
+record. Uh yeah. So, so just wanted to check first. Uh is is um does does that make sense just in terms of the the purpose of the meeting?
+Sure. No, absolutely. I think it does make sense and I'm happy that we actually kind of um got in touch um and I'm I'm again I'm happy to to share feedback. So just to
+give a quick intro about me first.
+Sure.
+So uh you already know my name Khan. I am part of the global t ition team in Beaker Hughes uh and I've been with Bey Hughes/G because it was Beu used to be part of G at one point for last 15 years within talent acquisition uh my current role is uh performance and innovation manager so I look at all of the tools and technology um analytics reporting process and so on for big use globally um so I'm kind of the let's say the functional theme when it comes to work there we do have a technical workday team that we work with that I closely partner with, which is where I which is the team that you you guys probably work with more closely, the technical product team. So, I'm kind of the functional owner from a recruiting side for that for that team.
+Um, and I've been working with uh that team for the last I would say three three years or so uh closely on in terms of the all the changes, enhancements and and those kind of things that that we do in working.
+Uh but yeah, I think it's it's good to connect with somebody on workday site directly and and kind of have this interaction. Um, so yeah, I think it's good. Look, I mean, again, I think from a workday standpoint, I've been with Baker when we launched workday back in 2020. So that's when I think we went live with workday.
+Now I I know that workday's core strong suit is the ATM, right? So ATM was kind of their core um kind of the I think that's where their strongest suit I would say uh the end of it. And I know that you guys are now trying to build different modules and bringing in more capabilities within and recruiting being one of them.
+So um I would say from a when we migrated and I think it was definitely changed for everybody uh where from moving from TEO which was basically a standalone ATS to a
+environment which was all inclusive including an NCM everybody being part of the same workflow. I think it was um I would say uh positive in the sense you did not have to deal with multiple systems and we used to SAP Oracle and so on. So in that way everything being part of one ecosystem was definitely helpful for for us
+but it also meant that purely from a if I'm being purely talking about as a recruiter
+uh that also meant some limitations because we could not touch something because it will impact downstream HCM or some other modules.
+So in that regard there were I would say some restrictions that came with it. Um
+but all in all I think it's been a good journey.
+Um if and I' I've been trying to collect some feedback from the team as well. Right.
+Oh brilliant. Okay.
+And so on.
+Yeah.
+Now if I think around it there are I would say two main themes that I can think of from a recruiting standpoint. Right. Or the recruiting model.
+One is around the interface I would say right especially around How easy is it to navigate through the information on
+let's say if you go into the candidate grid for example. Yes. Right. So now for example some of the kind of the basic example is I think I think the information is good but you have to navigate through different tabs to for some of the information. So some of the let's say if you want I want education I have to click on a different tab. Then I want to see the CV I have to come back on a different tab.
+Sure.
+So that feedback was from mo most from most of the recruiters was Uh can it be more seamless in the sense that rather than having go through multiple different tabs, can most of the important information be integrated in integrated into a single tab or in a more seamless way so that they spend less time trying to navigate through different um because again imagine when they're trying to go through 100 candidates or 200 candidates it's going to be
+it's definitely going to be kind of time consuming. So
+makes sense that I would say the interface or the kind of the how seamless the interface is for recruiters. I think that's was one common theme that came across from the team that uh and I've kind of experienced that as well. Right. So which
+so that that definitely was one
+um that where what can we do to make it more intuitive or seamless for the recruiters to access the critical information they want to see being in one place versus having to navigate to multiple places. Yeah,
+the other one I would say was around um the search functionality or capabilities, right? So
+I know we have some search capabilities like basically the standard ones.
+Mhm.
+I don't think the boolean search is that strong on workday, right? Or or there needs to be a lot more
+u kind of options like what previous company or like different I mean different combinations or I I would definitely want to see a much more um improve boolean search capabilities within workday
+and I think uh what goes hand in hand and again this is what we are seeing with a lot of the other tools as well right because we also have a a CRM that we use phenom uh with workday and I know most and we are also trying to bring in different technologies
+one of the things that we are definitely really trying to look at is AI assisted searches so for example
+uh I I'm looking at a wreck I have let's say 20 candidates
+right
+but we have two million candidates in our workday database
+right
+can I see who else is matching that requirement for example uh and those are some of the I would say some of the things that we are looking at again I don't know if those are things on your road map or not again I can't I I would know that but
+those are some of the things from a recruiter standpoint would be important
+to make their life easier to say hey can I look at all of the people in our database can the system match and show me uh for example who are the people that have not applied for this job but are matching that that particular
+that makes sense.
+So that was that was one of the other pieces uh because I think uh we're definitely that's an area I think of of improvement um uh from kind of a search functionality or how we can make recruiters life easier I would say.
+Perfect.
+Uh so that definitely was one more one theme. Um the other one was and again we exploring we have explored different options uh with this with different vendors and we are looking at different option is
+u I think
+we tried to utilize the workday scheduling capability the workday scheduling capability but
+yes
+uh I I f when we and we did a de we did a kind of a test phase as well with that um but it it felt more complicated than scheduling a meeting via Outlook. So yeah,
+I think our intention was can we ensure that the recruiters don't have to go to Outlook and can they do it that part of workday.
+Um I I think that uh that other that would be the other piece from a from a recruiting standpoint. Um where if we have a much more again I don't know how you guys are working with different partners or how much integration we have at this point from Office 365 and so on.
+Yeah, you guys are on that front. But I think that's the other area which I think is uh going to be from a productivity point of view, it's going to be important if we are able to build that rather than people going into different systems and trying
+perform tasks.
+Yes. Yeah. No, absolutely. First of all, thank you so much for the for the feedback. That's exactly the the type of feedback I was I was um I was looking for to kind of understand where those where those friction points or gaps are um that that your team are are seeing. So um candidate grid yeah it's it's definitely something we're we're aware of. It's you know I think it's it's something you know we've heard from other customers as well. So how can we yeah how can we improve that experience without having to have you know multiple tabs open or copy and paste and things like that to um you know to to find specific bits of information about candidates. So makes makes total sense. Um search functionality I know on the on the AI side and particularly around like sem semantic search that's something as well you know we are looking at at the moment um in terms of you know at the moment you have to be very specific with you know certain words and things like that um and you know particularly for their languages as well so we are yeah I suppose we are looking at how AI AI can improve that and um interview scheduling and again very candidly it's it's definitely not the first time uh we've heard that um One thing we are excited about, we we have recently acquired Paradox who would be kind of uh they've been a certified integration partner up until now and um it's it's you know it's a it's a integration a lot of our customers have been using up up until now. So you know they're going to be coming into workday now. So I think for a lot of those more um beyond the basics uh interview scheduling uh capabilities that that are there at the moment you know to negate that need for recruiters to go into Outlook, you know, that's definitely something again top top of mind for us. Um,
+I think that that would that's a good move. I again I think we we did see a demo from Paradox previously and I think we even recently got part of the RPO solutions. Paradox is good.
+Uh I think as a standalone scheduling service they were very expensive which is why we could not let's say we could not afford them as a standalone product but if they integrated in both it is packaged as kind of a kind of a package deal. I think that might be more enticing for for customers as well if I think right because I think uh yeah that was I think cost was the main reason previously we could not go for
+the paradox solution but yeah if you if you're integrating that as part of work ecosystem I think that might be a good definitely a good option to if you're promoting that as the primary scheduling solution as part of the workday ecosystem that might that might work um yeah the I think yeah I think those Those are some of the things that are good because I think for example we have seen this with other like when I talk about AI
+for example with some of the other products we have seen wherein you get into the rack it shows you your candidates but it also shows you here are people in the database that you we think will match with you just a different tab
+and again I don't I can't say if it works 100% because I don't think nothing works 100% accurately at this point
+but I think something like that would I I think would be ideal in in a workday environment as well to help uh recruit users with like finding candidates rather than trying to go and run searches separately on trying to integrate that I think would also be I think beneficial.
+Yeah, absolutely. Um I again just being totally candid, it's something that just got announced a couple of weeks ago. So I know we're we're early days and uh I believe there's actually a workshop in in um in Pleasant in our HQ over the next couple of weeks in terms of um how we're going to integrate that and what the future of that looks like. But um very very excited like I think again we we know interview scheduling has been a a common pain point for for many customers. So I think there's you know definitely a lot of possibilities there as to you know how to remove having you know yet another um add-on bring that into bring that into recruiting and kind of you know use the power of of of some of their kind of best-in-class AI capabilities to to help with that process which can be quite manual. Uh you know I think as as you mentioned So uh so so yeah, more more to come on that, but I I think it's it's hopefully moving us in in the right direction in in in terms of interview scheduling. Um yeah, I suppose just just a couple of follow-on questions to to those. You know, I think there's you called out some some kind of key areas there for for the for the recruiter. Um I was curious from a uh like GCC specific point of view um if there are any uh considerations or challenges specific to the region for uh you know in those areas. So um for example uh around like scheduling interviews are you know in um in the UAE or in Saudi or any any of the countries there are there any specifics that you know maybe we should consider as as we improve our interview scheduling capabilities um search uh things like language localization and maybe just throw out uh candidate communication um something we're looking at at the moment is is uh is WhatsApp uh which we've heard um from some of our initial research you know is quite you know widely used in in the GCC region. So I suppose yeah market specific you know any kind of local things that we should consider um around the you know the recruiter flow.
+Yeah I mean so I mean from a communication standpoint I think um having something like a WhatsApp or other communication methodologies would be helpful especially in markets like GCC and Saudi and and so on. uh we have tried to use it with other tools uh for example so we do use WhatsApp for kind of uh campaigns and also for general communication uh by phenom at the moment
+so I think that's definitely because at the moment the again you do have the campaign functionality in workday but that is limited email campaigns at this point
+so I think those additional uh additional kind of uh options would be helpful from a communication and and campaigns point of view. Um I think the other piece I would I would say is um especially around recruiting, marketing or or kind of managing that whole piece. Uh do you guys have any any plans on that or or is there anything that you're developing functionality in terms of being able to build templates or then trying to uh develop something like that?
+Yeah, I suppose is is that kind of from um that CRM point of view you were thinking
+yeah so we do we do actually as part of our latest uh release we did for candidate engagement uh part of the product um I know we have delivered uh templates so it's kind of a wizzywig builder uh where uh you know a recruiter can create a you know nice uh email uh communications and you know personalized and um in kind of a uh rich text format and and things like that. So, um I can I can certainly share more details on that if if you're interested as well. Um but it is yeah, it is something you know we're we're actively trying to trying to improve to improve the kind of those marketing capabilities with within candidate engagement.
+Okay. I think yeah that that that's another area which I think it's is good. Again, I think one of the things that and And full honesty, I think all of the organizations are trying to control cost and everybody wants to reduce the dependencies on different tools.
+Uh especially our DT team wants to have as many as less tools as possible because it
+sure help them it makes their life easy to manage it. So the more things are in one ecosystem, the better it is for
+from my customer point of view rather than having to deal with workday, phenom uh like further systems. If some of those capabil are in one system that makes sense that easier.
+Uh the other other area I would definitely say where
+we we think there is a room for improvement is on the uh career site
+uh career site
+uh which I know currently cannot be branded in the sense we cannot get a big user of.com benefit type career site
+so we are now using currently using a phenom solution for career site
+and For example, specific to bake use situation uh because we had some downstream issues with because of the how the data flow between phenom and
+and both day uh we had to move go to a apply redirect solution wherein
+somebody lands on the career side.
+Yeah.
+They click on then they land on workday career site
+then they apply for a job.
+Uh and they might be coming from a job board like a LinkedIn or something. something else as well. So
+from an experience standpoint, right? Somebody finds a job on a job board, they click on it,
+they land on the phenom career site,
+then they click on it, they land on workday career site,
+right?
+Then they apply. So it's and we were thinking like what is the easier solution?
+Yeah.
+Um for that, right? How we can make it
+better or easier for for the candidates to to be have a more seamless experience for that.
+And again, I think we there are pros and cons for for both like We did posted apply with phenom and we did with uh with now we are apply redirect with workday
+but that's definitely one area I think
+uh again I don't know if you guys are focused on that or if that is not something that that you guys are looking at but uh from a experience point of view if
+I had had a choice and if you guys offered a full-fledged career side I would rather go with the work because everything will be in one ecosystem rather than
+we sending on the job phenom and then having an in building an integration and then doing all of that uh which kind of adds to the complexity of it.
+That makes sense.
+Yeah.
+Yeah. So that that that way I think u makes everybody's but from a my point of view is more from a candidate experience point of view can we it would be one ecosystem
+which would be an easier option.
+Yeah. No it makes total sense. Um and I think the the branding and control over the career side again And that's that's definitely something we've heard from other customers. One thing um that I think the Paradox acquisition will hopefully help with. I know they have that more bespoke uh you know really pixel perfect career site capability. So that's something you know again uh kind of see what see what comes out of of the the the integration plans but that's something they offer at the moment. So you know potentially in the longer term bringing that into into Workday to give customers way more control over the the branding of the career site I think could be could be very impactful. So um makes makes total sense. The just on the apply flow I I was just curious um would candidates in the region typically apply through English or would it be Arabic or would it kind of be a mix of both?
+It it would be a mix of both. So for our region I think um in the Middle East and UAE Saudi are probably the biggest ones for for the main region. Um it will be a mix of Arabic and English. Um I think English would be pretty much common for I would say professional level roles where people will apply but
+u um for any of the shop floor or more operational type roles blue what we call as blue collar
+that is where I think language becomes more critical because they might only they might not know English
+and and that's where I uh we kind of use uh we are building our career site in different languages as well. So we We we do have that um and okay that's where we you will see you'll see a mix but I think the language are more relevant for bluecollared or more operational type roles where we want to ensure that they can understand in their local language
+for professional levels I don't think that's a that's a big deal
+will have some basic English anywhere
+okay no that makes sense so sounds like there there's a little bit of a mix sometimes and with just with the candidates who do apply in Arabic have have you come across any issues with the apply flow in terms of language or in terms of candidates being able to upload um resumes in Arabic or anything like that? I'm not sure if you come across any challenge.
+Not heard of any any specific issues but I think one thing I would say is especially in the Middle East there is a heavy utilization of people that apply via mobile phones.
+So which is I think uh which you might be seeing in different countries uh but I think especially we saw heavy I mean even with because monitor our analytics on on Pino lot of the people who actually come on our career side almost say 40% or more actually coming via a mobile or a handheld device
+that's huge
+yeah and so that the interface and the look and feel of when they are actually applying is it more mobile friendly and how intuitive is when they are actually doing that through a handheld I think that's uh
+that's definitely a important factor for that audience.
+No, again I think that that's really uh useful. I think uh yeah, mobile usage and how we're optimizing recruiting for for mobile uh that's definitely something I think we we can look at and and what is the experience they receive at the moment on mobile definitely something we can we can look at with our mobile team
+from a sorry one I just had a one quick question related to that from an application point of view
+uh at the moment I believe you have LinkedIn enabled for like people can use their LinkedIn account to login and just and register.
+Are we uh are we trying to add more to that like Google, Apple or some other job boards?
+Yeah. So actually uh this release uh the team one of the teams is working on social sign on for Google, Apple uh and LinkedIn obviously as well. So uh candidates won't have to remember uh uh you know another new yet another new password. They'll be a to use their social accounts to uh to log in. So again, I think that's that's been a friction point we have heard. So uh to yeah to enable the likes of Google to be used is is um will be delivered this this release. So again, I think that's a definitely a step in the in the right direction. Um sorry, just one more question. I'm just conscious of your time. Uh just from a legal and compliance point of view, are there any things we you know any gaps there you might see from a GCC specific point of view. Um, one thing I have heard uh, so far from uh, some of the research is nationalization and you know being able to track that. Like I'm not sure if that's something in in um, in your world that that you see as you know a consideration or kind of legal and compliance point of view. Is is there anything with the with the regions you work with that you're hiring for that we should consider from a legal and compliance point of view?
+Yes, in the Middle East region GC the localization or nationalization is a big topic. it is specific countries have specific mandates for each company in terms of what that percentage should look like.
+Um and I know currently we are we we actually added capturing of the nationality in UAE and Saudi
+um but I think we doing that as a custom field. I think it's probably not out of the box solution for for work. I think the out of- the box solution is only for US and UK I think if I remember correctly at the moment.
+Okay.
+So um if I mean if you're able to add more in terms of the local requirements. So for example I know in in US you already have an out of-box solution for ethnicity for veteran status and for for diversity right. So um so those kind of things I think if if we are have more out of the box solution uh that that I think would be helpful like for example in Saudi most is a key
+mandate and we are required to collect information we are also required to report uh uh report on what is our localization percentage we we'll get penalty we actually get penalties if we don't meet okay
+certain certain uh percentage of localization so
+having that built into a more out of the box and delivered situation versus I think what what we what we have now is more bandaids I would say versus
+uh kind of we trying to come up with adop solutions versus kind of out of the box
+gotcha okay no again I think that's that's super useful. How do we make that more native to the to the platform to to help support those compliance needs? Makes total sense. Um I'm just conscious of of time, so I I I suppose I'll finish up just in terms of my questions. Is there anything uh anything else you'd like to share uh with me before before we finish up?
+No, I think those are probably the main one main kind of fe points that I wanted to share. Again, if you have any further questions, if you need more information, I'm I'm happy to to kind of get in touch. If you need followup sessions, we can we can absolutely do that.
+Yeah. No, that that that would be super. Uh yeah, if if if anything else comes to mind, I'll I'll be sure to reach out. But again, that was super valuable. Thanks very much, my boob. Really appreciate your time.
+Thanks for reaching out and great chatting with you.
+Great chat. Thank you.
+See you. Byebye.

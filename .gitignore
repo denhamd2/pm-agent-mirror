@@ -1,0 +1,35 @@
+# Node modules
+node_modules/
+design/node_modules/
+
+# Build outputs
+dist/
+build/
+*.log
+
+# Environment files
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.swp
+*~
+
+# MCP cache (optional - keep local only)
+# Uncomment if you don't want to track MCP files
+# /Users/david.denham/.cursor/projects/
+
+# Slide deck outputs (optional - these are generated)
+*.pptx
+
+# Local development
+design/dist/

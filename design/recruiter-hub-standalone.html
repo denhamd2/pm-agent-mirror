@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recruiter Hub - Workday Prototype</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+      padding: 24px;
+      color: #333;
+    }
+    .flex { display: flex; }
+    .flex-between { justify-content: space-between; }
+    .flex-center { align-items: center; }
+    .flex-wrap { flex-wrap: wrap; }
+    .gap-s { gap: 8px; }
+    .gap-m { gap: 16px; }
+    .gap-l { gap: 24px; }
+    .mb-l { margin-bottom: 24px; }
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .header { margin-bottom: 24px; }
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #0875e1;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    h1 { font-size: 24px; font-weight: 600; margin-bottom: 4px; }
+    .subtext { font-size: 14px; color: #666; }
+    .btn {
+      padding: 8px 16px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .btn-primary { background: #0875e1; color: white; }
+    .btn-secondary { background: #f5f5f5; color: #333; border: 1px solid #ddd; }
+    .btn-tertiary { background: transparent; color: #0875e1; }
+    .banner {
+      background: #e8f4fc;
+      border-left: 4px solid #0875e1;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      border-radius: 4px;
+    }
+    .banner strong { color: #0875e1; }
+    .metric-card {
+      flex: 1 1 200px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .metric-title { font-size: 12px; color: #666; text-transform: uppercase; margin-bottom: 8px; }
+    .metric-value { font-size: 28px; font-weight: 600; margin-bottom: 4px; }
+    .metric-trend { font-size: 12px; color: #666; }
+    .metric-trend.positive { color: #2e7d32; }
+    .metric-trend.negative { color: #c62828; }
+    .tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 24px;
+      border-bottom: 2px solid #e0e0e0;
+    }
+    .tab {
+      padding: 12px 24px;
+      cursor: pointer;
+      font-weight: 500;
+      color: #666;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+    }
+    .tab.active { color: #0875e1; border-bottom-color: #0875e1; }
+    .two-col { display: flex; gap: 24px; flex-wrap: wrap; }
+    .col-left { flex: 1 1 60%; min-width: 400px; }
+    .col-right { flex: 1 1 35%; min-width: 300px; }
+    .section-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+    th { font-weight: 600; color: #666; font-size: 12px; text-transform: uppercase; }
+    .status { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+    .status-active { background: #e8f5e9; color: #2e7d32; }
+    .status-risk { background: #ffebee; color: #c62828; }
+    .candidate-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+    }
+    .candidate-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      margin-right: 12px;
+    }
+    .match-score { color: #2e7d32; font-weight: 600; }
+    .badge {
+      background: #c62828;
+      color: white;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      margin-left: 4px;
+    }
+    .recommendation {
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      border-left: 4px solid #0875e1;
+    }
+    .recommendation.high { background: #fff3e0; border-left-color: #e65100; }
+    .recommendation.medium { background: #f5f5f5; }
+    .interview-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .interview-time {
+      background: #e3f2fd;
+      padding: 8px 12px;
+      border-radius: 4px;
+      min-width: 70px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .activity-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .activity-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="flex flex-between flex-center header">
+    <div class="flex flex-center gap-m">
+      <div class="avatar">DD</div>
+      <div>
+        <h1>Welcome back, David Denham</h1>
+        <div class="subtext">Tuesday, March 18, 2026</div>
+      </div>
+    </div>
+    <div class="flex gap-s flex-center">
+      <button class="btn btn-tertiary">🔔 <span class="badge">3</span></button>
+      <button class="btn btn-secondary">Settings</button>
+      <button class="btn btn-primary">+ Post job</button>
+    </div>
+  </div>
+
+  <!-- AI Banner -->
+  <div class="banner">
+    <strong>AI Insight:</strong> 3 requisitions are at risk of exceeding time-to-fill targets. 
+    Review pipeline health and consider activating HiredScore screening.
+  </div>
+
+  <!-- Hero Metrics -->
+  <div class="flex gap-m mb-l flex-wrap">
+    <div class="metric-card">
+      <div class="metric-title">Active requisitions</div>
+      <div class="metric-value">24</div>
+      <div class="metric-trend">+3 this week</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-title">Candidates in pipeline</div>
+      <div class="metric-value">187</div>
+      <div class="metric-trend positive">+12% vs last month</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-title">Avg time-to-fill</div>
+      <div class="metric-value">28 days</div>
+      <div class="metric-trend positive">-5 days vs target</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-title">Interviews this week</div>
+      <div class="metric-value">16</div>
+      <div class="metric-trend">3 today</div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active">Overview</div>
+    <div class="tab">Pipeline</div>
+    <div class="tab">Insights</div>
+  </div>
+
+  <!-- Two Column Layout -->
+  <div class="two-col">
+    <div class="col-left">
+      <!-- Quick Actions -->
+      <div class="card">
+        <div class="section-title">Quick actions</div>
+        <div class="flex gap-s flex-wrap">
+          <button class="btn btn-secondary">🔍 Review candidates</button>
+          <button class="btn btn-secondary">📅 Schedule interview</button>
+          <button class="btn btn-secondary">📤 Send offer</button>
+          <button class="btn btn-secondary">📄 Generate report</button>
+        </div>
+      </div>
+
+      <!-- Active Requisitions -->
+      <div class="card">
+        <div class="flex flex-between flex-center mb-l">
+          <div class="section-title">Active requisitions</div>
+          <button class="btn btn-tertiary">View all →</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Job title</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>Candidates</th>
+              <th>Days open</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Senior Product Manager</strong></td>
+              <td>Pleasanton, CA</td>
+              <td><span class="status status-active">Active</span></td>
+              <td>12</td>
+              <td>18</td>
+            </tr>
+            <tr>
+              <td><strong>Software Engineer II</strong></td>
+              <td>Boulder, CO</td>
+              <td><span class="status status-active">Active</span></td>
+              <td>23</td>
+              <td>12</td>
+            </tr>
+            <tr>
+              <td><strong>UX Designer</strong></td>
+              <td>Dublin, Ireland</td>
+              <td><span class="status status-risk">At risk</span></td>
+              <td>5</td>
+              <td style="color: #c62828;">42</td>
+            </tr>
+            <tr>
+              <td><strong>Data Analyst</strong></td>
+              <td>Remote</td>
+              <td><span class="status status-active">Active</span></td>
+              <td>31</td>
+              <td>8</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Candidate Queue -->
+      <div class="card">
+        <div class="flex flex-between flex-center mb-l">
+          <div class="section-title">Candidates awaiting review</div>
+          <span class="badge">8</span>
+        </div>
+        <div class="candidate-row">
+          <div class="flex flex-center">
+            <div class="candidate-avatar"></div>
+            <div>
+              <div><strong>Sarah Chen</strong></div>
+              <div class="subtext">Senior Product Manager</div>
+            </div>
+          </div>
+          <div class="flex flex-center gap-m">
+            <div style="text-align: right;">
+              <div class="match-score">✨ 94% match</div>
+              <div class="subtext">Applied 2d ago</div>
+            </div>
+            <button class="btn btn-secondary">Review</button>
+          </div>
+        </div>
+        <div class="candidate-row">
+          <div class="flex flex-center">
+            <div class="candidate-avatar"></div>
+            <div>
+              <div><strong>Marcus Johnson</strong></div>
+              <div class="subtext">Software Engineer II</div>
+            </div>
+          </div>
+          <div class="flex flex-center gap-m">
+            <div style="text-align: right;">
+              <div class="match-score">✨ 89% match</div>
+              <div class="subtext">Applied 1d ago</div>
+            </div>
+            <button class="btn btn-secondary">Review</button>
+          </div>
+        </div>
+        <div class="candidate-row">
+          <div class="flex flex-center">
+            <div class="candidate-avatar"></div>
+            <div>
+              <div><strong>Priya Sharma</strong></div>
+              <div class="subtext">UX Designer</div>
+            </div>
+          </div>
+          <div class="flex flex-center gap-m">
+            <div style="text-align: right;">
+              <div class="match-score">✨ 91% match</div>
+              <div class="subtext">Applied 3d ago</div>
+            </div>
+            <button class="btn btn-secondary">Review</button>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 16px;">
+          <button class="btn btn-tertiary">View all 8 candidates</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-right">
+      <!-- AI Recommendations -->
+      <div class="card">
+        <div class="section-title mb-l">✨ AI recommendations</div>
+        <div class="recommendation high">
+          <div style="font-weight: 600; margin-bottom: 4px;">Activate HiredScore for UX Designer</div>
+          <div class="subtext" style="margin-bottom: 8px;">94% of qualified candidates are screened out manually. Enable AI screening to save 3 hours per requisition.</div>
+          <button class="btn btn-tertiary">Take action →</button>
+        </div>
+        <div class="recommendation medium">
+          <div style="font-weight: 600; margin-bottom: 4px;">Extend Data Analyst search</div>
+          <div class="subtext" style="margin-bottom: 8px;">31 candidates but low match scores. Consider expanding location criteria to include Seattle.</div>
+          <button class="btn btn-tertiary">Take action →</button>
+        </div>
+        <div class="recommendation medium">
+          <div style="font-weight: 600; margin-bottom: 4px;">Schedule Paradox interviews</div>
+          <div class="subtext" style="margin-bottom: 8px;">12 Senior PM candidates ready for screening. Auto-schedule with Paradox to fill calendar this week.</div>
+          <button class="btn btn-tertiary">Take action →</button>
+        </div>
+      </div>
+
+      <!-- Upcoming Interviews -->
+      <div class="card">
+        <div class="section-title mb-l">Upcoming interviews</div>
+        <div class="interview-item">
+          <div class="interview-time">10:00 AM</div>
+          <div>
+            <div><strong>Sarah Chen</strong></div>
+            <div class="subtext">Senior Product Manager</div>
+            <div class="subtext" style="margin-top: 4px;">📞 with You</div>
+          </div>
+        </div>
+        <div class="interview-item">
+          <div class="interview-time">2:30 PM</div>
+          <div>
+            <div><strong>Marcus Johnson</strong></div>
+            <div class="subtext">Software Engineer II</div>
+            <div class="subtext" style="margin-top: 4px;">📹 with Alex Rivera</div>
+          </div>
+        </div>
+        <div class="interview-item">
+          <div class="interview-time">4:00 PM</div>
+          <div>
+            <div><strong>David Kim</strong></div>
+            <div class="subtext">Data Analyst</div>
+            <div class="subtext" style="margin-top: 4px;">📹 with You</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Activity -->
+      <div class="card">
+        <div class="section-title mb-l">Team activity</div>
+        <div class="activity-item">
+          <div class="activity-avatar"></div>
+          <div>
+            <div><strong>Alex Rivera</strong> scheduled interview with <strong>Marcus Johnson</strong></div>
+            <div class="subtext">15 min ago</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-avatar"></div>
+          <div>
+            <div><strong>Emily Watson</strong> posted job <strong>Customer Success Manager</strong></div>
+            <div class="subtext">1 hour ago</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-avatar"></div>
+          <div>
+            <div><strong>James Park</strong> sent offer to <strong>Lisa Anderson</strong></div>
+            <div class="subtext">2 hours ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
