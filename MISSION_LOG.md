@@ -5,7 +5,7 @@ This log tracks the state of all active product initiatives, decisions, and hand
 
 ## Current Status
 **Status:** ✅ OPERATIONAL - PMF Research Reorganized (Country-Based Structure)
-**Last Updated:** Tuesday Mar 17, 2026 22:32 PST
+**Last Updated:** Friday Mar 20, 2026 (GCC-E2E-002 — Recruiter Dashboard: 320–330 complete; backlog next)
 **Workspace Version:** 1.3
 **Active Agents:** 9 (Orchestrator + 7 Specialists + Functional Knowledge Authority)
 
@@ -33,23 +33,172 @@ This log tracks the state of all active product initiatives, decisions, and hand
 
 ## Active Missions
 
-### MISSION-012: GCC E2E Pipeline - Fresh Research from Scratch
-**Status:** Initializing
+## Mission: GCC-E2E-002 - GCC Research to Design Pipeline (v41 - Recruiter Dashboard)
+**Status:** In Progress
+**Pipeline Step:** 9 of 10 (Research ✓ → HITL ✓ → PRD ✓ → Discovery ✓ → Prototype ✓ → Copy ✓ → Figma ✓ → **Backlog** → Complete)
+**Selected Recommendation:** **#7 - Recruiter Dashboard** - Granular metrics dashboard (time-to-review, stage conversion) by LOB/location/level; replace PowerBI workarounds
+**Created:** 2026-03-20
 **Owner:** Master Orchestrator
-**Created:** Thursday Mar 19, 2026
-**Pipeline Step:** 1 of 10 (Research → HITL → PRD → Discovery → Prototype → Copy → Figma → Backlog → Complete)
-**Objective:** Execute complete GCC E2E pipeline with FRESH Braun & Clarke analysis from customer transcripts through Jira backlog creation
+
+**Objective:** Execute complete GCC E2E pipeline with fresh v41 research for Recruiter Dashboard opportunity
+
+**Artifacts:**
+- Research: `research/GCC/thematic-analysis/2026-03-20-GCC-PMF-Analysis-v41.md`
+- Slide Deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v41.pptx` (37 content slides + auto agenda; full PESTEL / competitive / Win-Loss / interviews / matrix + v41 theme deep-dives, RICE, E2E handoff)
+- Slide spec: `slides_spec_v41.json`
+- PRD: `docs/prds/gcc-recruiter-dashboard-prd.md`
+- Discovery Brief: `design/gcc-recruiter-dashboard-discovery-brief.md`
+- Prototype: `design/gcc-recruiter-dashboard.tsx` — dev server **`http://localhost:5199/`**; `design/main.tsx` mounts **GccRecruiterDashboard** for this mission
+- Copy: `design/gcc-recruiter-dashboard-copy.md`
+- Compliance note: `design/gcc-recruiter-dashboard-compliance.md`
+- Figma: **https://www.figma.com/design/DyLBdKO85Sn2g8bEFs21ak** (GCC Recruiter Dashboard; captureId `1e53fd34-c0c2-4cd1-b550-e48759774d49`, `figmadelay` 8000ms)
+
+**Next Actions:**
+- [ ] 400→420→430: Backlog refinement & Jira stories (HRREC / Recruiting Purge per E2E convention)
+
+**PMF Signal**: 8/10 (Strong) - Abandonment signal: customers migrated to PowerBI/Excel; need granular operational metrics
+
+### MISSION-017: GCC E2E Pipeline - v40 — **#6 Candidate grid and search**
+**Status:** In Progress  
+**Owner:** Master Orchestrator  
+**Created:** Friday Mar 20, 2026  
+**Pipeline Step:** 7 of 10 (Research ✓ → HITL ✓ → PRD ✓ → Discovery ✓ → Prototype ✓ → Copy ✓ → **Figma / Backlog** → Complete)  
+**Selected Recommendation:** **#6** — Candidate grid and search — improve unified grid, boolean search, AI-assisted matching  
+**Trigger:** User requested fresh GCC research E2E to the end; Step 1 executed per orchestrator (no resume from MISSION-016).
+
+**Artifacts:**
+- Research: `research/GCC/thematic-analysis/2026-03-20-GCC-PMF-Analysis-v40.md`
+- Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v40.pptx` (36 slides + auto agenda)
+- Slide spec: `slides_spec.json` (subtitle v40)
+- PRD: `docs/prds/gcc-candidate-grid-search-prd.md`
+- Discovery Brief: `design/gcc-candidate-grid-search-discovery-brief.md`
+- Prototype: `design/gcc-candidate-grid-search.tsx` — **profile modal** (key details left, resume right), **prev/next carousel** + keyboard arrows, **HiredScore-style fit** column; `design/main.tsx` currently mounts **GccRecruiterDashboard** (GCC-E2E-002) — switch import to **GccCandidateGridSearch** to demo or recapture this prototype
+- Copy: `design/gcc-candidate-grid-search-copy.md`
+- Compliance note: `design/gcc-candidate-grid-search-compliance-mission017.md`
+- Epic: **HRREC-90968** (GCC candidate grid / search / AI-assisted matching)
+- Figma: **https://www.figma.com/design/zNuwawBxPeC6yqKvryMvOp?node-id=4-2** (GCC Candidate Grid - diagnostic + prototype; 6s delay resolved blank file issue)
 
 **Pipeline Steps:**
-- [ ] 1. 120: Fresh PMF analysis + slide deck (new version)
-- [ ] 2. HITL: PM selects recommendation
-- [ ] 3. 200: PRD
-- [ ] 4. 315: Discovery & Design Brief
-- [ ] 5. 320: Prototype
-- [ ] 6. 310: Copy review
-- [ ] 7. 330: Figma capture
-- [ ] 8. 400: Backlog refinement (410→420→430)
+- [x] 1. 120: Fresh PMF analysis v40 + slide deck v40
+- [x] 2. HITL: PM selected **#6**
+- [x] 3. 200 → 315 → 320 → 310 (PRD, discovery, prototype, copy)
+- [x] 4. 330: Figma capture (resolved: increased `figmadelay` to 6000ms; fonts + React layout fully rendered)
+- [ ] 5. 400 → 420 HITL → 430: backlog and Jira stories under HRREC-90968
+
+---
+
+### MISSION-016: GCC E2E Pipeline - v39 — **#1 Nationalization — blocked on Story Map HITL (420)**
+**Status:** In Progress  
+**Owner:** Master Orchestrator  
+**Created:** Thursday Mar 20, 2026  
+**Pipeline Step:** 8 of 10 (Research ✓ → HITL ✓ → PRD ✓ → Discovery ✓ → Prototype ✓ → Copy ✓ → **Figma processing** → **Backlog HITL** → Complete)  
+**Selected Recommendation:** **#1** — Nationalization and compliance — OOB nationalization fields for Saudi (Nitaqat), UAE (Emiratisation), Kuwait (Kuwaitisation) with application capture, reporting, and compliance dashboards
+
+**Artifacts:**
+- Research: `research/GCC/thematic-analysis/2026-03-20-GCC-PMF-Analysis-v39.md`
+- Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v39.pptx`
+- PRD: `docs/prds/gcc-nationalization-compliance-prd.md` (v39 sources + epic HRREC-90967)
+- Discovery Brief: `design/gcc-nationalization-compliance-discovery-brief.md`
+- Prototype: `design/gcc-nationalization-compliance.tsx` — dev server **`http://localhost:5199/`** (`design/main.tsx` currently mounts **MISSION-017** `GccCandidateGridSearch`; switch import to `gcc-nationalization-compliance` for this mission’s capture; to `gcc-whatsapp-integration` for MISSION-015)
+- Copy review: `design/gcc-nationalization-compliance-copy.md` (MISSION-016 header)
+- Compliance (060-style): `design/gcc-nationalization-compliance-compliance-review-mission016.md`
+- Story map (420): `docs/story-maps/gcc-nationalization-compliance-mission016-story-map.md` — **awaiting PM approval before 430**
+- Epic: [HRREC-90967](https://jira2.workday.com/browse/HRREC-90967) (Recruiting Purge; v39 E2E)
+- Figma: **New capture started** — `captureId` **`c83965b9-059e-4680-8e6c-d332575ee5d9`**; poll `generate_figma_design` until **completed**, then claim file if needed. Prior file: https://www.figma.com/design/xNmMG73Ic5BN20BvFQEF2K
+
+**Pipeline Steps:**
+- [x] 1. 120: Fresh PMF analysis v39 + slide deck v39
+- [x] 2. HITL: PM selected **#1** — Nationalization and compliance
+- [x] 3. 200: PRD aligned to v39 + HRREC-90967
+- [x] 4. 315: Discovery Brief
+- [x] 5. 320: Prototype header + `main.tsx` entry for capture
+- [x] 6. 310: Copy doc tagged MISSION-016
+- [~] 7. 330: Figma capture **processing** (poll captureId above)
+- [x] 8a. 410: Epic **HRREC-90967** created
+- [ ] 8b. 420: **PM must approve value slices** (reply below)
+- [ ] 8c. 430: Jira stories — **only after 420 approval**
+
+**Note:** **MISSION-015** (WhatsApp) — restore `design/main.tsx` import to `gcc-whatsapp-integration` when resuming that capture.
+
+---
+
+### MISSION-015: GCC E2E Pipeline - v38 — WhatsApp (#5) — **blocked on Story Map HITL (420)**
+**Status:** In Progress  
+**Owner:** Master Orchestrator  
+**Created:** Thursday Mar 19, 2026  
+**Pipeline Step:** 8 of 10 (Research ✓ → HITL ✓ → PRD ✓ → Discovery ✓ → Prototype ✓ → Copy ✓ → Figma **processing** → **Backlog HITL** → Complete)  
+**Selected Recommendation:** #5 — WhatsApp integration — GA WhatsApp for GCC; extend campaigns beyond email
+
+**Artifacts:**
+- Research: `research/GCC/thematic-analysis/2026-03-19-GCC-PMF-Analysis-v38.md`
+- Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v38.pptx`
+- PRD: `docs/prds/gcc-whatsapp-integration-prd.md` (v38 references)
+- Discovery Brief: `design/gcc-whatsapp-integration-discovery-brief.md`
+- Prototype: `design/gcc-whatsapp-integration.tsx` — dev server **`http://localhost:5199/`** (fixed in `design/vite.config.ts` for Figma capture)
+- Copy review: `design/gcc-whatsapp-integration-copy-review.md`
+- Story map: `docs/story-maps/gcc-whatsapp-integration-story-map.md` (epic **HRREC-90966**)
+- Epic: [HRREC-90966](https://jira2.workday.com/browse/HRREC-90966) (assignee: david.denham, component Recruiting Purge)
+- Figma: **Latest capture** (Mar 2026) — `captureId` **`75181bae-3575-4510-9f19-ccf5df097280`**; hash opened **once** on `http://localhost:5199/`; MCP polls showed **processing** with *Capture data was submitted* (confirms **not** "Capture already submitted"). Poll `generate_figma_design` with that id until **completed**, then use file/claim URL. Evidence: `.cursor/figma-capture-debug.log`
+
+**Pipeline Steps:**
+- [x] 1. 120: Fresh PMF analysis v38 + slide deck v38
+- [x] 2. HITL: PM selected **#5** — WhatsApp integration
+- [x] 3. 200: PRD aligned to v38
+- [x] 4. 315: Discovery Brief — MISSION-015
+- [x] 5. 320: Prototype (existing; header MISSION-015)
+- [x] 6. 310: Copy review doc — MISSION-015
+- [~] 7. 330: Figma new file capture started — **poll captureId or complete in browser**
+- [x] 8a. 410: Epic **HRREC-90966** created
+- [ ] 8b. 420: Story map HITL — **PM must approve value slices** (see chat)
+- [ ] 8c. 430: Jira stories — **only after 420 approval**
 - [ ] 9. Mission complete
+
+**Note:** **MISSION-014** remains a separate thread (HRREC-90962) if you still need that story-map closure.
+
+---
+
+### MISSION-014: GCC E2E Pipeline - v37 — HITL #5 WhatsApp (In Progress)
+**Status:** In Progress — **blocked on Story Map HITL** (420) before Jira story creation
+**Owner:** Master Orchestrator
+**Created:** Thursday Mar 19, 2026
+**Pipeline Step:** 8 of 10 (Research ✓ → HITL #5 ✓ → PRD ✓ → Discovery ✓ → Prototype ✓ → Copy ✓ → Figma partial → **Backlog HITL** → Complete)
+**Selected Recommendation:** #5 — WhatsApp Integration — GA WhatsApp for GCC; extend campaigns beyond email
+
+**Artifacts:**
+- Research: `research/GCC/thematic-analysis/2026-03-19-GCC-PMF-Analysis-v37.md`
+- Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v37.pptx`
+- PRD: `docs/prds/gcc-whatsapp-integration-prd.md` (v37 research references)
+- Discovery Brief: `design/gcc-whatsapp-integration-discovery-brief.md`
+- Prototype: `design/gcc-whatsapp-integration.tsx` — dev server **http://localhost:5185/** (Vite chose 5185; 5177–5184 were in use)
+- Copy review: `design/gcc-whatsapp-integration-copy-review.md`
+- Story map: `docs/story-maps/gcc-whatsapp-integration-story-map.md` (epic **HRREC-90962**)
+- Epic: [HRREC-90962](https://jira2.workday.com/browse/HRREC-90962)
+- Figma: New-file capture started (captureId `c201d1f6-8d40-4a19-b834-0299b7f22a72`); if still processing, open capture URL from Figma MCP instructions or poll `generate_figma_design` with that captureId until `completed`, then claim file if needed
+
+**Pipeline Steps:**
+- [x] 1. 120: Fresh PMF analysis v37 + slide deck v37
+- [x] 2. HITL: PM selected **#5** — WhatsApp Integration
+- [x] 3. 200: PRD updated (v37)
+- [x] 4. 315: Discovery Brief updated (MISSION-014)
+- [x] 5. 320: Prototype (existing; header updated MISSION-014)
+- [x] 6. 310: Copy review doc aligned MISSION-014
+- [~] 7. 330: Figma — new file capture initiated; **confirm completion in Figma / poll captureId**
+- [x] 8a. 410: Epic created **HRREC-90962**
+- [ ] 8b. 420: Story map HITL — **PM must approve value slices** (see below)
+- [ ] 8c. 430: Jira stories — **only after 420 approval**
+- [ ] 9. Mission complete
+
+---
+
+### MISSION-012: GCC E2E Pipeline - Fresh Research from Scratch
+**Status:** Superseded by MISSION-014 (v37 run)
+**Owner:** Master Orchestrator
+**Created:** Thursday Mar 19, 2026
+**Note:** Initializing entry; continued as MISSION-014 with v37 deliverables
+
+**Pipeline Steps:**
+- [x] 1. 120: Fresh PMF analysis + slide deck (v37)
+- [ ] 2–9: See MISSION-014
 
 ---
 

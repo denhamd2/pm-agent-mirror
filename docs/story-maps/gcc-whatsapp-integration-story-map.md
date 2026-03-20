@@ -1,7 +1,9 @@
 # Story Map: WhatsApp Candidate Communication for GCC
 
-**Epic**: [HRREC-90928](https://jira2.workday.com/browse/HRREC-90928) - WhatsApp Candidate Communication for GCC
-**Created**: Thursday Mar 19, 2026
+**Epic**: [HRREC-90966](https://jira2.workday.com/browse/HRREC-90966) - WhatsApp candidate communication for GCC (2026R2) — **MISSION-015 v38 E2E**  
+**Prior epics (reference only):** [HRREC-90962](https://jira2.workday.com/browse/HRREC-90962) (MISSION-014), [HRREC-90928](https://jira2.workday.com/browse/HRREC-90928)  
+**Created**: Thursday Mar 19, 2026  
+**Updated**: Thursday Mar 19, 2026 (MISSION-015 — new epic after v38 HITL #5)  
 **Author**: AI Story Mapping Specialist (420)
 
 ## Epic Context

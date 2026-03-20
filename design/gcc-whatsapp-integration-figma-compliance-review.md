@@ -1,6 +1,6 @@
 # Legal & Compliance Assessment: GCC WhatsApp Integration – Figma Design Capture
 
-**Invoked by**: 330-ux-designer (after capture to Figma)  
+**Invoked by**: 330-figma-creator (after capture to Figma)  
 **Date**: 19 March 2026  
 **Figma File**: https://www.figma.com/design/tW2Gmvwbqjtsn8I5oSk0jd  
 **Mission**: MISSION-013 (GCC E2E Pipeline)

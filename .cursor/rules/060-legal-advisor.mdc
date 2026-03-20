@@ -289,7 +289,7 @@ You are **automatically invoked** by other agents during their workflows. When i
 | **120-pmf-thematic-analysis** | After Legal PESTEL research; before Roadmap Recommendations finalization | Validate Legal PESTEL citations; review recommendations for compliance implications |
 | **100-market-intelligence** | After Strategic Recommendations in synthesis | Validate legal implications of each recommendation |
 | **320-prototype-developer** | Before handoff to 330 (prototype complete) | Compliance review of prototype (consent, privacy, AI disclosure) |
-| **330-ux-designer** | After design analysis or after capture to Figma | Compliance review of design (consent placement, privacy, forms) |
+| **330-figma-creator** | After design analysis or after capture to Figma | Compliance review of design (consent placement, privacy, forms) |
 | **310-doc-writer** | When copy is legal-sensitive | Review consent text, privacy notices, AI disclosure, data messages |
 
 ## Design and Prototype Review

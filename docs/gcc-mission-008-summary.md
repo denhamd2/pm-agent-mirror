@@ -85,7 +85,7 @@ Successfully executed the complete GCC E2E pipeline from fresh PMF research thro
 
 ---
 
-### Step 6: Figma Capture (330-ux-designer)
+### Step 6: Figma Capture (330-figma-creator)
 - **Figma File:** https://www.figma.com/design/xNmMG73Ic5BN20BvFQEF2K
 - **Design Analysis:** `design/gcc-nationalization-compliance-analysis.md`
 

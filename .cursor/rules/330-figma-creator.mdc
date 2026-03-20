@@ -26,7 +26,12 @@ When the user shares Figma URLs or mentions "analyze design", you:
 ### Figma MCP (`plugin-figma-figma`)
 **Location**: `/Users/david.denham/.cursor/projects/Users-david-denham-product-manager-agent/mcps/plugin-figma-figma/`
 
-**Read server instructions**: `/Users/david.denham/.cursor/projects/Users-david-denham-product-manager-agent/mcps/plugin-figma-figma/server-instructions.md`
+**Read server instructions**: `INSTRUCTIONS.md` in that folder (same content Cursor surfaces as Figma MCP server hints).
+
+**Setup alignment (checklist):**
+- **Official Figma MCP** is the HTTP server at `https://mcp.figma.com/mcp` (Cursor often labels it **`figma`**; descriptor id **`plugin-figma-figma`**). It must be **enabled and authenticated** in Cursor for `generate_figma_design`, `get_design_context`, FigJam tools, and Code Connect.
+- **Not the same** as a separate entry in `~/.cursor/mcp.json` such as **`figma-mcp`** pointing at a **local/custom** Node server (e.g. Workday-specific tools). Html-to-design capture (`generate_figma_design`, `capture.js` on `mcp.figma.com`) is **official Figma MCP only**.
+- If tools fail or auth errors appear: Command Palette → **Clear All MCP Tokens** → re-authenticate Figma → restart Cursor (see Figma MCP resource `mcp-clients-issues`).
 
 **Key capabilities:**
 - `get_design_context`: Primary tool - gets code, screenshot, and hints
@@ -44,15 +49,20 @@ When the user shares Figma URLs or mentions "analyze design", you:
 
 #### Web-to-Figma Capture (`generate_figma_design`)
 
-**When to use**: User has a prototype running (e.g., localhost:5176) and wants it captured as a Figma design.
+**When to use**: User has a prototype running (e.g., localhost:5199 for this repo) and wants it captured as a Figma design.
 
 **Workflow**:
 1. Identify the page to capture (local dev server URL or external URL)
-2. For local projects: Find dev server command and URL from codebase (e.g., `package.json` scripts, `vite.config`)
-3. Call `generate_figma_design` **without** `outputMode` first to get capture instructions and `captureId`
-4. User chooses output: `newFile` (creates new Figma file), `existingFile` (adds to file), or `clipboard`
-5. Call again with `outputMode` and `captureId` (and `fileKey`/`nodeId` if existingFile)
-6. Poll with `captureId` every 5 seconds (up to 10 times) until status is `completed`
+2. For local projects: Find dev server command and URL from codebase (e.g., `package.json` scripts, `vite.config`). This repo’s Vite prototype uses **`http://localhost:5199/`** (`design/vite.config.ts`, `strictPort: true`). **React + Vite:** `capture.js` must load **after** the first React paint (this repo injects it from `design/main.tsx` via `FigmaCaptureScriptLoader`). A sync script after `<script type="module">` still runs **before** the deferred module, producing a **blank** Figma capture of empty `#root`.
+3. **Optional:** Call `generate_figma_design` **without** `outputMode` if the PM must pick plan / new vs existing file from the tool’s option list. Otherwise call **once** with `outputMode` set (`newFile` | `existingFile` | `clipboard`) plus required args — the tool returns a **`captureId`** and hash-URL instructions.
+   - **Fresh Figma file on every run (no clipboard):** default to **`outputMode: "newFile"`** with a **unique `fileName`** each time and a persisted **`planKey`**. **`clipboard`** is only for paste workflows; it does not create a file. See **`design/README.md` → Fresh Figma file every run**.
+4. Open the **localhost** URL with the **`#figmacapture=<captureId>&figmaendpoint=…`** fragment **exactly once** per `captureId` (e.g. macOS `open "http://localhost:5199/#figmacapture=…"`). Default capture root is **`#figma-capture-root`**; `main.tsx` waits for **`document.fonts.ready`** before `captureForDesign` (Roboto from Workday CDN). If Figma shows a **blank file**, retry with **`&figmadelay=8000`** and a **new** `captureId` from `generate_figma_design`. For a **second** capture in the same tab, navigate to a **new** hash (new `captureId`); this repo’s `main.tsx` listens for **`hashchange`**.
+5. **Poll only via MCP:** call `generate_figma_design` with **`captureId`** every 5 seconds (extend past 10 polls if needed) until status is **`completed`**. Polling does **not** submit a second capture.
+6. Share the Figma file / claim URL from the completed poll response.
+
+**Single-use capture IDs (critical — not an MCP bug)**:
+- Each `captureId` accepts **one** browser submission. If the UI shows **"Capture already submitted"**, the ID was already used (refresh, double-opened hash URL, or toolbar resubmitted the same id). **Do not** keep polling that id expecting a retry.
+- **Recovery:** Call `generate_figma_design` again with the same `outputMode` / `fileName` / `planKey` (or `existingFile` + `fileKey` after the first file exists) to get a **new** `captureId`, then open the **new** hash URL **once**.
 
 **Output modes**:
 - `newFile`: Requires `fileName`, optionally `planKey` (team/org). Returns `file_key` when done.
@@ -82,6 +92,8 @@ When the user shares Figma URLs or mentions "analyze design", you:
 **Location**: `/Users/david.denham/.cursor/projects/Users-david-denham-product-manager-agent/mcps/user-canvas-kit-mcp/`
 
 **CRITICAL**: This is your SOLE source of truth for Canvas Kit information. Do NOT reference external websites or documentation.
+
+**Workday visual target**: When analysing or capturing recruiter prototypes, align feedback with **`010-style-guide.mdc` → Sana Style UI** and the versioned reference **`design/references/sana/`** (neutral white/grey, sparing blue, typography and radii as documented). Use **`get-canvas-kit-tokens`** when validating colour or density choices.
 
 **Available tools:**
 - `get-canvas-kit-tokens`: Token documentation and migration guides
@@ -644,14 +656,13 @@ When receiving **"Capture prototype at localhost to Figma. Part of GCC e2e pipel
 Analysis saved to `/design/timesheets-analysis.md`
 ```
 
-**User**: "Capture our Recruiter Hub prototype to Figma. It's running at localhost:5176"
+**User**: "Capture our Recruiter Hub prototype to Figma. It's running at localhost:5199"
 
 **Your Actions**:
-1. Call `generate_figma_design` without outputMode to get capture instructions and captureId
-2. Ask user to choose: new file, existing file, or clipboard
-3. Call again with outputMode and captureId
-4. Poll with captureId every 5 seconds until status is completed
-5. Share the resulting Figma file URL with the user
+1. Confirm dev server URL (this repo: `http://localhost:5199/`).
+2. Call `generate_figma_design` with `outputMode: "newFile"` (plus `fileName`, `planKey`) **or** without `outputMode` first if the tool must present plan/file choices — obtain a fresh **`captureId`**.
+3. Open the hash URL **once** per `captureId`; if the browser shows **"Capture already submitted"**, obtain a **new** `captureId` (step 2 again) — never reuse the old hash URL.
+4. Poll with `captureId` via MCP until `completed`; share the Figma file URL.
 
 **User**: "Create a user flow diagram in FigJam for the candidate application process"
 

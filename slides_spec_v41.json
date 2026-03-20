@@ -1,0 +1,1044 @@
+[
+  {
+    "master_index": 1,
+    "layout_name": "TITLE",
+    "placeholders": {
+      "0": {
+        "text": "GCC Recruiting Product-Market Fit Research"
+      },
+      "1": {
+        "text": "Braun & Clarke 6-Phase Thematic Analysis | v41 | 20 March 2026"
+      }
+    }
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Executive Summary"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Six PMF themes from Braun & Clarke analysis (v41) on 3 GCC customer interviews (Accenture, Baker Hughes, Shell)\n• This deck follows the standard structure: methodology, strategic context, full PESTEL, competitive and Win/Loss, primary research, triangulation, then deep-dive themes, RICE, and E2E handoff\n• Strongest signals: nationalization compliance, candidate grid friction, AI matching, WhatsApp-first comms, interview scheduling complexity, native reporting gaps (PowerBI / Excel exits)\n• E2E handoff lists 8 actionable recommendations for PM selection",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.6,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Executive overview; next sections mirror prior GCC deck structure (PESTEL, competitive, Win/Loss, interviews).\n• Deep theme slides reflect v41 coding pass.\n\nReferences:\n• research/GCC/thematic-analysis/2026-03-20-GCC-PMF-Analysis-v41.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "Research Challenge",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "Objectives and methodology",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Research Question & Objectives"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• How can Workday Recruiting better support hiring in the GCC region?\n• Understand customer pain points, compliance requirements, and local preferences\n• Identify product gaps and roadmap opportunities\n• Triangulate customer interviews with Win/Loss data and PESTEL context",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.5,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Braun & Clarke 6-phase thematic analysis.\n• 3 customer interviews, 2 GCC Win/Loss gaps.\n\nReferences:\n• Braun & Clarke (2006) Thematic Analysis"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "5-Phase Framework"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "Phase 0: Geographic filtering (GCC)\nPhase 1: Familiarisation with data\nPhase 2: Generating initial codes\nPhase 3: Generating themes\nPhase 4: Reviewing themes (triangulation)\nPhase 5: Defining and naming themes\nPhase 6: Producing report + slide deck",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.5,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Standard Braun & Clarke methodology.\n\nReferences:\n• Braun & Clarke (2006)"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "Context Review",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "Strategic context and market momentum",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Strategic Context"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• GCC HR Tech: US$2.6B (2023) → US$5.5B (2032), CAGR 9.05%\n• 70% of GCC companies plan to invest in HR tech\n• Vision 2030 (Saudi) and economic diversification drive digital transformation\n• Nationalization mandates (Nitaqat, Emiratisation) accelerate ATS adoption",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.5,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Astute Analytica market data.\n\nReferences:\n• https://www.astuteanalytica.com/industry-report/gcc-hr-tech-market"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "PESTEL Analysis",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "Political, Economic, Social, Technological, Environmental, Legal",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Political"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Saudi Nitaqat 2026–2028: 340,000+ jobs localised; sector quotas (tourism 40%, engineering 30%, marketing 60%)\n• UAE Emiratisation: 8% (2025), 10% (2026); AED 108,000 per missing Emirati\n• Kuwait Kuwaitisation, Oman Omanisation: Similar mandates\n• Non-compliance: visa freezes, licence suspension, government contract exclusion\n\nProduct implication: OOB nationalization tracking as native dimensions with application capture and compliance dashboards.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Mondaq, Envoy Global sources.\n\nReferences:\n• https://www.mondaq.com/saudiarabia/contracts-and-commercial-law/1754286"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Economic"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• GCC HR Tech: US$2.6B → US$5.5B by 2032 (9.05% CAGR)\n• 70% of GCC companies investing in HR tech\n• Recruitment/ATS key segment\n• Enterprise software consolidation in Saudi/UAE\n\nProduct implication: GCC is high-growth market; nationalization and recruiting capabilities are differentiators.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.5,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Astute Analytica.\n\nReferences:\n• https://www.astuteanalytica.com/industry-report/gcc-hr-tech-market"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Social"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• WhatsApp: 98% open rate vs 20% email; 30M+ users in Saudi; dominant for recruitment\n• GCC smartphone penetration: Saudi 92%, UAE 97% (highest in MENA)\n• P2: 40%+ career site traffic from mobile in Middle East\n• Arabic/English bilingual: mix for professional vs blue-collar roles\n\nProduct implication: WhatsApp integration; mobile-optimised apply flow; Arabic RTL support.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Statista, Wuseller.\n\nReferences:\n• https://www.statista.com/statistics/1190185/mena-smartphone-penetration-rate-forecast-by-region/"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Technological"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Qiwa, GOSI, Mudad: Saudi government portals for work permits, Nitaqat dashboard\n• 70% GCC companies investing in HR tech; HiredScore, Paradox integrations\n• AI-powered recruitment platforms and workforce analytics\n\nProduct implication: Government portal integrations; AI-assisted screening and scheduling.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.2,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Qiwa platform, Astute Analytica.\n\nReferences:\n• https://safwahr.com/qiwa-platform-complete-employer-guide-saudi-arabia-2026/"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Environmental"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• DATA GAP: No material recruiting-specific environmental signals\n• UAE Net Zero 2050, Saudi 2060 are macro\n• ESG workforce reporting may emerge",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.5,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Environmental factor has limited recruiting relevance.\n\nReferences:\n• N/A"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Legal"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Saudi PDPL 2023: Effective Sept 2023; SDAIA oversight; consent, breach 72h, DPO, DPIA\n• KSA Interview Regulations (May 2025): 3-day notice; panel ≥2 Saudi nationals (1 HR specialist); non-Saudi ≤50%; 30-day outcome notification\n• UAE PDPA 2022: Data protection requirements\n\nProduct implication: Interview scheduling must enforce 3-day notice, panel composition validation; consent capture; PDPL-compliant candidate data handling.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Mondaq, Lexology, DLA Piper.\n\nReferences:\n• https://www.mondaq.com/saudiarabia/privacy-protection/1704024\n• https://www.lexology.com/library/detail.aspx?g=c7de6aaf-c00f-40ea-bb2e-c2c11da83e07"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "Competitive Landscape",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "Regional specialists vs global platforms",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Competitive Landscape"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "Global platforms: Workday, SAP SuccessFactors, Oracle HCM/Taleo, ADP\nRegional specialists: ZenHR (ZenATS), Talentera (Bayt.com), Darwinbox\nDifferentiators: ZenHR/Talentera offer native nationalisation tracking, Arabic localisation, government portal awareness\nWorkday wins: Enterprise HCM integration\nWorkday loses: GCC-specific compliance OOB",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.5,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• ZenHR built for MENA; Talentera Bayt.com.\n\nReferences:\n• https://blog.zenhr.com/en/the-complete-hr-stack-for-multi-entity-gcc-groups-2026-executive-guide"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "Win/Loss Overview",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "GCC-explicit gaps",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "GCC-Relevant Win/Loss Gaps"
+      }
+    },
+    "tables": [
+      {
+        "rows": [
+          [
+            "Gap ID",
+            "Pain Point",
+            "Severity"
+          ],
+          [
+            "PG-00009165",
+            "GCC populations cannot use WD integrations with Outlook for interview scheduling or MS Teams HiredScore",
+            "Tolerable (5)"
+          ],
+          [
+            "PG-00005541",
+            "CareerPlug integration; prospect may post jobs in competitor",
+            "Risk of SKU Removal (3)"
+          ]
+        ],
+        "left_inches": 0.5,
+        "top_inches": 1.2,
+        "width_inches": 9,
+        "height_inches": 2.5,
+        "font_size_pt": 9,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.25
+      }
+    ],
+    "speaker_notes": "• 2 GCC-explicit gaps from filtered dataset.\n\nReferences:\n• research/raw-data/filtered_gcc_opps.csv"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "Primary Research",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "Interview participants",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Interview Participants"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "P1 – Cyber Security & Campus Hiring Lead, Accenture (Egypt, GCC, Africa)\nP2 – Performance & Innovation Manager, Baker Hughes (Global TA)\nP3 – Product Owner, Talent & Resourcing, Shell (Global, franchise countries including GCC)",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Anonymised as P1, P2, P3 per research protocol.\n\nReferences:\n• research/GCC/customer-transcripts/"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "P1 – Accenture: Key Themes"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Nationalization: 20% Emiratisation, 60% Saudization, 50% Kuwaitisation; need to track throughout Workday\n• Interview scheduling: 'If we can schedule interviews and send notifications... a lot better'; KSA 3-day notice, 50% Saudi panel\n• Offer rigidity: 2-month dev cycles; 'near impossible' for config changes\n• WhatsApp: 'Absolute necessary... that's how I reach out for quick closures'\n• Dashboards: 'Couldn't read them'; download and create own",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.5,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• P1 leads cyber security and campus hiring for GCC.\n\nReferences:\n• Interview_P1_Ammad_Alsairafi_Accenture.txt"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "P2 – Baker Hughes: Key Themes"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Candidate grid: 'Navigate through different tabs... can it be more seamless?'\n• Boolean search: 'Not that strong'; AI-assisted searches desired\n• Interview scheduling: 'Felt more complicated than Outlook'; Paradox 'good if integrated'\n• Nationalization: 'Nitaqat key mandate'; custom fields; 'we get penalties'\n• WhatsApp: 'Helpful especially in markets like GCC and Saudi'\n• Career site: Cannot be branded; apply redirect clunky\n• Mobile: 40%+ traffic from handheld",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.5,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• P2 is functional owner for Workday Recruiting.\n\nReferences:\n• Interview_P2_Mahboob_Khan_Baker_Hughes.mp4.txt"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "P3 – Shell: Key Themes"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Reporting: 'Dashboard capabilities of Workday not able to accommodate'; built PowerBI\n• Arabic/RTL: Workday Docs 'squares rather than actual characters' for Arabic offers\n• Franchise model: GCC countries 'different operating model'; fewer openings; manual reporting\n• HiredScore: 'Looking at' for high volume, low openings\n• Communication: Shell policy restricts WhatsApp; email, text, MS Teams",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.2,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• P3 manages talent and resourcing globally; GCC in franchise group.\n\nReferences:\n• Interview_P3_Arika_Yamahata_Shell.txt"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "Thematic Analysis",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "Validated themes and triangulation",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Validated Themes 1–3"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "1. Nationalization & Compliance: OOB gap; Nitaqat, Emiratisation, Kuwaitisation; penalties; custom-field workarounds\n2. Reporting & Dashboards: PowerBI/Excel workarounds; multi-tab navigation; native dashboards insufficient\n3. Interview Scheduling: GCC cannot use Outlook/MS Teams; Paradox opportunity; KSA 3-day notice, 50% Saudi panel",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.2,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Themes 1–3 are Priority 1 blockers.\n\nReferences:\n• 2026-03-20-GCC-PMF-Analysis-v40.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Validated Themes 4–6"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "4. Offer Generation Rigidity: 2-month config cycles; Arabic/RTL squares; candidate document upload missing\n5. WhatsApp / Candidate Comms: P1 'absolute necessary'; P2 'helpful'; 90%+ open rates; 40% hiring time reduction\n6. Candidate Grid & Search: Multi-tab navigation; weak boolean search; AI-assisted matching desired",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.2,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Themes 4–6 are Priority 2 opportunities.\n\nReferences:\n• 2026-03-20-GCC-PMF-Analysis-v40.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Cross-Source Validation Matrix"
+      }
+    },
+    "tables": [
+      {
+        "rows": [
+          [
+            "Theme",
+            "P1",
+            "P2",
+            "P3",
+            "CSV",
+            "PMF Impact"
+          ],
+          [
+            "Nationalization",
+            "✓",
+            "✓",
+            "-",
+            "Implicit",
+            "High"
+          ],
+          [
+            "Reporting",
+            "✓",
+            "✓",
+            "✓",
+            "-",
+            "High"
+          ],
+          [
+            "Interview Scheduling",
+            "✓",
+            "✓",
+            "-",
+            "✓",
+            "High"
+          ],
+          [
+            "Offer Generation",
+            "✓",
+            "-",
+            "✓",
+            "-",
+            "Medium"
+          ],
+          [
+            "WhatsApp",
+            "✓",
+            "✓",
+            "Policy",
+            "-",
+            "High"
+          ],
+          [
+            "Candidate Grid/Search",
+            "✓",
+            "✓",
+            "-",
+            "-",
+            "Medium"
+          ]
+        ],
+        "left_inches": 0.5,
+        "top_inches": 1.2,
+        "width_inches": 9,
+        "height_inches": 3.2,
+        "font_size_pt": 8,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.25
+      }
+    ],
+    "speaker_notes": "• Triangulation: P1, P2 strongest on Nationalization and Interview Scheduling.\n\nReferences:\n• Braun & Clarke triangulation"
+  },
+  {
+    "master_index": 1,
+    "placeholders": {
+      "0": {
+        "text": "Theme 2: The AI Matching Imperative"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 4,
+        "text": "Definition: High application volumes (Shell: hundreds per opening; Baker Hughes: 2M database) with weak boolean search create desperate need for AI-assisted candidate matching and pre-screening automation.\n\nKey Insights:\n• P2 (Baker Hughes): \"2M candidates in our database. Can I see who else is matching that requirement? Show people who haven't applied but match.\"\n• P3 (Shell): \"High application volume, low openings = struggle knowing who to pay attention to. Looking at HiredScore for AI.\"\n• P1 (Accenture): \"Is AI on your roadmap? Would be quite helpful.\"\n• Weak boolean search: \"Not that strong on Workday, need more combinations\" (P2)\n\nImpact:\n• Qualified candidates buried in noise; recruiter can't surface hidden gems\n• Baker Hughes has 2M database but no rerank = underutilised talent pool\n\nPMF Signal: 9/10 (Critical) - HiredScore interest validates demand; competitive parity need",
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "bold": false,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• AI matching is no longer nice-to-have - it's table stakes for enterprise ATS.\n• Baker Hughes 2M database quote is powerful: they have the data, Workday isn't helping them use it.\n• HiredScore mentioned by both P2 and P3 = strong validation.\n\nReferences:\n• P2 transcript lines 29-44\n• P3 transcript lines 98-107",
+    "layout_name": "Title Only"
+  },
+  {
+    "master_index": 1,
+    "placeholders": {
+      "0": {
+        "text": "Theme 3: The Interview Scheduling Labyrinth"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 4,
+        "text": "Definition: Coordination spans Outlook/MS Teams/Workday; GCC adds legal complexity (Saudi: 50% national panels, 3-day notice); Paradox acquisition signals recognition of gap.\n\nKey Insights:\n• P1 (Accenture): \"Scheduling piece is #1 thing I'd wish for. If WorkDay can schedule interviews, send notifications, allow hiring manager to add slots = brilliant.\"\n• P2 (Baker Hughes): \"Tested Workday scheduling - more complicated than Outlook. Paradox is good but very expensive standalone.\"\n• P1 (GCC-specific): \"Saudi requires 50% Saudi nationals on interview panels. Also, cannot organise interview <3 days notice without candidate consent.\"\n• CSV data: \"GCC populations cannot use Workday's Outlook/MS Teams integrations\"\n\nImpact:\n• Recruiters context-switch between systems; manual coordination bottleneck\n• GCC compliance adds layer: panel nationality tracking, notice period validation\n\nPMF Signal: 9/10 (Critical) - Top pain point; Paradox acquisition addresses; GCC needs compliance layer",
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "bold": false,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Interview scheduling has been a known pain point for years.\n• Paradox acquisition (Nov 2025) shows Workday recognises this gap.\n• GCC angle: 50% national panel requirement and 3-day notice are legal mandates, not preferences. Need system validation.\n\nReferences:\n• P1 transcript lines 9-13, 71-73\n• P2 transcript lines 47-57\n• CSV: PG-00009165",
+    "layout_name": "Title Only_Alt"
+  },
+  {
+    "master_index": 1,
+    "placeholders": {
+      "0": {
+        "text": "Theme 4: The Nationalization Compliance Tightrope"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 4,
+        "text": "Definition: Saudization (60%), Emiratisation (20%), Kuwaitisation (50%) mandates with penalty risks demand OOB nationality tracking and reporting; current custom fields are fragile band-aids.\n\nKey Insights:\n• P1 (Accenture): \"I'm liable to hit 20% Emiratisation, 60% Saudization, 50% Kuwaitisation on my hiring. We track nationality because we need to hit targets. Also track PWD (4% KSA, 5% Egypt) and gender diversity.\"\n• P2 (Baker Hughes): \"Localization is a big topic in Middle East GCC. Currently we added nationality as custom field - not OOB solution. We get penalties if we don't meet certain percentage.\"\n• P3 (Shell): \"GCC countries more conservative on ethnicity/gender targets vs Western markets, but we do track where legally required (e.g. Malaysia).\"\n\nImpact:\n• Companies face financial penalties for missing quotas\n• Custom fields = fragile; no standardised reporting or compliance dashboard\n\nPMF Signal: 10/10 (Strongest) - Legal mandates + penalties + custom workarounds = urgent OOB need",
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "bold": false,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• This is the HIGHEST PMF signal in the research.\n• Penalties are real: Baker Hughes explicitly mentioned financial consequences.\n• Custom fields = poor solution; breaks with config changes, no standard reporting.\n• Competitive gap: regional ATS competitors (Talentera, Bayt) have OOB nationalization features.\n\nReferences:\n• P1 transcript lines 28-35\n• P2 transcript lines 119-127",
+    "layout_name": "Title Only"
+  },
+  {
+    "master_index": 1,
+    "placeholders": {
+      "0": {
+        "text": "Theme 5: The WhatsApp Communication Gap"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 4,
+        "text": "Definition: GCC candidates expect instant WhatsApp responses; email campaigns insufficient; mobile-first experience critical (40%+ mobile applies).\n\nKey Insights:\n• P1 (Accenture): \"WhatsApp is an absolute necessary. The whole world uses WhatsApp. I reach out to candidates for quick closures - emails take whenever. WhatsApp = immediate responses.\"\n• P2 (Baker Hughes): \"Additional communication methodologies like WhatsApp would be helpful especially in GCC and Saudi. Workday campaigns are email-only at the moment.\"\n• P3 (Shell): \"40%+ of applications in Middle East come via mobile. Mobile interface critical for that audience.\" (Note: Shell avoids WhatsApp for compliance, prefers MS Teams)\n• Interviewer: GA for WhatsApp targeting 26.1 release\n\nImpact:\n• Email response rates poor in GCC; WhatsApp = regional standard\n• Mobile-first candidate experience essential; desktop-optimised flows lose candidates\n\nPMF Signal: 9/10 (Critical) - Near-universal demand; regional imperative; GA roadmap validates",
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "bold": false,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• WhatsApp usage in GCC is among highest globally - not optional for recruiting.\n• P1's quote \"absolute necessary\" and \"immediate responses\" shows urgency.\n• Shell avoiding WhatsApp due to policy is outlier; most customers demand it.\n• Workday already building this (26.1 GA target) - validates research.\n\nReferences:\n• P1 transcript lines 61-68\n• P2 transcript lines 63-65\n• P3 transcript lines 109-113",
+    "layout_name": "Title Only_Alt"
+  },
+  {
+    "master_index": 1,
+    "placeholders": {
+      "0": {
+        "text": "Theme 6: The Reporting Abandonment Signal"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 4,
+        "text": "Definition: Unreadable native dashboards force PowerBI/Excel migrations; customers need granular metrics (time-to-review, stage conversion) by LOB, location, management level.\n\nKey Insights:\n• P1 (Accenture): \"Dashboards gave me a headache to look at. Can't go into Workday and select 'show me all EMEA roles' and get nice dashboard. Need to download and create own dashboards - tedious task.\"\n• P3 (Shell): \"Dashboard capabilities of Workday not mature enough 2022-2023. Had to build dashboard separately in PowerBI. Need granular view: time to review, move to next stage per req/candidate.\"\n• P2 (Baker Hughes): Implied need for better search/filter to surface candidate data\n\nImpact:\n• Customers migrate to external BI tools (PowerBI, Tableau)\n• \"Abandonment signal\" = strong indicator of product gap\n• Granular operational metrics missing (time-per-stage, conversion rates)\n\nPMF Signal: 8/10 (Strong) - Customers build workarounds; \"build vs buy elsewhere\" signal",
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "bold": false,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Abandonment signal = customers stop using native feature, build external solution.\n• Shell migrating to PowerBI in 2022-2023 = recent; dashboards haven't improved enough since.\n• P1's \"headache\" and \"tedious\" language shows frustration level.\n• Granular metrics (time-to-review, stage funnel) = operational excellence blockers.\n\nReferences:\n• P1 transcript lines 52-60\n• P3 transcript lines 23-36",
+    "layout_name": "Title Only"
+  },
+  {
+    "master_index": 1,
+    "text_boxes": [
+      {
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "text": "Product Roadmap Impact",
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "text": "Opportunities",
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "bold": false,
+        "color": "laptop"
+      }
+    ],
+    "layout_name": "Section Title"
+  },
+  {
+    "master_index": 1,
+    "placeholders": {
+      "0": {
+        "text": "Product Roadmap Impact Summary (RICE Prioritisation)"
+      }
+    },
+    "tables": [
+      {
+        "left_inches": 0.5,
+        "top_inches": 1.2,
+        "width_inches": 9,
+        "height_inches": 2.35,
+        "rows": [
+          [
+            "#",
+            "Opportunity",
+            "Reach (users/qtr)",
+            "Impact (0-3)",
+            "Confidence (%)",
+            "Effort (PM)",
+            "RICE",
+            "Priority"
+          ],
+          [
+            "1",
+            "Nationalization OOB",
+            "5,000",
+            "3.0",
+            "90",
+            "4",
+            "3,375",
+            "P1"
+          ],
+          [
+            "2",
+            "Candidate Grid Redesign",
+            "50,000",
+            "2.0",
+            "85",
+            "6",
+            "14,167",
+            "P1"
+          ],
+          [
+            "3",
+            "AI Candidate Matching",
+            "30,000",
+            "2.5",
+            "70",
+            "8",
+            "6,563",
+            "P1"
+          ],
+          [
+            "4",
+            "WhatsApp Integration",
+            "8,000",
+            "2.5",
+            "80",
+            "3",
+            "5,333",
+            "P1"
+          ],
+          [
+            "5",
+            "Interview Scheduling (Paradox)",
+            "40,000",
+            "2.0",
+            "90",
+            "6",
+            "12,000",
+            "P1"
+          ],
+          [
+            "6",
+            "Reporting/Dashboards",
+            "60,000",
+            "1.5",
+            "75",
+            "10",
+            "6,750",
+            "P2"
+          ]
+        ],
+        "font_size_pt": 9,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.25
+      }
+    ],
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 3.65,
+        "width_inches": 8.6,
+        "height_inches": 1.85,
+        "text": "Key insight: All six opportunities score P1 or P2. GCC interviews stress regional compliance and WhatsApp; the same customers validate global grid, AI, scheduling, and reporting gaps.\n\nStrategic note: Candidate grid redesign leads on RICE (reach); nationalization leads on impact (compliance).",
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "bold": false,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• RICE formula: (Reach × Impact × Confidence) / Effort\n• All opportunities are P1 except Reporting (P2 due to high effort: 10 PM)\n• Candidate Grid has highest absolute RICE but Nationalization has highest impact score\n• Interview Scheduling already being addressed via Paradox acquisition\n\nReferences:\n• RICE framework: Intercom product prioritisation methodology",
+    "layout_name": "Title Only_Alt"
+  },
+  {
+    "master_index": 1,
+    "placeholders": {
+      "0": {
+        "text": "E2E Handoff: Research Recommendations"
+      }
+    },
+    "tables": [
+      {
+        "left_inches": 0.5,
+        "top_inches": 1.2,
+        "width_inches": 9,
+        "height_inches": 3.8,
+        "rows": [
+          [
+            "#",
+            "Title",
+            "Action"
+          ],
+          [
+            "1",
+            "Nationalization & Compliance",
+            "Build OOB nationality tracking for Saudi (Nitaqat), UAE (Emiratisation), Kuwait (Kuwaitisation) with application capture, reporting dashboards, and penalty alerts"
+          ],
+          [
+            "2",
+            "Candidate Grid Redesign",
+            "Unified candidate profile modal with left-hand key details (fit, stage, notes) + right-hand resume; reduce 5-10 min navigation tax"
+          ],
+          [
+            "3",
+            "AI Candidate Matching",
+            "AI-powered 'similar candidates' feature showing database matches who haven't applied; integrate HiredScore rerank into candidate grid"
+          ],
+          [
+            "4",
+            "WhatsApp Campaign Builder",
+            "Extend Campaigns app with WhatsApp channel for GCC; templates, scheduling, opt-out, Arabic support"
+          ],
+          [
+            "5",
+            "Interview Panel Compliance",
+            "Saudi interview scheduling with 50% national panel requirement, 3-day notice validation, consent capture for exceptions"
+          ],
+          [
+            "6",
+            "Offer Generation Flexibility",
+            "Flexible offer configuration (levels, templates, Arabic contracts); in-system document collection from candidates"
+          ],
+          [
+            "7",
+            "Recruiter Dashboard",
+            "Granular metrics dashboard: time-to-review, stage conversion, by LOB/location/level; replace PowerBI workarounds"
+          ],
+          [
+            "8",
+            "Boolean Search Enhancement",
+            "Advanced boolean search with more operators, saved queries, AI-assisted query building"
+          ]
+        ],
+        "font_size_pt": 8,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.25
+      }
+    ],
+    "speaker_notes": "• This table is for E2E pipeline handoff.\n• PM will select one recommendation to take through: PRD → Discovery → Prototype → Copy → Figma → Backlog.\n• All 8 recommendations have strong PMF signals; prioritised by RICE score.\n• GCC research provides both regional (1,4,5) and global (2,3,6,7,8) opportunities.",
+    "layout_name": "Title Only"
+  },
+  {
+    "master_index": 1,
+    "placeholders": {
+      "0": {
+        "text": "Key Takeaway: GCC research validates both regional imperatives and global recruiting pain points"
+      }
+    },
+    "layout_name": "1/2 Headline_Alt",
+    "text_boxes": [
+      {
+        "text": "• GCC research is both a regional compliance story and a global recruiter-efficiency story\n• Prioritise OOB nationalization and in-product dashboards to stem custom fields and BI exits\n• Pair AI matching and scheduling investments with human-in-the-loop positioning for regulated markets",
+        "left_inches": 0.7,
+        "top_inches": 1.45,
+        "width_inches": 8.6,
+        "height_inches": 3.2,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Bumper Slide"
+  }
+]

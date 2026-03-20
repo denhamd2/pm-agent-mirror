@@ -47,4 +47,4 @@ This ensures the search bar takes up available space while keeping the logo and 
 - Build successful
 - All TypeScript types correct
 - Components properly styled with Canvas Kit defaults
-- Dev server running at http://localhost:5176/
+- Dev server running at http://localhost:5199/

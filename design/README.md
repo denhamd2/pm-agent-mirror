@@ -8,6 +8,47 @@ This folder contains prototypes, design documentation, and reference materials f
 
 This Figma file contains the approved design system, UI patterns, and component styles for Workday Recruiting features.
 
+### Capture this prototype to Figma (html-to-design MCP)
+
+1. **Dev server** — from this folder run `npm run dev`. Vite is pinned to **`http://localhost:5199/`** (`strictPort: true` in `vite.config.ts`) so capture hash URLs always match the running app.
+2. **Figma `capture.js`** — On load, the script runs **`Kt()`**, which **reads `#figmacapture` from the URL** and starts its own automatic multi-capture flow. **`main.tsx` removes figma hash params synchronously** (before the script runs), then calls **`window.figma.captureForDesign({ captureId, endpoint, selector, delayMs })` exactly once** so only one submission runs per `captureId`. Non-figma hash keys (e.g. **`country=`**) are preserved. Default **`figmadelay` is 6000ms** when omitted. Default **`figmaselector`** is **`#figma-capture-root`**. After load, the address bar **no longer shows** `figmacapture` / `figmaendpoint` — that is expected. If the Figma file is **blank**, raise **`figmadelay`** (e.g. **`10000`**) and use a **new** `captureId` from MCP.
+3. **Agent flow** — call Figma MCP `generate_figma_design` (new file or existing file), then open the returned **localhost:5199** URL including the `#figmacapture=…&figmaendpoint=…` fragment in your browser (macOS: `open "http://localhost:5199/#figmacapture=…"`).
+4. If port **5199** is already taken, stop the other process or temporarily change `vite.config.ts` and use the same port in the capture URL.
+
+#### Fresh Figma file every run (no clipboard, no paste)
+
+Html-to-design can **create a new Figma file automatically** on each capture. You only need to avoid reusing a spent `captureId`.
+
+1. **MCP call** — In one shot, pass **`outputMode: "newFile"`**, a unique **`fileName`** (e.g. `GCC Nationalisation — 20 Mar 2026 — v2`), and your org **`planKey`**. Do **not** use **`clipboard`** unless you explicitly want “Copy instead” / paste-in-Figma.
+2. **New id every time** — Before each capture, call **`generate_figma_design`** again. Each response includes a **new** `captureId` and hash URL. **Never** reuse yesterday’s link, refresh a tab that already submitted, or run `open` twice on the same hash.
+3. **Open the new URL once** — Load the URL from **that** response only. `main.tsx` also listens for **`hashchange`**, so the agent can point the same tab at a **new** hash (new `captureId`) for a follow-up capture without a full reload.
+4. **Poll** — Keep polling with the **`captureId`** from that same run until the MCP reports `completed`; the response should include the **new file** / claim URL.
+
+You cannot get a new server-side file from an old `captureId`; “Capture already submitted” always means **request a new capture from MCP**, then use the **new** URL.
+
+#### Troubleshooting: "Capture already submitted"
+
+This message comes from **Figma’s html-to-design service**, not from a broken MCP install. Each **`captureId` is single-use**: the browser may only submit that id **once**. Typical causes:
+
+- You **refreshed** the tab that had `#figmacapture=…` in the URL  
+- You **opened the same hash URL twice**  
+- An agent ran `open …#figmacapture=old-id` again after a successful submit  
+- **Double submit**: Figma’s boot **`Kt()`** saw `#figmacapture` **and** the app also called **`captureForDesign`** (older builds). Current **`main.tsx`** strips figma params from the URL before **`capture.js`** executes so **`Kt()`** is a no-op; only **`captureForDesign`** runs.
+
+**Fix:** In Cursor, ask the agent to call Figma MCP **`generate_figma_design`** again (same `outputMode` / file target) to get a **new** `captureId`, then open **`http://localhost:5199/#figmacapture=<new-id>&figmaendpoint=…`** **once**. Use MCP **polling** with the new id only — do not rely on reloading the browser to "retry".
+
+#### Troubleshooting: new Figma file opens but looks **blank**
+
+Html-to-design snapshots the DOM after a delay. This stack loads **Roboto from `design.workdaycdn.com`** (Canvas Kit fonts). If capture runs **before** fonts and layout settle, Figma can create a file with **empty or nearly empty** frames.
+
+**Checks:**
+
+- Dev server is **`npm run dev`** and you open the hash URL on **`http://localhost:5199/`** (not a stale build tab).
+- Add **`&figmadelay=8000`** (or higher) to the hash URL for a slower machine or VPN.
+- Open DevTools **Console**: you should see **`[figma capture] starting captureForDesign`** before the Figma **capturing** spinner and **Sent to Figma** bar appear. Older builds could **skip** `captureForDesign` when layout looked empty, which hid **all** Figma UI; current **`main.tsx`** waits up to **30s** for `#figma-capture-root` layout, then **always** calls `captureForDesign` so Figma can show its own UI or errors.
+- Ensure **`capture.js`** is not blocked (privacy / corporate extension); the page must load `https://mcp.figma.com/mcp/html-to-design/capture.js`.
+- **New `captureId` every attempt** — after a failed capture, call **`generate_figma_design`** again; do not reuse the same hash URL.
+
 ## Extracting Design Tokens
 
 Before building a new prototype, extract design tokens and patterns from Figma to ensure visual consistency.
@@ -82,7 +123,7 @@ graph TD
     
     E --> J[Router Setup]
     E --> K[Persistent Nav]
-    E --> L[Breadcrumbs]
+    E --> L[Page title plus tabs]
 ```
 
 ### Wizard/Stepper Flows
@@ -104,7 +145,7 @@ Use for: Dashboard, list views, detail pages
 **Key Components**:
 - Persistent top navigation
 - React Router or state-based routing
-- Breadcrumb navigation
+- Page **`Heading`** and hub / object **`Tabs`** for context (omit breadcrumb strips unless a PRD explicitly requires them)
 - URL-based navigation
 
 **Example**: Recruiter Hub (Dashboard → Candidates → Candidate Detail)
@@ -120,11 +161,14 @@ Use for: Simple forms, single actions, focused tasks
 ```
 design/
 ├── README.md                        # This file
+├── components/                      # Shared shell: WorkdayTopNav, WorkdayLeftTabBar, CommunicationDock, sanaShellTheme
 ├── workday-design-tokens.md         # Extracted Figma tokens
 ├── [feature]-prototype.tsx          # Prototype implementations
 ├── [feature]-implementation.md      # Implementation docs
 └── node_modules/                    # Dependencies (gitignored)
 ```
+
+**Shared Sana shell (full-page Recruiting prototypes):** import **`WorkdayTopNav`** and **`WorkdayLeftTabBar`** from `./components`, set the page background to **`SANA_PAGE_CANVAS`**, and follow **`010-style-guide.mdc`** and **`design/references/sana/`**.
 
 ## Building a Prototype
 
@@ -254,7 +298,7 @@ Save to `[feature]-implementation.md` with:
 - **Test accessibility** - Keyboard navigation, screen readers, contrast
 - **Match Figma fidelity** - Use Figma as visual target for styling
 - **Document as you go** - Save implementation notes for handoff
-- **Run locally** - Ensure prototype works before handoff to 330-ux-designer
+- **Run locally** - Ensure prototype works before handoff to 330-figma-creator
 
 ## Questions?
 

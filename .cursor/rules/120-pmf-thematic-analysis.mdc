@@ -148,9 +148,14 @@ This enables the orchestrator to present all recommendations to the PM for human
 
 **MCP Workflow:**
 1. Call `parse_template` for template_path
-2. Write slide spec JSON to `slides_spec.json` at project root
+2. Write slide spec JSON to `slides_spec.json` (or `slides_spec_vN.json`) at project root
 3. Call `create_presentation` or run `generate_presentation.py`
 4. Output to `~/Downloads/[Country]_Recruiting_PMF_Roadmap_vN.pptx` — version auto-increments on each generation (v1, v2, v3…)
+
+**Slide spec schema (mandatory — matches `user-slide-deck-mcp` `create_presentation`):**
+- Use **`layout_name`** on every slide (e.g. `"TITLE"`, `"Title Only"`, `"Title Only_Alt"`, `"Section Title"`, `"1/2 Headline_Alt"`, `"Bumper Slide"`). Do **not** use a top-level `"layout"` key; the engine ignores it and may render every slide as a title slide.
+- **`placeholders`** must map indices to objects: `"0": {"text": "Title"}`. Never use `"0": "plain string"`.
+- **Section Title** has no title placeholder; use two **`text_boxes`**: heading at `(3.3, 1.5)` 24pt bold `ink`, subtitle at `(3.3, 3.8)` 11pt `laptop` (see working `slides_spec.json` in repo).
 
 **Deck Structure (indicative length ~49 slides, McKinsey-style tone):**
 - Title | Research Author | Agenda | Executive Summary
@@ -164,6 +169,8 @@ This enables the orchestrator to present all recommendations to the PM for human
 - SECTION 05: Gap Analysis (Full Funnel — Major/Partial/Supported)
 - SECTION 06: Roadmap Recommendations (6 slides)
 - Bumper Slide
+
+**Canonical GCC deck merge (mandatory unless PM asks for a “focus deck” only):** Versioned specs such as `slides_spec_v41.json` must **retain the full section flow** from the working baseline `slides_spec.json` (Research Challenge through Strategic Context, **full PESTEL** six factors, Competitive Landscape, Win/Loss, Primary Research through P3, Thematic Analysis with **Validated Themes + Cross-Source Matrix**). Append newer analysis as **additional** slides (e.g. v41 six theme deep-dives, RICE table, 8-row E2E handoff). Do **not** replace that baseline with a short “themes only” deck or point stakeholders to an older `.pptx` for PESTEL.
 
 **Participant Anonymization:**
 - Customer interview participants: List as "P1 - Job Title, Company" (e.g., "P1 - Senior Recruiter, Accenture")

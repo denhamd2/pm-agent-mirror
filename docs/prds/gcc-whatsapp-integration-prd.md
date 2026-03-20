@@ -4,7 +4,7 @@ March 2026
 
 ## Executive Summary
 
-Workday is uniquely positioned to deliver WhatsApp as a candidate communication channel for the Gulf Cooperation Council (GCC) region. WhatsApp has 98% open rates for recruitment in GCC versus ~20% for email—the dominant channel for recruiter-candidate engagement—yet Workday Recruiting today relies exclusively on email for campaigns, status updates, and interview coordination. Workday Messaging (SMS) supports only U.S. and Canada; GCC recruiters have no native channel for their preferred communication method. GCC PMF research (v36) identified WhatsApp as a critical PMF theme: P1 (Accenture) stated "Absolutely WhatsApp is an absolute necessary… that's how I reach out to my candidates for quick closures. Emails will take whenever. But when you're looking at WhatsApp, you get immediate responses." P2 (Baker Hughes): "Having something like a WhatsApp or other communication methodologies would be helpful especially in markets like GCC and Saudi… the campaign functionality in workday is limited email campaigns at this point." P3 (Shell) has policy against WhatsApp for official business—an exception case. Workday is developing WhatsApp integration (early adopters); this PRD defines GA for GCC and extension of candidate engagement campaigns beyond email.
+Workday is uniquely positioned to deliver WhatsApp as a candidate communication channel for the Gulf Cooperation Council (GCC) region. WhatsApp has 98% open rates for recruitment in GCC versus ~20% for email—the dominant channel for recruiter-candidate engagement—yet Workday Recruiting today relies exclusively on email for campaigns, status updates, and interview coordination. Workday Messaging (SMS) supports only U.S. and Canada; GCC recruiters have no native channel for their preferred communication method. GCC PMF research (v38) identified WhatsApp as a critical PMF theme: P1 (Accenture) stated "Absolutely WhatsApp is an absolute necessary… that's how I reach out to my candidates for quick closures. Emails will take whenever. But when you're looking at WhatsApp, you get immediate responses." P2 (Baker Hughes): "Having something like a WhatsApp or other communication methodologies would be helpful especially in markets like GCC and Saudi… the campaign functionality in workday is limited email campaigns at this point." P3 (Shell) has policy against WhatsApp for official business—an exception case. Workday is developing WhatsApp integration (early adopters); this PRD defines GA for GCC and extension of candidate engagement campaigns beyond email.
 
 For our customers, this feature will enable recruiters to reach candidates on their preferred channel—WhatsApp—reducing time-to-response from 24–48 hours (email) to 5–15 minutes, improving offer acceptance rates, and eliminating manual workarounds (personal WhatsApp, email forwarding). PESTEL research: GCC has 30M+ WhatsApp users in Saudi alone; 98% open rate vs 20% email; smartphone penetration Saudi 92%, UAE 97% (highest in MENA); 40%+ career site traffic from mobile (P2). Recruiters will send job alerts, interview reminders, and status updates via WhatsApp within Workday, with full audit trail and consent management.
 
@@ -13,8 +13,9 @@ For Workday, this initiative will remove a PMF blocker in the high-growth GCC ma
 This feature will be delivered as part of the Candidate Engagement roadmap for 2026R2, with GCC (Saudi Arabia, UAE, Kuwait, Qatar, Bahrain, Oman) as the initial GA region.
 
 **Epic Links:**
-- WhatsApp GCC EA: RECRUIT-TBD
-- WhatsApp GCC GA: RECRUIT-TBD
+- **MISSION-015 (v38 E2E, HITL #5):** [HRREC-90966](https://jira2.workday.com/browse/HRREC-90966)
+- Prior epics (reference): [HRREC-90962](https://jira2.workday.com/browse/HRREC-90962) (MISSION-014), [HRREC-90928](https://jira2.workday.com/browse/HRREC-90928)
+- WhatsApp GCC EA / GA: link formal programme epics when assigned
 
 ---
 
@@ -124,7 +125,7 @@ No AI/ML decision-making; communication channel extension only.
 
 ## Resources
 
-• **Source Research**: research/GCC/thematic-analysis/2026-03-19-GCC-PMF-Analysis-v36.md
+• **Source Research**: research/GCC/thematic-analysis/2026-03-19-GCC-PMF-Analysis-v38.md
 • **GCC PMF Theme**: Candidate Communication (WhatsApp) - Theme 5
 • **Customer Evidence**: P1 (Accenture): "Absolutely WhatsApp is an absolute necessary… that's how I reach out to my candidates for quick closures. Emails will take whenever. But when you're looking at WhatsApp, you get immediate responses." P2 (Baker Hughes): "Having something like a WhatsApp or other communication methodologies would be helpful especially in markets like GCC and Saudi… the campaign functionality in workday is limited email campaigns at this point." P3 (Shell): Policy against WhatsApp for official business (exception case)
 • **PESTEL Context**: GCC has 30M+ WhatsApp users in Saudi; 98% open rate vs 20% email; smartphone penetration Saudi 92%, UAE 97%; 40%+ career site traffic from mobile (P2); GCC app market growth 2.6% YoY vs 0.5% globally

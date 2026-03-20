@@ -4,7 +4,7 @@
     "layout_name": "TITLE",
     "placeholders": {
       "0": {"text": "GCC Recruiting Product-Market Fit Research"},
-      "1": {"text": "Braun & Clarke 6-Phase Thematic Analysis | v36 | 19 March 2026"}
+      "1": {"text": "Braun & Clarke 6-Phase Thematic Analysis | v40 | 20 March 2026"}
     }
   },
   {
@@ -216,7 +216,7 @@
     "text_boxes": [
       {"text": "1. Nationalization & Compliance: OOB gap; Nitaqat, Emiratisation, Kuwaitisation; penalties; custom-field workarounds\n2. Reporting & Dashboards: PowerBI/Excel workarounds; multi-tab navigation; native dashboards insufficient\n3. Interview Scheduling: GCC cannot use Outlook/MS Teams; Paradox opportunity; KSA 3-day notice, 50% Saudi panel", "left_inches": 0.7, "top_inches": 1.2, "width_inches": 8.6, "height_inches": 3.2, "font_name": "Archivo", "font_size_pt": 11, "color": "ink"}
     ],
-    "speaker_notes": "• Themes 1–3 are Priority 1 blockers.\n\nReferences:\n• 2026-03-19-GCC-PMF-Analysis-v36.md"
+    "speaker_notes": "• Themes 1–3 are Priority 1 blockers.\n\nReferences:\n• 2026-03-20-GCC-PMF-Analysis-v40.md"
   },
   {
     "master_index": 1,
@@ -225,7 +225,7 @@
     "text_boxes": [
       {"text": "4. Offer Generation Rigidity: 2-month config cycles; Arabic/RTL squares; candidate document upload missing\n5. WhatsApp / Candidate Comms: P1 'absolute necessary'; P2 'helpful'; 90%+ open rates; 40% hiring time reduction\n6. Candidate Grid & Search: Multi-tab navigation; weak boolean search; AI-assisted matching desired", "left_inches": 0.7, "top_inches": 1.2, "width_inches": 8.6, "height_inches": 3.2, "font_name": "Archivo", "font_size_pt": 11, "color": "ink"}
     ],
-    "speaker_notes": "• Themes 4–6 are Priority 2 opportunities.\n\nReferences:\n• 2026-03-19-GCC-PMF-Analysis-v36.md"
+    "speaker_notes": "• Themes 4–6 are Priority 2 opportunities.\n\nReferences:\n• 2026-03-20-GCC-PMF-Analysis-v40.md"
   },
   {
     "master_index": 1,

@@ -7,23 +7,29 @@ import {
 } from '@workday/canvas-kit-react/button';
 import { Card } from '@workday/canvas-kit-react/card';
 import { Avatar } from '@workday/canvas-kit-react/avatar';
-import { Table } from '@workday/canvas-kit-react/table';
 import { Banner } from '@workday/canvas-kit-react/banner';
 import { SystemIcon } from '@workday/canvas-kit-react/icon';
 import { Flex, Box } from '@workday/canvas-kit-react/layout';
-import { colors, space } from '@workday/canvas-kit-react/tokens';
+import { colors } from '@workday/canvas-kit-react/tokens';
 import { Heading, BodyText } from '@workday/canvas-kit-react/text';
-import { TextInput } from '@workday/canvas-kit-react/text-input';
-import { Tabs } from '@workday/canvas-kit-react/tabs';
 import {
-  searchIcon,
-  justifyIcon,
+  WorkdayTopNav,
+  WorkdayLeftTabBar,
+  WORKDAY_TOP_NAV_HEIGHT_PX,
+  SANA_PAGE_CANVAS,
+} from './components';
+import {
   checkIcon,
   exclamationTriangleIcon,
   xIcon,
   xSmallIcon,
   activityStreamIcon,
 } from '@workday/canvas-system-icons-web';
+
+const CAMPAIGN_TABS = [
+  { id: 'profile', label: 'Profile' },
+  { id: 'activity', label: 'Activity' },
+] as const;
 
 /**
  * GCC WhatsApp Candidate Communication Prototype
@@ -106,6 +112,7 @@ function getConsentLabel(status: ConsentStatus): string {
 
 export const GCCWhatsAppCampaign: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
+  const [leftTab, setLeftTab] = useState<string>('profile');
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>(TEMPLATES[0].id);
   const [isSending, setIsSending] = useState(false);
@@ -146,67 +153,33 @@ export const GCCWhatsAppCampaign: React.FC = () => {
   };
 
   return (
-    <Box>
-      {/* Top Navigation */}
-      <Box
-        paddingX="l"
-        paddingY="s"
-        style={{
-          backgroundColor: 'white',
-          borderBottom: `1px solid ${colors.soap300}`,
-        }}
+    <Box style={{ minHeight: '100vh', backgroundColor: SANA_PAGE_CANVAS }}>
+      <WorkdayTopNav
+        searchValue={searchValue}
+        onSearchChange={setSearchValue}
+        notificationBadge={20}
+        inboxBadge={101}
+        searchMaxWidthPx={600}
+      />
+      <Flex
+        alignItems="stretch"
+        style={{ minHeight: `calc(100vh - ${WORKDAY_TOP_NAV_HEIGHT_PX}px)` }}
       >
-        <Flex justifyContent="space-between" alignItems="center" gap="l">
-          <Flex alignItems="center" gap="m" flex="0 0 auto">
-            <ToolbarIconButton icon={justifyIcon} aria-label="Menu" />
-            <Box
-              style={{
-                fontSize: 24,
-                fontWeight: 700,
-                color: colors.blueberry500,
-                fontFamily: '"Roboto", sans-serif',
-              }}
-            >
-              Workday
-            </Box>
-          </Flex>
-
-          <Box flex="1 1 auto" maxWidth="600px" style={{ position: 'relative' }}>
-            <Box
-              style={{
-                position: 'absolute',
-                left: 12,
-                top: '50%',
-                transform: 'translateY(-50%)',
-                pointerEvents: 'none',
-                zIndex: 1,
-              }}
-            >
-              <SystemIcon icon={searchIcon} size={16} color={colors.blackPepper400} />
-            </Box>
-            <TextInput
-              placeholder="Search..."
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              aria-label="Search"
-              style={{
-                width: '100%',
-                backgroundColor: colors.soap100,
-                border: `1px solid ${colors.soap300}`,
-                borderRadius: 4,
-                padding: '8px 12px 8px 36px',
-              }}
-            />
-          </Box>
-
-          <Flex alignItems="center" flex="0 0 auto">
-            <Avatar size={32} altText="User" as="div" />
-          </Flex>
-        </Flex>
-      </Box>
-
-      {/* Main Content - Candidate Profile */}
-      <Box padding="xl" style={{ maxWidth: 1200, margin: '0 auto', position: 'relative' }}>
+        <WorkdayLeftTabBar
+          secondaryTitle={MOCK_CANDIDATE.name}
+          secondarySubtitle={`Applied ${MOCK_CANDIDATE.appliedDate}`}
+          tabs={[...CAMPAIGN_TABS]}
+          activeTabId={leftTab}
+          onTabChange={setLeftTab}
+        />
+        <Box
+          flex={1}
+          minWidth={0}
+          padding="xl"
+          style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', overflow: 'auto' }}
+        >
+      {leftTab === 'profile' ? (
+      <>
         <Heading size="large" marginBottom="xs">
           Candidate profile
         </Heading>
@@ -332,7 +305,19 @@ export const GCCWhatsAppCampaign: React.FC = () => {
             The candidate has 8 years of experience in full-stack development with expertise in React, Node.js, and cloud infrastructure. Previous experience at Accenture and Shell.
           </BodyText>
         </Card>
-      </Box>
+      </>
+      ) : (
+        <Card padding="l">
+          <Heading size="small" marginBottom="m">
+            Activity
+          </Heading>
+          <BodyText size="medium" color={colors.blackPepper600}>
+            Placeholder for timeline and message history. Profile tab contains the WhatsApp campaign actions.
+          </BodyText>
+        </Card>
+      )}
+        </Box>
+      </Flex>
 
       {/* Sliding Side Panel */}
       {isPanelOpen && (

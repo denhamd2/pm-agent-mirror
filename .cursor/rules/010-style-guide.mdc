@@ -58,6 +58,56 @@ Instead, Workday partners with **Broadbean** (certified partner) for job distrib
 
 **Do NOT recommend Workday build native job board integrations.** Always check Broadbean first, then recommend partnership expansion if needed.
 
+## Sana Style UI (prototypes and visual design)
+
+Apply to **all** in-repo Canvas Kit prototypes under `design/`, Figma capture targets, and any agent output that specifies **screen layout, colour, typography, or radii** for Workday UI (especially **315** discovery briefs and **320** implementations).
+
+### Intent
+**Sana** prioritises a **neutral, calm** interface: **white and light grey** surfaces, **muted** accent use, and **soft geometry**. It is **not** the older pattern of large **blue** header bands and heavy blueberry fills for every chrome region.
+
+### Colour
+- **Page canvas (full viewport behind shell)**: Use shared **`SANA_PAGE_CANVAS`** from `design/components/sanaShellTheme.ts` (reference ~`#F3F5F7`) for prototypes that mirror the latest Sana benchmark, or the closest **`soap`** token if you must stay token-only.
+- **Top navigation bar**: Use **`SANA_TOP_NAV_BG`** (~`#F3F4F6`) — light grey strip (not white). Centre **pill search** uses **`SANA_SEARCH_FIELD_BG`** (white) with a thin **`soap300`** border and subtle shadow; trailing utilities stay **dark outline** icons on the grey bar.
+- **Primary left icon rail**: Use **`SANA_PRIMARY_RAIL_BG`** (same grey band as top bar for continuity) with **stacked icon + uppercase micro-label** under each icon (`design/references/sana/Sana_Style_UI-employee-profile-comm-dock.png`). No heavy border between rail and **secondary** column — they share one grey field.
+- **Secondary hub column (vertical tabs)**: Use **`SANA_SECONDARY_NAV_BG`** (same cool grey as the icon rail). **Inactive** tab labels: medium grey (**`SANA_SECONDARY_TAB_INACTIVE_FG`**). **Active** tab: **pill** fill **`SANA_SECONDARY_TAB_ACTIVE_BG`** (slightly darker than the rail), label **bold** near-black (**`SANA_SECONDARY_TAB_ACTIVE_FG`**). For worker / candidate profile hubs, set **`WorkdayLeftTabBar`** **`showSecondaryTitleIcon`** so a **person** icon sits beside the hub title (Sana reference).
+- **Page and panel backgrounds**: Light greys and off-whites for chrome; **`#FFFFFF`** or **`frenchVanilla100`** for main **content** cards only (not the left hub column).
+- **Link / primary accent (hex reference)**: **`SANA_LINK_ACCENT`** (~`#005CB9`) for inline link colour where CK blueberry is too heavy; still prefer Canvas Kit for buttons and focus.
+- **Primary structure**: White **cards** on grey **canvas**; thin **`soap300`** (or token-equivalent) borders and hairline dividers.
+- **Blue and brand colour**: Use **sparingly** for **hyperlinks**, **primary actions**, **selected states**, and **focus rings**. Avoid painting whole sidebars or page headers in saturated blueberry unless the reference screen explicitly requires it (e.g. legacy candidate column). Prefer **neutral** rails and **subtle** selection fills.
+- **Badges and alerts**: Keep existing semantic colours (e.g. cinnamon for notification counts) where CK provides them.
+
+### Typography
+- **Font stack**: **Roboto** with Canvas Kit text primitives (`Heading`, `BodyText`, `Text`); match CK type sizes rather than inventing px scales.
+- **Hierarchy**: **Bold** module and card titles; **regular** body; **smaller** secondary labels and metadata (British English in copy).
+
+### Shape and layout
+- **Global search**: **Pill** (`border-radius` fully rounded) with icon inset, matching Sana reference density.
+- **Navigation**: Active items use **pill** or **soft rounded** highlight containers, not sharp rectangles.
+- **Cards**: Corner radius in the **16–20px** range unless a Canvas Kit component dictates otherwise; shared theme uses **`SANA_CARD_RADIUS_LG`** (~20px) for large content cards.
+- **Main shell / large regions**: Where a single content well wraps the page body, **large** corner radii (order of **24px**; **`SANA_SHELL_RADIUS`**) may apply, consistent with Sana reference layouts.
+- **Compact UI** (chips, message bubbles, small controls): **~12px** radius for a softer, conversational feel.
+
+### Prototype shell (mandatory for `design/*.tsx` Recruiting prototypes)
+- **`WorkdayTopNav`** (`design/components/WorkdayTopNav.tsx`): Grey bar (**`SANA_TOP_NAV_BG`**); Canvas Kit **`InputGroup`** + **`InputGroup.Input`** for **white** pill search; **`ToolbarIconButton`** utilities (dark icons); **`CountBadge`** on inbox/notifications; **`Avatar`**; optional tenant **`Heading`**. Extend via props (`trailingActions`, `showMenuWordmark`, `showWMark`, `compactTrailing`, etc.); **do not** reimplement top chrome inline for new prototypes.
+- **`WorkdayLeftTabBar`** (`design/components/WorkdayLeftTabBar.tsx`): Primary rail = **`SystemIcon`** + **uppercase micro-label** (9px, wide letter-spacing, pepper grey). Secondary column = **same grey** as rail; hub **`Heading`** + optional **`userIcon`**; section tabs = **full pill** radius, **inactive** medium grey / **active** darker grey pill + bold near-black (tokens in **`sanaShellTheme.ts`**). Do not use **`TertiaryButton`** for section tabs. Use on every full-page prototype unless the brief explicitly scopes a modal-only or single-panel demo.
+- **No breadcrumbs in prototypes**: Do **not** add Canvas Kit **`Breadcrumbs`** or custom chevron trails under the shell. Use **page `Heading`**, left hub tabs, and object **`Tabs`** for place-in-product unless a PRD explicitly requires breadcrumbs.
+- **`CommunicationDock`**: sliding column wrapped in Canvas Kit **`Card`** (`padding="zero"`); rail uses **`Flex`** + **`space`** tokens.
+- **Theme exports**: Import **`SANA_PAGE_CANVAS`**, **`SANA_CARD_SHADOW`**, **`SANA_SHELL_RADIUS`**, etc. from `design/components/sanaShellTheme.ts` (re-exported in `design/components/index.ts`) instead of scattering one-off hexes.
+
+### Canvas Kit MCP
+Before adding new custom CSS for colour, spacing, or type, **check** **`user-canvas-kit-mcp`** (`get-canvas-kit-tokens` and token resources). Prefer **components** over raw markup.
+
+**Prototype chrome:** Do not use **warning-styled `Banner`** only to flag mock data; use neutral **`BodyText`**. Implement **every** visible hub or page tab with real Canvas Kit content unless the PRD explicitly limits scope.
+
+### Reference imagery
+**Versioned benchmarks** (see `design/references/sana/README.md`):
+- `design/references/sana/Sana_Style_UI-e0cea579-b804-4bf4-a662-30fc2a8cbe96.png` (earlier capture)
+- `design/references/sana/Sana_Style_UI-e1cc54e6-0b94-46e8-88cf-9a0667164eb4.png` (candidate profile + left tab bar + top nav; preferred for shell layout)
+- `design/references/sana/Sana_Style_UI-secondary-nav-grey.png` (grey secondary hub tabs: inactive vs active pill)
+- `design/references/sana/Sana_Style_UI-employee-profile-comm-dock.png` (Sana-fied shell: grey top bar, white pill search, labelled icon rail, comm dock)
+
+Use these to validate **neutrals, radii, and type hierarchy**, not to bypass Canvas Kit. Additional ad-hoc PNGs in Cursor assets may supplement but the repo paths are the default citations.
+
 ## Research & Analysis Standards
 
 ### Citations
@@ -148,5 +198,6 @@ This rule applies to:
 - PRD documents
 - Roadmap recommendations
 - Internal documentation
+- **Canvas Kit prototypes** and **design** specs in `design/` (including **Sana Style UI** above)
 
 Always apply these standards unless explicitly instructed otherwise by the user.

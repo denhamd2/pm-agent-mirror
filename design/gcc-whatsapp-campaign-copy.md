@@ -243,4 +243,4 @@ The prototype copy is largely aligned with Workday Editorial Guidelines. Most he
 2. **Clarity:** Tighten error and success messages; make the Schedule radio label explicit.
 3. **Legal validation:** Consent labels and PDPL/PDPA messaging must be reviewed by 060-legal-advisor before production.
 
-After 060 validates the legal-sensitive copy, the prototype is ready for 330-ux-designer Figma capture.
+After 060 validates the legal-sensitive copy, the prototype is ready for 330-figma-creator Figma capture.

@@ -9,6 +9,17 @@ import { Checkbox } from '@workday/canvas-kit-react/checkbox';
 import { SystemIcon } from '@workday/canvas-kit-react/icon';
 import { checkIcon, xIcon, infoIcon } from '@workday/canvas-system-icons-web';
 import { colors, space } from '@workday/canvas-kit-react/tokens';
+import {
+  WorkdayTopNav,
+  WorkdayLeftTabBar,
+  WORKDAY_TOP_NAV_HEIGHT_PX,
+  SANA_PAGE_CANVAS,
+} from './components';
+
+const SCHEDULING_TABS = [
+  { id: 'schedule', label: 'Schedule interview' },
+  { id: 'rules', label: 'GCC rules' },
+] as const;
 
 interface Interviewer {
   id: string;
@@ -25,6 +36,8 @@ interface ComplianceStatus {
 }
 
 export const GCCInterviewScheduling: React.FC = () => {
+  const [searchValue, setSearchValue] = useState('');
+  const [leftTab, setLeftTab] = useState<string>('schedule');
   const [requisitionId] = useState('REQ-2024-00542');
   const [requisitionTitle] = useState('Senior Engineer - Riyadh');
   const [entity] = useState('Saudi Arabia');
@@ -53,8 +66,10 @@ export const GCCInterviewScheduling: React.FC = () => {
     const ksaPanelRule = totalCount > 0 && (saudiCount / totalCount) >= 0.5;
     
     // Kuwait Notice: 3-day minimum
-    const kuwaitNotice = candidateLocation !== 'Kuwait' || 
-      (interviewDate && new Date(interviewDate).getTime() - Date.now() >= 3 * 24 * 60 * 60 * 1000);
+    const kuwaitNotice =
+      candidateLocation !== 'Kuwait' ||
+      (!!interviewDate &&
+        new Date(interviewDate).getTime() - Date.now() >= 3 * 24 * 60 * 60 * 1000);
     
     // Emiratisation tracking (placeholder)
     const emiratisationTracking = entity !== 'UAE' || selectedPanelists.some(i => i.nationality === 'Emirati');
@@ -86,12 +101,30 @@ export const GCCInterviewScheduling: React.FC = () => {
 
   if (showScheduleConfirmation) {
     return (
-      <Box padding="xxl" style={{ maxWidth: 800, margin: '0 auto' }}>
-        <Card padding="l">
-          <Flex direction="column" gap="l" alignItems="center">
+      <Box style={{ minHeight: '100vh', backgroundColor: SANA_PAGE_CANVAS }}>
+        <WorkdayTopNav
+          searchValue={searchValue}
+          onSearchChange={setSearchValue}
+          notificationBadge={20}
+          inboxBadge={101}
+        />
+        <Flex
+          alignItems="stretch"
+          style={{ minHeight: `calc(100vh - ${WORKDAY_TOP_NAV_HEIGHT_PX}px)` }}
+        >
+          <WorkdayLeftTabBar
+            secondaryTitle={candidateName}
+            secondarySubtitle={requisitionTitle}
+            tabs={[...SCHEDULING_TABS]}
+            activeTabId={leftTab}
+            onTabChange={setLeftTab}
+          />
+          <Box flex={1} padding="xxl" style={{ overflow: 'auto' }}>
+            <Card padding="l" style={{ maxWidth: 800, margin: '0 auto' }}>
+          <Flex flexDirection="column" gap="l" alignItems="center">
             <SystemIcon icon={checkIcon} size={48} color={colors.greenApple600} />
             <Heading size="large">Interview Scheduled Successfully</Heading>
-            <BodyText>
+            <BodyText size="medium">
               Interview for {candidateName} has been scheduled with GCC compliance verified.
             </BodyText>
             
@@ -114,13 +147,35 @@ export const GCCInterviewScheduling: React.FC = () => {
               <TertiaryButton>View Calendar</TertiaryButton>
             </Flex>
           </Flex>
-        </Card>
+            </Card>
+          </Box>
+        </Flex>
       </Box>
     );
   }
 
   return (
-    <Box padding="xl" style={{ maxWidth: 1200, margin: '0 auto' }}>
+    <Box style={{ minHeight: '100vh', backgroundColor: SANA_PAGE_CANVAS }}>
+      <WorkdayTopNav
+        searchValue={searchValue}
+        onSearchChange={setSearchValue}
+        notificationBadge={20}
+        inboxBadge={101}
+      />
+      <Flex
+        alignItems="stretch"
+        style={{ minHeight: `calc(100vh - ${WORKDAY_TOP_NAV_HEIGHT_PX}px)` }}
+      >
+        <WorkdayLeftTabBar
+          secondaryTitle={candidateName}
+          secondarySubtitle={requisitionTitle}
+          tabs={[...SCHEDULING_TABS]}
+          activeTabId={leftTab}
+          onTabChange={setLeftTab}
+        />
+        <Box flex={1} minWidth={0} padding="xl" style={{ overflow: 'auto' }}>
+      {leftTab === 'schedule' ? (
+      <>
       <Heading size="large" marginBottom="m">Schedule Interview with GCC Compliance</Heading>
       
       <Flex gap="l" style={{ flexWrap: 'wrap' }}>
@@ -128,35 +183,33 @@ export const GCCInterviewScheduling: React.FC = () => {
         <Box flex="1" minWidth="400px">
           <Card padding="l" marginBottom="l">
             <Heading size="medium" marginBottom="m">Requisition Details</Heading>
-            <Flex direction="column" gap="m">
+            <Flex flexDirection="column" gap="m">
               <Box>
                 <BodyText size="small" style={{ fontWeight: 600, color: colors.blackPepper600 }}>Requisition ID</BodyText>
-                <BodyText>{requisitionId}</BodyText>
+                <BodyText size="medium">{requisitionId}</BodyText>
               </Box>
               <Box>
                 <BodyText size="small" style={{ fontWeight: 600, color: colors.blackPepper600 }}>Position</BodyText>
-                <BodyText>{requisitionTitle}</BodyText>
+                <BodyText size="medium">{requisitionTitle}</BodyText>
               </Box>
               <Box>
                 <BodyText size="small" style={{ fontWeight: 600, color: colors.blackPepper600 }}>Entity</BodyText>
-                <BodyText>{entity}</BodyText>
+                <BodyText size="medium">{entity}</BodyText>
               </Box>
               <Box>
                 <BodyText size="small" style={{ fontWeight: 600, color: colors.blackPepper600 }}>Candidate</BodyText>
-                <BodyText>{candidateName}</BodyText>
+                <BodyText size="medium">{candidateName}</BodyText>
               </Box>
               <Box>
                 <BodyText size="small" style={{ fontWeight: 600, color: colors.blackPepper600 }} marginBottom="xs">Candidate Location</BodyText>
-                <Select 
-                  value={candidateLocation} 
-                  onChange={(e) => setCandidateLocation(e.target.value)}
-                  style={{ width: '100%' }}
-                >
-                  <option value="Riyadh">Riyadh, Saudi Arabia</option>
-                  <option value="Dubai">Dubai, UAE</option>
-                  <option value="Kuwait">Kuwait City, Kuwait</option>
-                  <option value="Doha">Doha, Qatar</option>
-                </Select>
+                <Box width="100%">
+                  <Select value={candidateLocation} onChange={(e) => setCandidateLocation(e.target.value)}>
+                    <option value="Riyadh">Riyadh, Saudi Arabia</option>
+                    <option value="Dubai">Dubai, UAE</option>
+                    <option value="Kuwait">Kuwait City, Kuwait</option>
+                    <option value="Doha">Doha, Qatar</option>
+                  </Select>
+                </Box>
               </Box>
             </Flex>
           </Card>
@@ -217,7 +270,7 @@ export const GCCInterviewScheduling: React.FC = () => {
                   <Box flex="1">
                     <Flex justifyContent="space-between" alignItems="center">
                       <Box>
-                        <BodyText style={{ fontWeight: 600 }}>{interviewer.name}</BodyText>
+                        <BodyText size="medium" style={{ fontWeight: 600 }}>{interviewer.name}</BodyText>
                         <BodyText size="small" color={colors.blackPepper400}>{interviewer.role}</BodyText>
                       </Box>
                       {interviewer.isSaudiNational && (
@@ -268,7 +321,7 @@ export const GCCInterviewScheduling: React.FC = () => {
             {!allCompliant && selectedInterviewers.length > 0 && (
               <Box marginTop="m" padding="s" style={{ backgroundColor: 'white', borderRadius: 4 }}>
                 <BodyText size="small" color={colors.cantaloupe600}>
-                  ⚠️ Interview cannot be scheduled until all compliance requirements are met.
+                  Warning: interview cannot be scheduled until all compliance requirements are met.
                 </BodyText>
               </Box>
             )}
@@ -283,6 +336,22 @@ export const GCCInterviewScheduling: React.FC = () => {
               Schedule Interview
             </PrimaryButton>
           </Flex>
+        </Box>
+      </Flex>
+      </>
+      ) : (
+        <Card padding="l" style={{ maxWidth: 720 }}>
+          <Heading size="medium" marginBottom="s">
+            GCC interview rules (illustrative)
+          </Heading>
+          <BodyText size="medium" color={colors.blackPepper600} marginBottom="s">
+            Saudi Arabia: interview panels often require a minimum share of Saudi nationals (Nitaqat context).
+          </BodyText>
+          <BodyText size="medium" color={colors.blackPepper600}>
+            Kuwait: allow at least three days notice where local rules apply. Schedule tab runs the live compliance checks for this prototype.
+          </BodyText>
+        </Card>
+      )}
         </Box>
       </Flex>
     </Box>

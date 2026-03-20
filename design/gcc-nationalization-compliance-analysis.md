@@ -95,5 +95,5 @@ Combine with Figma capture hash for manual re-capture via the capture toolbar.
 
 ## Next Steps
 
-- **060-legal-advisor**: Compliance review (invoke per 330-ux-designer rule)
+- **060-legal-advisor**: Compliance review (invoke per 330-figma-creator rule)
 - **400-backlog-refinement**: Create epic and user stories in Jira (GCC E2E Pipeline Step 7)

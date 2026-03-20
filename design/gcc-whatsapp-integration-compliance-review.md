@@ -1,6 +1,6 @@
 # Legal & Compliance Assessment: GCC WhatsApp Integration Prototype
 
-**Invoked by**: 320-prototype-developer (before handoff to 330-ux-designer)  
+**Invoked by**: 320-prototype-developer (before handoff to 330-figma-creator)  
 **Date**: 19 March 2026  
 **Prototype**: design/gcc-whatsapp-integration.tsx  
 **Mission**: MISSION-013 (GCC E2E Pipeline)
@@ -67,7 +67,7 @@ The prototype demonstrates WhatsApp candidate communication for GCC (Saudi Arabi
 
 - **050-functional-knowledge**: Align WhatsApp message audit trail with GDPR purge schedules (candidate data retention)
 - **200-prd-writer**: PRD already references PDPL/PDPA; ensure acceptance criteria include opt-out link and consent capture flow
-- **330-ux-designer**: When capturing to Figma, ensure consent warning banner and consent status on Personal Information are clearly visible for design handoff
+- **330-figma-creator**: When capturing to Figma, ensure consent warning banner and consent status on Personal Information are clearly visible for design handoff
 
 ---
 
@@ -79,4 +79,4 @@ The prototype demonstrates WhatsApp candidate communication for GCC (Saudi Arabi
 
 ---
 
-**Conclusion**: Prototype demonstrates consent-first design appropriate for GCC. No blocking compliance issues for prototype handoff to 330-ux-designer. Production implementation must include opt-out link in messages and full consent capture flow.
+**Conclusion**: Prototype demonstrates consent-first design appropriate for GCC. No blocking compliance issues for prototype handoff to 330-figma-creator. Production implementation must include opt-out link in messages and full consent capture flow.

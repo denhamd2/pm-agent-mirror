@@ -1,6 +1,6 @@
 # Workday Recruiting Placement Patterns
 
-This document captures common Workday Recruiting placement patterns discovered through the 315-prototype-discovery-and-design workflow. Use this as a reference library to speed up placement decisions for future features.
+This document captures common Workday Recruiting placement patterns discovered through the 315-ux-designer workflow. Use this as a reference library to speed up placement decisions for future features.
 
 **Last Updated**: Wednesday Mar 18, 2026
 
@@ -196,7 +196,7 @@ When deciding placement, ask:
 
 ## Examples Library
 
-As 315-prototype-discovery-and-design discovers placements, document them here:
+As 315-ux-designer discovers placements, document them here:
 
 ### WhatsApp Campaign Integration (GCC)
 - **Pattern**: Extend Existing App (Campaigns)
@@ -211,7 +211,7 @@ As 315-prototype-discovery-and-design discovers placements, document them here:
 
 ## Notes
 
-- This document grows over time as 315-prototype-discovery-and-design runs
+- This document grows over time as 315-ux-designer runs
 - Patterns are guidelines, not rigid rules - context matters
 - When in doubt, consult Deployment Agent MCP for Workday-specific guidance
 - Six Hats Thinking helps validate pattern choice from multiple perspectives

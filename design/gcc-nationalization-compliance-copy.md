@@ -1,9 +1,11 @@
 # UX Copy Review: GCC Nationalisation & Compliance Dashboard
 
 **Prototype**: `design/gcc-nationalization-compliance.tsx`  
-**Feature**: GCC Nationalization & Compliance (MISSION-008, Step 5)  
-**Date**: 18 March 2026  
-**Reviewer**: 310-doc-writer
+**Feature**: GCC Nationalization & Compliance — **MISSION-016** (PMF v39 E2E #1)  
+**Date**: 20 March 2026  
+**Reviewer**: 310-doc-writer  
+
+_Review below reflects MISSION-008 pass; copy unchanged in prototype—still valid. Re-run 060 if regulatory strings change._
 
 ---
 

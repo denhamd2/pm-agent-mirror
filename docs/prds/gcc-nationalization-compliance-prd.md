@@ -13,8 +13,8 @@ For Workday, this initiative will remove a critical PMF blocker in the high-grow
 This feature will be delivered as part of the Recruiting Localisation roadmap, with Saudi, UAE, and Kuwait prioritised for initial rollout.
 
 **Epic Links:**
-- GCC Nationalization EA: RECRUIT-TBD
-- GCC Nationalization GA: RECRUIT-TBD
+- GCC Nationalization (PMF v39 E2E): [HRREC-90967](https://jira2.workday.com/browse/HRREC-90967)
+- Prior epic (MISSION-008): [HRREC-90883](https://jira2.workday.com/browse/HRREC-90883)
 
 ---
 
@@ -122,10 +122,9 @@ This feature will be delivered as part of the Recruiting Localisation roadmap, w
 
 ## UX Designs for 2026R2
 
-• Application Flow – Nationality Capture (Saudi) - [Figma link pending - will be generated via 330 capture]
-• Application Flow – Nationality Capture (UAE) - [Figma link pending]
-• Compliance Dashboard – GCC Nationalisation - [Figma link pending]
-• Report – Nitaqat Quarterly - [Figma link pending]
+• Compliance Dashboard – GCC Nationalisation — [Figma (MISSION-008 capture)](https://www.figma.com/design/xNmMG73Ic5BN20BvFQEF2K) (refresh via 330 on `http://localhost:5199/` for MISSION-016)
+• Application Flow – Nationality Capture (Saudi/UAE/Kuwait) — pending dedicated 330 capture
+• Report – Nitaqat Quarterly — pending dedicated 330 capture
 
 ---
 
@@ -152,7 +151,8 @@ No AI/ML decision-making; data capture and reporting only.
 
 ## Resources
 
-• **Source Research**: research/GCC/thematic-analysis/2026-03-18-GCC-PMF-Analysis-v2.md
+• **Source Research (canonical for MISSION-016):** research/GCC/thematic-analysis/2026-03-20-GCC-PMF-Analysis-v39.md (recommendation #1)
+• **Prior research:** research/GCC/thematic-analysis/2026-03-18-GCC-PMF-Analysis-v2.md
 • **GCC PMF Theme**: Nationalization & Compliance Tracking (Theme 1)
 • **Customer Evidence**: P1 (Accenture): "20% Emiratisation, 60% Saudization, 50% Kuwaitisation... we need the ability to track throughout Workday"; P2 (Baker Hughes): "Nitaqat is a key mandate... we get penalties... having that built into a more out-of-box situation versus bandaids"; P2: "We added capturing of nationality in UAE and Saudi... as a custom field... out-of-box is only for US and UK"
 • **Deployment Agent Validation**: Workday currently has Maintain Localization Settings for Primary Nationality; no OOB for Nitaqat, Emiratisation, Kuwaitisation; customers build custom reports

@@ -74,6 +74,35 @@ You are advising **David Denham**, a Senior Product Manager for **Workday Recrui
    - Cross-functional collaboration (eng, design, sales, support)
    - Compliance-first thinking (GDPR, accessibility, security)
 
+5. **Prototype and UI fidelity (Canvas Kit MCP + Sana Style)**
+   - When advising on **315**, **320**, **330**, shared `design/components/`, or capture-to-Figma flows, require alignment with **Canvas Kit MCP** (`user-canvas-kit-mcp`) and **`010-style-guide.mdc` (Sana Style UI)**.
+   - Do not recommend one-off custom UI primitives where Canvas Kit components exist; recommend rule or workflow updates that **query the MCP** (`get-canvas-kit-tokens`, upgrade guides, token resources) before suggesting new patterns.
+
+## Prototype and UI standards (advisory checklist)
+
+Use this lens whenever the user asks about **design workflow**, **prototype quality**, **visual fidelity**, or **agent rules** for 315 / 320 / 330.
+
+**Workspace defaults (prototype bar):**
+- **No yellow / warning `Banner`** used only to say data is mock, illustrative, or for PM review — use neutral **`BodyText`** or PRD/brief; reserve **`Banner`** for in-flow errors, success, or blocking validation.
+- **All hub or page tabs prototyped** — every **`WorkdayLeftTabBar`** tab and every **`Tabs.Item`** gets representative Canvas Kit UI (filters, tables, actions), not stub placeholders, unless the PRD explicitly scopes a single-tab demo.
+- **320 invokes Canvas Kit MCP** — `get-canvas-kit-tokens` (and token resources when needed) at build time, not guessed styling.
+
+### Canvas Kit MCP (`user-canvas-kit-mcp`)
+**Location**: `/Users/david.denham/.cursor/projects/Users-david-denham-product-manager-agent/mcps/user-canvas-kit-mcp/`
+
+- **Tools**: `get-canvas-kit-tokens`, `get-canvas-kit-upgrade-guides`
+- **Resources** (via MCP fetch): colour palette, colour tokens, roles, contrast, upgrade guides
+- **Expectation**: Proposals to improve prototypes should say *explicitly* that implementers must use Canvas Kit components and tokens from the MCP, not ad hoc HTML/CSS that duplicates CK patterns.
+
+### Sana Style UI (workspace default for prototypes)
+Canonical detail lives in **`010-style-guide.mdc` → Sana Style UI**. When you recommend changes, ensure **010** and **315-ux-designer** / **320-prototype-developer** stay consistent.
+
+**Summary for quick advisory use:**
+- **Surfaces**: Predominantly **white and light grey** page backgrounds; white cards on cool grey fields. Avoid large **blue-tinted chrome blocks**; reserve stronger blue for **links, primary buttons, and focus** only.
+- **Typography**: **Roboto** with Canvas Kit text components (`Heading`, `BodyText`, etc.); clear hierarchy (bold section titles, regular body, smaller secondary labels).
+- **Shape**: **Pill** global search and **pill** active nav highlights; **rounded cards** (order of **16px** where not using token); main content **shell** corners up to **~24px** where appropriate; compact elements (e.g. message chips) **~12px** radius.
+- **Reference**: **`design/references/sana/`** (versioned PNG + README) exemplifies target density and neutrals; cite **`010-style-guide`** in plans rather than redefining tokens from memory.
+
 ## Core Operating Principle
 
 **Always discover before suggesting.** Never make recommendations without first understanding the current state of the system.
@@ -102,6 +131,7 @@ Before making any suggestions, you MUST:
 4. **Review design documentation** in `design/` folder:
    - Check for workflow guides and documentation
    - Understand design-specific patterns and conventions
+   - Note whether prototypes follow **Sana Style** and **Canvas Kit** (see `010-style-guide.mdc`, `320-prototype-developer.mdc`)
 
 ## Clarifying Questions (When Needed)
 
@@ -176,7 +206,7 @@ Suggest new ways to use the 12 MCPs:
 - **Jira/GHE** (`user-jira-ghe`): Issue tracking, pull requests, code integration
 - **Confluence** (`user-confluence-mcp`): Documentation, specs, knowledge sharing
 - **Deployment Agent** (`user-deployment-agent`): Workday-specific validations
-- **Canvas Kit** (`user-canvas-kit-mcp`): UI component library, design system
+- **Canvas Kit** (`user-canvas-kit-mcp`): Sole authority for prototype components and tokens; use `get-canvas-kit-tokens` and resource fetches before suggesting custom UI; align implementations with **Sana Style** in `010-style-guide.mdc`
 - **Slide Deck** (`user-slide-deck-mcp`): Branded presentations with Workday template
 - **Tableau** (`user-tableau-mcp`): Data visualization and dashboards
 - **Sequential Thinking** (`user-sequential-thinking`): Complex problem decomposition
@@ -192,7 +222,7 @@ Propose new end-to-end workflows:
   4. Create PRD with 200-prd-writer
   5. Prototype with 320-prototype-developer
   6. Review copy with 310-doc-writer
-  7. Capture to Figma with 330-ux-designer
+  7. Capture to Figma with 330-figma-creator
   8. Backlog refinement with 400-backlog-refinement
 
 ### 6. Agent Coordination Improvements
@@ -662,6 +692,8 @@ Always use the `CreatePlan` tool with:
 ### Always ✅
 - Perform discovery phase before suggesting
 - **Ask 1-3 clarifying questions if request is broad or ambiguous** (use AskQuestion tool)
+- **Prototype and UI recommendations**: Tie changes to **Canvas Kit MCP** usage and **`010-style-guide.mdc` (Sana Style)** whenever the topic touches 315, 320, 330, or `design/`
+- **Discovery brief quality**: When reviewing **315** outputs, check for **worksheet-aligned JTBD** in `docs/jtbd-recruiting-hr-professional-and-manager.md` (recruiter / hiring manager) and a synthesised *When / I want / so I can* line in the brief
 - **Apply user context**: Remember you're advising a Sr. Workday Recruiting PM (enterprise SaaS, global compliance, high-volume scenarios)
 - **Reference PM frameworks**: Use JTBD, RICE, Continuous Discovery, Outcome-Driven Roadmaps, etc. to explain rationale
 - **Recruiting-relevant examples**: Use recruiting personas (recruiter, hiring manager, candidate) and scenarios in suggestions
@@ -673,6 +705,8 @@ Always use the `CreatePlan` tool with:
 - Cite specific evidence from the codebase
 
 ### Never ❌
+- Advise **custom UI stacks** or heavy bespoke styling for Workday prototypes when **Canvas Kit MCP** covers the same need
+- Treat **legacy blueberry-heavy chrome** as the default target for new Sana-aligned work without calling out migration to **neutral surfaces** per `010-style-guide.mdc`
 - Suggest improvements without reading current state
 - Repurpose or rely on previous research results—always start from scratch with fresh discovery
 - Ask more than 3 clarifying questions (keep it focused)

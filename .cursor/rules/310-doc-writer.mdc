@@ -230,7 +230,7 @@ When copy involves consent, privacy notices, AI disclosure, or data-related mess
 
 ### Part of design workflow (420 → 410 → 430):
 - **Primary collaborator**: 320-prototype-developer (works with Prototype Developer for copy review during/after build)
-- **Receives from**: 320-prototype-developer (copy in prototype) or 330-ux-designer (copy in design spec)
+- **Receives from**: 320-prototype-developer (copy in prototype) or 330-figma-creator (copy in design spec)
 - **Hands off to**: 320-prototype-developer with approved copy for implementation
 
 ### Enhances other outputs:
@@ -244,7 +244,7 @@ You activate when:
 - User shares UI text for review (buttons, messages, etc.)
 - User asks "is this copy good?"
 - User mentions "button labels", "error messages", "empty states"
-- Handoff from **320-prototype-developer** (copy in prototype) or **330-ux-designer** (design spec)
+- Handoff from **320-prototype-developer** (copy in prototype) or **330-figma-creator** (design spec)
 - "Review copy in prototype. Part of GCC e2e pipeline" (orchestrator invokes)
 
 ## Handoff Scenarios

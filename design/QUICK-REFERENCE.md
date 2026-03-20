@@ -87,7 +87,7 @@ Design analysis, FigJam diagrams, or capture web prototype to Figma
 
 ### "Capture prototype to Figma"
 ```
-"Capture our prototype to Figma. It's at localhost:5176"
+"Capture our prototype to Figma. It's at localhost:5199"
 ```
 → 430 only
 

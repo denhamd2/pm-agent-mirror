@@ -32,9 +32,9 @@ You orchestrate these specialized agents:
 - **120-pmf-thematic-analysis.mdc**: Braun & Clarke PMF thematic analysis (country-based, triangulation)
 - **200-prd-writer.mdc**: PRD writing and Confluence publishing
 - **310-doc-writer.mdc**: UX copy review and editorial guidelines
-- **315-prototype-discovery-and-design.mdc**: Prototype discovery and design (grounds prototypes in Workday workflow context)
+- **315-ux-designer.mdc**: Prototype discovery and design (grounds prototypes in Workday workflow context)
 - **320-prototype-developer.mdc**: Canvas Kit prototype implementation (first in design flow)
-- **330-ux-designer.mdc**: Figma design extraction, analysis, and capture
+- **330-figma-creator.mdc**: Figma design extraction, analysis, and capture
 - **400-backlog-refinement.mdc**: Orchestrates epic definition, story mapping, and story writing (chains 410→420→430)
 - **410-epic-definition.mdc**: Writes epics in user story format and creates them in Jira
 - **420-story-mapping.mdc**: Applies Jeff Patton story mapping with value slices and HITL approval
@@ -99,18 +99,18 @@ When routing work:
 **060-legal-advisor** is automatically invoked as a trusted advisor: by 320 (prototype compliance review), 330 (design compliance review), 310 (legal-sensitive copy). Also invoked by 120 (PESTEL Legal, recommendations) and 100 (Strategic Recommendations).
 
 **Prototype-first with discovery** (primary for GCC E2E): Discover placement, build, then capture to Figma
-1. **315-prototype-discovery-and-design**: Research Workday context, query Deployment Agent, validate with Six Hats, produce Discovery Brief
+1. **315-ux-designer**: Research Workday context, query Deployment Agent, validate with Six Hats, produce Discovery Brief
 2. **320-prototype-developer**: Build prototype from Discovery Brief + PRD; invoke 060 for compliance review before handoff
 3. **310-doc-writer**: Review UI copy (works with 320); invoke 060 when copy is legal-sensitive
-4. **330-ux-designer**: Capture running prototype to Figma; invoke 060 for design compliance review
+4. **330-figma-creator**: Capture running prototype to Figma; invoke 060 for design compliance review
 
 **Prototype-first without discovery** (simple standalone prototypes): Build first, then capture to Figma
 1. **320-prototype-developer**: Build prototype from spec/PRD; invoke 060 for compliance review before handoff
 2. **310-doc-writer**: Review UI copy (works with 320); invoke 060 when copy is legal-sensitive
-3. **330-ux-designer**: Capture running prototype to Figma; invoke 060 for design compliance review
+3. **330-figma-creator**: Capture running prototype to Figma; invoke 060 for design compliance review
 
 **Design-first** (when Figma URL provided):
-1. **330-ux-designer**: Extract design context, components, tokens; invoke 060 for design compliance review
+1. **330-figma-creator**: Extract design context, components, tokens; invoke 060 for design compliance review
 2. **310-doc-writer**: Review all UI copy against Editorial Guidelines; invoke 060 when copy is legal-sensitive
 3. **320-prototype-developer**: Implement with Canvas Kit; invoke 060 for prototype compliance review before handoff
 

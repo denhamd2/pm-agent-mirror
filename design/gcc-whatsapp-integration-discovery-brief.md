@@ -1,9 +1,10 @@
 # Discovery & Design Brief: WhatsApp Candidate Communication for GCC
 
 **PRD**: docs/prds/gcc-whatsapp-integration-prd.md  
-**Created**: 19 March 2026  
-**Agent**: 315-prototype-discovery-and-design  
-**Mission**: MISSION-013 (GCC E2E Pipeline)  
+**Created**: 19 March 2026 (updated MISSION-015)  
+**Agent**: 315-ux-designer  
+**Mission**: MISSION-015 (GCC E2E Pipeline — HITL #5, research v38)  
+**Research**: research/GCC/thematic-analysis/2026-03-19-GCC-PMF-Analysis-v38.md  
 **Selected Recommendation**: #5 - WhatsApp Integration - GA WhatsApp for GCC; extend campaigns beyond email
 
 ---

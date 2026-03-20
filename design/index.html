@@ -3,11 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GCC WhatsApp Campaign - Prototype</title>
-    <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+    <title>Recruiting prototype — design</title>
+    <!-- Speed up Roboto for Figma html-to-design: late fonts often produce empty-looking captures -->
+    <link
+      rel="preload"
+      href="https://design.workdaycdn.com/beta/assets/fonts@1.0.0/roboto/ttf/Roboto-Regular.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="https://design.workdaycdn.com/beta/assets/fonts@1.0.0/roboto/ttf/Roboto-Medium.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
   </head>
   <body>
     <div id="root"></div>
+    <!-- Module is deferred: runs after full parse. Do NOT put capture.js here — it would run before React and capture an empty DOM. Script is injected from main.tsx after mount; capture targets #figma-capture-root by default. -->
     <script type="module" src="/main.tsx"></script>
   </body>
 </html>

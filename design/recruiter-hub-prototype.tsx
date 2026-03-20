@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PrimaryButton, SecondaryButton, TertiaryButton, ToolbarIconButton } from '@workday/canvas-kit-react/button';
+import { PrimaryButton, SecondaryButton, TertiaryButton } from '@workday/canvas-kit-react/button';
 import { Card } from '@workday/canvas-kit-react/card';
 import { Avatar } from '@workday/canvas-kit-react/avatar';
 import { Table } from '@workday/canvas-kit-react/table';
@@ -8,7 +8,12 @@ import { Flex, Box } from '@workday/canvas-kit-react/layout';
 import { space, colors } from '@workday/canvas-kit-react/tokens';
 import { Heading, BodyText } from '@workday/canvas-kit-react/text';
 import { Tabs } from '@workday/canvas-kit-react/tabs';
-import { TextInput } from '@workday/canvas-kit-react/text-input';
+import {
+  WorkdayTopNav,
+  WorkdayLeftTabBar,
+  WORKDAY_TOP_NAV_HEIGHT_PX,
+  SANA_PAGE_CANVAS,
+} from './components';
 import {
   plusIcon,
   searchIcon,
@@ -19,8 +24,13 @@ import {
   documentIcon,
   videoIcon,
   phoneIcon,
-  justifyIcon,
 } from '@workday/canvas-system-icons-web';
+
+const HUB_TABS = [
+  { id: 'dashboard', label: 'Dashboard' },
+  { id: 'reqs', label: 'Active requisitions' },
+  { id: 'candidates', label: 'Candidates' },
+] as const;
 
 /**
  * Recruiter Hub - Multi-page prototype demonstrating Workday Recruiting UI patterns
@@ -46,72 +56,28 @@ export const RecruiterHub: React.FC<RecruiterHubProps> = ({ recruiterName }) => 
   const [currentPage, setCurrentPage] = useState<'dashboard' | 'reqs' | 'candidates'>('dashboard');
 
   return (
-    <Box>
-      {/* Top Navigation - Pattern from Figma reference */}
-      <Box
-        paddingX="l"
-        paddingY="s"
-        style={{
-          backgroundColor: 'white', // TODO: Extract from Figma (2-Way Email file) if custom
-          borderBottom: `1px solid ${colors.soap300}`, // Figma token: [Border Color] → Canvas Kit: colors.soap300
-        }}
+    <Box style={{ minHeight: '100vh', backgroundColor: SANA_PAGE_CANVAS }}>
+      <WorkdayTopNav
+        searchValue={searchValue}
+        onSearchChange={setSearchValue}
+        notificationBadge={20}
+        inboxBadge={101}
+        searchMaxWidthPx={600}
+      />
+      <Flex
+        alignItems="stretch"
+        style={{ minHeight: `calc(100vh - ${WORKDAY_TOP_NAV_HEIGHT_PX}px)` }}
       >
-        <Flex justifyContent="space-between" alignItems="center" gap="l">
-          {/* Left section: Hamburger + Logo */}
-          <Flex alignItems="center" gap="m" flex="0 0 auto">
-            <ToolbarIconButton
-              icon={justifyIcon}
-              aria-label="Menu"
-            />
-            <Box
-              style={{
-                fontSize: 24,
-                fontWeight: 700,
-                color: colors.blueberry500, // Figma token: [Primary Brand] → Canvas Kit: colors.blueberry500
-                fontFamily: '"Roboto", sans-serif',
-              }}
-            >
-              Workday
-            </Box>
-          </Flex>
-
-          {/* Center section: Search bar */}
-          <Box flex="1 1 auto" maxWidth="600px" style={{ position: 'relative' }}>
-            <Box
-              style={{
-                position: 'absolute',
-                left: 12,
-                top: '50%',
-                transform: 'translateY(-50%)',
-                pointerEvents: 'none',
-                zIndex: 1,
-              }}
-            >
-              <SystemIcon icon={searchIcon} size={16} color={colors.blackPepper400} />
-            </Box>
-            <TextInput
-              placeholder="Search..."
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              style={{
-                width: '100%',
-                backgroundColor: colors.soap100,
-                border: `1px solid ${colors.soap300}`,
-                borderRadius: 4,
-                padding: '8px 12px 8px 36px',
-              }}
-            />
-          </Box>
-
-          {/* Right section: Avatar */}
-          <Flex alignItems="center" gap="m" flex="0 0 auto">
-            <Avatar size={32} altText={recruiterName} as="div" />
-          </Flex>
-        </Flex>
-      </Box>
-
-      {/* Main Content */}
-      <Box padding="xl" backgroundColor={colors.soap100}>
+        <WorkdayLeftTabBar
+          secondaryTitle={recruiterName}
+          secondarySubtitle="Recruiter"
+          tabs={[...HUB_TABS]}
+          activeTabId={currentPage}
+          onTabChange={(id) => setCurrentPage(id as 'dashboard' | 'reqs' | 'candidates')}
+        />
+        <Box flex={1} minWidth={0} padding="xl" style={{ overflow: 'auto' }} backgroundColor={SANA_PAGE_CANVAS}>
+      {currentPage === 'dashboard' ? (
+      <>
       {/* Page Header */}
       <Flex justifyContent="space-between" alignItems="center" marginBottom="xl">
         <Box>
@@ -355,7 +321,28 @@ export const RecruiterHub: React.FC<RecruiterHubProps> = ({ recruiterName }) => 
           </Box>
         </Tabs.Panel>
       </Tabs>
-      </Box>
+      </>
+      ) : currentPage === 'reqs' ? (
+        <Card padding="xl">
+          <Heading size="large" marginBottom="s">
+            Active requisitions
+          </Heading>
+          <BodyText size="medium" color={colors.blackPepper600}>
+            Placeholder view. Switch to Dashboard for the full recruiter hub prototype.
+          </BodyText>
+        </Card>
+      ) : (
+        <Card padding="xl">
+          <Heading size="large" marginBottom="s">
+            Candidates
+          </Heading>
+          <BodyText size="medium" color={colors.blackPepper600}>
+            Placeholder view. Switch to Dashboard for pipeline and review patterns.
+          </BodyText>
+        </Card>
+      )}
+        </Box>
+      </Flex>
     </Box>
   );
 };

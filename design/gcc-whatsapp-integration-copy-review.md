@@ -1,7 +1,7 @@
 # UX Copy Review: GCC WhatsApp Integration Prototype
 
 **Prototype:** design/gcc-whatsapp-integration.tsx  
-**Mission:** MISSION-013 (GCC E2E Pipeline)  
+**Mission:** MISSION-015 (GCC E2E — HITL #5, v38 research)  
 **Date:** 19 March 2026  
 **Agent:** 310-doc-writer
 

@@ -5,6 +5,8 @@ export default defineConfig({
   plugins: [react()],
   root: '.',
   server: {
-    port: 5177,
+    // Fixed port for Figma MCP capture URLs (hash links must match actual dev server).
+    port: 5199,
+    strictPort: true,
   },
 });

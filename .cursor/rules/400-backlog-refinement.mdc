@@ -159,7 +159,7 @@ You activate when the user says:
 
 **Receives from:**
 - **200-prd-writer**: PRD for backlog refinement
-- **330-ux-designer**: Figma designs for implementation context
+- **330-figma-creator**: Figma designs for implementation context
 - **000-master-orchestrator**: Part of GCC E2E Pipeline
 
 **Hands off to:**

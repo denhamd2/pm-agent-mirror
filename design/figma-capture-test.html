@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Figma Capture Diagnostic</title>
+  <link
+    rel="preload"
+    href="https://design.workdaycdn.com/beta/assets/fonts@1.0.0/roboto/ttf/Roboto-Regular.ttf"
+    as="font"
+    type="font/ttf"
+    crossorigin
+  />
+  <style>
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 400;
+      src: local('Roboto Regular'), local('Roboto-Regular'),
+        url('https://design.workdaycdn.com/beta/assets/fonts@1.0.0/roboto/ttf/Roboto-Regular.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 500;
+      src: local('Roboto Medium'), local('Roboto-Medium'),
+        url('https://design.workdaycdn.com/beta/assets/fonts@1.0.0/roboto/ttf/Roboto-Medium.ttf') format('truetype');
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f6f7f9;
+      padding: 24px;
+    }
+    #figma-capture-root {
+      min-height: 100vh;
+      min-width: 1280px;
+      background: white;
+      border-radius: 8px;
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 { font-size: 24px; font-weight: 500; margin-bottom: 16px; color: #0d1824; }
+    p { font-size: 14px; margin-bottom: 12px; color: #52626e; line-height: 1.5; }
+    .status { padding: 12px 16px; background: #e3f2fd; border-radius: 4px; margin: 16px 0; }
+    .box { display: inline-block; width: 100px; height: 100px; background: #0078d4; border-radius: 4px; margin: 8px; }
+  </style>
+</head>
+<body>
+  <div id="figma-capture-root">
+    <h1>Figma Capture Diagnostic Page</h1>
+    <p>This page tests Figma html-to-design capture with Canvas Kit fonts and explicit sizing.</p>
+    <div class="status" id="status">Loading fonts and capture script...</div>
+    <p><strong>Roboto font family:</strong> <span style="font-family: Roboto, sans-serif;">The quick brown fox jumps over the lazy dog (Regular)</span></p>
+    <p><strong>Medium weight:</strong> <span style="font-family: Roboto, sans-serif; font-weight: 500;">The quick brown fox jumps over the lazy dog (Medium)</span></p>
+    <div class="box"></div>
+    <div class="box" style="background: #2b8a3e;"></div>
+    <div class="box" style="background: #d9480f;"></div>
+  </div>
+
+  <script>
+    const FIGMA_CAPTURE_SCRIPT_SRC = 'https://mcp.figma.com/mcp/html-to-design/capture.js';
+    const FIGMA_HASH_KEYS = ['figmacapture', 'figmaendpoint', 'figmadelay', 'figmaselector', 'figmalogpayload', 'figmalogverbose'];
+
+    function parseFigmaCaptureHash() {
+      const h = window.location.hash;
+      if (!h || h.length < 2) return null;
+      const q = h.startsWith('#') ? h.slice(1) : h;
+      const params = new URLSearchParams(q);
+      const captureId = params.get('figmacapture');
+      const endpoint = params.get('figmaendpoint');
+      if (!captureId || !endpoint) return null;
+      const delayRaw = params.get('figmadelay');
+      const delayMs = Math.min(Math.max(Number(delayRaw) || 6000, 800), 30000);
+      const selector = params.get('figmaselector') || '#figma-capture-root';
+      return { captureId, endpoint, delayMs, selector };
+    }
+
+    function stripFigmaHashParams() {
+      const h = window.location.hash;
+      if (!h || h.length < 2) return;
+      const raw = h.startsWith('#') ? h.slice(1) : h;
+      const params = new URLSearchParams(raw);
+      let changed = false;
+      for (const k of FIGMA_HASH_KEYS) {
+        if (params.has(k)) {
+          params.delete(k);
+          changed = true;
+        }
+      }
+      if (!changed) return;
+      const next = params.toString();
+      const url = new URL(window.location.href);
+      url.hash = next ? '#' + next : '';
+      history.replaceState(null, '', url.pathname + url.search + url.hash);
+    }
+
+    async function loadFigmaScript() {
+      return new Promise((resolve, reject) => {
+        const existing = document.querySelector(`script[src="${FIGMA_CAPTURE_SCRIPT_SRC}"]`);
+        if (existing) {
+          if (window.figma) {
+            resolve();
+            return;
+          }
+          existing.addEventListener('load', () => resolve(), { once: true });
+          existing.addEventListener('error', () => reject(new Error('Script load error')), { once: true });
+          return;
+        }
+        const el = document.createElement('script');
+        el.src = FIGMA_CAPTURE_SCRIPT_SRC;
+        el.async = true;
+        el.onload = () => resolve();
+        el.onerror = () => reject(new Error('Script load error'));
+        document.body.appendChild(el);
+      });
+    }
+
+    /**
+     * Match design/main.tsx: strip figma params before capture.js runs so Kt() does not auto-start,
+     * then call captureForDesign once (avoids "Capture already submitted").
+     */
+    (async () => {
+      const status = document.getElementById('status');
+      const cfg = parseFigmaCaptureHash();
+      if (!cfg) {
+        status.textContent = 'No capture params in hash. Add #figmacapture=...&figmaendpoint=... to URL.';
+        return;
+      }
+      stripFigmaHashParams();
+
+      try {
+        status.textContent = 'Loading capture.js… then single captureForDesign (hash cleared from URL).';
+        await loadFigmaScript();
+        await document.fonts.ready;
+        await new Promise((r) => setTimeout(r, 400));
+        if (!window.figma?.captureForDesign) {
+          status.textContent = 'ERROR: window.figma.captureForDesign missing';
+          status.style.background = '#ffebee';
+          return;
+        }
+        await window.figma.captureForDesign({
+          captureId: cfg.captureId,
+          endpoint: cfg.endpoint,
+          selector: cfg.selector,
+          delayMs: cfg.delayMs,
+        });
+        status.textContent = 'Capture submitted (captureId ' + cfg.captureId + '). Poll MCP until completed.';
+        status.style.background = '#c8e6c9';
+      } catch (e) {
+        status.textContent = 'ERROR: ' + e.message;
+        status.style.background = '#ffebee';
+      }
+    })();
+  </script>
+</body>
+</html>

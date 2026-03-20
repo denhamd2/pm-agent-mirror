@@ -15,7 +15,7 @@ A new **"Prototype Discovery & Design"** phase (agent 315) that grounds prototyp
 
 ### ✅ Created Files
 
-1. **`.cursor/rules/315-prototype-discovery-and-design.mdc`** (18.3 KB)
+1. **`.cursor/rules/315-ux-designer.mdc`** (18.3 KB)
    - New agent rule for prototype discovery and design
    - Integrates with Functional Knowledge, Deployment Agent MCP, and Six Hats Thinking MCP
    - Produces Discovery & Design Briefs with workflow context, placement decisions, and functional requirements
@@ -205,7 +205,7 @@ User will see Discovery Brief created at `design/[feature]-discovery-brief.md` b
 - **Test PRD**: `docs/prds/bulk-candidate-rejection-prd.md`
 
 ### For Agents
-- **315 Rule**: `.cursor/rules/315-prototype-discovery-and-design.mdc` - Full agent implementation
+- **315 Rule**: `.cursor/rules/315-ux-designer.mdc` - Full agent implementation
 - **Orchestrator**: Updated GCC E2E Pipeline flow
 - **320 Rule**: Enhanced to use Discovery Brief
 
