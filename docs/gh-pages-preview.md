@@ -56,6 +56,46 @@ VITE_BASE_PATH=/pages/david-denham/pm-agent/preview/<slug>/
 
 Match this to whatever path your instance uses for Pages (check **Settings → Pages** after enabling).
 
+## Open the preview in your browser (local)
+
+GitHub Actions **cannot** open a browser on your Mac. This repo includes **`scripts/open-latest-design-preview.sh`**, which:
+
+1. Finds the workflow run for your current **`HEAD`** commit.
+2. Waits for it to finish.
+3. Downloads the **`preview-open`** artifact (`preview.env`).
+4. Opens the URL with **`open`** (macOS) or **`xdg-open`** (Linux).
+
+**Requirements:** [GitHub CLI](https://cli.github.com/) installed and `gh auth login` against your GHE host.
+
+**Full URL in the artifact:** set a repository **Actions variable**:
+
+| Name | Example value |
+|------|----------------|
+| `PAGES_PUBLIC_ORIGIN` | `https://ghe.megaleo.com` or `https://<user>.github.io` (scheme + host only, **no** path) |
+
+The script combines **`PAGES_PUBLIC_ORIGIN` + `PREVIEW_PATH`** (same path Vite used for `base`). If `PAGES_PUBLIC_ORIGIN` is unset, export locally before running:
+
+```bash
+export PM_AGENT_PAGES_ORIGIN=https://ghe.megaleo.com
+./scripts/open-latest-design-preview.sh
+```
+
+### Automatic open after each design commit (optional)
+
+After a successful push, the **post-commit** hook can start the script in the background when **`design/`** changed:
+
+```bash
+export PM_AGENT_AUTO_OPEN_PREVIEW=1
+# If PAGES_PUBLIC_ORIGIN is not set on the repo:
+export PM_AGENT_PAGES_ORIGIN=https://ghe.megaleo.com
+```
+
+Add those lines to your shell profile, or prefix a one-off commit:
+
+```bash
+PM_AGENT_AUTO_OPEN_PREVIEW=1 PM_AGENT_PAGES_ORIGIN=https://ghe.megaleo.com git commit -am "…"
+```
+
 ## Local build with a subpath (smoke test)
 
 ```bash

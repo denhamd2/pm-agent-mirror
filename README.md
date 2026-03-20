@@ -71,7 +71,7 @@ Rules are located in `.cursor/rules/` and follow this numbering:
 
 ## Design prototypes on Pages (optional)
 
-GitHub Actions can publish **timestamped** static previews of `design/` to the **`gh-pages`** branch. See [docs/gh-pages-preview.md](docs/gh-pages-preview.md).
+GitHub Actions can publish **timestamped** static previews of `design/` to the **`gh-pages`** branch. See [docs/gh-pages-preview.md](docs/gh-pages-preview.md). To **open the latest preview in your browser** after the workflow runs, use **`./scripts/open-latest-design-preview.sh`** (`gh` CLI required).
 
 ## Git: auto-push to origin
 

@@ -8,7 +8,18 @@ fi
 
 echo ""
 echo "[git hooks] Pushing to origin ($(git symbolic-ref -q --short HEAD || echo 'HEAD'))..."
-if ! git push -u origin HEAD; then
+if git push -u origin HEAD; then
+  # Optional: after a design change, wait for Pages workflow and open preview (requires gh + auth).
+  # export PM_AGENT_AUTO_OPEN_PREVIEW=1
+  # Optional if PAGES_PUBLIC_ORIGIN is not set on the repo: export PM_AGENT_PAGES_ORIGIN=https://ghe.megaleo.com
+  if [ "${PM_AGENT_AUTO_OPEN_PREVIEW:-0}" = 1 ] && command -v gh >/dev/null 2>&1; then
+    if git diff-tree --no-commit-id --name-only -r HEAD | grep -q '^design/'; then
+      ROOT="$(git rev-parse --show-toplevel)"
+      (cd "$ROOT" && ./scripts/open-latest-design-preview.sh) &
+      echo "[git hooks] Started open-latest-design-preview.sh in background (PM_AGENT_AUTO_OPEN_PREVIEW=1)."
+    fi
+  fi
+else
   echo "[git hooks] Push failed (network, auth, or non-fast-forward). Your commit is saved locally."
   echo "[git hooks] When ready: git pull --rebase && git push"
 fi
