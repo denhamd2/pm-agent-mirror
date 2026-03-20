@@ -1,0 +1,15 @@
+#!/bin/sh
+# Push to origin after every successful local commit.
+# Enable once: ./scripts/setup-git-hooks.sh
+
+if ! git remote get-url origin >/dev/null 2>&1; then
+  exit 0
+fi
+
+echo ""
+echo "[git hooks] Pushing to origin ($(git symbolic-ref -q --short HEAD || echo 'HEAD'))..."
+if ! git push -u origin HEAD; then
+  echo "[git hooks] Push failed (network, auth, or non-fast-forward). Your commit is saved locally."
+  echo "[git hooks] When ready: git pull --rebase && git push"
+fi
+exit 0
