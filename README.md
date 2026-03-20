@@ -69,6 +69,16 @@ Rules are located in `.cursor/rules/` and follow this numbering:
 - **400-499**: Design and UI
 - **500-599**: Communication
 
+## Git: auto-push to origin
+
+After a one-time setup, **every `git commit` pushes your branch to `origin`** (your GHE remote). Saving files in the editor does **not** push until you commit.
+
+```bash
+./scripts/setup-git-hooks.sh
+```
+
+Details: [docs/git-auto-push.md](docs/git-auto-push.md). New clones should run the setup script once.
+
 ## Mission Log
 Check `MISSION_LOG.md` for current project status, decisions, and handoffs.
 
