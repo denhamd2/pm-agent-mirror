@@ -2,6 +2,10 @@
 
 This folder contains prototypes, design documentation, and reference materials for Workday Recruiting UI implementations.
 
+## Published previews (timestamped URLs)
+
+CI can deploy each build to **GitHub / GHE Pages** under `preview/preview-<UTC>-<run_id>/`. Setup and URL rules: **[docs/gh-pages-preview.md](../docs/gh-pages-preview.md)**.
+
 ## Figma Design Reference
 
 **Source**: [2-Way Email Recruiting](https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024)

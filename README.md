@@ -69,6 +69,10 @@ Rules are located in `.cursor/rules/` and follow this numbering:
 - **400-499**: Design and UI
 - **500-599**: Communication
 
+## Design prototypes on Pages (optional)
+
+GitHub Actions can publish **timestamped** static previews of `design/` to the **`gh-pages`** branch. See [docs/gh-pages-preview.md](docs/gh-pages-preview.md).
+
 ## Git: auto-push to origin
 
 After a one-time setup, **every `git commit` pushes your branch to `origin`** (your GHE remote). Saving files in the editor does **not** push until you commit.
