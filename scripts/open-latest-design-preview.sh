@@ -88,11 +88,6 @@ if [[ -z "$URL" ]]; then
   URL="${ORIGIN%/}${PREVIEW_PATH:-}"
 fi
 
-echo "Opening: $URL"
-if command -v open >/dev/null 2>&1; then
-  open "$URL"
-elif command -v xdg-open >/dev/null 2>&1; then
-  xdg-open "$URL"
-else
-  echo "$URL"
-fi
+echo "Opening in Chrome + Cursor Simple Browser: $URL"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+bash "$SCRIPT_DIR/open-url-chrome-and-cursor-browser.sh" "$URL"

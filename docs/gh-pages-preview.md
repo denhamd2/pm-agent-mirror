@@ -63,9 +63,13 @@ GitHub Actions **cannot** open a browser on your Mac. This repo includes **`scri
 1. Finds the workflow run for your current **`HEAD`** commit.
 2. Waits for it to finish.
 3. Downloads the **`preview-open`** artifact (`preview.env`).
-4. Opens the URL with **`open`** (macOS) or **`xdg-open`** (Linux).
+4. Runs **`scripts/open-url-chrome-and-cursor-browser.sh`**: **Google Chrome** (new window) and **Cursor Simple Browser** via the `vscode://vscode/simple-browser/show?...` deeplink (same as VS Code’s Simple Browser).
 
 **Requirements:** [GitHub CLI](https://cli.github.com/) installed and `gh auth login` against your GHE host.
+
+**Chrome only:** `OPEN_IN_CURSOR_BROWSER=0 ./scripts/open-latest-design-preview.sh`
+
+**Local `npm run dev`:** also opens Chrome + Cursor Simple Browser; disable with `VITE_NO_OPEN_BROWSERS=1 npm run dev` (see `design/README.md`).
 
 **Full URL in the artifact:** set a repository **Actions variable**:
 
