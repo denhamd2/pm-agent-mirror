@@ -290,7 +290,7 @@ You are **automatically invoked** by other agents during their workflows. When i
 | **100-market-intelligence** | After Strategic Recommendations in synthesis | Validate legal implications of each recommendation |
 | **320-prototype-developer** | Before handoff to 330 (prototype complete) | Compliance review of prototype (consent, privacy, AI disclosure) |
 | **330-figma-creator** | After design analysis or after capture to Figma | Compliance review of design (consent placement, privacy, forms) |
-| **310-doc-writer** | When copy is legal-sensitive | Review consent text, privacy notices, AI disclosure, data messages |
+| **319-doc-writer** | When copy is legal-sensitive | Review consent text, privacy notices, AI disclosure, data messages |
 
 ## Design and Prototype Review
 
@@ -325,7 +325,7 @@ When 120 invokes you for Legal PESTEL validation:
 
 ## Doc Writer Collaboration
 
-When 410 invokes you for legal-sensitive copy review:
+When **319-doc-writer** invokes you for legal-sensitive copy review:
 
 **Input you receive**: UI copy (consent text, privacy notice, AI disclosure, data-related messages)
 

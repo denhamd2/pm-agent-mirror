@@ -69,7 +69,7 @@ Successfully executed the complete GCC E2E pipeline from fresh PMF research thro
 
 ---
 
-### Step 5: Copy Review (310-doc-writer)
+### Step 5: Copy Review (319-doc-writer)
 - **Copy Review:** `design/gcc-nationalization-compliance-copy.md`
 - **Status:** ⚠️ Legal review required
 
@@ -158,7 +158,7 @@ Successfully executed the complete GCC E2E pipeline from fresh PMF research thro
 
 ## Success Metrics
 
-✅ **Full E2E pipeline executed:** 120 → HITL → 200 → 320 → 310 → 330 → 400  
+✅ **Full E2E pipeline executed:** 120 → HITL → 200 → 320 → 319 → 330 → 400  
 ✅ **Fresh research:** New recommendation different from MISSION-006 (Interview Scheduling) and MISSION-007 (WhatsApp)  
 ✅ **PRD published:** Both Notion and Confluence  
 ✅ **High-fidelity prototype:** Canvas Kit v11 with Workday design patterns  

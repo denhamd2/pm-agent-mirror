@@ -530,6 +530,6 @@ interface Interview {
 ---
 
 **Built with ❤️ using Workday Canvas Kit**  
-**Canvas Kit Version**: v14.2.34  
+**Canvas Kit Version**: v14.2.37  
 **TypeScript**: 5.x  
 **React**: 18.x

@@ -46,6 +46,21 @@ Use this to:
 - Primary PRD location (Notion is source of truth for full PRD)
 - Support for emojis, colored headers, and complex layouts
 
+## Workday user research sources
+
+**Hub:** [`docs/workday-user-research/README.md`](../../docs/workday-user-research/README.md) (PDFs + index).
+
+When drafting **Audience / Personas** and JTBD-related narrative:
+
+1. Read **`docs/workday-user-research/README.md`** and open the **relevant PDF(s)** for the users in scope.
+2. Map **Primary / Secondary / Tertiary** personas explicitly, for example:
+   - **HR Professional (Recruiting)** — supplemental JTBD PDF + [`docs/jtbd-recruiting-hr-professional-and-manager.md`](../../docs/jtbd-recruiting-hr-professional-and-manager.md) for verbatim JTBD lines
+   - **Frontline Manager** — `Frontline-Manager-UX-Persona-V1.pdf` when the initiative targets frontline hiring managers
+   - **External Candidate** — `External-Candidate-UX-Persona-V1.pdf` for candidate-facing or career-site scope
+3. Keep alignment with **[`docs/experience-principles.md`](../../docs/experience-principles.md)** (Empower, Trust, Grow) and the curated JTBD markdown where recruiter/manager jobs apply.
+
+Cite in the PRD which sources informed personas (e.g. one line under **Audience / Personas**: *Persona depth from docs/workday-user-research/ …*).
+
 ## Workday PRD Template
 
 **Based on**: Interview Team Optimization Skill PRD (GA version)
@@ -435,6 +450,95 @@ Before finalizing a PRD, ensure:
 - [ ] Professional, data-driven tone maintained
 - [ ] Page numbers formatted as "Workday Confidential    N" with "-- N of M --"
 
+## Experience Principles Validation
+
+**Reference**: `docs/experience-principles.md`
+
+Before finalizing any PRD, validate the feature against **Workday's three Experience Principles**. Add a dedicated section to the PRD that demonstrates alignment.
+
+### Validation Checklist
+
+For each principle, ask these questions and document the answers in the PRD:
+
+#### 1. Empower (Give Users Control)
+- ✅ **Outcome-Focused**: Does this feature focus on the user's desired outcome (not force them through the system's model)?
+- ✅ **Augment over Replace**: Does it keep the human in control as an active driver?
+- ✅ **Stay Out of the Way**: Can users adopt basic functions without "earning a degree"?
+
+**Red flags**: Feature obscures information, requires complex training, forces users through system workflow instead of their natural workflow.
+
+#### 2. Trust (Build Their Confidence)
+- ✅ **Transparency**: Will users understand what the system is doing?
+- ✅ **Clarity & Familiarity**: Does it speak the user's language and feel natural?
+- ✅ **Quality with Accuracy**: Does it create a sense of reliability?
+
+**Red flags**: Unclear states, unfamiliar terminology, low-quality implementation that creates doubt.
+
+#### 3. Grow (Enable Them To Change)
+- ✅ **Easy Change**: Can users easily revise and iterate through self-service?
+- ✅ **Change History**: Are changes and their implications clear?
+- ✅ **Build Upon**: Can users build upon existing work without manual re-implementation?
+
+**Red flags**: Changes are punishing, require support tickets, force users to recreate work, hide change history.
+
+### PRD Section Template
+
+Add this section to every PRD (after "Feature Solution" and before "Strategic Value & Outcomes"):
+
+```markdown
+### Experience Principles Alignment
+
+**How this feature upholds Workday's Experience Principles:**
+
+**Empower (Give Users Control)**
+- [Specific way the feature keeps users in control]
+- [How it focuses on user outcome, not system model]
+- [Example: "Recruiters preview all 47 candidates before bulk-updating status, with clear undo"]
+
+**Trust (Build Their Confidence)**
+- [Specific way the feature builds transparency]
+- [How it uses familiar language/patterns]
+- [Example: "Clear preview: '3 candidates will be notified via WhatsApp. Review →'"]
+
+**Grow (Enable Them To Change)**
+- [Specific way the feature enables easy revision]
+- [How change history is preserved/visible]
+- [Example: "Campaign messages editable post-send; affects future sends only; history preserved"]
+
+**Principle Validation:**
+- [ ] Feature keeps user in control (not system-driven)
+- [ ] Clear transparency about what's happening
+- [ ] Easy to change/iterate without support tickets
+```
+
+### Example: GCC WhatsApp Integration
+
+```markdown
+### Experience Principles Alignment
+
+**Empower (Give Users Control)**
+- Recruiters control when/how messages are sent (system suggests, doesn't auto-send)
+- Outcome-focused: Feature enables "reach GCC candidates effectively," not "navigate WhatsApp API"
+- Preview every message before sending; bulk operations show impact before applying
+
+**Trust (Build Their Confidence)**
+- Transparent delivery status: "Sent to 12 candidates, 8 read, 3 replied" (real-time)
+- Familiar language: "Message," "Send," "Reply" (not technical jargon)
+- Quality: Messages are reliably delivered; system indicates failures clearly
+
+**Grow (Enable Them To Change)**
+- Self-service template editing (no IT dependency)
+- Change history: "Template edited 3 times; affects future campaigns only"
+- Builds on existing Campaigns: WhatsApp added as new channel (not separate app)
+```
+
+### When Principles Conflict
+
+Sometimes principles create tension (e.g., "Empower" wants flexibility, "Trust" wants simplicity). Document the tradeoff in the PRD:
+
+**Example:**
+> **Principle Tradeoff**: We prioritized **Trust** (clarity) over **Empower** (maximum flexibility) by limiting custom WhatsApp templates to 5 pre-approved formats. This prevents compliance issues (GCC regulations) while still enabling personalization via merge fields. Future iteration could add custom templates with compliance validation.
+
 ## Best Practices
 
 ### Executive Summary
@@ -466,21 +570,27 @@ You activate when user says:
 ## Handoff Scenarios
 - **To Execution Planner (300)**: After PRD approval, for Jira ticket creation
 - **To Slide Generator (110)**: To create executive presentation from PRD
-- **To Market Intelligence (100)**: For competitive analysis to include in PRD
+- **To Market Intelligence (100)**: **Broader** market or industry research (macro trends, category dynamics) **outside** structured ATS/regional parity. **Do not** re-run **100** for a basic competitor list when **GCC E2E** already ran **101** and produced `e2e-ci-brief` + matrix delta.
+- **From Competitive Intelligence (101)**: **GCC E2E** – orchestrator runs **101** before you. You **must** read the E2E CI brief and GCC matrix (paths below) and ground competitive differentiation in **Native / Workaround / True Gap** with citations from those artifacts (not unsourced competitor marketing).
 - **From Design agents (420 Prototype, 410 Doc Writer, 430 UX Designer)**: To document design decisions and implementation in PRD
 
 ## GCC E2E Pipeline Context
 
-When receiving **"Create PRD for the selected GCC opportunity: [recommendation]. Source: [path]. Part of GCC e2e pipeline"** (the recommendation is the PM-selected one from the human-in-the-loop step):
+When receiving **"Create PRD for the selected GCC opportunity: [recommendation]. Source: [path]. Part of GCC e2e pipeline"** or any invoke that includes **Required inputs:** **e2e-ci-brief** / **gcc-competitive-matrix** (orchestrator Step 6), the recommendation is the PM-selected one from HITL **after** **101** has completed Step 5.
+
 1. Read the GCC PMF analysis from the source path (e.g., `research/GCC/thematic-analysis/[latest].md`)
-2. Use the recommendation as the PRD scope (problem, solution, success metrics)
-3. Structure the PRD to support prototype scope (420 will build from it)
-4. **CRITICAL: Execute full publishing workflow (Steps 1-4)**:
+2. **Read Competitive Intelligence outputs (mandatory for GCC E2E):**
+   - `research/competitive/gcc/e2e-ci-brief-[feature-slug]-[YYYY-MM-DD].md` (path from orchestrator / MISSION_LOG, or latest matching brief for this feature slug)
+   - `research/competitive/matrices/gcc-competitive-matrix.md` (roster, tables, regional context)
+3. In **Overview** – *How is our approach uniquely different from others?* (and any **Competitive / market** subsection): **cite** the brief and matrix – summarise parity as **Native**, **Workaround** (with limits), or **True Gap** where relevant to the initiative; align narrative with PMF themes **without** contradicting **101** validation.
+4. Use the recommendation as the PRD scope (problem, solution, success metrics)
+5. Structure the PRD to support representative UI scope for **315** (discovery brief) and **320** (prototype)
+6. **CRITICAL: Execute full publishing workflow (Steps 1-4)**:
    - Step 1: Save markdown to `/docs/prds/[feature-name]-prd.md`
    - Step 2: Publish to Notion using `notion-create-pages` (full PRD with rich formatting)
    - Step 3: Publish to Confluence using `create_confluence_page` (summary + link to Notion)
    - Step 4: Log both URLs to MISSION_LOG and provide to user
-5. After publishing completes, the orchestrator handles handoff to 420—no need to invoke 420 directly
+7. After publishing completes, the orchestrator handles handoff to **315** (discovery)—no need to invoke **315** directly from **200**
 
 ## Example Usage
 

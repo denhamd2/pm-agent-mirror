@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   PrimaryButton,
   SecondaryButton,
+  TertiaryButton,
   ToolbarIconButton,
 } from '@workday/canvas-kit-react/button';
 import { Avatar } from '@workday/canvas-kit-react/avatar';
@@ -14,6 +15,11 @@ import {
   DEFAULT_COMM_RAIL_PX,
   DEFAULT_COMM_EXPANDED_PX,
   SANA_PAGE_CANVAS,
+  SANA_COMM_PANEL_SURFACE,
+  SANA_LINK_ACCENT,
+  SanaCommComposer,
+  SanaCommMessageBubble,
+  sanaCommFormControlStyle,
 } from './components';
 import { Banner } from '@workday/canvas-kit-react/banner';
 import { Card } from '@workday/canvas-kit-react/card';
@@ -36,6 +42,7 @@ import {
   copyIcon,
   sendIcon,
   caretDownSmallIcon,
+  plusIcon,
 } from '@workday/canvas-system-icons-web';
 
 /** WhatsApp brand mark for the communication rail (system icons do not ship it). */
@@ -232,6 +239,7 @@ export const GCCWhatsAppIntegration: React.FC = () => {
   const [whatsappExpanded, setWhatsappExpanded] = useState(false);
   const [activeNavId, setActiveNavId] = useState<string>(candidateTabId('Summary'));
   const [showEmailTeaser, setShowEmailTeaser] = useState(true);
+  const [composerDraft, setComposerDraft] = useState('');
 
   const selectedTemplate = TEMPLATES.find((t) => t.id === selectedTemplateId) ?? TEMPLATES[0];
   const hasConsent = candidate.consent === 'opted_in';
@@ -244,6 +252,7 @@ export const GCCWhatsAppIntegration: React.FC = () => {
     await new Promise((r) => setTimeout(r, 1200));
     setIsSending(false);
     setSendSuccess(true);
+    setComposerDraft('');
     setTimeout(() => {
       setSendSuccess(false);
       setWhatsappExpanded(false);
@@ -283,7 +292,7 @@ export const GCCWhatsAppIntegration: React.FC = () => {
           style={{
             borderBottom: `1px solid ${colors.soap300}`,
             flexShrink: 0,
-            backgroundColor: colors.soap100,
+            backgroundColor: SANA_COMM_PANEL_SURFACE,
           }}
         >
           <Flex justifyContent="space-between" alignItems="center" gap="m">
@@ -292,7 +301,7 @@ export const GCCWhatsAppIntegration: React.FC = () => {
                 <WhatsAppMark size={24} />
               </Box>
               <Heading size="small" id="whatsapp-panel-title">
-                WhatsApp
+                Candidate WhatsApp
               </Heading>
             </Flex>
             <ToolbarIconButton
@@ -303,11 +312,11 @@ export const GCCWhatsAppIntegration: React.FC = () => {
             />
           </Flex>
           <BodyText size="small" color={colors.blackPepper600} marginTop="xxs">
-            Send a templated message to {candidate.name.split(' ')[0]}
+            {candidate.requisitionId} · {candidate.jobTitle}
           </BodyText>
         </Box>
 
-        <Box padding="l" style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
+        <Box padding="l" style={{ flex: 1, minHeight: 0, overflowY: 'auto', backgroundColor: SANA_COMM_PANEL_SURFACE }}>
           {sendSuccess && (
             <Card
               marginBottom="m"
@@ -355,29 +364,22 @@ export const GCCWhatsAppIntegration: React.FC = () => {
           </Card>
 
           <Box marginBottom="m">
-            <FormField label="Message template" inputId="gcc-wa-template">
-              <Box
+            <FormField id="gcc-wa-template">
+              <FormField.Label>Message template</FormField.Label>
+              <FormField.Input
                 as="select"
-                id="gcc-wa-template"
                 value={selectedTemplateId}
-                onChange={(e) => setSelectedTemplateId(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '8px 12px',
-                  fontSize: 14,
-                  fontFamily: '"Roboto", sans-serif',
-                  backgroundColor: colors.soap100,
-                  border: `1px solid ${colors.soap300}`,
-                  borderRadius: 4,
-                  color: colors.blackPepper600,
-                }}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                  setSelectedTemplateId(e.target.value)
+                }
+                style={sanaCommFormControlStyle()}
               >
                 {TEMPLATES.map((t) => (
                   <option key={t.id} value={t.id}>
                     {t.name}
                   </option>
                 ))}
-              </Box>
+              </FormField.Input>
             </FormField>
           </Box>
 
@@ -409,16 +411,40 @@ export const GCCWhatsAppIntegration: React.FC = () => {
             )}
           </Card>
 
-          <Flex gap="s" marginTop="l" flexDirection="column">
-            <PrimaryButton
-              onClick={handleSendMessage}
-              disabled={!hasConsent || isSending}
-              aria-busy={isSending}
-            >
-              {isSending ? 'Sending...' : 'Send message'}
-            </PrimaryButton>
+          <Box marginBottom="m">
+            <BodyText size="small" fontWeight="bold" marginBottom="s">
+              Recent messages
+            </BodyText>
+            <SanaCommMessageBubble align="start" timestamp="Yesterday · 16:42">
+              Hi, this is {candidate.recruiter?.split(' ')[0] ?? 'Rachel'} from recruiting. Can you confirm you can
+              attend Thursday at 10:00?
+            </SanaCommMessageBubble>
+            <SanaCommMessageBubble align="end" timestamp="Yesterday · 17:05">
+              Yes, Thursday works. Thank you.
+            </SanaCommMessageBubble>
+          </Box>
+
+          <SanaCommComposer
+            value={composerDraft}
+            onChange={setComposerDraft}
+            placeholder={`Type a message to ${candidate.name.split(' ')[0]}.`}
+            onSend={handleSendMessage}
+            sendDisabled={!hasConsent || isSending}
+            sendLabel={isSending ? 'Sending' : 'Send message'}
+            footer={
+              <TertiaryButton
+                size="small"
+                icon={plusIcon}
+                onClick={() => document.getElementById('gcc-wa-template')?.focus()}
+              >
+                Add template
+              </TertiaryButton>
+            }
+          />
+
+          <Flex gap="s" marginTop="m" flexDirection="column">
             <SecondaryButton onClick={collapseWhatsapp} disabled={isSending}>
-              Cancel
+              Close panel
             </SecondaryButton>
             {isSaudiArabiaCandidate(candidate) && (
               <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.4 }}>
@@ -505,7 +531,7 @@ export const GCCWhatsAppIntegration: React.FC = () => {
             >
               <Box
                 style={{
-                  color: whatsappExpanded ? colors.blueberry500 : '#128C7E',
+                  color: whatsappExpanded ? SANA_LINK_ACCENT : '#128C7E',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -634,10 +660,6 @@ export const GCCWhatsAppIntegration: React.FC = () => {
                 </PrimaryButton>
               </Card>
             )}
-
-            <BodyText size="small" color={colors.blackPepper500} marginBottom="m">
-              Recruiting / Candidates / {candidate.name}
-            </BodyText>
 
             <Box
               style={{

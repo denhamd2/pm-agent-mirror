@@ -15,7 +15,7 @@ import {
   SANA_PAGE_CANVAS,
   SANA_CARD_RADIUS_LG,
   SANA_SHELL_RADIUS,
-  SANA_CARD_SHADOW_LIFTED,
+  SANA_CARD_SHADOW,
 } from './components';
 
 /**
@@ -47,17 +47,29 @@ function KpiTile({
         flex: '1 1 200px',
         minWidth: 180,
         borderRadius: SANA_CARD_RADIUS_LG,
-        boxShadow: SANA_CARD_SHADOW_LIFTED,
-        backgroundColor: colors.frenchVanilla100,
+        boxShadow: SANA_CARD_SHADOW,
+        backgroundColor: 'var(--cnvs-sys-color-bg-default)',
+        border: '1px solid var(--cnvs-sys-color-border-container)',
       }}
     >
-      <BodyText size="small" color={colors.blackPepper500} marginBottom="xs">
+      <BodyText
+        size="small"
+        style={{ color: 'var(--cnvs-sys-color-fg-muted)' }}
+        marginBottom="xs"
+      >
         {label}
       </BodyText>
-      <Heading size="medium" style={{ marginBottom: space.xs }}>
+      <Heading
+        size="large"
+        style={{
+          marginBottom: space.xs,
+          color: 'var(--cnvs-sys-color-text-strong)',
+          fontWeight: 700,
+        }}
+      >
         {value}
       </Heading>
-      <BodyText size="small" color={colors.blackPepper500}>
+      <BodyText size="small" style={{ color: 'var(--cnvs-sys-color-fg-muted)' }}>
         {hint}
       </BodyText>
     </Card>
@@ -192,9 +204,10 @@ export const GccRecruiterDashboard: React.FC = () => {
               </BodyText>
               <Flex gap="m" marginBottom="m" flexWrap="wrap" alignItems="flex-end">
                 <Box style={{ flex: '1 1 220px', minWidth: 180 }}>
-                  <FormField label="Search" inputId="req-search">
-                    <TextInput
-                      id="req-search"
+                  <FormField id="req-search">
+                    <FormField.Label>Search</FormField.Label>
+                    <FormField.Input
+                      as={TextInput}
                       value={reqSearch}
                       onChange={(e) => setReqSearch(e.target.value)}
                       placeholder="Title or req ID"
@@ -202,14 +215,15 @@ export const GccRecruiterDashboard: React.FC = () => {
                   </FormField>
                 </Box>
                 <Box style={{ flex: '1 1 200px', minWidth: 160 }}>
-                  <FormField label="Status" inputId="req-status">
-                    <Select id="req-status" value={reqStatus} onChange={(e) => setReqStatus(e.target.value)}>
+                  <FormField id="req-status">
+                    <FormField.Label>Status</FormField.Label>
+                    <FormField.Input as={Select} value={reqStatus} onChange={(e) => setReqStatus(e.target.value)}>
                       <option value="all">All statuses</option>
                       <option value="Interview">Interview</option>
                       <option value="Screen">Screen</option>
                       <option value="Offer">Offer</option>
                       <option value="Approved">Approved</option>
-                    </Select>
+                    </FormField.Input>
                   </FormField>
                 </Box>
                 <SecondaryButton>New requisition</SecondaryButton>
@@ -253,9 +267,10 @@ export const GccRecruiterDashboard: React.FC = () => {
               </BodyText>
               <Flex gap="m" marginBottom="m" flexWrap="wrap" alignItems="flex-end">
                 <Box style={{ flex: '1 1 280px', minWidth: 200 }}>
-                  <FormField label="Search" inputId="cand-search">
-                    <TextInput
-                      id="cand-search"
+                  <FormField id="cand-search">
+                    <FormField.Label>Search</FormField.Label>
+                    <FormField.Input
+                      as={TextInput}
                       value={candSearch}
                       onChange={(e) => setCandSearch(e.target.value)}
                       placeholder="Name or requisition"
@@ -303,34 +318,37 @@ export const GccRecruiterDashboard: React.FC = () => {
 
               <Flex gap="m" marginBottom="m" flexWrap="wrap" alignItems="flex-end">
                 <Box style={{ flex: '1 1 200px', minWidth: 160 }}>
-                  <FormField label="Line of business" inputId="dash-filter-lob">
-                    <Select id="dash-filter-lob" value={lob} onChange={(e) => setLob(e.target.value)}>
+                  <FormField id="dash-filter-lob">
+                    <FormField.Label>Line of business</FormField.Label>
+                    <FormField.Input as={Select} value={lob} onChange={(e) => setLob(e.target.value)}>
                       <option value="all">All lines of business</option>
                       <option value="corp">Corporate functions</option>
                       <option value="tech">Technology</option>
                       <option value="ops">Operations</option>
-                    </Select>
+                    </FormField.Input>
                   </FormField>
                 </Box>
                 <Box style={{ flex: '1 1 200px', minWidth: 160 }}>
-                  <FormField label="Location / region" inputId="dash-filter-loc">
-                    <Select id="dash-filter-loc" value={location} onChange={(e) => setLocation(e.target.value)}>
+                  <FormField id="dash-filter-loc">
+                    <FormField.Label>Location / region</FormField.Label>
+                    <FormField.Input as={Select} value={location} onChange={(e) => setLocation(e.target.value)}>
                       <option value="all">All locations</option>
                       <option value="gcc">GCC</option>
                       <option value="uae">United Arab Emirates</option>
                       <option value="ksa">Saudi Arabia</option>
                       <option value="emea">EMEA (non-GCC)</option>
-                    </Select>
+                    </FormField.Input>
                   </FormField>
                 </Box>
                 <Box style={{ flex: '1 1 200px', minWidth: 160 }}>
-                  <FormField label="Management level" inputId="dash-filter-level">
-                    <Select id="dash-filter-level" value={level} onChange={(e) => setLevel(e.target.value)}>
+                  <FormField id="dash-filter-level">
+                    <FormField.Label>Management level</FormField.Label>
+                    <FormField.Input as={Select} value={level} onChange={(e) => setLevel(e.target.value)}>
                       <option value="all">All levels</option>
                       <option value="ic">Individual contributor</option>
                       <option value="mgr">Manager</option>
                       <option value="dir">Director+</option>
-                    </Select>
+                    </FormField.Input>
                   </FormField>
                 </Box>
                 <SecondaryButton>Export summary</SecondaryButton>

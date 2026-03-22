@@ -15,7 +15,7 @@ A comprehensive **UX Design Framework for Enterprise Recruiting** section has be
 ### 1. Information Architecture & Structure (Principles #1-5)
 - **#1 Card Grouping (Miller's Law)**: Chunk information into 5-9 digestible sections
 - **#2 Left-to-Right, Top-to-Bottom Priority (F/Z-Pattern)**: Primary content top-left, secondary right
-- **#3 Page title and primary nav**: Hierarchy via `Heading`, left rail, and tabs; omit breadcrumb strips unless PRD requires
+- **#3 Page title and primary nav**: Hierarchy via `Heading`, left rail, and tabs; **no** breadcrumb or chevron path strips in `design/` prototypes (hard workspace rule)
 - **#4 Hub-and-Spoke Navigation**: Tabs/left nav for related views
 - **#5 Filter-Then-Act Pattern**: Filters above, data middle, actions below
 
@@ -37,7 +37,7 @@ A comprehensive **UX Design Framework for Enterprise Recruiting** section has be
 - **#16 Fitts's Law (Target Size)**: 44×44px touch, 24×24px desktop minimums
 - **#17 Hick's Law (Limit Choices)**: Max 7 primary actions, overflow for more
 - **#18 Jakob's Law (Familiar Patterns)**: Align with Workday + industry standards
-- **#19 Recognition over Recall**: Persistent context (page title, tabs, sticky headers; no breadcrumbs by default)
+- **#19 Recognition over Recall**: Persistent context (page title, tabs, sticky headers; **no** breadcrumbs or path strips in prototypes)
 - **#20 Keyboard Navigation**: All interactive elements keyboard accessible
 
 ### 5. Layout Decision Framework (Steps A-F)

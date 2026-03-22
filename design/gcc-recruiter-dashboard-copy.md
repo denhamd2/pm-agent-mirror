@@ -2,7 +2,7 @@
 
 **Prototype:** `design/gcc-recruiter-dashboard.tsx`  
 **Date:** 20 March 2026  
-**Agent:** 310-doc-writer (design chain)
+**Agent:** 319-doc-writer (design chain)
 
 ## Summary
 

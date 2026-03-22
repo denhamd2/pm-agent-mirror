@@ -5,14 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "open:browsers": "bash ../scripts/open-url-chrome-and-cursor-browser.sh 'http://localhost:5199/'",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
-    "@workday/canvas-kit-react": "^11.0.0",
-    "@workday/canvas-kit-react-fonts": "^14.2.37",
-    "@workday/canvas-tokens-web": "^4.1.4",
+    "@workday/canvas-kit-react": "14.2.37",
+    "@workday/canvas-kit-react-fonts": "14.2.37",
+    "@workday/canvas-tokens-web": "3.1.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

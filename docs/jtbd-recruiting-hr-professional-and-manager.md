@@ -2,7 +2,15 @@
 
 Curated from the internal **JTBD Worksheet** for use with **315-ux-designer** and **320-prototype-developer**. This file is the **stable agent-facing source**; update when the canonical worksheet taxonomy changes.
 
-**Persona names in the worksheet**: **HR Professional** (Talent Acquisition and related) ≈ **Recruiter** in Recruiting prototypes; **Manager** ≈ **hiring manager** when the feature supports **Grow and maintain my team** hiring jobs.
+## Canonical extended sources (PDFs)
+
+For full depth beyond this excerpt, use the versioned PDFs in **`docs/workday-user-research/`** (see [`README.md`](workday-user-research/README.md)):
+
+- **HR Professional (Recruiting) JTBD — full supplemental guide:** [`workday-user-research/HR-Professional-JTBD-Supplemental-Guide-V1.0.pdf`](workday-user-research/HR-Professional-JTBD-Supplemental-Guide-V1.0.pdf)
+- **Frontline Manager UX persona** (when the feature targets frontline hiring managers): [`workday-user-research/Frontline-Manager-UX-Persona-V1.pdf`](workday-user-research/Frontline-Manager-UX-Persona-V1.pdf)
+- **External Candidate UX persona** (candidate-primary flows): [`workday-user-research/External-Candidate-UX-Persona-V1.pdf`](workday-user-research/External-Candidate-UX-Persona-V1.pdf)
+
+**Persona names in the worksheet**: **HR Professional** (Talent Acquisition and related) ≈ **Recruiter** in Recruiting prototypes; **Manager** ≈ **hiring manager** when the feature supports **Grow and maintain my team** hiring jobs. Use the **Frontline Manager** persona PDF when the PRD or product scope explicitly concerns that segment.
 
 ---
 

@@ -6,10 +6,10 @@
 
 ## Workflow Sequence (Correct Order)
 
-### Step 1: Epic Creation (410-epic-definition)
-**Action**: Create epic in Jira
-**Jira Impact**: ✅ Epic created (HRREC-XXX)
-**Human Approval**: Not required (epic creation is straightforward)
+### Step 1: Epic draft (410-epic-definition)
+**Action**: Write epic draft markdown to `docs/epics/*-epic-draft.md` (user story, scope, Jira-ready body)
+**Jira Impact**: ❌ No Jira ticket yet
+**Human Approval**: Not required (draft only)
 
 ### Step 2: Story Mapping & HITL Approval (420-story-mapping)
 **Action**: Create story map document and present for approval
@@ -50,25 +50,27 @@
    ```
 
 **PM Options** (via `AskQuestion` tool):
-- "Approve all - Create all stories in Jira (VS1, VS2, VS3)"
-- "Approve VS1 only - Create only VS1 stories in Jira"
+- "Approve all - Create Jira epic + all stories (VS1, VS2, VS3)"
+- "Approve VS1 only - Create Jira epic + VS1 stories only"
 - "Request changes - Provide feedback on the story map first"
 
 **CRITICAL NOTE**: The presentation explicitly states:
-> "NO JIRA STORIES HAVE BEEN CREATED YET. This is the planning/review stage."
+> "NO JIRA STORIES HAVE BEEN CREATED YET. This is the planning/review stage."  
+> (Epic in Jira is also created only in **430**, after this approval.)
 
-### Step 3: Story Writing & Jira Creation (430-story-writing)
-**Action**: Create user stories in Jira with BDD scenarios
-**Jira Impact**: ✅ STORIES CREATED (only for approved value slices)
+### Step 3: Epic + story writing & Jira creation (430-story-writing)
+**Action**: Create **Jira epic** from the 410 draft (unless reusing a legacy epic key on the story map), then create user stories with BDD scenarios
+**Jira Impact**: ✅ Epic + stories created (only for approved value slices)
 **Human Approval**: Already completed in Step 2
 
 **430's Responsibility**:
-- Read approved story map
+- Read approved story map and epic draft path
+- Create Jira epic via MCP (or reuse existing key documented on the story map)
 - Apply value slice filter from PM approval
 - Consult Deployment Agent for Workday context
 - Write stories with 2-4 BDD scenarios each
 - Create stories in Jira with dual-field format
-- Link to epic and label with value slice
+- Link stories to epic and label with value slice
 
 **430 does NOT present for approval** - it assumes approval already happened in Step 2
 
@@ -92,12 +94,7 @@
 
 ### In 430-story-writing.mdc
 
-**Lines 64-76** (Step 1: Read Context):
-```markdown
-**IMPORTANT**: This agent assumes the story map has ALREADY been approved by the PM in the HITL review (conducted by 420-story-mapping). This agent's job is to execute on the approved plan by creating Jira stories.
-
-**This agent does NOT present for approval - that happens in 420-story-mapping BEFORE this agent is invoked.**
-```
+**Step 1 / Step 1b**: Requires 420 HITL approval first; then **creates the Jira epic** from the epic draft (410 output) before creating stories. **410 does not call Jira.**
 
 ### In 400-backlog-refinement.mdc
 
@@ -111,25 +108,25 @@
 **Wait for approval** before proceeding to Step 3.
 ```
 
-**Step 3 description (lines 40-47)**:
+**Step 3 description**:
 ```markdown
-**This step ONLY executes after PM approval in Step 2.** 430 creates Jira stories for the approved value slices only.
+**This step ONLY executes after PM approval in Step 2.** 430 creates the **Jira epic** from the draft, then creates stories for the approved value slices only.
 ```
 
 ## Example Workflow Execution
 
 ### Scenario: GCC Interview Scheduling
 
-**Step 1 - Epic Creation (410)**:
+**Step 1 - Epic draft (410)**:
 ```
 Input: GCC Interview Scheduling PRD
-Output: Epic HRREC-125 created in Jira
-Status: ✅ Epic exists in Jira
+Output: docs/epics/gcc-interview-scheduling-epic-draft.md
+Status: ✅ Draft on disk; no Jira yet
 ```
 
 **Step 2 - Story Mapping & HITL (420)**:
 ```
-Input: Epic HRREC-125, PRD
+Input: Epic draft path, PRD
 Action: 
   1. Create story map document
   2. Identify 3 value slices (VS1, VS2, VS3) with 12 total stories
@@ -169,51 +166,52 @@ Action:
      
      NO JIRA STORIES HAVE BEEN CREATED YET. This is the planning/review stage.
      
-     Which value slices would you like me to create stories for in Jira?"
+     Which value slices would you like me to create Jira epic + stories for?"
   
   4. PM selects: "Approve VS1 only"
   
 Output: Story map approved for VS1 (5 stories)
-Status: ❌ NO JIRA STORIES CREATED YET (only story map document exists)
+Status: ❌ NO JIRA EPIC OR STORIES YET (only story map document exists)
 ```
 
-**Step 3 - Story Writing (430)**:
+**Step 3 - Epic + story writing (430)**:
 ```
-Input: Story map (VS1 filter), Epic HRREC-125
+Input: Story map (VS1 filter), epic draft path
 Action:
-  1. Read story map, filter for VS1 stories
-  2. Consult Deployment Agent for Workday context
-  3. Write 5 stories with 2-4 BDD scenarios each (14 scenarios total)
-  4. Create stories in Jira:
+  1. Create Jira epic HRREC-125 from epic draft (createNewJiraTicket, issueType Epic)
+  2. Read story map, filter for VS1 stories
+  3. Consult Deployment Agent for Workday context
+  4. Write 5 stories with 2-4 BDD scenarios each (14 scenarios total)
+  5. Create stories in Jira:
      - HRREC-126: Validate KSA panel composition (3 scenarios)
      - HRREC-127: Validate Kuwait 3-day notice (3 scenarios)
      - HRREC-128: Display compliance warnings (2 scenarios)
      - HRREC-129: Log compliance checks (3 scenarios)
      - HRREC-130: Audit trail for compliance (3 scenarios)
-  5. Link all stories to epic HRREC-125
-  6. Label all stories with "VS1"
+  6. Link all stories to epic HRREC-125
+  7. Label all stories with "VS1"
 
-Output: 5 stories created in Jira under epic HRREC-125
-Status: ✅ JIRA STORIES NOW EXIST (only for approved VS1)
+Output: Epic HRREC-125 + 5 stories in Jira (approved VS1 only)
+Status: ✅ JIRA EPIC AND STORIES NOW EXIST
 ```
 
 ## Verification Checklist
 
-- ✅ Epic creation (410) happens BEFORE story map
-- ✅ Story map (420) is created as a document BEFORE Jira stories
+- ✅ Epic **draft** (410) happens BEFORE story map
+- ✅ Story map (420) is created as a document BEFORE any Jira epic or stories
 - ✅ HITL approval (420) presents high-level story structure to PM
 - ✅ HITL approval includes full list of story titles under each value slice
-- ✅ HITL approval explicitly states "NO JIRA STORIES CREATED YET"
+- ✅ HITL approval explicitly states no Jira stories yet (and epic is still pending until 430)
 - ✅ Story writing (430) ONLY executes after PM approval
-- ✅ 430 creates Jira stories ONLY for approved value slices
+- ✅ 430 creates **Jira epic + stories** ONLY after approval (stories only for approved value slices)
 - ✅ Workflow blocks at HITL until PM provides explicit approval
 
 ## Summary
 
-The workflow is correctly structured with HITL approval BEFORE Jira story creation:
+The workflow is correctly structured with HITL approval BEFORE any Jira epic or story creation:
 
-1. **410-epic-definition**: Creates epic in Jira (no approval needed)
+1. **410-epic-definition**: Writes epic draft to `docs/epics/` (no Jira)
 2. **420-story-mapping**: Creates story map document → **HITL APPROVAL** → hands off to 430
-3. **430-story-writing**: Creates stories in Jira (assumes approval already happened)
+3. **430-story-writing**: Creates **Jira epic** from draft, then creates stories (assumes approval already happened)
 
-**PM reviews and approves the story map structure at a high level (story titles listed under each value slice) BEFORE any user stories are created in Jira under the epic.**
+**PM reviews and approves the story map structure at a high level (story titles listed under each value slice) BEFORE the Jira epic and user stories are created.**

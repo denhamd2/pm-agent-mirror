@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Global, css } from '@emotion/react';
 import { CanvasProvider } from '@workday/canvas-kit-react/common';
@@ -6,8 +6,40 @@ import { fonts } from '@workday/canvas-kit-react-fonts';
 import '@workday/canvas-tokens-web/css/base/_variables.css';
 import '@workday/canvas-tokens-web/css/system/_variables.css';
 import '@workday/canvas-tokens-web/css/brand/_variables.css';
-import GccRecruiterDashboard from './gcc-recruiter-dashboard';
+import GccWhatsappOmnichannelEngagementV45 from './gcc-whatsapp-omnichannel-engagement-v45';
+import { GccCandidateGridV46 } from './gcc-candidate-grid-v46';
+import { GccRecruiterDashboard } from './gcc-recruiter-dashboard';
 import { SANA_PAGE_CANVAS } from './components';
+
+function prototypeFromLocation(): 'whatsapp-v45' | 'gcc-candidate-grid-v46' | 'gcc-recruiter-dashboard' {
+  const path = window.location.pathname.replace(/\/+$/, '') || '/';
+  if (path.endsWith('gcc-candidate-grid-v46')) return 'gcc-candidate-grid-v46';
+  if (path.endsWith('gcc-recruiter-dashboard')) return 'gcc-recruiter-dashboard';
+  const h = window.location.hash.replace(/^#\/?/, '');
+  if (h === 'gcc-candidate-grid-v46' || h.startsWith('gcc-candidate-grid-v46')) {
+    return 'gcc-candidate-grid-v46';
+  }
+  if (h === 'gcc-recruiter-dashboard' || h.startsWith('gcc-recruiter-dashboard')) {
+    return 'gcc-recruiter-dashboard';
+  }
+  return 'whatsapp-v45';
+}
+
+function AppRoot() {
+  const [route, setRoute] = useState(prototypeFromLocation);
+  useEffect(() => {
+    const sync = () => setRoute(prototypeFromLocation());
+    window.addEventListener('popstate', sync);
+    window.addEventListener('hashchange', sync);
+    return () => {
+      window.removeEventListener('popstate', sync);
+      window.removeEventListener('hashchange', sync);
+    };
+  }, []);
+  if (route === 'gcc-candidate-grid-v46') return <GccCandidateGridV46 />;
+  if (route === 'gcc-recruiter-dashboard') return <GccRecruiterDashboard />;
+  return <GccWhatsappOmnichannelEngagementV45 />;
+}
 
 const FIGMA_CAPTURE_SCRIPT_SRC =
   'https://mcp.figma.com/mcp/html-to-design/capture.js';
@@ -259,7 +291,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           backgroundColor: SANA_PAGE_CANVAS,
         }}
       >
-        <GccRecruiterDashboard />
+        <AppRoot />
       </div>
     </CanvasProvider>
   </React.StrictMode>

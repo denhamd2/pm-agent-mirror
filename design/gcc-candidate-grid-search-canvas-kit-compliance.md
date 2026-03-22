@@ -9,8 +9,9 @@
 ## Canvas Kit Setup ✅
 
 ### Dependencies (package.json)
-- ✅ `@workday/canvas-kit-react@^11.0.0` - Core components
-- ✅ `@workday/canvas-kit-react-fonts@^14.2.37` - Roboto fonts
+- ✅ `@workday/canvas-kit-react@14.2.37` - Core components
+- ✅ `@workday/canvas-kit-react-fonts@14.2.37` - Roboto fonts
+- ✅ `@workday/canvas-tokens-web@3.1.6` - CSS variables (see `main.tsx`)
 - ✅ `@workday/canvas-tokens-web@^4.1.4` - Design tokens
 
 ### Token CSS Imports (main.tsx)

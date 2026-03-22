@@ -5,7 +5,7 @@ This log tracks the state of all active product initiatives, decisions, and hand
 
 ## Current Status
 **Status:** ✅ OPERATIONAL - PMF Research Reorganized (Country-Based Structure)
-**Last Updated:** Friday Mar 20, 2026 (GCC-E2E-002 — Recruiter Dashboard: 320–330 complete; backlog next)
+**Last Updated:** 21 March 2026 (GCC-E2E-006 — PRD #3 written to Git + Confluence summary; Notion publish pending MCP)
 **Workspace Version:** 1.3
 **Active Agents:** 9 (Orchestrator + 7 Specialists + Functional Knowledge Authority)
 
@@ -31,7 +31,256 @@ This log tracks the state of all active product initiatives, decisions, and hand
 - ✅ PMF Thematic Analysis: Country-based Braun & Clarke with Triangulation
 - ✅ Total workspace size: 200MB+
 
+## Copy Review Timing Change (March 2026)
+
+**Old flow**: 315 → 320 → 319 (copy review after prototype)
+**New flow**: 315 PASS 1-2 → 319 (copy review) → 315 PASS 3-4 → 320 (build with approved copy) → 319 (spot-check)
+
+**For in-flight missions** (GCC-E2E-005, GCC-CANDIDATE-GRID-001, etc.):
+- Continue with old flow (already past 315)
+- New missions (GCC-E2E-006+) will use new flow
+
+**Benefits**:
+- Copy issues caught before implementation
+- Legal compliance validated upfront
+- Less rework for 320 (prototype developer)
+- Faster iteration cycle
+
 ## Active Missions
+
+## Mission: GCC-E2E-007 - GCC Research to Design Pipeline (v46 — Fresh Research)
+**Status:** In Progress
+**Pipeline Step:** 7 of 12 (Research → HITL → PRD → Red Team PRD → Discovery → Prototype → Copy → Figma → Backlog → Red Team Stories → Jira → Complete)
+**Created:** 2026-03-21
+**Owner:** Master Orchestrator
+
+**Objective:** Execute complete GCC E2E pipeline with fresh v46 research, proceeding through PRD, Red Team PRD review, Discovery, Prototype, Copy Review, Figma Capture, Backlog Refinement, Red Team story map review, and Jira creation based on PM-selected recommendation.
+
+**Artifacts:**
+- Research (105): `research/GCC/105-user-research-findings.md`
+- Research (120 PMF): `research/GCC/thematic-analysis/2026-03-21-GCC-PMF-Analysis-v46.md`
+- Slide spec: `slides_spec_v46.json`
+- Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v46.pptx` (48 content slides)
+- PRD (Git): `docs/prds/gcc-candidate-grid-redesign-v46-prd.md`
+- PRD (Confluence summary): https://confluence.workday.com/display/~david.denham/Candidate+Grid+Redesign+2026R2+PRD+Summary
+- PRD (Notion): **Not published** – `plugin-notion-workspace-notion` MCP requires auth; publish from Git markdown when connected
+- Red Team PRD Review: `docs/prds/gcc-candidate-grid-redesign-v46-prd-red-team-review.md` (5 critical risks, 5 important issues; 200 revision completed)
+- Discovery Brief: `design/gcc-candidate-grid-redesign-v46-discovery-brief.md` (Final Verdict: APPROVED)
+- Prototype: `design/gcc-candidate-grid-v46.tsx` (http://localhost:5199/#/gcc-candidate-grid-v46; fixed: import mismatch + FormSelect uses native HTML select for Canvas Kit v14 compatibility)
+- Copy review (319): `design/gcc-candidate-grid-v46-copy-review.md` (2 critical fixes applied, 060 compliance passed)
+- Figma: [in progress - Step 7]
+- Story map: [pending]
+- Red Team Story Map Review: [pending]
+- Jira epic + stories: [pending]
+
+**Selected Recommendation:** **#5 - Candidate grid redesign (P1)** - Unified recruiter view across summary, CV, notes, history; fewer tabs; faster actions at high volume
+
+**Next Actions:**
+- [x] Step 1: 120 - Fresh PMF analysis + 105 user research + slide deck v46
+- [x] Step 2: HITL - PM selected #5 (Candidate grid redesign)
+- [x] Step 3: 200 - Create PRD for selected recommendation (Git + Confluence summary; Notion pending MCP)
+- [x] Step 3a: 080 - Red Team review PRD
+- [x] Step 3b: 200 revision to address Red Team feedback (12 critical fixes applied)
+- [x] Step 4: 315 - Discovery & Design Brief (Final Verdict: APPROVED)
+- [x] Step 5: 320 - Prototype implementation (running at localhost:5199)
+- [x] Step 6: 319 - Copy spot-check (2 critical fixes applied)
+- [ ] Step 7: 330 - Figma capture (in progress)
+- [ ] Step 8: 400 - Backlog refinement (410→420→420 HITL)
+- [ ] Step 8a: 080 - Red Team review story map
+- [ ] Step 8b: 420 revision if Red Team findings exist (1 attempt max)
+- [ ] Step 8c: 430 - Create Jira epic + stories
+
+---
+
+## Mission: GCC-E2E-006 - GCC Research to Design Pipeline (v45 — Fresh Research)
+**Status:** In Progress
+**Pipeline Step:** 7 of 12 (Figma capture complete → 400 backlog next)
+**Created:** 2026-03-21
+**Owner:** Master Orchestrator
+
+**Objective:** Execute complete GCC E2E pipeline with fresh v45 research, proceeding through PRD, Red Team PRD review, Discovery, Prototype, Copy Review, Figma Capture, Backlog Refinement, Red Team story map review, and Jira creation based on PM-selected recommendation.
+
+**Artifacts:**
+- Research (105): `research/GCC/105-user-research-findings.md`
+- Research (120 PMF): `research/GCC/thematic-analysis/2026-03-21-GCC-PMF-Analysis-v45.md`
+- Slide spec: `slides_spec_v45.json`
+- Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v45.pptx` (40 slides incl. auto-agenda)
+- PRD (Git): `docs/prds/gcc-whatsapp-omnichannel-candidate-engagement-prd.md`
+- PRD (Notion): **Not published in agent session** – `plugin-notion-workspace-notion` exposed no callable page-create tool in MCP filesystem (auth-only descriptor). **Action:** Publish full PRD to Notion from the Git markdown via Cursor Notion MCP when connected; paste URL here.
+- PRD (Confluence summary): https://confluence.workday.com/pages/viewpage.action?pageId=4349989128
+- Red Team PRD Review: `docs/prds/gcc-whatsapp-omnichannel-engagement-prd-red-team-review.md` (3 critical risks, 5 important issues found)
+- Discovery Brief: `design/gcc-whatsapp-omnichannel-engagement-v45-discovery-brief.md` (**Final Verdict: APPROVED**)
+- Copy review (319): `design/gcc-whatsapp-omnichannel-engagement-v45-copy-review.md` (18 editorial tweaks, 060 flags for legal-sensitive copy)
+- Prototype: `design/gcc-whatsapp-omnichannel-engagement-v45.tsx` (mounted in `main.tsx` at http://localhost:5199/)
+- Compliance review (060): Medium risk - DPIA required, Legal sign-off needed for [060]-marked strings
+- Copy review (319 spot-check): `design/gcc-whatsapp-omnichannel-engagement-v45-copy-spot-check.md` (PASS - all major inventory strings match approved copy)
+- Figma: **https://www.figma.com/design/yMm1QGPer6S5f7Qz37MiSw** (file: *GCC WhatsApp Omnichannel Engagement v45*; captureId `2d81a097-a2e3-4983-9f82-cd7565be62cd`; `planKey` omitted — MCP used account default)
+- Figma (060 design compliance): see agent response (post-capture review)
+- Story map: [pending]
+- Red Team Story Map Review: [pending]
+- Jira epic + stories: [pending]
+
+**Selected Recommendation:** **#3 - WhatsApp and omnichannel candidate engagement** - WhatsApp/SMS with templates, Arabic, opt-in, retention, audit logs, tenant toggles where WhatsApp is blocked
+
+**Next Actions:**
+- [x] Step 1: 120 - Fresh PMF analysis + 105 user research + slide deck v45
+- [x] Step 2: HITL - PM selected #3 (WhatsApp and omnichannel candidate engagement)
+- [x] Step 3: 200 - Create PRD for selected recommendation (Git + Confluence summary; Notion pending MCP)
+- [x] Step 3a: 080 - Red Team review PRD (3 critical risks, 5 important issues)
+- [x] Step 3b: 200 revision to address Red Team feedback (SMS geography, 2025R1 campaigns, portfolio relationship, data classification, phone resolution)
+- [x] Step 4: 315 - Discovery & Design Brief (multi-pass PASS 1-2 → 319 copy review → PASS 3-4 → **Final Verdict: APPROVED**)
+- [x] Step 5: 320 - Prototype implementation (Screen A: Profile + CommunicationDock; Screen B: Admin; 060 compliance review complete)
+- [x] Step 6: 319 - Copy spot-check (PASS - all major inventory strings match approved copy)
+- [x] Step 7: 330 - Figma capture (https://www.figma.com/design/yMm1QGPer6S5f7Qz37MiSw + 060 design compliance review)
+- [ ] Step 8: 400 - Backlog refinement (410→420→420 HITL)
+- [ ] Step 8a: 080 - Red Team review story map
+- [ ] Step 8b: 420 revision if Red Team findings exist (1 attempt max)
+- [ ] Step 8c: 430 - Create Jira epic + stories
+
+---
+
+## Mission: GCC-CANDIDATE-GRID-001 - Candidate Grid Prototype (v44 Standalone)
+**Status:** ✅ COMPLETE
+**Created:** 2026-03-21
+**Owner:** Master Orchestrator
+
+**Objective:** Design and prototype the Candidate Grid, Search, and AI Matching feature (#4 from v44 research) - standalone path outside full E2E pipeline.
+
+**Artifacts:**
+- Discovery Brief: `design/gcc-candidate-grid-v44-discovery-brief.md` (**Final Verdict: APPROVED**)
+- Prototype: `design/gcc-candidate-grid-v44.tsx` (mounted in `design/main.tsx`)
+- Dev server: **http://localhost:5199/**
+- Copy review: `design/gcc-candidate-grid-v44-copy.md` (8 issues, 060 validation complete)
+- Figma: **https://www.figma.com/design/uE1odx83iqrS1yaaaD7MoJ** (captureId `2239d4cd-ff63-42d2-8708-76730bc9ba77`)
+- 060 compliance: Medium risk (AI-assisted, GDPR Art 22, EU AI Act) - prototype acceptable, production needs legal sign-off
+
+**Completed Steps:**
+- [x] 315 - Discovery Brief (APPROVED after multi-pass review)
+- [x] 320 - Prototype (unified modal, split panels, AI features, 060 review)
+- [x] 319 - Copy review (8 editorial issues, legal-sensitive AI disclosure validated)
+- [x] 330 - Figma capture (060 design compliance review complete)
+
+**Key Features Prototyped:**
+- Unified candidate profile modal (left: key details, right: full resume)
+- Prev/Next carousel with keyboard shortcuts
+- Enhanced search with boolean operators
+- AI similar candidates toggle
+- Search across database toggle
+- Match score indicator (HiredScore-style)
+- GDPR compliance disclosure ("AI-assisted ranking - Human review required")
+- Sortable candidate table
+- Sana Style UI (neutral surfaces, white cards, pill patterns)
+
+---
+
+## Mission: GCC-E2E-005 - GCC Research to Design Pipeline (v44 — Fresh Research)
+**Status:** In Progress
+**Pipeline Step:** 3b of 12 (Research ✓ → HITL ✓ → PRD ✓ → Red Team PRD ✓ → **PRD Revision (in progress)** → Discovery → Prototype → Copy → Figma → Backlog → Red Team Stories → Jira → Complete)
+**Created:** 2026-03-21
+**Owner:** Master Orchestrator
+
+**Objective:** Execute complete GCC E2E pipeline with fresh v44 research, proceeding through PRD, Red Team PRD review, Discovery, Prototype, Copy Review, Figma Capture, Backlog Refinement, Red Team story map review, and Jira creation based on PM-selected recommendation.
+
+**Artifacts:**
+- Research (105): `research/GCC/105-user-research-findings.md`
+- Research (120 PMF): `research/GCC/thematic-analysis/2026-03-21-GCC-PMF-Analysis-v44.md`
+- Slide spec: `slides_spec_v44.json`
+- Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v44.pptx` (40 slides + auto agenda)
+- PRD (markdown): `docs/prds/gcc-nationalisation-workforce-compliance-prd.md`
+- Red Team PRD Review: `docs/prds/gcc-nationalisation-workforce-compliance-prd-red-team-review.md` (5 critical risks, 5 important issues found)
+- PRD Revision: **In progress** (addressing Red Team feedback - nationality fields clarification, adoption metric revision, cross-team dependencies)
+- Red Team Story Map Review: [pending]
+
+**Selected Recommendation:** **#1 - GCC nationalisation and workforce compliance (OOB)** - Standard nationality/quota/diversity dimensions, dashboards, audit exports for KSA (Nitaqat), UAE (Emiratisation), Kuwait (Kuwaitisation)
+
+**Next Actions:**
+- [x] Step 1: 120 - Fresh PMF analysis + 105 user research + slide deck v44
+- [x] Step 2: HITL - PM selected #1 (GCC nationalisation and workforce compliance)
+- [ ] Step 3: 200 - Create PRD for selected recommendation
+- [x] Step 3a: 080 - Red Team review PRD (5 critical risks, 5 important issues - revision recommended)
+- [x] Step 3b: 200 - Revise PRD to address Red Team feedback (12 critical fixes applied)
+- [ ] Step 4: 315 - Discovery & Design Brief (multi-pass with internal peer review until APPROVED)
+- [ ] Step 5: 320 - Prototype implementation
+- [ ] Step 6: 319 - Copy review
+- [ ] Step 7: 330 - Figma capture
+- [ ] Step 8: 400 - Backlog refinement (410→420→420 HITL)
+- [ ] Step 8a: 080 - Red Team review story map (check dependencies, hidden complexity)
+- [ ] Step 8b: 420 revision if Red Team findings exist (1 attempt max)
+- [ ] Step 8c: 430 - Create Jira epic + stories
+
+---
+
+## Active Missions
+
+## Mission: GCC-E2E-004 - GCC Research to Design Pipeline (v43 — WhatsApp 2-Way Communication)
+**Status:** In Progress
+**Pipeline Step:** 8 of 10 (Research ✓ → HITL ✓ → PRD ✓ → Discovery ✓ → Prototype ✓ → Copy ✓ → Figma ✓ → **400: 410 ✓, 420 story map ✓, 420 HITL pending** → 430 → Complete)
+**Selected Recommendation:** **#4 - WhatsApp 2-Way Communication** - WhatsApp messaging from candidate profile page (recruiter ↔ candidate); NOT campaign builder; includes templates, Arabic, opt-in/out, enterprise policy controls
+**Created:** 2026-03-20
+**Owner:** Master Orchestrator
+
+**Objective:** Execute complete GCC E2E pipeline with v43 research for WhatsApp 2-way communication feature.
+
+**Artifacts:**
+- Research: `research/GCC/thematic-analysis/2026-03-20-GCC-PMF-Analysis-v43.md`
+- Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v43.pptx` (37 slides)
+- Slide spec: `slides_spec_v43.json`
+- PRD (markdown): `docs/prds/gcc-whatsapp-2way-communication-prd.md`
+- Confluence (summary): https://confluence.workday.com/pages/viewpage.action?pageId=4349332625
+- Notion (full PRD): *pending — Notion MCP requires interactive `mcp_auth` in Cursor; publish from markdown after auth*
+- Discovery Brief: `design/gcc-whatsapp-2way-communication-discovery-brief.md`
+- Prototype: `design/gcc-whatsapp-2way-communication.tsx` — dev server **`http://localhost:5199/`**
+- Compliance (060 pre-review): Medium risk; Legal sign-off required for production copy
+- Copy review: `design/gcc-whatsapp-2way-communication-copy.md` (18 issues: 3 critical, 9 quick wins, 6 consistency)
+- Figma: **https://www.figma.com/design/i6N5EWLjZ584UJIRs6HVyc** (`GCC WhatsApp 2-Way Communication - v43`; captureId `44bb375a-d0ad-49a6-9c37-62cd5a7896da`, status **completed**; `figmadelay` 8000ms)
+- 330 + 060: Design compliance logged in agent response (20 Mar 2026)
+- Epic draft (410): `docs/epics/gcc-whatsapp-2way-communication-epic.md`
+- Story map (420): `docs/story-maps/gcc-whatsapp-2way-communication-story-map.md` — **awaiting PM approval** (VS1 only / all / changes)
+- Jira epic + stories: **not created** until 420 HITL complete (430)
+
+**Next Actions:**
+- [x] Step 1: 120 - Fresh PMF analysis + slide deck v43
+- [x] Step 2: HITL - PM selected #4 (WhatsApp 2-way communication from candidate profile)
+- [x] Step 3: 200 - PRD saved + Confluence summary published (Notion blocked on MCP auth)
+- [x] Step 4: 315 - Discovery Brief complete (Pattern B + CommunicationDock + 1-on-1 scope)
+- [x] Step 5: 320 - Prototype built (1-on-1 messaging with templates, consent, session window)
+- [x] Step 6: 319 - Copy review complete (18 issues flagged; 6 legal-sensitive items for 060)
+- [x] Step 7: 330 - Figma capture (official MCP; localhost hash opened once)
+- [x] Step 8a: 410 - Epic draft written
+- [x] Step 8b: 420 - Story map written
+- [ ] Step 8c: **420 HITL** — PM approves value slices (reply in chat)
+- [ ] Step 9: 430 - Create Jira epic (HRREC, Recruiting Purge, david.denham) + stories for approved slices only
+
+---
+
+## Mission: GCC-E2E-003 - GCC Research to Design Pipeline (v42 — #2 Candidate Grid Redesign)
+**Status:** In Progress
+**Pipeline Step:** 8 of 10 (Research ✓ → HITL ✓ → PRD ✓ → Discovery ✓ → Prototype ✓ → Copy ✓ → **Figma** → **420 HITL** → 430 → Complete)
+**Selected Recommendation:** **#2 — Candidate Grid Redesign** — Unified profile modal; left key details + right resume; reduce navigation tax
+**Created:** 2026-03-20
+**Owner:** Master Orchestrator
+
+**Objective:** Fresh GCC E2E v42; take recommendation #2 through PRD → design → backlog.
+
+**Artifacts:**
+- Research: `research/GCC/thematic-analysis/2026-03-20-GCC-PMF-Analysis-v42.md`
+- Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v42.pptx`
+- Slide spec: `slides_spec_v42.json`
+- PRD: `docs/prds/gcc-candidate-grid-redesign-v42-prd.md`
+- Discovery Brief: `design/gcc-candidate-grid-redesign-v42-discovery-brief.md`
+- Prototype: `design/gcc-candidate-grid-search.tsx` — dev **`http://localhost:5199/`**; `design/main.tsx` mounts **GccCandidateGridSearch**
+- Copy: `design/gcc-candidate-grid-redesign-v42-copy.md`
+- Compliance: `design/gcc-candidate-grid-redesign-v42-compliance.md`
+- Story map (420): `docs/story-maps/gcc-candidate-grid-redesign-v42-story-map.md`
+- Epic: [HRREC-90976](https://jira2.workday.com/browse/HRREC-90976) (Recruiting Purge; assignee david.denham)
+- Figma: **Pending** — run 330 capture from localhost per `design/README.md` (new file or branch from MISSION-017 file if reusing)
+
+**Next Actions:**
+- [ ] **330:** Capture prototype to Figma when convenient
+- [ ] **420 HITL:** PM approves story map value slices (reply **Approve all** / **Approve VS1 only** / **Request changes**)
+- [ ] **430:** Create Jira stories **only after** 420 approval
+
+---
 
 ## Mission: GCC-E2E-002 - GCC Research to Design Pipeline (v41 - Recruiter Dashboard)
 **Status:** In Progress
@@ -55,6 +304,8 @@ This log tracks the state of all active product initiatives, decisions, and hand
 
 **Next Actions:**
 - [ ] 400→420→430: Backlog refinement & Jira stories (HRREC / Recruiting Purge per E2E convention)
+
+**Note:** Fresh `e2e GCC` opened **GCC-E2E-003** (v42, HITL). You can still complete this mission’s backlog for Recruiter Dashboard independently.
 
 **PMF Signal**: 8/10 (Strong) - Abandonment signal: customers migrated to PowerBI/Excel; need granular operational metrics
 
@@ -81,7 +332,7 @@ This log tracks the state of all active product initiatives, decisions, and hand
 **Pipeline Steps:**
 - [x] 1. 120: Fresh PMF analysis v40 + slide deck v40
 - [x] 2. HITL: PM selected **#6**
-- [x] 3. 200 → 315 → 320 → 310 (PRD, discovery, prototype, copy)
+- [x] 3. 200 → 315 → 320 → 319 (PRD, discovery, prototype, copy)
 - [x] 4. 330: Figma capture (resolved: increased `figmadelay` to 6000ms; fonts + React layout fully rendered)
 - [ ] 5. 400 → 420 HITL → 430: backlog and Jira stories under HRREC-90968
 
@@ -112,7 +363,7 @@ This log tracks the state of all active product initiatives, decisions, and hand
 - [x] 3. 200: PRD aligned to v39 + HRREC-90967
 - [x] 4. 315: Discovery Brief
 - [x] 5. 320: Prototype header + `main.tsx` entry for capture
-- [x] 6. 310: Copy doc tagged MISSION-016
+- [x] 6. 319: Copy doc tagged MISSION-016
 - [~] 7. 330: Figma capture **processing** (poll captureId above)
 - [x] 8a. 410: Epic **HRREC-90967** created
 - [ ] 8b. 420: **PM must approve value slices** (reply below)
@@ -146,7 +397,7 @@ This log tracks the state of all active product initiatives, decisions, and hand
 - [x] 3. 200: PRD aligned to v38
 - [x] 4. 315: Discovery Brief — MISSION-015
 - [x] 5. 320: Prototype (existing; header MISSION-015)
-- [x] 6. 310: Copy review doc — MISSION-015
+- [x] 6. 319: Copy review doc — MISSION-015
 - [~] 7. 330: Figma new file capture started — **poll captureId or complete in browser**
 - [x] 8a. 410: Epic **HRREC-90966** created
 - [ ] 8b. 420: Story map HITL — **PM must approve value slices** (see chat)
@@ -181,7 +432,7 @@ This log tracks the state of all active product initiatives, decisions, and hand
 - [x] 3. 200: PRD updated (v37)
 - [x] 4. 315: Discovery Brief updated (MISSION-014)
 - [x] 5. 320: Prototype (existing; header updated MISSION-014)
-- [x] 6. 310: Copy review doc aligned MISSION-014
+- [x] 6. 319: Copy review doc aligned MISSION-014
 - [~] 7. 330: Figma — new file capture initiated; **confirm completion in Figma / poll captureId**
 - [x] 8a. 410: Epic created **HRREC-90962**
 - [ ] 8b. 420: Story map HITL — **PM must approve value slices** (see below)
@@ -228,7 +479,7 @@ This log tracks the state of all active product initiatives, decisions, and hand
 - [x] 3. 200: PRD updated (placement: Candidate Profile)
 - [x] 4. 315: Discovery Brief updated (Candidate Profile primary)
 - [x] 5. 320: Prototype (design/gcc-whatsapp-campaign.tsx, localhost:5182)
-- [x] 6. 310: Copy review (design/gcc-whatsapp-profile-copy-review.md)
+- [x] 6. 319: Copy review (design/gcc-whatsapp-profile-copy-review.md)
 - [x] 7. 330: Figma capture (https://www.figma.com/design/FaTs4z44UeWpeAvXzeu6vX)
 - [x] 8a. 410: Epic created (HRREC-90926)
 - [x] 8b. 420: Story mapping complete (docs/story-maps/gcc-whatsapp-integration-story-map.md - 29 stories, 3 value slices)
@@ -254,7 +505,7 @@ This log tracks the state of all active product initiatives, decisions, and hand
 - Confluence: https://confluence.workday.com/pages/viewpage.action?pageId=4327734254
 - Prototype: design/gcc-whatsapp-campaign.tsx (localhost:5184)
 - Compliance Review: design/gcc-whatsapp-integration-compliance-review.md (060-legal-advisor)
-- Copy Review: design/gcc-whatsapp-integration-copy-review.md (310-doc-writer)
+- Copy Review: design/gcc-whatsapp-integration-copy-review.md (319-doc-writer)
 - Figma: https://www.figma.com/design/ykET4TQHaAwWA6JWPQTucm (GCC WhatsApp Integration - MISSION-010)
 
 **Pipeline Steps:**
@@ -263,7 +514,7 @@ This log tracks the state of all active product initiatives, decisions, and hand
 - [x] 3. 200: PRD + Notion + Confluence
 - [x] 4. 315: Discovery & Design Brief
 - [x] 5. 320: Prototype (channel selector, recipient table, consent warning, template selector, send flow)
-- [x] 6. 310: Copy review (design/gcc-whatsapp-integration-copy-review.md)
+- [x] 6. 319: Copy review (design/gcc-whatsapp-integration-copy-review.md)
 - [x] 7. 330: Figma capture (complete)
 - [ ] 8. 400: Backlog refinement + Jira epic/stories
 - [ ] 9. Mission complete
@@ -294,7 +545,7 @@ This log tracks the state of all active product initiatives, decisions, and hand
 - [x] 2. HITL: PM selected #5 - WhatsApp Integration
 - [x] 3. 200: PRD + Notion + Confluence (complete)
 - [x] 4. 320: Prototype (complete - localhost:5183, legal review by 060 complete)
-- [x] 5. 310: Copy review (complete - 12 issues found)
+- [x] 5. 319: Copy review (complete - 12 issues found)
 - [x] 6. 330: Figma capture (complete - https://www.figma.com/design/k07y8Gfy0YbRxm30p4xJbO)
 - [ ] 7. 400: Backlog refinement + Jira epic/stories
 - [ ] 8. Mission complete
@@ -317,7 +568,7 @@ This log tracks the state of all active product initiatives, decisions, and hand
 - [x] 2. HITL: PM selected #1 - Nationalization & Compliance
 - [x] 3. 200: PRD + Notion + Confluence
 - [x] 4. 320: Prototype (design/gcc-nationalization-compliance.tsx)
-- [x] 5. 310: Copy review (flagged legal issues for 060-legal-advisor)
+- [x] 5. 319: Copy review (flagged legal issues for 060-legal-advisor)
 - [x] 6. 330: Figma capture
 - [x] 7. 400: Backlog refinement + Jira (Epic + 13 stories)
 - [x] 8. Mission complete
@@ -330,7 +581,7 @@ This log tracks the state of all active product initiatives, decisions, and hand
 - **Legal Review Required:** Copy flagged for 060-legal-advisor (compliance status labels, government submission language)
 
 **Success Metrics:**
-- ✅ Full E2E pipeline executed (120 → HITL → 200 → 320 → 310 → 330 → 400)
+- ✅ Full E2E pipeline executed (120 → HITL → 200 → 320 → 319 → 330 → 400)
 - ✅ Fresh research with new recommendation (different from MISSION-006/007)
 - ✅ PRD published to both Notion and Confluence
 - ✅ High-fidelity prototype with Canvas Kit v11
@@ -375,7 +626,7 @@ This log tracks the state of all active product initiatives, decisions, and hand
 2. ✅ HITL: Selected #1 - Interview Scheduling
 3. ✅ 200: PRD (existing, published to Notion + Confluence)
 4. ✅ 320: Prototype (design/gcc-interview-scheduling.tsx)
-5. ✅ 310: Copy review (design/gcc-interview-scheduling-copy.md)
+5. ✅ 319: Copy review (design/gcc-interview-scheduling-copy.md)
 6. ✅ 330: Figma capture
 7. ✅ 400: Backlog refinement (story map + value slices)
 
@@ -550,7 +801,7 @@ research/
 ### MISSION-013: GCC E2E Pipeline - Fresh Research to Complete Backlog ✅
 **Completed:** Thursday Mar 19, 2026
 **Selected Recommendation:** #5 - WhatsApp Integration - GA WhatsApp for GCC; extend campaigns beyond email
-**Result:** Full E2E pipeline executed (120 → HITL → 200 → 315 → 320 → 310 → 330 → 400) for WhatsApp Integration from fresh v36 research
+**Result:** Full E2E pipeline executed (120 → HITL → 200 → 315 → 320 → 319 → 330 → 400) for WhatsApp Integration from fresh v36 research
 
 **Key Outcomes:**
 - **Feature:** WhatsApp Candidate Communication for GCC - Extend Recruiting Campaigns to WhatsApp; send ad-hoc messages from Candidate Profile; consent-first design
@@ -574,7 +825,7 @@ research/
 - Jira Epic: https://jira2.workday.com/browse/HRREC-90928 (17 VS1 stories: HRREC-90929 through HRREC-90945)
 
 **Success Metrics:**
-- ✅ Full E2E pipeline executed (120 → HITL → 200 → 315 → 320 → 310 → 330 → 400)
+- ✅ Full E2E pipeline executed (120 → HITL → 200 → 315 → 320 → 319 → 330 → 400)
 - ✅ Fresh research with PM selection from 6 recommendations
 - ✅ Discovery Brief grounded feature in Workday workflows (collaboration panel, consent status, campaigns)
 - ✅ PRD published to both Notion and Confluence

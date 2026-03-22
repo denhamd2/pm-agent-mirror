@@ -46,3 +46,26 @@ export const SANA_PRIMARY_RAIL_WIDTH_PX = 64;
 
 /** Secondary text nav column */
 export const SANA_SECONDARY_NAV_WIDTH_PX = 232;
+
+// --- Communication dock (sliding panel: Email, SMS, Notes, LINE, WhatsApp, etc.) ---
+
+/** Message bubble corner radius (Sana reference: soft ~12px) */
+export const SANA_COMM_MESSAGE_RADIUS_PX = 12;
+
+/** Composer row: fully rounded pill */
+export const SANA_COMM_COMPOSER_RADIUS_PX = 999;
+
+/** Sliding panel inner surface (white card field) */
+export const SANA_COMM_PANEL_SURFACE = '#FFFFFF';
+
+/** Active channel tile on the narrow rail — light blue square (Sana reference) */
+export const SANA_COMM_RAIL_ACTIVE_BG = '#E3F2FD';
+
+/** Rail active tile icon / focus accent */
+export const SANA_COMM_RAIL_ACTIVE_ICON = SANA_LINK_ACCENT;
+
+/** Incoming / outgoing bubble fill */
+export const SANA_COMM_BUBBLE_BG = '#FFFFFF';
+
+/** Timestamp and meta in thread */
+export const SANA_COMM_META_FG = '#6B6B6B';

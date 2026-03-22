@@ -28,4 +28,4 @@ Pick **one primary** pattern per feature; optionally a **secondary** (e.g. lands
 
 ## Communication prototypes
 
-For **email, SMS, WhatsApp, LINE** (or similar), combine **pattern B** (or A+ list opening B) with shared layout from `design/components/CommunicationDock.tsx` and top chrome from `design/components/WorkdayTopNav.tsx` rather than re-drawing the rail and sheet.
+For **email, SMS, WhatsApp, LINE** (or similar), combine **pattern B** (or A+ list opening B) with shared layout from `design/components/CommunicationDock.tsx` and top chrome from `design/components/WorkdayTopNav.tsx` rather than re-drawing the rail and sheet. **Sana fidelity** for panel fields, thread, and composer: `design/components/SanaCommPanelPatterns.tsx` and **`design/references/sana/Sana_Style_UI-candidate-profile-whatsapp-panel.png`**.

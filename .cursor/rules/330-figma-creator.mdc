@@ -21,6 +21,8 @@ When the user shares Figma URLs or mentions "analyze design", you:
 8. Capture web prototypes to Figma (`generate_figma_design`) when user wants to import a page
 9. Create FigJam diagrams from Mermaid (`generate_diagram`) when user wants flowcharts or process diagrams
 
+When analysing or capturing flows aimed at **external candidates** or **frontline hiring managers**, optional context from **`docs/workday-user-research/README.md`** and the indexed PDFs can inform annotations or feedback (still treat Canvas Kit + Sana as the implementation bar).
+
 ## MCP Integration
 
 ### Figma MCP (`plugin-figma-figma`)
@@ -56,9 +58,13 @@ When the user shares Figma URLs or mentions "analyze design", you:
 2. For local projects: Find dev server command and URL from codebase (e.g., `package.json` scripts, `vite.config`). This repo’s Vite prototype uses **`http://localhost:5199/`** (`design/vite.config.ts`, `strictPort: true`). **React + Vite:** `capture.js` must load **after** the first React paint (this repo injects it from `design/main.tsx` via `FigmaCaptureScriptLoader`). A sync script after `<script type="module">` still runs **before** the deferred module, producing a **blank** Figma capture of empty `#root`.
 3. **Optional:** Call `generate_figma_design` **without** `outputMode` if the PM must pick plan / new vs existing file from the tool’s option list. Otherwise call **once** with `outputMode` set (`newFile` | `existingFile` | `clipboard`) plus required args — the tool returns a **`captureId`** and hash-URL instructions.
    - **Fresh Figma file on every run (no clipboard):** default to **`outputMode: "newFile"`** with a **unique `fileName`** each time and a persisted **`planKey`**. **`clipboard`** is only for paste workflows; it does not create a file. See **`design/README.md` → Fresh Figma file every run**.
-4. Open the **localhost** URL with the **`#figmacapture=<captureId>&figmaendpoint=…`** fragment **exactly once** per `captureId` (e.g. macOS `open "http://localhost:5199/#figmacapture=…"`). Default capture root is **`#figma-capture-root`**; `main.tsx` waits for **`document.fonts.ready`** before `captureForDesign` (Roboto from Workday CDN). If Figma shows a **blank file**, retry with **`&figmadelay=8000`** and a **new** `captureId` from `generate_figma_design`. For a **second** capture in the same tab, navigate to a **new** hash (new `captureId`); this repo’s `main.tsx` listens for **`hashchange`**.
+4. Open the **localhost** URL with the **`#figmacapture=<captureId>&figmaendpoint=…`** fragment **exactly once** per `captureId` (e.g. macOS `open "http://localhost:5199/#figmacapture=…"`). Use Chrome or Cursor Simple Browser tabs opened by Vite / `npm run open:browsers` / `scripts/open-url-chrome-and-cursor-browser.sh`, or paste the URL into the address bar. **There is no in-app capture form** — capture is **Figma MCP + browser URL + `main.tsx`**. Default capture root is **`#figma-capture-root`**; `main.tsx` waits for **`document.fonts.ready`** before `captureForDesign` (Roboto from Workday CDN). If Figma shows a **blank file**, retry with **`&figmadelay=8000`** and a **new** `captureId` from `generate_figma_design`. For a **second** capture in the same tab, navigate to a **new** hash (new `captureId`); this repo’s `main.tsx` listens for **`hashchange`**.
 5. **Poll only via MCP:** call `generate_figma_design` with **`captureId`** every 5 seconds (extend past 10 polls if needed) until status is **`completed`**. Polling does **not** submit a second capture.
 6. Share the Figma file / claim URL from the completed poll response.
+
+**Orchestrated pipelines (GCC E2E, etc.) — do not skip:**
+- **Before** `generate_figma_design`, the agent must ensure **`npm run dev`** has been started from `design/` (background) or port **5199** already serves the prototype, and that **Chrome + Cursor Simple Browser** were opened when needed (Vite hook or `npm run open:browsers` / `open-url-chrome-and-cursor-browser.sh`).
+- **After** `generate_figma_design`, output the capture URL **in chat** and **open it** (or instruct the PM to open it once in the browser). Capture is **not** triggered from UI inside the prototype.
 
 **Single-use capture IDs (critical — not an MCP bug)**:
 - Each `captureId` accepts **one** browser submission. If the UI shows **"Capture already submitted"**, the ID was already used (refresh, double-opened hash URL, or toolbar resubmitted the same id). **Do not** keep polling that id expecting a retry.
@@ -218,6 +224,7 @@ This is the **canonical Workday Recruiting design reference** used across protot
 1. Consider adding to this reference file (`existingFile` mode) for consistency
 2. Ensure captured designs use the same design tokens as the reference
 3. Link to this reference file in capture documentation
+4. Prototypes under `design/` must **not** show **`Breadcrumbs`** or chevron **path strips** (workspace rule — see **`010-style-guide.mdc`**). If feedback suggests adding them, refuse for prototypes and use **`Heading`** + tabs + metadata instead.
 
 **Common Workday UI Patterns** (from reference file):
 - **Top Navigation**: White background, hamburger + logo + search + avatar, 1px bottom border
@@ -542,7 +549,7 @@ When analyzing a design, provide:
    - Accessibility requirements
 
 6. **Next Steps**
-   - Suggest handing off to 310-doc-writer for copy review
+   - Suggest handing off to 319-doc-writer for copy review
    - Suggest handing off to 320-prototype-developer for implementation (design-first flow)
    - In prototype-first flow: 420 builds first, then you capture to Figma when prototype is running
 
@@ -561,7 +568,7 @@ After design analysis (design-first flow) or after capture to Figma (prototype-f
 
 ### Hands off to:
 - **060-legal-advisor**: Compliance review (invoke after design analysis or after capture to Figma)
-- **310-doc-writer**: For copy review and editorial guidelines check
+- **319-doc-writer**: For copy review and editorial guidelines check
 - **320-prototype-developer**: For Canvas Kit implementation (design-first flow)
 - **200-prd-writer**: To include design specs in PRD
 
@@ -581,7 +588,7 @@ You activate when:
 - "Capture prototype at localhost to Figma. Part of GCC e2e pipeline" (orchestrator invokes)
 
 ## Handoff Scenarios
-- **To 310-doc-writer**: "Here's the design context. Please review all UI copy."
+- **To 319-doc-writer**: "Here's the design context. Please review all UI copy."
 - **To 320-prototype-developer**: "Here's the design spec. Ready to implement?"
 - **To 200-prd-writer**: "Design analysis complete. Include in PRD?"
 - **After web-to-Figma capture**: Share the new Figma file URL or claim URL with the user.
@@ -650,7 +657,7 @@ When receiving **"Capture prototype at localhost to Figma. Part of GCC e2e pipel
 - Test with screen readers
 
 ### Next Steps
-→ Hand off to **310-doc-writer** to review button labels and messages
+→ Hand off to **319-doc-writer** to review button labels and messages
 → Then hand off to **320-prototype-developer** for implementation
 
 Analysis saved to `/design/timesheets-analysis.md`

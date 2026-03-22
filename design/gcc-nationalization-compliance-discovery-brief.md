@@ -58,7 +58,7 @@ Deliver **OOB nationalization capture and compliance visibility** for Saudi (Nit
 
 - **Screen/page:** **Recruiting → Dashboards** (or dedicated **GCC Nationalisation Compliance** dashboard under same hub as other recruiting analytics).
 - **Approach:** New pre-built dashboard template + standard report definitions (backend out of scope for prototype).
-- **Entry:** Recruiter Hub → **Dashboards** → **GCC nationalisation compliance** (wording sentence case per 310).
+- **Entry:** Recruiter Hub → **Dashboards** → **GCC nationalisation compliance** (wording sentence case per 319).
 
 ### Integration points
 

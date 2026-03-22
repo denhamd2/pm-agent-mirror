@@ -8,8 +8,7 @@ import { Flex, Box } from '@workday/canvas-kit-react/layout';
 import { colors, space } from '@workday/canvas-kit-react/tokens';
 import { Heading, BodyText, Text } from '@workday/canvas-kit-react/text';
 import { Table } from '@workday/canvas-kit-react/table';
-import { SystemIcon } from '@workday/canvas-kit-react/icon';
-import { arrowLeftSmallIcon, arrowRightSmallIcon, chevronRightSmallIcon, xSmallIcon } from '@workday/canvas-system-icons-web';
+import { arrowLeftSmallIcon, arrowRightSmallIcon, xSmallIcon } from '@workday/canvas-system-icons-web';
 import {
   WorkdayTopNav,
   WorkdayLeftTabBar,
@@ -24,9 +23,12 @@ import {
 /**
  * GCC Candidate Grid, Search & AI-Assisted Matching (concept)
  *
- * MISSION-017 | PMF v40 E2E HITL #6
+ * GCC-E2E-003 | PMF v42 E2E HITL #2 (Candidate Grid Redesign — primary)
+ * PRD: docs/prds/gcc-candidate-grid-redesign-v42-prd.md
+ * Discovery: design/gcc-candidate-grid-redesign-v42-discovery-brief.md
+ *
+ * Also covers MISSION-017 | v40 HITL #6 (broader grid + search + AI)
  * PRD: docs/prds/gcc-candidate-grid-search-prd.md
- * Discovery: design/gcc-candidate-grid-search-discovery-brief.md
  */
 
 const REQ_TABS = [
@@ -387,29 +389,6 @@ export const GccCandidateGridSearch: React.FC = () => {
         />
 
         <Box flex={1} minWidth={0} style={{ overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
-          <Box
-            paddingX="l"
-            paddingY="xs"
-            style={{
-              backgroundColor: colors.frenchVanilla100,
-              borderBottom: `1px solid ${colors.soap300}`,
-            }}
-          >
-            <Flex alignItems="center" style={{ fontSize: 13, color: colors.blackPepper500, height: 32 }}>
-              <BodyText size="small">Recruiting</BodyText>
-              <SystemIcon icon={chevronRightSmallIcon} size={16} color={colors.blackPepper400} style={{ margin: '0 4px' }} />
-              <BodyText size="small">Job requisitions</BodyText>
-              <SystemIcon icon={chevronRightSmallIcon} size={16} color={colors.blackPepper400} style={{ margin: '0 4px' }} />
-              <BodyText size="small">R-2026-1842</BodyText>
-              <SystemIcon icon={chevronRightSmallIcon} size={16} color={colors.blackPepper400} style={{ margin: '0 4px' }} />
-              <BodyText size="small" style={{ fontWeight: 600, color: colors.blackPepper600 }}>
-                {leftTab === 'overview' && 'Overview'}
-                {leftTab === 'candidates' && 'Candidates'}
-                {leftTab === 'interviews' && 'Interviews'}
-              </BodyText>
-            </Flex>
-          </Box>
-
           {leftTab === 'overview' && (
             <Box padding="l">
               <Heading size="large" marginBottom="m">
@@ -518,9 +497,10 @@ export const GccCandidateGridSearch: React.FC = () => {
 
                 <Flex gap="s" marginBottom="m" flexWrap="wrap" alignItems="flex-end">
                   <Box style={{ flex: '1 1 240px', minWidth: 200 }}>
-                    <FormField label="Search candidates" inputId="gcc-cand-search-q">
-                      <TextInput
-                        id="gcc-cand-search-q"
+                    <FormField id="gcc-cand-search-q">
+                      <FormField.Label>Search candidates</FormField.Label>
+                      <FormField.Input
+                        as={TextInput}
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder='Try: (skill:"Project management") AND location:Riyadh*'

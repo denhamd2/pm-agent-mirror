@@ -26,17 +26,20 @@ After any significant action, update `MISSION_LOG.md` with:
 ### 3. Agent Coordination
 You orchestrate these specialized agents:
 - **060-legal-advisor.mdc**: Legal compliance, data privacy, EU AI Act, GDPR, and global regulations for Workday Recruiting
+- **080-red-team.mdc**: Cross-functional risk analysis and stress testing for PRDs and story maps
 - **090-agent-improvement-advisor.mdc**: Strategic advisor for improving workflows, rules, and PM practices
 - **100-market-intelligence.mdc**: Research analysis and competitive intel
+- **101-competitive-intelligence.mdc**: Deep research on global and regional ATS competitors with gap analysis and sales enablement; **authoritative competitive matrices** live in `research/competitive/matrices/*.md` (version-controlled markdown, not Confluence)
+- **105-user-researcher.mdc**: User research planning (Research Briefs) and interview analysis (Teresa Torres Continuous Discovery)
 - **110-slide-generator.mdc**: Presentation creation
-- **120-pmf-thematic-analysis.mdc**: Braun & Clarke PMF thematic analysis (country-based, triangulation)
+- **120-pmf-thematic-analysis.mdc**: Braun & Clarke PMF thematic analysis (country-based, triangulation); orchestrates 105 for user research
 - **200-prd-writer.mdc**: PRD writing and Confluence publishing
-- **310-doc-writer.mdc**: UX copy review and editorial guidelines
-- **315-ux-designer.mdc**: Prototype discovery and design (grounds prototypes in Workday workflow context)
-- **320-prototype-developer.mdc**: Canvas Kit prototype implementation (first in design flow)
+- **319-doc-writer.mdc**: UX copy review after 315-approved Discovery Brief and prototype build; Editorial Guidelines; pairs with **430** for user-visible copy in Jira stories (Description, AC, BDD)
+- **315-ux-designer.mdc**: Multi-pass Discovery & Design Brief (layout, Canvas Kit composition, internal peer review, **Final Verdict**); production-ready handoff to **320** only when **APPROVED**
+- **320-prototype-developer.mdc**: Canvas Kit prototype implementation (after 315 **APPROVED** brief)
 - **330-figma-creator.mdc**: Figma design extraction, analysis, and capture
 - **400-backlog-refinement.mdc**: Orchestrates epic definition, story mapping, and story writing (chains 410→420→430)
-- **410-epic-definition.mdc**: Writes epics in user story format and creates them in Jira
+- **410-epic-definition.mdc**: Writes epic drafts (user story format) to `docs/epics/`; Jira epic is created in **430** after story map approval
 - **420-story-mapping.mdc**: Applies Jeff Patton story mapping with value slices and HITL approval
 - **430-story-writing.mdc**: Writes user stories with BDD scenarios and creates them in Jira
 - **500-slack-responder.mdc**: Communication triage and drafting
@@ -77,41 +80,53 @@ Your 12 active MCPs:
 
 ## Decision Framework
 When routing work:
-- "Run GCC e2e" or "e2e GCC research" or "e2e to 430" or "GCC research all the way to 430" or "GCC pipeline" or "Full GCC workflow" → Execute FULL GCC E2E Pipeline from Step 1 (120). Do NOT resume from MISSION_LOG. Sequential: 120 → HITL → 200 → 315 → 320 → 310 → 330 → 400
+- "Run GCC e2e" or "e2e GCC research" or "e2e to 430" or "GCC research all the way to 430" or "GCC pipeline" or "Full GCC workflow" → Execute FULL GCC E2E Pipeline from Step 1 (120). Do NOT resume from MISSION_LOG. Sequential: 120 → HITL → **101** → 200 → 315 → 320 → 319 → 330 → 400
 - "Legal", "compliance", "GDPR", "AI Act", "data privacy", "DPIA", "legal requirements", "legal risks" → Legal Advisor (060)
+- "Red Team review" or "stress test [PRD/epic/deck]" → Red Team (080)
 - "How can I improve" or "review my setup" or "what workflows am I missing" or "brainstorm improvements" or "audit my agent system" → Agent Improvement Advisor (090)
 - Research files → Market Intelligence (100)
-- "Analyze [Country]" or "PMF thematic analysis" → 120-pmf-thematic-analysis.mdc
-- "Create slides" or "presentation" → Slide Generator (110)
+- "Competitive scan" or "check competitors" or "what is [competitor] doing" → Competitive Intelligence (101)
+- "Scan [region] competitors" or "[region] competitive landscape" → Competitive Intelligence (101) (regions: **UK, France, Germany, Australia, Japan, India, Canada, GCC**; matrices in `research/competitive/matrices/`)
+- "Scan all regions" / "full regional CI refresh" / "update all competitive matrices" → Competitive Intelligence (101) (refresh **all eight** regional matrices per **101** Regional matrix file map)
+- "Battle card" or "sales enablement vs [competitor]" → Competitive Intelligence (101)
+- "Feature gap" or "competitive parity" or "local feature gaps" → Competitive Intelligence (101)
+- "Regional competitive review" → Competitive Intelligence (101)
+- "Plan user research" or "Create research brief" → User Researcher (105) Path A (creates Research Brief)
+- "Analyze interviews" or "Analyze [specific topic] interviews" → User Researcher (105) Path B (thematic analysis, standalone)
+- "Analyze [Country]" or "PMF thematic analysis" → 120-pmf-thematic-analysis.mdc (orchestrates 105 for user research + adds PESTEL/Competitive/comprehensive deck)
+- **Full PMF / roadmap research deck** (must use **120** Phase 6b, **not** **110**): Output pattern **`[Country]_Recruiting_PMF_Roadmap_vN.pptx`**; **GCC PMF deck**; **country PMF slides**; **PESTEL + interviews + thematic + roadmap** structure; **36–50 slides**; McKinsey-style PMF readout; **"match v30"** / **match PMF roadmap deck** / same structure as **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`** → **120-pmf-thematic-analysis.mdc** (or re-run analysis + Phase 6b if content must be refreshed). Baseline: **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`**
+- "Create slides" or "presentation" for **short** decks (exec briefing, PRD summary, competitive intelligence readout, **110** templates, typically **~10–20 slides**) → Slide Generator (**110**)
 - "PRD" or "requirements" → PRD Writer (200)
-- "Prototype discovery" or "discover placement" or "ground in Workday" → Prototype Discovery & Design (315)
+- "Prototype discovery" or "discover placement" or "ground in Workday" or "Design peer review" or "review Discovery Brief" or "Sana-fy brief" or "318 review" (legacy) → Prototype Discovery & Design (315) — runs full multi-pass brief including internal peer review
 - "Backlog refinement" or "refine backlog" or "break down PRD" → Backlog Refinement orchestrator (400)
 - "Create epic" or "write epic" or "define epic" → Epic Definition (410)
 - "Story map" or "user story mapping" or "create story map" → Story Mapping (420)
 - "Write stories" or "create Jira stories" or "write user stories" → Story Writing (430)
-- Figma URLs → UX Designer (330) or design workflow chain (315→320→310→330)
-- "Review copy" or "UX writing" → Doc Writer (310)
+- Figma URLs → UX Designer (330) or design workflow chain (315→320→319→330)
+- "Review copy" or "UX writing" → Doc Writer (319)
 - "Implement" or "Canvas Kit prototype" → Prototype Developer (320)
 - Files in `/inbox/` → Slack Responder (500)
 
-### Design Workflow Chain (315 → 320 → 310 → 330)
+### Design Workflow Chain (315 → 320 → 319 → 330)
 
-**060-legal-advisor** is automatically invoked as a trusted advisor: by 320 (prototype compliance review), 330 (design compliance review), 310 (legal-sensitive copy). Also invoked by 120 (PESTEL Legal, recommendations) and 100 (Strategic Recommendations).
+**060-legal-advisor** is automatically invoked as a trusted advisor: by 320 (prototype compliance review), 330 (design compliance review), 319 (legal-sensitive copy). Also invoked by 120 (PESTEL Legal, recommendations) and 100 (Strategic Recommendations).
 
-**Prototype-first with discovery** (primary for GCC E2E): Discover placement, build, then capture to Figma
-1. **315-ux-designer**: Research Workday context, query Deployment Agent, validate with Six Hats, produce Discovery Brief
-2. **320-prototype-developer**: Build prototype from Discovery Brief + PRD; invoke 060 for compliance review before handoff
-3. **310-doc-writer**: Review UI copy (works with 320); invoke 060 when copy is legal-sensitive
-4. **330-figma-creator**: Capture running prototype to Figma; invoke 060 for design compliance review
+**Prototype-first with discovery** (primary for GCC E2E): Multi-pass Discovery Brief (with internal peer review, **copy review**, and **Final Verdict**), build, then capture to Figma
+1. **315-ux-designer**: Ground in Workday (Deployment Agent, functional knowledge, Six Hats as needed); run PASS 1–2; write `design/[feature]-discovery-brief.md` with JTBD, shell pattern, Canvas Kit mapping, and **Copy Inventory section**. **STOP after PASS 2.**
+2. **319-doc-writer**: Review Copy Inventory against Editorial Guidelines; invoke 060 for legal-sensitive text; output approved copy revisions.
+3. **315-ux-designer**: PASS 3-4 with approved copy; complete peer review (including copy quality); finalize Discovery Brief with **Final Verdict: APPROVED** or **NEEDS REVISION**. If **NEEDS REVISION**, re-invoke **315** until **APPROVED** before **320**.
+4. **320-prototype-developer**: Build prototype from **APPROVED** Discovery Brief + PRD; invoke 060 for compliance review before handoff; copy is pre-validated, implement exactly as written.
+5. **319-doc-writer**: Final spot-check of implemented copy (quick validation, not full review—copy was already approved in step 2); invoke 060 when copy is legal-sensitive.
+6. **330-figma-creator**: Capture running prototype to Figma; invoke 060 for design compliance review.
 
 **Prototype-first without discovery** (simple standalone prototypes): Build first, then capture to Figma
 1. **320-prototype-developer**: Build prototype from spec/PRD; invoke 060 for compliance review before handoff
-2. **310-doc-writer**: Review UI copy (works with 320); invoke 060 when copy is legal-sensitive
+2. **319-doc-writer**: Review UI copy (works with 320); invoke 060 when copy is legal-sensitive
 3. **330-figma-creator**: Capture running prototype to Figma; invoke 060 for design compliance review
 
 **Design-first** (when Figma URL provided):
 1. **330-figma-creator**: Extract design context, components, tokens; invoke 060 for design compliance review
-2. **310-doc-writer**: Review all UI copy against Editorial Guidelines; invoke 060 when copy is legal-sensitive
+2. **319-doc-writer**: Review all UI copy against Editorial Guidelines; invoke 060 when copy is legal-sensitive
 3. **320-prototype-developer**: Implement with Canvas Kit; invoke 060 for prototype compliance review before handoff
 
 **Trigger phrases**:
@@ -120,16 +135,16 @@ When routing work:
 - Design-first: "Implement this Figma design: [URL]", "Build a prototype from [Figma URL]"
 
 **Standalone invocations**:
-- **315 only**: "Discover placement for [feature]", "Where should this go in Workday?"
+- **315 only**: "Discover placement for [feature]", "Where should this go in Workday?", "Review this Discovery Brief", "Design peer review for [feature]", "Sana-fy the discovery brief"
 - **320 only**: "Implement this component using Canvas Kit", "Build prototype" (without discovery)
-- **310 only**: "Review the copy in this design", "Check if these button labels follow guidelines"
+- **319 only**: "Review the copy in this design", "Check if these button labels follow guidelines", "post peer review copy"
 - **330 only**: "What's in this Figma file?", "Analyze this design: [URL]", "Capture to Figma"
 
-### GCC E2E Pipeline (120 → HITL → 200 → 315 → 320 → 310 → 330 → 400)
+### GCC E2E Pipeline (120 → HITL → 101 → 200 → 315 → 320 → 319 → 330 → 400)
 
 **Trigger**: "Run GCC e2e", "e2e GCC region research", "e2e to 430", "GCC research all the way to 430", "GCC research to design", "GCC pipeline", "Full GCC workflow", "GCC research e2e"
 
-**Behavior**: ALWAYS runs fresh research (agent 120) → NEW slide deck → HITL → PRD → Discovery → Prototype → Copy → Figma → Backlog. No confirmation needed.
+**Behavior**: ALWAYS runs fresh research (agent 120) → NEW slide deck → HITL → **scoped Competitive Intelligence (101)** → PRD → Discovery → Prototype → Copy → Figma → Backlog. No confirmation needed.
 
 **Flow** (execute sequentially, update MISSION_LOG at each step):
 
@@ -140,6 +155,7 @@ When routing work:
 - Do NOT interpret "e2e to 430" or "all the way to the end" as "complete the backlog step only"
 - Do NOT skip Step 1 (120) - every E2E trigger starts with fresh research
 - Do NOT skip HITL 1 (recommendation selection) - you MUST present AskQuestion and wait
+- Do NOT skip Step 5 (101 Competitive Intelligence) - every GCC E2E must run the scoped CI pass after HITL and before PRD (see step 5 below)
 - Do NOT skip HITL 2 (story map approval) - 400 invokes 410→420→430; 420 MUST present for approval
 - "e2e GCC research", "GCC pipeline", "full GCC workflow", "e2e to 430" = FULL pipeline from Step 1
 
@@ -151,21 +167,32 @@ When routing work:
 2. Invoke 120: "Analyze GCC from scratch. Run FRESH Braun & Clarke 6-phase analysis on all data in research/GCC/ (customer transcripts, internal SME transcripts, CSV data). Generate a NEW slide deck (auto-increment version: v1, v2, v3...) saved to ~/Downloads/GCC_Recruiting_PMF_Roadmap_vN.pptx. Produce full PMF analysis report. Append an E2E Handoff section with a numbered table of ALL recommendations from Product Roadmap Impact Summary (Priority 1 and Priority 2). Format: `## E2E Handoff: Research Recommendations` followed by a markdown table with columns #, Title, Action."
 3. HUMAN-IN-THE-LOOP: Parse 120 output for the E2E Handoff table. Present the recommendations to the PM. Call AskQuestion with: Title "Which GCC research recommendation would you like to take through PRD, prototype, copy review, and Figma?"; Options derived from the table (one per recommendation, e.g. "1. Interview Scheduling - Integrate Paradox with GCC compliance", "2. Reporting & Dashboards - Improve recruiter dashboards", etc.). **STOP and wait for user response. Do NOT proceed to step 4 until the user has explicitly selected an option. Do NOT default or assume—the pipeline is blocked until the user responds.**
 4. Parse selected recommendation; log in MISSION_LOG as "Selected Recommendation". **CRITICAL: ALWAYS honor the user's selection exactly as given. Do NOT check if the recommendation was done before. Do NOT override or substitute a different recommendation. Execute the pipeline fresh for whatever the user selects, regardless of prior missions.**
-5. Invoke 200: "Create PRD for the selected GCC opportunity: [recommendation]. Source: research/GCC/thematic-analysis/[latest].md. This is part of GCC e2e pipeline."
-6. Invoke 315: "Perform discovery & design for the PRD at docs/prds/[feature]-prd.md. This is part of GCC e2e pipeline. Consult functional knowledge, ask Deployment Agent for placement guidance, brainstorm options, validate with Six Hats Thinking. Produce Discovery Brief."
-7. Invoke 320: "Build prototype from the Discovery Brief at design/[feature]-discovery-brief.md and PRD at docs/prds/[feature]-prd.md. This is part of GCC e2e pipeline. Scope to representative UI as defined in Discovery Brief. Ensure prototype runs on localhost for capture."
-8. Invoke 310: "Review all UI copy in the prototype. Part of GCC e2e pipeline."
-9. Invoke 330: "Capture the running prototype at localhost to Figma. Part of GCC e2e pipeline."
-10. Invoke 400: "Perform backlog refinement on the PRD and Figma design. Create epic and user stories in Jira (HRREC project, Recruiting Purge component, assigned to David Denham). Part of GCC e2e pipeline."
-11. Mark mission complete; summarize artifacts (report, slide deck, PRD, Discovery Brief, Notion, Confluence, prototype, Figma URL, Jira epic)
+5. Invoke **101**: "GCC E2E competitive pass. Region: **GCC**. Selected recommendation: [title and action from HITL]. Source PMF report: `research/GCC/thematic-analysis/[latest].md` (path from step 2 output). Per **101-competitive-intelligence.mdc** Pattern: GCC E2E competitive pass: (1) Scoped web research and Deployment Agent / @functional-knowledge validation for capabilities implied by the recommendation. (2) Update `research/competitive/matrices/gcc-competitive-matrix.md` with a **delta** relevant to this initiative (not a full matrix rewrite). (3) Write `research/competitive/gcc/e2e-ci-brief-[feature-slug]-[YYYY-MM-DD].md` with competitor claims vs Workday, Native/Workaround/True Gap table, Deployment Agent query log, and cited sources. Log both paths in MISSION_LOG. Part of GCC e2e pipeline."
+6. Invoke 200: "Create PRD for the selected GCC opportunity: [recommendation]. Source: research/GCC/thematic-analysis/[latest].md. **Required inputs:** read `research/competitive/gcc/e2e-ci-brief-[feature-slug]-[date].md` from step 5 and `research/competitive/matrices/gcc-competitive-matrix.md`; incorporate competitive differentiation and parity (Native/Workaround/Gap) from 101 into Overview and any competitive sections. This is part of GCC e2e pipeline."
+6a. Invoke 080: "Red Team: review PRD at docs/prds/[feature]-prd.md before 315. Use Mode 1 (PRD Risk Analysis). Search functional knowledge and query Deployment Agent for Workday feasibility. Cross-check competitive claims against `research/competitive/gcc/e2e-ci-brief-*.md` and `research/competitive/matrices/gcc-competitive-matrix.md` per **080-red-team.mdc**. Present findings to orchestrator." Capture Red Team findings.
+6b. If Red Team findings exist (critical risks or important issues): Reinvoke 200 with "Revise PRD at docs/prds/[feature]-prd.md to address Red Team feedback: [summary of critical + important issues]. Maintain PRD structure and format. This is a revision (1 attempt max)."
+6c. Pipeline continues to step 7 regardless of whether revision resolves all issues.
+7. Invoke 315: "Perform discovery & design for the PRD at docs/prds/[feature]-prd.md. This is part of GCC e2e pipeline. Consult functional knowledge, ask Deployment Agent for placement guidance, validate with Six Hats Thinking as needed. Run **315** multi-pass process PASS 1-2 per **315-ux-designer.mdc**; write `design/[feature]-discovery-brief.md` including JTBD, shell pattern, Canvas Kit mapping, and **Copy Inventory section**. **After PASS 2 completes, STOP before PASS 3.**"
+7a. Invoke 319: "Review UI copy from Discovery Brief at design/[feature]-discovery-brief.md (PASS 2 Copy Inventory section). Apply Editorial Guidelines checklist. Flag legal-sensitive copy for 060. Output approved copy revisions. Part of GCC e2e pipeline."
+7b. If legal-sensitive copy exists: 319 invokes 060 automatically per 319-doc-writer.mdc rules.
+7c. Invoke 315: "Continue with PASS 3-4. Incorporate approved copy from 319 review. Complete peer review (including copy quality validation) and finalize Discovery Brief with **Final Verdict: APPROVED** or **NEEDS REVISION**. 315 internal peer review covers JTBD, shell pattern, Sana Style, Canvas Kit mapping, copy quality, Experience Principles (`docs/experience-principles.md`), no-breadcrumb rule. If **NEEDS REVISION**, re-invoke **315** until **Final Verdict: APPROVED** — do **not** invoke **320** until approved."
+8. Invoke 320: "Build prototype from the Discovery Brief at design/[feature]-discovery-brief.md and PRD at docs/prds/[feature]-prd.md. This is part of GCC e2e pipeline. Scope to representative UI as defined in Discovery Brief. **Then start the design dev server** so the PM actually sees the UI: from `design/` run `npm run dev` **in the background** (or verify `http://localhost:5199/` already responds). On first Vite listen, **`vite.config.ts` opens Google Chrome (new window) and Cursor Simple Browser** unless `VITE_NO_OPEN_BROWSERS=1`. If the server was **already running** before this session or browsers did not open, run from repo root: `bash scripts/open-url-chrome-and-cursor-browser.sh 'http://localhost:5199/'` **or** from `design/`: `npm run open:browsers`."
+9. Invoke 319: "Review all UI copy in the prototype. Part of GCC e2e pipeline."
+10. Invoke 330: "Capture the running prototype at localhost to Figma. Part of GCC e2e pipeline. **Mandatory:** (1) Confirm `http://localhost:5199/` loads the prototype. (2) Call **official Figma MCP** `generate_figma_design` per `design/README.md` / `330-figma-creator.mdc` (e.g. `outputMode: newFile`, unique `fileName`, `planKey`). (3) Open the returned **`#figmacapture=…`** localhost URL once (e.g. `open "http://localhost:5199/#figmacapture=…"` on macOS, or use Chrome / Simple Browser from step 8) — **no in-app paste UI**; flow is MCP + browser URL only. (4) Poll capture status until complete; log the Figma file URL in MISSION_LOG. **Do not skip** starting the dev server or opening browsers in step 8 when the PM needs to see the prototype."
+11. Invoke 400: "Perform backlog refinement on the PRD and Figma design. Epic draft (410) → story map + HITL (420) → **Jira epic + stories** in 430 only (HRREC project, Recruiting Purge component, assigned to David Denham). **430** applies **319** to user-visible strings in stories before Jira create. Part of GCC e2e pipeline."
+11a. After 420 HITL approval, invoke 080: "Red Team: review story map at docs/story-maps/[feature]-story-map.md before 430. Use Mode 2 (Story Map Pre-Flight). Search functional knowledge and query Deployment Agent for dependencies. Present findings to orchestrator." Capture Red Team findings.
+11b. If Red Team findings exist (blockers or complexity flags): Reinvoke 420 with "Revise story map at docs/story-maps/[feature]-story-map.md to address Red Team feedback: [summary of blockers + complexity flags]. Maintain Jeff Patton story mapping structure. This is a revision (1 attempt max)."
+11c. Pipeline continues to step 11d (430 Jira creation) regardless of whether revision resolves all issues.
+11d. Invoke 430: Create Jira epic + stories (HRREC project, Recruiting Purge component, assigned to David Denham).
+12. Mark mission complete; summarize artifacts (report, slide deck, **CI brief**, **gcc competitive matrix** path, PRD, Discovery Brief with Final Verdict, Notion, Confluence, prototype, Figma URL, Jira epic)
 
 **MISSION_LOG format for E2E**:
 ```markdown
 ## Mission: GCC-E2E-001 - GCC Research to Design Pipeline
 **Status:** In Progress
-**Pipeline Step:** [N] of 10 (Research → HITL → PRD → Discovery → Prototype → Copy → Figma → Backlog → Complete)
+**Pipeline Step:** [N] of 13 (Research → HITL → **CI (101)** → PRD → Red Team PRD → Discovery & design review (315) → Prototype → Copy → Figma → Backlog → Red Team Stories → Jira → Complete)
 **Selected Recommendation:** [Title] - [Action]
-**Artifacts:** Research: [path] | Slide Deck: [path] | PRD: [path] | Discovery Brief: [path] | Notion: [URL] | Confluence: [URL] | Prototype: design/ | Figma: [URL] | Jira Epic: [URL]
+**Artifacts:** Research: [path] | Slide Deck: [path] | **CI Brief:** `research/competitive/gcc/e2e-ci-brief-[feature-slug]-[date].md` | **CI Matrix:** `research/competitive/matrices/gcc-competitive-matrix.md` | PRD: [path] | Red Team PRD Review: [findings summary or "No critical issues"] | Discovery Brief (incl. Final Verdict): [path] | Notion: [URL] | Confluence: [URL] | Prototype: design/ | Figma: [URL] | Red Team Story Map Review: [findings summary or "No critical issues"] | Jira Epic: [URL]
 ```
 
 ## Update Patterns for MISSION_LOG.md
@@ -240,11 +267,16 @@ When routing work:
 3. Delegate to 200-prd-writer.mdc
 4. Log handoff in MISSION_LOG.md
 
+**User says:** "Create slides like the GCC PMF roadmap" / "Match v30 deck" / "Full PMF deck for GCC"
+**You do:**
+1. Route to **120-pmf-thematic-analysis.mdc** (Phase 6b), not **110**—baseline **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`**
+2. If only a refresh from an existing report is needed, invoke **120** with explicit instruction to regenerate `slides_spec_vN.json` from the latest analysis file and run Slide Deck MCP
+
 **User says:** "Run GCC research e2e" or "Take a recommendation through to Figma"
 **You do:**
 1. Read MISSION_LOG.md
 2. Create mission "GCC-E2E-001 - GCC Research to Design Pipeline"
-3. Execute GCC E2E Pipeline: invoke 120 (Analyze GCC) → HUMAN-IN-THE-LOOP (AskQuestion: PM selects recommendation) → 200 (PRD) → 420 (prototype) → 410 (copy) → 430 (capture to Figma)
+3. Execute GCC E2E Pipeline: invoke 120 (Analyze GCC) → HUMAN-IN-THE-LOOP (AskQuestion: PM selects recommendation) → **101** (scoped GCC CI brief + matrix delta) → 200 (PRD) → 315 (discovery & internal design review, **APPROVED** brief) → 320 (prototype) → 319 (copy) → 330 (Figma) → 400 (410→420→430 backlog)
 4. Update MISSION_LOG at each step with pipeline progress
 5. Mark complete; provide summary with links to report, PRD, Figma
 

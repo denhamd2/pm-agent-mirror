@@ -53,7 +53,18 @@ Updated both the **UX Designer (430)** and **Prototype Developer (420)** rules b
 
 ---
 
-### 3. Table Component Pattern
+### 3. No Breadcrumbs in Prototypes (Workspace Rule)
+
+**Do not use** in any file under `design/`:
+
+- Canvas Kit **`Breadcrumbs`**
+- **Ad hoc path strips**: rows of labels separated by **`chevronRightSmallIcon`**, `>`, or ` / ` when the intent is a **hierarchy trail** (same role as breadcrumbs)
+
+**Use instead**: **`Heading`**, **`WorkdayLeftTabBar`**, object **`Tabs`**, and a single line of **`BodyText`** metadata (req ID, location) under the title. **PRDs cannot override** this rule in this repo.
+
+---
+
+### 4. Table Component Pattern
 
 **Clarified v11 compound component usage**:
 
@@ -82,7 +93,7 @@ Updated both the **UX Designer (430)** and **Prototype Developer (420)** rules b
 
 ---
 
-### 4. TextInput Component
+### 5. TextInput Component
 
 **Clarified styling approach**:
 
@@ -107,7 +118,7 @@ Updated both the **UX Designer (430)** and **Prototype Developer (420)** rules b
 
 ---
 
-### 5. Icon Components
+### 6. Icon Components
 
 **Added clarification**:
 
@@ -125,7 +136,7 @@ import { searchIcon, justifyIcon } from '@workday/canvas-system-icons-web';
 
 ---
 
-### 6. ToolbarIconButton Component
+### 7. ToolbarIconButton Component
 
 **Added new component documentation**:
 
@@ -144,7 +155,7 @@ import { justifyIcon } from '@workday/canvas-system-icons-web';
 
 ---
 
-### 7. Standard Workday Top Navigation Pattern
+### 8. Standard Workday Top Navigation Pattern
 
 **Added complete reference implementation**:
 
@@ -166,7 +177,7 @@ import { justifyIcon } from '@workday/canvas-system-icons-web';
 
 ---
 
-### 8. Updated Component Lists
+### 9. Updated Component Lists
 
 **Added missing components**:
 - `ToolbarIconButton` to buttons list
@@ -175,7 +186,7 @@ import { justifyIcon } from '@workday/canvas-system-icons-web';
 
 ---
 
-### 9. Enhanced DO/DO NOT Lists
+### 10. Enhanced DO/DO NOT Lists
 
 **Added specific prohibitions**:
 - ❌ DO NOT forget to install/import Canvas Tokens Web CSS

@@ -136,7 +136,9 @@ Execute all phases sequentially for the specified folder (e.g., `research/Japan/
 **Default:** If PM does not select, proceed with #1.
 ```
 
-This enables the orchestrator to present all recommendations to the PM for human-in-the-loop selection before the next pipeline step (PRD creation).
+This enables the orchestrator to present all recommendations to the PM for human-in-the-loop selection before **101** (scoped competitive intelligence) and **200** (PRD creation).
+
+**E2E note:** Downstream **101-competitive-intelligence** (orchestrator Step 5, after HITL) deepens **ATS/regional parity** into `research/competitive/matrices/gcc-competitive-matrix.md` and a PRD-ready `research/competitive/gcc/e2e-ci-brief-*.md`; **120** remains the qualitative PMF + slide deck source.
 
 **Report Naming:** Save to `research/[Country]/thematic-analysis/[YYYY-MM-DD]-[Country]-PMF-Analysis.md`
 
@@ -145,6 +147,8 @@ This enables the orchestrator to present all recommendations to the PM for human
 ### Phase 6b: Slide Deck Generation (Primary Output)
 
 **Objective:** Generate a branded Workday slide deck using the Slide Deck MCP (`user-slide-deck-mcp`).
+
+**Canonical baseline (repo):** Before drafting `slides_spec.json` or `slides_spec_vN.json`, read **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`** for mandatory **section order**, **36–50 slide** guardrails, and layout expectations. For a fast skeleton, copy the **structure** (section dividers, slide sequence, `layout_name` pattern) from the latest **`slides_spec_v*.json`** in the project root, then replace all content from the current PMF report—do **not** ship fewer than **36 slides** or omit standard sections unless the PM explicitly requests a **focus deck**.
 
 **MCP Workflow:**
 1. Call `parse_template` for template_path
@@ -157,20 +161,72 @@ This enables the orchestrator to present all recommendations to the PM for human
 - **`placeholders`** must map indices to objects: `"0": {"text": "Title"}`. Never use `"0": "plain string"`.
 - **Section Title** has no title placeholder; use two **`text_boxes`**: heading at `(3.3, 1.5)` 24pt bold `ink`, subtitle at `(3.3, 3.8)` 11pt `laptop` (see working `slides_spec.json` in repo).
 
-**Deck Structure (indicative length ~49 slides, McKinsey-style tone):**
-- Title | Research Author | Agenda | Executive Summary
-- SECTION 01: Research Challenge (Research Question & Objectives, 5-Phase Framework)
-- SECTION 02: Context Review (Strategic Context, Market Momentum)
-- SECTION 02A: PESTEL — one slide per factor (Political, Economic, Social, Technological, Environmental, Legal)
-- SECTION 02B: Competitive Landscape (Regional Specialists, Global Platforms)
-- SECTION 02C: Win/Loss (Dataset Overview, Top 10 Gap Themes, GCC-Relevant Sev-1 Gaps)
-- SECTION 03: Primary Research (Interview Participants, one slide per customer, Ideation Hub)
-- SECTION 04: Thematic Analysis (Validated Themes 1-4, Themes 5-7, Cross-Source Validation Matrix)
-- SECTION 05: Gap Analysis (Full Funnel — Major/Partial/Supported)
-- SECTION 06: Roadmap Recommendations (6 slides)
-- Bumper Slide
+**Deck Structure (target length 36-50 slides, McKinsey-style tone):**
 
-**Canonical GCC deck merge (mandatory unless PM asks for a “focus deck” only):** Versioned specs such as `slides_spec_v41.json` must **retain the full section flow** from the working baseline `slides_spec.json` (Research Challenge through Strategic Context, **full PESTEL** six factors, Competitive Landscape, Win/Loss, Primary Research through P3, Thematic Analysis with **Validated Themes + Cross-Source Matrix**). Append newer analysis as **additional** slides (e.g. v41 six theme deep-dives, RICE table, 8-row E2E handoff). Do **not** replace that baseline with a short “themes only” deck or point stakeholders to an older `.pptx` for PESTEL.
+**MANDATORY: Every new versioned deck (v41, v42, v45, etc.) MUST include ALL sections below unless user explicitly requests a "focus deck."**
+
+1. **Title + Executive Summary** (2 slides)
+   - Title: [Region] Recruiting Product-Market Fit Research
+   - Executive Summary: Key themes, PESTEL headlines, E2E handoff summary
+
+2. **SECTION: Research Challenge** (3 slides with section divider)
+   - Section Title: "Research Challenge | Objectives and methodology"
+   - Research Question & Objectives
+   - 5-Phase Framework (Braun & Clarke phases 0-6)
+
+3. **SECTION: Context Review** (2+ slides with section divider)
+   - Section Title: "Context Review | Strategic context and market momentum"
+   - Strategic Context (market size, growth, digital transformation)
+
+4. **SECTION: PESTEL Analysis** (7 slides with section divider)
+   - Section Title: "PESTEL Analysis | Political, Economic, Social, Technological, Environmental, Legal"
+   - Political (full slide with nationalization mandates, penalties)
+   - Economic (full slide with market data, CAGR, investment trends)
+   - Social (full slide with communication channel stats, smartphone penetration, cultural factors)
+   - Technological (full slide with AI, government portals, integrations)
+   - Environmental (full slide, DATA GAP if no recruiting signal)
+   - Legal (full slide with PDPL, interview regulations, compliance requirements)
+
+5. **SECTION: Competitive Landscape** (2 slides with section divider)
+   - Section Title: "Competitive Landscape | Regional specialists vs global platforms"
+   - Competitive Landscape (global enterprise vs regional specialists breakdown)
+
+6. **SECTION: Win/Loss Overview** (2 slides with section divider)
+   - Section Title: "Win/Loss Overview | [Region]-explicit gaps"
+   - GCC-Relevant Win/Loss Gaps (table with Gap ID, Pain Point, Severity)
+
+7. **SECTION: Primary Research** (5+ slides with section divider)
+   - Section Title: "Primary Research | Interview participants"
+   - Interview Participants (P1, P2, P3 with roles and companies)
+   - P1 - [Company]: Key Themes (detailed bullets with quotes)
+   - P2 - [Company]: Key Themes (detailed bullets with quotes)
+   - P3 - [Company]: Key Themes (detailed bullets with quotes)
+
+8. **SECTION: Thematic Analysis** (4+ slides with section divider)
+   - Section Title: "Thematic Analysis | Validated themes and triangulation"
+   - Validated Themes 1-3 (or 1-4 if >6 themes)
+   - Validated Themes 4-6 (or 5-7 if >7 themes)
+   - Cross-Source Validation Matrix (triangulation table: Theme | P1 | P2 | P3 | CSV | PMF Impact)
+
+9. **SECTION: Roadmap Recommendations** (8+ slides with section divider)
+   - Section Title: "Roadmap Recommendations | Priority 1 and Priority 2"
+   - Recommendation 1: [Title] (5-part: Problem, Evidence, Recommendation, Why now, Success Metrics)
+   - Recommendation 2: [Title]
+   - Recommendation 3: [Title]
+   - Recommendation 4: [Title]
+   - Recommendation 5: [Title]
+   - Recommendation 6: [Title] (if applicable)
+   - E2E Handoff: N Recommendations for PM Selection (numbered table slide)
+
+10. **Bumper Slide**
+
+**Canonical baseline enforcement:** `slides_spec.json` MUST contain the full 36-50 slide structure above as the working baseline. When generating versioned decks (v41+), the agent MUST:
+1. Start from `slides_spec.json` structure
+2. Populate with fresh analysis content from the report
+3. Add any version-specific deep-dive slides AFTER the standard sections
+4. Never skip or compress standard sections unless user says "focus deck only"
+
+**Compressed decks are forbidden by default.** If a versioned deck has <36 slides or is missing PESTEL/Win/Loss/Interview sections, it violates the standard.
 
 **Participant Anonymization:**
 - Customer interview participants: List as "P1 - Job Title, Company" (e.g., "P1 - Senior Recruiter, Accenture")
@@ -289,6 +345,25 @@ When analyzing **GCC** (Gulf Cooperation Council: Saudi Arabia, UAE, Qatar, Kuwa
 - Include high-intensity direct quotes; cite specific sources (transcript names, Gap IDs, Idea IDs)
 - Save markdown report to `research/[Country]/thematic-analysis/`
 - **Generate slide deck** via Slide Deck MCP; output to `~/Downloads/[Country]_Recruiting_PMF_Roadmap_v1.pptx`
+
+### Deck Quality Checklist (MANDATORY before calling `create_presentation`)
+
+Before generating the slide deck, verify the `slides_spec_vN.json` file contains:
+
+- [ ] 36-50+ total slides
+- [ ] 8-9 section dividers with proper "Section Title" layout
+- [ ] PESTEL: 6 individual slides (one per factor)
+- [ ] Interview: 1 participants list + 1 slide per customer (P1, P2, P3)
+- [ ] Themes: Split across 2 slides (1-3, 4-6 or similar)
+- [ ] Triangulation: Cross-Source Validation Matrix table
+- [ ] Recommendations: Individual slides (not compressed bullets)
+- [ ] E2E Handoff: Numbered table slide
+- [ ] Speaker notes on all content slides (except Title, Section Title, Bumper)
+- [ ] Chart font sizes set (category_axis_font_size_pt: 9, value_axis_font_size_pt: 9)
+- [ ] Product implication formatting (PESTEL slides)
+
+**If any checklist item fails, revise `slides_spec_vN.json` before calling `create_presentation`.**
+
 
 ### Never ❌
 - Use real customer names (always anonymize as P1, P2, P3, etc.)

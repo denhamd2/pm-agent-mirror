@@ -4,7 +4,7 @@
 **Prototype URL:** http://localhost:5182/  
 **Context:** MISSION-011 – GCC E2E Pipeline (Candidate Profile placement)  
 **Reviewed:** 19 March 2026  
-**Reviewer:** 310-doc-writer (Editorial Guidelines)
+**Reviewer:** 319-doc-writer (Editorial Guidelines)
 
 ---
 

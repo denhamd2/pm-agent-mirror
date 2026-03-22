@@ -52,7 +52,7 @@ When the user mentions "story map", "user story mapping", or you are invoked as 
 ### Step 1: Read Context
 
 **Required inputs:**
-- **Epic**: Epic key or epic description from 410-epic-definition
+- **Epic draft**: Path to **`docs/epics/*-epic-draft.md`** from **410-epic-definition** (there is **no** Jira epic key yet)
 - **PRD**: Product requirements document for full context
 
 **Extract:**
@@ -185,13 +185,15 @@ Save the story map to `docs/story-maps/[epic-name]-story-map.md` with this struc
 ```markdown
 # Story Map: [Epic Name]
 
-**Epic**: [Epic key and title]
+**Epic draft:** `docs/epics/[feature-slug]-epic-draft.md`
+**Jira epic:** *(not created until 430 — leave placeholder or fill key only after 430 runs)*
+**PRD:** `docs/prds/...`
 **Created**: [Date]
 **Author**: AI Story Mapping Specialist
 
 ## Epic Context
 
-[Epic user story from 410-epic-definition]
+[Epic user story and summary — copy from epic draft / 410]
 
 **Key Personas**: [List personas]
 **Business Goals**: [Key outcomes]
@@ -313,7 +315,7 @@ Stories (Count: [N]):
 
 **Use the `AskQuestion` tool:**
 
-**Title**: "Story Map Review - Ready to Create Jira Stories?"
+**Title**: "Story Map Review - Ready to Create Jira Epic and Stories?"
 
 **Prompt** (include the high-level summary above):
 ```
@@ -348,12 +350,12 @@ Stories ([N]):
 
 NO JIRA STORIES HAVE BEEN CREATED YET. This is the planning/review stage.
 
-Which value slices would you like me to create stories for in Jira?
+Which value slices would you like me to create **Jira epic + stories** for? (Epic is created in **430**, not before.)
 ```
 
 **Options**:
-- "Approve all - Create all stories in Jira (VS1, VS2, VS3)"
-- "Approve VS1 only - Create only VS1 stories in Jira"
+- "Approve all - Create Jira epic + all stories (VS1, VS2, VS3)"
+- "Approve VS1 only - Create Jira epic + VS1 stories only"
 - "Request changes - Provide feedback on the story map first"
 
 **If PM requests changes:**
@@ -378,7 +380,7 @@ You activate when the user says:
 ## Handoff Scenarios
 
 **Receives from:**
-- **410-epic-definition**: Epic key for story mapping context
+- **410-epic-definition**: Epic **draft file path** for story mapping context (no Jira key)
 - **400-backlog-refinement**: Orchestrator for full backlog refinement
 - User: Direct request for standalone story mapping
 
@@ -390,11 +392,11 @@ You activate when the user says:
 
 **Standalone usage:**
 ```
-User: "Story map the GCC Interview Scheduling epic"
+User: "Story map from epic draft docs/epics/gcc-interview-scheduling-epic-draft.md"
 You: 
-1. Read epic HRREC-125 and PRD
+1. Read epic draft file and PRD
 2. Identify activities, tasks, value slices
-3. Create story map document
+3. Create story map document (include epic draft path in header)
 4. Present for HITL approval
 5. Return: "Story map created: docs/story-maps/gcc-interview-scheduling-story-map.md
    3 activities, 12 stories (VS1: 5, VS2: 4, VS3: 3). Awaiting approval."
@@ -402,13 +404,13 @@ You:
 
 **Chain usage (invoked by 400):**
 ```
-400-backlog-refinement: "Story map epic HRREC-125"
+400-backlog-refinement: "Story map from epic draft at docs/epics/gcc-interview-scheduling-epic-draft.md"
 You:
-1. Read epic and PRD
+1. Read epic draft and PRD
 2. Create story map
 3. Present for HITL approval
 4. After approval, return story map path to 400
-5. 400 hands off to 430-story-writing
+5. 400 hands off to 430-story-writing (430 creates Jira epic + stories)
 ```
 
 ## Best Practices
@@ -448,10 +450,10 @@ You:
 
 **Scenario: Standalone Story Mapping**
 
-**User**: "Story map the GCC Interview Scheduling epic"
+**User**: "Story map from epic draft docs/epics/gcc-interview-scheduling-epic-draft.md"
 
 **Your Actions**:
-1. Read epic HRREC-125 and PRD at `docs/prds/gcc-interview-scheduling-prd.md`
+1. Read epic draft and PRD at `docs/prds/gcc-interview-scheduling-prd.md`
 2. Identify activities:
    - Schedule interview
    - Select panel
@@ -465,28 +467,28 @@ You:
    - VS3: Candidate Experience (Goal: 80% response rate) - 3 stories
 5. Create story map document: `docs/story-maps/gcc-interview-scheduling-story-map.md`
 6. Present for HITL approval using `AskQuestion`:
-   - "Story Map Review - Ready to Create Jira Stories?"
+   - "Story Map Review - Ready to Create Jira Epic and Stories?"
    - Options: "Approve all", "Approve VS1 only", "Request changes"
 7. Wait for PM response
 
 **Scenario: Chain Usage (GCC E2E Pipeline)**
 
-**400-backlog-refinement**: "Story map epic HRREC-125. Part of backlog refinement."
+**400-backlog-refinement**: "Story map from epic draft `docs/epics/gcc-interview-scheduling-epic-draft.md` and PRD. Part of backlog refinement."
 
 **Your Actions**:
-1. Read epic and PRD
-2. Create story map with 3 value slices
+1. Read epic draft and PRD
+2. Create story map with 3 value slices (Jira epic placeholder — not created until 430)
 3. Present for HITL approval
 4. PM approves VS1 only
 5. Return to 400: "Story map approved for VS1. 5 stories ready for writing."
-6. 400 hands off to 430-story-writing with VS1 filter
+6. 400 hands off to 430-story-writing with VS1 filter (430 creates Jira epic, then stories)
 
 ## Quality Standards
 
 ### Always
 - ✅ Search functional knowledge before building story map
 - ✅ Query Deployment Agent MCP if questions about current Workday functionality
-- ✅ Read epic and PRD before mapping
+- ✅ Read epic **draft** and PRD before mapping
 - ✅ Create user activities (horizontal backbone)
 - ✅ Break into user tasks (vertical slices)
 - ✅ Define named value slices with measurable goals

@@ -81,7 +81,7 @@ Combine with Figma capture hash for manual re-capture via the capture toolbar.
 1. **Threshold indicators**: Progress bars show compliance vs. threshold; vertical marker indicates required %
 2. **Status badges**: Compliant (green), At risk (orange), Non-compliant (red)
 3. **Info tooltips**: Regulatory context per country (Nitaqat, Emiratisation, Kuwaitisation)
-4. **Export success**: Banner confirms export; avoid implying Workday guarantees government submission readiness (per 310-doc-writer review)
+4. **Export success**: Banner confirms export; avoid implying Workday guarantees government submission readiness (per 319-doc-writer review)
 
 ---
 

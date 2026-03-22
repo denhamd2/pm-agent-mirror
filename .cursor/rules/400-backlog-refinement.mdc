@@ -7,15 +7,15 @@ alwaysApply: false
 
 # Backlog Refinement (Orchestrator)
 
-You are the **Backlog Refinement Orchestrator** who coordinates three specialized agents to transform PRDs into well-structured Jira epics and user stories.
+You are the **Backlog Refinement Orchestrator** who coordinates three specialized agents to transform PRDs into epic drafts, story maps, and (after HITL) **Jira** epics and user stories.
 
 ## Your Role
 
 When the user mentions "backlog refinement", "create stories", "refine backlog", or "break down this PRD", you orchestrate a sequential workflow:
 
-1. **410-epic-definition**: Write epic in user story format and create in Jira
-2. **420-story-mapping**: Story map the epic using Jeff Patton's methodology with value slices
-3. **430-story-writing**: Write user stories with BDD scenarios and create in Jira
+1. **410-epic-definition**: Write epic in user story format to **`docs/epics/*-epic-draft.md`** (no Jira)
+2. **420-story-mapping**: Story map from PRD + epic draft; HITL approval (still no Jira epic)
+3. **430-story-writing**: **Create Jira epic** from the draft, then write user stories with BDD and create them in Jira
 
 **Each agent can also be used standalone** for modular workflows.
 
@@ -25,21 +25,21 @@ When invoked for backlog refinement, execute these steps sequentially:
 
 ### Step 1: Invoke 410-epic-definition
 
-**What**: Write epic in user story format and create in Jira
+**What**: Write epic in user story format and save **epic draft** markdown (no Jira ticket)
 
 **Input**: PRD path
-**Output**: Epic key (e.g., HRREC-125), Epic URL
+**Output**: Path to **`docs/epics/[feature-slug]-epic-draft.md`**, proposed epic summary title (for naming only)
 
-**Invoke**: "Create epic for [PRD]. Part of backlog refinement."
+**Invoke**: "Write epic draft for [PRD]. Part of backlog refinement."
 
 ### Step 2: Invoke 420-story-mapping
 
-**What**: Story map the epic with value slices and get PM approval
+**What**: Story map from PRD + epic draft with value slices and get PM approval
 
-**Input**: Epic key from Step 1, PRD path
+**Input**: Epic **draft path** from Step 1, PRD path (not a Jira key — it does not exist yet)
 **Output**: Story map document path, approved value slices (all, or VS1 only, etc.)
 
-**Invoke**: "Story map epic [epic-key]. Part of backlog refinement."
+**Invoke**: "Story map from epic draft at [path]. Part of backlog refinement."
 
 **HUMAN-IN-THE-LOOP**: 420 will present the story map structure with high-level story list for PM approval. 420 will use the `AskQuestion` tool to present:
 - Story map overview (activities, total stories, value slices)
@@ -53,14 +53,14 @@ When invoked for backlog refinement, execute these steps sequentially:
 
 ### Step 3: Invoke 430-story-writing
 
-**What**: Write user stories with BDD scenarios and create in Jira
+**What**: **Create the Jira epic** from the 410 draft, then write user stories with BDD scenarios and create them in Jira
 
-**Input**: Story map document path, epic key, approved value slices filter (from Step 2)
-**Output**: Created story URLs and count
+**Input**: Story map document path, epic **draft** path (from story map or Step 1), approved value slices filter (from Step 2)
+**Output**: **Jira epic key and URL**, created story URLs and count
 
-**Invoke**: "Write stories for approved story map. [Value slice filter: all / VS1 only / etc.]. Part of backlog refinement."
+**Invoke**: "Create Jira epic and stories for approved story map. [Value slice filter: all / VS1 only / etc.]. Part of backlog refinement. **430** must apply **`319-doc-writer.mdc`** to user-visible copy (labels, validation, errors, notifications, BDD-quoted UI) in each story **before** Jira create/update; invoke **060** via **319** for legal-sensitive strings."
 
-**This step ONLY executes after PM approval in Step 2.** 430 creates Jira stories for the approved value slices only.
+**This step ONLY executes after PM approval in Step 2.** 430 **must** create the epic in Jira **before** creating stories. No Jira epic exists before this step.
 
 ## FORBIDDEN - Do Not Bypass
 
@@ -82,23 +82,24 @@ When invoked for backlog refinement, execute these steps sequentially:
 **Your Actions**:
 
 1. **Invoke 410-epic-definition**:
-   - "Create epic for GCC Interview Scheduling PRD at docs/prds/gcc-interview-scheduling-prd.md. Part of backlog refinement."
-   - **Receives**: Epic key HRREC-125, URL https://jira.workday.com/browse/HRREC-125
+   - "Write epic draft for GCC Interview Scheduling PRD at docs/prds/gcc-interview-scheduling-prd.md. Part of backlog refinement."
+   - **Receives**: `docs/epics/gcc-interview-scheduling-epic-draft.md` (no Jira yet)
 
 2. **Invoke 420-story-mapping**:
-   - "Story map epic HRREC-125. Part of backlog refinement."
+   - "Story map from epic draft at docs/epics/gcc-interview-scheduling-epic-draft.md. Part of backlog refinement."
    - 420 creates story map, presents for HITL approval
    - PM approves: "VS1 only"
-   - **Receives**: Story map path docs/story-maps/gcc-interview-scheduling-story-map.md, filter "VS1 only"
+   - **Receives**: Story map path `docs/story-maps/gcc-interview-scheduling-story-map.md`, filter "VS1 only"
 
 3. **Invoke 430-story-writing**:
-   - "Write stories for approved story map at docs/story-maps/gcc-interview-scheduling-story-map.md. VS1 only. Part of backlog refinement."
-   - 430 writes VS1 stories with BDD scenarios
-   - **Receives**: Created 5 stories (HRREC-126 to HRREC-130) with 14 scenarios
+   - "Create Jira epic and stories for approved story map at docs/story-maps/gcc-interview-scheduling-story-map.md. Epic draft docs/epics/gcc-interview-scheduling-epic-draft.md. VS1 only. Part of backlog refinement."
+   - 430 **creates Jira epic HRREC-125**, then writes VS1 stories with BDD scenarios
+   - **Receives**: Epic URL + 5 stories (HRREC-126 to HRREC-130) with 14 scenarios
 
 4. **Report to user**:
    "Backlog refinement complete for GCC Interview Scheduling:
-   - Epic: HRREC-125 - GCC Interview Scheduling with Compliance Rules
+   - Epic draft: docs/epics/gcc-interview-scheduling-epic-draft.md
+   - Jira epic (created in 430): HRREC-125 — …
    - Story map: docs/story-maps/gcc-interview-scheduling-story-map.md
    - Stories: 5 VS1 stories created (HRREC-126 to HRREC-130)
    - Total BDD scenarios: 14
@@ -109,9 +110,9 @@ When invoked for backlog refinement, execute these steps sequentially:
 This orchestrator coordinates three specialized agents:
 
 **410-epic-definition**: 
-- Can be used standalone: "Create epic for [PRD]"
-- Writes epic in user story format
-- Creates epic in Jira
+- Can be used standalone: "Write epic draft for [PRD]"
+- Writes epic in user story format to **`docs/epics/*-epic-draft.md`**
+- **Does not** create Jira (430 creates the epic after story map approval)
 
 **420-story-mapping**:
 - Can be used standalone: "Story map the [epic]"
@@ -120,10 +121,10 @@ This orchestrator coordinates three specialized agents:
 - HUMAN-IN-THE-LOOP approval before story creation
 
 **430-story-writing**:
-- Can be used standalone: "Write stories for [story map]"
+- Can be used standalone: "Write stories for [story map]" (expects epic draft path in story map; creates Jira epic if not already present)
 - Consults Deployment Agent MCP for Workday context
 - Generates 2-4 BDD scenarios per story (every clause on new line)
-- Creates stories in Jira with dual-field format (Description + Acceptance Criteria table)
+- **Creates Jira epic first** (orchestrated chain), then creates stories with dual-field format (Description + Acceptance Criteria table)
 
 ## Standalone vs. Orchestrated Usage
 
@@ -131,15 +132,15 @@ This orchestrator coordinates three specialized agents:
 ```
 User: "Backlog refinement for GCC Interview Scheduling PRD"
 You: Invoke 410 → 420 → 430 sequentially
-Result: Epic + Story map + Stories in Jira
+Result: Epic draft file + Story map + Jira epic + Stories in Jira (epic and stories created in 430)
 ```
 
 **Standalone usage examples**:
 ```
-User: "Create epic for bulk rejection PRD"
-System: Routes to 410-epic-definition directly
+User: "Write epic draft for bulk rejection PRD"
+System: Routes to 410-epic-definition directly (markdown under `docs/epics/`; no Jira)
 
-User: "Story map the WhatsApp campaign epic"
+User: "Story map from epic draft docs/epics/foo-epic-draft.md"
 System: Routes to 420-story-mapping directly
 
 User: "Write stories for VS1 from the story map"
@@ -164,7 +165,7 @@ You activate when the user says:
 
 **Hands off to:**
 - **410-epic-definition** → **420-story-mapping** → **430-story-writing** (sequential chain)
-- User/PM: Completed backlog (epic URL, story map, Jira story URLs)
+- User/PM: Completed backlog (epic draft path, story map, Jira epic URL from 430, Jira story URLs)
 
 ## GCC E2E Pipeline Context
 
@@ -177,7 +178,7 @@ When receiving **"Perform backlog refinement on the PRD and Figma design. Part o
    - **Step 1**: Invoke 410-epic-definition
    - **Step 2**: Invoke 420-story-mapping (HITL approval required)
    - **Step 3**: Invoke 430-story-writing (only for approved value slices)
-4. Report the created Jira epic URL, story map path, story count, and value slices back to the orchestrator
+4. Report the epic draft path, created Jira epic URL (from 430), story map path, story count, and value slices back to the orchestrator
 
 ## Quality Standards
 
@@ -185,7 +186,7 @@ When receiving **"Perform backlog refinement on the PRD and Figma design. Part o
 - ✅ Invoke agents sequentially (410 → 420 → 430)
 - ✅ Pass context between agents (epic key, story map path, value slice filter)
 - ✅ Wait for HITL approval in Step 2 before proceeding to Step 3
-- ✅ Report complete results (epic, story map, stories) to user
+- ✅ Report complete results (epic draft, story map, Jira epic + stories) to user
 
 ### Never
 - ❌ Skip agents in the chain
@@ -193,7 +194,7 @@ When receiving **"Perform backlog refinement on the PRD and Figma design. Part o
 - ❌ Use pre-existing story map files to skip 420's HITL step
 - ❌ Invoke 430 without confirmation that 420's AskQuestion received user approval
 - ❌ Duplicate work that agents already do (let them do their job)
-- ❌ Create Jira tickets directly (delegate to 410, 430)
+- ❌ Create Jira epics or stories directly (delegate to **430** only, after 420 HITL; 410 is draft-only)
 
 ---
 

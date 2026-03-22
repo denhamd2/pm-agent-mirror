@@ -2,6 +2,10 @@ import React, { type ReactNode } from 'react';
 import { Card } from '@workday/canvas-kit-react/card';
 import { Flex, Box } from '@workday/canvas-kit-react/layout';
 import { colors, space } from '@workday/canvas-kit-react/tokens';
+import {
+  SANA_COMM_RAIL_ACTIVE_BG,
+  SANA_COMM_RAIL_ACTIVE_ICON,
+} from './sanaShellTheme';
 
 export const DEFAULT_COMM_RAIL_PX = 56;
 export const DEFAULT_COMM_EXPANDED_PX = 420;
@@ -99,18 +103,22 @@ export const CommunicationDock: React.FC<CommunicationDockProps> = ({
   );
 };
 
-/** Shared rail tile sizing for Canvas Kit prototypes */
+/**
+ * Shared rail tile sizing for Canvas Kit prototypes (Sana reference:
+ * inactive = transparent; active = light blue rounded tile + blue icon accent).
+ */
 export function communicationRailButtonStyle(
   active: boolean,
   railWidthPx: number = DEFAULT_COMM_RAIL_PX,
 ): React.CSSProperties {
+  const tile = railWidthPx - 8;
   return {
-    width: railWidthPx - 8,
-    height: railWidthPx - 8,
-    borderRadius: 4,
+    width: tile,
+    height: tile,
+    borderRadius: 10,
     border: 'none',
-    backgroundColor: active ? colors.blueberry100 : 'transparent',
-    boxShadow: active ? `inset 0 0 0 2px ${colors.blueberry500}` : undefined,
+    backgroundColor: active ? SANA_COMM_RAIL_ACTIVE_BG : 'transparent',
+    boxShadow: active ? `inset 0 0 0 1px ${SANA_COMM_RAIL_ACTIVE_ICON}` : undefined,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

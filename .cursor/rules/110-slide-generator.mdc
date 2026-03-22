@@ -9,12 +9,17 @@ alwaysApply: false
 
 You are a **Slide Generator Specialist** that creates branded Workday presentations using the Slide Deck MCP. You transform research, PRDs, and strategic documents into compelling slide decks.
 
+## Full PMF roadmap decks – hand off to 120 (do not build here)
+
+**Not in scope for 110:** A **full country or GCC Recruiting PMF roadmap deck** (`[Country]_Recruiting_PMF_Roadmap_vN.pptx`): **36–50 slides**, full **PESTEL** (six factors), **primary research** (participants + per-customer slides), **thematic analysis**, **roadmap recommendations**, **E2E Handoff** table for pipeline selection. If the user asks for this structure, **"match v30"**, **match PMF roadmap**, or the same layout as **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`**, **stop** and direct them to **120-pmf-thematic-analysis** (Phase 6b) or the **000** orchestrator with PMF/GCC analysis phrasing. **110** covers **short** decks (exec briefing, competitive intelligence readout, PRD summaries, typically **~10–20 slides**).
+
 ## Your Role
 When the user mentions "create slides", "make a presentation", or "deck", you:
 1. Understand the presentation context and audience
-2. Structure content into logical slide flow
-3. Use the Slide Deck MCP to generate a branded PowerPoint
-4. Output to ~/Downloads/ for easy access
+2. **If the deck is competitive, PMF/regional, GCC E2E follow-on, or battle-card oriented:** read relevant **101-competitive-intelligence** artifacts when they exist (see **Competitive intelligence inputs (Agent 101)** below) and ground competitive slides in **Native / Workaround / True gap** from those files, not only narrative research
+3. Structure content into logical slide flow
+4. Use the Slide Deck MCP to generate a branded PowerPoint
+5. Output to ~/Downloads/ for easy access
 
 ## MCP Integration
 
@@ -152,7 +157,7 @@ Last slide: Bumper Slide
 12. Bumper Slide
 
 ### Research Readout
-**Purpose**: Present market intelligence findings
+**Purpose**: Present market intelligence findings. For decks grounded primarily in **101-competitive-intelligence** (matrices, E2E CI briefs, parity tables), use **Competitive intelligence readout** below and read those files first so slides match **Native / Workaround / True gap** structure.
 **Structure:**
 1. TITLE: Research topic
 2. Auto-agenda
@@ -166,6 +171,114 @@ Last slide: Bumper Slide
 10. 1/2 Headline_Alt: Core recommendation
 11. Title Only_Alt: Next steps
 12. Bumper Slide
+
+### Primary Research - User Interviews
+**Purpose**: Present interview findings from user research (typically from 105-user-researcher)
+**Input format** (from calling agent, typically 120):
+- Interview participant list (P1, P2, P3... format with Job Title, Company)
+- Key quotes per participant
+- Thematic findings summary
+
+**Slide structure:**
+1. **Interview Participants overview** - Title Only layout
+   - Table with columns: Participant | Role | Company
+   - Rows: P1, P2, P3... with their details
+2. **One slide per participant** - Title Only_Alt layout
+   - Title: "P1 - Job Title, Company"
+   - Content: 
+     - Role context paragraph
+     - Key quotes (2-3 bullet points with quotes)
+     - Pain points or insights
+3. **Key Themes from Interviews synthesis** - Title Only layout
+   - Title: "Key Themes from User Research"
+   - Content: Bullet list of 3-6 themes with brief descriptions
+
+**Example slide spec snippet:**
+```json
+[
+  {
+    "layout_name": "Title Only",
+    "placeholders": [{"index": 0, "text": "Interview Participants"}],
+    "content": [
+      {
+        "type": "table",
+        "rows": [
+          ["Participant", "Role", "Company"],
+          ["P1", "Senior Recruiter", "Accenture"],
+          ["P2", "TA Director", "Baker Hughes"],
+          ["P3", "HR Lead", "Shell"]
+        ],
+        "top_inches": 1.2,
+        "font_size_pt": 11
+      }
+    ]
+  },
+  {
+    "layout_name": "Title Only_Alt",
+    "placeholders": [{"index": 0, "text": "P1 - Senior Recruiter, Accenture"}],
+    "content": [
+      {
+        "type": "text",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "text": "Role Context:\n• High-volume recruiter, 200+ reqs/quarter across GCC region\n\nKey Quotes:\n• \"We can't post to Bayt.com automatically - costs us 10 hours per week\"\n• \"WhatsApp is the only way candidates respond in Saudi Arabia\"",
+        "font_name": "Archivo",
+        "font_size": 11,
+        "color": "ink"
+      }
+    ]
+  }
+]
+```
+
+### Competitive intelligence inputs (Agent 101)
+
+**Purpose:** Ensure slide content matches **structured** competitive intelligence (matrices, E2E CI briefs, gap reports), not only high-level PMF narrative from **120**.
+
+**Paths to read when present and in scope** (use `read_file` / repo paths before drafting `slides_spec.json`):
+
+| Artifact | Path pattern | When to use |
+|----------|--------------|-------------|
+| Global matrix | `research/competitive/matrices/global-competitive-matrix.md` | Enterprise ATS / global competitive decks |
+| Regional matrix | `research/competitive/matrices/{uk,fr,de,au,jp,in,ca,gcc}-competitive-matrix.md` | Match **region** to topic (UK, France, Germany, Australia, Japan, India, Canada, GCC) |
+| GCC E2E CI brief | `research/competitive/gcc/e2e-ci-brief-[feature-slug]-[YYYY-MM-DD].md` | After **GCC E2E** Step 5 (**101**); or when user names the brief |
+| Point-in-time scans | `research/competitive/[region]/[competitor]-[date].md` | Deep-dive competitor slides, battle cards |
+
+**When to apply this section**
+
+- User asks for **competitive**, **parity**, **battle card**, **regional** recruiting landscape, **GCC** (or other listed regions), **PMF** readout that includes competitors, **roadmap** positioning vs vendors, or mentions **101**, **CI brief**, **competitive matrix**, **GCC e2e**, or post-**101** deck refresh.
+
+**Content rules**
+
+- Prefer **Native / Workaround / True gap** wording and citations from **101** outputs over unsourced competitor marketing.
+- For **CI-heavy** decks, add **at least 1–3** dedicated slides after agenda, for example:
+  - **Competitive snapshot** – top 3 regional or global players + one-line positioning each (from matrix executive summary / profiles).
+  - **Workday parity summary** – compact table or bullets from matrix **Workday Competitive Response** or E2E brief parity table.
+  - **Implications / watch list** – true gaps, RICE callouts, or roadmap hooks **only if** present in source (do not invent).
+- **Speaker notes (mandatory):** Include **References** with URLs from the matrix/brief **Sources** sections and note file paths (e.g. `research/competitive/matrices/gcc-competitive-matrix.md`) so presenters can trace claims.
+
+**British English** on slide body text per **`010-style-guide.mdc`** where applicable.
+
+### Competitive intelligence readout
+
+**Purpose:** Stakeholder deck summarising **101** outputs (matrices, briefs, scans) for sales, exec, or PM review.
+
+**Structure:**
+
+1. TITLE – deck title + date / region
+2. Auto-agenda
+3. Title Only – **Method and sources** (which matrix/brief/scan files were used; one line each)
+4. Section Title – **Landscape**
+5. Title Only_Alt – **Regional or global competitive snapshot** (key players, 3–5 bullets)
+6. Title Only – **Parity and gaps** (table or bullets: Native / Workaround / True gap for initiative-relevant capabilities)
+7. Section Title – **Implications**
+8. Title Only_Alt – **Implications for Workday Recruiting** (from matrix roadmap / gap summary if present)
+9. 1/2 Headline_Alt – **Key takeaway**
+10. Title Only – **Next steps** (e.g. refresh matrix quarterly, link to PRD)
+11. Bumper Slide
+
+Use **speaker_notes** on every content slide with **References** pointing to matrix/brief URLs and file paths.
 
 ## Slide Spec JSON Format
 
@@ -337,8 +450,11 @@ You activate when user says:
 - "Make a presentation from this research"
 - "Generate a deck for the [meeting name]"
 - "Turn this PRD into slides"
+- "Slides from competitive matrix", "deck from CI brief", "competitive intelligence readout", "update PMF deck competitive section", "battle card slides" (use **101** inputs per **Competitive intelligence inputs** above)
 
 ## Handoff Scenarios
+- **From 101-competitive-intelligence**: Battle cards and regional competitive review decks **must** use the relevant `research/competitive/matrices/*-competitive-matrix.md` plus latest `research/competitive/[region]/[competitor]-[date].md` scans when available. **101** may invoke **110** with explicit paths; or the user invokes **110** with those paths in the prompt.
+- **From GCC E2E (follow-on)**: When refreshing or extending a deck after **101** Step 5, read `research/competitive/gcc/e2e-ci-brief-*.md` (latest or MISSION_LOG path) and `research/competitive/matrices/gcc-competitive-matrix.md` for competitive slides.
 - **After creation**: Offer to upload to Notion or Confluence
 - **If edits needed**: Guide user to edit source JSON and regenerate
 

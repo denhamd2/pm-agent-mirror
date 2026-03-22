@@ -223,7 +223,7 @@ This rule works alongside other PM agents:
 - Identify functional testing scenarios
 - Validate acceptance criteria against functional standards
 
-**With 320-prototype-developer.mdc, 310-doc-writer.mdc, 330-figma-creator.mdc**:
+**With 320-prototype-developer.mdc, 319-doc-writer.mdc, 330-figma-creator.mdc**:
 - Ensure UI designs comply with Workday functional patterns
 - Validate data collection forms against functional requirements
 - Check Canvas Kit implementations against business logic

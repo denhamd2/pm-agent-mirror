@@ -10,6 +10,7 @@ Version-controlled **high-fidelity reference** for **Sana**-aligned Workday UI: 
 | `Sana_Style_UI-employee-profile-comm-dock.png` | Full shell + comm dock (grey top nav, white search pill, labelled icon rail) |
 | `Sana_Style_UI-e1cc54e6-0b94-46e8-88cf-9a0667164eb4.png` | Full shell: top nav, left tab bar, white cards on light grey canvas |
 | `Sana_Style_UI-e0cea579-b804-4bf4-a662-30fc2a8cbe96.png` | Earlier benchmark; neutrals, radii, type hierarchy |
+| `Sana_Style_UI-candidate-profile-whatsapp-panel.png` | **Candidate profile + comm dock**: header card, sub-nav pills, two-column cards, **WhatsApp** panel with **pill composer** (blue focus), **circular send**, **message bubbles** |
 
 ## How agents use this
 
@@ -23,5 +24,6 @@ Version-controlled **high-fidelity reference** for **Sana**-aligned Workday UI: 
 - `design/references/sana/Sana_Style_UI-employee-profile-comm-dock.png`
 - `design/references/sana/Sana_Style_UI-e1cc54e6-0b94-46e8-88cf-9a0667164eb4.png`
 - `design/references/sana/Sana_Style_UI-e0cea579-b804-4bf4-a662-30fc2a8cbe96.png`
+- `design/references/sana/Sana_Style_UI-candidate-profile-whatsapp-panel.png`
 
 When updating the reference image, add or replace the PNG and adjust this table if the filename changes.

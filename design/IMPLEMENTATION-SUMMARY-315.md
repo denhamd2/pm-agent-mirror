@@ -1,6 +1,8 @@
 # Prototype Discovery & Design Phase - Implementation Summary
 
-**Implemented**: Wednesday Mar 18, 2026
+**Implemented**: Wednesday Mar 18, 2026  
+**Updated**: Friday 21 March 2026 — **318** merged into **315**; design chain is **315 → 320 → 319 → 330**; single `design/[feature]-discovery-brief.md` with **Final Verdict: APPROVED | NEEDS REVISION** (no separate peer-review file required for new work).
+
 **Status**: ✅ Complete
 
 ---
@@ -15,10 +17,10 @@ A new **"Prototype Discovery & Design"** phase (agent 315) that grounds prototyp
 
 ### ✅ Created Files
 
-1. **`.cursor/rules/315-ux-designer.mdc`** (18.3 KB)
-   - New agent rule for prototype discovery and design
-   - Integrates with Functional Knowledge, Deployment Agent MCP, and Six Hats Thinking MCP
-   - Produces Discovery & Design Briefs with workflow context, placement decisions, and functional requirements
+1. **`.cursor/rules/315-ux-designer.mdc`**
+   - Principal UX + internal design peer review (PASS 1–4), **Final Verdict** before **320**
+   - Integrates Functional Knowledge, Deployment Agent MCP, Six Hats, Canvas Kit MCP, JTBD and workday-user-research grounding
+   - Produces a single **Discovery & Design Brief** with layout strategy, UI composition, peer review findings, and implementation-ready final section
 
 2. **`design/placement-patterns.md`** (4.8 KB)
    - Reference library of common Workday placement patterns
@@ -35,7 +37,7 @@ A new **"Prototype Discovery & Design"** phase (agent 315) that grounds prototyp
 1. **`.cursor/rules/000-master-orchestrator.mdc`**
    - Added 315 to agent coordination list
    - Updated GCC E2E Pipeline to include discovery step (now 10 steps instead of 9)
-   - Modified pipeline: `120 → HITL → 200 → **315** → 320 → 310 → 330 → 400`
+   - Pipeline: `120 → HITL → 200 → **315** → 320 → 319 → 330 → 400`
    - Added routing logic for "prototype discovery" triggers
    - Updated Design Workflow Chain documentation
 
@@ -52,14 +54,14 @@ A new **"Prototype Discovery & Design"** phase (agent 315) that grounds prototyp
 
 ### New GCC E2E Pipeline Flow
 
-**Before** (9 steps):
+**Before** (no discovery / older copy agent number):
 ```
 120 (PMF) → HITL → 200 (PRD) → 320 (Prototype) → 310 (Copy) → 330 (Figma) → 400 (Backlog)
 ```
 
-**After** (10 steps):
+**After** (discovery + internal review in 315 + copy as 319):
 ```
-120 (PMF) → HITL → 200 (PRD) → **315 (Discovery)** → 320 (Prototype) → 310 (Copy) → 330 (Figma) → 400 (Backlog)
+120 (PMF) → HITL → 200 (PRD) → **315 (Discovery & design review)** → 320 (Prototype) → 319 (Copy) → 330 (Figma) → 400 (Backlog)
 ```
 
 ### What 315 Does
@@ -83,7 +85,7 @@ A new **"Prototype Discovery & Design"** phase (agent 315) that grounds prototyp
    - Functionality scope (what to build)
    - Functional requirements (constraints from business logic)
    - Design rationale (Six Hats synthesis)
-7. **Hands off to 320** with clear implementation guidance
+7. **Ends with Final Verdict**; **hands off to 320** only when **APPROVED**
 
 ### What 320 Receives
 
@@ -163,9 +165,9 @@ When running GCC E2E pipeline next time, the orchestrator will:
 1. Invoke 120 (PMF analysis)
 2. HITL (user selects recommendation)
 3. Invoke 200 (PRD)
-4. **Invoke 315 (NEW - Discovery & Design)**
-5. Invoke 320 (Prototype using Discovery Brief)
-6. Continue through 310, 330, 400
+4. **Invoke 315 (Discovery & Design — multi-pass brief + Final Verdict)**
+5. Invoke 320 (Prototype using **APPROVED** Discovery Brief)
+6. Continue through 319 (copy), 330, 400
 
 User will see Discovery Brief created at `design/[feature]-discovery-brief.md` before prototype is built.
 
@@ -193,7 +195,7 @@ User will see Discovery Brief created at `design/[feature]-discovery-brief.md` b
 - 315 produces Discovery Brief
 - 320 receives and uses Discovery Brief
 - Resulting prototype is grounded in Workday workflow
-- Pipeline continues: 310 (copy) → 330 (Figma) → 400 (backlog)
+- Pipeline continues: 319 (copy) → 330 (Figma) → 400 (backlog)
 
 ---
 
@@ -236,7 +238,7 @@ Discovery before delivery (Dual-Track Agile, Continuous Discovery).
 ## Recommendations Implemented
 
 ### 1. ✅ Agent numbering: 315
-Placed between 310 (doc-writer) and 320 (prototype-developer) - logical sequence.
+Numbered **315** for discovery and internal design review before **320** prototype; copy pass is **319** after the prototype.
 
 ### 2. ✅ Six Hats mandatory for GCC E2E
 Always runs all six hats for pipeline work. Can be optional for standalone prototypes.

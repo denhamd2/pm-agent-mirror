@@ -86,11 +86,11 @@ Please select 1, 2, or 3.
 
 **If user selects "1. Extend":**
 - Invoke 200-prd-writer: "Update the WhatsApp PRD to add Phase 2 scope (two-way messaging, document requests). Source: research/GCC/thematic-analysis/2026-03-18-GCC-PMF-Analysis-v2.md + existing docs/prds/gcc-whatsapp-integration-prd.md"
-- Continue pipeline: 320 (prototype Phase 2), 310 (copy review), 330 (Figma capture), 400 (backlog refinement for new stories)
+- Continue pipeline: 320 (prototype Phase 2), 319 (copy review), 330 (Figma capture), 400 (backlog refinement for new stories)
 
 **If user selects "2. Regenerate":**
 - Invoke 200-prd-writer: "Create a v2 PRD for WhatsApp Integration. Source: research/GCC/thematic-analysis/2026-03-18-GCC-PMF-Analysis-v2.md. This is a refresh of the MISSION-007 PRD with updated evidence and metrics."
-- Continue pipeline: 320 (rebuild prototype), 310 (copy review), 330 (Figma capture), 400 (regenerate story map + create new epic)
+- Continue pipeline: 320 (rebuild prototype), 319 (copy review), 330 (Figma capture), 400 (regenerate story map + create new epic)
 
 **If user selects "3. Proceed as-is":**
 - Invoke 200-prd-writer: "Create a PRD for WhatsApp Integration. Source: research/GCC/thematic-analysis/2026-03-18-GCC-PMF-Analysis-v2.md. Part of GCC e2e pipeline MISSION-008."

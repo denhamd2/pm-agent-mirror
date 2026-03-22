@@ -22,11 +22,11 @@ Extract #1 Recommendation
     ↓
 200 PRD Writer → gcc-interview-scheduling-prd.md
     ↓
-420 Prototype Developer → gcc-interview-scheduling.tsx
+320 Prototype Developer → gcc-interview-scheduling.tsx
     ↓
-410 Doc Writer → gcc-interview-scheduling-copy.md
+319 Doc Writer → gcc-interview-scheduling-copy.md
     ↓
-430 UX Designer → Figma Capture
+330 Figma Creator → Figma Capture
 ```
 
 ---

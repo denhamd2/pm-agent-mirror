@@ -9,13 +9,13 @@ Successfully modularized the backlog refinement workflow by splitting the monoli
 ## Files Created
 
 ### 1. `.cursor/rules/410-epic-definition.mdc`
-**Purpose**: Write epics in user story format and create them in Jira
+**Purpose**: Write epics in user story format to **`docs/epics/*-epic-draft.md`** (no Jira)
 
 **Key Capabilities**:
 - Reads PRD to extract feature scope and business value
 - Writes epic in "As a [persona], I want [goal], So that [outcome]" format
-- Creates epic in Jira (HRREC project, Recruiting Purge component)
-- Returns epic URL and key for downstream agents
+- Saves Jira-ready markdown body in the draft for **430** to paste when creating the epic
+- Returns **draft file path** for 420 / 430 (Jira epic is created in **430** after 420 HITL)
 
 **Standalone Usage**: `"Create epic for [PRD/feature]"`
 
@@ -53,8 +53,8 @@ Goal: [Specific measurable outcome]
 ```
 
 **HITL Approval Options**:
-- "Approve - Create all stories in Jira"
-- "Approve VS1 only - Create only VS1 stories"
+- "Approve all - Create Jira epic + all stories (VS1, VS2, VS3)"
+- "Approve VS1 only - Create Jira epic + VS1 stories only"
 - "Request changes - Provide feedback first"
 
 ---
@@ -63,6 +63,7 @@ Goal: [Specific measurable outcome]
 **Purpose**: Write user stories with BDD scenarios and create them in Jira
 
 **Key Capabilities**:
+- **Creates Jira epic** from 410 epic draft after story map approval (Step 1b); then creates stories
 - **Consults Deployment Agent MCP** for Workday-specific context
 - **Searches functional knowledge** for Workday Recruiting workflows
 - Applies SPIDR splitting framework for large stories
@@ -130,9 +131,9 @@ As a [Role], I want to [Action/Goal], so that [Benefit].
 **Change**: Transformed from monolithic specialist to lightweight orchestrator
 
 **New Role**: Orchestrates the three specialized agents:
-1. Invoke 410-epic-definition → returns epic key
+1. Invoke 410-epic-definition → returns **epic draft path** (no Jira)
 2. Invoke 420-story-mapping → presents for HITL approval, returns story map path
-3. Invoke 430-story-writing → creates stories in Jira for approved value slices
+3. Invoke 430-story-writing → creates **Jira epic** from draft, then stories for approved value slices
 
 **Preserved Triggers**: All existing triggers still work:
 - "Backlog refinement for [PRD/feature]"
@@ -203,13 +204,14 @@ User: "Backlog refinement for the GCC Interview Scheduling PRD"
 System Flow:
 1. Master Orchestrator (000) routes to Backlog Refinement (400)
 2. 400 invokes 410-epic-definition
-   → Epic created: HRREC-125
+   → Epic draft saved: `docs/epics/...-epic-draft.md`
 3. 400 invokes 420-story-mapping
    → Story map created with VS1, VS2, VS3
    → HITL approval: PM selects "Approve VS1 only"
 4. 400 invokes 430-story-writing (VS1 filter)
+   → Jira epic created: HRREC-125
    → 5 stories created (HRREC-126 to HRREC-130) with 14 scenarios
-5. 400 reports back: Epic + Story map + Stories created
+5. 400 reports back: Draft + Story map + Jira epic + Stories
 
 Result: Complete backlog ready for sprint planning
 ```
@@ -221,10 +223,10 @@ User: "Create epic for the bulk candidate rejection PRD"
 
 System Flow:
 1. Master Orchestrator (000) routes to Epic Definition (410)
-2. 410 reads PRD, writes epic, creates in Jira
-3. 410 returns: HRREC-131 - Bulk Candidate Rejection
+2. 410 reads PRD, writes epic draft to `docs/epics/`
+3. 410 returns: path to draft (no Jira key yet)
 
-Result: Epic created, ready for story mapping later
+Result: Epic draft ready for story mapping; Jira epic is created in 430 after map approval
 ```
 
 ### Standalone: Story Map Only
@@ -234,7 +236,7 @@ User: "Story map the WhatsApp campaign epic"
 
 System Flow:
 1. Master Orchestrator (000) routes to Story Mapping (420)
-2. 420 reads epic HRREC-132 and PRD
+2. 420 reads epic draft and PRD
 3. 420 creates story map with activities, tasks, value slices
 4. 420 presents for HITL approval
 5. PM approves: "Approve all"
@@ -250,14 +252,14 @@ User: "Write stories for VS1 from the GCC Interview Scheduling story map"
 
 System Flow:
 1. Master Orchestrator (000) routes to Story Writing (430)
-2. 430 reads story map, filters for VS1 stories
+2. 430 reads story map; creates Jira epic from epic draft if needed; filters for VS1 stories
 3. 430 consults Deployment Agent for Workday context
 4. 430 searches functional knowledge for GCC compliance
 5. 430 writes 5 stories with 2-4 BDD scenarios each
-6. 430 creates stories in Jira with dual-field format
-7. 430 returns: 5 stories created (HRREC-126 to HRREC-130)
+6. 430 creates stories in Jira with dual-field format (Epic Link to epic from step 2)
+7. 430 returns: epic HRREC-125 + 5 stories (HRREC-126 to HRREC-130)
 
-Result: VS1 stories in Jira, ready for sprint planning
+Result: Jira epic + VS1 stories, ready for sprint planning
 ```
 
 ---
@@ -340,8 +342,8 @@ Result: VS1 stories in Jira, ready for sprint planning
 
 **410-epic-definition**:
 - ✅ Can be invoked standalone: "Create epic for [PRD]"
-- ✅ Creates Jira epic with user story format
-- ✅ Returns epic URL for downstream use
+- ✅ Writes epic draft with user story format to `docs/epics/`
+- ✅ Returns draft path for downstream use (no Jira from 410)
 
 **420-story-mapping**:
 - ✅ Can be invoked standalone: "Story map the [epic]"
@@ -351,12 +353,13 @@ Result: VS1 stories in Jira, ready for sprint planning
 
 **430-story-writing**:
 - ✅ Can be invoked standalone: "Write stories for [story map]"
+- ✅ Creates Jira epic from epic draft after 420 approval (or reuses legacy epic key on map)
 - ✅ Consults Deployment Agent MCP for Workday context
 - ✅ Searches functional knowledge for relevant workflows
 - ✅ Generates 2-4 scenarios per story
 - ✅ Every Gherkin clause on NEW LINE
 - ✅ Creates Jira stories with dual-field format (Description + Acceptance Criteria table)
-- ✅ Returns created story URLs
+- ✅ Returns epic URL + created story URLs
 
 **400-backlog-refinement**:
 - ✅ Chains 410 → 420 → 430 sequentially
@@ -381,9 +384,9 @@ Result: VS1 stories in Jira, ready for sprint planning
 - Every Gherkin clause on NEW LINE
 
 ### Flexibility
-- Standalone epic creation
+- Standalone epic **draft** (410)
 - Standalone story mapping
-- Standalone story writing
+- Standalone story writing (430 creates epic + stories when needed)
 - Full orchestrated backlog refinement
 - Incremental value slice delivery (VS1, then VS2, then VS3)
 

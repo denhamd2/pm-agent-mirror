@@ -29,6 +29,13 @@ export {
   SANA_CARD_SHADOW_LIFTED,
   SANA_PRIMARY_RAIL_WIDTH_PX,
   SANA_SECONDARY_NAV_WIDTH_PX,
+  SANA_COMM_MESSAGE_RADIUS_PX,
+  SANA_COMM_COMPOSER_RADIUS_PX,
+  SANA_COMM_PANEL_SURFACE,
+  SANA_COMM_RAIL_ACTIVE_BG,
+  SANA_COMM_RAIL_ACTIVE_ICON,
+  SANA_COMM_BUBBLE_BG,
+  SANA_COMM_META_FG,
 } from './sanaShellTheme';
 export {
   CommunicationDock,
@@ -37,3 +44,18 @@ export {
   DEFAULT_COMM_EXPANDED_PX,
   type CommunicationDockProps,
 } from './CommunicationDock';
+export {
+  sanaCommFormControlStyle,
+  sanaCommFormControlFocusStyle,
+  SanaCommMessageBubble,
+  SanaCommComposer,
+} from './SanaCommPanelPatterns';
+export {
+  FormSelect,
+  FormTextInput,
+  FormDateInput,
+  type FormSelectProps,
+  type FormTextInputProps,
+  type FormDateInputProps,
+} from './SharedFormControls';
+export { CanvasKitTest } from './CanvasKitTest';

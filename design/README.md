@@ -2,6 +2,16 @@
 
 This folder contains prototypes, design documentation, and reference materials for Workday Recruiting UI implementations.
 
+## Local prototype entry URLs (dev server)
+
+With **`npm run dev`** (port **5199**):
+
+- **`http://localhost:5199/`** — default shell loads **WhatsApp omnichannel engagement v45**.
+- **`http://localhost:5199/gcc-candidate-grid-v46`** — **Candidate grid redesign v46** (unified modal, hub tabs Requisitions / Candidates / Offers / Analytics).
+- **`http://localhost:5199/gcc-candidate-grid-v46?mode=anonymised`** — same prototype in **anonymised review** mode (Works Council–style masking).
+- Optional query flags (v46): **`empty=1`** (empty grid copy), **`gridError=1`** (grid error banner), **`cvError=1`** (CV error banner in modal). Combine with `&` as needed.
+- Hash fallback: **`http://localhost:5199/#/gcc-candidate-grid-v46`**.
+
 ## Published previews (timestamped URLs)
 
 CI can deploy each build to **GitHub / GHE Pages** under `preview/preview-<UTC>-<run_id>/`. Setup and URL rules: **[docs/gh-pages-preview.md](../docs/gh-pages-preview.md)**.
@@ -14,9 +24,9 @@ This Figma file contains the approved design system, UI patterns, and component 
 
 ### Capture this prototype to Figma (html-to-design MCP)
 
-1. **Dev server** — from this folder run `npm run dev`. Vite is pinned to **`http://localhost:5199/`** (`strictPort: true` in `vite.config.ts`) so capture hash URLs always match the running app. On listen, the dev server **opens that URL in Google Chrome (new window) and Cursor’s Simple Browser** (see repo `scripts/open-url-chrome-and-cursor-browser.sh`). To skip: `VITE_NO_OPEN_BROWSERS=1 npm run dev`.
+1. **Dev server** — from this folder run `npm run dev`. Vite is pinned to **`http://localhost:5199/`** (`strictPort: true` in `vite.config.ts`) so capture hash URLs always match the running app. On listen, the dev server **opens that URL in Google Chrome (new window) and Cursor’s Simple Browser** (see repo `scripts/open-url-chrome-and-cursor-browser.sh`). To skip: `VITE_NO_OPEN_BROWSERS=1 npm run dev`. If the server was **already running** when you opened the project (no fresh `listening` event), run **`npm run open:browsers`** from this folder to open both again.
 2. **Figma `capture.js`** — On load, the script runs **`Kt()`**, which **reads `#figmacapture` from the URL** and starts its own automatic multi-capture flow. **`main.tsx` removes figma hash params synchronously** (before the script runs), then calls **`window.figma.captureForDesign({ captureId, endpoint, selector, delayMs })` exactly once** so only one submission runs per `captureId`. Non-figma hash keys (e.g. **`country=`**) are preserved. Default **`figmadelay` is 6000ms** when omitted. Default **`figmaselector`** is **`#figma-capture-root`**. After load, the address bar **no longer shows** `figmacapture` / `figmaendpoint` — that is expected. If the Figma file is **blank**, raise **`figmadelay`** (e.g. **`10000`**) and use a **new** `captureId` from MCP.
-3. **Agent flow** — call Figma MCP `generate_figma_design` (new file or existing file), then open the returned **localhost:5199** URL including the `#figmacapture=…&figmaendpoint=…` fragment in your browser (macOS: `open "http://localhost:5199/#figmacapture=…"`).
+3. **Agent flow (Figma MCP only)** — Call **official Figma MCP** `generate_figma_design` (new file or existing file). Open the returned **`http://localhost:5199/#figmacapture=…&figmaendpoint=…`** URL **once** in a browser (e.g. macOS `open "http://localhost:5199/#figmacapture=…"`). Do not rely on any in-app paste UI — capture is driven entirely by **MCP + URL + `main.tsx`**. Poll MCP with the **`captureId`** until status is **`completed`**.
 4. If port **5199** is already taken, stop the other process or temporarily change `vite.config.ts` and use the same port in the capture URL.
 
 #### Fresh Figma file every run (no clipboard, no paste)
@@ -149,7 +159,7 @@ Use for: Dashboard, list views, detail pages
 **Key Components**:
 - Persistent top navigation
 - React Router or state-based routing
-- Page **`Heading`** and hub / object **`Tabs`** for context (omit breadcrumb strips unless a PRD explicitly requires them)
+- Page **`Heading`** and hub / object **`Tabs`** for context — **do not** add Canvas Kit **`Breadcrumbs`** or chevron **path strips** anywhere under `design/` (workspace rule; PRDs cannot override)
 - URL-based navigation
 
 **Example**: Recruiter Hub (Dashboard → Candidates → Candidate Detail)
@@ -165,14 +175,14 @@ Use for: Simple forms, single actions, focused tasks
 ```
 design/
 ├── README.md                        # This file
-├── components/                      # Shared shell: WorkdayTopNav, WorkdayLeftTabBar, CommunicationDock, sanaShellTheme
+├── components/                      # Shared shell: WorkdayTopNav, WorkdayLeftTabBar, CommunicationDock, SanaCommPanelPatterns, sanaShellTheme
 ├── workday-design-tokens.md         # Extracted Figma tokens
 ├── [feature]-prototype.tsx          # Prototype implementations
 ├── [feature]-implementation.md      # Implementation docs
 └── node_modules/                    # Dependencies (gitignored)
 ```
 
-**Shared Sana shell (full-page Recruiting prototypes):** import **`WorkdayTopNav`** and **`WorkdayLeftTabBar`** from `./components`, set the page background to **`SANA_PAGE_CANVAS`**, and follow **`010-style-guide.mdc`** and **`design/references/sana/`**.
+**Shared Sana shell (full-page Recruiting prototypes):** import **`WorkdayTopNav`** and **`WorkdayLeftTabBar`** from `./components`, set the page background to **`SANA_PAGE_CANVAS`**, and follow **`010-style-guide.mdc`** and **`design/references/sana/`**. For **communication sliding panels** (Email, SMS, Notes, LINE, WhatsApp), use **`SanaCommComposer`**, **`SanaCommMessageBubble`**, **`sanaCommFormControlStyle`**, and **`communicationRailButtonStyle`** per **`Sana_Style_UI-candidate-profile-whatsapp-panel.png`**.
 
 ## Building a Prototype
 
@@ -200,10 +210,10 @@ Determine if prototype needs:
 
 ### 4. Implement with Canvas Kit
 
-Use Canvas Kit v11 components:
+Use Canvas Kit **v14.2.37** components (see [`CANVAS-KIT-VERSION.md`](./CANVAS-KIT-VERSION.md)):
 - Layout: `Box`, `Flex`, `Card`
 - Buttons: `PrimaryButton`, `SecondaryButton`, `TertiaryButton`
-- Inputs: `TextInput`, `Select`, `Radio`, `Checkbox`
+- Inputs: `TextInput`, `Select`, `FormField` + `FormField.Label` + `FormField.Input`, `Radio`, `Checkbox`
 - Navigation: `Tabs`
 - Text: `Heading`, `BodyText`
 - Icons: `SystemIcon`
@@ -290,7 +300,8 @@ Save to `[feature]-implementation.md` with:
 
 ## Resources
 
-- [Canvas Kit v11 Documentation](https://workday.github.io/canvas-kit/) (via Canvas Kit MCP)
+- [Canvas Kit Storybook](https://workday.github.io/canvas-kit/) (cross-check with **v14** MCP resources)
+- [Canvas Kit version pin](./CANVAS-KIT-VERSION.md)
 - [Workday Design Tokens](./workday-design-tokens.md)
 - [Figma Source File](https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/)
 - [320-prototype-developer Rule](../.cursor/rules/320-prototype-developer.mdc)

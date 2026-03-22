@@ -3,7 +3,7 @@
 **Source:** `design/gcc-whatsapp-campaign.tsx`  
 **Context:** MISSION-009 – GCC E2E Pipeline  
 **Reviewed:** 18 March 2026  
-**Reviewer:** 310-doc-writer (Editorial Guidelines)
+**Reviewer:** 319-doc-writer (Editorial Guidelines)
 
 ---
 
@@ -204,7 +204,7 @@ The following copy should be validated by **060-legal-advisor** before finalisin
 - [ ] Accuracy: no misleading statements
 - [ ] GCC-specific: PDPL (UAE, Saudi), PDPA alignment
 
-### Preliminary Legal Assessment (310; 060 should confirm)
+### Preliminary Legal Assessment (319; 060 should confirm)
 
 Based on 060-legal-advisor's documented expertise:
 
