@@ -1,5 +1,5 @@
 ---
-description: Applies Braun & Clarke (2006) 6-phase thematic analysis to qualitative PMF data across countries. Supports country-based structure, triangulation, slide deck generation, and deep research for PESTEL/Competitive Landscape.
+description: Applies Braun & Clarke (2006) 6-phase thematic analysis to qualitative PMF data across countries. Supports country-based structure, triangulation, and deep research for PESTEL/Competitive Landscape. Full PMF roadmap decks are built by 130 after this report is final.
 globs:
   - "research/**/*.txt"
   - "research/**/*.csv"
@@ -18,6 +18,10 @@ research/
 │   ├── raw-data/                      # Opportunity Detail.csv, Idea Responses.csv
 │   ├── internal-sme-transcripts/      # .txt files from internal SME interviews
 │   ├── customer-transcripts/          # .txt files from customer interviews
+│   ├── brainstorm-sessions/           # .txt / .csv / .xlsx / .xls — optional input to **106-brainstorm-analyser.mdc**
+│   ├── win-loss-interviews/           # .txt / .csv / .xlsx / .xls — optional input to **107-win-loss-analyser.mdc**
+│   ├── brainstorm-analysis/           # **106** output (dated markdown)
+│   ├── win-loss-analysis/             # **107** output (dated markdown)
 │   └── thematic-analysis/             # Generated report.md files
 ├── raw-data/                          # Legacy: global CSV data (filter by region in Phase 0)
 └── filter_region.py                   # Helper script for geographic filtering
@@ -55,11 +59,14 @@ Execute all phases sequentially for the specified folder (e.g., `research/Japan/
 2. **Read all .txt transcripts** in `research/[Country]/customer-transcripts/`
 3. **Read CSV verbatims** in `research/[Country]/raw-data/` or filtered output from `research/raw-data/`
 4. **Initial Observations:** What are customers saying? What are SMEs saying? Where do they align or diverge?
+5. **Optional — 106 / 107:** If `research/[Country]/brainstorm-analysis/*.md` exists for this pipeline run (orchestrator Step 2.5), **read** the latest file and note internal hypotheses and themes. If `research/[Country]/win-loss-analysis/*.md` exists (orchestrator Step 2.75), **read** the latest file and note win-loss themes and buying criteria. **Do not** treat these as substitutes for re-reading customer transcripts and SME files; they are **additional** lenses for triangulation.
+
+**105-user-research-findings.md (GCC E2E):** **000-master-orchestrator** runs **105** as **Step 2a** **before** **120**. By the time **120** starts, `research/[Country]/105-user-research-findings.md` should already exist with **## Fresh pass attestation** per **105-user-researcher.mdc**. **120** Phase 1 must **still re-read** the underlying `customer-transcripts/` and SME files (and CSVs); **120** must **not** skip transcript ingestion by relying only on the **105** markdown summary.
 
 **Anonymization (MANDATORY):**
 - **Customer interview participants:** Always anonymize names as P1, P2, P3, etc.
 - **Preserve:** Company name and job title (e.g., "P1 - Senior Recruiter, Accenture")
-- **Apply throughout:** Reports, slide decks, triangulation matrices, quotes, and all documentation
+- **Apply throughout:** Reports, triangulation matrices, quotes, and all documentation (and any downstream **130** deck content sourced from the report)
 - **Format:** "P1 (Company)" or "P1 - Job Title, Company"
 
 **Output:** Deep familiarity with the complete dataset for the country.
@@ -74,6 +81,7 @@ Execute all phases sequentially for the specified folder (e.g., `research/Japan/
 - **Shorthand format**: Use PM-friendly codes (e.g., "UI-Complexity", "Board-Integration-Gap")
 - **Semantic coding**: Focus on meaning, not just keywords
 - **Source-tagged**: Tag each code with source type [SME], [Customer], [CSV]
+- **When 106 / 107 reports exist:** Also tag codes that are **supported or contradicted** by **106** (Internal Team) or **107** (Win-Loss) as **[Brainstorm]** or **[WinLoss]** **in addition** to primary transcript tags where evidence warrants (e.g. a customer quote plus a matching win-loss theme)
 
 **Output:** List of 30-100+ shorthand codes, frequency count, source tags, example quotes.
 
@@ -91,16 +99,29 @@ Execute all phases sequentially for the specified folder (e.g., `research/Japan/
 
 ### Phase 4: Reviewing Themes (Triangulation)
 
-**Objective:** Validate themes and cross-reference between SME and Customer perspectives.
+**Objective:** Validate themes and cross-reference between SME, Customer, and (when present) Internal Team (106) and Win-Loss (107) perspectives.
 
 **Two-Level Review:**
 - **Level 1:** Internal coherence of codes within themes
-- **Level 2:** Triangulation — SME Perspective vs Customer Perspective; Convergence vs Divergence
+- **Level 2:** Triangulation — available perspectives; Convergence vs Divergence
 
-**Triangulation Matrix (per theme):**
+**Triangulation matrix (choose the row shape that matches available inputs):**
+
+- **Baseline (SME + Customer only):**
 | Theme | SME View | Customer View | Convergence | Divergence | PMF Impact |
 
-**Output:** Refined thematic map (3-6 robust themes), triangulation matrix.
+- **With 106 only (add Internal Team column):**
+| Theme | SME View | Customer View | Internal Team (106) | Convergence | Divergence | PMF Impact |
+
+- **With 107 only (add Win-Loss column):**
+| Theme | SME View | Customer View | Win-Loss (107) | Convergence | Divergence | PMF Impact |
+
+- **With 106 and 107 (four evidence columns):**
+| Theme | SME View | Customer View | Internal Team (106) | Win-Loss (107) | Convergence | Divergence | PMF Impact |
+
+**Convergence note:** When four columns are present, call out **4/4**, **3/4**, or **2/4** agreement in the **Convergence** cell where it strengthens or weakens confidence.
+
+**Output:** Refined thematic map (3-6 robust themes), triangulation matrix (adaptive format).
 
 ---
 
@@ -108,7 +129,7 @@ Execute all phases sequentially for the specified folder (e.g., `research/Japan/
 
 **Objective:** Clearly articulate what each theme means for PMF.
 
-**For Each Theme, Define:** Theme Name, Description, PMF Implication, Evidence Strength, Triangulation Status (Converged / Diverged / SME-only / Customer-only).
+**For Each Theme, Define:** Theme Name, Description, PMF Implication, Evidence Strength, Triangulation Status (Converged / Diverged / SME-only / Customer-only / **multi-source** — when 106 or 107 present, note **Internal-only**, **Win-Loss-only**, or **N-way align** as appropriate).
 
 **Output:** Fully defined themes with PMF implications.
 
@@ -119,6 +140,42 @@ Execute all phases sequentially for the specified folder (e.g., `research/Japan/
 **Objective:** Create a comprehensive, actionable PMF analysis report.
 
 **Report Structure:** Executive Summary, Methodology, Triangulation Matrix, Theme write-ups (Description, Triangulation Analysis, Evidence, High-Intensity Quotes, Supporting Codes, PMF Impact, Product Roadmap Impact), Cross-Theme Insights, Product Roadmap Impact Summary, Appendix.
+
+**GCC E2E — `## 105 inputs (this run)` (mandatory when orchestrator Step 2a ran):** After Methodology (or immediately after Executive Summary), add a short section linking to `research/[Country]/105-user-research-findings.md`, quoting the **Mission ID** from that file's attestation, and confirming that Phase 1 re-read the listed transcript paths (not only the **105** doc). If **105** attestation is missing, **stop** and return to orchestrator — do not ship the PMF report without **105** Step 2a complete.
+
+**GCC E2E — `## 101 inputs (Step 1)` (when Step 1 competitive scan was performed):** If a `research/competitive/gcc/gcc-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md` file exists matching this mission ID, include a section after `## 105 inputs (this run)`:
+
+```markdown
+## 101 Competitive Intelligence inputs (Step 1)
+
+**Matrix**: `research/competitive/matrices/gcc-competitive-matrix.md` (changelog entry [date])
+**Point-in-time report**: `research/competitive/gcc/gcc-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md`
+
+The Competitive Landscape section below is sourced from 101's research (Step 1 of GCC E2E pipeline). Key findings:
+- [1-2 bullet summary from 101 report Executive Summary]
+```
+
+This confirms for readers that 120 used 101's findings rather than performing duplicate research.
+
+**GCC E2E — `## 106 inputs (Step 2.5)` (when brainstorm analysis ran):** If orchestrator Step 2.5 produced `research/[Country]/brainstorm-analysis/[YYYY-MM-DD]-brainstorm-analysis.md` for this mission, add after the **101** section (or after **105** if no 101 section applies):
+
+```markdown
+## 106 Brainstorm inputs (Step 2.5)
+
+**Report:** [path to brainstorm-analysis markdown]
+
+Internal team hypotheses and themes below are triangulated in the matrix; they are **not** customer ground truth until validated by **105** evidence.
+```
+
+**GCC E2E — `## 107 inputs (Step 2.75)` (when win-loss analysis ran):** If orchestrator Step 2.75 produced `research/[Country]/win-loss-analysis/[YYYY-MM-DD]-win-loss-analysis.md` for this mission, add:
+
+```markdown
+## 107 Win-Loss inputs (Step 2.75)
+
+**Report:** [path to win-loss-analysis markdown]
+
+Win-loss themes are **buyer-reported**; competitive claims require **101** / Deployment Agent validation for Native / Workaround / True Gap.
+```
 
 **E2E Handoff (when part of GCC e2e pipeline):** When invoked for "GCC e2e" or "GCC pipeline", append to the report and include in your output a numbered table of ALL recommendations from Product Roadmap Impact Summary (Priority 1 and Priority 2):
 
@@ -132,158 +189,30 @@ Execute all phases sequentially for the specified folder (e.g., `research/Japan/
 | 3 | [From Priority 2, item 1] | [Full action text] |
 | 4 | [From Priority 2, item 2] | [Full action text] |
 | 5 | [From Priority 2, item 3] | [Full action text] |
-
-**Default:** If PM does not select, proceed with #1.
 ```
 
-This enables the orchestrator to present all recommendations to the PM for human-in-the-loop selection before **101** (scoped competitive intelligence) and **200** (PRD creation).
+**HITL:** The **000-master-orchestrator** blocks the pipeline until the PM explicitly selects a recommendation — **no default** (do not assume #1 or any row if the PM has not chosen).
 
-**E2E note:** Downstream **101-competitive-intelligence** (orchestrator Step 5, after HITL) deepens **ATS/regional parity** into `research/competitive/matrices/gcc-competitive-matrix.md` and a PRD-ready `research/competitive/gcc/e2e-ci-brief-*.md`; **120** remains the qualitative PMF + slide deck source.
+This enables the orchestrator to present all recommendations to the PM for human-in-the-loop selection before **200** (PRD creation).
+
+**E2E note:** The **130-pmf-slide-generator** builds the roadmap **.pptx** from this report (orchestrator chains **120 → 130** before HITL when a deck is required).
 
 **Report Naming:** Save to `research/[Country]/thematic-analysis/[YYYY-MM-DD]-[Country]-PMF-Analysis.md`
 
 ---
 
-### Phase 6b: Slide Deck Generation (Primary Output)
+### Handoff to 130: PMF roadmap deck (after report)
 
-**Objective:** Generate a branded Workday slide deck using the Slide Deck MCP (`user-slide-deck-mcp`).
+**120** does **not** call Slide Deck MCP or author `slides_spec_vN.json`. After Phase 6 report is saved, the **Master Orchestrator** (GCC E2E, full PMF deliverable) or the user invokes **130-pmf-slide-generator.mdc** to produce the v30-parity PowerPoint.
 
-**Canonical baseline (repo):** Before drafting `slides_spec.json` or `slides_spec_vN.json`, read **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`** for mandatory **section order**, **36–50 slide** guardrails, and layout expectations. For a fast skeleton, copy the **structure** (section dividers, slide sequence, `layout_name` pattern) from the latest **`slides_spec_v*.json`** in the project root, then replace all content from the current PMF report—do **not** ship fewer than **36 slides** or omit standard sections unless the PM explicitly requests a **focus deck**.
+**Pass to 130:**
+- Path to the finalized report: `research/[Country]/thematic-analysis/[YYYY-MM-DD]-[Country]-PMF-Analysis.md`
+- Optional: `research/[Country]/105-user-research-findings.md` if interview tables are maintained separately — must comply with **105** fresh-pass rules when regenerated in the same pipeline run as **120**
+- **[Country]** / region string for title and filename (`[Country]_Recruiting_PMF_Roadmap_vN.pptx`)
 
-**MCP Workflow:**
-1. Call `parse_template` for template_path
-2. Write slide spec JSON to `slides_spec.json` (or `slides_spec_vN.json`) at project root
-3. Call `create_presentation` or run `generate_presentation.py`
-4. Output to `~/Downloads/[Country]_Recruiting_PMF_Roadmap_vN.pptx` — version auto-increments on each generation (v1, v2, v3…)
+**130 outputs:** `slides_spec_vN.json` at project root; `~/Downloads/[Country]_Recruiting_PMF_Roadmap_vN.pptx`. Full deck structure, typography, checklist, and MCP steps live in **`130-pmf-slide-generator.mdc`**.
 
-**Slide spec schema (mandatory — matches `user-slide-deck-mcp` `create_presentation`):**
-- Use **`layout_name`** on every slide (e.g. `"TITLE"`, `"Title Only"`, `"Title Only_Alt"`, `"Section Title"`, `"1/2 Headline_Alt"`, `"Bumper Slide"`). Do **not** use a top-level `"layout"` key; the engine ignores it and may render every slide as a title slide.
-- **`placeholders`** must map indices to objects: `"0": {"text": "Title"}`. Never use `"0": "plain string"`.
-- **Section Title** has no title placeholder; use two **`text_boxes`**: heading at `(3.3, 1.5)` 24pt bold `ink`, subtitle at `(3.3, 3.8)` 11pt `laptop` (see working `slides_spec.json` in repo).
-
-**Deck Structure (target length 36-50 slides, McKinsey-style tone):**
-
-**MANDATORY: Every new versioned deck (v41, v42, v45, etc.) MUST include ALL sections below unless user explicitly requests a "focus deck."**
-
-1. **Title + Executive Summary** (2 slides)
-   - Title: [Region] Recruiting Product-Market Fit Research
-   - Executive Summary: Key themes, PESTEL headlines, E2E handoff summary
-
-2. **SECTION: Research Challenge** (3 slides with section divider)
-   - Section Title: "Research Challenge | Objectives and methodology"
-   - Research Question & Objectives
-   - 5-Phase Framework (Braun & Clarke phases 0-6)
-
-3. **SECTION: Context Review** (2+ slides with section divider)
-   - Section Title: "Context Review | Strategic context and market momentum"
-   - Strategic Context (market size, growth, digital transformation)
-
-4. **SECTION: PESTEL Analysis** (7 slides with section divider)
-   - Section Title: "PESTEL Analysis | Political, Economic, Social, Technological, Environmental, Legal"
-   - Political (full slide with nationalization mandates, penalties)
-   - Economic (full slide with market data, CAGR, investment trends)
-   - Social (full slide with communication channel stats, smartphone penetration, cultural factors)
-   - Technological (full slide with AI, government portals, integrations)
-   - Environmental (full slide, DATA GAP if no recruiting signal)
-   - Legal (full slide with PDPL, interview regulations, compliance requirements)
-
-5. **SECTION: Competitive Landscape** (2 slides with section divider)
-   - Section Title: "Competitive Landscape | Regional specialists vs global platforms"
-   - Competitive Landscape (global enterprise vs regional specialists breakdown)
-
-6. **SECTION: Win/Loss Overview** (2 slides with section divider)
-   - Section Title: "Win/Loss Overview | [Region]-explicit gaps"
-   - GCC-Relevant Win/Loss Gaps (table with Gap ID, Pain Point, Severity)
-
-7. **SECTION: Primary Research** (5+ slides with section divider)
-   - Section Title: "Primary Research | Interview participants"
-   - Interview Participants (P1, P2, P3 with roles and companies)
-   - P1 - [Company]: Key Themes (detailed bullets with quotes)
-   - P2 - [Company]: Key Themes (detailed bullets with quotes)
-   - P3 - [Company]: Key Themes (detailed bullets with quotes)
-
-8. **SECTION: Thematic Analysis** (4+ slides with section divider)
-   - Section Title: "Thematic Analysis | Validated themes and triangulation"
-   - Validated Themes 1-3 (or 1-4 if >6 themes)
-   - Validated Themes 4-6 (or 5-7 if >7 themes)
-   - Cross-Source Validation Matrix (triangulation table: Theme | P1 | P2 | P3 | CSV | PMF Impact)
-
-9. **SECTION: Roadmap Recommendations** (8+ slides with section divider)
-   - Section Title: "Roadmap Recommendations | Priority 1 and Priority 2"
-   - Recommendation 1: [Title] (5-part: Problem, Evidence, Recommendation, Why now, Success Metrics)
-   - Recommendation 2: [Title]
-   - Recommendation 3: [Title]
-   - Recommendation 4: [Title]
-   - Recommendation 5: [Title]
-   - Recommendation 6: [Title] (if applicable)
-   - E2E Handoff: N Recommendations for PM Selection (numbered table slide)
-
-10. **Bumper Slide**
-
-**Canonical baseline enforcement:** `slides_spec.json` MUST contain the full 36-50 slide structure above as the working baseline. When generating versioned decks (v41+), the agent MUST:
-1. Start from `slides_spec.json` structure
-2. Populate with fresh analysis content from the report
-3. Add any version-specific deep-dive slides AFTER the standard sections
-4. Never skip or compress standard sections unless user says "focus deck only"
-
-**Compressed decks are forbidden by default.** If a versioned deck has <36 slides or is missing PESTEL/Win/Loss/Interview sections, it violates the standard.
-
-**Participant Anonymization:**
-- Customer interview participants: List as "P1 - Job Title, Company" (e.g., "P1 - Senior Recruiter, Accenture")
-- Apply consistently on Interview Participants slide, customer detail slides, triangulation matrices, and all quotes
-
-**Recommendation Slide Structure (5-part):** Problem | Evidence | Recommendation | Why now | Success Metrics
-
-**Before finalizing Roadmap Recommendations (Section 06)**: Invoke **060-legal-advisor** to review recommendations for legal/compliance implications (GDPR, AI Act, local regulations). Legal Advisor validates "Why now" and "Recommendation" for compliance. Address any flags before generating deck.
-
-**Speaker Notes (MANDATORY for content slides):**
-- Add `speaker_notes` to every content slide except TITLE, Section Title, Bumper Slide
-- Format: Bullet-pointed presenter guidance, then "References:" with live, working URLs
-- Include references for all sources used (Mondaq, Astute Analytica, Braun & Clarke, etc.)
-
-**Product Implication (PESTEL slides):**
-- Each PESTEL slide ends with "Product implication:" — bold, same font size as bullets, yellow highlight. The generate_presentation pipeline applies this automatically.
-
-**Chart requirements:**
-
-- **One label per bar:** Use exactly one series for simple bar charts (e.g. Win/Loss Top 10) so each category gets one bar and one Y-axis label. For stacked bars (e.g. Ideation Hub), use `bar_stacked` — each category gets one stacked bar.
-- **Font sizes:** Always include `category_axis_font_size_pt: 9`, `value_axis_font_size_pt: 9`, `title_font_size_pt: 10` to keep chart text readable.
-
-**Table requirements:**
-- **Font size:** Use 7-9pt for table content (7pt for dense content like SWOT analysis)
-- **Headers:** Navy background (`ink`) with white text (`paper`)
-- **Header height:** Use `header_height_inches: 0.25` for compact headers
-- **SWOT Analysis:** Use two separate tables (one for Strengths/Weaknesses at `top_inches: 1.0`, one for Opportunities/Threats at `top_inches: 3.15`) to ensure all headers have proper formatting
-- **Height:** Use `height_inches: 2.1` per table for SWOT analysis to fit content properly
-- **Example SWOT configuration:**
-```json
-"tables": [
-  {
-    "rows": [["Strengths", "Weaknesses"], ["...", "..."]],
-    "top_inches": 1.0,
-    "height_inches": 2.1,
-    "font_size_pt": 7,
-    "header_row": true,
-    "header_bg_color": "ink",
-    "header_font_color": "paper",
-    "header_height_inches": 0.25
-  },
-  {
-    "rows": [["Opportunities", "Threats"], ["...", "..."]],
-    "top_inches": 3.15,
-    "height_inches": 2.1,
-    "font_size_pt": 7,
-    "header_row": true,
-    "header_bg_color": "ink",
-    "header_font_color": "paper",
-    "header_height_inches": 0.25
-  }
-]
-```
-
-**Content positioning:**
-- Body text: `top_inches: 1.2` (not 1.6) to avoid excess vertical gap between title and content
-- Tables: Start at `top_inches: 0.95` or `1.0` for maximum space utilization
+**Before finalising Roadmap Recommendations in the report:** Invoke **060-legal-advisor** to review recommendations for legal/compliance implications (GDPR, AI Act, local regulations). Address any flags **in the markdown** before handoff to **130** (slides will mirror report wording).
 
 ---
 
@@ -306,7 +235,9 @@ This enables the orchestrator to present all recommendations to the PM for human
 - **Market & Key Stats:** `[Country] recruiting HR tech market 2025 2026`, `[Country] smartphone penetration Statista`, `[Country] AI adoption HR`
 - **Coverage:** Political, Economic, Social (communication channel preferences with stats), Technological, Environmental (DATA GAP if none), Legal (cite authoritative sources)
 
-**Competitive Landscape (deep research):** `[Country] ATS competitors Workday SAP Oracle`, `[Country] recruiting software local vendors`, `[Country] HR tech market share` — categorize Global enterprise, Regional specialists, Local players. Seek market share data (e.g., Fosway, Gartner) and vendor-specific strengths.
+**Competitive Landscape:**
+- **GCC E2E pipeline (when 101 Step 1 output exists)**: Read `research/competitive/matrices/gcc-competitive-matrix.md` (check changelog for this mission's entry) and `research/competitive/gcc/gcc-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md`. Use **101's** findings for Competitive Landscape section. Do NOT perform separate web research for competitors. Cite 101 outputs (matrix sections, report pages).
+- **Standalone 120 invocations (no prior 101)**: Perform deep research as before: `[Country] ATS competitors Workday SAP Oracle`, `[Country] recruiting software local vendors`, `[Country] HR tech market share` — categorize Global enterprise, Regional specialists, Local players. Seek market share data (e.g., Fosway, Gartner) and vendor-specific strengths.
 
 ---
 
@@ -324,10 +255,12 @@ When analyzing **GCC** (Gulf Cooperation Council: Saudi Arabia, UAE, Qatar, Kuwa
 - **Environmental:** Often DATA GAP for recruiting; `UAE Net Zero 2050 Saudi 2060`, `GCC ESG workforce reporting` if relevant
 - **Legal:** `Saudi PDPL 2023`, `UAE PDPA 2022`, `KSA interview regulations May 2025`, `Mondaq Saudi employment`, `3-day notice 50% Saudi panel`
 
-**Competitive Landscape — GCC vendors to research:**
-- **Regional specialists:** Talentera (Bayt.com), ZenHR (ZenATS), Darwinbox
-- **Global platforms:** Workday, SAP SuccessFactors, Oracle HCM/Taleo
-- **Search:** `GCC HR tech ZenHR Talentera`, `Saudi UAE ATS market share`, `Fosway talent acquisition GCC EMEA`
+**Competitive Landscape — GCC vendors:**
+- **GCC E2E pipeline**: Read Step 1 outputs (`gcc-competitive-matrix.md` + `gcc-competitive-scan-*.md`). Do not perform additional web searches.
+- **Standalone**: Research these vendors via web search:
+  - **Regional specialists:** Talentera (Bayt.com), ZenHR (ZenATS), Darwinbox
+  - **Global platforms:** Workday, SAP SuccessFactors, Oracle HCM/Taleo
+  - **Search:** `GCC HR tech ZenHR Talentera`, `Saudi UAE ATS market share`, `Fosway talent acquisition GCC EMEA`
 
 **GCC-specific product implications:** Nationalization tracking (Saudization/Emiratization as native dimensions), WhatsApp integration, Arabic RTL (offer letters), government portal integrations (Qiwa, GOSI, Mudad), KSA interview panel compliance (3-day notice, 50% Saudi nationals).
 
@@ -337,6 +270,7 @@ When analyzing **GCC** (Gulf Cooperation Council: Saudi Arabia, UAE, Qatar, Kuwa
 
 ### Always ✅
 - **Anonymize customer names:** Always use P1, P2, P3, etc. for customer interview participants; preserve company name and job title
+- **106 / 107 triangulation:** When `brainstorm-analysis/` or `win-loss-analysis/` outputs exist for the same country and pipeline run, **include** them in Phase 4 matrix columns and Phase 6 input sections; label internal and win-loss evidence clearly
 - **Use deep research** for PESTEL Analysis and Competitive Landscape: iterative, multi-round web searches; use `mcp_task` generalPurpose subagent for exhaustive research; do not use training data
 - **Seek authoritative sources** for PESTEL: government, legal (Mondaq), industry reports, Statista; include key stats and cite communication channel preferences (WhatsApp, SMS, Line, etc.) with penetration/usage data
 - Filter by region FIRST when using global CSV data (Phase 0)
@@ -344,31 +278,13 @@ When analyzing **GCC** (Gulf Cooperation Council: Saudi Arabia, UAE, Qatar, Kuwa
 - Generate shorthand PM-friendly codes; create triangulation matrix
 - Include high-intensity direct quotes; cite specific sources (transcript names, Gap IDs, Idea IDs)
 - Save markdown report to `research/[Country]/thematic-analysis/`
-- **Generate slide deck** via Slide Deck MCP; output to `~/Downloads/[Country]_Recruiting_PMF_Roadmap_v1.pptx`
-
-### Deck Quality Checklist (MANDATORY before calling `create_presentation`)
-
-Before generating the slide deck, verify the `slides_spec_vN.json` file contains:
-
-- [ ] 36-50+ total slides
-- [ ] 8-9 section dividers with proper "Section Title" layout
-- [ ] PESTEL: 6 individual slides (one per factor)
-- [ ] Interview: 1 participants list + 1 slide per customer (P1, P2, P3)
-- [ ] Themes: Split across 2 slides (1-3, 4-6 or similar)
-- [ ] Triangulation: Cross-Source Validation Matrix table
-- [ ] Recommendations: Individual slides (not compressed bullets)
-- [ ] E2E Handoff: Numbered table slide
-- [ ] Speaker notes on all content slides (except Title, Section Title, Bumper)
-- [ ] Chart font sizes set (category_axis_font_size_pt: 9, value_axis_font_size_pt: 9)
-- [ ] Product implication formatting (PESTEL slides)
-
-**If any checklist item fails, revise `slides_spec_vN.json` before calling `create_presentation`.**
-
+- **Hand off to 130** for the PMF roadmap `.pptx` when a full deck is required (see **Handoff to 130** above)
 
 ### Never ❌
 - Use real customer names (always anonymize as P1, P2, P3, etc.)
 - Skip geographic filtering when data is global
 - Skip any data source
+- Paste or carry forward **105-user-research-findings.md** narrative from a prior run without **105** having re-read raw transcripts per **105-user-researcher.mdc** (GCC E2E / 120 fresh pass)
 - Create themes without triangulation analysis
 - Use vague theme names
 - Cherry-pick quotes
@@ -395,7 +311,7 @@ Adapt paths for country-based: `research/[Country]/raw-data/` or `research/raw-d
 - **100-market-intelligence.mdc:** Qualitative depth to quantitative analysis
 - **200-prd-writer.mdc:** Feed PMF themes into PRD problem statements
 - **400-backlog-refinement.mdc:** Themes become epics; codes become user stories
-- **110-slide-generator.mdc:** PMF workflow auto-generates slide deck per Phase 6b
+- **130-pmf-slide-generator.mdc:** Builds full PMF roadmap deck from this agent's finalized report
 
 ---
 
@@ -403,11 +319,13 @@ Adapt paths for country-based: `research/[Country]/raw-data/` or `research/raw-d
 
 You activate when user says:
 - "Analyze [Country]" (e.g., "Analyze Japan", "Analyze GCC")
-- "Analyze GCC" as part of GCC e2e pipeline (orchestrator passes this context)
+- "Analyze GCC" as part of GCC e2e pipeline (orchestrator runs **120** then **130** for the `.pptx`)
 - "Perform thematic analysis for [Country]"
 - "What are the [Country] PMF gaps?"
 - "Generate PMF report for [Country]"
 - CSV files in `research/raw-data/` or transcripts in `research/**/`
+
+For the **PowerPoint only**, orchestrator or user invokes **130** after your report exists.
 
 ---
 
@@ -424,12 +342,11 @@ You activate when user says:
 6. Phase 5: Define themes with PMF implications
 7. Phase 6: Save report to `research/Japan/thematic-analysis/[date]-Japan-PMF-Analysis.md`
 8. **Deep research** for PESTEL and Competitive Landscape (Japan) — use mcp_task generalPurpose subagent
-9. **Phase 6b:** Generate slide deck; output to `~/Downloads/Japan_Recruiting_PMF_Roadmap_v1.pptx`
-10. Report back: "Japan PMF analysis complete. Markdown: [path]. Slide deck: ~/Downloads/Japan_Recruiting_PMF_Roadmap_v1.pptx"
+9. Report back: "Japan PMF analysis complete. Markdown: [path]. For full PMF roadmap deck, orchestrator or user invokes **130** with this report path → `~/Downloads/Japan_Recruiting_PMF_Roadmap_vN.pptx`."
 
 **User Request:** "Analyze GCC"
 
-**Your Process:** Same phases 0–6b, but use `research/GCC/` and apply **GCC Region — Deep Research Override** for PESTEL and Competitive Landscape. Filter for Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman. Deck outputs to `~/Downloads/GCC_Recruiting_PMF_Roadmap_vN.pptx`.
+**Your Process:** Same phases 0–6, but use `research/GCC/` and apply **GCC Region — Deep Research Override** for PESTEL and Competitive Landscape. If **106** / **107** analysis files exist under `research/GCC/brainstorm-analysis/` and `research/GCC/win-loss-analysis/`, use the **adaptive triangulation matrix** in Phase 4. Filter for Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman. After the report is saved, **130** produces `~/Downloads/GCC_Recruiting_PMF_Roadmap_vN.pptx` (GCC E2E chains **120** then **130**).
 
 ---
 

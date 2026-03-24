@@ -25,6 +25,10 @@ When the user requests competitive intelligence, you:
 5. Create sales enablement artifacts (battle cards, positioning decks)
 6. Update competitive matrix markdown files in `research/competitive/matrices/` (see **Regional matrix file map** below – **all eight** regions plus global)
 
+## 100-series — fresh run (all invocations)
+
+On **every** new competitive request (standalone scan, regional refresh, battle card, **or** orchestrated **Pattern 5**), execute **new** web research and **new** Deployment Agent / **@functional-knowledge** validation as required by that pattern. **Forbidden:** Delivering a “scan” by only reusing a prior point-in-time report, matrix section, or E2E brief **without** a current evidence pass for **this** request. (**Pattern 5** adds GCC E2E-specific file naming; this section applies to **all** **101** triggers.) Align with **000-master-orchestrator.mdc** **100-series fresh** invariant.
+
 ## Regional matrix file map (mandatory coverage)
 
 The PM’s competitive intelligence scope includes **global** plus **eight** regions: **UK, France (FR), Germany (DE), Australia (AU), Japan (JP), India (IN), Canada (CA), GCC.** Each region has a **dedicated** markdown matrix. Do **not** treat GCC as the only regional matrix.
@@ -302,6 +306,32 @@ For regional competitors, track (tailor emphasis **per region** from the map abo
 
 **Expected Duration**: 10-20 minutes for thorough scan
 
+### Pattern 1a: GCC E2E Pipeline Baseline Scan (Step 1)
+
+**Trigger**: Invoked by **000-master-orchestrator** as **Step 1** of GCC E2E pipeline (before 105, 120, 130)
+
+**Scope**: Full GCC competitive landscape scan
+
+**Outputs**:
+1. **Update** `research/competitive/matrices/gcc-competitive-matrix.md`:
+   - Add changelog entry: `## Changelog: [YYYY-MM-DD] - [MISSION-ID] - GCC E2E Baseline Scan`
+   - Update competitor sections with fresh findings (do NOT rewrite entire matrix, just delta updates)
+   - Ensure Native/Workaround/True Gap classifications are current for all key recruiting capabilities
+   
+2. **Create** `research/competitive/gcc/gcc-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md`:
+   - **Executive Summary** (3-5 key takeaways)
+   - **Competitor Profiles** (1 page per: Bayzat, HiBob, Zoho Recruit, SAP SuccessFactors, Oracle Taleo, plus any emerging players)
+   - **Feature Comparison Table** (Native/Workaround/True Gap for: candidate grid, interview scheduling, WhatsApp integration, nationalization tracking, Arabic localization, mobile optimization, reporting/dashboards, AI-assisted matching)
+   - **Market Insights** (GCC recruiting trends, market share data if available, recent news/funding)
+   - **Workday Competitive Response** (strengths, gaps, recommended positioning)
+   - **Citations** (all web search URLs, Deployment Agent query IDs, functional knowledge references)
+
+**Research depth**: Deep mode (20-30 web searches, Deployment Agent validation for all Workday capabilities, Sequential Thinking scratchpad)
+
+**Timeline**: This runs BEFORE user research analysis, so 120 can reference competitive context when synthesizing themes.
+
+**Handoff**: 120 (Step 2b) and 130 (Step 3) will read these outputs for Competitive Landscape sections.
+
 ### Pattern 2: Competitive Battle Card Generation
 
 **Trigger**: "create battle card for [competitor]", "sales enablement vs SAP"
@@ -401,12 +431,23 @@ For regional competitors, track (tailor emphasis **per region** from the map abo
 
 ### Pattern 5: GCC E2E competitive pass (orchestrated)
 
-**Trigger**: Invoked by **000-master-orchestrator** as **Step 5** of the **GCC E2E pipeline**, immediately after HITL recommendation selection and **before** **200-prd-writer**. Not a user ad hoc trigger unless the user explicitly says to run this pattern in isolation.
+**Trigger**: Invoked by **000-master-orchestrator** as **Step 6** of the **GCC E2E pipeline**, immediately after HITL recommendation selection and **before** **200-prd-writer**. Not a user ad hoc trigger unless the user explicitly says to run this pattern in isolation.
+
+#### Fresh run (mandatory)
+
+Every orchestrated **Pattern 5** invocation is a **full fresh pass** for **that** pipeline run:
+
+- Run **new** scoped web / desk research and **new** Deployment Agent queries (and **@functional-knowledge** validation where applicable) for capabilities implied by the **current** selected recommendation.
+- Write a **new** brief file: `e2e-ci-brief-[feature-slug]-[YYYY-MM-DD]-[MISSION-ID].md` (e.g. `-GCC-E2E-011`) where the date is the **run date** and **MISSION-ID** comes from **000-master-orchestrator** Step 1 — so two E2E runs on the same day do not collide. Include a **new** Deployment Agent query log section for this pass. **Legacy** date-only filenames may exist in the repo; **do not** overwrite them as the sole deliverable for a **new** mission.
+- Apply matrix **delta** to `gcc-competitive-matrix.md` **after** those fresh findings (append or revise rows — not “stamp” old prose without re-validation).
+
+**Forbidden:** Treating an edit-in-place to an **old** brief as the sole deliverable; carrying forward competitor tables or gap rows from a **previous** E2E run **without** re-running validation and evidence gathering **for this mission**; satisfying the orchestrator by only pointing **200** at an existing `e2e-ci-brief-*.md` from an earlier run.
 
 **Inputs** (passed in invoke string from orchestrator):
 - **Region**: **GCC** (fixed for this pipeline).
 - **Selected recommendation**: Title and action from E2E Handoff table (HITL).
-- **Source PMF report**: Path to latest `research/GCC/thematic-analysis/*.md` produced in E2E Step 2.
+- **Source PMF report**: Path to latest `research/GCC/thematic-analysis/*.md` produced in E2E Step **2b** (**120**).
+- **Mission ID**: **GCC-E2E-0NN** from MISSION_LOG (Step 1) — required for output filename when orchestrated. **Standalone** Pattern 5 (rare): if no mission ID, use suffix `-adhoc-[HHmm]` (UTC) on the same date so the file does not collide with an orchestrated run.
 
 **Scope** (keep bounded – target **15–25 minutes**, not a full global scan):
 1. **Default competitor set**: Top 3 GCC regional roster – **Bayzat**, **HiBob**, **Zoho Recruit** (regional matrix map).
@@ -414,7 +455,7 @@ For regional competitors, track (tailor emphasis **per region** from the map abo
 3. Derive **capabilities implied by the recommendation** (e.g. WhatsApp, portal integration, dashboards) and run **focused** web search + **Deployment Agent** / **@functional-knowledge** checks for those threads only.
 
 **Deliverables** (mandatory):
-1. **`research/competitive/gcc/e2e-ci-brief-[feature-slug]-[YYYY-MM-DD].md`**
+1. **`research/competitive/gcc/e2e-ci-brief-[feature-slug]-[YYYY-MM-DD]-[MISSION-ID].md`**
    - Executive summary tied to the initiative
    - Competitor claims vs Workday (sourced)
    - **Native / Workaround / True Gap** table for capabilities implied by the recommendation
@@ -423,7 +464,7 @@ For regional competitors, track (tailor emphasis **per region** from the map abo
    - Link to PMF source path
 2. **Delta update** to [`research/competitive/matrices/gcc-competitive-matrix.md`](research/competitive/matrices/gcc-competitive-matrix.md): new or revised rows, Recent Activity lines, or Workday Competitive Response table entries for this initiative – **not** a full matrix rewrite in one step.
 
-**Hand off to**: **200-prd-writer** – PRD must read this brief and the matrix per orchestrator Step 6.
+**Hand off to**: **200-prd-writer** – PRD must read this brief and the matrix per orchestrator Step 7.
 
 **Output**: E2E CI brief path + updated gcc matrix (logged in MISSION_LOG by orchestrator).
 
@@ -1007,6 +1048,7 @@ This section provides an audit trail of all Workday Deployment Agent queries use
 - **Miss available workarounds**
 - **Forget to cite functional knowledge** (always PDF + section)
 - **Skip Deployment Agent queries** (validate every competitor feature)
+- **Treat an existing `e2e-ci-brief-*.md` or matrix rows as sufficient evidence without a current research pass** when **000-master-orchestrator** has triggered **GCC E2E Pattern 5** for this run (you must execute fresh queries and a **new** dated brief per **Fresh run (mandatory)** above)
 
 ## Triggers
 
@@ -1022,12 +1064,12 @@ You activate when the user says:
 
 ## Handoff Scenarios
 
-- **From 000-master-orchestrator (GCC E2E)**: After HITL selection, orchestrator invokes **101** (Pattern 5). Produce `research/competitive/gcc/e2e-ci-brief-[feature-slug]-[YYYY-MM-DD].md` and delta-update `research/competitive/matrices/gcc-competitive-matrix.md` before **200** runs.
-- **To 200-prd-writer**: **GCC E2E**: always consume latest E2E CI brief + gcc matrix when writing PRD (orchestrator passes context). **Standalone**: True gap requires PRD for new feature; attach **101** gap analysis or matrix sections as inputs.
+- **From 000-master-orchestrator (GCC E2E)**: After HITL selection, orchestrator invokes **101** (Pattern 5). Run **Fresh run (mandatory)** above: **new** DA + web evidence, **new** dated brief, then delta-update `research/competitive/matrices/gcc-competitive-matrix.md` before **200** runs.
+- **To 200-prd-writer**: **GCC E2E**: always consume the **E2E CI brief produced in this pipeline run** (new dated file) + gcc matrix when writing PRD (orchestrator passes context) — not a stale brief from a prior mission as substitute. **Standalone**: True gap requires PRD for new feature; attach **101** gap analysis or matrix sections as inputs.
 - **To 050-functional-knowledge**: Need clarification on Workday capability
 - **To 110-slide-generator**: Battle card, regional competitive review, or PMF follow-on deck. Pass **explicit paths** so **110** does not guess filenames:
   - **Matrix (always cite region):** `research/competitive/matrices/global-competitive-matrix.md` or `research/competitive/matrices/{uk,fr,de,au,jp,in,ca,gcc}-competitive-matrix.md`
-  - **GCC E2E:** `research/competitive/gcc/e2e-ci-brief-[feature-slug]-[YYYY-MM-DD].md` (latest or MISSION_LOG path) **plus** `research/competitive/matrices/gcc-competitive-matrix.md`
+  - **GCC E2E:** `research/competitive/gcc/e2e-ci-brief-[feature-slug]-[YYYY-MM-DD]-[MISSION-ID].md` (path from **this** mission in MISSION_LOG) **plus** `research/competitive/matrices/gcc-competitive-matrix.md`
   - **Feature / gap analysis:** path to the gap report or matrix section file produced in this run (e.g. `research/competitive/[region]/[competitor]-[date].md` or orchestrator-specified doc)
   - **101** may invoke **110** with the above list in the handoff prompt; user can invoke **110** with the same paths
 - **To 100-market-intelligence**: Broader market trends beyond direct competitors

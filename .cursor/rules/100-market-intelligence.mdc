@@ -18,6 +18,16 @@ When research files are added to `/research/` or the user mentions "analyze rese
 4. Synthesize findings into actionable insights
 5. Document results in a structured format
 
+## 100-series — fresh run (mandatory)
+
+On **every** new user request or orchestrator invocation of **100**, perform a **full** pass:
+
+- **Re-read** the research files and inputs in scope for **this** run (do not rely on a prior `research/*-analysis-*.md` or pasted summary as a substitute for opening sources again).
+- **Re-run** Six-Hats (and Sequential Thinking when used) for **this** pass; update or create a **new** dated analysis file (e.g. `research/[topic]-analysis-[YYYY-MM-DD].md`) so the output reflects **this** execution.
+- **Forbidden:** Handing off “analysis complete” by only pointing at an older report, Notion page snapshot, or chat summary **without** re-ingesting the underlying research for the current mission.
+
+Notion search is for **context**, not a replacement for re-analysis. Align with **000-master-orchestrator.mdc** **100-series fresh** invariant.
+
 ## MCP Integration
 
 ### Six-Hats Thinking (`user-six-hats-thinking`)

@@ -9,9 +9,9 @@ alwaysApply: false
 
 You are a **Slide Generator Specialist** that creates branded Workday presentations using the Slide Deck MCP. You transform research, PRDs, and strategic documents into compelling slide decks.
 
-## Full PMF roadmap decks – hand off to 120 (do not build here)
+## Full PMF roadmap decks – hand off to 130 (do not build here)
 
-**Not in scope for 110:** A **full country or GCC Recruiting PMF roadmap deck** (`[Country]_Recruiting_PMF_Roadmap_vN.pptx`): **36–50 slides**, full **PESTEL** (six factors), **primary research** (participants + per-customer slides), **thematic analysis**, **roadmap recommendations**, **E2E Handoff** table for pipeline selection. If the user asks for this structure, **"match v30"**, **match PMF roadmap**, or the same layout as **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`**, **stop** and direct them to **120-pmf-thematic-analysis** (Phase 6b) or the **000** orchestrator with PMF/GCC analysis phrasing. **110** covers **short** decks (exec briefing, competitive intelligence readout, PRD summaries, typically **~10–20 slides**).
+**Not in scope for 110:** A **full country or GCC Recruiting PMF roadmap deck** (`[Country]_Recruiting_PMF_Roadmap_vN.pptx`): **36–50 slides**, full **PESTEL** (six factors), **primary research** (participants + per-customer slides), **thematic analysis**, **roadmap recommendations**, **E2E Handoff** table for pipeline selection. If the user asks for this structure, **"match v30"**, **match PMF roadmap**, or the same layout as **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`**, **stop** and direct them to **130-pmf-slide-generator** (after a **120** report) or the **000** orchestrator with PMF/GCC analysis phrasing. **110** covers **short** decks (exec briefing, competitive intelligence readout, PRD summaries, typically **~10–20 slides**).
 
 ## Your Role
 When the user mentions "create slides", "make a presentation", or "deck", you:
@@ -58,10 +58,20 @@ Last slide: Bumper Slide
 - Canvas: 10.0in x 5.63in
 - Title bar: Top ~1.2in
 - Body starts: top_inches 1.2 (content closer to title, avoid excess gap)
-- Font: "Archivo" (Title: 14pt bold, Body: 11-12pt)
+- Font: "Archivo" (layout title placeholder: ~14pt bold per template; **body** bullets: **11pt** default)
 - Colors: `ink`, `ballpoint`, `water_cooler`, `blue_sky`, `pencil`, `paper`, `laptop`, `staple`, `desk`
 - **TEXT COLOR**: Always use `"ink"` (dark navy) - the branded backgrounds are LIGHT, not dark
 - Icons: Always use `center_in_width` matching text column width
+
+**Workday / v30-aligned typography (090 + 130 PMF standard — use for all Slide Deck MCP specs in this workspace; 110 short decks use the same defaults for consistency):**
+
+- **Authoritative detail:** [`docs/decks/gcc-pmf-roadmap-v30-typography.md`](docs/decks/gcc-pmf-roadmap-v30-typography.md) (measured from `GCC_Recruiting_PMF_Roadmap_v30.pptx`). **090** flags drift when decks ignore this; **110** should **default** to these settings so short decks match PMF deck density and hierarchy.
+- **Body text box (Title Only / Title Only_Alt):** `left_inches` **0.7**, `top_inches` **1.2**, `width_inches` **8.6**, `height_inches` **2.8** (raise only for tables/charts or unavoidably dense slides).
+- **Bullets:** Prefer **`text_boxes[].paragraphs`** with **`level`: 1** (native PowerPoint bullets). Avoid a single **`text`** string with Unicode `•` unless the engine path is unavoidable.
+- **In-slide subheads** (e.g. exec summary blocks): **12pt bold** via run dicts inside **`paragraphs`**; supporting lines **level 1**, **11pt**.
+- **Section Title layout:** One **`text_box`** at **(3.3, 1.5)**, **5.6 × 2.2** in, **`paragraphs`**: primary line **12pt bold** (not **24pt**); secondary line **11pt** `laptop`, both **`level`: 0** so the subtitle does not get a bullet (see typography doc). If the MCP **`create_presentation`** descriptor still says **24pt** for Section Title, **ignore it** for this workspace; v30 parity is **12pt**.
+- **PESTEL / Product implication:** **11pt bold** + run-level **`highlight`**: **`FFFF00`** on the implication line; do **not** rely on undocumented auto-highlight of plain `text` strings.
+- **Full PMF roadmap decks** are **130** only (from a finalized **120** report); when **routing** users there, remind them the same typography doc applies.
 
 **Speaker Notes (MANDATORY for content slides):**
 - Add `speaker_notes` to every content slide except TITLE, Section Title, Bumper Slide
@@ -69,7 +79,7 @@ Last slide: Bumper Slide
 - Example: `"speaker_notes": "• Key point.\n\nReferences:\n• Source: https://example.com"`
 
 **Product Implication (PESTEL-style slides):**
-- When content includes "Product implication:" as a final paragraph: bold, same font size as bullets, yellow highlight (FFFF00). The generate_presentation pipeline applies this automatically when the line starts with "Product implication:"
+- **11pt bold** and **yellow highlight `FFFF00`** on the implication line, per **`010-style-guide.mdc`**. Implement with **`paragraphs`** + **list of run dicts** (`bold`, `font_size_pt`: 11, `highlight`: `FFFF00`) — same pattern as [`docs/decks/gcc-pmf-roadmap-v30-typography.md`](docs/decks/gcc-pmf-roadmap-v30-typography.md). Do not assume automatic highlighting on a single plain **`text`** field; the MCP descriptor may not document run-level **`highlight`**, but the engine supports it.
 
 **Chart Rules (MANDATORY):**
 - **One label per bar:** Use exactly one series for simple bar/column charts so each category has one bar and one Y-axis label. For stacked bars, use `bar_stacked` with multiple series — each category still gets one stacked bar.
@@ -174,7 +184,7 @@ Last slide: Bumper Slide
 
 ### Primary Research - User Interviews
 **Purpose**: Present interview findings from user research (typically from 105-user-researcher)
-**Input format** (from calling agent, typically 120):
+**Input format** (from calling agent, e.g. **120** / **105** outputs embedded in PMF narrative):
 - Interview participant list (P1, P2, P3... format with Job Title, Company)
 - Key quotes per participant
 - Thematic findings summary
@@ -193,39 +203,54 @@ Last slide: Bumper Slide
    - Title: "Key Themes from User Research"
    - Content: Bullet list of 3-6 themes with brief descriptions
 
-**Example slide spec snippet:**
+**Example slide spec snippet** (canonical **`create_presentation`** shape; v30-aligned body box):
+
 ```json
 [
   {
+    "master_index": 1,
     "layout_name": "Title Only",
-    "placeholders": [{"index": 0, "text": "Interview Participants"}],
-    "content": [
+    "placeholders": {"0": {"text": "Interview Participants"}},
+    "tables": [
       {
-        "type": "table",
         "rows": [
           ["Participant", "Role", "Company"],
           ["P1", "Senior Recruiter", "Accenture"],
           ["P2", "TA Director", "Baker Hughes"],
           ["P3", "HR Lead", "Shell"]
         ],
+        "left_inches": 0.5,
         "top_inches": 1.2,
-        "font_size_pt": 11
+        "width_inches": 9.0,
+        "height_inches": 2.0,
+        "font_size_pt": 10,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.25
       }
     ]
   },
   {
+    "master_index": 1,
     "layout_name": "Title Only_Alt",
-    "placeholders": [{"index": 0, "text": "P1 - Senior Recruiter, Accenture"}],
-    "content": [
+    "placeholders": {"0": {"text": "P1 - Senior Recruiter, Accenture"}},
+    "text_boxes": [
       {
-        "type": "text",
         "left_inches": 0.7,
         "top_inches": 1.2,
         "width_inches": 8.6,
-        "text": "Role Context:\n• High-volume recruiter, 200+ reqs/quarter across GCC region\n\nKey Quotes:\n• \"We can't post to Bayt.com automatically - costs us 10 hours per week\"\n• \"WhatsApp is the only way candidates respond in Saudi Arabia\"",
+        "height_inches": 2.8,
         "font_name": "Archivo",
-        "font_size": 11,
-        "color": "ink"
+        "font_size_pt": 11,
+        "color": "ink",
+        "paragraphs": [
+          {"level": 0, "text": [{"text": "Role context", "bold": true, "font_size_pt": 12}]},
+          {"level": 0, "text": "High-volume recruiter, 200+ reqs per quarter across GCC."},
+          {"level": 0, "text": [{"text": "Key quotes", "bold": true, "font_size_pt": 12}]},
+          {"level": 1, "text": "We cannot post to Bayt.com automatically; costs us 10 hours per week."},
+          {"level": 1, "text": "WhatsApp is the only way candidates respond in Saudi Arabia."}
+        ]
       }
     ]
   }
@@ -242,7 +267,8 @@ Last slide: Bumper Slide
 |----------|--------------|-------------|
 | Global matrix | `research/competitive/matrices/global-competitive-matrix.md` | Enterprise ATS / global competitive decks |
 | Regional matrix | `research/competitive/matrices/{uk,fr,de,au,jp,in,ca,gcc}-competitive-matrix.md` | Match **region** to topic (UK, France, Germany, Australia, Japan, India, Canada, GCC) |
-| GCC E2E CI brief | `research/competitive/gcc/e2e-ci-brief-[feature-slug]-[YYYY-MM-DD].md` | After **GCC E2E** Step 5 (**101**); or when user names the brief |
+| GCC E2E baseline CI scan | `research/competitive/gcc/gcc-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md` | **GCC E2E** Step 1 (**101** Pattern 1a); use MISSION_LOG path |
+| GCC E2E CI brief (optional) | `research/competitive/gcc/e2e-ci-brief-[feature-slug]-[YYYY-MM-DD]-[MISSION-ID].md` | **Supplementary** Pattern 5 brief when present for the same mission; not required if only Step 1 scan exists |
 | Point-in-time scans | `research/competitive/[region]/[competitor]-[date].md` | Deep-dive competitor slides, battle cards |
 
 **When to apply this section**
@@ -280,81 +306,90 @@ Last slide: Bumper Slide
 
 Use **speaker_notes** on every content slide with **References** pointing to matrix/brief URLs and file paths.
 
-## Slide Spec JSON Format
+## Slide Spec JSON Format (`create_presentation`)
+
+Use the **same object shape** the Slide Deck MCP consumes: top-level **`layout_name`**, **`master_index`**: 1, **`placeholders`** as a **map** (`"0"`, `"1"`), optional **`text_boxes`**, **`tables`**, **`charts`**, **`speaker_notes`**. Do **not** use a fictional `"content"` array or **`placeholders`** as a list.
+
+**TITLE**
 
 ```json
-[
+{
+  "master_index": 1,
+  "layout_name": "TITLE",
+  "placeholders": {
+    "0": {"text": "Initiative Title"},
+    "1": {"text": "Subtitle or Context"}
+  }
+}
+```
+
+**Title Only — body with native bullets (v30-aligned)**
+
+```json
+{
+  "master_index": 1,
+  "layout_name": "Title Only",
+  "placeholders": {"0": {"text": "Slide Title"}},
+  "text_boxes": [
+    {
+      "left_inches": 0.7,
+      "top_inches": 1.2,
+      "width_inches": 8.6,
+      "height_inches": 2.8,
+      "font_name": "Archivo",
+      "font_size_pt": 11,
+      "color": "ink",
+      "paragraphs": [
+        {"level": 1, "text": "First bullet (native •)"},
+        {"level": 1, "text": "Second bullet"}
+      ]
+    }
+  ],
+  "speaker_notes": "• Presenter note.\n\nReferences:\n• Source: https://example.com"
+}
+```
+
+**Section Title — 12pt primary / 11pt secondary (v30-aligned, not 24pt)**
+
+```json
+{
+  "master_index": 1,
+  "layout_name": "Section Title",
+  "text_boxes": [
+    {
+      "left_inches": 3.3,
+      "top_inches": 1.5,
+      "width_inches": 5.6,
+      "height_inches": 2.2,
+      "font_name": "Archivo",
+      "font_size_pt": 11,
+      "color": "ink",
+      "paragraphs": [
+        {"level": 0, "text": [{"text": "S E C T I O N  0 1", "bold": true, "font_size_pt": 12}]},
+        {"level": 0, "text": [{"text": "Landscape", "font_size_pt": 11, "color": "laptop"}]}
+      ]
+    }
+  ]
+}
+```
+
+**PESTEL-style closing line (Product implication + highlight)**
+
+```json
+"paragraphs": [
+  {"level": 1, "text": "Factor bullet one"},
+  {"level": 1, "text": "Factor bullet two"},
   {
-    "layout_name": "TITLE",
-    "master_index": 1,
-    "placeholders": [
-      {"index": 0, "text": "Initiative Title"},
-      {"index": 1, "text": "Subtitle or Context"}
-    ]
-  },
-  {
-    "layout_name": "Title Only",
-    "master_index": 1,
-    "placeholders": [
-      {"index": 0, "text": "Slide Title"}
-    ],
-    "content": [
-      {
-        "type": "text",
-        "left_inches": 0.7,
-        "top_inches": 1.2,
-        "width_inches": 8.6,
-        "height_inches": 0.4,
-        "text": "Key point or headline",
-        "font_name": "Archivo",
-        "font_size": 14,
-        "bold": true,
-        "color": "ink"
-      },
-      {
-        "type": "text",
-        "left_inches": 0.7,
-        "top_inches": 1.6,
-        "width_inches": 8.6,
-        "height_inches": 2.5,
-        "text": "Supporting details or body text. Use bullet points when appropriate:\n• Point one\n• Point two\n• Point three",
-        "font_name": "Archivo",
-        "font_size": 11,
-        "color": "ink"
-      }
-    ]
-  },
-  {
-    "layout_name": "Section Title",
-    "master_index": 1,
-    "content": [
-      {
-        "type": "text",
-        "left_inches": 3.3,
-        "top_inches": 1.5,
-        "width_inches": 5.6,
-        "height_inches": 2.2,
-        "text": "Section Heading",
-        "font_name": "Archivo",
-        "font_size": 24,
-        "bold": true,
-        "color": "ink"
-      },
-      {
-        "type": "text",
-        "left_inches": 3.3,
-        "top_inches": 1.1,
-        "width_inches": 4.3,
-        "height_inches": 0.4,
-        "text": "Optional subtitle",
-        "font_name": "Archivo",
-        "font_size": 11,
-        "color": "laptop"
-      }
+    "level": 0,
+    "text": [
+      {"text": "Product implication: ", "bold": true, "font_size_pt": 11, "highlight": "FFFF00"},
+      {"text": "One line tied to the slide.", "bold": true, "font_size_pt": 11, "highlight": "FFFF00"}
     ]
   }
 ]
 ```
+
+Per-paragraph **`text`** may be a string, one run dict, or a **list of run dicts** (`font_size_pt`, `bold`, `color`, `highlight`). See **`docs/decks/gcc-pmf-roadmap-v30-typography.md`** for the full cheat sheet.
 
 ## Content Transformation
 
@@ -404,8 +439,9 @@ Ask clarifying questions:
 - Apply Workday color scheme (text color: "ink")
 - Include icons where appropriate with `center_in_width`
 - Ensure text fits within canvas bounds
+- **Typography:** Apply **v30-aligned** defaults above (2.8in body box, **paragraphs** + **level** for bullets, **12pt** Section Title primary, explicit **Product implication** **`highlight`**) so output matches **090** / **130** PMF deck bar where applicable
 - **Add `speaker_notes`** to every content slide (except TITLE, Section Title, Bumper) with bullet guidance and References URLs
-- For PESTEL-style slides: end with "Product implication:" paragraph (bold, yellow highlight applied by pipeline)
+- For PESTEL-style slides: end with **Product implication:** using **run-level `highlight` `FFFF00`** (do not rely on auto-highlight)
 - For charts: include `category_axis_font_size_pt: 9`, `value_axis_font_size_pt: 9`, `title_font_size_pt: 10`
 
 ### Step 4: Generate Presentation
@@ -430,9 +466,9 @@ Ask clarifying questions:
 - **Do**: Use "1/2 Headline" for emphasis on key points
 
 ### Content Density
-- **Less is more**: 3-5 bullets per slide maximum
-- **Visual hierarchy**: Headlines bold, body regular
-- **White space**: Don't crowd the canvas
+- **Less is more**: ~3–5 bullets per slide; for **2.8in** body boxes cap at **~5–6** short bullets (see **`docs/decks/gcc-pmf-roadmap-v30-typography.md`**)
+- **Visual hierarchy**: In-body subheads **12pt bold**; bullets **11pt** via **`paragraphs`**
+- **White space**: Don't crowd the canvas; increase **`height_inches`** only when tables or charts need it
 
 ### Color Usage
 - **Text**: Always use "ink" for main text (it's dark navy, works on light backgrounds)
@@ -454,7 +490,7 @@ You activate when user says:
 
 ## Handoff Scenarios
 - **From 101-competitive-intelligence**: Battle cards and regional competitive review decks **must** use the relevant `research/competitive/matrices/*-competitive-matrix.md` plus latest `research/competitive/[region]/[competitor]-[date].md` scans when available. **101** may invoke **110** with explicit paths; or the user invokes **110** with those paths in the prompt.
-- **From GCC E2E (follow-on)**: When refreshing or extending a deck after **101** Step 5, read `research/competitive/gcc/e2e-ci-brief-*.md` (latest or MISSION_LOG path) and `research/competitive/matrices/gcc-competitive-matrix.md` for competitive slides.
+- **From GCC E2E (follow-on)**: When refreshing or extending a deck after **101** (orchestrator Step 6), read `research/competitive/gcc/e2e-ci-brief-*.md` (the **new** brief for this run per MISSION_LOG path) and `research/competitive/matrices/gcc-competitive-matrix.md` for competitive slides.
 - **After creation**: Offer to upload to Notion or Confluence
 - **If edits needed**: Guide user to edit source JSON and regenerate
 

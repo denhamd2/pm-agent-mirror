@@ -3,11 +3,13 @@
 ## Overview
 This log tracks the state of all active product initiatives, decisions, and handoffs across the agentic PM workspace.
 
+**GCC E2E freshness (log per run):** **101 fresh:** **Step 1** — Pattern 1a baseline scan: new `research/competitive/gcc/gcc-competitive-scan-[YYYY-MM-DD]-GCC-E2E-0NN.md` + matrix changelog (not recycled scan only). **105 fresh:** **Step 2a** — `research/GCC/105-user-research-findings.md` with **## Fresh pass attestation** before **120**. **106 / 107 (optional):** when `brainstorm-sessions/` or `win-loss-interviews/` contain `.txt`, `.csv`, `.xlsx`, or `.xls`, new analysis under `brainstorm-analysis/` or `win-loss-analysis/` with attestation (and `scripts/dump_research_folder_to_text.py` for spreadsheets) before **120**.
+
 ## Current Status
 **Status:** ✅ OPERATIONAL - PMF Research Reorganized (Country-Based Structure)
-**Last Updated:** 21 March 2026 (GCC-E2E-006 — PRD #3 written to Git + Confluence summary; Notion publish pending MCP)
+**Last Updated:** 24 March 2026 (GCC-E2E-017: Step 11 **400** backlog refinement complete — Jira epic HRREC-91050 + 11 issues)
 **Workspace Version:** 1.3
-**Active Agents:** 9 (Orchestrator + 7 Specialists + Functional Knowledge Authority)
+**Active Agents:** 10+ (Orchestrator + specialists incl. **120** report + **130** PMF deck + Functional Knowledge Authority)
 
 ## System Health
 - ✅ Folder structure reorganized (Country-based PMF research)
@@ -15,9 +17,7 @@ This log tracks the state of all active product initiatives, decisions, and hand
   - research/India/{raw-data,internal-sme-transcripts,customer-transcripts,thematic-analysis}
   - research/GCC/{raw-data,internal-sme-transcripts,customer-transcripts,thematic-analysis}
   - Legacy: research/raw-data/ (contains existing data files - 287KB)
-- ✅ 10 MDC rules deployed (.cursor/rules/, 130KB)
-  - 050-functional-knowledge.mdc (Workday Functional Authority)
-  - 120-pmf-thematic-analysis.mdc (PMF Research Specialist with Triangulation)
+- ✅ MDC rules in `.cursor/rules/` (incl. 050-functional-knowledge, **120** PMF thematic analysis, **130** PMF slide generator)
 - ✅ 12 MCPs integrated and mapped
 - ✅ Documentation updated (research/README.md - comprehensive guide)
 - ✅ Sequential thinking verification complete
@@ -47,6 +47,380 @@ This log tracks the state of all active product initiatives, decisions, and hand
 - Faster iteration cycle
 
 ## Active Missions
+
+## Mission: PM-DRIVEN-PRD-001 - PM-Driven PRD Workflow Enhancement
+**Status:** ✅ Complete
+**Pipeline Step:** Implementation complete
+**Created:** 24 March 2026
+**Owner:** 090-agent-improvement-advisor
+
+**Objective:** Enhance PRD writing workflow to require PM framing upfront (problem, success, scope, strategy) with agent-proposed drafts based on research. Agent becomes thinking partner, not auto-writer.
+
+**Problem Solved:** Current GCC E2E pipeline auto-generated PRDs from research artifacts after PM selects a recommendation. PM didn't define the problem or requirements themselves - they just picked an option and the agent wrote everything. This risked loss of PM ownership and shallow PRDs missing strategic intent.
+
+**Solution Implemented:**
+- Added **Step 4.5: PM Framing Conversation** to GCC E2E pipeline (between HITL and PRD generation)
+- Agent proposes evidence-based drafts for:
+  1. Problem Statement (from 120 themes + 105 quotes + 101 gaps)
+  2. Success Criteria (2-3 metrics with research-based targets)
+  3. Scope Boundaries (what's NOT in v1)
+- PM refines or approves drafts and provides:
+  4. Strategic Intent (why now, why this)
+  5. Anything else (constraints, concerns)
+- Agent uses **PM-approved framing as PRIMARY input** (research as supporting evidence)
+
+**Files Modified:**
+- ✅ `200-prd-writer.mdc`: Added Step 1.5 PM Framing Conversation (~120 lines)
+- ✅ `080-red-team.mdc`: Added Risk Category 5 - Strategic Clarity & PM Ownership (~60 lines)
+- ✅ `000-master-orchestrator.mdc`: Updated Step 6 PRD invocation + pipeline count (14→15 steps)
+- ✅ `090-agent-improvement-advisor.mdc`: Documented enhancement in Relationship to Specialized Agents
+
+**Red Team Enhancement:**
+New validation lens ensures PRD reflects PM thinking, not just research synthesis:
+- Flags generic problem statements
+- Checks for explicit tradeoffs and scope boundaries
+- Validates quantified success metrics
+- Requires strategic "why now" rationale beyond research
+
+**Benefits:**
+- ✅ PM ownership of strategic thinking (not just menu selection)
+- ✅ Agent as thinking partner (proposes, PM refines)
+- ✅ Low friction (refine proposals vs. blank page)
+- ✅ Evidence-informed (sees research before framing)
+- ✅ Red Team validates PM ownership
+
+**Next GCC E2E run** (GCC-E2E-017) will use new flow with PM Framing step + bug fixes.
+
+---
+
+## Mission: GCC-E2E-017 - GCC Research to Design Pipeline (v57 — Fresh E2E with Bug Fixes) ✅ COMPLETE
+**Status:** Complete
+**Pipeline Step:** 11 of 11 (Full E2E pipeline from research to Jira backlog)
+**Created:** 24 March 2026
+**Completed:** 24 March 2026
+**Owner:** Master Orchestrator
+
+**Objective:** Full GCC E2E from orchestrator trigger (`e2e gcc`) with bug fixes: proper 130 deck generation (48-52 slides), enhanced PM Framing, correct Canvas Kit usage, artifact links.
+
+**Selected recommendation (HITL 1):** **#3 - Unified Candidate Review Surface** | High-density single-surface review (summary, CV, timeline, notes); relax or redesign notes policy for pre-screen stages; complement existing Native sequential review on req.
+
+**Artifacts:**
+- **CI Scan (101 Step 1):** [`research/competitive/gcc/gcc-competitive-scan-2026-03-24-GCC-E2E-017.md`](file:///Users/david.denham/product-manager-agent/research/competitive/gcc/gcc-competitive-scan-2026-03-24-GCC-E2E-017.md) ✅
+- **CI Matrix:** [`research/competitive/matrices/gcc-competitive-matrix.md`](file:///Users/david.denham/product-manager-agent/research/competitive/matrices/gcc-competitive-matrix.md) (v1.7, changelog GCC-E2E-017) ✅
+- **Research (105):** [`research/GCC/105-user-research-findings.md`](file:///Users/david.denham/product-manager-agent/research/GCC/105-user-research-findings.md) (v57, attestation GCC-E2E-017) ✅
+- **Research (120 PMF):** [`research/GCC/thematic-analysis/2026-03-24-GCC-PMF-Analysis-v57.md`](file:///Users/david.denham/product-manager-agent/research/GCC/thematic-analysis/2026-03-24-GCC-PMF-Analysis-v57.md) ✅
+- **Slide spec (130):** [`slides_spec_v57.json`](file:///Users/david.denham/product-manager-agent/slides_spec_v57.json) (52 slides; v30 parity) ✅
+- **Slide deck (130):** 🎯 **[GCC_Recruiting_PMF_Roadmap_v57.pptx](file:///Users/david.denham/Downloads/GCC_Recruiting_PMF_Roadmap_v57.pptx)** (52 slides ✅ **Bug #1 FIXED**)
+- **PRD (200, markdown only):** [`docs/prds/gcc-unified-candidate-review-prd.md`](file:///Users/david.denham/product-manager-agent/docs/prds/gcc-unified-candidate-review-prd.md) ✅ (**Bug #2 FIXED** - Enhanced PM Framing)
+- **Red Team PRD Review (080):** 2 critical risks, 5 important issues identified ✅
+- **PRD Revision (200, Step 6b):** Addressed all 5 Red Team fixes ✅
+- **Discovery Brief (315):** [`design/gcc-unified-candidate-review-v57-discovery-brief.md`](file:///Users/david.denham/product-manager-agent/design/gcc-unified-candidate-review-v57-discovery-brief.md) ✅ **Final Verdict: APPROVED**
+- **Copy Review (319):** [`design/gcc-unified-candidate-review-v57-copy-review.md`](file:///Users/david.denham/product-manager-agent/design/gcc-unified-candidate-review-v57-copy-review.md) ✅
+- **Prototype (320):** [`design/gcc-unified-candidate-review-v57.tsx`](file:///Users/david.denham/product-manager-agent/design/gcc-unified-candidate-review-v57.tsx) | 🌐 **[OPEN UI](http://localhost:5199/gcc-unified-candidate-review-v57)** ✅ (**Bug #3 FIXED** - Canvas Kit v14 API)
+- **Copy Spot-Check (319 final):** [`design/gcc-unified-candidate-review-v57-copy-spot-check.md`](file:///Users/david.denham/product-manager-agent/design/gcc-unified-candidate-review-v57-copy-spot-check.md) ✅
+- **Figma (330):** **[GCC Unified Candidate Review v57 (GCC-E2E-017)](https://www.figma.com/design/tbyRMoc1CdtyE4ZSyoAoxf)** ✅
+- **Backlog (400, Step 11):** Epic [`docs/epics/gcc-unified-candidate-review-epic-draft.md`](file:///Users/david.denham/product-manager-agent/docs/epics/gcc-unified-candidate-review-epic-draft.md) · Story map [`docs/story-maps/gcc-unified-candidate-review-story-map.md`](file:///Users/david.denham/product-manager-agent/docs/story-maps/gcc-unified-candidate-review-story-map.md) · **Jira:** [HRREC-91050](https://jira2.workday.com/browse/HRREC-91050) + 11 stories [91051-91061](https://jira2.workday.com/browse/HRREC-91051) ✅
+
+**Bug Fixes Successfully Applied:**
+- ✅ **Bug #1 (Slide Deck):** 52-slide PMF deck generated (v30 parity) vs. previous 9-slide output
+- ✅ **Bug #2 (PM Framing):** Enhanced visual presentation in PRD Kickoff Conversation
+- ✅ **Bug #3 (Prototype):** Correct Canvas Kit v14 API usage (StatusIndicator, FormField compound pattern, Heading/BodyText size props)
+- ✅ **Enhancement:** Direct clickable links to all artifacts throughout MISSION_LOG
+
+---
+
+## Mission: GCC-E2E-016 - GCC Research to Design Pipeline (v56 — Fresh E2E with PM Framing)
+**Status:** Complete (Steps 1-11)
+**Pipeline Step:** 11 of 15 (**101** ✓ → **105** ✓ → **120** ✓ → **130** ✓ → HITL ✓ → **200** ✓ → **080** ✓ → **315** ✓ → **319** ✓ → **320** ✓ → **319** ✓ → **330** → **400** → Complete)
+**Created:** 24 March 2026
+**Owner:** Master Orchestrator
+
+**Objective:** Full GCC E2E from orchestrator trigger (`e2e gcc`) with correct step ordering: **101** baseline CI → **105** user research → **120** PMF (no 106/107) → **130** deck → HITL → **PM Framing** → PRD → Red Team → Discovery → Prototype → Copy → Figma → Backlog.
+
+**Selected recommendation (HITL 1):** **#4 — Nationalization OOB Fields**
+
+**Artifacts:**
+- **CI Scan (101 Step 1):** [`research/competitive/gcc/gcc-competitive-scan-2026-03-24-GCC-E2E-016.md`](file:///Users/david.denham/product-manager-agent/research/competitive/gcc/gcc-competitive-scan-2026-03-24-GCC-E2E-016.md) ✓
+- **CI Matrix:** [`research/competitive/matrices/gcc-competitive-matrix.md`](file:///Users/david.denham/product-manager-agent/research/competitive/matrices/gcc-competitive-matrix.md) (v1.6) ✓
+- **Research (105):** [`research/GCC/105-user-research-findings.md`](file:///Users/david.denham/product-manager-agent/research/GCC/105-user-research-findings.md) (v56, attestation) ✓
+- **Research (120 PMF):** [`research/GCC/thematic-analysis/2026-03-24-GCC-PMF-Analysis-v56.md`](file:///Users/david.denham/product-manager-agent/research/GCC/thematic-analysis/2026-03-24-GCC-PMF-Analysis-v56.md) ✓
+- **Slide spec (130):** [`slides_spec_v56.json`](file:///Users/david.denham/product-manager-agent/slides_spec_v56.json) ✓
+- **Slide deck (130):** [`~/Downloads/GCC_Recruiting_PMF_Roadmap_v56.pptx`](file:///Users/david.denham/Downloads/GCC_Recruiting_PMF_Roadmap_v56.pptx) ⚠️ (9 slides - see Bug #1)
+- **PRD (200):** [`docs/prds/gcc-nationalization-oob-fields-prd.md`](file:///Users/david.denham/product-manager-agent/docs/prds/gcc-nationalization-oob-fields-prd.md) ✓
+- **Red Team PRD Review (080):** [`docs/prds/gcc-nationalization-oob-fields-prd-red-team.md`](file:///Users/david.denham/product-manager-agent/docs/prds/gcc-nationalization-oob-fields-prd-red-team.md) ✓
+- **Discovery Brief (315):** [`design/gcc-nationalization-oob-v56-discovery-brief.md`](file:///Users/david.denham/product-manager-agent/design/gcc-nationalization-oob-v56-discovery-brief.md) ✓
+- **Copy Review (319):** [`design/gcc-nationalization-oob-v56-copy-review.md`](file:///Users/david.denham/product-manager-agent/design/gcc-nationalization-oob-v56-copy-review.md) ✓
+- **Prototype (320):** [`design/gcc-nationalization-oob-v56.tsx`](file:///Users/david.denham/product-manager-agent/design/gcc-nationalization-oob-v56.tsx) | 🌐 **[OPEN UI](http://localhost:5199/gcc-nationalization-oob-v56)** ✓
+- **Copy Spot-Check (319 final):** [`design/gcc-nationalization-oob-v56-copy-spot-check.md`](file:///Users/david.denham/product-manager-agent/design/gcc-nationalization-oob-v56-copy-spot-check.md) ✓
+- **Figma (330):** [pending]
+
+**Next Actions:**
+- [ ] Step 11: **330** — Capture prototype to Figma
+- [ ] Step 12: **400** — Backlog refinement (410→420→430)
+
+**Known Issues:**
+- ⚠️ **Bug #1 (FIXED):** Slide deck v56 was only 9 slides instead of required 48-52 slides (v30 parity). Root cause: Agent didn't enforce 130 checklist. Fixed in orchestrator rule.
+- ⚠️ **Bug #2 (FIXED):** PM Framing drafts were shown but formatting could be clearer. Enhanced 200-prd-writer presentation.
+- ⚠️ **Bug #3 (FIXED):** Prototype had TypeScript build errors (wrong Canvas Kit API usage). Fixed all import and prop issues.
+- ✅ **Enhancement (IMPLEMENTED):** All artifact links now provided as clickable file:// and http:// URLs
+
+---
+
+## Mission: GCC-E2E-015 - GCC Research to Design Pipeline (v55 — Fresh E2E)
+**Status:** In Progress
+**Pipeline Step:** 1 of 15 (**101** → **105** → **120** → **130** → HITL → **200** → **080** → **315** → **319** → **320** → **319** → **330** → **400** → Complete)
+**Created:** 22 March 2026
+**Owner:** Master Orchestrator
+
+**Objective:** Full GCC E2E from orchestrator trigger (`e2e gcc`) with correct step ordering: **101** baseline CI → **105** user research → **120** PMF (no 106/107 as no `.txt`/`.csv`/`.xlsx`/`.xls` sources in those folders) → **130** deck → HITL → CI/PRD/design/backlog.
+
+**Selected recommendation (HITL 1):** **#3 — Unified candidate review + search roadmap (incl. AI match stance):** Reduce tab load; strengthen boolean; clarify HiredScore / enterprise search path for database-wide match with human-in-the-loop.
+
+**Artifacts:**
+- CI Scan (101 Step 1): `research/competitive/gcc/gcc-competitive-scan-2026-03-22-GCC-E2E-015.md` ✓
+- CI Matrix: `research/competitive/matrices/gcc-competitive-matrix.md` (v1.5, GCC-E2E-015 delta) ✓
+- Research (105): `research/GCC/105-user-research-findings.md` (v55, GCC-E2E-015 attestation) ✓
+- Research (120 PMF): `research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v55.md` ✓
+- Slide spec (**130**): `slides_spec_v55.json` ✓
+- Slide deck (**130**): `~/Downloads/GCC_Recruiting_PMF_Roadmap_v55.pptx` (56 slides with auto-agenda) ✓
+- **PRD (200, markdown only):** [pending]
+- **Discovery Brief (315):** [pending]
+- **Copy Review (319):** [pending]
+- **Prototype (320):** [pending]
+- **Copy Spot-Check (319 final):** [pending]
+- **Figma (330):** [pending]
+
+**Next Actions:**
+- [x] Create mission: GCC-E2E-015
+- [x] Step 1: **101** — GCC baseline competitive scan (Pattern 1a) + matrix changelog
+  - Scan: `research/competitive/gcc/gcc-competitive-scan-2026-03-22-GCC-E2E-015.md`
+  - Matrix: v1.5 (changelog entry 2026-03-22 - GCC-E2E-015)
+  - Top 3 threats: Oracle WhatsApp/SMS, SAP SmartRecruiters+Joule, Regional suite Mudad/statutory
+  - True gaps: 5 (RTL docs, core AI, native Qiwa/Mudad/MOHRE)
+  - Deployment Agent thread: `02cb2824-6945-4423-a009-937e8d9ec29e`
+- [x] Step 2a: **105** — regenerate findings from transcripts with Fresh pass attestation
+  - Path: `research/GCC/105-user-research-findings.md` (v55 header)
+  - Attestation: ✓ (all 3 customer transcripts listed, Mission ID GCC-E2E-015)
+  - Participants: 3 customer (P1 Accenture, P2 Baker Hughes, P3 Shell) + 0 SME
+  - Top 3 themes: Workflow rigidity, Recruiter efficiency, Reporting/nationalization/local compliance
+- [x] Step 2b: **120** — Fresh PMF analysis (no 106/107 triangulation)
+  - Path: `research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v55.md`
+  - E2E handoff: 9 recommendations (Interview scheduling, Nationalisation, Candidate review, Omnichannel, RTL docs, Offer/visa, Dashboards, Mobile-first apply, Gov portals)
+  - Top 3 themes: End-to-end workflow rigidity, Recruiter efficiency at scale, Compliance/nationalisation/reporting
+- [x] Step 3: **130** — PMF roadmap deck from **120** report
+  - Spec: `slides_spec_v55.json`
+  - Deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v55.pptx` (56 slides)
+  - Generator: `scripts/build_gcc_slides_spec_v55_v30_typography.py`
+- [ ] Step 4: HITL — PM selects recommendation
+- [ ] Steps 5-15: Continue pipeline
+
+---
+
+## Mission: GCC-E2E-014 - GCC Research to Design Pipeline (v54 — Fresh E2E, Restarted)
+**Status:** In Progress
+**Pipeline Step:** 8 of 15 (… → HITL ✓ → **101** Pattern 5 ✓ → **200** PRD ✓ → **080** Red Team PRD → **315** → …)
+**Created:** 22 March 2026
+**Owner:** Master Orchestrator
+
+**Objective:** Full GCC E2E from orchestrator trigger (`e2e gcc`) with correct step ordering: **101** baseline CI → **105** user research → **106** brainstorm (xlsx present) → **107** win-loss (xlsx present) → **120** PMF with 4-way triangulation → **130** deck → HITL.
+
+**Selected recommendation (HITL 1):** **#3 — Candidate review experience:** unified high-density candidate review (grid/profile), stronger search, and mobile-optimised apply to reduce tab sprawl and Middle East mobile drop-off.
+
+**Artifacts:**
+- CI Scan (101 Step 1): `research/competitive/gcc/gcc-competitive-scan-2026-03-22-GCC-E2E-014.md` ✓
+- CI Brief (101 Pattern 5, HITL #3): `research/competitive/gcc/e2e-ci-brief-candidate-review-2026-03-22-GCC-E2E-014.md` ✓
+- CI Matrix: `research/competitive/matrices/gcc-competitive-matrix.md` (v1.4, GCC-E2E-014 delta) ✓
+- Research (105): `research/GCC/105-user-research-findings.md` ✓ (v54, GCC-E2E-014 attestation)
+- Brainstorm (106): `research/GCC/brainstorm-analysis/2026-03-22-brainstorm-analysis.md` ✓ (scratch: `_scratch-brainstorm-sources.md`)
+- Win-Loss (107): `research/GCC/win-loss-analysis/2026-03-22-win-loss-analysis.md` ✓ (scratch: `_scratch-winloss-sources.md`, Mission ID: GCC-E2E-014)
+- Research (120 PMF): `research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v54.md` ✓
+- Slide spec (**130**): `slides_spec_v54.json` ✓
+- Slide deck (**130**): `~/Downloads/GCC_Recruiting_PMF_Roadmap_v54.pptx` ✓
+- **PRD (200, markdown only):** `docs/prds/gcc-candidate-review-experience-v54-prd.md` ✓ (22 March 2026, includes CV carousel enhancement)
+- **Discovery Brief (315):** `design/gcc-candidate-review-cv-carousel-v54-discovery-brief.md` ✓ (APPROVED)
+- **Copy Review (319):** `design/gcc-candidate-review-cv-carousel-v54-copy-review-319.md` ✓ (APPROVED with Quick Wins)
+- **Prototype (320):** `design/gcc-candidate-review-cv-carousel-v54.tsx` ✓ (route: `http://localhost:5199/gcc-candidate-review-cv-carousel-v54`)
+- **Copy Spot-Check (319 final):** `design/gcc-candidate-review-cv-carousel-v54-copy-spot-check-319.md` ✓ (PASS)
+- **Figma (330):** [pending capture]
+
+**Next Actions:**
+- [x] Step 1: **101** — GCC baseline competitive scan (Pattern 1a) + matrix changelog ✓
+  - Scan: `research/competitive/gcc/gcc-competitive-scan-2026-03-22-GCC-E2E-014.md`
+  - Query log: `research/competitive/gcc/query-log-2026-03-22-GCC-E2E-014.md`
+  - Matrix v1.3: `research/competitive/matrices/gcc-competitive-matrix.md`
+  - Deployment Agent thread: `ffba380b-d961-4f1b-8b61-3a4d7f6c9a59`
+- [x] Step 2a: **105** — regenerate findings from transcripts with Fresh pass attestation (update header to v54/GCC-E2E-014) ✓
+  - Updated: `research/GCC/105-user-research-findings.md` (Mission ID: GCC-E2E-014)
+- [x] Step 2.5: **106** — Analyze brainstorm `.xlsx` (P&T Idea Results Dashboard) ✓
+  - Output: `research/GCC/brainstorm-analysis/2026-03-22-brainstorm-analysis.md` (Mission ID: GCC-E2E-014, Fresh pass attestation)
+- [x] Step 2.75: **107** — Analyze win-loss `.xlsx` (Opportunity Detail) ✓
+  - Output: `research/GCC/win-loss-analysis/2026-03-22-win-loss-analysis.md` (Fresh pass attestation, GCC-E2E-014)
+- [x] Step 2b: **120** — Fresh PMF analysis with 4-way triangulation (101+105+106+107) ✓
+  - Report: `research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v54.md`
+  - Top themes: Nationalisation compliance (4/4), Omnichannel communications (3/4), Candidate review density + mobile (4/4)
+  - E2E Handoff table: 10 recommendations ready for HITL
+- [x] Step 3: **130** — PMF roadmap deck from **120** report ✓
+  - Spec: `slides_spec_v54.json` (55 slide objects)
+  - Deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v54.pptx` (56 slides with auto-agenda)
+  - Script: `scripts/build_gcc_slides_spec_v54_v30_typography.py`
+- [x] Step 4: HITL — PM selects recommendation ✓
+  - **Selected: #3 - Candidate review experience** (unified grid/profile, stronger search, mobile-optimised apply)
+- [x] Step 6: **101** — Scoped GCC CI pass for candidate review (Pattern 5 E2E brief) ✓
+  - Brief: `research/competitive/gcc/e2e-ci-brief-candidate-review-2026-03-22-GCC-E2E-014.md`
+  - Deployment Agent thread: `9c0d7686-b087-4c9b-8166-9c9261631199`
+  - Matrix: v1.4 delta logged in `gcc-competitive-matrix.md`
+- [x] Step 7: **200** — PRD for HITL #3 (candidate review experience) ✓
+  - `docs/prds/gcc-candidate-review-experience-v54-prd.md` (canonical; **not** Confluence)
+- [x] Step 7.1: **200** — PRD updated with CV carousel enhancement ✓
+- [x] Step 8: **315** — Discovery & Design Brief (multi-pass with internal peer review) ✓
+  - `design/gcc-candidate-review-cv-carousel-v54-discovery-brief.md` — **Final Verdict: APPROVED**
+- [x] Step 8a: **319** — Copy review of PASS 2 Copy Inventory ✓
+  - `design/gcc-candidate-review-cv-carousel-v54-copy-review-319.md` (APPROVED with Quick Wins)
+- [x] Step 9: **320** — Build Canvas Kit prototype ✓
+  - `design/gcc-candidate-review-cv-carousel-v54.tsx` (route: `http://localhost:5199/gcc-candidate-review-cv-carousel-v54`)
+  - Registered in `design/main.tsx`
+- [x] Step 10: **319** — Copy spot-check of implemented prototype ✓
+  - `design/gcc-candidate-review-cv-carousel-v54-copy-spot-check-319.md` (PASS)
+- [ ] Step 11: **330** — Figma capture (`#figmacapture=…` flow)
+- [ ] Steps 12-15: **400** (410→420 HITL→080→430), complete
+
+---
+
+## Mission: GCC-E2E-013 - GCC Research to Design Pipeline (v54 — Superseded)
+**Status:** Superseded (restarted as GCC-E2E-014 with correct step ordering)
+**Note:** Executed 105 out of sequence (before 101/106/107); restarting with proper orchestrator flow per `000-master-orchestrator.mdc`
+
+---
+
+## Mission: GCC-E2E-012 - GCC Research to Design Pipeline (v53 — Fresh E2E)
+**Status:** In Progress
+**Pipeline Step:** 2a of 15 (**105** → **120** → **130** → HITL → **101** → PRD → Red Team PRD → Discovery → Prototype → Copy → Figma → Backlog → Red Team Stories → Jira → Complete)
+**Created:** 22 March 2026
+**Owner:** Master Orchestrator
+
+**Objective:** Full GCC E2E from orchestrator trigger (`e2e gcc`): fresh **105** Step 2a, then **120** research, **130** deck, HITL, then CI/PRD/design/backlog.
+
+**Artifacts:**
+- Research (105): `research/GCC/105-user-research-findings.md` ✓ (v53 header, GCC-E2E-012 attestation)
+- Research (120 PMF): `research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v53.md` (in progress)
+- Slide spec (**130**): `slides_spec_v53.json` (pending)
+- Slide deck (**130**): `~/Downloads/GCC_Recruiting_PMF_Roadmap_v53.pptx` (pending)
+
+**Next Actions:**
+- [x] Step 2a: **105** — regenerate findings from transcripts with Fresh pass attestation
+- [ ] Step 2b: **120** — fresh PMF analysis
+- [ ] Step 3: **130** — PMF roadmap deck
+- [ ] Step 4: HITL — PM selects recommendation
+- [ ] Steps 5-15: Continue pipeline
+
+---
+
+## Mission: GCC-E2E-011 - GCC Research to Design Pipeline (v52 — Fresh E2E)
+**Status:** In Progress
+**Pipeline Step:** 10 of 15 (**105**/**120** ✓ → **130** ✓ → **HITL** ✓ → **101** ✓ → **200** ✓ → **080** ✓ → **315** ✓ → **319** ✓ → **320** ✓ → **319** spot-check → **330** → **400**)
+**Created:** 22 March 2026
+**Owner:** Master Orchestrator
+
+**Objective:** Full GCC E2E from orchestrator trigger (`e2e GCC`): fresh **120** + **130** (no resume from prior HITL); transcripts and CSV re-ingested; **105** regenerated; then HITL before CI/PRD/design/backlog.
+
+**Selected recommendation (HITL 1):** **#5 — Candidate grid redesign (P1):** unified recruiter view (summary, CV, notes, history); fewer tabs; high-volume throughput.
+
+**Artifacts:**
+- Research (105): `research/GCC/105-user-research-findings.md` (header **v52**)
+- Research (120 PMF): `research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v52.md`
+- Slide spec (**130**): `slides_spec_v52.json` (50 spec slides + MCP auto-agenda)
+- Slide deck (**130**): `~/Downloads/GCC_Recruiting_PMF_Roadmap_v52.pptx`
+- Generator: `scripts/build_gcc_slides_spec_v52_v30_typography.py`
+- **CI Brief (101, E2E-011):** `research/competitive/gcc/e2e-ci-brief-candidate-grid-redesign-2026-03-22.md` (Deployment Agent thread `eb984a05-f81e-44f5-8c59-f7cf1575f0fc`)
+- **CI matrix:** `research/competitive/matrices/gcc-competitive-matrix.md` (changelog **v1.2**, E2E-011 delta)
+- **PRD (v52):** `docs/prds/gcc-candidate-grid-redesign-v52-prd.md`
+- **Red Team PRD (v52):** `docs/prds/gcc-candidate-grid-redesign-v52-prd-red-team-review.md` (0 critical; viewed/unviewed risk bullet added to PRD)
+- **Discovery Brief (315):** `design/gcc-candidate-grid-redesign-v52-discovery-brief.md` — **Final Verdict: APPROVED**
+- **319 (Copy Inventory):** `design/gcc-candidate-grid-redesign-v52-copy-review-319.md`
+- **Prototype (320):** `design/gcc-candidate-grid-redesign-v52.tsx` — route **`http://localhost:5199/gcc-candidate-grid-redesign-v52`** (see `design/README.md`)
+
+**Next Actions:**
+- [x] **HITL 1:** **#5** (candidate grid redesign)
+- [x] Step 6: **101** — scoped CI brief + matrix delta
+- [x] Step 7: **200** — v52 PRD
+- [x] Step 7a–7c: **080** Red Team v52 + **one** PRD revision (viewed/unviewed risk)
+- [x] Step 8–8c: **315** PASS 1–2 → **319** → **315** PASS 3–4 → **APPROVED**
+- [x] Step 9: **320** — `design/gcc-candidate-grid-redesign-v52.tsx`; `main.tsx` route registered; `npm run build` ✓
+- [ ] Step 9b: Start `npm run dev` from `design/` when you want live preview (or use existing server on **5199**)
+- [ ] Step 10: **319** spot-check prototype strings vs approved copy
+- [ ] Step 11: **330** Figma capture (`#figmacapture=…` flow)
+- [ ] Step 12–14: **400** (410→420 HITL→080→430)
+
+---
+
+## Mission: GCC-E2E-010 - GCC Research to Design Pipeline (v51 — superseded by E2E-011)
+**Status:** Superseded (orchestrator re-trigger **e2e GCC** ran fresh **120**/**130** → **v52**)
+**Note:** HITL on v51 is stale; use **GCC-E2E-011** and `2026-03-22-GCC-PMF-Analysis-v52.md` for new selections.
+
+---
+
+## Mission: GCC-E2E-009 - GCC Research to Design Pipeline (v50 — Fresh Research)
+**Status:** In Progress
+**Pipeline Step:** 8 of 14 (**120** ✓ → **130** ✓ → **HITL** ✓ → **CI (101)** ✓ → **200** ✓ → **080** ✓ → **315** → … → Complete) — see `000-master-orchestrator.mdc`
+**Created:** 22 March 2026
+**Owner:** Master Orchestrator
+
+**Objective:** Execute full GCC E2E pipeline from fresh **v50** Braun & Clarke PMF analysis (orchestrator: every `e2e gcc` starts at **120** then **130**).
+
+**Selected recommendation (HITL 1):** **#5 — Candidate grid redesign (P1):** unified recruiter view (summary, CV, notes, history); fewer tabs; faster actions at high volume.
+
+**Artifacts (Steps 1–8 through Red Team PRD):**
+- Research (105): `research/GCC/105-user-research-findings.md` (header v50)
+- Research (120 PMF): `research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v50.md`
+- Slide spec (**130**): `slides_spec_v50.json` (50 spec slides; auto-agenda from MCP)
+- Slide deck (**130**): `~/Downloads/GCC_Recruiting_PMF_Roadmap_v50.pptx`
+- Generator: `scripts/build_gcc_slides_spec_v50_v30_typography.py`
+- **CI Brief:** `research/competitive/gcc/e2e-ci-brief-candidate-grid-redesign-2026-03-22.md` (refreshed for v50 / E2E-009)
+- **CI matrix:** `research/competitive/matrices/gcc-competitive-matrix.md` (existing E2E delta block for candidate grid)
+- **PRD (v50):** `docs/prds/gcc-candidate-grid-redesign-v50-prd.md`
+- **Red Team PRD (v50):** `docs/prds/gcc-candidate-grid-redesign-v50-prd-red-team-review.md`
+- **Discovery Brief (315, PASS 1–2 checkpoint):** `design/gcc-candidate-grid-redesign-v50-discovery-brief.md` — **await 319** before PASS 3–4
+
+**Next Actions:**
+- [x] Step 1: **120** — Fresh PMF v50 report
+- [x] Step 2: **130** — PMF roadmap `.pptx` + `slides_spec_v50.json`
+- [x] Step 4: **HITL** — Recommendation **#5** (candidate grid redesign)
+- [x] Step 6: **101** — Scoped CI brief + matrix (existing artefact aligned to v50)
+- [x] Step 7: **200** — v50 PRD (`docs/prds/gcc-candidate-grid-redesign-v50-prd.md`)
+- [x] Step 7a–7c: **080** Red Team v50 + **one** PRD revision (positioning, metrics, competitive — applied in same session)
+- [ ] Step 8: **319** — Copy review of PASS 1–2 **Copy Inventory** in `design/gcc-candidate-grid-redesign-v50-discovery-brief.md`
+- [ ] Step 8b–8c: **315** PASS 3–4 → **Final Verdict: APPROVED**
+- [ ] Steps 9–14: **320** → **319** → **330** → **400** (410→420 HITL→430)
+
+---
+
+## Mission: GCC-E2E-008 - GCC Research to Design Pipeline (v47 — Fresh Research)
+**Status:** Blocked (HITL 1 — PM must select a research recommendation)
+**Pipeline Step:** 3 of 14 (**120** ✓ → **130** ✓ → **HITL** → CI (101) → … → Complete)
+**Created:** 22 March 2026
+**Owner:** Master Orchestrator
+
+**Objective:** Execute full GCC E2E pipeline from fresh **v47** Braun & Clarke PMF analysis (orchestrator: every `e2e gcc` starts at Step 1).
+
+**Artifacts (Step 1 complete):**
+- Research (105): `research/GCC/105-user-research-findings.md` (header v47)
+- Research (120 PMF): `research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v47.md`
+- Slide spec: `slides_spec_v49.json` (v30 inventory + **v30 typography**: `paragraphs`, 2.8in body, 12pt section lines, PESTEL `FFFF00` highlight)
+- Generator: `scripts/build_gcc_slides_spec_v49_v30_typography.py`
+- Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v49.pptx` (51 slides with MCP auto-agenda per `python-pptx`; 50 spec slides)
+- Typography brief: `docs/decks/gcc-pmf-roadmap-v30-typography.md`
+- Legacy: `slides_spec_v48.json` / `GCC_Recruiting_PMF_Roadmap_v48.pptx`; `slides_spec_v47.json` / `GCC_Recruiting_PMF_Roadmap_v47.pptx`
+- **CI Brief / matrix delta:** pending after HITL (historically Step 5; now **Step 6** per **120→130** split)
+- **Selected Recommendation:** [pending HITL]
+
+**Next Actions:**
+- [x] Step 1: **120** — Fresh PMF v47 report
+- [x] Step 2: **130** — Deck v49 (or combined legacy run)
+- [ ] Step 4: **HITL** — Reply in chat with recommendation **#1–#8** (see table below)
+- [ ] Step 6: **101** — Scoped GCC competitive pass (after selection)
+- [ ] Remaining steps: per `000-master-orchestrator.mdc` GCC E2E chain
+
+---
 
 ## Mission: GCC-E2E-007 - GCC Research to Design Pipeline (v46 — Fresh Research)
 **Status:** In Progress
@@ -847,6 +1221,12 @@ research/
 **Knowledge Areas:** UDMF, Two-Step Offers, GDPR Purge, Recruiting, Security, HCM
 
 ## Decision Log
+
+### DECISION-004: PMF roadmap decks — agent 130 after 120
+**Date:** 22 March 2026  
+**Context:** Full PMF PowerPoints were previously **120** Phase 6b; separation improves handoff clarity.  
+**Choice:** **120-pmf-thematic-analysis** produces the markdown report only; **130-pmf-slide-generator** builds `slides_spec_vN.json` and `~/Downloads/[Country]_Recruiting_PMF_Roadmap_vN.pptx` from that report. GCC E2E: **120** → **130** → HITL → **101** → …  
+**Owner:** PM + orchestrator rules update  
 
 ### DECISION-003: HITL Autonomy - Always Honor User Selections
 **Date:** Tuesday Mar 18, 2026  

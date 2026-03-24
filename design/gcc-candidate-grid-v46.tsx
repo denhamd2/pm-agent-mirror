@@ -452,14 +452,6 @@ export const GccCandidateGridV46: React.FC = () => {
   const booleanPopupModel = usePopupModel();
   const profileModal = useModalModel();
 
-  // #region agent log
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      fetch('http://127.0.0.1:7559/ingest/aed26437-7f30-4964-80c9-2b9b6574b106',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'9698bf'},body:JSON.stringify({sessionId:'9698bf',location:'gcc-candidate-grid-v46.tsx:454',message:'Component mounted - viewport',data:{viewportWidth:window.innerWidth,viewportHeight:window.innerHeight},timestamp:Date.now(),runId:'scroll-debug',hypothesisId:'H1'})}).catch(()=>{});
-    }
-  }, []);
-  // #endregion
-
   const filteredRows = useMemo(() => {
     if (queryFlags.emptyGrid) return [];
     return MOCK_ROWS.filter((r) => {
@@ -584,14 +576,6 @@ export const GccCandidateGridV46: React.FC = () => {
           width: '100%',
           maxWidth: '100%',
           boxSizing: 'border-box',
-        }}
-        ref={(el) => {
-          /* #region agent log */
-          if (el && typeof window !== 'undefined') {
-            const rect = el.getBoundingClientRect();
-            fetch('http://127.0.0.1:7559/ingest/aed26437-7f30-4964-80c9-2b9b6574b106',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'9698bf'},body:JSON.stringify({sessionId:'9698bf',location:'gcc-candidate-grid-v46.tsx:569',message:'Card dimensions',data:{cardWidth:rect.width,cardClientWidth:el.clientWidth,cardScrollWidth:el.scrollWidth,cardOffsetWidth:el.offsetWidth,hasHorizontalScroll:el.scrollWidth>el.clientWidth},timestamp:Date.now(),runId:'scroll-debug',hypothesisId:'H2'})}).catch(()=>{});
-          }
-          /* #endregion */
         }}
       >
         {anonymisedMode && (
@@ -744,14 +728,6 @@ export const GccCandidateGridV46: React.FC = () => {
                 overflowX: 'auto',
                 WebkitOverflowScrolling: 'touch',
               }}
-              ref={(el) => {
-                /* #region agent log */
-                if (el && typeof window !== 'undefined') {
-                  const rect = el.getBoundingClientRect();
-                  fetch('http://127.0.0.1:7559/ingest/aed26437-7f30-4964-80c9-2b9b6574b106',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'9698bf'},body:JSON.stringify({sessionId:'9698bf',location:'gcc-candidate-grid-v46.tsx:734',message:'Outer Box (scroll container)',data:{outerBoxWidth:rect.width,outerBoxClientWidth:el.clientWidth,outerBoxScrollWidth:el.scrollWidth,hasScroll:el.scrollWidth>el.clientWidth},timestamp:Date.now(),runId:'scroll-debug',hypothesisId:'H3'})}).catch(()=>{});
-                }
-                /* #endregion */
-              }}
             >
               <Box
                 style={{
@@ -762,26 +738,8 @@ export const GccCandidateGridV46: React.FC = () => {
                   display: 'inline-block',
                   minWidth: '100%',
                 }}
-                ref={(el) => {
-                  /* #region agent log */
-                  if (el && typeof window !== 'undefined') {
-                    const rect = el.getBoundingClientRect();
-                    fetch('http://127.0.0.1:7559/ingest/aed26437-7f30-4964-80c9-2b9b6574b106',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'9698bf'},body:JSON.stringify({sessionId:'9698bf',location:'gcc-candidate-grid-v46.tsx:745',message:'Inner Box (table container)',data:{innerBoxWidth:rect.width,innerBoxClientWidth:el.clientWidth,innerBoxScrollWidth:el.scrollWidth,computedMinWidth:window.getComputedStyle(el).minWidth,computedMaxWidth:window.getComputedStyle(el).maxWidth},timestamp:Date.now(),runId:'scroll-debug',hypothesisId:'H3'})}).catch(()=>{});
-                  }
-                  /* #endregion */
-                }}
               >
-                <Table
-                  ref={(el) => {
-                    /* #region agent log */
-                    if (el && typeof window !== 'undefined') {
-                      const rect = el.getBoundingClientRect();
-                      const computed = window.getComputedStyle(el);
-                      fetch('http://127.0.0.1:7559/ingest/aed26437-7f30-4964-80c9-2b9b6574b106',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'9698bf'},body:JSON.stringify({sessionId:'9698bf',location:'gcc-candidate-grid-v46.tsx:756',message:'Table dimensions',data:{tableWidth:rect.width,tableClientWidth:el.clientWidth,tableScrollWidth:el.scrollWidth,tableComputedWidth:computed.width,tableComputedMinWidth:computed.minWidth,tableLayout:computed.tableLayout},timestamp:Date.now(),runId:'scroll-debug',hypothesisId:'H4'})}).catch(()=>{});
-                    }
-                    /* #endregion */
-                  }}
-                >
+                <Table>
                   <Table.Head>
                     <Table.Row>
                     <Table.Header scope="col" style={{ width: '40px', minWidth: '40px' }}>
@@ -1209,14 +1167,6 @@ export const GccCandidateGridV46: React.FC = () => {
             style={{
               overflow: 'auto',
               backgroundColor: SANA_PAGE_CANVAS,
-            }}
-            ref={(el) => {
-              /* #region agent log */
-              if (el && typeof window !== 'undefined') {
-                const rect = el.getBoundingClientRect();
-                fetch('http://127.0.0.1:7559/ingest/aed26437-7f30-4964-80c9-2b9b6574b106',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'9698bf'},body:JSON.stringify({sessionId:'9698bf',location:'gcc-candidate-grid-v46.tsx:1010',message:'Main content area (flex child)',data:{mainAreaWidth:rect.width,mainAreaClientWidth:el.clientWidth,mainAreaScrollWidth:el.scrollWidth,hasHorizontalScroll:el.scrollWidth>el.clientWidth},timestamp:Date.now(),runId:'scroll-debug',hypothesisId:'H5'})}).catch(()=>{});
-              }
-              /* #endregion */
             }}
           >
             <Box

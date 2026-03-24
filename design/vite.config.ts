@@ -13,6 +13,50 @@ function normaliseBase(raw: string | undefined): string {
   return b.endsWith('/') ? b : `${b}/`;
 }
 
+/**
+ * Prototype entry files live at `design/<slug>.tsx`. Vite resolves `GET /<slug>` to that module, so the browser
+ * document becomes raw transformed JS instead of `index.html`. Rewrite those bare slugs to `/` so the SPA boots;
+ * `main.tsx` still reads `location.pathname` and picks the right screen.
+ *
+ * **Keep `slugs` in sync** with pathname routes in `main.tsx` `prototypeFromLocation()` — every new slug needs
+ * an entry here or deep links show a blank page.
+ */
+function prototypeSpaSlugFallback(): Plugin {
+  const slugs = new Set([
+    'gcc-candidate-review-cv-carousel-v54',
+    'gcc-candidate-review-experience-v54',
+    'gcc-candidate-grid-redesign-v52',
+    'gcc-candidate-grid-v46',
+    'gcc-recruiter-dashboard',
+    'gcc-nationalization-oob-v56',
+    'gcc-unified-candidate-review-v57',
+  ]);
+  return {
+    name: 'prototype-spa-slug-fallback',
+    enforce: 'pre',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const raw = req.url;
+        if (!raw) return next();
+        const [pathOnly, ...rest] = raw.split('?');
+        const query = rest.length ? `?${rest.join('?')}` : '';
+        const base = server.config.base.replace(/\/$/, '');
+        let pathname = pathOnly;
+        if (base && pathOnly.startsWith(base)) {
+          pathname = pathOnly.slice(base.length) || '/';
+        }
+        const trimmed = (pathname.replace(/\/+$/, '') || '/').replace(/^\//, '');
+        const lastSeg = trimmed.split('/').filter(Boolean).pop() ?? '';
+        const looksLikeFile = pathOnly.includes('.') && !pathOnly.endsWith('/');
+        if (!looksLikeFile && lastSeg && slugs.has(lastSeg)) {
+          req.url = `${base ? `${base}/` : '/'}${query}`;
+        }
+        next();
+      });
+    },
+  };
+}
+
 /** After dev server listens, open localhost in Chrome + Cursor Simple Browser (skip with VITE_NO_OPEN_BROWSERS=1). */
 function openChromeAndCursorBrowser(): Plugin {
   let done = false;
@@ -38,7 +82,7 @@ function openChromeAndCursorBrowser(): Plugin {
 
 export default defineConfig({
   base: normaliseBase(process.env.VITE_BASE_PATH),
-  plugins: [react(), openChromeAndCursorBrowser()],
+  plugins: [prototypeSpaSlugFallback(), react(), openChromeAndCursorBrowser()],
   root: '.',
   server: {
     // Fixed port for Figma MCP capture URLs (hash links must match actual dev server).

@@ -1,9 +1,9 @@
 # PMF Research Workspace
 
 **Organization:** Country-based qualitative research with Braun & Clarke thematic analysis  
-**Method:** 6-phase triangulated analysis (SME + Customer + CSV data)  
-**Agent:** 120-pmf-thematic-analysis.mdc  
-**Updated:** Tuesday Mar 17, 2026
+**Method:** 6-phase triangulated analysis (SME + Customer + CSV; optional Internal Team + Win-Loss via **106** / **107**)  
+**Agents:** **105** (customer + SME synthesis) → optional **106** / **107** → **120-pmf-thematic-analysis.mdc** (report) → **130-pmf-slide-generator.mdc** (full PMF roadmap `.pptx` when needed)  
+**Updated:** 22 March 2026
 
 ---
 
@@ -25,6 +25,16 @@ research/
 │   │   ├── customer-interview-001.txt # Customer interviews
 │   │   ├── customer-interview-002.txt
 │   │   └── ...
+│   │
+│   ├── brainstorm-sessions/           # .txt — optional input for **106-brainstorm-analyser**
+│   │   └── brainstorm_[topic]_[YYYY-MM-DD].txt
+│   │
+│   ├── win-loss-interviews/          # .txt — optional input for **107-win-loss-analyser**
+│   │   ├── win_[Customer]_[date].txt
+│   │   └── loss_[Customer]_[Competitor]_[date].txt
+│   │
+│   ├── brainstorm-analysis/          # **106** output (dated markdown)
+│   ├── win-loss-analysis/            # **107** output (dated markdown)
 │   │
 │   └── thematic-analysis/             # Generated reports
 │       └── [YYYY-MM-DD]-[Country]-PMF-Analysis.md
@@ -82,6 +92,18 @@ Place interview transcripts from customers:
   - Decision makers
   - Implementation partners
 
+#### Internal brainstorm sessions → `brainstorm-sessions/` (optional, **106**)
+- **Format:** `.txt`, `.csv`, `.xlsx`, or `.xls` (workshop notes, ideation dumps, idea dashboard exports)
+- **Naming:** `brainstorm_[topic]_[YYYY-MM-DD].txt` or spreadsheet exports (suggested)
+- **Agent:** **106-brainstorm-analyser.mdc** writes to `brainstorm-analysis/[YYYY-MM-DD]-brainstorm-analysis.md`; uses `scripts/dump_research_folder_to_text.py` + `scripts/requirements-research-xlsx.txt` for spreadsheets
+- **GCC E2E:** Orchestrator runs **106** as Step 2.5 when this folder contains any of those file types
+
+#### Win-loss interviews → `win-loss-interviews/` (optional, **107**)
+- **Format:** `.txt`, `.csv`, `.xlsx`, or `.xls` (transcripts or **Opportunity Detail** exports)
+- **Naming:** `win_[Customer]_[date].txt`, `loss_...`, or `Opportunity Detail.xlsx` (suggested)
+- **Agent:** **107-win-loss-analyser.mdc** writes to `win-loss-analysis/[YYYY-MM-DD]-win-loss-analysis.md`; same spreadsheet helper as **106**
+- **GCC E2E:** Orchestrator runs **107** as Step 2.75 when this folder contains any of those file types
+
 ### Step 3: Request Analysis
 
 Once your data is in place, simply say:
@@ -121,6 +143,8 @@ research/[Country]/thematic-analysis/[YYYY-MM-DD]-[Country]-PMF-Analysis.md
 #### Triangulation Matrix
 | Theme | SME Perspective | Customer Perspective | Convergence | Divergence | PMF Impact |
 |-------|----------------|---------------------|-------------|-----------|-----------|
+
+When **106** (brainstorm analysis) and/or **107** (win-loss analysis) outputs exist for the same run, **120** adds **Internal Team (106)** and/or **Win-Loss (107)** columns (see **120-pmf-thematic-analysis.mdc**).
 
 This shows where internal experts and customers align or disagree on PMF challenges.
 
@@ -331,7 +355,7 @@ Then add your data files and request: "Analyze Australia"
 ## Current Status
 
 **Countries Ready:** Japan, India, GCC  
-**Agent:** 120-pmf-thematic-analysis.mdc (active)  
+**Agents:** 120-pmf-thematic-analysis.mdc + 130-pmf-slide-generator.mdc (active)  
 **Method:** Braun & Clarke 6-phase with triangulation  
 **Last Updated:** Tuesday Mar 17, 2026
 
@@ -340,7 +364,7 @@ Then add your data files and request: "Analyze Australia"
 ## Next Steps
 
 1. **Add your data files** to the appropriate country folders
-2. **Request analysis**: "Analyze [Country]"
+2. **Request analysis**: "Analyze [Country]" (**120**); for the v30-parity deck, chain **130** or use GCC E2E in **000**
 3. **Review report** in `research/[Country]/thematic-analysis/`
 4. **Act on insights**: Use triangulation matrix and roadmap impact to prioritize
 

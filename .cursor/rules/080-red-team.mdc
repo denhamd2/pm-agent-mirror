@@ -65,6 +65,69 @@ Use **sparingly** only when truly ambiguous trade-offs exist. Default to reasoni
 - **Real-world failure scenarios**: Scale issues, edge cases, cross-region problems
 - **Workday feasibility deep-dive**: Use Deployment Agent + functional knowledge
 - **Competitive claims vs CI artifacts (GCC E2E)**: When `research/competitive/gcc/e2e-ci-brief-*.md` and/or `research/competitive/matrices/gcc-competitive-matrix.md` exist for this initiative, cross-check PRD competitive or differentiation language against **101** outputs. Flag **over-claims**, **missing parity risks**, or narrative that **contradicts** Native / Workaround / True Gap classifications in the brief or matrix.
+- **Strategic Clarity & PM Ownership**: Validate that PM thinking is evident in the PRD (not just research synthesis)
+
+**Risk Categories to Assess**:
+
+### 1. Assumption Stress-Testing
+
+[Critical risks and important issues related to adoption, forecasts, timelines]
+
+### 2. Hidden Dependencies
+
+[Critical risks and important issues related to integrations, cross-team work, org readiness]
+
+### 3. Real-World Failure Scenarios
+
+[Critical risks and important issues related to scale, edge cases, cross-region problems]
+
+### 4. Workday Feasibility
+
+[Use Deployment Agent + functional knowledge to validate technical feasibility]
+
+### 5. Strategic Clarity & PM Ownership (NEW)
+
+**Purpose**: Validate that PM thinking is evident in the PRD, not just research synthesis.
+
+**Critical Risks:**
+- ❌ **Problem statement is generic**: "Users need better [X]" (template language, could apply to any feature)
+  - **Test**: Does the problem statement include specific pain points, customer evidence, and business impact unique to this opportunity?
+  - **If flagged**: Request PM to strengthen problem specificity with concrete examples
+- ❌ **No tradeoffs documented**: Everything is in scope, no v1/v2 boundaries defined
+  - **Test**: Does the PRD explicitly state what's NOT being solved in v1?
+  - **If flagged**: Request PM to clarify scope boundaries and sequencing rationale
+- ❌ **Vague success metrics**: "Improve adoption" with no baseline or quantified target
+  - **Test**: Are metrics formatted as "Baseline → Target" with rationale?
+  - **If flagged**: Request PM to quantify baselines and targets with specific numbers
+- ❌ **Missing "why now"**: Research-only rationale, no business strategy or strategic timing
+  - **Test**: Does Executive Summary or Overview explain what changed to make this a priority now?
+  - **If flagged**: Request PM to provide business context (strategic mandate, competitive threat, customer escalation, roadmap commitment)
+
+**Important Issues:**
+- ⚠️ **Problem statement lacks specificity**: Could apply to multiple features or customer segments
+  - **Test**: Is the problem statement narrowly scoped to this specific opportunity?
+  - **If flagged**: Suggest adding customer quotes, quantified pain points, or regional context
+- ⚠️ **Success metrics not fully quantified**: Some metrics lack clear baseline → target or rationale
+  - **Test**: Do all listed metrics include baseline, target, and reasoning from research?
+  - **If flagged**: Request completion of missing metric components
+- ⚠️ **Scope boundaries missing or vague**: "TBD", "as needed", "future phases" without specifics
+  - **Test**: Are v1 boundaries explicit about what's deferred and why?
+  - **If flagged**: Suggest adding rationale for each deferred item (complexity, dependency, sequencing)
+- ⚠️ **Strategic intent shallow**: No connection to company priorities, roadmap positioning, or competitive landscape
+  - **Test**: Does PRD explain how this aligns to broader strategy beyond "research says"?
+  - **If flagged**: Suggest adding strategic context (e.g., GCC expansion mandate, market positioning, customer segment priority)
+
+**Questions for PM (if flagged):**
+- What specific problem are we solving (beyond "research says customers want this")?
+- What's the quantified success target with baseline? (e.g., "Reduce time to X from 16 days to 10 days")
+- What are we explicitly NOT solving in v1 and why?
+- Why is this strategically important RIGHT NOW (not just "customers want it")?
+
+**Severity**: Medium-High (indicates agent over-automation; PM thinking not applied)
+
+**Recommendation if flagged**: Request PM to strengthen strategic framing before proceeding to 315. Note: This doesn't mean PRD is bad—it means it reads as research synthesis rather than PM-driven strategy.
+
+### 6. Competitive Claims vs CI Artifacts (GCC E2E)
 
 **Output Format**:
 

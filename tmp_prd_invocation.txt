@@ -1,0 +1,9 @@
+Invoking 200-prd-writer.mdc for GCC-E2E-005 Step 3
+
+Create PRD for the selected GCC opportunity: GCC nationalisation and workforce compliance (OOB). 
+
+Replace band-aid custom fields with standard objects, quota dashboards, and audit exports aligned to KSA (Nitaqat / Qiwa-aligned evidence hooks), UAE (Emiratisation), and Kuwait (Kuwaitisation) with role-based security and customer lawful-basis configuration.
+
+Source: research/GCC/thematic-analysis/2026-03-21-GCC-PMF-Analysis-v44.md
+
+This is part of GCC e2e pipeline.

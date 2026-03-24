@@ -16,6 +16,7 @@ import {
   SANA_CARD_RADIUS_LG,
   SANA_SHELL_RADIUS,
   SANA_CARD_SHADOW,
+  SANA_CARD_SHADOW_LIFTED,
 } from './components';
 
 /**

@@ -90,7 +90,7 @@ Successfully implemented a new **User Researcher Agent (105)** applying Teresa T
 **Changes**:
 - Added **Step 0: Invoke 105-user-researcher** at start of execution
 - 120 captures 105's structured output
-- **Phase 6b** (Slide Deck Generation) now parses 105's output and integrates it into SECTION 03 (Primary Research - User Interviews)
+- **130-pmf-slide-generator** (after **120** report) parses 105-backed content and places SECTION 03 (Primary Research - User Interviews) in the PMF roadmap deck
 - Refactored to use Thematic Analysis skill for 120's own analysis
 - 120 remains the orchestrator for full PMF analysis (105 user research + PESTEL + Competitive + comprehensive deck)
 
@@ -244,7 +244,8 @@ graph TD
 |------|--------|---------|
 | `~/.cursor/skills-cursor/thematic-analysis/SKILL.md` | ✅ Created | Extracted reusable skill from 120 (Braun & Clarke method) |
 | `.cursor/rules/105-user-researcher.mdc` | ✅ Created | New agent with Teresa Torres methodology |
-| `.cursor/rules/120-pmf-thematic-analysis.mdc` | ✅ Updated | Added Step 0 (invoke 105), Phase 6b integration |
+| `.cursor/rules/120-pmf-thematic-analysis.mdc` | ✅ Updated | Added Step 0 (invoke 105); full deck via **130** |
+| `.cursor/rules/130-pmf-slide-generator.mdc` | ✅ Added | PMF roadmap `.pptx` after **120** |
 | `.cursor/rules/110-slide-generator.mdc` | ✅ Updated | Added Primary Research section template |
 | `.cursor/rules/000-master-orchestrator.mdc` | ✅ Updated | Added 105 to roster and routing logic |
 | `.cursor/rules/090-agent-improvement-advisor.mdc` | ✅ Updated | Added 105 to ecosystem, updated workflow example |

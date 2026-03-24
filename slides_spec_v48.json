@@ -1,0 +1,1296 @@
+[
+  {
+    "master_index": 1,
+    "layout_name": "TITLE",
+    "placeholders": {
+      "0": {
+        "text": "GCC Product-Market Fit Research"
+      },
+      "1": {
+        "text": "Braun & Clarke thematic analysis | v48 | v30 inventory parity | 22 March 2026"
+      }
+    }
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "Workday Confidential",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "GCC Recruiting PMF roadmap",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Research Author"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Analysis: Workday Recruiting PMF agent workflow (120 Phase 6b)\n• Report: research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v47.md\n• Primary qual: 3 GCC-market enterprise customer interviews (P1–P3)\n• Structured opportunities: research/raw-data/filtered_gcc_opps.csv (2 GCC rows)\n• Legal checkpoints: 060-advisor validation on PESTEL Legal and roadmap recommendations\n• Slide spec: v30 inventory alignment (SWOT, 4× Win/Loss, Ideation block, Full Funnel, 6 recommendations)",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Ownership and traceability for exec readers.\n\nReferences:\n• research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Executive Summary"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Fresh PMF pass (22 March 2026): Braun & Clarke on 3 GCC customer interviews; triangulation with 2 filtered GCC Win/Loss rows; no internal SME transcripts in research/GCC/\n• Strongest signals: nationalisation / Nitaqat 2026–2028 and Emiratisation enforcement narratives; KSA interview rules (notice, committee composition themes); scheduling + M365 integration friction (qual + PG-00009165); WhatsApp penetration vs enterprise policy split; candidate grid, boolean/semantic search, AI matching; PowerBI / dashboard exits\n• Competitive: regional specialists (Talentera, ZenHR, Darwinbox) vs global suites; win on compliance depth + enterprise trust\n• Roadmap: six recommendation slides mirror Priority 1–2 focus (see report for full eight-row E2E handoff table)",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.6,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• v47 executive synthesis; deck structure restored to v30 inventory.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "Workday Confidential",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "Research challenge",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Research Question & Objectives"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• How can Workday Recruiting better support hiring in the GCC region?\n• Understand customer pain points, compliance requirements, and local preferences\n• Identify product gaps and roadmap opportunities\n• Triangulate customer interviews with Win/Loss data, desk research (PESTEL), and competitive context",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Braun & Clarke six-phase methodology.\n\nReferences:\n• Braun & Clarke (2006)"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Research Approach - 5-Phase Framework"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "Phase 0: Geographic filtering (GCC)\nPhase 1: Familiarisation with data\nPhase 2: Generating initial codes\nPhase 3: Generating themes\nPhase 4: Reviewing themes (triangulation)\nPhase 5: Defining and naming themes\nPhase 6: Producing report + slide deck (v30 inventory parity)",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Standard Braun & Clarke methodology.\n\nReferences:\n• Braun & Clarke (2006)"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "Workday Confidential",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "Strategic context",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Strategic Context - Why GCC Now"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Vision 2030 and public-sector nationalisation programmes tie hiring software to licence-to-operate risk\n• Enterprise ATS replacement cycles favour suites that prove compliance depth and auditability\n• Regional competitors move quickly on Arabic UX, local boards, and nationalisation reporting\n• Workday wins on global HCM record; must close GCC-specific configuration and evidence gaps",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Strategic framing for regional investment.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "GCC Market Momentum - Key Indicators"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Astute Analytica: US$2,557.3M (2023) → US$5,483.5M (2032), CAGR 9.05% (GCC HR tech)\n• Analyst summaries cite strong HR tech investment intent across GCC enterprises\n• Nationalisation timelines (e.g. Nitaqat phase 2026–2028 commentary) increase scrutiny on hiring proof\n• High WhatsApp penetration in UAE sample statistics (industry summaries) vs tenant messaging policy variance\n\nProduct implication: Market growth plus compliance enforcement make recruiting product depth a board-visible purchase criterion.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Astute Analytica market sizing.\n\nReferences:\n• https://www.astuteanalytica.com/industry-report/gcc-hr-tech-market"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "Workday Confidential",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "PESTEL",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Political"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Saudi Nitaqat 2026–2028: MHRSD phase (commentary; verify Arabic primary notices)\n• UAE Emiratisation: MOHRE enforcement; press cites fines context under illustrative 2025 reporting (verify per engagement)\n• Kuwait / Oman: Kuwaitisation and Omanisation pressure on government-linked contracts (2025–2026 commentary)\n\nProduct implication: Native nationalisation dimensions, audit-ready reporting, Qiwa/MoHRE-aligned evidence hooks where customers require them.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Mondaq employer summaries; Gulf News illustration.\n\nReferences:\n• https://www.mondaq.com/saudiarabia/contracts-and-commercial-law/1754286/new-phase-of-the-nitaqat-saudization-program-20262028-what-businesses-in-saudi-arabia-need-to-know"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Economic"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Astute Analytica: US$2,557.3M (2023) → US$5,483.5M (2032), CAGR 9.05%\n• Recruitment / ATS remains a priority segment inside HR suites\n• Saudi / UAE enterprise consolidation favours platforms that prove compliance depth\n\nProduct implication: GCC is a high-growth market; nationalisation-ready recruiting is a differentiator.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Astute Analytica.\n\nReferences:\n• https://www.astuteanalytica.com/industry-report/gcc-hr-tech-market"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Social"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• UAE: Global Media Insight 2024 — ~85.8% WhatsApp penetration (16–64 internet users) in industry summary\n• P1–P2: WhatsApp essential for speed; P3: official WhatsApp may be blocked by policy\n• P2: 40%+ career traffic from handheld; Arabic critical for operational hiring\n\nProduct implication: WhatsApp + SMS + email with policy controls; mobile apply; Arabic UX.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• GMI UAE statistics; interview transcripts.\n\nReferences:\n• https://www.globalmediainsight.com/blog/uae-social-media-statistics"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Technological"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Qiwa, GOSI, Mudad: Saudi government portals for work permits, Nitaqat dashboard (verify product facts via Deployment Agent)\n• AI-powered recruitment platforms and workforce analytics are baseline in analyst narratives (e.g. Fosway TA grids)\n• Integration depth with Microsoft 365 and scheduling partners remains a differentiator\n\nProduct implication: Credible government-adjacent evidence patterns; AI with audit, explainability, and human review.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Industry summaries; verify portal scope with product.\n\nReferences:\n• learningnews.com/news/fosway/2025/2025-fosway-9-grid-for-cloud-hr/"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Environmental"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• DATA GAP: No material recruiting-specific environmental signals in this pass\n• UAE Net Zero 2050, Saudi 2060 are macro ESG context\n• ESG workforce reporting may emerge\n\nProduct implication: No recruiting feature commitment from this factor in v48; monitor ESG workforce reporting demand.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Environmental factor has limited recruiting relevance.\n\nReferences:\n• N/A"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Legal"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Saudi PDPL: lawful basis, retention, rights, breach notification — map recruiting personal data (verify with Legal)\n• KSA private-sector interviews (practitioner summaries): ≥3 working days' notice; committee composition themes — verify Arabic primary text with counsel\n• UAE PDPA (Federal Decree-Law 45/2021): lawful processing, cross-border transfers, subject rights\n\nProduct implication: Configurable scheduling guardrails + evidence logs; PDPL/PDPA-ready data minimisation; legal review of UX copy.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Mondaq interview regulations; UAE PDPA summaries.\n\nReferences:\n• https://www.mondaq.com/saudiarabia/employee-rights-labour-relations/1683580/new-regulations-for-private-sector-job-advertising-and-interviews"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "Workday Confidential",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "Competitive landscape",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Competitive Landscape - Regional Specialists"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Talentera (Bayt.com): strong regional job board adjacency and Arabic-first recruiting workflows\n• ZenHR / ZenATS: GCC-focused HR stack narratives; mid-market agility\n• Darwinbox: APAC/GCC growth stories; rapid configuration marketing\n• Differentiators often emphasise: Arabic UX, local board posting, nationalisation-friendly reporting\n\nProduct implication: Expect RFPs to compare Workday against 'good enough' regional ATS unless compliance depth is demonstrated.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Desk scan; validate claims in live deals.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Competitive Landscape - Global Platforms"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Global suites: Workday, SAP SuccessFactors (incl. SmartRecruiters acquisition narratives), Oracle HCM / Taleo\n• CRM / career experience: Phenom (called out by P2) shapes candidate journey expectations\n• Analyst grids (e.g. Fosway) frame AI and suite consolidation as baseline\n\nProduct implication: Win GCC on compliance depth + enterprise trust + integration reality, not slide-ware parity alone.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Fosway / industry summaries.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Competitive SWOT Analysis - Workday Recruiting in GCC"
+      }
+    },
+    "tables": [
+      {
+        "rows": [
+          [
+            "Strengths",
+            "Weaknesses"
+          ],
+          [
+            "Single HCM record; global process scale; security and enterprise trust",
+            "GCC OOTB nationalisation reporting vs custom-field workarounds; Arabic/RTL edge cases in documents"
+          ],
+          [
+            "Partner ecosystem (HiredScore, Paradox assumed integrated) for AI and scheduling narratives",
+            "Scheduling and M365 friction for some populations (echoed in Win/Loss PG-00009165)"
+          ]
+        ],
+        "top_inches": 1.0,
+        "left_inches": 0.5,
+        "width_inches": 9.0,
+        "height_inches": 2.1,
+        "font_size_pt": 7,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.25
+      },
+      {
+        "rows": [
+          [
+            "Opportunities",
+            "Threats"
+          ],
+          [
+            "Nationalisation enforcement timelines; board-level compliance buys",
+            "Regional ATS and 'local enough' suites win on speed and Arabic-first UX"
+          ],
+          [
+            "AI-matching demand validated in interviews; semantic search pull",
+            "Competitor job posting paths and SKU removal risk (e.g. PG-00005541 pattern)"
+          ]
+        ],
+        "top_inches": 3.15,
+        "left_inches": 0.5,
+        "width_inches": 9.0,
+        "height_inches": 2.1,
+        "font_size_pt": 7,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.25
+      }
+    ],
+    "speaker_notes": "• SWOT is desk + interview informed; validate for sales enablement.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "Workday Confidential",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "Win / Loss",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Win / Loss Analysis - Dataset Overview"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Source: research/raw-data/filtered_gcc_opps.csv\n• Rows ingested for GCC PMF: 2 opportunity records (plus header)\n• Triangulation role: independent echo for scheduling integration friction and competitor posting risk\n• Limitation: small n — use as directional signal alongside qualitative research, not population inference\n\nProduct implication: Treat Win/Loss as a compliance + integration + SKU risk lens for GCC deal reviews.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• CSV path and row count.\n\nReferences:\n• research/raw-data/filtered_gcc_opps.csv"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Win / Loss - Top Product Gap Themes (Severity-Weighted)"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Theme A — Scheduling / calendaring integrations: Outlook / MS Teams / HiredScore experience friction for GCC populations (PG-00009165); severity narrative: tolerable but manual effort (5)\n• Theme B — Job posting / competitor path: CareerPlug integration; risk of SKU removal from deal (PG-00005541); severity narrative (3)\n• Qualitative amplification: P1–P2 scheduling pain aligns with Theme A; posting risk aligns with competitor pressure in interviews\n\nProduct implication: Prioritise integration reliability and guided scheduling guardrails in GCC bids.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Severity labels from opportunity export; verify in source system.\n\nReferences:\n• filtered_gcc_opps.csv"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Win / Loss - Gap Analysis: Charts"
+      }
+    },
+    "charts": [
+      {
+        "chart_type": "column",
+        "categories": [
+          "PG-00009165\n(scheduling friction)",
+          "PG-00005541\n(posting / SKU risk)"
+        ],
+        "series": [
+          {
+            "name": "Severity score (export)",
+            "values": [
+              5,
+              3
+            ]
+          }
+        ],
+        "left_inches": 1.0,
+        "top_inches": 1.65,
+        "width_inches": 8.0,
+        "height_inches": 3.2,
+        "category_axis_font_size_pt": 9,
+        "value_axis_font_size_pt": 9,
+        "title_font_size_pt": 10
+      }
+    ],
+    "speaker_notes": "• One series per style guide (simple column chart).\n\nReferences:\n• filtered_gcc_opps.csv"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Win / Loss - GCC-Relevant Severity-1 Gaps (EMEA Proxy)"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Proxy method: when GCC explicit n is small, review EMEA Win/Loss catalogues for recurring integration and compliance-adjacent patterns (do not treat as GCC prevalence rates)\n• GCC cohort highlights: scheduling stack friction; competitor-assisted posting paths\n• Interview bridge: P1 cites KSA interview notice and committee themes; P2 cites Outlook-easier-than-Workday scheduling\n\nProduct implication: Use proxy themes to pre-brief CSG and engineering on 'first questions' in GCC escalations.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Transparent proxy framing; avoid false precision.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "Workday Confidential",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "Primary research",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Customer Interviews | 3 GCC-market enterprise participants (anonymised)"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Qualitative depth sample: three enterprise programmes with GCC hiring exposure\n• Protocol: anonymise individuals as P1, P2, P3; retain company and role for context\n• Coverage: nationalisation, scheduling, messaging policy, grid UX, AI matching, dashboards, Arabic docs, career site/mobile\n• Limitation: no internal SME transcripts in research/GCC/ for this pass — triangulation is Customer vs CSV",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Primary research strip intro.\n\nReferences:\n• research/GCC/customer-transcripts/"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Customer Interview Participants"
+      }
+    },
+    "tables": [
+      {
+        "rows": [
+          [
+            "Participant",
+            "Role",
+            "Organisation",
+            "GCC relevance"
+          ],
+          [
+            "P1",
+            "Cyber Security & Campus Hiring Lead",
+            "Accenture",
+            "Egypt, GCC, Africa hiring"
+          ],
+          [
+            "P2",
+            "Performance & Innovation Manager (TA systems)",
+            "Baker Hughes",
+            "Global TA with GCC volume themes"
+          ],
+          [
+            "P3",
+            "Product Owner, Talent & Resourcing",
+            "Shell",
+            "Global programme; franchise countries incl. GCC"
+          ]
+        ],
+        "left_inches": 0.5,
+        "top_inches": 1.2,
+        "width_inches": 9.0,
+        "height_inches": 2.8,
+        "font_size_pt": 9,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.25
+      }
+    ],
+    "speaker_notes": "• Anonymisation protocol.\n\nReferences:\n• research/GCC/customer-transcripts/"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Customer Interview - Accenture (P1)"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Nationalisation: Emiratisation, Saudization, Kuwaitisation targets; track nationality, gender, PWD quotas in Workday\n• Interview scheduling: top wish; cites KSA-style rules (≥3 days' notice; panel nationalities) and Kuwait interview notice practice\n• Offer rigidity: long cycles for out-of-template offers; offline workarounds\n• WhatsApp: essential for fast candidate closure\n• Dashboards: hard to read; export and rebuild externally",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• P1 transcript summary.\n\nReferences:\n• Interview_P1_Ammad_Alsairafi_Accenture.txt"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Customer Interview - Baker Hughes (P2)"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Candidate grid: navigate many tabs at 100–200 candidates; wants a more seamless view\n• Boolean search: not strong; wants AI-assisted search\n• Interview scheduling: felt more complicated than Outlook; Paradox good if integrated\n• Nationalisation: Nitaqat mandate; custom fields; penalties if targets missed\n• WhatsApp: helpful in GCC and Saudi\n• Career site: branding limits; apply redirect clunky; 40%+ handheld traffic",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• P2 transcript summary.\n\nReferences:\n• Interview_P2_Mahboob_Khan_Baker_Hughes.mp4.txt"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Customer Interview - Shell (P3)"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• Reporting: native dashboards insufficient; built PowerBI for leadership cuts\n• Arabic/RTL: Workday Docs shows squares rather than Arabic characters for offers\n• Franchise model: fewer openings in some GCC markets; manual / Excel reporting\n• HiredScore: evaluating for high volume, low openings\n• Communication: policy restricts WhatsApp; email, SMS, MS Teams",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• P3 transcript summary.\n\nReferences:\n• Interview_P3_Arika_Yamahata_Shell.txt"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Customer Ideation Hub | Structured opportunities + qualitative codes (v48)"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• DATA GAP: No 9,922-row GCC ideas corpus attached to this pass (unlike legacy v30 benchmark)\n• Quant proxy: 2 GCC-filtered Win/Loss opportunity rows + 22 March 2026 thematic codebook (sample codes in report)\n• Method: semantic coding with source tags ([Customer], [CSV]) then theme clustering\n\nProduct implication: When ideas telemetry is connected, re-run Ideation slides with true volume charts; until then label proxies transparently.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Honest quant stance; preserves v30 block without fabricating volumes.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Customer Ideation Hub - Top Capability Areas (Qualitative Weighting)"
+      }
+    },
+    "charts": [
+      {
+        "chart_type": "column",
+        "categories": [
+          "Nationalisation\n& compliance",
+          "Scheduling\n& M365",
+          "Grid / search\n& AI match",
+          "WhatsApp /\nomnichannel",
+          "Dashboards\n& reporting",
+          "Offers / docs\n/ RTL / mobile"
+        ],
+        "series": [
+          {
+            "name": "Interview emphasis (relative)",
+            "values": [
+              9,
+              9,
+              8,
+              8,
+              8,
+              7
+            ]
+          }
+        ],
+        "left_inches": 0.7,
+        "top_inches": 1.55,
+        "width_inches": 8.6,
+        "height_inches": 3.35,
+        "category_axis_font_size_pt": 8,
+        "value_axis_font_size_pt": 9,
+        "title_font_size_pt": 10
+      }
+    ],
+    "text_boxes": [
+      {
+        "text": "Note: scores are illustrative weights from transcript coding density — not a statistical model.",
+        "left_inches": 0.7,
+        "top_inches": 4.95,
+        "width_inches": 8.6,
+        "height_inches": 0.55,
+        "font_name": "Archivo",
+        "font_size_pt": 9,
+        "color": "laptop"
+      }
+    ],
+    "speaker_notes": "• Illustrative weighting; replace with real idea volumes when available.\n\nReferences:\n• Customer transcripts; v47 code sample table"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Customer Ideation Hub - 6 Key Themes from Verbatim Analysis"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "1. Nationalisation and workforce compliance analytics\n2. Interview scheduling, integrations, and statutory guardrails\n3. Recruiter efficiency: candidate grid, search, and AI matching\n4. Omnichannel candidate engagement (WhatsApp, SMS, campaigns)\n5. Reporting and dashboard abandonment (PowerBI / Excel exits)\n6. Offers, documents, localisation, and mobile candidate experience",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Theme names from v47 report.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Customer Ideation Hub - AI Ideas Spotlight"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "• P2: '2M candidates in our database' — wants matches beyond applicants; boolean 'not that strong'\n• P3: high volume, low openings — evaluating HiredScore for prioritisation\n• P1: asks whether AI is on the roadmap for search and matching\n• Compliance: EU AI Act high-risk recruitment uses and GDPR Art. 22 — ship human-in-the-loop and disclosures\n\nProduct implication: AI is a buyer expectation; pair capability with governance and GCC tenant realities.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• AI quotes paraphrased from transcripts; verify exact wording for external use.\n\nReferences:\n• Customer transcripts; 060-legal-advisor.mdc"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "Workday Confidential",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "Thematic validation",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Validated Themes 1-4 - Strong customer signal (GCC)"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "1. Nationalisation & compliance: OOTB gap; penalties; custom-field workarounds (P1, P2)\n2. Interview scheduling: Outlook/Teams friction; Paradox path; KSA notice/committee themes (P1, P2; CSV PG-00009165)\n3. Candidate grid & AI matching: tab fatigue; weak boolean; database-wide match desire (P2, P3)\n4. WhatsApp & omnichannel: speed in GCC vs enterprise policy constraints (P1, P2 vs P3)",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Four-theme batch to mirror v30 rhythm.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Validated Themes 5-7 - Reporting, offers/docs, competitive pressure"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "5. Reporting & dashboards: native readability and granularity gaps; PowerBI exits (P1, P3)\n6. Offers, Arabic/RTL docs, mobile apply, career site branding: configuration delays; rendering issues; Phenom redirect themes (P1–P3)\n7. Job posting / competitor paths: SKU risk pattern in Win/Loss (PG-00005541) plus regional ATS comparisons\n\nProduct implication: Themes 5–7 are medium–high PMF; pair with legal review on documents and retention.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Seven-theme coverage aligned to inventory slide pair.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Cross-Source Validation Matrix"
+      }
+    },
+    "tables": [
+      {
+        "rows": [
+          [
+            "Theme",
+            "P1",
+            "P2",
+            "P3",
+            "CSV",
+            "PMF impact"
+          ],
+          [
+            "Nationalisation",
+            "✓",
+            "✓",
+            "-",
+            "Implicit",
+            "Critical"
+          ],
+          [
+            "Reporting",
+            "✓",
+            "Partial",
+            "✓",
+            "-",
+            "High"
+          ],
+          [
+            "Interview scheduling",
+            "✓",
+            "✓",
+            "-",
+            "✓",
+            "Critical"
+          ],
+          [
+            "Offer / docs / RTL",
+            "✓",
+            "-",
+            "✓",
+            "-",
+            "Medium–high"
+          ],
+          [
+            "WhatsApp / channels",
+            "✓",
+            "✓",
+            "Policy",
+            "-",
+            "High"
+          ],
+          [
+            "Grid / search / AI",
+            "Partial",
+            "✓",
+            "✓",
+            "-",
+            "High"
+          ]
+        ],
+        "left_inches": 0.5,
+        "top_inches": 1.2,
+        "width_inches": 9.0,
+        "height_inches": 3.25,
+        "font_size_pt": 8,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.25
+      }
+    ],
+    "speaker_notes": "• v47 triangulation: customer + CSV; no SME column.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "Workday Confidential",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "Diagnostic",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "GCC Recruiting Gap Analysis - Full Funnel"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "Attract & apply: mobile apply and career site branding gaps reduce conversion; competitor posting paths create SKU risk\nScreen & interview: grid/tab friction slows throughput; scheduling leaks to Outlook; KSA notice and committee rules need in-product guardrails\nOffer & onboard: offer configuration lead times; Arabic/RTL document defects; email-borne document risk\nCompliance & evidence: nationalisation tracking often custom-field based; dashboard exports to PowerBI signal reporting abandonment\n\nProduct implication: Full-funnel fixes must blend compliance depth with recruiter speed — not one at the expense of the other.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.8,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Qualitative funnel synthesis.\n\nReferences:\n• Customer transcripts; filtered_gcc_opps.csv"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "text": "Workday Confidential",
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 24,
+        "bold": true,
+        "color": "ink"
+      },
+      {
+        "text": "Roadmap recommendations",
+        "left_inches": 3.3,
+        "top_inches": 3.8,
+        "width_inches": 4.3,
+        "height_inches": 0.4,
+        "font_name": "Archivo",
+        "font_size_pt": 11,
+        "color": "laptop"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Recommendation 1: Nationalisation and compliance analytics (P1)"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "Problem: Custom nationality fields break under config churn; audit risk for Nitaqat / Emiratisation / Kuwaitisation.\nEvidence: P1 tracks targets; P2 cites penalties; desk research on programme phases.\nRecommendation: OOTB objects, reports, exceptions, Qiwa/MoHRE-aligned evidence patterns (legal sign-off).\nWhy now: 2026–2028 Nitaqat commentary and rising enforcement narratives in UAE press (verify per deal).\nSuccess metrics: % tenants on standard packs; audit findings down; GCC win rate vs regional ATS.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.9,
+        "font_name": "Archivo",
+        "font_size_pt": 10,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Five-part slide structure; items 7–8 remain in written report E2E handoff table.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Recommendation 2: Interview scheduling and GCC rule packs (P1)"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "Problem: Recruiters leave Workday for Outlook; compliance rules live in spreadsheets.\nEvidence: P1 top wish; P2 Workday harder than Outlook; PG-00009165 integration friction.\nRecommendation: Microsoft 365 depth; Paradox-class flows; configurable KSA notice/panel helpers with legal-approved copy.\nWhy now: MHRSD rule themes summarised in practitioner articles (verify Arabic primary law).\nSuccess metrics: in-product scheduled interviews; fewer scheduling tickets; legal acceptance of warnings/consent flows.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.9,
+        "font_name": "Archivo",
+        "font_size_pt": 10,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Five-part slide structure; items 7–8 remain in written report E2E handoff table.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Recommendation 3: AI matching and semantic search (P1)"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "Problem: Boolean search too weak; large databases hide matches.\nEvidence: P2 database scale; P3 HiredScore evaluation; P1 AI roadmap question.\nRecommendation: Semantic search, similar candidates, HiredScore alignment, human review and disclosures.\nWhy now: Analyst grids treat AI in TA as baseline buyer expectation.\nSuccess metrics: time-to-shortlist; match acceptance; DPIA completion for AI surfaces.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.9,
+        "font_name": "Archivo",
+        "font_size_pt": 10,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Five-part slide structure; items 7–8 remain in written report E2E handoff table.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Recommendation 4: WhatsApp and omnichannel campaigns (P1)"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "Problem: Email-only campaigns miss GCC norms; tenants disagree on channel policy.\nEvidence: P1/P2 WhatsApp essential/helpful; P3 policy blocks WhatsApp.\nRecommendation: WhatsApp Business messaging with templates, Arabic, consent logs, tenant toggles.\nWhy now: High messaging penetration statistics in UAE summaries (industry).\nSuccess metrics: opt-in rate; delivered messages; reduction in shadow channels where allowed.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.9,
+        "font_name": "Archivo",
+        "font_size_pt": 10,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Five-part slide structure; items 7–8 remain in written report E2E handoff table.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Recommendation 5: Candidate grid redesign (P1)"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "Problem: Tab navigation exhausts recruiters at high volume.\nEvidence: P2 100–200 candidate navigation quote.\nRecommendation: Single-pane overview across summary, CV, notes, history, and actions.\nWhy now: Grid pain is global; GCC volume hiring amplifies time-to-fill risk.\nSuccess metrics: clicks-to-CV; time-to-shortlist; recruiter satisfaction.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.9,
+        "font_name": "Archivo",
+        "font_size_pt": 10,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Five-part slide structure; items 7–8 remain in written report E2E handoff table.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Recommendation 6: Recruiter and leader dashboards (P2)"
+      }
+    },
+    "text_boxes": [
+      {
+        "text": "Problem: Native dashboards unreadable or shallow; PowerBI exits.\nEvidence: P1 'headache' quote; P3 PowerBI migration.\nRecommendation: Role-aware dashboards: time-in-stage, conversion, LOB/location/level cuts.\nWhy now: Leadership expects live proof of compliance and funnel health.\nSuccess metrics: weekly active dashboard users; reduction in external BI extracts.",
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.9,
+        "font_name": "Archivo",
+        "font_size_pt": 10,
+        "color": "ink"
+      }
+    ],
+    "speaker_notes": "• Five-part slide structure; items 7–8 remain in written report E2E handoff table.\n\nReferences:\n• 2026-03-22-GCC-PMF-Analysis-v47.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Bumper Slide"
+  }
+]

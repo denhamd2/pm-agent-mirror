@@ -8,14 +8,47 @@ import '@workday/canvas-tokens-web/css/system/_variables.css';
 import '@workday/canvas-tokens-web/css/brand/_variables.css';
 import GccWhatsappOmnichannelEngagementV45 from './gcc-whatsapp-omnichannel-engagement-v45';
 import { GccCandidateGridV46 } from './gcc-candidate-grid-v46';
+import { GccCandidateGridRedesignV52 } from './gcc-candidate-grid-redesign-v52';
+import { GccCandidateReviewExperienceV54 } from './gcc-candidate-review-experience-v54';
+import { GccCandidateReviewCvCarouselV54 } from './gcc-candidate-review-cv-carousel-v54';
 import { GccRecruiterDashboard } from './gcc-recruiter-dashboard';
+import GccNationalizationOobV56 from './gcc-nationalization-oob-v56';
+import { GccUnifiedCandidateReviewV57 } from './gcc-unified-candidate-review-v57';
 import { SANA_PAGE_CANVAS } from './components';
 
-function prototypeFromLocation(): 'whatsapp-v45' | 'gcc-candidate-grid-v46' | 'gcc-recruiter-dashboard' {
+function prototypeFromLocation():
+  | 'whatsapp-v45'
+  | 'gcc-candidate-grid-v46'
+  | 'gcc-candidate-grid-redesign-v52'
+  | 'gcc-candidate-review-experience-v54'
+  | 'gcc-candidate-review-cv-carousel-v54'
+  | 'gcc-recruiter-dashboard'
+  | 'gcc-nationalization-oob-v56'
+  | 'gcc-unified-candidate-review-v57' {
   const path = window.location.pathname.replace(/\/+$/, '') || '/';
+  if (path.endsWith('gcc-unified-candidate-review-v57')) return 'gcc-unified-candidate-review-v57';
+  if (path.endsWith('gcc-nationalization-oob-v56')) return 'gcc-nationalization-oob-v56';
+  if (path.endsWith('gcc-candidate-review-cv-carousel-v54')) return 'gcc-candidate-review-cv-carousel-v54';
+  if (path.endsWith('gcc-candidate-review-experience-v54')) return 'gcc-candidate-review-experience-v54';
+  if (path.endsWith('gcc-candidate-grid-redesign-v52')) return 'gcc-candidate-grid-redesign-v52';
   if (path.endsWith('gcc-candidate-grid-v46')) return 'gcc-candidate-grid-v46';
   if (path.endsWith('gcc-recruiter-dashboard')) return 'gcc-recruiter-dashboard';
   const h = window.location.hash.replace(/^#\/?/, '');
+  if (h === 'gcc-unified-candidate-review-v57' || h.startsWith('gcc-unified-candidate-review-v57')) {
+    return 'gcc-unified-candidate-review-v57';
+  }
+  if (h === 'gcc-nationalization-oob-v56' || h.startsWith('gcc-nationalization-oob-v56')) {
+    return 'gcc-nationalization-oob-v56';
+  }
+  if (h === 'gcc-candidate-review-cv-carousel-v54' || h.startsWith('gcc-candidate-review-cv-carousel-v54')) {
+    return 'gcc-candidate-review-cv-carousel-v54';
+  }
+  if (h === 'gcc-candidate-review-experience-v54' || h.startsWith('gcc-candidate-review-experience-v54')) {
+    return 'gcc-candidate-review-experience-v54';
+  }
+  if (h === 'gcc-candidate-grid-redesign-v52' || h.startsWith('gcc-candidate-grid-redesign-v52')) {
+    return 'gcc-candidate-grid-redesign-v52';
+  }
   if (h === 'gcc-candidate-grid-v46' || h.startsWith('gcc-candidate-grid-v46')) {
     return 'gcc-candidate-grid-v46';
   }
@@ -36,6 +69,11 @@ function AppRoot() {
       window.removeEventListener('hashchange', sync);
     };
   }, []);
+  if (route === 'gcc-unified-candidate-review-v57') return <GccUnifiedCandidateReviewV57 />;
+  if (route === 'gcc-nationalization-oob-v56') return <GccNationalizationOobV56 />;
+  if (route === 'gcc-candidate-review-cv-carousel-v54') return <GccCandidateReviewCvCarouselV54 />;
+  if (route === 'gcc-candidate-review-experience-v54') return <GccCandidateReviewExperienceV54 />;
+  if (route === 'gcc-candidate-grid-redesign-v52') return <GccCandidateGridRedesignV52 />;
   if (route === 'gcc-candidate-grid-v46') return <GccCandidateGridV46 />;
   if (route === 'gcc-recruiter-dashboard') return <GccRecruiterDashboard />;
   return <GccWhatsappOmnichannelEngagementV45 />;
