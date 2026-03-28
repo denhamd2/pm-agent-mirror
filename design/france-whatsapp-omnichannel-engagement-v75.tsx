@@ -17,7 +17,7 @@ import { Table } from '@workday/canvas-kit-react/table';
 import { colors, space } from '@workday/canvas-kit-react/tokens';
 import { Heading, BodyText } from '@workday/canvas-kit-react/text';
 import { SystemIcon } from '@workday/canvas-kit-react/icon';
-import { speechBubbleIcon, xSmallIcon, mailIcon, uploadClipIcon, boldIcon, italicsIcon, underlineIcon, linkIcon, unorderedListIcon, chevronDownIcon } from '@workday/canvas-system-icons-web';
+import { speechBubbleIcon, xSmallIcon, mailIcon, uploadClipIcon, boldIcon, italicsIcon, underlineIcon, linkIcon, unorderedListIcon, chevronDownIcon, documentIcon, checkCircleIcon } from '@workday/canvas-system-icons-web';
 import { Checkbox } from '@workday/canvas-kit-react/checkbox';
 import { TextInput } from '@workday/canvas-kit-react/text-input';
 
@@ -215,27 +215,47 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
               <Box flex="1 1 320px" minWidth={0}>
                 <Card padding="l" style={cardStyle()}>
                   <Heading size="small" marginBottom="m">
-                    Summary
+                    Candidate Summary
                   </Heading>
-                  <BodyText size="small" color={colors.blackPepper600} marginBottom="s">
-                    Strong fit for design systems and enterprise recruiting workflows. French and English fluency confirmed.
+                  <BodyText size="small" color={colors.blackPepper600} marginBottom="m">
+                    Highly experienced product designer with a strong background in enterprise SaaS and design systems. Bilingual (French/English) and immediately available.
                   </BodyText>
+                  <Flex gap="xl" marginBottom="m">
+                    <Box>
+                      <BodyText size="small" fontWeight="bold">Experience</BodyText>
+                      <BodyText size="small" color={colors.blackPepper600}>7+ years</BodyText>
+                    </Box>
+                    <Box>
+                      <BodyText size="small" fontWeight="bold">Education</BodyText>
+                      <BodyText size="small" color={colors.blackPepper600}>Master's in HCI</BodyText>
+                    </Box>
+                  </Flex>
                   <BodyText size="small" fontWeight="bold" marginBottom="xxs">
-                    Top skills
+                    Top Skills
                   </BodyText>
-                  <BodyText size="small" color={colors.blackPepper600}>
-                    Figma, accessibility, localisation, cross-functional facilitation
-                  </BodyText>
+                  <Flex gap="xs" flexWrap="wrap">
+                    {['Figma', 'Design Systems', 'Accessibility', 'Prototyping'].map(skill => (
+                      <Box key={skill} padding="xxs xs" style={{ backgroundColor: colors.soap100, borderRadius: 12, border: `1px solid ${colors.soap300}` }}>
+                        <BodyText size="small" color={colors.blackPepper600}>{skill}</BodyText>
+                      </Box>
+                    ))}
+                  </Flex>
                 </Card>
               </Box>
               <Box flex="1 1 320px" minWidth={0}>
                 <Card padding="l" style={cardStyle()}>
                   <Heading size="small" marginBottom="m">
-                    Job and history
+                    Active Application
                   </Heading>
-                  <BodyText size="small" color={colors.blackPepper600} marginBottom="m">
-                    Current stage: Interview. Source: LinkedIn. Last activity: scheduling request sent by email.
-                  </BodyText>
+                  <BodyText size="small" fontWeight="bold">Senior Product Designer</BodyText>
+                  <BodyText size="small" color={colors.blackPepper600} marginBottom="m">REQ-2026-8841 · Paris, France</BodyText>
+                  
+                  <Flex alignItems="center" gap="s" marginBottom="s">
+                    <Box style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: colors.blueberry400 }} />
+                    <BodyText size="small" fontWeight="bold">Stage: Interview</BodyText>
+                  </Flex>
+                  <BodyText size="small" color={colors.blackPepper600} marginBottom="m">In progress for 10 days. Next step: Panel Interview.</BodyText>
+                  
                   <Flex gap="s" flexWrap="wrap">
                     <SecondaryButton size="small" onClick={() => setActiveChannel('whatsapp')}>
                       WhatsApp
@@ -258,21 +278,24 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
             <Table>
               <Table.Head>
                 <Table.Row>
-                  <Table.Header>Job</Table.Header>
-                  <Table.Header>Stage</Table.Header>
-                  <Table.Header>Applied</Table.Header>
+                  <Table.Header>Job Requisition</Table.Header>
+                  <Table.Header>Status</Table.Header>
+                  <Table.Header>Applied Date</Table.Header>
+                  <Table.Header>Source</Table.Header>
                 </Table.Row>
               </Table.Head>
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell>Senior product designer</Table.Cell>
-                  <Table.Cell>Interview</Table.Cell>
+                  <Table.Cell><BodyText size="small" fontWeight="bold" color={SANA_LINK_ACCENT}>Senior Product Designer (REQ-2026-8841)</BodyText></Table.Cell>
+                  <Table.Cell><Box padding="xxs s" style={{ display: 'inline-block', backgroundColor: colors.blueberry100, color: colors.blueberry600, borderRadius: 4, fontSize: 12, fontWeight: 'bold' }}>Interview</Box></Table.Cell>
                   <Table.Cell>18 Mar 2026</Table.Cell>
+                  <Table.Cell>LinkedIn</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Product designer</Table.Cell>
-                  <Table.Cell>Rejected</Table.Cell>
+                  <Table.Cell><BodyText size="small" fontWeight="bold" color={SANA_LINK_ACCENT}>Product Designer (REQ-2025-1102)</BodyText></Table.Cell>
+                  <Table.Cell><Box padding="xxs s" style={{ display: 'inline-block', backgroundColor: colors.soap200, color: colors.blackPepper600, borderRadius: 4, fontSize: 12, fontWeight: 'bold' }}>Rejected</Box></Table.Cell>
                   <Table.Cell>2 Feb 2025</Table.Cell>
+                  <Table.Cell>Careers Site</Table.Cell>
                 </Table.Row>
               </Table.Body>
             </Table>
@@ -282,17 +305,32 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
         return (
           <Card padding="l" style={cardStyle()}>
             <Heading size="small" marginBottom="m">
-              Screening
+              Screening Results
             </Heading>
-            <BodyText size="small" color={colors.blackPepper600} marginBottom="m">
-              Pre-screen questionnaire completed. No knockout responses. Recruiter phone screen: scheduled.
-            </BodyText>
+            <Flex gap="l" marginBottom="l" flexWrap="wrap">
+              <Box flex="1 1 250px">
+                <BodyText size="small" fontWeight="bold" marginBottom="xxs">Pre-screen Questionnaire</BodyText>
+                <Flex alignItems="center" gap="xs">
+                  <SystemIcon icon={checkCircleIcon} color={colors.green500} size={16} />
+                  <BodyText size="small" color={colors.green600} fontWeight="bold">Passed (100%)</BodyText>
+                </Flex>
+                <BodyText size="small" color={colors.blackPepper600} marginTop="xs">All knockout questions answered favorably. Right to work in France confirmed.</BodyText>
+              </Box>
+              <Box flex="1 1 250px">
+                <BodyText size="small" fontWeight="bold" marginBottom="xxs">Recruiter Phone Screen</BodyText>
+                <Flex alignItems="center" gap="xs">
+                  <SystemIcon icon={checkCircleIcon} color={colors.blueberry500} size={16} />
+                  <BodyText size="small" color={colors.blueberry600} fontWeight="bold">Completed</BodyText>
+                </Flex>
+                <BodyText size="small" color={colors.blackPepper600} marginTop="xs">Strong communication skills. Salary expectations align with budget.</BodyText>
+              </Box>
+            </Flex>
             <Card padding="m" style={{ ...cardStyle(), boxShadow: 'none', backgroundColor: colors.soap100 }}>
               <BodyText size="small" fontWeight="bold" marginBottom="xxs">
-                Assessment
+                AI Skills Match (HiredScore)
               </BodyText>
               <BodyText size="small" color={colors.blackPepper600}>
-                Work sample review — not requested for this requisition.
+                Grade: A. Candidate profile strongly matches required skills for Senior Product Designer based on resume parsing.
               </BodyText>
             </Card>
           </Card>
@@ -300,20 +338,45 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
       case 'interviews':
         return (
           <Card padding="l" style={cardStyle()}>
-            <Heading size="small" marginBottom="m">
-              Interviews
-            </Heading>
+            <Flex justifyContent="space-between" alignItems="center" marginBottom="m">
+              <Heading size="small">Interview Schedule</Heading>
+              <SecondaryButton size="small">Schedule Interview</SecondaryButton>
+            </Flex>
+            
             <Box marginBottom="m" paddingBottom="m" style={{ borderBottom: `1px solid ${colors.soap200}` }}>
-              <BodyText size="small" color={colors.blackPepper500}>
-                25 March 2026 · 14:00 CET
-              </BodyText>
-              <BodyText size="small" color={colors.blackPepper600}>
-                Panel interview — Hiring manager, design lead
+              <Flex justifyContent="space-between" alignItems="flex-start">
+                <Box>
+                  <BodyText size="small" fontWeight="bold" color={SANA_LINK_ACCENT}>Panel Interview: Design & Product</BodyText>
+                  <BodyText size="small" color={colors.blackPepper600} marginTop="xxs">
+                    25 March 2026 · 14:00 - 15:30 CET · Video Conference
+                  </BodyText>
+                  <Flex gap="s" marginTop="s" alignItems="center">
+                    <Avatar size={24} altText="Hiring Manager" as="div" />
+                    <BodyText size="small" color={colors.blackPepper600}>Jean Dupont (Hiring Manager)</BodyText>
+                  </Flex>
+                  <Flex gap="s" marginTop="xs" alignItems="center">
+                    <Avatar size={24} altText="Product Lead" as="div" />
+                    <BodyText size="small" color={colors.blackPepper600}>Marie Martin (Product Lead)</BodyText>
+                  </Flex>
+                </Box>
+                <Box padding="xxs s" style={{ backgroundColor: colors.blueberry100, color: colors.blueberry600, borderRadius: 4, fontSize: 12, fontWeight: 'bold' }}>Upcoming</Box>
+              </Flex>
+            </Box>
+            
+            <Box>
+              <Flex justifyContent="space-between" alignItems="flex-start">
+                <Box>
+                  <BodyText size="small" fontWeight="bold">Recruiter Screen</BodyText>
+                  <BodyText size="small" color={colors.blackPepper600} marginTop="xxs">
+                    12 March 2026 · 10:00 - 10:30 CET · Phone
+                  </BodyText>
+                </Box>
+                <Box padding="xxs s" style={{ backgroundColor: colors.green100, color: colors.green700, borderRadius: 4, fontSize: 12, fontWeight: 'bold' }}>Completed</Box>
+              </Flex>
+              <BodyText size="small" color={colors.blackPepper600} marginTop="s" style={{ fontStyle: 'italic', borderLeft: `2px solid ${colors.soap400}`, paddingLeft: space.s }}>
+                "Camille is a very strong candidate. Great portfolio and communicates well. Proceeding to panel."
               </BodyText>
             </Box>
-            <BodyText size="small" color={colors.blackPepper600}>
-              Phone screen · 12 March 2026 — Complete
-            </BodyText>
           </Card>
         );
       case 'offer':
@@ -322,55 +385,69 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
             <Heading size="small" marginBottom="m">
               Offer
             </Heading>
-            <BodyText size="small" color={colors.blackPepper600}>
-              No offer in progress. Candidate remains in interview stage.
-            </BodyText>
+            <Box padding="l" style={{ backgroundColor: colors.soap100, borderRadius: 8, textAlign: 'center' }}>
+              <BodyText size="small" color={colors.blackPepper600}>
+                No offer in progress. Candidate remains in the interview stage.
+              </BodyText>
+            </Box>
           </Card>
         );
       case 'personal':
         return (
           <Card padding="l" style={cardStyle()}>
             <Heading size="small" marginBottom="m">
-              Contact details
+              Contact & Personal Details
             </Heading>
-            <Box marginBottom="s">
-              <BodyText size="small" fontWeight="bold" marginBottom="xxs">
-                Email
-              </BodyText>
-              <BodyText size="small" color={colors.blackPepper600}>
-                {MOCK.email}
-              </BodyText>
-            </Box>
-            <Box>
-              <BodyText size="small" fontWeight="bold" marginBottom="xxs">
-                Mobile
-              </BodyText>
-              <BodyText size="small" color={colors.blackPepper600}>
-                {MOCK.mobile}
-              </BodyText>
-            </Box>
+            <Flex flexWrap="wrap" gap="xl">
+              <Box flex="1 1 200px">
+                <BodyText size="small" fontWeight="bold" marginBottom="xxs">Email</BodyText>
+                <BodyText size="small" color={SANA_LINK_ACCENT} marginBottom="m">{MOCK.email}</BodyText>
+                
+                <BodyText size="small" fontWeight="bold" marginBottom="xxs">Mobile</BodyText>
+                <BodyText size="small" color={colors.blackPepper600} marginBottom="m">{MOCK.mobile}</BodyText>
+                
+                <BodyText size="small" fontWeight="bold" marginBottom="xxs">Location</BodyText>
+                <BodyText size="small" color={colors.blackPepper600}>Paris, Île-de-France, France</BodyText>
+              </Box>
+              <Box flex="1 1 200px">
+                <BodyText size="small" fontWeight="bold" marginBottom="xxs">LinkedIn</BodyText>
+                <BodyText size="small" color={SANA_LINK_ACCENT} marginBottom="m">linkedin.com/in/camilledubois</BodyText>
+                
+                <BodyText size="small" fontWeight="bold" marginBottom="xxs">Preferred Language</BodyText>
+                <BodyText size="small" color={colors.blackPepper600} marginBottom="m">French (Native), English (Fluent)</BodyText>
+                
+                <BodyText size="small" fontWeight="bold" marginBottom="xxs">Right to Work</BodyText>
+                <BodyText size="small" color={colors.blackPepper600}>Yes (Citizen)</BodyText>
+              </Box>
+            </Flex>
           </Card>
         );
       case 'job-history':
         return (
           <Card padding="l" style={cardStyle()}>
             <Heading size="small" marginBottom="m">
-              Job history
+              Experience
             </Heading>
-            <Box marginBottom="m">
-              <BodyText size="small" color={colors.blackPepper500}>
-                2019 – present
-              </BodyText>
+            
+            <Box marginBottom="l" paddingBottom="m" style={{ borderBottom: `1px solid ${colors.soap200}` }}>
+              <Flex justifyContent="space-between">
+                <BodyText size="small" fontWeight="bold">Design Lead</BodyText>
+                <BodyText size="small" color={colors.blackPepper500}>Oct 2019 – Present</BodyText>
+              </Flex>
+              <BodyText size="small" color={colors.blackPepper600} marginBottom="xs">TechCorp SaaS · Paris, France</BodyText>
               <BodyText size="small" color={colors.blackPepper600}>
-                Design lead · Enterprise SaaS · Paris
+                Led a team of 4 designers to overhaul the core enterprise application. Established a comprehensive design system reducing UI inconsistencies by 40%.
               </BodyText>
             </Box>
+            
             <Box>
-              <BodyText size="small" color={colors.blackPepper500}>
-                2015 – 2019
-              </BodyText>
+              <Flex justifyContent="space-between">
+                <BodyText size="small" fontWeight="bold">Product Designer</BodyText>
+                <BodyText size="small" color={colors.blackPepper500}>Jan 2015 – Sep 2019</BodyText>
+              </Flex>
+              <BodyText size="small" color={colors.blackPepper600} marginBottom="xs">RetailSolutions · Lyon, France</BodyText>
               <BodyText size="small" color={colors.blackPepper600}>
-                Product designer · Retail technology · Lyon
+                Designed mobile POS interfaces and inventory management dashboards. Conducted weekly user testing sessions with store managers.
               </BodyText>
             </Box>
           </Card>
@@ -378,38 +455,78 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
       case 'comments':
         return (
           <Card padding="l" style={cardStyle()}>
-            <Heading size="small" marginBottom="m">
-              Notes
-            </Heading>
-            <BodyText size="small" color={colors.blackPepper600} marginBottom="m">
-              Strong portfolio; emphasise Workday design language familiarity in next round.
-            </BodyText>
-            <TertiaryButton size="small">Add note</TertiaryButton>
+            <Flex justifyContent="space-between" alignItems="center" marginBottom="m">
+              <Heading size="small">Comments & Notes</Heading>
+              <SecondaryButton size="small">Add Note</SecondaryButton>
+            </Flex>
+            
+            <Box padding="m" style={{ backgroundColor: colors.soap100, borderRadius: 8, marginBottom: 'm' }}>
+              <Flex justifyContent="space-between" marginBottom="xs">
+                <BodyText size="small" fontWeight="bold">Sophie Laurent (Recruiter)</BodyText>
+                <BodyText size="small" color={colors.blackPepper500}>18 Mar 2026</BodyText>
+              </Flex>
+              <BodyText size="small" color={colors.blackPepper600}>
+                Candidate is very responsive on WhatsApp. Prefers afternoon interviews. Salary expectations are within our band.
+              </BodyText>
+            </Box>
           </Card>
         );
       case 'attachments':
         return (
           <Card padding="l" style={cardStyle()}>
-            <Heading size="small" marginBottom="m">
-              Attachments
-            </Heading>
-            <BodyText size="small" color={colors.blackPepper600} marginBottom="s">
-              CV_Camille_Dubois.pdf · Uploaded 18 March 2026
-            </BodyText>
-            <BodyText size="small" color={colors.blackPepper600}>
-              Portfolio_2026.pdf · Uploaded 18 March 2026
-            </BodyText>
+            <Flex justifyContent="space-between" alignItems="center" marginBottom="m">
+              <Heading size="small">Attachments</Heading>
+              <SecondaryButton size="small">Upload</SecondaryButton>
+            </Flex>
+            
+            <Flex flexDirection="column" gap="s">
+              <Flex alignItems="center" gap="m" padding="s" style={{ border: `1px solid ${colors.soap300}`, borderRadius: 8 }}>
+                <SystemIcon icon={documentIcon} size={24} color={colors.blackPepper500} />
+                <Box flex={1}>
+                  <BodyText size="small" fontWeight="bold" color={SANA_LINK_ACCENT}>CV_Camille_Dubois_2026.pdf</BodyText>
+                  <BodyText size="small" color={colors.blackPepper500}>Added by Candidate · 18 Mar 2026 · 1.2 MB</BodyText>
+                </Box>
+              </Flex>
+              <Flex alignItems="center" gap="m" padding="s" style={{ border: `1px solid ${colors.soap300}`, borderRadius: 8 }}>
+                <SystemIcon icon={documentIcon} size={24} color={colors.blackPepper500} />
+                <Box flex={1}>
+                  <BodyText size="small" fontWeight="bold" color={SANA_LINK_ACCENT}>Portfolio_Presentation.pdf</BodyText>
+                  <BodyText size="small" color={colors.blackPepper500}>Added by Candidate · 18 Mar 2026 · 5.4 MB</BodyText>
+                </Box>
+              </Flex>
+            </Flex>
           </Card>
         );
       case 'business-process':
         return (
           <Card padding="l" style={cardStyle()}>
             <Heading size="small" marginBottom="m">
-              Business process history
+              Business Process History
             </Heading>
-            <BodyText size="small" color={colors.blackPepper600}>
-              Initiate Recruit — completed · Move to Interview — in progress · Offer — not started
-            </BodyText>
+            
+            <Flex flexDirection="column" gap="m">
+              <Flex gap="m">
+                <Box style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: colors.green500, marginTop: 4 }} />
+                <Box>
+                  <BodyText size="small" fontWeight="bold">Move to Interview</BodyText>
+                  <BodyText size="small" color={colors.blackPepper600}>Completed by Sophie Laurent · 20 Mar 2026</BodyText>
+                </Box>
+              </Flex>
+              <Flex gap="m">
+                <Box style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: colors.green500, marginTop: 4 }} />
+                <Box>
+                  <BodyText size="small" fontWeight="bold">Screening</BodyText>
+                  <BodyText size="small" color={colors.blackPepper600}>Completed by Sophie Laurent · 19 Mar 2026</BodyText>
+                </Box>
+              </Flex>
+              <Flex gap="m">
+                <Box style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: colors.green500, marginTop: 4 }} />
+                <Box>
+                  <BodyText size="small" fontWeight="bold">Application Received</BodyText>
+                  <BodyText size="small" color={colors.blackPepper600}>System · 18 Mar 2026</BodyText>
+                </Box>
+              </Flex>
+            </Flex>
           </Card>
         );
       default:
