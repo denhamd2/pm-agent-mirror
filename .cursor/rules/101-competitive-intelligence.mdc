@@ -176,10 +176,10 @@ For regional competitors, track (tailor emphasis **per region** from the map abo
 3. Classify: Native / Workaround / True Gap
 4. Document with citations
 
-## Strategic Context Input (Regional E2E Step 1)
+## Strategic Context Input (Regional E2E Step 4)
 
-When invoked as **Step 1** in Regional E2E (after Step 0 strategy review):
-- Read `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md` (from Step 0)
+When invoked as **Step 4** in Regional E2E (after Steps 1-3 strategy review):
+- Read `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md` (from Step 1)
 - Use strategic priorities to focus competitive scan (prioritise features aligned with Q2/annual strategy)
 - Flag competitive gaps that block strategic initiatives (e.g., GCC WhatsApp if GCC is strategic priority)
 - In Feature Comparison section, call out **strategic gaps** vs. **nice-to-have gaps**
@@ -321,9 +321,9 @@ When invoked as **Step 1** in Regional E2E (after Step 0 strategy review):
 
 **Expected Duration**: 10-20 minutes for thorough scan
 
-### Pattern 1a: Regional E2E Pipeline Baseline Scan (Step 1)
+### Pattern 1a: Regional E2E Pipeline Baseline Scan (Step 4)
 
-**Trigger**: Invoked by **000-master-orchestrator** as **Step 1** of Regional E2E pipeline (before 105, 120, 130). Supports all 8 regions: GCC, UK, France, Germany, Japan, India, Canada, Australia.
+**Trigger**: Invoked by **000-master-orchestrator** as **Step 4** of Regional E2E pipeline (before 105, 120, 130). Supports all 8 regions: GCC, UK, France, Germany, Japan, India, Canada, Australia.
 
 **Scope**: Full competitive landscape scan for the specified region
 
@@ -345,7 +345,7 @@ When invoked as **Step 1** in Regional E2E (after Step 0 strategy review):
 
 **Timeline**: This runs BEFORE user research analysis, so 120 can reference competitive context when synthesizing themes.
 
-**Handoff**: 120 (Step 2b) and 130 (Step 3) will read these outputs for Competitive Landscape sections.
+**Handoff**: 120 (Step 8) and 130 (Step 10) will read these outputs for Competitive Landscape sections.
 
 ### Pattern 2: Competitive Battle Card Generation
 
@@ -451,14 +451,14 @@ When invoked as **Step 1** in Regional E2E (after Step 0 strategy review):
 
 ### Pattern 5: Regional E2E competitive pass (orchestrated)
 
-**Trigger**: Invoked by **000-master-orchestrator** as **Step 6** of the **Regional E2E pipeline**, immediately after HITL recommendation selection and **before** **200-prd-writer**. Not a user ad hoc trigger unless the user explicitly says to run this pattern in isolation.
+**Trigger**: Invoked by **000-master-orchestrator** (historically Step 6) of the **Regional E2E pipeline**, immediately after HITL recommendation selection and **before** **200-prd-writer**. Not a user ad hoc trigger unless the user explicitly says to run this pattern in isolation.
 
 #### Fresh run (mandatory)
 
 Every orchestrated **Pattern 5** invocation is a **full fresh pass** for **that** pipeline run:
 
 - Run **new** scoped web / desk research and **new** Deployment Agent queries (and **@functional-knowledge** validation where applicable) for capabilities implied by the **current** selected recommendation.
-- Write a **new** brief file: `e2e-ci-brief-[feature-slug]-[YYYY-MM-DD]-[MISSION-ID].md` (e.g. `-GCC-E2E-011`) where the date is the **run date** and **MISSION-ID** comes from **000-master-orchestrator** Step 1 — so two E2E runs on the same day do not collide. Include a **new** Deployment Agent query log section for this pass. **Legacy** date-only filenames may exist in the repo; **do not** overwrite them as the sole deliverable for a **new** mission.
+- Write a **new** brief file: `e2e-ci-brief-[feature-slug]-[YYYY-MM-DD]-[MISSION-ID].md` (e.g. `-GCC-E2E-011`) where the date is the **run date** and **MISSION-ID** comes from **000-master-orchestrator** Step 4 — so two E2E runs on the same day do not collide. Include a **new** Deployment Agent query log section for this pass. **Legacy** date-only filenames may exist in the repo; **do not** overwrite them as the sole deliverable for a **new** mission.
 - Apply matrix **delta** to `gcc-competitive-matrix.md` **after** those fresh findings (append or revise rows — not “stamp” old prose without re-validation).
 
 **Forbidden:** Treating an edit-in-place to an **old** brief as the sole deliverable; carrying forward competitor tables or gap rows from a **previous** E2E run **without** re-running validation and evidence gathering **for this mission**; satisfying the orchestrator by only pointing **200** at an existing `e2e-ci-brief-*.md` from an earlier run.
@@ -467,7 +467,7 @@ Every orchestrated **Pattern 5** invocation is a **full fresh pass** for **that*
 - **Region**: **GCC** (fixed for this pipeline).
 - **Selected recommendation**: Title and action from E2E Handoff table (HITL).
 - **Source PMF report**: Path to latest `research/GCC/thematic-analysis/*.md` produced in E2E Step **2b** (**120**).
-- **Mission ID**: **GCC-E2E-0NN** from MISSION_LOG (Step 1) — required for output filename when orchestrated. **Standalone** Pattern 5 (rare): if no mission ID, use suffix `-adhoc-[HHmm]` (UTC) on the same date so the file does not collide with an orchestrated run.
+- **Mission ID**: **GCC-E2E-0NN** from MISSION_LOG (Step 4) — required for output filename when orchestrated. **Standalone** Pattern 5 (rare): if no mission ID, use suffix `-adhoc-[HHmm]` (UTC) on the same date so the file does not collide with an orchestrated run.
 
 **Scope** (keep bounded – target **15–25 minutes**, not a full global scan):
 1. **Default competitor set**: Top 3 GCC regional roster – **Bayzat**, **HiBob**, **Zoho Recruit** (regional matrix map).
@@ -484,7 +484,7 @@ Every orchestrated **Pattern 5** invocation is a **full fresh pass** for **that*
    - Link to PMF source path
 2. **Delta update** to [`research/competitive/matrices/gcc-competitive-matrix.md`](research/competitive/matrices/gcc-competitive-matrix.md): new or revised rows, Recent Activity lines, or Workday Competitive Response table entries for this initiative – **not** a full matrix rewrite in one step.
 
-**Hand off to**: **200-prd-writer** – PRD must read this brief and the matrix per orchestrator Step 7.
+**Hand off to**: **200-prd-writer** – PRD must read this brief and the matrix per orchestrator Step 14.
 
 **Output**: E2E CI brief path + updated gcc matrix (logged in MISSION_LOG by orchestrator).
 

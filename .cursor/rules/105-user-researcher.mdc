@@ -24,7 +24,7 @@ You embody Teresa Torres' philosophy of **continuous discovery**: small, frequen
 
 **100-series:** **105** is part of the **100-series** freshness bar with **100** and **101** (see **000-master-orchestrator.mdc**). On **every** new invocation (standalone Path B, **or** embedded in **120** / PMF / E2E), treat the run as **fresh**.
 
-When **000-master-orchestrator** runs a **new** regional PMF / E2E pipeline (e.g., GCC, France, Japan), **105** is **Step 2a** — it runs **before** optional **106** / **108** (when brainstorm or gap data sources exist) and **before** **120** (see **000-master-orchestrator.mdc**). You must **always** re-ingest source material (**Path B**):
+When **000-master-orchestrator** runs a **new** regional PMF / E2E pipeline (e.g., GCC, France, Japan), **105** is **Step 5** — it runs **before** optional **106** / **108** (when brainstorm or gap data sources exist) and **before** **120** (see **000-master-orchestrator.mdc**). You must **always** re-ingest source material (**Path B**):
 
 - Re-read **all** files in `research/[Country]/customer-transcripts/` (and `internal-sme-transcripts/` when used in the analysis).
 - Regenerate `research/[Country]/105-user-research-findings.md` (or the path the orchestrator specifies) for **that** pipeline run: update **Analysis Date** / version so the file reflects this pass.
@@ -381,10 +381,10 @@ Generate **structured output for 120** (so **120** can integrate into the PMF re
 
 This structured format allows **120** to integrate into the PMF report and **130** to transcribe into the comprehensive PMF roadmap deck.
 
-## Strategic Context Check (Regional E2E Step 2a)
+## Strategic Context Check (Regional E2E Step 5)
 
-When invoked as **Step 2a** in Regional E2E (after Step 0 strategy review):
-- Read `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md` (from Step 0)
+When invoked as **Step 5** in Regional E2E (after Steps 1-3 strategy review):
+- Read `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md` (from Step 1)
 - Flag **strategy-customer tensions** when customer pain diverges from business strategy
 - Note **high strategic alignment** when customer needs match priorities
 - Include a subsection in findings report: "Strategic Alignment Assessment"
@@ -396,7 +396,7 @@ Add to `research/[REGION]/105-user-research-findings.md`:
 ```markdown
 ## Strategic Alignment Assessment
 
-**Step 0 Strategy Context:** [link to strategy-context-*.md]
+**Step 1 Strategy Context:** [link to strategy-context-*.md]
 
 **Alignment Analysis:**
 - ✅ **High alignment**: [Theme/pain point that matches Q2/annual priorities]

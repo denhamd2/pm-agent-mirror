@@ -413,22 +413,22 @@ Override the auto-generation by explicitly defining slide 2 in your JSON spec:
 - **Font sizes:** Always set `category_axis_font_size_pt: 9`, `value_axis_font_size_pt: 9`, `title_font_size_pt: 10` to keep chart text readable
 
 ### Table Styling
-- **Font size:** Use 7-9pt for table content to maximize readability while fitting content
+- **Font size:** Use 7-10pt for table content to maximize readability while fitting content
   - **Standard tables**: 8-9pt for VP-friendly readability
-  - **SWOT Analysis**: **9pt** (increased from 7pt for executive presentations)
+  - **SWOT Analysis**: **10pt** (VP executive presentation standard)
   - **Competitive Landscape tables (Regional Specialists, Global Platforms)**: **8pt ONLY** - set at table level only
 - **Headers:** Navy background (`ink` color) with white text (`paper` color)
 - **Header height:** **MUST be `header_height_inches: 0.25`** for compact, professional headers (especially SWOT analysis)
   - **CRITICAL**: Do NOT omit this property - default header heights are too tall
   - **Note**: This only controls header row height; content rows auto-size based on text
-- **SWOT Analysis tables:** Use two separate tables (one for Strengths/Weaknesses, one for Opportunities/Threats) to ensure both have proper header formatting
+- **SWOT Analysis tables:** Use **SINGLE 2x2 table** with all four quadrants (Strengths|Weaknesses in first content row, Opportunities|Threats in second content row)
 - **SWOT content formatting**: Each cell should contain **bullet-pointed content** (use `\n• ` for bullets within table cells) with 3-5 detailed points per quadrant for VP audience
 - **Competitive Landscape table content formatting (MANDATORY)**: Use **plain text with semicolons or commas as separators** (NOT bullet-formatted text within cells)
   - ❌ FORBIDDEN: `"• Point 1\n• Point 2\n• Point 3"` in competitive tables (causes rendering inconsistency)
   - ✅ CORRECT: `"Point 1; Point 2; Point 3"` (ensures consistent 8pt rendering)
   - **Rationale**: Matches Win/Loss table pattern; prevents PowerPoint from applying default paragraph formatting that overrides table-level font sizing
   - **Exception**: SWOT tables continue to use bullet-formatted content within cells
-- **Positioning:** Start first table at `top_inches: 1.0`; position second table at `top_inches: 3.15` for proper spacing
+- **Positioning:** Start tables at `top_inches: 1.0`
 - **Auto-height tables:** **CRITICAL - Do NOT specify `height_inches` for tables** - omit this property entirely to allow PowerPoint to auto-calculate height based on content. This prevents fixed row heights that cause text overflow or cramping.
 - **Example SWOT structure:**
 ```json
@@ -438,27 +438,17 @@ Override the auto-generation by explicitly defining slide 2 in your JSON spec:
       "rows": [
         ["Strengths", "Weaknesses"], 
         [
-          "• Suite depth, security model, global HCM adjacency\n• Paradox narrative for conversational engagement\n• Skills Cloud integration for talent intelligence\n• Compliance strength (GDPR, localization)",
-          "• WhatsApp True Gap in core UI\n• Nationalisation reporting gaps\n• Interview scheduling friction vs competitors"
+          "• Suite integration and HCM adjacency for hire-to-retire governance\n• Enterprise security, audit, and GDPR-class tooling for RFP legal reviews\n• HiredScore and Paradox when activated for volume and scheduling\n• Multi-country templates for GCC HQs standardising policy with local fields\n• Broadbean-certified job-board strategy avoiding native board sprawl",
+          "• WhatsApp and omnichannel gap risk until SKU and UAT clarity lands\n• Government portal and nationalisation executive experience wants native-feeling dashboards\n• Arabic and RTL document fidelity historically trust-breaking for some tenants\n• SMS and messaging framework answers drift across internal capability research notes; triangulate before claims\n• Semantic AI match without add-ons creates demo risk if sellers imply free parity"
+        ],
+        ["Opportunities", "Threats"], 
+        [
+          "• Q2 GCC OKR tailwinds tie features to permit and fine avoidance narratives\n• PDPL plus AI governance differentiation if collateral is credible and fast\n• Paradox and HiredScore activation programmes convert latent entitlement\n• Broadbean depth closes integration objections without native board builds\n• Dubai expansion improves local execution credibility with partners",
+          "• Regional bundle competitors win TCO on payroll plus compliance packaging\n• Oracle and SAP feature marketing on WhatsApp and AI in enterprise RFPs\n• Legal and AI compliance burden slows roadmaps if legal review is not pre-staged\n• Inconsistent capability answers erode trust if sales over-rotates single threads\n• Global policy forbidding casual WhatsApp may block GCC UX without approved channels"
         ]
       ],
       "top_inches": 1.0,
-      "font_size_pt": 9,
-      "header_row": true,
-      "header_bg_color": "ink",
-      "header_font_color": "paper",
-      "header_height_inches": 0.25
-    },
-    {
-      "rows": [
-        ["Opportunities", "Threats"], 
-        [
-          "• Activate Paradox for scheduling automation\n• Elevate nationalisation reporting to native capability\n• GCC-first communication design (WhatsApp, SMS)",
-          "• Regional suites bundle messaging + compliance\n• SAP and Oracle have nationalisation advantages\n• HiBob targets mid-market with simpler UX"
-        ]
-      ],
-      "top_inches": 3.15,
-      "font_size_pt": 9,
+      "font_size_pt": 10,
       "header_row": true,
       "header_bg_color": "ink",
       "header_font_color": "paper",

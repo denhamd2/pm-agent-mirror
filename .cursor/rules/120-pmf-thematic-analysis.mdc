@@ -55,7 +55,7 @@ Execute all phases sequentially for the specified folder (e.g., `research/Japan/
 **Objective:** Immerse yourself in the qualitative data to understand the complete picture.
 
 **Actions:**
-1. **Read strategic context from Step 0 (099):** In Regional E2E pipelines, read:
+1. **Read strategic context from Steps 1-3 (099):** In Regional E2E pipelines, read:
    - `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md` (strategic priorities, OKRs, regional focus, RICE guidance)
    - `research/[REGION]/pestel-analysis-[REGION]-[YYYY-MM-DD]-[MISSION-ID].md` (macro-environment with Legal/compliance depth)
    - `research/[REGION]/swot-analysis-[REGION]-[YYYY-MM-DD]-[MISSION-ID].md` (competitive positioning, strengths/weaknesses/opportunities/threats)
@@ -66,9 +66,9 @@ Execute all phases sequentially for the specified folder (e.g., `research/Japan/
 3. **Read all .txt transcripts** in `research/[Country]/customer-transcripts/`
 4. **Read CSV verbatims** in `research/[Country]/raw-data/` or filtered output from `research/raw-data/`
 5. **Initial Observations:** What are customers saying? What are SMEs saying? Where do they align or diverge? How do they relate to 099's PESTEL/SWOT findings?
-6. **Optional — 106 / 108:** If `research/[Country]/brainstorm-analysis/*.md` exists for this pipeline run (orchestrator Step 2.5), **read** the latest file and note internal hypotheses and themes. If `research/[Country]/gap-analysis/*.md` exists (orchestrator Step 2.75), **read** the latest file and note presales gap severity patterns and capability themes. **Do not** treat these as substitutes for re-reading customer transcripts and SME files; they are **additional** lenses for triangulation.
+6. **Optional — 106 / 108:** If `research/[Country]/brainstorm-analysis/*.md` exists for this pipeline run (orchestrator Step 6), **read** the latest file and note customer ideation hypotheses and themes. If `research/[Country]/gap-analysis/*.md` exists (orchestrator Step 7), **read** the latest file and note presales gap severity patterns and capability themes. **Do not** treat these as substitutes for re-reading customer transcripts and SME files; they are **additional** lenses for triangulation.
 
-**105-user-research-findings.md (Regional E2E):** **000-master-orchestrator** runs **105** as **Step 2a** **before** **120**. By the time **120** starts, `research/[Country]/105-user-research-findings.md` should already exist with **## Fresh pass attestation** per **105-user-researcher.mdc**. **120** Phase 1 must **still re-read** the underlying `customer-transcripts/` and SME files (and CSVs); **120** must **not** skip transcript ingestion by relying only on the **105** markdown summary.
+**105-user-research-findings.md (Regional E2E):** **000-master-orchestrator** runs **105** as **Step 5** **before** **120**. By the time **120** starts, `research/[Country]/105-user-research-findings.md` should already exist with **## Fresh pass attestation** per **105-user-researcher.mdc**. **120** Phase 1 must **still re-read** the underlying `customer-transcripts/` and SME files (and CSVs); **120** must **not** skip transcript ingestion by relying only on the **105** markdown summary.
 
 **Anonymization (MANDATORY):**
 - **Customer interview participants:** Always anonymize names as P1, P2, P3, etc.
@@ -88,7 +88,7 @@ Execute all phases sequentially for the specified folder (e.g., `research/Japan/
 - **Shorthand format**: Use PM-friendly codes (e.g., "UI-Complexity", "Board-Integration-Gap")
 - **Semantic coding**: Focus on meaning, not just keywords
 - **Source-tagged**: Tag each code with source type [SME], [Customer], [CSV]
-- **When 106 / 108 reports exist:** Also tag codes that are **supported or contradicted** by **106** (Internal Team) or **108** (Gap Data) as **[Brainstorm]** or **[GapData]** **in addition** to primary transcript tags where evidence warrants (e.g. a customer quote plus a matching gap severity pattern)
+- **When 106 / 108 reports exist:** Also tag codes that are **supported or contradicted** by **106** (Customer Ideation Hub) or **108** (Gap Data) as **[Ideation]** or **[GapData]** **in addition** to primary transcript tags where evidence warrants (e.g. a customer quote plus a matching gap severity pattern)
 
 **Output:** List of 30-100+ shorthand codes, frequency count, source tags, example quotes.
 
@@ -117,14 +117,14 @@ Execute all phases sequentially for the specified folder (e.g., `research/Japan/
 - **Baseline (SME + Customer only):**
 | Theme | SME View | Customer View | Convergence | Divergence | PMF Impact |
 
-- **With 106 only (add Internal Team column):**
-| Theme | SME View | Customer View | Internal Team (106) | Convergence | Divergence | PMF Impact |
+- **With 106 only (add Customer Ideation Hub column):**
+| Theme | SME View | Customer View | Customer Ideation Hub (106) | Convergence | Divergence | PMF Impact |
 
 - **With 108 only (add Gap Data column):**
 | Theme | SME View | Customer View | Gap Data (108) | Convergence | Divergence | PMF Impact |
 
 - **With 106 and 108 (four evidence columns):**
-| Theme | SME View | Customer View | Internal Team (106) | Gap Data (108) | Convergence | Divergence | PMF Impact |
+| Theme | SME View | Customer View | Customer Ideation Hub (106) | Gap Data (108) | Convergence | Divergence | PMF Impact |
 
 **Convergence note:** When four columns are present, call out **4/4**, **3/4**, or **2/4** agreement in the **Convergence** cell where it strengthens or weakens confidence.
 
@@ -152,56 +152,56 @@ Execute all phases sequentially for the specified folder (e.g., `research/Japan/
 
 Before generating the **Product Roadmap Impact Summary** section in Phase 6:
 
-1. **Read strategy context from Step 0** (Regional E2E only):
-   - If invoked as Step 2b in Regional E2E pipeline, read `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md` (from Step 0)
+1. **Read strategy context from Step 1** (Regional E2E only):
+   - If invoked as Step 8 in Regional E2E pipeline, read `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md` (from Step 1)
    - Extract: Strategic priorities, OKRs, [REGION] regional focus level, competitive positioning themes, what's NOT priority, RICE Business Impact guidance
-   - **Standalone 120 invocations:** If Step 0 context doesn't exist, search `strategy/markdown/` and `strategy/pdfs/` directly as before
-2. **Extract strategic context** (from Step 0 file OR direct search):
+   - **Standalone 120 invocations:** If Step 1 context doesn't exist, search `strategy/markdown/` and `strategy/pdfs/` directly as before
+2. **Extract strategic context** (from Step 1 file OR direct search):
    - Top 3-5 strategic priorities for the quarter/year
    - Relevant OKRs for Recruiting
    - Regional expansion priorities
    - What's explicitly NOT a priority
 3. **Invoke enhanced RICE Skill** (`~/.cursor/skills-cursor/rice-prioritisation/SKILL.md`):
    - Read the skill file for dual-dimension Impact scoring framework
-   - Score each recommendation: **Business Impact** (strategy alignment using Step 0 rubric) + **Customer Impact** (pain severity)
+   - Score each recommendation: **Business Impact** (strategy alignment using Step 1 rubric) + **Customer Impact** (pain severity)
    - Calculate Composite Impact = (Business + Customer) / 2
    - Generate full RICE scores: (Reach × Composite Impact × Confidence%) / Effort
 4. **Use in recommendations**:
    - Each recommendation should show: Business Impact score + Customer Impact score + Composite + full RICE
    - Prioritise recommendations by RICE score (highest first)
    - Flag strategic tensions when Business/Customer Impact diverge by >1.0 points
-   - Cite **Step 0 strategy context** (or strategy docs if standalone) for Business Impact; cite research evidence for Customer Impact
+   - Cite **Step 1 strategy context** (or strategy docs if standalone) for Business Impact; cite research evidence for Customer Impact
 
-**Regional E2E — `## 105 inputs (this run)` (mandatory when orchestrator Step 2a ran):** After Methodology (or immediately after Executive Summary), add a short section linking to `research/[Country]/105-user-research-findings.md`, quoting the **Mission ID** from that file's attestation, and confirming that Phase 1 re-read the listed transcript paths (not only the **105** doc). If **105** attestation is missing, **stop** and return to orchestrator — do not ship the PMF report without **105** Step 2a complete.
+**Regional E2E — `## 105 inputs (this run)` (mandatory when orchestrator Step 5 ran):** After Methodology (or immediately after Executive Summary), add a short section linking to `research/[Country]/105-user-research-findings.md`, quoting the **Mission ID** from that file's attestation, and confirming that Phase 1 re-read the listed transcript paths (not only the **105** doc). If **105** attestation is missing, **stop** and return to orchestrator — do not ship the PMF report without **105** Step 5 complete.
 
-**Regional E2E — `## 101 inputs (Step 1)` (when Step 1 competitive scan was performed):** If a `research/competitive/[region-code]/[region-code]-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md` file exists matching this mission ID, include a section after `## 105 inputs (this run)`:
+**Regional E2E — `## 101 inputs (Step 4)` (when Step 4 competitive scan was performed):** If a `research/competitive/[region-code]/[region-code]-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md` file exists matching this mission ID, include a section after `## 105 inputs (this run)`:
 
 ```markdown
-## 101 Competitive Intelligence inputs (Step 1)
+## 101 Competitive Intelligence inputs (Step 4)
 
 **Matrix**: `research/competitive/matrices/gcc-competitive-matrix.md` (changelog entry [date])
 **Point-in-time report**: `research/competitive/gcc/gcc-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md`
 
-The Competitive Landscape section below is sourced from 101's research (Step 1 of Regional E2E pipeline). Key findings:
+The Competitive Landscape section below is sourced from 101's research (Step 4 of Regional E2E pipeline). Key findings:
 - [1-2 bullet summary from 101 report Executive Summary]
 ```
 
 This confirms for readers that 120 used 101's findings rather than performing duplicate research.
 
-**Regional E2E — `## 106 inputs (Step 2.5)` (when brainstorm analysis ran):** If orchestrator Step 2.5 produced `research/[Country]/brainstorm-analysis/[YYYY-MM-DD]-brainstorm-analysis.md` for this mission, add after the **101** section (or after **105** if no 101 section applies):
+**Regional E2E — `## 106 inputs (Step 6)` (when customer ideation hub analysis ran):** If orchestrator Step 6 produced `research/[Country]/brainstorm-analysis/[YYYY-MM-DD]-brainstorm-analysis.md` for this mission, add after the **101** section (or after **105** if no 101 section applies):
 
 ```markdown
-## 106 Brainstorm inputs (Step 2.5)
+## 106 Customer Ideation Hub inputs (Step 6)
 
 **Report:** [path to brainstorm-analysis markdown]
 
-Internal team hypotheses and themes below are triangulated in the matrix; they are **not** customer ground truth until validated by **105** evidence.
+Customer ideation hypotheses and themes below are triangulated in the matrix; they are **not** customer ground truth until validated by **105** evidence.
 ```
 
-**Regional E2E — `## 108 inputs (Step 2.75)` (when gap analysis ran):** If orchestrator Step 2.75 produced `research/[Country]/gap-analysis/[YYYY-MM-DD]-gap-analysis-[MISSION-ID].md` for this mission, add:
+**Regional E2E — `## 108 inputs (Step 7)` (when gap analysis ran):** If orchestrator Step 7 produced `research/[Country]/gap-analysis/[YYYY-MM-DD]-gap-analysis-[MISSION-ID].md` for this mission, add:
 
 ```markdown
-## 108 Gap Data inputs (Step 2.75)
+## 108 Gap Data inputs (Step 7)
 
 **Report:** [path to gap-analysis markdown]
 
@@ -243,13 +243,13 @@ This enables the orchestrator to present all recommendations to the PM for human
 
 **130 outputs:** `slides_spec_vN.json` at project root; `~/Downloads/[Country]_Recruiting_PMF_Roadmap_vN.pptx`. Full deck structure, typography, checklist, and MCP steps live in **`130-pmf-slide-generator.mdc`**.
 
-**Before finalising Roadmap Recommendations in the report:** **Orchestrator invokes 060-legal-advisor** (Step 2b.1 in Regional E2E pipeline, renumbered from former 2b.3) to review recommendations for legal/compliance implications (GDPR, AI Act, local regulations). 120 addresses any flags **in the markdown** before handoff to **130** (slides will mirror report wording).
+**Before finalising Roadmap Recommendations in the report:** **Orchestrator invokes 060-legal-advisor** (Step 9 in Regional E2E pipeline) to review recommendations for legal/compliance implications (GDPR, AI Act, local regulations). 120 addresses any flags **in the markdown** before handoff to **130** (slides will mirror report wording).
 
 ---
 
-### Strategic Context and PESTEL/SWOT Consumption (from Step 0 - 099)
+### Strategic Context and PESTEL/SWOT Consumption (from Steps 1-3 - 099)
 
-**In Regional E2E pipelines**, the **099-principal-product-strategist** performs comprehensive strategic analysis as **Step 0** (before 101, 105, and 120). By the time 120 starts at Step 2b, you have access to three foundational inputs:
+**In Regional E2E pipelines**, the **099-product-strategist** performs comprehensive strategic analysis as **Steps 1-3** (before 101, 105, and 120). By the time 120 starts at Step 8, you have access to three foundational inputs:
 
 **1. Strategy Context**: `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md`
 - Strategic priorities and OKRs for current quarter
@@ -271,11 +271,11 @@ This enables the orchestrator to present all recommendations to the PM for human
 
 **Your Role (120)**: Read and incorporate these 099 outputs into your thematic analysis. **DO NOT perform PESTEL or SWOT research yourself**—099 has already completed this with deep research methodology. Your focus is **qualitative thematic analysis of customer/SME transcripts** using Braun & Clarke 6-phase method and **triangulation** with 099's strategic/PESTEL/SWOT context.
 
-**Standalone 120 invocations (rare)**: If 120 is invoked without E2E pipeline (no Step 0 outputs exist), search `strategy/` folder directly for strategic context and note that PESTEL/SWOT analysis was not performed.
+**Standalone 120 invocations (rare)**: If 120 is invoked without E2E pipeline (no Steps 1-3 outputs exist), search `strategy/` folder directly for strategic context and note that PESTEL/SWOT analysis was not performed.
 
-### Competitive Landscape (from Step 1 - 101)
+### Competitive Landscape (from Step 4 - 101)
 
-**Regional E2E pipeline (when 101 Step 1 output exists)**: Read `research/competitive/matrices/[region-code]-competitive-matrix.md` (check changelog for this mission's entry) and `research/competitive/[region-code]/[region-code]-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md`. Use **101's** findings for Competitive Landscape section. Do NOT perform separate web research for competitors. Cite 101 outputs (matrix sections, report pages).
+**Regional E2E pipeline (when 101 Step 4 output exists)**: Read `research/competitive/matrices/[region-code]-competitive-matrix.md` (check changelog for this mission's entry) and `research/competitive/[region-code]/[region-code]-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md`. Use **101's** findings for Competitive Landscape section. Do NOT perform separate web research for competitors. Cite 101 outputs (matrix sections, report pages).
 
 **Standalone 120 invocations (no prior 101)**: Perform web research if needed: `[Country] ATS competitors Workday SAP Oracle`, `[Country] recruiting software local vendors`—categorize Global enterprise, Regional specialists, Local players.
 
@@ -302,8 +302,8 @@ When analyzing **GCC** (Gulf Cooperation Council: Saudi Arabia, UAE, Qatar, Kuwa
 ### Always ✅
 - **Anonymize customer names:** Always use P1, P2, P3, etc. for customer interview participants; preserve company name and job title
 - **106 / 108 triangulation:** When `brainstorm-analysis/` or `gap-analysis/` outputs exist for the same country and pipeline run, **include** them in Phase 4 matrix columns and Phase 6 input sections; label internal and gap data evidence clearly
-- **Read 099 strategic outputs (Regional E2E):** Consume strategy-context.md, pestel-analysis.md, swot-analysis.md from Step 0 in Phase 1; incorporate into Cross-Theme Insights and Product Roadmap Impact Summary
-- **Use 101 for Competitive Landscape (Regional E2E):** Read competitive matrix and scan from Step 1; do not duplicate competitive research
+- **Read 099 strategic outputs (Regional E2E):** Consume strategy-context.md, pestel-analysis.md, swot-analysis.md from Steps 1-3 in Phase 1; incorporate into Cross-Theme Insights and Product Roadmap Impact Summary
+- **Use 101 for Competitive Landscape (Regional E2E):** Read competitive matrix and scan from Step 4; do not duplicate competitive research
 - Filter by region FIRST when using global CSV data (Phase 0)
 - Read ALL data sources (SME transcripts, Customer transcripts, CSVs)
 - Generate shorthand PM-friendly codes; create triangulation matrix
@@ -338,7 +338,7 @@ Adapt paths for country-based: `research/[Country]/raw-data/` or `research/raw-d
 
 ## Integration with Other Agents
 
-- **099-principal-product-strategist:** Provides strategy context, PESTEL analysis (all 6 factors with Legal/compliance depth), and SWOT analysis in Step 0 (before 120); 120 reads and incorporates these outputs
+- **099-product-strategist:** Provides strategy context, PESTEL analysis (all 6 factors with Legal/compliance depth), and SWOT analysis in Step 0 (before 120); 120 reads and incorporates these outputs
 - **060-legal-advisor.mdc:** Reviews Roadmap Recommendations for compliance implications (Step 2b.1 in Regional E2E, renumbered from former 2b.3)
 - **100-market-intelligence.mdc:** Qualitative depth to quantitative analysis
 - **200-prd-writer.mdc:** Feed PMF themes into PRD problem statements
@@ -391,7 +391,7 @@ For the **PowerPoint only**, orchestrator or user invokes **130** after your rep
 - **Triangulation:** SME + Customer agreement = high confidence; prioritize converged themes
 - **Evidence:** Every theme needs direct quotes; include IDs for traceability
 - **Strategic context:** Reference 099's strategy-context.md, pestel-analysis.md, swot-analysis.md for Business Impact scoring and strategic alignment
-- **Competitive intelligence:** Use 101's matrix and scan outputs (Step 1) for Competitive Landscape section
+- **Competitive intelligence:** Use 101's matrix and scan outputs (Step 4) for Competitive Landscape section
 
 ---
 
