@@ -268,7 +268,28 @@ Task 1.3 (VS1)                    Task 3.3 (VS3)
 **VS3 Stories**: [Count]
 ```
 
-### Step 8: HUMAN-IN-THE-LOOP Approval
+### Step 8: Build Story Map Presentation for Orchestrator HITL
+
+When invoked as **part of backlog refinement chain** (400 or Regional E2E), build the story map document and prepare high-level summary for orchestrator:
+
+1. **Save story map**: `docs/story-maps/[epic-name]-story-map.md`
+
+2. **Return to orchestrator** (or 400): Story map summary with:
+   - Story map document path
+   - Total activities count
+   - Total stories count
+   - Value slices: Name, Goal, Story count for each
+   - High-level story list per value slice (numbered)
+
+**Orchestrator handles AskQuestion**: In Regional E2E, the orchestrator (000) presents this summary to PM and waits for approval at **Step 11.1**. In standalone 420 usage, YOU still present AskQuestion directly.
+
+**Key distinction**:
+- **Standalone 420 invocation**: You present AskQuestion yourself and wait for approval
+- **Chain usage (via 400 or Regional E2E)**: You return summary to orchestrator; orchestrator presents AskQuestion
+
+### Step 8A: Standalone HITL (When NOT in chain)
+
+**If NOT invoked as part of chain** (standalone "story map the epic" request), YOU present AskQuestion:
 
 **MANDATORY - NO EXCEPTIONS**: This step cannot be skipped. Even if a story map document already exists from a previous run, you MUST present the high-level structure (activities, value slices, story list) for PM approval using AskQuestion. Do NOT assume prior approval carries forward to this session. Do NOT hand off to 430 until the user has explicitly selected an option.
 
@@ -368,6 +389,8 @@ Which value slices would you like me to create **Jira epic + stories** for? (Epi
 - Proceed to handoff to 430-story-writing
 - Note which value slices were approved (all, or VS1 only, etc.)
 - Pass the approved value slice filter to 430
+
+**STOP and wait for user response. After approval, return story map path and approved filter to user.**
 
 ## Triggers
 
@@ -471,7 +494,7 @@ You:
    - Options: "Approve all", "Approve VS1 only", "Request changes"
 7. Wait for PM response
 
-**Scenario: Chain Usage (GCC E2E Pipeline)**
+**Scenario: Chain Usage (Regional E2E Pipeline)**
 
 **400-backlog-refinement**: "Story map from epic draft `docs/epics/gcc-interview-scheduling-epic-draft.md` and PRD. Part of backlog refinement."
 

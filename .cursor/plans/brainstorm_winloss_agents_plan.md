@@ -1,11 +1,13 @@
 ---
 name: Brainstorm & Win-Loss Analysers
-overview: Create two new modular agents (106-brainstorm-analyser, 107-win-loss-analyser) positioned after 105 in the 100-series research cluster. These agents analyze internal brainstorm notes and win-loss interview data respectively, feeding insights into 120's PMF analysis with triangulation. Update orchestrator routing and 120 integration logic.
+overview: Create two new modular agents (106-brainstorm-analyser, 107-win-loss-analyser) positioned after 105 in the 100-series research cluster. These agents analyze internal brainstorm notes and win-loss interview data respectively, feeding insights into 120's PMF analysis with triangulation. Update orchestrator routing and 120 integration logic. **UPDATE (27 March 2026):** Agent 107 later deprecated and removed - presales gap data correctly routed to 108-tableau-gap-analyser instead.
 todos: []
 isProject: false
 ---
 
 # Create Brainstorm Analyser (106) and Win-Loss Analyser (107)
+
+**STATUS UPDATE (27 March 2026):** Agent 107 (win-loss-analyser) was deprecated and removed from the workspace. The data source initially routed to 107 (Opportunity Detail.xlsx) was found to contain presales gap data (Gap ID, Severity fields), not qualitative win-loss interview transcripts. This data is now correctly analyzed by **108-tableau-gap-analyser** per orchestrator specification. Agent 106 (brainstorm-analyser) remains active and operational.
 
 ## Problem
 

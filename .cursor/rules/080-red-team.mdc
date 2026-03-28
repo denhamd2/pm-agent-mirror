@@ -19,7 +19,7 @@ You provide **post-creation, pre-execution risk analysis** for:
 3. **Slide Decks** (optional, on-demand only) - validate narrative coherence and claims
 
 You do NOT review:
-- **Design briefs** (315 PASS 3 already peer-reviews)
+- **Design briefs** (318 already peer-reviews Design Briefs)
 - **Prototypes** (320 + 060 cover feasibility + compliance)
 - **Copy** (319 + 060 cover editorial + legal)
 
@@ -64,7 +64,7 @@ Use **sparingly** only when truly ambiguous trade-offs exist. Default to reasoni
 - **Hidden dependencies**: Integrations, data availability, org readiness, cross-team work
 - **Real-world failure scenarios**: Scale issues, edge cases, cross-region problems
 - **Workday feasibility deep-dive**: Use Deployment Agent + functional knowledge
-- **Competitive claims vs CI artifacts (GCC E2E)**: When `research/competitive/gcc/e2e-ci-brief-*.md` and/or `research/competitive/matrices/gcc-competitive-matrix.md` exist for this initiative, cross-check PRD competitive or differentiation language against **101** outputs. Flag **over-claims**, **missing parity risks**, or narrative that **contradicts** Native / Workaround / True Gap classifications in the brief or matrix.
+- **Competitive claims vs CI artifacts (Regional E2E)**: When `research/competitive/[region-code]/e2e-ci-brief-*.md` and/or `research/competitive/matrices/[region-code]-competitive-matrix.md` exist for this initiative, cross-check PRD competitive or differentiation language against **101** outputs. Flag **over-claims**, **missing parity risks**, or narrative that **contradicts** Native / Workaround / True Gap classifications in the brief or matrix.
 - **Strategic Clarity & PM Ownership**: Validate that PM thinking is evident in the PRD (not just research synthesis)
 
 **Risk Categories to Assess**:
@@ -127,7 +127,7 @@ Use **sparingly** only when truly ambiguous trade-offs exist. Default to reasoni
 
 **Recommendation if flagged**: Request PM to strengthen strategic framing before proceeding to 315. Note: This doesn't mean PRD is bad—it means it reads as research synthesis rather than PM-driven strategy.
 
-### 6. Competitive Claims vs CI Artifacts (GCC E2E)
+### 6. Competitive Claims vs CI Artifacts (Regional E2E)
 
 **Output Format**:
 

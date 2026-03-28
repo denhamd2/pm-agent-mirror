@@ -585,7 +585,7 @@ You:
    - HRREC-130: "Audit trail for compliance" (3 scenarios)
 10. Return: "Created epic HRREC-125 + 5 VS1 stories (HRREC-126 to HRREC-130) with 14 scenarios total. All stories include Workday context from Deployment Agent and GCC compliance requirements from functional knowledge. Copy reviewed per **319**."
 
-**Scenario: Chain Usage (GCC E2E Pipeline)**
+**Scenario: Chain Usage (Regional E2E Pipeline)**
 
 **400-backlog-refinement**: "Create Jira epic and stories for approved story map. VS1 only approved. Epic draft: docs/epics/..."
 

@@ -1,0 +1,7 @@
+Gap Name,Gap ID,Opp Region,Opp Segment,Product Area,Country Specific Gap Detail,Created Date,CI Notes,Pain point(s),Product Capability,Severity
+PG-90001001,x1,France MFG HC & Edu,France MFG HC & Edu,Talent Acquisition,France - EU data residency ask,15/01/2025,,Recruiter needs offer templates aligned to French labour practice.,Offers & Contracts,Risk of Deal Loss (3)
+PG-90001002,x2,Canada LE & Industries,,Talent Acquisition,,20/02/2025,,Should not appear in France slice.,Career Sites,Tolerable but Requires Some Manual Effort (5)
+PG-90001003,x3,France Services Tech Media,,Talent Acquisition,,01/03/2025,,France opp in correct France Opp Region bucket.,Job Postings,Risk of Removal of SKU from Deal (2)
+PG-90001004,x4,APJ 1,,Talent Acquisition,,10/03/2025,,APJ noise row.,Interview Scheduling,Tolerable but Requires Some Manual Effort (5)
+PG-90001005,x5,France MFG HC & Edu,,HCM Core,,12/03/2025,,Wrong product area — Talent Acquisition only.,Payroll,N/A
+PG-90001006,x6,Germany LE,,Talent Acquisition,,14/03/2025,,Should not appear in France slice (DACH ≠ France).,Sourcing,Tolerable but Requires Some Manual Effort (5)

@@ -214,7 +214,7 @@ You:
 3. Save `docs/epics/bulk-candidate-rejection-epic-draft.md`
 4. Return draft path and proposed summary title
 
-**Scenario 2: Chain usage (GCC E2E Pipeline)**
+**Scenario 2: Chain usage (Regional E2E Pipeline)**
 
 **400-backlog-refinement**: "Write epic draft for GCC Interview Scheduling PRD. Part of backlog refinement."
 

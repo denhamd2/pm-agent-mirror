@@ -286,11 +286,18 @@ You are **automatically invoked** by other agents during their workflows. When i
 
 | Invoked By | When | Your Task |
 |------------|------|-----------|
-| **120-pmf-thematic-analysis** | After Legal PESTEL research; before Roadmap Recommendations finalization | Validate Legal PESTEL citations; review recommendations for compliance implications |
+| **120-pmf-thematic-analysis** | **Explicit orchestrator step** (Regional E2E Step 2b.1 for Roadmap Recommendations, renumbered from former 2b.3) | Review roadmap recommendations for compliance implications (GDPR, AI Act, local regulations) |
+| **200-prd-writer** | **Explicit orchestrator step** (Regional E2E Step 6a - after PRD creation) | Review PRD for GDPR, EU AI Act, country-specific compliance; flag high-risk features requiring DPIA, consent, or data transfer mechanisms |
 | **100-market-intelligence** | After Strategic Recommendations in synthesis | Validate legal implications of each recommendation |
 | **320-prototype-developer** | Before handoff to 330 (prototype complete) | Compliance review of prototype (consent, privacy, AI disclosure) |
 | **330-figma-creator** | After design analysis or after capture to Figma | Compliance review of design (consent placement, privacy, forms) |
 | **319-doc-writer** | When copy is legal-sensitive | Review consent text, privacy notices, AI disclosure, data messages |
+
+**Regional E2E Pipeline Context**: 060 is **explicitly orchestrated** at two quality gates in the E2E pipeline:
+1. **During 120 (Step 2b.1, renumbered from former 2b.3)**: Review roadmap recommendations before deck generation
+2. **After 200 (Step 6a)**: PRD compliance review before Red Team (080) and design phases
+
+Both follow the advisory pattern with one revision pass. For other agents (100, 319, 320, 330), invocation remains internal to those agents' workflows.
 
 ## Design and Prototype Review
 
@@ -308,20 +315,6 @@ When 420 or 430 invokes you for a design/prototype review:
 - [ ] Accessibility (legal requirement in EU, US, etc.)
 
 **Output**: Compliance assessment with any flags; recommended fixes. Use standard response format.
-
-## PESTEL Legal Validation
-
-When 120 invokes you for Legal PESTEL validation:
-
-**Input you receive**: Legal PESTEL research draft (citations, regulations, product implications for the country)
-
-**Validation**:
-- Verify regulatory accuracy (GDPR, PDPL, labor law, AI Act if relevant)
-- Flag missing regulations for the country/region
-- Suggest product implications (consent flows, retention, nationalization, etc.)
-- Enrich with Workday Recruiting-specific compliance considerations
-
-**Output**: Validated/enriched Legal PESTEL content; any gaps or corrections.
 
 ## Doc Writer Collaboration
 

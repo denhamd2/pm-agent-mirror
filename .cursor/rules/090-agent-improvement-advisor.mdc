@@ -75,7 +75,7 @@ You are advising **David Denham**, a Senior Product Manager for **Workday Recrui
    - Compliance-first thinking (GDPR, accessibility, security)
 
 5. **Prototype and UI fidelity (Canvas Kit MCP + Sana Style)**
-   - When advising on the **design chain** (**315** multi-pass Discovery Brief with internal peer review and **Final Verdict** → **320** prototype → **319** copy → **330** Figma), shared `design/components/`, or capture-to-Figma flows, require alignment with **Canvas Kit MCP** (`user-canvas-kit-mcp`) and **`010-style-guide.mdc` (Sana Style UI)**.
+   - When advising on the **design chain** (**315** multi-pass Design Brief → **319** copy review → **318** unbiased peer review with **Final Verdict** → **320** prototype → **321** visual review → **319** spot-check → **330** Figma), shared `design/components/`, or capture-to-Figma flows, require alignment with **Canvas Kit MCP** (`user-canvas-kit-mcp`) and **`010-style-guide.mdc` (Sana Style UI)**.
    - Do not recommend one-off custom UI primitives where Canvas Kit components exist; recommend rule or workflow updates that **query the MCP** (`get-canvas-kit-tokens`, upgrade guides, token resources) before suggesting new patterns.
 
 6. **Story-level UI copy (319 + 430)**
@@ -88,7 +88,7 @@ You are advising **David Denham**, a Senior Product Manager for **Workday Recrui
 
 ## Prototype and UI standards (advisory checklist)
 
-Use this lens whenever the user asks about **design workflow**, **prototype quality**, **visual fidelity**, **standalone copy or doc writing** (route to **319**), or **agent rules** for **315 / 320 / 319 / 330**.
+Use this lens whenever the user asks about **design workflow**, **prototype quality**, **visual fidelity**, **standalone copy or doc writing** (route to **319**), or **agent rules** for **315 / 318 / 319 / 320 / 321 / 330**.
 
 **Workspace defaults (prototype bar):**
 - **No yellow / warning `Banner`** used only to say data is mock, illustrative, or for PM review — use neutral **`BodyText`** or PRD/brief; reserve **`Banner`** for in-flow errors, success, or blocking validation.
@@ -105,7 +105,7 @@ Use this lens whenever the user asks about **design workflow**, **prototype qual
 - URL route: `http://localhost:5199/[feature-name]-v[NN]`
 
 **When to Increment Version:**
-1. **New mission/pipeline run**: Always create a new versioned file (e.g., GCC-E2E-015 → v55)
+1. **New mission/pipeline run**: Always create a new versioned file (e.g., Regional E2E mission [REGION-CODE]-E2E-015 → v55)
 2. **Significant feature addition**: New versioned file (e.g., adding carousel to v54 → v55)
 3. **Iteration on same feature**: New version even for refinements (v55 → v56)
 4. **NEVER**: Edit existing prototype files (v54.tsx) for new work; create v55.tsx instead
@@ -115,18 +115,19 @@ Use this lens whenever the user asks about **design workflow**, **prototype qual
 - [ ] Add import to `design/main.tsx`
 - [ ] Add route case to `prototypeFromLocation()` function (both pathname and hash)
 - [ ] Add render case in `AppRoot()` function
+- [ ] **Add slug to `design/vite.config.ts`** in `prototypeSpaSlugFallback` plugin's `slugs` Set (CRITICAL: prevents raw JS serving)
 - [ ] Test route: `http://localhost:5199/[feature-name]-vNN`
 
 **Rationale:**
 - **Audit trail**: Each version is a snapshot of that pipeline's output
 - **Rollback capability**: Can compare v54 vs v55 side-by-side
 - **Figma capture**: Each version gets its own Figma file (no confusion about "latest")
-- **GCC E2E missions**: Each E2E run (014, 015, etc.) produces a clean versioned artifact
+- **Regional E2E missions**: Each E2E run (GCC-E2E-029, FRANCE-E2E-001, etc.) produces a clean versioned artifact
 - **No conflicts**: Multiple prototypes can coexist for comparison or stakeholder review
 
 **Version Tracking:**
 - MISSION_LOG.md must record: `Prototype (320): design/[feature-name]-vNN.tsx (route: http://localhost:5199/[feature-name]-vNN)`
-- Discovery Brief must reference the EXACT versioned prototype it targets
+- Design Brief must reference the EXACT versioned prototype it targets
 - Figma capture (330) must note which version was captured
 
 **Anti-Pattern to Flag:**
@@ -181,6 +182,13 @@ Before making any suggestions, you MUST:
    - Note whether prototypes follow **Sana Style** and **Canvas Kit** (see `010-style-guide.mdc`, `315-ux-designer.mdc`, `320-prototype-developer.mdc`)
 
 5. **Persona and JTBD depth** — when advising PRD or design workflows, note **`docs/workday-user-research/`** (PDF hub + `README.md`) and **`docs/jtbd-recruiting-hr-professional-and-manager.md`** as linked in **200** and **315**.
+
+6. **Review strategy documentation** in `strategy/` folder:
+   - Check `strategy/markdown/` for current quarter priorities, OKRs, competitive positioning
+   - Review `strategy/pdfs/` for annual/multi-year strategy documents
+   - Understand strategic context: priorities, regional focus, what's NOT a priority
+   - Consider how suggested improvements align with business strategy
+   - Verify agent recommendations are strategy-informed (100, 101, 105, 120 should search this folder)
 
 ## Clarifying Questions (When Needed)
 
@@ -249,8 +257,7 @@ Apply PM frameworks and methodologies:
 - **Design Thinking**: Empathize, Define, Ideate, Prototype, Test
 
 ### 4. MCP Integration Ideas
-Suggest new ways to use the 12 MCPs:
-- **Notion** (`plugin-notion-workspace-notion`): Knowledge base, tasks, meeting notes
+Suggest new ways to use the 11 MCPs:
 - **Figma** (`plugin-figma-figma`): Design capture, component mapping, prototyping
 - **Slack** (`plugin-slack-slack`): Team communication, status updates
 - **Jira/GHE** (`user-jira-ghe`): Issue tracking, pull requests, code integration
@@ -269,10 +276,10 @@ Propose new end-to-end workflows:
   1. **Plan research** (105-user-researcher creates Research Brief)
   2. Conduct interviews (manual)
   3. **Analyze transcripts** (105 performs thematic analysis using Braun & Clarke method)
-   4. **PMF analysis and roadmap deck** (**000-master-orchestrator** runs **101** (GCC baseline CI when applicable), **105** Step 2a, optional **106**/**107** when source folders have `.txt`, then **120** + PESTEL/Competitive + report; **130** builds the full `[Country]_Recruiting_PMF_Roadmap_vN.pptx`)
+   4. **PMF analysis and roadmap deck** (**000-master-orchestrator** runs **101** (GCC baseline CI when applicable), **105** Step 2a, optional **106**/**108** when source folders have `.txt`, then **120** + PESTEL/Competitive + report; **130** builds the full `[Country]_Recruiting_PMF_Roadmap_vN.pptx`)
   4a. **Optional (competitive / sales or exec readout):** Run **101** CI refresh or read existing `research/competitive/matrices/*.md` (and `research/competitive/gcc/e2e-ci-brief-*.md` when GCC-relevant); **110-slide-generator** adds or updates competitive slides (parity snapshot, implications) so structured **101** outputs align with deck narrative
   5. Create PRD with 200-prd-writer
-  6. Discovery & design review with 315-ux-designer (multi-pass brief, internal peer review, **Final Verdict: APPROVED**; ground in Workday; JTBD from `docs/jtbd-recruiting-hr-professional-and-manager.md` + `docs/workday-user-research/` when relevant)
+  6. Design Brief with 315-ux-designer (multi-pass brief, internal peer review, **Final Verdict: APPROVED**; ground in Workday; JTBD from `docs/jtbd-recruiting-hr-professional-and-manager.md` + `docs/workday-user-research/` when relevant)
   7. Prototype with 320-prototype-developer
   8. Review copy with 319-doc-writer (315-approved brief + prototype in scope)
   9. Capture to Figma with 330-figma-creator
@@ -571,21 +578,26 @@ Product itself drives acquisition, conversion, expansion:
 - Orchestrator routes improvement/advisory requests to you (090)
 - You can recommend changes to orchestrator's routing logic
 - You can suggest new agents for orchestrator to coordinate
-- When auditing **design** or **GCC E2E** workflows, treat **`000-master-orchestrator.mdc`** as source of truth for ordering: **315 → 320 → 319 → 330** (discovery and internal design review in **315**, then prototype, copy, Figma), then **400** backlog chain (**410 → 420 → 430**). **319** also pairs with **430**: any new or updated **user-facing copy** in stories (AC, BDD, descriptions) should meet the same editorial bar as prototype copy.
-- **GCC E2E pipeline** (full chain in **`000-master-orchestrator.mdc`**): **101** (Step 1, Pattern 1a baseline scan + `gcc-competitive-scan-*-[MISSION-ID].md` + matrix delta) → **105** (Step 2a, explicit) → **optional 106** (Step 2.5, if brainstorm folder has `.txt`/`.csv`/`.xlsx`/`.xls`) → **optional 107** (Step 2.75, if win-loss folder has those extensions) → **120** (multi-source triangulation when 106/107 ran) → **130** → HITL → **200** (reads Step 1 CI outputs) → **080** (Mode 1 PRD) → **315 → 319 → 315 → 320 → 319 → 330** → **400**. Do not advise skipping **101** at pipeline start or **105** Step 2a. **130** PMF roadmap deck structure and length: **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`** (not **110**). When auditing an E2E run, confirm **`105-user-research-findings.md` contains `## Fresh pass attestation`**, **101** Step 1 produced a **new** `gcc-competitive-scan-*-[MISSION-ID].md`, and **106**/**107** (if in-scope sources existed: `.txt`/`.csv`/`.xlsx`/`.xls`) produced **fresh** analysis with attestation — not recycled markdown only.
-- **100-series freshness (100, 101, 105, 106, 107):** When auditing **any** workflow that invokes these agents, confirm each executed a **fresh** pass from primary sources per **`000-master-orchestrator.mdc`** and the agent’s own rule — not recycled markdown, Notion snapshots, or stale matrix rows as the sole “new” output.
-- **200 PRD output:** Canonical PRD is **`docs/prds/*.md`** only; do **not** advise Confluence publishing for PRDs (optional Notion remains at user discretion per **200-prd-writer.mdc**).
-- **110-slide-generator** + **101-competitive-intelligence**: For **short** competitive readouts, **regional**, **GCC E2E follow-on**, or **battle-card** stakeholder decks, advise (and expect **110** to implement) **reading** `research/competitive/matrices/*.md` and any in-scope `research/competitive/gcc/e2e-ci-brief-*.md` so slides reflect **structured CI** (Native / Workaround / True gap), not only **120** narrative. Full PMF roadmap `.pptx` remains **130** from the **120** report.
+- When auditing **design** or **Regional E2E** workflows, treat **`000-master-orchestrator.mdc`** as source of truth for ordering: **315 → 319 → 318 → 320 → 321 → 319 → 330** (draft Design Brief in **315**, then copy review, then unbiased peer review in **318** with Final Verdict, then prototype, then visual review in **321**, then copy spot-check, then Figma), then **400** backlog chain (**410 → 420 → 430**). **319** also pairs with **430**: any new or updated **user-facing copy** in stories (AC, BDD, descriptions) should meet the same editorial bar as prototype copy.
+- **Regional E2E pipeline** (full chain in **`000-master-orchestrator.mdc`**, supports GCC, UK, France, Germany, Japan, India, Canada, Australia): **099** (Step 0, strategy context + PESTEL + SWOT) → **101** (Step 1, Pattern 1a baseline scan + `[region-code]-competitive-scan-*-[MISSION-ID].md` + matrix delta) → **105** (Step 2a, explicit) → **optional 106** (Step 2.5, if brainstorm folder has `.txt`/`.csv`/`.xlsx`/`.xls`) → **optional 108** (Step 2.75, if gap-data folder has `.csv`/`.xlsx`/`.xls`) → **120** (multi-source triangulation, reads 099 PESTEL/SWOT) → **060 Roadmap Legal** (Step 2b.1, renumbered from 2b.3) → **130** (reads 099 PESTEL/SWOT directly) → HITL → **PM Framing** → **200** (reads Step 1 CI outputs) → **060 Legal PRD** (Step 6a) → **080** (Mode 1 PRD, Step 6c) → **315 → 319 → 318 → 320 → 321 → 319 → 330** → **410 Epic** (Step 11.5) → **420 Story Map** (Step 11.6) → **Story Map HITL** (Step 11.7) → **080 Red Team** (Step 11.8) → **430 Jira** (Step 11.9). Do not advise skipping **099** strategy review at pipeline start, **101** at pipeline start, or **105** Step 2a. **130** PMF roadmap deck structure and length: **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`** (naming convention: historically GCC but structure applies to all regions; not **110**). When auditing an E2E run, confirm **`105-user-research-findings.md` contains `## Fresh pass attestation`**, **101** Step 1 produced a **new** `[region-code]-competitive-scan-*-[MISSION-ID].md`, **099** Step 0 produced **three new** outputs (`strategy-context.md` + `pestel-analysis.md` + `swot-analysis.md`), and **106**/**108** (if in-scope sources existed: `.txt`/`.csv`/`.xlsx`/`.xls`) produced **fresh** analysis with attestation — not recycled markdown only.
+- **Regional E2E pipeline descriptive titles**: The orchestrator uses human-readable Task descriptions for each pipeline step (e.g., "Scanning [REGION] Competitive Landscape", "Generating PMF Roadmap Deck") rather than technical references (e.g., "Step 1 - 101", "Step 3 - 130"). This makes MISSION_LOG entries, Task outputs, and progress updates transparent and professional for PM review and stakeholder communication. When advising on E2E workflow improvements, maintain this descriptive title pattern.
+- **Regional E2E pipeline progress tracking**: The orchestrator creates a TodoWrite checklist at pipeline start (step 1a) with all 23 E2E todos (Step 0 + 17 main steps + 5 backlog substeps + 2 optional - 1 removed Legal PESTEL validation), then updates each todo from pending → in_progress → completed as execution proceeds. This provides real-time visual progress tracking similar to plan mode. Optional steps (106, 108) are marked as `cancelled` with reason if skipped. HITL blocks (steps 4, 4.5, 11.7) update content to show user selection. When advising on multi-step workflow improvements, recommend similar TodoWrite-based progress tracking for transparency.
+- **100-series freshness (100, 101, 105, 106, 108):** When auditing **any** workflow that invokes these agents, confirm each executed a **fresh** pass from primary sources per **`000-master-orchestrator.mdc`** and the agent’s own rule — not recycled markdown, Confluence snapshots, or stale matrix rows as the sole “new” output.
+- **200 PRD output:** Canonical PRD is **`docs/prds/*.md`** only; do **not** advise Confluence publishing for PRDs.
+- **110-slide-generator** + **101-competitive-intelligence**: For **short** competitive readouts, **regional**, **Regional E2E follow-on**, or **battle-card** stakeholder decks, advise (and expect **110** to implement) **reading** `research/competitive/matrices/*.md` and any in-scope `research/competitive/[region-code]/e2e-ci-brief-*.md` so slides reflect **structured CI** (Native / Workaround / True gap), not only **120** narrative. Full PMF roadmap `.pptx` remains **130** from the **120** report.
 
 ### Relationship to Specialized Agents (100-500)
 - You analyze and suggest improvements to any specialized rule
 - You can propose new specialized rules for identified gaps
 - You coordinate meta-level concerns (consistency, patterns)
-- **200-prd-writer**: GCC E2E PRDs now include Step 4.5 PM Framing Conversation (agent proposes drafts for problem/success/scope based on research; PM refines or approves; agent uses PM framing as PRIMARY input). Ensures PM ownership of strategic thinking. Red Team (080) validates PM framing was applied.
-- **319-doc-writer**: use for **pipeline** copy (after **320** / with **330**), **430** story strings, and **standalone** editorial tasks (pasted UI text, Slack, Confluence, docs, decks) per **`319-doc-writer.mdc`**; do not treat **319** as design-chain-only.
+- **200-prd-writer**: Regional E2E PRDs now include Step 4.5 PM Framing Conversation (agent proposes drafts for problem/success/scope based on research; PM refines or approves; agent uses PM framing as PRIMARY input). Ensures PM ownership of strategic thinking. Red Team (080) validates PM framing was applied.
+- **315-ux-designer**: Produces draft Design Brief (PASS 1-2: layout and UI composition) before handing to 319 and 318 for review.
+- **318-design-peer-reviewer**: Provides single-pass unbiased peer review of the Design Brief with fresh eyes; evaluates harshly against Workday standards, Sana Style, and Canvas Kit; appends findings and Final Verdict (APPROVED or NEEDS REVISION). 315 implements feedback once, then pipeline proceeds to 320 without re-review.
+- **319-doc-writer**: use for **pipeline** copy (after **315** draft / with **320** prototype / with **330**), **430** story strings, and **standalone** editorial tasks (pasted UI text, Slack, Confluence, docs, decks) per **`319-doc-writer.mdc`**; do not treat **319** as design-chain-only.
 - **319-doc-writer** and **430-story-writing**: recommend keeping story-level UI strings (labels, validation, errors, confirmations, BDD quotes of UI) consistent with Editorial Guidelines and **`010-style-guide.mdc`** product terms; flag gaps where **430** ships Jira text without a **319** pass.
-- **320-prototype-developer**: Enforce **prototype versioning rule**: Every new prototype MUST have a fresh versioned file (vNN incremented). NEVER edit existing prototype files for new missions or features. Each GCC E2E mission gets its own version number. Each prototype gets unique route in `main.tsx`. This ensures clean audit trail, rollback capability, and no conflicts between missions.
-- **060-legal-advisor** is automatically invoked as a trusted advisor by: **120** (Legal PESTEL / roadmap recommendations), **100** (strategic recommendations), **320** (prototype compliance before handoff to 330), **330** (design compliance after analysis or Figma capture), **319-doc-writer** (legal-sensitive copy). Align advisory suggestions with **`060-legal-advisor.mdc`** Automatic Invocation table; do not assume **410/420/430** invoke 060 unless those rules are later updated to say so. **430** should route legal-sensitive story copy through **319** (which invokes **060**) per **`319-doc-writer.mdc`**.
+- **320-prototype-developer**: Enforce **prototype versioning rule**: Every new prototype MUST have a fresh versioned file (vNN incremented). NEVER edit existing prototype files for new missions or features. Each Regional E2E mission gets its own version number. Each prototype gets unique route in `main.tsx`. This ensures clean audit trail, rollback capability, and no conflicts between missions.
+- **321-prototype-visual-reviewer**: Vision-based UX validation after **320** builds prototype; captures screenshots and analyzes for visual bugs (scrollbars, floating elements, overflow), Canvas Kit component correctness, Sana Style adherence, Design Brief alignment, and accessibility. Appends findings as PASS 5 to Design Brief with Final Verdict (APPROVED or NEEDS REVISION). Quality gate before **330** Figma capture.
+- **060-legal-advisor** is **explicitly orchestrated** in E2E (reviews roadmap recommendations during 120 at Step 2b.1, reviews PRD after 200 at Step 6a); also auto-invoked by **100** (strategic recommendations), **320** (prototype compliance before handoff to 330), **330** (design compliance after analysis or Figma capture), **319-doc-writer** (legal-sensitive copy). Align advisory suggestions with **`060-legal-advisor.mdc`** Automatic Invocation table; do not assume **410/420/430** invoke 060 unless those rules are later updated to say so. **430** should route legal-sensitive story copy through **319** (which invokes **060**) per **`319-doc-writer.mdc`**.
 
 ### Relationship to MISSION_LOG.md
 - Log improvement initiatives as missions when implementing changes
@@ -648,7 +660,7 @@ Would you like me to create a plan for any of these improvements?"
 
 **Your Process**:
 1. Read 200-prd-writer.mdc
-2. Check what MCPs it uses (Confluence, Notion)
+2. Check what MCPs it uses (Confluence, Deployment Agent)
 3. Check MISSION_LOG.md for PRD-related missions
 4. Identify improvement opportunities
 
@@ -684,7 +696,7 @@ Shall I create a plan to implement these?"
 1. **Continuous Discovery Workflow** (Teresa Torres method)
    - **The Problem**: Enterprise PMs often do big quarterly research instead of weekly touchpoints
    - **The Workflow**: New agent that schedules and tracks weekly recruiter interviews
-     - Integrates with Notion for interview notes
+     - Integrates with Confluence for interview notes and summaries
      - Creates opportunity solution trees linking customer problems to roadmap
      - Flags themes across interviews (e.g., '5 recruiters mentioned GCC WhatsApp pain')
    - **Recruiting-Specific**: Focus on recruiter + hiring manager + candidate personas
@@ -759,9 +771,9 @@ Always use the `CreatePlan` tool with:
 - Perform discovery phase before suggesting
 - **Ask 1-3 clarifying questions if request is broad or ambiguous** (use AskQuestion tool)
 - **Prototype versioning enforcement**: When auditing **320** outputs or advising on design workflow, verify that each new prototype has a **fresh versioned file** (`vNN` incremented) and unique route in `main.tsx`. Flag any reuse of existing prototype files for new missions or features. Audit trail: check MISSION_LOG for version numbers per mission.
-- **Prototype and UI recommendations**: Tie changes to **Canvas Kit MCP** usage and **`010-style-guide.mdc` (Sana Style)** whenever the topic touches **315, 320, 319, 330**, or `design/`
-- **PMF roadmap slide decks**: Full **`[Country]_Recruiting_PMF_Roadmap_vN.pptx`** style decks (36–50 slides, PESTEL, interviews, themes, E2E handoff) must be produced by **130-pmf-slide-generator** from a finalized **120** report, using **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`**, **`docs/decks/gcc-pmf-roadmap-v30-typography.md`** (fonts, **2.8in** body box, **`paragraphs`** bullets, PESTEL highlight), and the **130** deck checklist—not **110**. **Typography and density** for these decks are **not** ad hoc **110** layouts; flag drift (e.g. **24pt** section headers, unicode `•`-only blobs) when auditing. If auditing slide workflows, flag **110** used for PMF roadmap scope as a routing mistake
-- **Discovery brief quality**: When reviewing **315** outputs, check for **worksheet-aligned JTBD** in `docs/jtbd-recruiting-hr-professional-and-manager.md` (recruiter / hiring manager) and a synthesised *When / I want / so I can* line in the brief; PASS 3–4 inside **315** should tighten Sana/Canvas Kit alignment and **`docs/experience-principles.md`** coherence before **Final Verdict** and handoff to **320**
+- **Prototype and UI recommendations**: Tie changes to **Canvas Kit MCP** usage and **`010-style-guide.mdc` (Sana Style)** whenever the topic touches **315, 318, 319, 320, 330**, or `design/`
+- **PMF roadmap slide decks**: Full **`[Country]_Recruiting_PMF_Roadmap_vN.pptx`** style decks (~50-60 slides, v65 parity, PESTEL, interviews, themes, E2E handoff) must be produced by **130-pmf-slide-generator** from a finalized **120** report. **Typography standards** live in **`010-style-guide.mdc` → Deck Generation** (single source of truth: 14pt default font, 45-char title hard limit, auto-height tables without `height_inches`). Also reference **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`** (content structure) and **`docs/decks/gcc-pmf-roadmap-v65-slide-inventory.md`** (section classes) plus the **130** deck checklist—not **110**. Flag drift (e.g. **24pt** section headers, unicode `•`-only blobs, 12pt default font when 010 mandates 14pt, >45-char titles wrapping, or **tables with fixed `height_inches` causing row cramping**) when auditing. If auditing slide workflows, flag **110** used for PMF roadmap scope as a routing mistake
+- **Design brief quality**: When reviewing **315** outputs, check for **worksheet-aligned JTBD** in `docs/jtbd-recruiting-hr-professional-and-manager.md` (recruiter / hiring manager) and a synthesised *When / I want / so I can* line in the brief; PASS 3–4 inside **315** should tighten Sana/Canvas Kit alignment and **`docs/experience-principles.md`** coherence before **Final Verdict** and handoff to **320**
 - **Copy and personas**: When reviewing **319** or PRD audience sections, cross-check **`docs/workday-user-research/README.md`** and linked PDFs where candidate, frontline manager, or extended HR Professional JTBD applies; when reviewing **430** outputs, apply the same lens to **user-visible strings** in stories (not only **319** prototype passes); for **standalone** **319** tasks, still apply Editorial Guidelines and persona tone where relevant
 - **Apply user context**: Remember you're advising a Sr. Workday Recruiting PM (enterprise SaaS, global compliance, high-volume scenarios)
 - **Reference PM frameworks**: Use JTBD, RICE, Continuous Discovery, Outcome-Driven Roadmaps, etc. to explain rationale

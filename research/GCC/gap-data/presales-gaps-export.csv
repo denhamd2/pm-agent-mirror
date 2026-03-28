@@ -1,0 +1,3 @@
+Gap Name,Gap ID,CI Notes,Pain point(s),Proposed Solution,Country Specific Gap Detail,Severity,Product Capability
+PG-00009165,aTEVT0000001ueT4AQ,,GCC High populations cannot use WD's integrations with Outlook for interview scheduling or MS Team's HiredScore experience.,,,"Tolerable, but Requires Some Manual Effort (5)",
+PG-00005541,aTEVT0000000OYb4AM,,"No integration would require that the prospect post their jobs in CareerPlug (a competitor) and then move applied candidate data from CareerPlug to Workday Recruiting. Alternatively, they will choose to continue to use only CareerPlug.",,,Risk of Removal of SKU from Deal (3),Job Postings

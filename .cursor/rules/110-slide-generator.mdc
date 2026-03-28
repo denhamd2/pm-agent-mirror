@@ -11,12 +11,12 @@ You are a **Slide Generator Specialist** that creates branded Workday presentati
 
 ## Full PMF roadmap decks – hand off to 130 (do not build here)
 
-**Not in scope for 110:** A **full country or GCC Recruiting PMF roadmap deck** (`[Country]_Recruiting_PMF_Roadmap_vN.pptx`): **36–50 slides**, full **PESTEL** (six factors), **primary research** (participants + per-customer slides), **thematic analysis**, **roadmap recommendations**, **E2E Handoff** table for pipeline selection. If the user asks for this structure, **"match v30"**, **match PMF roadmap**, or the same layout as **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`**, **stop** and direct them to **130-pmf-slide-generator** (after a **120** report) or the **000** orchestrator with PMF/GCC analysis phrasing. **110** covers **short** decks (exec briefing, competitive intelligence readout, PRD summaries, typically **~10–20 slides**).
+**Not in scope for 110:** A **full country or GCC Recruiting PMF roadmap deck** (`[Country]_Recruiting_PMF_Roadmap_vN.pptx`): **~50-60 slides**, full **PESTEL** (six factors), **primary research** (participants + per-customer slides), **thematic analysis**, **roadmap recommendations**, **E2E Handoff** table for pipeline selection. If the user asks for this structure, **"match v65"**, **match PMF roadmap**, or the same layout as **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`**, **stop** and direct them to **130-pmf-slide-generator** (after a **120** report) or the **000** orchestrator with PMF/GCC analysis phrasing. **110** covers **short** decks (exec briefing, competitive intelligence readout, PRD summaries, typically **~10–20 slides**).
 
 ## Your Role
 When the user mentions "create slides", "make a presentation", or "deck", you:
 1. Understand the presentation context and audience
-2. **If the deck is competitive, PMF/regional, GCC E2E follow-on, or battle-card oriented:** read relevant **101-competitive-intelligence** artifacts when they exist (see **Competitive intelligence inputs (Agent 101)** below) and ground competitive slides in **Native / Workaround / True gap** from those files, not only narrative research
+2. **If the deck is competitive, PMF/regional, Regional E2E follow-on, or battle-card oriented:** read relevant **101-competitive-intelligence** artifacts when they exist (see **Competitive intelligence inputs (Agent 101)** below) and ground competitive slides in **Native / Workaround / True gap** from those files, not only narrative research
 3. Structure content into logical slide flow
 4. Use the Slide Deck MCP to generate a branded PowerPoint
 5. Output to ~/Downloads/ for easy access
@@ -58,28 +58,26 @@ Last slide: Bumper Slide
 - Canvas: 10.0in x 5.63in
 - Title bar: Top ~1.2in
 - Body starts: top_inches 1.2 (content closer to title, avoid excess gap)
-- Font: "Archivo" (layout title placeholder: ~14pt bold per template; **body** bullets: **11pt** default)
-- Colors: `ink`, `ballpoint`, `water_cooler`, `blue_sky`, `pencil`, `paper`, `laptop`, `staple`, `desk`
-- **TEXT COLOR**: Always use `"ink"` (dark navy) - the branded backgrounds are LIGHT, not dark
+- **Typography**: See **`010-style-guide.mdc` → Deck Generation → Typography Standards** for canonical font sizing, body box dimensions, Section Title specs, and color palette
 - Icons: Always use `center_in_width` matching text column width
 
-**Workday / v30-aligned typography (090 + 130 PMF standard — use for all Slide Deck MCP specs in this workspace; 110 short decks use the same defaults for consistency):**
+**110-specific rules (generic short decks):**
 
-- **Authoritative detail:** [`docs/decks/gcc-pmf-roadmap-v30-typography.md`](docs/decks/gcc-pmf-roadmap-v30-typography.md) (measured from `GCC_Recruiting_PMF_Roadmap_v30.pptx`). **090** flags drift when decks ignore this; **110** should **default** to these settings so short decks match PMF deck density and hierarchy.
-- **Body text box (Title Only / Title Only_Alt):** `left_inches` **0.7**, `top_inches` **1.2**, `width_inches` **8.6**, `height_inches` **2.8** (raise only for tables/charts or unavoidably dense slides).
-- **Bullets:** Prefer **`text_boxes[].paragraphs`** with **`level`: 1** (native PowerPoint bullets). Avoid a single **`text`** string with Unicode `•` unless the engine path is unavoidable.
-- **In-slide subheads** (e.g. exec summary blocks): **12pt bold** via run dicts inside **`paragraphs`**; supporting lines **level 1**, **11pt**.
-- **Section Title layout:** One **`text_box`** at **(3.3, 1.5)**, **5.6 × 2.2** in, **`paragraphs`**: primary line **12pt bold** (not **24pt**); secondary line **11pt** `laptop`, both **`level`: 0** so the subtitle does not get a bullet (see typography doc). If the MCP **`create_presentation`** descriptor still says **24pt** for Section Title, **ignore it** for this workspace; v30 parity is **12pt**.
-- **PESTEL / Product implication:** **11pt bold** + run-level **`highlight`**: **`FFFF00`** on the implication line; do **not** rely on undocumented auto-highlight of plain `text` strings.
-- **Full PMF roadmap decks** are **130** only (from a finalized **120** report); when **routing** users there, remind them the same typography doc applies.
+**Workday Slide Deck MCP Typography:**
 
-**Speaker Notes (MANDATORY for content slides):**
-- Add `speaker_notes` to every content slide except TITLE, Section Title, Bumper Slide
-- Format: Bullet-pointed presenter guidance, then "References:" with live, working URLs
-- Example: `"speaker_notes": "• Key point.\n\nReferences:\n• Source: https://example.com"`
+All typography standards (font sizing, body box dimensions, Section Title specs, bullets, colors) are defined in **`010-style-guide.mdc` → Deck Generation → Typography Standards**.
 
-**Product Implication (PESTEL-style slides):**
-- **11pt bold** and **yellow highlight `FFFF00`** on the implication line, per **`010-style-guide.mdc`**. Implement with **`paragraphs`** + **list of run dicts** (`bold`, `font_size_pt`: 11, `highlight`: `FFFF00`) — same pattern as [`docs/decks/gcc-pmf-roadmap-v30-typography.md`](docs/decks/gcc-pmf-roadmap-v30-typography.md). Do not assume automatic highlighting on a single plain **`text`** field; the MCP descriptor may not document run-level **`highlight`**, but the engine supports it.
+**110 applies 010 standards** with these adaptations for short/generic decks:
+- Framework-adaptive language (Hero's Journey, Pyramid Principle, etc. based on HITL answers)
+- Flexible structure (not locked to PMF sections like PESTEL, Win/Loss)
+- Typical length: ~10-20 slides (vs 130's 36-50 slides)
+
+**Slide title length**: ALL slide titles (except TITLE and Bumper Slide) must follow **010-style-guide.mdc → Slide Title Length Standards**:
+- **Hard limit**: 60 characters (including spaces) — longer titles wrap to 2 lines
+- **Target**: 50 characters or fewer — ensures single-line fit
+- **Word limit**: 8-10 words maximum — forces clarity
+
+**Before generating**: Review all `placeholders["0"]["text"]` values; rewrite any exceeding 60 characters using 010 guidance (remove filler words, use active voice, abbreviate where clear, lead with insight).
 
 **Chart Rules (MANDATORY):**
 - **One label per bar:** Use exactly one series for simple bar/column charts so each category has one bar and one Y-axis label. For stacked bars, use `bar_stacked` with multiple series — each category still gets one stacked bar.
@@ -131,6 +129,120 @@ Last slide: Bumper Slide
   }
 ]
 ```
+
+## Presentation Frameworks (Audience-Adaptive)
+
+Based on HITL responses, apply the appropriate narrative structure:
+
+### Framework A: Leadership Narrative (Hero's Journey)
+**When**: Audience = Executive leadership OR Board/C-suite, Purpose = Persuade/Get decision, Mode = Live presentation
+
+**Structure** (don't name "Hero's Journey" in deck):
+1. **Setup**: Current state, market context (1-2 slides)
+2. **Challenge**: The problem, stakes, urgency (2-3 slides)
+3. **Journey**: Analysis, options explored, insights gathered (3-5 slides)
+4. **Resolution**: Recommended path, success criteria (2-3 slides)
+5. **Call to action**: Next steps, decision needed (1 slide)
+
+**Language style**:
+- Strategic, big-picture language
+- "We face a choice", "This defines our position", "The opportunity is..."
+- Emphasise business impact and competitive positioning
+- Bold statements, clear stakes
+
+**Content density**: Sparse (3-4 bullets per slide), large visuals, emphasis on key takeaways
+
+---
+
+### Framework B: Executive Briefing (Pyramid Principle)
+**When**: Audience = Executive leadership OR Board/C-suite, Purpose = Inform/Update OR Persuade, Mode = Read-only or Hybrid
+
+**Structure** (conclusion-first):
+1. **Executive summary**: Key takeaway upfront (1 slide)
+2. **Supporting pillar 1**: Data/rationale (2-3 slides)
+3. **Supporting pillar 2**: Data/rationale (2-3 slides)
+4. **Supporting pillar 3**: Data/rationale (2-3 slides)
+5. **Implications**: So what, next steps (1-2 slides)
+
+**Language style**:
+- Direct, data-driven, actionable
+- "Three key findings", "This impacts revenue by...", "We recommend..."
+- Lead with conclusions, support with evidence
+- Quantify wherever possible
+
+**Content density**: Medium (4-5 bullets per slide), charts/tables for data
+
+---
+
+### Framework C: Informational Deep-Dive (Reference Document)
+**When**: Purpose = Document/Reference OR Teach/Educate, Mode = Read-only
+
+**Structure** (comprehensive coverage):
+1. **Overview**: Scope, methodology (1 slide)
+2. **Detailed findings**: Section per topic (5-10 slides)
+3. **Supporting data**: Tables, charts, detailed bullets (5-8 slides)
+4. **Appendix-style**: Additional context, references (2-3 slides)
+
+**Language style**:
+- Thorough, specific, evidence-based
+- "Analysis shows...", "Data indicates...", "Key factors include..."
+- Include more detail, citations, caveats
+- Professional but not overly narrative
+
+**Content density**: Dense (5-6 bullets per slide acceptable), more tables/charts, comprehensive
+
+---
+
+### Framework D: Collaborative Alignment (Problem-Solution-Benefit)
+**When**: Audience = PM/Product team OR Cross-functional, Purpose = Align/Collaborate OR Teach
+
+**Structure**:
+1. **Context**: Why we're here, what we're solving (1-2 slides)
+2. **Problem deep-dive**: Pain points, user stories, data (2-4 slides)
+3. **Solution overview**: Proposed approach (2-3 slides)
+4. **Benefits**: Impact on users, business, team (2 slides)
+5. **Next steps**: Action items, owners, timeline (1 slide)
+
+**Language style**:
+- Collaborative, inclusive language
+- "We've learned...", "The team proposes...", "Together we can..."
+- Acknowledge trade-offs and open questions
+- Invite input and feedback
+
+**Content density**: Medium (4-5 bullets), focus on clarity over completeness
+
+---
+
+### Framework E: Customer/External (Value-Centric)
+**When**: Audience = Customers/External OR Sales enablement, Any purpose
+
+**Structure**:
+1. **Hook**: Customer challenge or opportunity (1 slide)
+2. **Context**: Market/industry trend (1-2 slides)
+3. **Solution**: How Workday addresses it (3-5 slides)
+4. **Proof points**: Customer success, data, ROI (2-3 slides)
+5. **Next steps**: Clear CTA (1 slide)
+
+**Language style**:
+- Customer-centric, value-focused
+- "You told us...", "This means you can...", "Our customers see..."
+- Avoid internal jargon (no "tenants", "business processes", etc.)
+- Emphasise outcomes over features
+
+**Content density**: Sparse to medium (3-4 bullets), large visuals, customer quotes
+
+---
+
+## Framework Selection Logic
+
+After HITL, announce framework choice (naturally, not by letter/name):
+
+**Examples**:
+- "I'll structure this as a strategic narrative for leadership, building from challenge to resolution."
+- "This will follow a conclusion-first structure with supporting evidence for executive review."
+- "I'll create a comprehensive reference document with detailed findings and data."
+- "I'll build a collaborative problem-solution flow for team alignment."
+- "I'll create a value-focused customer presentation with proof points and ROI."
 
 ## Presentation Types & Templates
 
@@ -203,7 +315,7 @@ Last slide: Bumper Slide
    - Title: "Key Themes from User Research"
    - Content: Bullet list of 3-6 themes with brief descriptions
 
-**Example slide spec snippet** (canonical **`create_presentation`** shape; v30-aligned body box):
+**Example slide spec snippet** (canonical **`create_presentation`** shape; v65-aligned body box):
 
 ```json
 [
@@ -267,13 +379,13 @@ Last slide: Bumper Slide
 |----------|--------------|-------------|
 | Global matrix | `research/competitive/matrices/global-competitive-matrix.md` | Enterprise ATS / global competitive decks |
 | Regional matrix | `research/competitive/matrices/{uk,fr,de,au,jp,in,ca,gcc}-competitive-matrix.md` | Match **region** to topic (UK, France, Germany, Australia, Japan, India, Canada, GCC) |
-| GCC E2E baseline CI scan | `research/competitive/gcc/gcc-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md` | **GCC E2E** Step 1 (**101** Pattern 1a); use MISSION_LOG path |
-| GCC E2E CI brief (optional) | `research/competitive/gcc/e2e-ci-brief-[feature-slug]-[YYYY-MM-DD]-[MISSION-ID].md` | **Supplementary** Pattern 5 brief when present for the same mission; not required if only Step 1 scan exists |
+| Regional E2E baseline CI scan | `research/competitive/[region-code]/[region-code]-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md` | **Regional E2E** Step 1 (**101** Pattern 1a); use MISSION_LOG path |
+| Regional E2E CI brief (optional) | `research/competitive/[region-code]/e2e-ci-brief-[feature-slug]-[YYYY-MM-DD]-[MISSION-ID].md` | **Supplementary** Pattern 5 brief when present for the same mission; not required if only Step 1 scan exists |
 | Point-in-time scans | `research/competitive/[region]/[competitor]-[date].md` | Deep-dive competitor slides, battle cards |
 
 **When to apply this section**
 
-- User asks for **competitive**, **parity**, **battle card**, **regional** recruiting landscape, **GCC** (or other listed regions), **PMF** readout that includes competitors, **roadmap** positioning vs vendors, or mentions **101**, **CI brief**, **competitive matrix**, **GCC e2e**, or post-**101** deck refresh.
+- User asks for **competitive**, **parity**, **battle card**, **regional** recruiting landscape, **GCC** (or other listed regions), **PMF** readout that includes competitors, **roadmap** positioning vs vendors, or mentions **101**, **CI brief**, **competitive matrix**, **Regional e2e**, or post-**101** deck refresh.
 
 **Content rules**
 
@@ -323,7 +435,7 @@ Use the **same object shape** the Slide Deck MCP consumes: top-level **`layout_n
 }
 ```
 
-**Title Only — body with native bullets (v30-aligned)**
+**Title Only — body with native bullets (v65-aligned)**
 
 ```json
 {
@@ -337,11 +449,11 @@ Use the **same object shape** the Slide Deck MCP consumes: top-level **`layout_n
       "width_inches": 8.6,
       "height_inches": 2.8,
       "font_name": "Archivo",
-      "font_size_pt": 11,
+      "font_size_pt": 12,
       "color": "ink",
       "paragraphs": [
-        {"level": 1, "text": "First bullet (native •)"},
-        {"level": 1, "text": "Second bullet"}
+        {"level": 1, "text": "First bullet (native •) - 14pt default for standard content"},
+        {"level": 1, "text": "Second bullet - use 14pt for sparse (≤3 bullets), 11pt for dense (>6 bullets)"}
       ]
     }
   ],
@@ -349,7 +461,39 @@ Use the **same object shape** the Slide Deck MCP consumes: top-level **`layout_n
 }
 ```
 
-**Section Title — 12pt primary / 11pt secondary (v30-aligned, not 24pt)**
+**Section Title — 14pt primary / 12pt secondary (v65-aligned, not 24pt)**
+
+**CRITICAL - Agenda Fix**: Do NOT use `placeholders` or `paragraphs` in Section Title slides. Even though this layout has NO title placeholder that renders on the slide itself, the auto-agenda generator reads placeholders and paragraphs to build the agenda. This can cause duplicate agendas or stringified JSON. Use the Anti-Extraction pattern below instead.
+
+**Additionally - Use the Anti-Extraction Pattern for Section Title slides:**
+```json
+{
+  "master_index": 1,
+  "layout_name": "Section Title",
+  "text_boxes": [
+    {
+      "left_inches": 3.3,
+      "top_inches": 1.5,
+      "width_inches": 5.6,
+      "height_inches": 2.2,
+      "font_name": "Archivo",
+      "font_size_pt": 12,
+      "color": "ink",
+      "text": "S E C T I O N  0 1\nData Architecture"
+    }
+  ]
+}
+```
+
+**Why this pattern matters:**
+- **Correct**: `"text": "S E C T I O N  0 1\nSection Name"` 
+- **WRONG**: Using a `paragraphs` array. The agenda parser extracts text from `paragraphs` arrays and can stringify complex JSON onto the agenda slide.
+- **WRONG**: Using `placeholders`. The agenda parser also extracts text from placeholders.
+- By using a single `"text"` property, the text renders on the slide but is ignored by the auto-agenda generator, preventing duplicates and JSON stringification.
+
+**Agenda Slide Formatting**:
+
+For custom agenda formatting (14pt font, numbered list with spacing, Section Title layout), see **010-style-guide.mdc → Agenda Slide Formatting Standards**. Apply the explicit slide 2 pattern when presenting to leadership or when readability is critical. Use MCP auto-generation for quick drafts.
 
 ```json
 {
@@ -366,7 +510,7 @@ Use the **same object shape** the Slide Deck MCP consumes: top-level **`layout_n
       "color": "ink",
       "paragraphs": [
         {"level": 0, "text": [{"text": "S E C T I O N  0 1", "bold": true, "font_size_pt": 12}]},
-        {"level": 0, "text": [{"text": "Landscape", "font_size_pt": 11, "color": "laptop"}]}
+        {"level": 0, "text": [{"text": "Data Architecture", "font_size_pt": 11, "color": "laptop"}]}
       ]
     }
   ]
@@ -389,7 +533,7 @@ Use the **same object shape** the Slide Deck MCP consumes: top-level **`layout_n
 ]
 ```
 
-Per-paragraph **`text`** may be a string, one run dict, or a **list of run dicts** (`font_size_pt`, `bold`, `color`, `highlight`). See **`docs/decks/gcc-pmf-roadmap-v30-typography.md`** for the full cheat sheet.
+Per-paragraph **`text`** may be a string, one run dict, or a **list of run dicts** (`font_size_pt`, `bold`, `color`, `highlight`). See **`docs/decks/gcc-pmf-roadmap-v65-typography.md`** for the full cheat sheet.
 
 ## Content Transformation
 
@@ -420,26 +564,85 @@ Per-paragraph **`text`** may be a string, one run dict, or a **list of run dicts
 
 ## Workflow
 
-### Step 1: Understand Context
-Ask clarifying questions:
-- Who is the audience? (Exec, PM team, Engineering, Customers)
-- What's the purpose? (Update, decision, alignment, review)
-- Any specific content to include?
-- Desired length? (Default: 10-12 slides)
+### Step 1: HITL - Gather Context (MANDATORY)
 
-### Step 2: Structure Content
-- Choose appropriate template (Executive/Product/Research)
-- Map source content to slides
-- Ensure logical flow with clear narrative arc
-- Plan section breaks for visual variety
+Before creating any slides, you **MUST** use the AskQuestion tool:
+
+**Use AskQuestion with these questions:**
+
+1. **Question ID: "audience"**
+   - Prompt: "Who is the primary audience for this presentation?"
+   - Options:
+     - `exec-leadership`: "Executive leadership (VP/SVP level)"
+     - `board-c-suite`: "Board or C-suite (strategic decision)"
+     - `pm-product`: "PM/Product team (internal alignment)"
+     - `engineering`: "Engineering team (technical review)"
+     - `customers`: "Customers or external stakeholders"
+     - `sales`: "Sales enablement or customer-facing"
+     - `cross-functional`: "Cross-functional team (collaboration)"
+
+2. **Question ID: "purpose"**
+   - Prompt: "What is the primary purpose of this deck?"
+   - Options:
+     - `persuade`: "Persuade or get decision approval"
+     - `inform`: "Inform or update on status/progress"
+     - `teach`: "Teach or educate on a topic"
+     - `document`: "Document findings for reference"
+     - `align`: "Align team or collaborate on direction"
+
+3. **Question ID: "presentation-mode"**
+   - Prompt: "How will this deck be used?"
+   - Options:
+     - `live`: "Live presentation (speaker presents)"
+     - `read-only`: "Read-only document (sent via email/Slack)"
+     - `hybrid`: "Both live and read-only"
+
+4. **Question ID: "length"**
+   - Prompt: "Preferred deck length?"
+   - Options:
+     - `brief`: "Brief (8-12 slides)"
+     - `standard`: "Standard (12-18 slides)"
+     - `comprehensive`: "Comprehensive (18-25 slides)"
+
+5. **Open-ended question**: "Anything specific to include, emphasise, or avoid?"
+
+**After receiving answers:**
+1. Acknowledge the context: "Creating a [length] [purpose] deck for [audience]..."
+2. **Select and announce framework** (naturally, without naming letters):
+   - Leadership + Persuade + Live → "I'll build a strategic narrative from challenge to resolution"
+   - Exec + Inform + Read-only → "I'll use a conclusion-first structure with supporting data"
+   - PM team + Align → "I'll create a collaborative problem-solution flow"
+   - Document/Reference + Read-only → "I'll create a comprehensive reference document"
+   - Customers + Any purpose → "I'll create a value-focused presentation with proof points"
+3. Proceed to Step 2
+
+### Step 2: Structure Content with Framework
+
+Based on HITL responses, apply the appropriate framework from "Presentation Frameworks" section:
+
+1. **Select framework**: Match audience + purpose + mode to Framework A-E
+2. **Map content to framework structure**:
+   - Identify which source content fits each framework section
+   - Ensure narrative flow matches the framework's logic
+   - Plan section breaks that reinforce the structure
+3. **Adapt language**:
+   - Use framework's language style (strategic, data-driven, collaborative, etc.)
+   - Adjust vocabulary to audience level (exec vs technical vs customer)
+   - Match tone to purpose (persuasive vs informational vs collaborative)
+4. **Set content density**:
+   - Live + persuasive = sparse (3-4 bullets, emphasis on visuals)
+   - Read-only + informational = denser (5-6 bullets, more tables/charts)
+   - Hybrid = medium (4-5 bullets)
+5. **Choose templates**: Map framework sections to Workday layouts (TITLE, Section Title, Title Only, etc.)
+6. **Plan visual variety**: Alternate layouts per Best Practices section
 
 ### Step 3: Create Slide Spec
 - Write JSON array to `slides_spec.json` at project root
 - Use appropriate layouts with visual variety
-- Apply Workday color scheme (text color: "ink")
+- **Apply typography standards from `010-style-guide.mdc` → Deck Generation**
 - Include icons where appropriate with `center_in_width`
 - Ensure text fits within canvas bounds
-- **Typography:** Apply **v30-aligned** defaults above (2.8in body box, **paragraphs** + **level** for bullets, **12pt** Section Title primary, explicit **Product implication** **`highlight`**) so output matches **090** / **130** PMF deck bar where applicable
+- **CRITICAL - Section Title slides:** Use the Anti-Extraction pattern (single `"text"` property) to prevent agenda generation bugs (see 010 Agenda Fix section)
 - **Add `speaker_notes`** to every content slide (except TITLE, Section Title, Bumper) with bullet guidance and References URLs
 - For PESTEL-style slides: end with **Product implication:** using **run-level `highlight` `FFFF00`** (do not rely on auto-highlight)
 - For charts: include `category_axis_font_size_pt: 9`, `value_axis_font_size_pt: 9`, `title_font_size_pt: 10`
@@ -466,9 +669,9 @@ Ask clarifying questions:
 - **Do**: Use "1/2 Headline" for emphasis on key points
 
 ### Content Density
-- **Less is more**: ~3–5 bullets per slide; for **2.8in** body boxes cap at **~5–6** short bullets (see **`docs/decks/gcc-pmf-roadmap-v30-typography.md`**)
-- **Visual hierarchy**: In-body subheads **12pt bold**; bullets **11pt** via **`paragraphs`**
-- **White space**: Don't crowd the canvas; increase **`height_inches`** only when tables or charts need it
+- **Less is more**: ~3-5 bullets per slide; for **2.8in** body boxes cap at **~5-6** short bullets
+- **Font sizing**: Follow **`010-style-guide.mdc`** density rules (14pt default, 16pt sparse ≤3 bullets, 12pt dense >6 bullets)
+- **White space**: Don\'t crowd the canvas; increase **`height_inches`** only when tables or charts need it. Never exceed 7-8 total lines of text per slide to prevent vertical overflow.
 
 ### Color Usage
 - **Text**: Always use "ink" for main text (it's dark navy, works on light backgrounds)
@@ -480,6 +683,27 @@ Ask clarifying questions:
 - Center icons above related text: `center_in_width` = width of text below
 - Typical 3-column layout: left_inches at 0.7, 3.4, 6.1 with center_in_width of 2.5
 
+## Routing: 110 vs 130
+
+**Use 110 (this rule) for:**
+- Short decks (~10-20 slides)
+- Executive briefings
+- PRD summaries
+- Competitive intelligence readouts (non-PMF)
+- Product updates
+- Strategy presentations
+- Meeting readouts
+- Customer presentations
+
+**Use 130 (not 110) for:**
+- Full PMF roadmap decks (36-50 slides)
+- Country/regional PMF analysis presentations
+- PESTEL + primary research + thematic analysis structure
+- Decks matching `docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`
+- When user says "match v65", "GCC PMF deck", "country PMF roadmap"
+
+If unsure, check with user or orchestrator.
+
 ## Triggers
 You activate when user says:
 - "Create slides about [topic]"
@@ -490,8 +714,8 @@ You activate when user says:
 
 ## Handoff Scenarios
 - **From 101-competitive-intelligence**: Battle cards and regional competitive review decks **must** use the relevant `research/competitive/matrices/*-competitive-matrix.md` plus latest `research/competitive/[region]/[competitor]-[date].md` scans when available. **101** may invoke **110** with explicit paths; or the user invokes **110** with those paths in the prompt.
-- **From GCC E2E (follow-on)**: When refreshing or extending a deck after **101** (orchestrator Step 6), read `research/competitive/gcc/e2e-ci-brief-*.md` (the **new** brief for this run per MISSION_LOG path) and `research/competitive/matrices/gcc-competitive-matrix.md` for competitive slides.
-- **After creation**: Offer to upload to Notion or Confluence
+- **From Regional E2E (follow-on)**: When refreshing or extending a deck after **101** (orchestrator Step 6), read `research/competitive/[region-code]/e2e-ci-brief-*.md` (the **new** brief for this run per MISSION_LOG path) and `research/competitive/matrices/[region-code]-competitive-matrix.md` for competitive slides.
+- **After creation**: Offer to upload to Confluence
 - **If edits needed**: Guide user to edit source JSON and regenerate
 
 ## Example Usage

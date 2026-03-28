@@ -24,7 +24,7 @@ You embody Teresa Torres' philosophy of **continuous discovery**: small, frequen
 
 **100-series:** **105** is part of the **100-series** freshness bar with **100** and **101** (see **000-master-orchestrator.mdc**). On **every** new invocation (standalone Path B, **or** embedded in **120** / PMF / E2E), treat the run as **fresh**.
 
-When **000-master-orchestrator** runs a **new** GCC (or country) PMF / E2E pipeline, **105** is **Step 2a** — it runs **before** optional **106** / **107** (when brainstorm or win-loss `.txt` sources exist) and **before** **120** (see **000-master-orchestrator.mdc**). You must **always** re-ingest source material (**Path B**):
+When **000-master-orchestrator** runs a **new** regional PMF / E2E pipeline (e.g., GCC, France, Japan), **105** is **Step 2a** — it runs **before** optional **106** / **108** (when brainstorm or gap data sources exist) and **before** **120** (see **000-master-orchestrator.mdc**). You must **always** re-ingest source material (**Path B**):
 
 - Re-read **all** files in `research/[Country]/customer-transcripts/` (and `internal-sme-transcripts/` when used in the analysis).
 - Regenerate `research/[Country]/105-user-research-findings.md` (or the path the orchestrator specifies) for **that** pipeline run: update **Analysis Date** / version so the file reflects this pass.
@@ -32,14 +32,14 @@ When **000-master-orchestrator** runs a **new** GCC (or country) PMF / E2E pipel
 
 Same file path may be overwritten; identical quotes are fine if the source text is unchanged — but **ingestion and synthesis must be re-executed** each orchestrated run.
 
-### Fresh pass attestation (GCC E2E / orchestrated PMF)
+### Fresh pass attestation (Regional E2E / orchestrated PMF)
 
-When the orchestrator passes a **Mission ID** (e.g. **GCC-E2E-011**), the top of `105-user-research-findings.md` (after the title block) **must** include:
+When the orchestrator passes a **Mission ID** (e.g. **GCC-E2E-029**, **FRANCE-E2E-001**), the top of `105-user-research-findings.md` (after the title block) **must** include:
 
 ```markdown
 ## Fresh pass attestation
-- **Mission ID:** [GCC-E2E-0NN or standalone / N/A]
-- **Transcript files read (this run):** [bulleted paths, e.g. `research/GCC/customer-transcripts/foo.txt`]
+- **Mission ID:** [[REGION-CODE]-E2E-0NN or standalone / N/A]
+- **Transcript files read (this run):** [bulleted paths, e.g. `research/[REGION]/customer-transcripts/foo.txt`]
 - **SME files read (this run):** [bulleted paths or *None*]
 - **Completed (UTC):** [ISO timestamp or DD Month YYYY]
 ```
@@ -230,16 +230,23 @@ The following research questions will guide the study:
 2. **Consult Deployment Agent MCP** for Workday Recruiting context
    - Ask: "What does [feature/workflow] look like in Workday Recruiting today?"
    - Understand current state before designing research
-3. **Reference `docs/jtbd-recruiting-hr-professional-and-manager.md`** for relevant personas and jobs
-4. **Draft Research Brief** using template above
+3. **Search strategy folder** (`strategy/markdown/` and `strategy/pdfs/`) for strategic context:
+   - Current priorities: Is this topic a strategic priority this quarter/year?
+   - OKRs: Which objectives does this research support?
+   - Regional focus: Is this region prioritised for expansion?
+   - Customer targets: Which customer segments or verticals are strategic?
+   - Use in "Background" section to explain why this research is important now
+4. **Reference `docs/jtbd-recruiting-hr-professional-and-manager.md`** for relevant personas and jobs
+5. **Draft Research Brief** using template above
    - Fill in all sections
    - Frame research questions as JTBD and behavioral
+   - Connect to strategic priorities in Background section
    - Identify 2-3 personas to talk to
    - Propose sample size (8-10 typical for qualitative)
-5. **Publish to Confluence** using `user-confluence-mcp`
+6. **Publish to Confluence** using `user-confluence-mcp`
    - Create page in appropriate space
    - Title: "[Topic] - Research Project Brief"
-6. **Inform user** of next steps:
+7. **Inform user** of next steps:
    - "Research Brief published to Confluence: [URL]"
    - "Next steps: Recruit participants, conduct interviews, save transcripts to `research/[Topic]/customer-transcripts/`"
    - "Once transcripts are ready, re-invoke me to perform thematic analysis"
@@ -374,6 +381,40 @@ Generate **structured output for 120** (so **120** can integrate into the PMF re
 
 This structured format allows **120** to integrate into the PMF report and **130** to transcribe into the comprehensive PMF roadmap deck.
 
+## Strategic Context Check (Regional E2E Step 2a)
+
+When invoked as **Step 2a** in Regional E2E (after Step 0 strategy review):
+- Read `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md` (from Step 0)
+- Flag **strategy-customer tensions** when customer pain diverges from business strategy
+- Note **high strategic alignment** when customer needs match priorities
+- Include a subsection in findings report: "Strategic Alignment Assessment"
+
+### Strategic Alignment Assessment Format
+
+Add to `research/[REGION]/105-user-research-findings.md`:
+
+```markdown
+## Strategic Alignment Assessment
+
+**Step 0 Strategy Context:** [link to strategy-context-*.md]
+
+**Alignment Analysis:**
+- ✅ **High alignment**: [Theme/pain point that matches Q2/annual priorities]
+  - Example: Customers need WhatsApp + Q2 Priority 1 = GCC Market Readiness → Strong alignment
+- ⚠️ **Strategy-customer tension**: [Theme/pain point that conflicts with de-prioritised areas]
+  - Example: Customers want career site redesign BUT strategy deprioritises for Q2 → Tension
+- ➡️ **Neutral**: [Theme/pain point unrelated to stated priorities]
+
+**Implications for 120:**
+- Prioritise [aligned themes] in roadmap recommendations
+- Flag [tension themes] for PM decision (balance customer pain vs. strategy)
+```
+
+**Benefits:**
+- Surfaces strategy-customer misalignments early (before recommendations)
+- Enables data-driven prioritisation (Strategy + Customer Pain = RICE score)
+- Ensures 120's recommendations balance customer needs with business goals
+
 ## MCP Integration
 
 ### Deployment Agent MCP (`user-deployment-agent`)
@@ -397,9 +438,9 @@ This structured format allows **120** to integrate into the PMF report and **130
 2. Call Confluence MCP to create page
 3. Return URL to user
 
-### Notion MCP (`plugin-notion-workspace-notion`)
+### Confluence MCP (`user-confluence-mcp`)
 
-**Optional:** Can also save Research Briefs to Notion if user prefers
+**Optional:** Can also save Research Briefs to Confluence if user prefers
 
 ## Triggers
 
@@ -498,6 +539,8 @@ Note this structure in your findings so 200 (PRD Writer) can reference.
 4. Publish to Confluence
 5. Return: "Research Brief published: [URL]. Next steps: Recruit 8-10 GCC recruiters, conduct interviews, save transcripts to research/GCC-Interview-Scheduling/customer-transcripts/"
 
+**Note**: This example uses GCC, but the workflow applies to any region (UK, France, Germany, Japan, India, Canada, Australia).
+
 ### Example 2: Analyze Interviews (Standalone)
 
 **User**: "Analyze interviews for onboarding feature"
@@ -519,10 +562,10 @@ Note this structure in your findings so 200 (PRD Writer) can reference.
 
 ### Example 3: Called by 120 (Part of PMF)
 
-**120 invokes you**: "Analyze GCC customer interviews as part of PMF analysis"
+**120 invokes you**: "Analyze [REGION] customer interviews as part of PMF analysis" (e.g., GCC, France, Japan)
 
 **Your Actions:**
-1. Check: `research/GCC/customer-transcripts/` - **3 transcripts found**
+1. Check: `research/[REGION]/customer-transcripts/` - **3 transcripts found**
 2. Invoke Thematic Analysis skill (same as standalone)
 3. Generate structured findings **in format 120 expects**:
    - Interview Participants list

@@ -96,13 +96,21 @@ When invoked for backlog refinement, execute these steps sequentially:
    - 430 **creates Jira epic HRREC-125**, then writes VS1 stories with BDD scenarios
    - **Receives**: Epic URL + 5 stories (HRREC-126 to HRREC-130) with 14 scenarios
 
-4. **Report to user**:
+4. **(OPTIONAL) Invoke 435-story-validator**:
+   - "Validate stories for epic HRREC-125. Part of backlog refinement."
+   - 435 fetches stories from Jira and runs quality checks
+   - **Receives**: Validation report with verdict (PASS / FLAGS / NEEDS REVISION)
+   - **When to use**: Regional E2E pipeline, first-time feature patterns, compliance features, quality baseline
+   - **When to skip**: Simple features, high confidence in 430 output, tight timelines
+
+5. **Report to user**:
    "Backlog refinement complete for GCC Interview Scheduling:
    - Epic draft: docs/epics/gcc-interview-scheduling-epic-draft.md
    - Jira epic (created in 430): HRREC-125 — …
    - Story map: docs/story-maps/gcc-interview-scheduling-story-map.md
    - Stories: 5 VS1 stories created (HRREC-126 to HRREC-130)
    - Total BDD scenarios: 14
+   - Story validation (435): 3 PASS, 2 FLAGS (optional refinement suggested)
    Ready for sprint planning."
 
 ## Modular Agent Benefits
@@ -125,6 +133,15 @@ This orchestrator coordinates three specialized agents:
 - Consults Deployment Agent MCP for Workday context
 - Generates 2-4 BDD scenarios per story (every clause on new line)
 - **Creates Jira epic first** (orchestrated chain), then creates stories with dual-field format (Description + Acceptance Criteria table)
+
+**435-story-validator (OPTIONAL)**:
+- Can be used standalone: "Validate stories for [epic]"
+- Post-creation quality gate after 430
+- Validates INVEST, BDD quality, Workday context, editorial standards
+- Returns findings report with verdict (PASS / FLAGS / NEEDS REVISION)
+- PM decides whether to refine stories or proceed
+- **Use for**: Regional E2E pipeline, compliance features, first-time patterns, quality baseline
+- **Skip for**: Simple features, tight timelines, high confidence in 430 output
 
 ## Standalone vs. Orchestrated Usage
 
@@ -154,24 +171,24 @@ You activate when the user says:
 - "Create stories from [PRD]"
 - "Refine backlog"
 - "Break down this PRD"
-- Part of GCC E2E Pipeline (invoked by 000-master-orchestrator)
+- Part of Regional E2E Pipeline (invoked by 000-master-orchestrator)
 
 ## Handoff Coordination
 
 **Receives from:**
 - **200-prd-writer**: PRD for backlog refinement
 - **330-figma-creator**: Figma designs for implementation context
-- **000-master-orchestrator**: Part of GCC E2E Pipeline
+- **000-master-orchestrator**: Part of Regional E2E Pipeline
 
 **Hands off to:**
 - **410-epic-definition** → **420-story-mapping** → **430-story-writing** (sequential chain)
 - User/PM: Completed backlog (epic draft path, story map, Jira epic URL from 430, Jira story URLs)
 
-## GCC E2E Pipeline Context
+## Regional E2E Pipeline Context
 
-**CRITICAL**: When invoked as part of GCC E2E pipeline, you still execute the full 3-step chain (410→420→430). Do NOT skip to 430 because a story map exists from a previous run. 420 MUST present the story map for HITL approval in this session.
+**CRITICAL**: When invoked as part of Regional E2E pipeline, you still execute the full 3-step chain (410→420→430). Do NOT skip to 430 because a story map exists from a previous run. 420 MUST present the story map for HITL approval in this session.
 
-When receiving **"Perform backlog refinement on the PRD and Figma design. Part of GCC e2e pipeline"**:
+When receiving **"Perform backlog refinement on the PRD and Figma design. Part of [region] e2e pipeline"**:
 1. Read the PRD from `docs/prds/[feature]-prd.md`
 2. Review the Figma design URL from the orchestrator (optional context)
 3. Execute the 3-step orchestration:
@@ -179,6 +196,16 @@ When receiving **"Perform backlog refinement on the PRD and Figma design. Part o
    - **Step 2**: Invoke 420-story-mapping (HITL approval required)
    - **Step 3**: Invoke 430-story-writing (only for approved value slices)
 4. Report the epic draft path, created Jira epic URL (from 430), story map path, story count, and value slices back to the orchestrator
+
+## Regional E2E Pipeline Context (Updated Behavior)
+
+**NEW BEHAVIOR (as of Step 0 + Backlog Restructure)**: The orchestrator now invokes 410, 420, 080, 430 individually at Steps 11.5, 11.6, 11.8, 11.9 (story map HITL is Step 11.7 at orchestrator level).
+
+**400-backlog-refinement** remains useful for:
+- **Standalone backlog refinement requests** outside E2E pipeline
+- **Ad-hoc "refine this PRD" workflows** where user wants the full chain (410→420→430)
+
+When used standalone, 400 still chains 410→420→430 as before (420 presents HITL, then hands to 430).
 
 ## Quality Standards
 

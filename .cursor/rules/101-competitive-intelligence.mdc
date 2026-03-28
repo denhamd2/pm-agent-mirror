@@ -27,7 +27,7 @@ When the user requests competitive intelligence, you:
 
 ## 100-series — fresh run (all invocations)
 
-On **every** new competitive request (standalone scan, regional refresh, battle card, **or** orchestrated **Pattern 5**), execute **new** web research and **new** Deployment Agent / **@functional-knowledge** validation as required by that pattern. **Forbidden:** Delivering a “scan” by only reusing a prior point-in-time report, matrix section, or E2E brief **without** a current evidence pass for **this** request. (**Pattern 5** adds GCC E2E-specific file naming; this section applies to **all** **101** triggers.) Align with **000-master-orchestrator.mdc** **100-series fresh** invariant.
+On **every** new competitive request (standalone scan, regional refresh, battle card, **or** orchestrated **Pattern 5**), execute **new** web research and **new** Deployment Agent / **@functional-knowledge** validation as required by that pattern. **Forbidden:** Delivering a “scan” by only reusing a prior point-in-time report, matrix section, or E2E brief **without** a current evidence pass for **this** request. (**Pattern 5** adds Regional E2E-specific file naming; this section applies to **all** **101** triggers.) Align with **000-master-orchestrator.mdc** **100-series fresh** invariant.
 
 ## Regional matrix file map (mandatory coverage)
 
@@ -133,7 +133,7 @@ For regional competitors, track (tailor emphasis **per region** from the map abo
 - Organize findings in `scratchpad.md` during research
 - Structure intelligence across 12 categories
 
-**Notion (`plugin-notion-workspace-notion`)**
+**Confluence (`user-confluence-mcp`)**
 - Search internal competitive intel
 - Find historical research and customer feedback
 
@@ -175,6 +175,21 @@ For regional competitors, track (tailor emphasis **per region** from the map abo
 2. Query Deployment Agent MCP
 3. Classify: Native / Workaround / True Gap
 4. Document with citations
+
+## Strategic Context Input (Regional E2E Step 1)
+
+When invoked as **Step 1** in Regional E2E (after Step 0 strategy review):
+- Read `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md` (from Step 0)
+- Use strategic priorities to focus competitive scan (prioritise features aligned with Q2/annual strategy)
+- Flag competitive gaps that block strategic initiatives (e.g., GCC WhatsApp if GCC is strategic priority)
+- In Feature Comparison section, call out **strategic gaps** vs. **nice-to-have gaps**
+- Example: If Q2 Priority 1 = "GCC Market Readiness" and WhatsApp is True Gap → escalate as **strategic blocker**
+- Example: If career site redesign is de-prioritised but competitor has it → note as **non-strategic gap**
+
+**Benefits:**
+- Focuses limited PM resources on competitive gaps that matter most to business strategy
+- Enables data-driven prioritisation (Strategy + Customer Pain + Competitive Pressure = RICE score)
+- Ensures competitive intelligence directly informs roadmap decisions
 
 ## Intelligence Categories (12 Categories)
 
@@ -286,7 +301,7 @@ For regional competitors, track (tailor emphasis **per region** from the map abo
    - Cross-reference and validate across sources
    - Identify patterns and strategic themes
 
-5. **Search Notion** for internal competitive notes
+5. **Search Confluence** for internal competitive notes
 
 6. **Apply Six-Hats Thinking** for strategic analysis:
    - White Hat: Facts from web search
@@ -306,23 +321,23 @@ For regional competitors, track (tailor emphasis **per region** from the map abo
 
 **Expected Duration**: 10-20 minutes for thorough scan
 
-### Pattern 1a: GCC E2E Pipeline Baseline Scan (Step 1)
+### Pattern 1a: Regional E2E Pipeline Baseline Scan (Step 1)
 
-**Trigger**: Invoked by **000-master-orchestrator** as **Step 1** of GCC E2E pipeline (before 105, 120, 130)
+**Trigger**: Invoked by **000-master-orchestrator** as **Step 1** of Regional E2E pipeline (before 105, 120, 130). Supports all 8 regions: GCC, UK, France, Germany, Japan, India, Canada, Australia.
 
-**Scope**: Full GCC competitive landscape scan
+**Scope**: Full competitive landscape scan for the specified region
 
 **Outputs**:
-1. **Update** `research/competitive/matrices/gcc-competitive-matrix.md`:
-   - Add changelog entry: `## Changelog: [YYYY-MM-DD] - [MISSION-ID] - GCC E2E Baseline Scan`
+1. **Update** `research/competitive/matrices/[region-code]-competitive-matrix.md`:
+   - Add changelog entry: `## Changelog: [YYYY-MM-DD] - [MISSION-ID] - [REGION] E2E Baseline Scan`
    - Update competitor sections with fresh findings (do NOT rewrite entire matrix, just delta updates)
    - Ensure Native/Workaround/True Gap classifications are current for all key recruiting capabilities
    
-2. **Create** `research/competitive/gcc/gcc-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md`:
+2. **Create** `research/competitive/[region-code]/[region-code]-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md`:
    - **Executive Summary** (3-5 key takeaways)
-   - **Competitor Profiles** (1 page per: Bayzat, HiBob, Zoho Recruit, SAP SuccessFactors, Oracle Taleo, plus any emerging players)
-   - **Feature Comparison Table** (Native/Workaround/True Gap for: candidate grid, interview scheduling, WhatsApp integration, nationalization tracking, Arabic localization, mobile optimization, reporting/dashboards, AI-assisted matching)
-   - **Market Insights** (GCC recruiting trends, market share data if available, recent news/funding)
+   - **Competitor Profiles** (1 page per major regional competitor, plus SAP SuccessFactors, Oracle Taleo, and any emerging players)
+   - **Feature Comparison Table** (Native/Workaround/True Gap for key regional recruiting capabilities: candidate grid, interview scheduling, local communication channels, localization, mobile, reporting, AI-assisted matching)
+   - **Market Insights** (Regional recruiting trends, market share data if available, recent news/funding)
    - **Workday Competitive Response** (strengths, gaps, recommended positioning)
    - **Citations** (all web search URLs, Deployment Agent query IDs, functional knowledge references)
 
@@ -339,15 +354,20 @@ For regional competitors, track (tailor emphasis **per region** from the map abo
 **Steps:**
 
 1. Read existing competitive matrix markdown file (`global-competitive-matrix.md` or the regional file from the **Regional matrix file map** for UK/FR/DE/AU/JP/IN/CA/GCC)
-2. Search Notion for recent customer objections/wins vs. competitor
-3. Structure battle card content:
+2. Search Confluence for recent customer objections/wins vs. competitor
+3. **Search strategy folder** (`strategy/markdown/` and `strategy/pdfs/`) for:
+   - Current competitive positioning themes (how we differentiate)
+   - Key messaging and battle card guidance
+   - Strategic priorities that inform win themes
+   - GTM strategy and target customer profiles
+4. Structure battle card content (aligned with strategy docs):
    - Competitor overview (strengths, weaknesses, positioning)
    - Recent activity (last 90 days from web search)
-   - Workday differentiators (why we win)
-   - Common objections and responses
+   - Workday differentiators (why we win - cite strategy positioning themes)
+   - Common objections and responses (aligned with GTM messaging)
    - Customer success stories
-4. Use Slide Deck MCP to generate branded battle card
-5. Save to `~/Downloads/Battle_Card_[Competitor]_[Date].pptx`
+5. Use Slide Deck MCP to generate branded battle card
+6. Save to `~/Downloads/Battle_Card_[Competitor]_[Date].pptx`
 
 **Battle Card Structure:**
 - Slide 1: Competitor Overview (size, funding, market position, recent M&A)
@@ -425,13 +445,13 @@ For regional competitors, track (tailor emphasis **per region** from the map abo
    - Workday positioning (differentiators, gaps)
    - Local feature roadmap recommendations (RICE-scored)
 5. Update regional competitive matrix markdown file in `research/competitive/matrices/`
-6. Create Notion page linking to deck + regional notes
+6. Save regional scan report to `research/competitive/[region-code]/`
 
-**Output**: Regional Competitive Review deck + updated matrix + Notion summary
+**Output**: Regional Competitive Review deck + updated matrix + scan report
 
-### Pattern 5: GCC E2E competitive pass (orchestrated)
+### Pattern 5: Regional E2E competitive pass (orchestrated)
 
-**Trigger**: Invoked by **000-master-orchestrator** as **Step 6** of the **GCC E2E pipeline**, immediately after HITL recommendation selection and **before** **200-prd-writer**. Not a user ad hoc trigger unless the user explicitly says to run this pattern in isolation.
+**Trigger**: Invoked by **000-master-orchestrator** as **Step 6** of the **Regional E2E pipeline**, immediately after HITL recommendation selection and **before** **200-prd-writer**. Not a user ad hoc trigger unless the user explicitly says to run this pattern in isolation.
 
 #### Fresh run (mandatory)
 
@@ -1048,7 +1068,7 @@ This section provides an audit trail of all Workday Deployment Agent queries use
 - **Miss available workarounds**
 - **Forget to cite functional knowledge** (always PDF + section)
 - **Skip Deployment Agent queries** (validate every competitor feature)
-- **Treat an existing `e2e-ci-brief-*.md` or matrix rows as sufficient evidence without a current research pass** when **000-master-orchestrator** has triggered **GCC E2E Pattern 5** for this run (you must execute fresh queries and a **new** dated brief per **Fresh run (mandatory)** above)
+- **Treat an existing `e2e-ci-brief-*.md` or matrix rows as sufficient evidence without a current research pass** when **000-master-orchestrator** has triggered **Regional E2E Pattern 5** for this run (you must execute fresh queries and a **new** dated brief per **Fresh run (mandatory)** above)
 
 ## Triggers
 
@@ -1064,12 +1084,12 @@ You activate when the user says:
 
 ## Handoff Scenarios
 
-- **From 000-master-orchestrator (GCC E2E)**: After HITL selection, orchestrator invokes **101** (Pattern 5). Run **Fresh run (mandatory)** above: **new** DA + web evidence, **new** dated brief, then delta-update `research/competitive/matrices/gcc-competitive-matrix.md` before **200** runs.
-- **To 200-prd-writer**: **GCC E2E**: always consume the **E2E CI brief produced in this pipeline run** (new dated file) + gcc matrix when writing PRD (orchestrator passes context) — not a stale brief from a prior mission as substitute. **Standalone**: True gap requires PRD for new feature; attach **101** gap analysis or matrix sections as inputs.
+- **From 000-master-orchestrator (Regional E2E)**: After HITL selection, orchestrator invokes **101** (Pattern 5). Run **Fresh run (mandatory)** above: **new** DA + web evidence, **new** dated brief, then delta-update `research/competitive/matrices/[region-code]-competitive-matrix.md` before **200** runs.
+- **To 200-prd-writer**: **Regional E2E**: always consume the **E2E CI brief produced in this pipeline run** (new dated file) + regional matrix when writing PRD (orchestrator passes context) — not a stale brief from a prior mission as substitute. **Standalone**: True gap requires PRD for new feature; attach **101** gap analysis or matrix sections as inputs.
 - **To 050-functional-knowledge**: Need clarification on Workday capability
 - **To 110-slide-generator**: Battle card, regional competitive review, or PMF follow-on deck. Pass **explicit paths** so **110** does not guess filenames:
   - **Matrix (always cite region):** `research/competitive/matrices/global-competitive-matrix.md` or `research/competitive/matrices/{uk,fr,de,au,jp,in,ca,gcc}-competitive-matrix.md`
-  - **GCC E2E:** `research/competitive/gcc/e2e-ci-brief-[feature-slug]-[YYYY-MM-DD]-[MISSION-ID].md` (path from **this** mission in MISSION_LOG) **plus** `research/competitive/matrices/gcc-competitive-matrix.md`
+  - **Regional E2E:** `research/competitive/[region-code]/e2e-ci-brief-[feature-slug]-[YYYY-MM-DD]-[MISSION-ID].md` (path from **this** mission in MISSION_LOG) **plus** `research/competitive/matrices/[region-code]-competitive-matrix.md`
   - **Feature / gap analysis:** path to the gap report or matrix section file produced in this run (e.g. `research/competitive/[region]/[competitor]-[date].md` or orchestrator-specified doc)
   - **101** may invoke **110** with the above list in the handoff prompt; user can invoke **110** with the same paths
 - **To 100-market-intelligence**: Broader market trends beyond direct competitors

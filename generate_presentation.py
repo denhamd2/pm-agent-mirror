@@ -166,12 +166,31 @@ def get_next_version(downloads_dir: str, base_name: str) -> int:
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Generate presentation from slides_spec.json")
+    parser.add_argument("--spec", default="/Users/david.denham/product-manager-agent/slides_spec.json", help="Path to the slides spec JSON file")
+    args = parser.parse_args()
+
     template_path = "/Users/david.denham/mcp-servers/wday-slidemcp/Workday Corporate Google Slides Template.pptx"
-    slides_json_path = "/Users/david.denham/product-manager-agent/slides_spec.json"
+    slides_json_path = args.spec
     downloads_dir = "/Users/david.denham/Downloads"
     base_name = "GCC_Recruiting_PMF_Roadmap"
     version = get_next_version(downloads_dir, base_name)
     output_path = os.path.join(downloads_dir, f"{base_name}_v{version}.pptx")
+    # Debug logging
+    import json as _json
+    with open("/Users/david.denham/product-manager-agent/.cursor/debug-1c35df.log", "a") as _log_f:
+        _log_f.write(_json.dumps({
+            "sessionId": "1c35df",
+            "id": "log_gen_pres",
+            "timestamp": 123456789,
+            "location": "generate_presentation.py:main",
+            "message": "Generating presentation",
+            "data": {"spec_path": slides_json_path, "output_path": output_path},
+            "runId": "run1",
+            "hypothesisId": "H1"
+        }) + "\n")
+
 
     if not os.path.exists(template_path):
         print(f"ERROR: Template not found: {template_path}")

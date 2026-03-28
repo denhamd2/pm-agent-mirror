@@ -1,0 +1,9 @@
+{
+  "name": "product-manager-agent",
+  "version": "1.0.0",
+  "description": "Product Manager Agent Workspace",
+  "scripts": {
+    "cleanup:artifacts": "python3 scripts/cleanup-old-artifacts.py --keep 3",
+    "cleanup:artifacts:dry-run": "python3 scripts/cleanup-old-artifacts.py --keep 3 --dry-run"
+  }
+}

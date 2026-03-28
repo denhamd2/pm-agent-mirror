@@ -26,10 +26,15 @@ function prototypeSpaSlugFallback(): Plugin {
     'gcc-candidate-review-cv-carousel-v54',
     'gcc-candidate-review-experience-v54',
     'gcc-candidate-grid-redesign-v52',
+    'gcc-candidate-grid-redesign-v68',
     'gcc-candidate-grid-v46',
     'gcc-recruiter-dashboard',
     'gcc-nationalization-oob-v56',
     'gcc-unified-candidate-review-v57',
+    'gcc-nationalisation-local-compliance-reporting-v58',
+    'gcc-nationalisation-local-compliance-reporting-v59',
+    'gcc-nationalisation-local-compliance-reporting-v60',
+    'gcc-nationalisation-local-compliance-reporting-v61',
   ]);
   return {
     name: 'prototype-spa-slug-fallback',
@@ -68,7 +73,11 @@ function openChromeAndCursorBrowser(): Plugin {
         if (done) return;
         done = true;
         const port = server.config.server.port ?? 5199;
-        const url = `http://localhost:${port}/`;
+        // Check for prototype slug in environment variable
+        const prototypeSlug = process.env.VITE_PROTOTYPE_SLUG || '';
+        const url = prototypeSlug 
+          ? `http://localhost:${port}/${prototypeSlug}`
+          : `http://localhost:${port}/`;
         const script = path.join(repoRoot, 'scripts', 'open-url-chrome-and-cursor-browser.sh');
         spawn('bash', [script, url], {
           detached: true,

@@ -20,9 +20,9 @@ When the user mentions "review copy", "UX writing", "editorial guidelines", "319
 
 ## Position in the design pipeline
 
-**EARLY REVIEW (NEW - GCC E2E with 315):** When orchestrator invokes 319 **during** 315 (after PASS 2, before PASS 3):
+**EARLY REVIEW (NEW - Regional E2E with 315):** When orchestrator invokes 319 **during** 315 (after PASS 2, before PASS 3):
 
-**Input**: Copy Inventory section from `design/[feature]-discovery-brief.md` (PASS 2)
+**Input**: Copy Inventory section from `design/[feature]-design-brief.md` (PASS 2)
 
 **Your role**:
 1. Review all UI text against Editorial Guidelines checklist
@@ -35,9 +35,9 @@ When the user mentions "review copy", "UX writing", "editorial guidelines", "319
 - Legal validation status (if applicable)
 - Any copy gaps that need to be written
 
-**GCC E2E / discovery flow (after 315-approved design):** When this step follows **315 APPROVED** → **320**, treat these as primary inputs:
+**Regional E2E / discovery flow (after 315-approved design):** When this step follows **315 APPROVED** → **320**, treat these as primary inputs:
 
-- **315** output: `design/[feature]-discovery-brief.md` with **Final Verdict: APPROVED** (includes PASS 1–4, JTBD, shell, Sana/Canvas Kit notes). Optional legacy file `design/[feature]-design-peer-review.md` may exist; do not require it for new work.
+- **315** output: `design/[feature]-design-brief.md` with **Final Verdict: APPROVED** (includes PASS 1–4, JTBD, shell, Sana/Canvas Kit notes). Optional legacy file `design/[feature]-design-peer-review.md` may exist; do not require it for new work.
 - **320** output: prototype source under `design/*.tsx` (and related files)
 
 **Your role in this phase**: Final spot-check validation (not full review - copy was already approved during 315).
@@ -264,7 +264,7 @@ When copy involves consent, privacy notices, AI disclosure, or data-related mess
 
 ### Part of design workflow (315 → 320 → **319** → 330):
 - **Primary collaborator**: **320-prototype-developer** (copy in prototype during/after build; **319** runs after **315-approved** brief + build in full pipeline)
-- **Receives from**: **315** Discovery Brief (**Final Verdict: APPROVED**) + **320** prototype (`design/*.tsx`), or **330-figma-creator** (copy in design spec in design-first flow)
+- **Receives from**: **315** Design Brief (**Final Verdict: APPROVED**) + **320** prototype (`design/*.tsx`), or **330-figma-creator** (copy in design spec in design-first flow)
 - **Hands off to**: **320-prototype-developer** with approved copy for implementation when changes are not yet in source
 
 ### Story writing (430):
@@ -283,7 +283,7 @@ You activate when:
 - User mentions "button labels", "error messages", "empty states", "validation message", "label in story"
 - Handoff from **320-prototype-developer** (copy in prototype) or **330-figma-creator** (design spec)
 - **430-story-writing** (orchestrator or PM) requests editorial pass on stories before Jira submission
-- **"Review all UI copy in the prototype. Part of GCC e2e pipeline"** (orchestrator invokes **319**)
+- **"Review all UI copy in the prototype. Part of [region] e2e pipeline"** (orchestrator invokes **319**)
 
 ## Handoff Scenarios
 - **To 060-legal-advisor**: When copy is legal-sensitive (consent, privacy, AI disclosure, data messages) - invoke for validation before finalizing
@@ -292,10 +292,10 @@ You activate when:
 - **To 200-prd-writer**: After reviewing PRD copy
 - **To 110-slide-generator**: After reviewing presentation copy
 
-## GCC E2E Pipeline Context
+## Regional E2E Pipeline Context
 
-When receiving **"Review all UI copy in the prototype. Part of GCC e2e pipeline"** (the prototype is for the PM-selected recommendation):
-- Read **315-approved** context: `design/[feature]-discovery-brief.md` (**Final Verdict: APPROVED**); optional legacy `design/[feature]-design-peer-review.md` if present
+When receiving **"Review all UI copy in the prototype. Part of [region] e2e pipeline"** (the prototype is for the PM-selected recommendation):
+- Read **315-approved** context: `design/[feature]-design-brief.md` (**Final Verdict: APPROVED**); optional legacy `design/[feature]-design-peer-review.md` if present
 - Review all UI text in the prototype built by **320-prototype-developer**
 - Apply Editorial Guidelines checklist to all user-facing text; apply fixes in prototype source and/or `design/[feature]-copy-review.md` as appropriate
 - The orchestrator sequences **319** before **330** (Figma) and **400** (backlog refinement). Within **400**, **430** continues the same editorial bar for copy that appears **inside Jira stories** (see **Story writing (430)** above).

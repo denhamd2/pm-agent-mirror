@@ -55,11 +55,18 @@ Execute all phases sequentially for the specified folder (e.g., `research/Japan/
 **Objective:** Immerse yourself in the qualitative data to understand the complete picture.
 
 **Actions:**
-1. **Read all .txt transcripts** in `research/[Country]/internal-sme-transcripts/`
-2. **Read all .txt transcripts** in `research/[Country]/customer-transcripts/`
-3. **Read CSV verbatims** in `research/[Country]/raw-data/` or filtered output from `research/raw-data/`
-4. **Initial Observations:** What are customers saying? What are SMEs saying? Where do they align or diverge?
-5. **Optional — 106 / 108:** If `research/[Country]/brainstorm-analysis/*.md` exists for this pipeline run (orchestrator Step 2.5), **read** the latest file and note internal hypotheses and themes. If `research/[Country]/gap-analysis/*.md` exists (orchestrator Step 2.75), **read** the latest file and note presales gap severity patterns and capability themes. **Do not** treat these as substitutes for re-reading customer transcripts and SME files; they are **additional** lenses for triangulation.
+1. **Read strategic context from Step 0 (099):** In Regional E2E pipelines, read:
+   - `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md` (strategic priorities, OKRs, regional focus, RICE guidance)
+   - `research/[REGION]/pestel-analysis-[REGION]-[YYYY-MM-DD]-[MISSION-ID].md` (macro-environment with Legal/compliance depth)
+   - `research/[REGION]/swot-analysis-[REGION]-[YYYY-MM-DD]-[MISSION-ID].md` (competitive positioning, strengths/weaknesses/opportunities/threats)
+   
+   **These provide strategic lens and market context before diving into customer transcripts.**
+
+2. **Read all .txt transcripts** in `research/[Country]/internal-sme-transcripts/`
+3. **Read all .txt transcripts** in `research/[Country]/customer-transcripts/`
+4. **Read CSV verbatims** in `research/[Country]/raw-data/` or filtered output from `research/raw-data/`
+5. **Initial Observations:** What are customers saying? What are SMEs saying? Where do they align or diverge? How do they relate to 099's PESTEL/SWOT findings?
+6. **Optional — 106 / 108:** If `research/[Country]/brainstorm-analysis/*.md` exists for this pipeline run (orchestrator Step 2.5), **read** the latest file and note internal hypotheses and themes. If `research/[Country]/gap-analysis/*.md` exists (orchestrator Step 2.75), **read** the latest file and note presales gap severity patterns and capability themes. **Do not** treat these as substitutes for re-reading customer transcripts and SME files; they are **additional** lenses for triangulation.
 
 **105-user-research-findings.md (Regional E2E):** **000-master-orchestrator** runs **105** as **Step 2a** **before** **120**. By the time **120** starts, `research/[Country]/105-user-research-findings.md` should already exist with **## Fresh pass attestation** per **105-user-researcher.mdc**. **120** Phase 1 must **still re-read** the underlying `customer-transcripts/` and SME files (and CSVs); **120** must **not** skip transcript ingestion by relying only on the **105** markdown summary.
 
@@ -236,57 +243,57 @@ This enables the orchestrator to present all recommendations to the PM for human
 
 **130 outputs:** `slides_spec_vN.json` at project root; `~/Downloads/[Country]_Recruiting_PMF_Roadmap_vN.pptx`. Full deck structure, typography, checklist, and MCP steps live in **`130-pmf-slide-generator.mdc`**.
 
-**Before finalising Roadmap Recommendations in the report:** **Orchestrator invokes 060-legal-advisor** (Step 2b.3 in Regional E2E pipeline) to review recommendations for legal/compliance implications (GDPR, AI Act, local regulations). 120 addresses any flags **in the markdown** before handoff to **130** (slides will mirror report wording).
+**Before finalising Roadmap Recommendations in the report:** **Orchestrator invokes 060-legal-advisor** (Step 2b.1 in Regional E2E pipeline, renumbered from former 2b.3) to review recommendations for legal/compliance implications (GDPR, AI Act, local regulations). 120 addresses any flags **in the markdown** before handoff to **130** (slides will mirror report wording).
 
 ---
 
-### Deep Research Requirements (MANDATORY for PESTEL and Competitive Landscape)
+### Strategic Context and PESTEL/SWOT Consumption (from Step 0 - 099)
 
-**Use deep research** — iterative, multi-round web searches that drill down into sources, verify findings, and cross-reference. Do NOT rely on single-pass searches or training data.
+**In Regional E2E pipelines**, the **099-principal-product-strategist** performs comprehensive strategic analysis as **Step 0** (before 101, 105, and 120). By the time 120 starts at Step 2b, you have access to three foundational inputs:
 
-**Deep Research Protocol:**
-1. **Round 1 — Broad discovery:** Run initial searches per topic; capture authoritative URLs and key stats
-2. **Round 2 — Source verification:** Fetch and read primary sources (Mondaq, Statista, government pages, industry reports); extract exact figures and dates
-3. **Round 3 — Follow-up and gaps:** For weak or missing coverage, run targeted follow-up searches; fill DATA GAP explicitly if no Environmental signal exists
-4. **Round 4 — Cross-reference:** Validate key claims across 2+ independent sources where possible; cite live, working URLs
+**1. Strategy Context**: `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md`
+- Strategic priorities and OKRs for current quarter
+- Regional focus level (High/Medium/Low)
+- Competitive positioning themes
+- RICE Business Impact scoring guidance
+- What's NOT a priority
 
-**Execution:** Use `mcp_task` with `subagent_type="generalPurpose"` when conducting PESTEL and Competitive Landscape research. Provide a detailed prompt that specifies the country, required PESTEL factors, competitive landscape categories, and the need for authoritative sources with live citations. The subagent will perform exhaustive, multi-step research autonomously.
+**2. PESTEL Analysis**: `research/[REGION]/pestel-analysis-[REGION]-[YYYY-MM-DD]-[MISSION-ID].md`
+- All 6 macro-environment factors researched (Political, Economic, Social, Technological, Environmental, Legal)
+- 35-55+ web operations performed by 099 with authoritative sources
+- Legal factor includes GDPR, AI Act, country-specific regulations with article citations
+- Product Implications per factor (≥22 words, ≥50 for Legal)
 
-**PESTEL Search Topics (run deep research per factor):**
-- **Legal & Compliance:** `[Country] labor law recruiting 2025`, `[Country] PDPL GDPR data protection`, `[Country] employment regulations Mondaq`, `[Country] nationalization compliance penalties`
-- **After Legal PESTEL research**: **Orchestrator invokes 060-legal-advisor** (Step 2b.1 in Regional E2E pipeline) to validate legal citations, verify regulatory accuracy, and add Workday Recruiting compliance implications. 120 incorporates 060 feedback into Legal PESTEL section before proceeding to Phase 2.
-- **Communication Channels:** `[Country] candidate communication WhatsApp SMS Line preferred`, `[Country] recruiting communication channels statistics`, `[Country] mobile messaging adoption hiring` — identify local preferences (e.g., WhatsApp in GCC, Line in Japan, WeChat in China) with **key stats** (penetration %, usage for hiring)
-- **Market & Key Stats:** `[Country] recruiting HR tech market 2025 2026`, `[Country] smartphone penetration Statista`, `[Country] AI adoption HR`
-- **Coverage:** Political, Economic, Social (communication channel preferences with stats), Technological, Environmental (DATA GAP if none), Legal (cite authoritative sources)
+**3. SWOT Analysis**: `research/[REGION]/swot-analysis-[REGION]-[YYYY-MM-DD]-[MISSION-ID].md`
+- 4-quadrant competitive positioning (Strengths, Weaknesses, Opportunities, Threats)
+- Evidence-based: Synthesizes 101 competitive intelligence, 105 customer research, strategy priorities, PESTEL findings
+- Strategic implications and recommendations
 
-**Competitive Landscape:**
-- **Regional E2E pipeline (when 101 Step 1 output exists)**: Read `research/competitive/matrices/[region-code]-competitive-matrix.md` (check changelog for this mission's entry) and `research/competitive/[region-code]/[region-code]-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md`. Use **101's** findings for Competitive Landscape section. Do NOT perform separate web research for competitors. Cite 101 outputs (matrix sections, report pages).
-- **Standalone 120 invocations (no prior 101)**: Perform deep research as before: `[Country] ATS competitors Workday SAP Oracle`, `[Country] recruiting software local vendors`, `[Country] HR tech market share` — categorize Global enterprise, Regional specialists, Local players. Seek market share data (e.g., Fosway, Gartner) and vendor-specific strengths.
+**Your Role (120)**: Read and incorporate these 099 outputs into your thematic analysis. **DO NOT perform PESTEL or SWOT research yourself**—099 has already completed this with deep research methodology. Your focus is **qualitative thematic analysis of customer/SME transcripts** using Braun & Clarke 6-phase method and **triangulation** with 099's strategic/PESTEL/SWOT context.
+
+**Standalone 120 invocations (rare)**: If 120 is invoked without E2E pipeline (no Step 0 outputs exist), search `strategy/` folder directly for strategic context and note that PESTEL/SWOT analysis was not performed.
+
+### Competitive Landscape (from Step 1 - 101)
+
+**Regional E2E pipeline (when 101 Step 1 output exists)**: Read `research/competitive/matrices/[region-code]-competitive-matrix.md` (check changelog for this mission's entry) and `research/competitive/[region-code]/[region-code]-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md`. Use **101's** findings for Competitive Landscape section. Do NOT perform separate web research for competitors. Cite 101 outputs (matrix sections, report pages).
+
+**Standalone 120 invocations (no prior 101)**: Perform web research if needed: `[Country] ATS competitors Workday SAP Oracle`, `[Country] recruiting software local vendors`—categorize Global enterprise, Regional specialists, Local players.
 
 ---
 
-### GCC Region — Deep Research Override
+### GCC Region — Data Filtering
 
-When analyzing **GCC** (Gulf Cooperation Council: Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman), use these region-specific search terms and coverage:
+When analyzing **GCC** (Gulf Cooperation Council: Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman):
 
 **Phase 0 — Filter terms:** GCC, Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman, KSA, MENA (when relevant)
 
-**PESTEL — GCC-specific topics:**
-- **Political:** `Saudi Saudization Nitaqat 2026 2028`, `UAE Emiratization mandate penalties`, `Kuwait Kuwaitisation Oman Omanization`, `Vision 2030 workforce localization`
-- **Economic:** `GCC HR tech market size 2025 2032`, `Astute Analytica GCC HR`, `Saudi UAE enterprise software consolidation`
-- **Social:** `WhatsApp recruitment GCC Saudi UAE`, `GCC smartphone penetration Statista`, `mobile career site traffic GCC`, `Arabic English bilingual hiring`
-- **Technological:** `GCC AI adoption HR 2025`, `Qiwa GOSI Mudad Saudi government portal`, `Bayanati MOHRE UAE`, `ZenHR Talentera GCC integrations`
-- **Environmental:** Often DATA GAP for recruiting; `UAE Net Zero 2050 Saudi 2060`, `GCC ESG workforce reporting` if relevant
-- **Legal:** `Saudi PDPL 2023`, `UAE PDPA 2022`, `KSA interview regulations May 2025`, `Mondaq Saudi employment`, `3-day notice 50% Saudi panel`
+**Phase 1 — Strategic Context:** 099's PESTEL and SWOT analyses for GCC already incorporate region-specific research (Nitaqat, Emiratization, WhatsApp adoption, PDPL compliance, etc.). Read those outputs for macro-environment context before analyzing customer transcripts.
 
-**Competitive Landscape — GCC vendors:**
-- **Regional E2E pipeline**: Read Step 1 outputs (`[region-code]-competitive-matrix.md` + `[region-code]-competitive-scan-*.md`). Do not perform additional web searches.
-- **Standalone**: Research these vendors via web search:
-  - **Regional specialists:** Talentera (Bayt.com), ZenHR (ZenATS), Darwinbox
-  - **Global platforms:** Workday, SAP SuccessFactors, Oracle HCM/Taleo
-  - **Search:** `GCC HR tech ZenHR Talentera`, `Saudi UAE ATS market share`, `Fosway talent acquisition GCC EMEA`
+**Competitive Landscape:**
+- **Regional E2E pipeline**: Read Step 1 outputs (`gcc-competitive-matrix.md` + `gcc-competitive-scan-*.md`). Do not perform additional web searches.
+- **Standalone**: If no Step 1 output exists, research GCC vendors: Talentera, ZenHR, Darwinbox (regional), Workday, SAP, Oracle (global)
 
-**GCC-specific product implications:** Nationalization tracking (Saudization/Emiratization as native dimensions), WhatsApp integration, Arabic RTL (offer letters), government portal integrations (Qiwa, GOSI, Mudad), KSA interview panel compliance (3-day notice, 50% Saudi nationals).
+**GCC-specific themes to watch for in customer/SME transcripts:** Nationalization tracking (Saudization/Emiratization), WhatsApp candidate communication, Arabic RTL, government portal integrations (Qiwa, GOSI, Mudad), KSA interview panel compliance.
 
 ---
 
@@ -295,8 +302,8 @@ When analyzing **GCC** (Gulf Cooperation Council: Saudi Arabia, UAE, Qatar, Kuwa
 ### Always ✅
 - **Anonymize customer names:** Always use P1, P2, P3, etc. for customer interview participants; preserve company name and job title
 - **106 / 108 triangulation:** When `brainstorm-analysis/` or `gap-analysis/` outputs exist for the same country and pipeline run, **include** them in Phase 4 matrix columns and Phase 6 input sections; label internal and gap data evidence clearly
-- **Use deep research** for PESTEL Analysis and Competitive Landscape: iterative, multi-round web searches; use `mcp_task` generalPurpose subagent for exhaustive research; do not use training data
-- **Seek authoritative sources** for PESTEL: government, legal (Mondaq), industry reports, Statista; include key stats and cite communication channel preferences (WhatsApp, SMS, Line, etc.) with penetration/usage data
+- **Read 099 strategic outputs (Regional E2E):** Consume strategy-context.md, pestel-analysis.md, swot-analysis.md from Step 0 in Phase 1; incorporate into Cross-Theme Insights and Product Roadmap Impact Summary
+- **Use 101 for Competitive Landscape (Regional E2E):** Read competitive matrix and scan from Step 1; do not duplicate competitive research
 - Filter by region FIRST when using global CSV data (Phase 0)
 - Read ALL data sources (SME transcripts, Customer transcripts, CSVs)
 - Generate shorthand PM-friendly codes; create triangulation matrix
@@ -331,7 +338,8 @@ Adapt paths for country-based: `research/[Country]/raw-data/` or `research/raw-d
 
 ## Integration with Other Agents
 
-- **060-legal-advisor.mdc:** Validates Legal PESTEL factor; reviews Roadmap Recommendations for compliance implications (invoke after Legal research and before finalizing Section 06)
+- **099-principal-product-strategist:** Provides strategy context, PESTEL analysis (all 6 factors with Legal/compliance depth), and SWOT analysis in Step 0 (before 120); 120 reads and incorporates these outputs
+- **060-legal-advisor.mdc:** Reviews Roadmap Recommendations for compliance implications (Step 2b.1 in Regional E2E, renumbered from former 2b.3)
 - **100-market-intelligence.mdc:** Qualitative depth to quantitative analysis
 - **200-prd-writer.mdc:** Feed PMF themes into PRD problem statements
 - **400-backlog-refinement.mdc:** Themes become epics; codes become user stories
@@ -367,21 +375,23 @@ For the **PowerPoint only**, orchestrator or user invokes **130** after your rep
 5. Phase 4: Triangulate SME vs Customer; refine themes
 6. Phase 5: Define themes with PMF implications
 7. Phase 6: Save report to `research/Japan/thematic-analysis/[date]-Japan-PMF-Analysis.md`
-8. **Deep research** for PESTEL and Competitive Landscape (Japan) — use mcp_task generalPurpose subagent
-9. Report back: "Japan PMF analysis complete. Markdown: [path]. For full PMF roadmap deck, orchestrator or user invokes **130** with this report path → `~/Downloads/Japan_Recruiting_PMF_Roadmap_vN.pptx`."
+8. Report back: "Japan PMF analysis complete. Markdown: [path]. For full PMF roadmap deck, orchestrator or user invokes **130** with this report path → `~/Downloads/Japan_Recruiting_PMF_Roadmap_vN.pptx`."
 
 **User Request:** "Analyze GCC"
 
-**Your Process:** Same phases 0–6, but use `research/GCC/` and apply **GCC Region — Deep Research Override** for PESTEL and Competitive Landscape. If **106** / **108** analysis files exist under `research/GCC/brainstorm-analysis/` and `research/GCC/gap-analysis/`, use the **adaptive triangulation matrix** in Phase 4. Filter for Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman. After the report is saved, **130** produces `~/Downloads/GCC_Recruiting_PMF_Roadmap_vN.pptx` (Regional E2E chains **120** then **130**).
+**Your Process:** Same phases 0–6, but use `research/GCC/`. If **106** / **108** analysis files exist under `research/GCC/brainstorm-analysis/` and `research/GCC/gap-analysis/`, use the **adaptive triangulation matrix** in Phase 4. Filter for Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman. After the report is saved, **130** produces `~/Downloads/GCC_Recruiting_PMF_Roadmap_vN.pptx` (Regional E2E chains **120** then **130**).
 
 ---
 
 ## Best Practices
 
 - **Phase 0:** Always filter first when data is global
+### Quality Criteria
+- **Phase 0:** Always filter first when data is global
 - **Triangulation:** SME + Customer agreement = high confidence; prioritize converged themes
 - **Evidence:** Every theme needs direct quotes; include IDs for traceability
-- **Deep research:** For PESTEL, use multi-round searches; verify sources; cite government, legal, industry reports; include key stats for communication channels
+- **Strategic context:** Reference 099's strategy-context.md, pestel-analysis.md, swot-analysis.md for Business Impact scoring and strategic alignment
+- **Competitive intelligence:** Use 101's matrix and scan outputs (Step 1) for Competitive Landscape section
 
 ---
 
@@ -390,7 +400,7 @@ For the **PowerPoint only**, orchestrator or user invokes **130** after your rep
 ❌ Skipping Phase 0 when data needs region filtering  
 ❌ Treating codes as themes (codes cluster INTO themes)  
 ❌ Cherry-picking verbatims  
-❌ Using training data instead of deep research for PESTEL/Competitive Landscape  
+❌ Not reading 099's strategy/PESTEL/SWOT outputs in Phase 1 (Regional E2E)
 
 ---
 

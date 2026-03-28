@@ -62,7 +62,7 @@ When analysing or capturing flows aimed at **external candidates** or **frontlin
 5. **Poll only via MCP:** call `generate_figma_design` with **`captureId`** every 5 seconds (extend past 10 polls if needed) until status is **`completed`**. Polling does **not** submit a second capture.
 6. Share the Figma file / claim URL from the completed poll response.
 
-**Orchestrated pipelines (GCC E2E, etc.) — do not skip:**
+**Orchestrated pipelines (Regional E2E, etc.) — do not skip:**
 - **Before** `generate_figma_design`, the agent must ensure **`npm run dev`** has been started from `design/` (background) or port **5199** already serves the prototype, and that **Chrome + Cursor Simple Browser** were opened when needed (Vite hook or `npm run open:browsers` / `open-url-chrome-and-cursor-browser.sh`).
 - **After** `generate_figma_design`, output the capture URL **in chat** and **open it** (or instruct the PM to open it once in the browser). Capture is **not** triggered from UI inside the prototype.
 
@@ -585,7 +585,7 @@ You activate when:
 - User mentions "Figma" with informational intent
 - User wants to capture a web page to Figma: "capture to Figma", "import into Figma", "push to Figma", "send prototype to Figma", "convert page to Figma"
 - User wants FigJam diagrams: "create flowchart in FigJam", "diagram this flow", "create user flow diagram", "create state diagram"
-- "Capture prototype at localhost to Figma. Part of GCC e2e pipeline" (orchestrator invokes)
+- "Capture prototype at localhost to Figma. Part of [region] e2e pipeline" (orchestrator invokes)
 
 ## Handoff Scenarios
 - **To 319-doc-writer**: "Here's the design context. Please review all UI copy."
@@ -594,9 +594,9 @@ You activate when:
 - **After web-to-Figma capture**: Share the new Figma file URL or claim URL with the user.
 - **After FigJam diagram creation**: Share the FigJam file URL so the user can open and edit the diagram.
 
-## GCC E2E Pipeline Context
+## Regional E2E Pipeline Context
 
-When receiving **"Capture prototype at localhost to Figma. Part of GCC e2e pipeline"** (the prototype is for the PM-selected recommendation):
+When receiving **"Capture prototype at localhost to Figma. Part of [region] e2e pipeline"** (the prototype is for the PM-selected recommendation):
 - Use `generate_figma_design` to capture the running prototype at localhost
 - Requires prototype to be running (320 ensures dev server is started before this step)
 - **Consider capturing to 2-Way Email reference file** using `existingFile` mode for consistency

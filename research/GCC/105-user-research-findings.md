@@ -1,274 +1,320 @@
-# GCC User Research Findings
+# User Research Findings: GCC Recruiting (Customer Interviews)
 
-**Analysis Date:** 24 March 2026 | **Version:** v57 (GCC-E2E-017)
+**Analysis date:** 27 March 2026  
+**Methodology:** Structured synthesis from customer interview transcripts (Teresa Torres-style story capture; themes clustered for **120** / **130** consumption).  
+**Geographic scope:** GCC-relevant hiring (Saudi Arabia, UAE, Kuwait, wider GCC/Middle East where cited).
+
+---
 
 ## Fresh pass attestation
-- **Mission ID:** GCC-E2E-017
+
+- **Mission ID:** GCC-E2E-031
 - **Transcript files read (this run):**
   - `research/GCC/customer-transcripts/Interview_P1_Ammad_Alsairafi_Accenture.txt`
   - `research/GCC/customer-transcripts/Interview_P2_Mahboob_Khan_Baker_Hughes.mp4.txt`
   - `research/GCC/customer-transcripts/Interview_P3_Arika_Yamahata_Shell.txt`
-- **SME files read (this run):** *None*
-- **Completed (UTC):** 24 March 2026
+- **SME files read (this run):** *None* (`research/GCC/internal-sme-transcripts/` contained no `.txt` files)
+- **Completed (UTC):** 2026-03-27T21:05:00Z
 
 ---
 
-**Data sources:** 3 customer transcripts, 0 internal SME transcripts  
-**Methodology:** Braun & Clarke-style thematic synthesis (codes and themes derived from full transcript re-read for this mission)
+## Strategic Alignment Assessment
+
+**Step 0 strategy context:** `research/GCC/strategy-context-2026-03-27-GCC-E2E-031.md`
+
+**Alignment analysis:**
+
+- **High alignment (customer pain ↔ Q2 P1 GCC market readiness)**
+  - **WhatsApp / omnichannel:** P1 (Accenture) describes WhatsApp as essential for quick candidate closure; P2 (Baker Hughes) wants WhatsApp-style channels and richer campaigns beyond email. Matches Priority 1 (candidate communication) and KR1 (GCC wins narrative).
+  - **Nationalisation / local compliance:** P1 tracks nationality, gender, PWD quotas for Nitaqat-style mandates and reporting; P2 needs Saudi/UAE nationality capture and penalties for missing localization targets; wants **native** (out-of-the-box) support vs custom fields. Matches Priority 1 (nationalisation compliance).
+  - **KSA interview rules:** P1 cites minimum **three-day** interview notice, candidate consent if shortened, and **panel nationality** rules (e.g. proportion of Saudi nationals). Direct input for scheduling and compliance-aware UX (Priority 1 + scheduling parity).
+  - **Arabic / localization:** P2 notes Arabic + English mix, especially for operational roles; P3 cites **Arabic character rendering** failures in Workday Docs (squares), blocking offer automation. Matches Priority 1 localisation theme.
+
+- **High alignment (customer pain ↔ Q2 P2 AI candidate matching)**
+  - **AI-assisted discovery:** P1 welcomes integrated AI to speed workflows and interpret historic funnel data; P2 wants semantic/boolean search and “who in the database matches this req” style matching; P3 explores **HiredScore** for high application volume vs few openings. Matches Priority 2 (AI matching activation, explainability narrative). *Note:* Q2 strategy also defers **talent pool AI recommendations** to H2; position HiredScore exploration as activation/explainability, not a promise of full talent-pool roadmap.
+
+- **High alignment (customer pain ↔ Q2 P3 core ATS parity)**
+  - **Interview scheduling:** P1’s top “change tomorrow” wish is scheduling in-product; P2 found Workday scheduling **more cumbersome than Outlook**, wants Office 365-calibre flow. Matches Priority 3 (Paradox activation, reduced scheduling friction).
+  - **Recruiter UX (candidate review):** P2 describes **tab-heavy** candidate grid; P1 struggles with **dashboard readability** and lack of in-app role overview (export to build own dashboards). Matches Priority 3 (mobile/recruiter experience, parity objections).
+  - **Bulk / workflow friction:** P1 cannot move candidates across reqs without assignee gymnastics; **screening notes** locked behind stage. Fits core ATS workflow parity.
+
+- **Strategy–customer tension (customer pull ↔ Q2 explicit de-priorities)**
+  - **Career site / branding:** P2 wants a **full-fledged, strongly branded** career site in Workday (today uses Phenom + apply redirect). Q2 strategy **defers career site redesign to Q3**. Tension: strong customer pain vs near-term roadmap slot.
+  - **Recruiting marketing / CRM depth:** P2 asks for richer **recruiting marketing** and template-driven engagement; Q2 doc **de-prioritises recruiting marketing automation**. Tension unless framed as candidate engagement packaging or longer horizon.
+
+- **Strategy–customer tension (regional norm ↔ enterprise policy, not Q2 de-prio list)**
+  - **WhatsApp vs policy:** P1 and P2 favour WhatsApp for GCC; P3 (Shell) explains **official channel restrictions** (scam risk, authorised contact) and limited use of WhatsApp for recruiting. Product implication: **channel choice + governance** matter as much as raw integration; one global customer will not behave like GCC-native hiring teams.
+
+- **Neutral / contextual**
+  - P3: GCC volumes **low** in Shell’s franchise model; local compliance may be **Excel/manual**; still validates **franchise** reporting and “Workday as source of truth” desire.
+  - P1: Resume parser **Arabic unknown**; English standard for their candidate pool. Nuance for Arabic parser investment vs other segments.
+
+**Implications for 120**
+
+- Prioritise roadmap narrative that ties **WhatsApp, nationalisation reporting, KSA scheduling rules, Arabic document fidelity, and recruiter grid/scheduling** to **Priority 1–3** and OKRs (10 GCC wins, 5 AI betas, NPS 60 per Step 0 file).
+- Flag **career site** and **recruiting marketing** as **tension themes**: high customer voice in this sample vs **Q2 de-prioritised**; surface trade-off (Q3/H2 vs strategic exception) for PM judgement.
+- Treat **Shell-style channel policy** as evidence that **multi-channel + audit/compliance** beats “WhatsApp only” framing.
+- Step 0 for **GCC-E2E-031** cites `strategy/pdfs/workday-talent-acquisition-strategy-march-2026.pdf` alongside Q2 markdown; use that pairing for long-horizon claims where relevant.
 
 ---
 
 ## Interview Participants
 
-- **P1** - Recruiter Lead (Cyber Security & Campus Hiring), Accenture
-- **P2** - Performance & Innovation Manager (Global TA), Baker Hughes  
-- **P3** - Product Owner (Talent & Resourcing), Shell
+| ID | Role | Organisation | GCC / regional relevance |
+|----|------|--------------|---------------------------|
+| **P1** | Recruitment lead (cyber security + campus hiring; end-to-end reqs) | Accenture | Egypt, GCC, Africa; deep KSA compliance examples |
+| **P2** | Performance and Innovation Manager, TA tools / Workday functional owner | Baker Hughes | Global with explicit GCC/Saudi/UAE communication and localization |
+| **P3** | Product Owner, Talent and Resourcing (Workday TA + Talent) | Shell | Global; GCC as **franchise** subset, lower volume; compliance and Docs |
 
 ---
 
-## Key Findings per Participant
+### Key Findings per Participant
 
-### P1 - Recruiter Lead, Accenture
+#### P1 – Recruitment lead, Accenture
 
-**Role context:** Leads cyber security and campus hiring covering Egypt, GCC, and part of Africa; manages a team of five; uses Workday for priorities and performance; runs events and full lifecycle reqs (posting, sourcing, pipeline, notes).
+**Role context:** Leads cyber security and campus hiring across Egypt, GCC, and Africa; team of ~five; uses Workday for goals and campus events; handles reqs end-to-end (posting, pipeline, notes).
 
 **Key quotes:**
-> "Why doesn't the system allow me that capability … it took me another what 5 10 minutes to go and assign the roles and then move the canvas across."
 
-> "It's very restrictive when it comes to allowing you to add your notes to candidates … there's no option to add notes on a candidate if … you haven't moved them to the screen stage."
+> “WhatsApp is an absolute necessary… when you're looking at WhatsApp, you get immediate responses, almost immediate responses.”
 
-> "The system should manage the end to end process not just pockets of it and pockets are manage through a different … website."
+> “If workday can have integration with WhatsApp and it starts sending messages to candidates and scheduling their interviews… it's just going to be absolutely brilliant.”
 
-> "WhatsApp is an absolute necessary … you get immediate responses, almost immediate responses."
+> “You're not able to organize an interview… in less than three day notice… if you're going to violate that requirement, then you'll need to have the consent of the candidate on email.”
+
+> “Once you put a panel in KSA… you need to select the nationality of the panel so that you make sure that 50% of them are nationals.”
+
+> “I need the ability to track… nationalization… gender… PWD… regulatory requirement compliance requirements.”
+
+> “The candidate grids… the overall Rex dashboard… I will need to sort of download it and create my own dashboards… it's a tedious tedious task.”
 
 **Pain points:**
-- Moving candidates between requisitions blocked unless tagged to each req (admin overhead to add/remove self as assignee)
-- Cannot add screening-style notes before the candidate reaches the screen stage
-- Unclear whether Workday exposes rich historic funnel metrics per requisition (applied / screened / rejected splits)
-- Interview scheduling handled in another integrated system; wants in-product scheduling, notifications, and hiring manager slot entry
-- Offer generation rigid when outside pre-configured grade bands; long lead times for config changes drive offline contracts and approvals
-- Candidate reporting and dashboards hard to interpret; exports and manual dashboard building described as tedious
 
-**GCC- and KSA-specific:**
-- Wants candidate document collection in Workday (upload by category) instead of email attachments (confidentiality, inbox clutter)
-- KSA: interview panel rules (e.g. at least one Saudi national on panel; record nationality to validate ~50% nationals); scheduling tool should warn (not necessarily block) if interview is inside three-day notice unless candidate consent is documented
-- Nationalization targets tracked in Workday (e.g. Emiratization, Saudization, Kuwaitization) plus gender and PWD (Egypt 5%, elsewhere 4%) via application fields and reporting
-- Standard candidate language is English; limited experience with Arabic résumé parsing
+- Cannot move candidates between requisitions without being assigned to every req; time lost adding/removing self as assignee.
+- Screening notes **not** addable until candidate in screen stage; blocks exploratory-call documentation.
+- Unclear or missing **historic funnel** view per req (applied / screened / rejected split).
+- **Offer configuration** rigid; exceptions need long dev cycles; forces offline contracts and misses targets.
+- **Interview scheduling** outside Workday (separate system); wants end-to-end in Workday with HM/candidate notifications.
+- **Document collection** offline via email; wants categorised **candidate upload** in system for confidentiality.
+- **Dashboards** hard to read; wants configurable presentation of what matters.
+- Kuwait rollout slow (generic new-country setup pain).
 
-**JTBD (illustrative):** When managing reqs and compliance across GCC, recruiters want one system to run pipeline, scheduling, offers, and reporting so they can hit targets without workarounds.
+**JTBD (from `docs/jtbd-recruiting-hr-professional-and-manager.md` lens):** When hiring across regulated GCC markets, recruiters need to **prove compliance, move talent fast, and communicate on local channels**, so they can **hit quotas without offline workarounds**.
 
 ---
 
-### P2 - Performance & Innovation Manager, Baker Hughes
+#### P2 – Performance and Innovation Manager, Baker Hughes
 
-**Role context:** Global TA tools, technology, analytics, and process owner; partners with technical Workday team; live on Workday since 2020; migrated from standalone ATS (Taleo) into unified HCM ecosystem.
+**Role context:** Global TA tools, analytics, processes; functional counterpart to technical Workday team; Workday live since 2020; values single HCM suite but notes recruiter-facing limits when HCM coupling blocks change.
 
 **Key quotes:**
-> "Can most of the important information be integrated into a single tab or in a more seamless way?"
 
-> "I would definitely want to see a much more improved boolean search capabilities within workday."
+> “Can most of the important information be integrated… in a more seamless way… going through 100 candidates or 200 candidates.”
 
-> "We have … two million candidates in our workday database … can I see who else is matching that requirement … who have not applied for this job but are matching."
+> “I would definitely want to see a much more… improved boolean search capabilities within workday.”
 
-> "It felt more complicated than scheduling a meeting via Outlook."
+> “We tried to utilize the workday scheduling capability… it felt more complicated than scheduling a meeting via Outlook.”
+
+> “Having something like a WhatsApp or other communication methodologies would be helpful especially in markets like GCC and Saudi.”
+
+> “If you're able to add more in terms of the local requirements… in Saudi… we are required to collect information… report… we'll get penalty.”
+
+> “Almost say 40% or more actually coming via a mobile or a handheld device.”
+
+> “If you guys offered a full-fledged career site I would rather go with the work [ecosystem].”
 
 **Pain points:**
-- Candidate grid: critical information split across tabs (e.g. education vs CV); friction at high review volumes (100–200 candidates)
-- Search: Boolean and field combinations feel weak; interest in AI-assisted and semantic matching across the full talent database
-- Interview scheduling: trial of Workday scheduling felt harder than Outlook; desire to keep recruiters in one ecosystem
-- Career site: limited native branding; uses Phenom with apply redirect (job board → Phenom → Workday), hurting seamless candidate experience
-- Campaign tooling: WhatsApp and richer channels used via Phenom; Workday campaigns seen as email-centric
 
-**GCC- and regional specifics:**
-- WhatsApp valued for campaigns and communication in GCC and Saudi
-- Apply language mix: English common for professional roles; Arabic more important for operational / blue-collar roles
-- Heavy mobile apply: ~40%+ of career site traffic from mobile or handheld devices
-- Nationalization: capturing nationality in UAE and Saudi via custom fields; desire for out-of-the-box localization reporting comparable to US/UK diversity-style delivery; penalties if mandates not met
+- **Candidate grid** tab sprawl (education vs CV vs other data).
+- **Search** weak vs boolean / field combinations; interest in **AI match** from entire database, not only applicants.
+- **Scheduling** not competitive with Outlook; wants deep Office 365 integration.
+- **Campaigns** limited to email; wants WhatsApp-class channels in GCC.
+- **Nationalisation** via **custom** fields; wants **out-of-the-box** Saudi/UAE (and similar) models like US/UK diversity reporting.
+- **Career site** branding and **apply redirect** (Phenom → Workday) hurts candidate experience; desire for **single ecosystem**.
+- **Arabic + English** apply paths; **mobile** critical for operational hiring.
 
-**JTBD (illustrative):** When recruiters triage and match at scale, they want dense candidate context in one view and stronger search so they can fill reqs faster with less tool-switching.
+**JTBD:** When recruiters run high-volume, multi-country hiring, they need **fast access to signal on candidates**, **scheduling that matches real calendaring**, and **local compliance without duct tape**, so they can **reduce tool sprawl and penalty risk**.
 
 ---
 
-### P3 - Product Owner, Shell
+#### P3 – Product Owner, Talent and Resourcing, Shell
 
-**Role context:** Owns talent and resourcing landscape globally; Workday TA and talent modules since 2020; interfaces with recruiters, sourcers, operations (scheduling, offers), and HR digital / DevOps.
+**Role context:** Owns talent and resourcing landscape with strong Workday use since 2020; interfaces recruiters, sourcing, COE, operations, HR digital; external vs internal hiring split; **franchise** countries (including GCC) differ from global standard.
 
 **Key quotes:**
-> "The dashboard capabilities of workday was not able to accommodate what we needed."
 
-> "Knowing immediately who we should be paying attention to [from hundreds of CVs]."
+> “Difficulties and challenges with workday is its reporting functionality… we did have to resort building a dashboard separately… in PowerBI.”
 
-> "Workday docs … we had challenge … with the Arabic letters … it would just be squares rather than the actual characters."
+> “For offers specifically the Arabic countries… work day docs… Arabic letters… it would just be squares rather than the actual characters.”
+
+> “From a messaging perspective… we… can't use WhatsApp for official business… we try to be careful… scammers.”
+
+> “GCC countries… franchise… local variances that we're not able to roll up… they also have… local specific reportings… from a legal perspective.”
+
+> “In the face of AI… pre-screening… high application volume but… low number of job openings… HiredScore.”
 
 **Pain points:**
-- Built PowerBI dashboards (from ~2022–23) because Workday dashboards and reporting did not meet multi-level needs (operational per-req/candidate timing through to leadership views by line of business and location)
-- Franchise / joint-venture markets (includes GCC): different operating models, small volumes, local legal reporting often handled outside Workday (e.g. Excel) or with manual steps; risk of email-based workflows for candidate data
-- Offer automation: Workday Docs limitation for Arabic (and historically Mandarin) character rendering blocked letter automation
-- High application volume vs few openings globally drives need for prioritisation (e.g. HiredScore / AI exploration)
 
-**GCC- and franchise-specific:**
-- GCC countries classed as franchise / JV: lower external hiring volumes; may use agencies and minimal in-house recruiter footprint
-- Shell policy restricts official WhatsApp for recruiting (fraud / brand impersonation concerns); prefers email, SMS, and Teams with verifiable identity
-- On nationalization: from global Shell lens, Western markets drive stronger ethnicity/gender reporting obligations; GCC characterised as comparatively less demanding in how Shell prioritises those metrics, with exceptions elsewhere (e.g. Malaysia)
+- **Reporting / dashboards** insufficient for operational + leadership cuts; **PowerBI** dependency; still needs discipline on Workday data quality.
+- **Workday Docs** **Arabic rendering** blocked offer automation (alongside historical Mandarin issues).
+- **Franchise GCC** entities: low volume, possibly **manual / Excel** compliance reporting; risk of **email**-based processes outside system.
+- **Channel strategy:** Official email, SMS, Teams; **not** WhatsApp for Shell recruiting despite regional norms elsewhere.
+- **AI matching** (HiredScore) of interest for volume/quality tension.
 
-**JTBD (illustrative):** When orchestrating global and franchise hiring, talent teams want trustworthy reporting and document automation in-platform so local variants do not default to email and spreadsheets.
+**JTBD:** When global COE supports franchise markets, they need **trustworthy data in one system**, **legible local artefacts (e.g. Arabic offers)**, and **governed channels**, so they **avoid compliance drift and tool proliferation**.
 
 ---
 
 ## Synthesized Themes
 
-### Theme 1: Candidate review density and navigation tax
+### Theme 1: GCC-native compliance and scheduling rules
 
-**Description:** Recruiters lose time opening multiple tabs or views to assemble education, CV, and screening context.
+**Description:** Customers describe **nationalisation** quotas, **panel composition**, and **interview notice/consent** rules (especially KSA) as operational reality, not optional fields.
 
-**Evidence:** P1 (notes and stage restrictions; multiple steps to move candidates), P2 (education vs CV on separate tabs at volume), P3 (hundreds of CVs vs few roles—need to know who matters)
+**Evidence:** Strong in **P1**, **P2**; **P3** notes franchise local reporting (often outside global roll-up).
 
-**Triangulation:** 3/3 customer convergence
+**Triangulation:** Customer-only (no SME transcripts this run).
 
-**Implication:** A more consolidated candidate review experience (single high-density view, notes policy review) supports GCC and global high-volume review.
+**Implication:** Product should treat **compliance hints, audit trails, and scheduling guardrails** as first-class for GCC, not post-configuration afterthoughts.
 
 **Representative quotes:**
-> P2: "Rather than having go through multiple different tabs, can most of the important information be integrated … in a more seamless way."
 
-> P3: "Knowing immediately who we should be paying attention to [from hundreds of CVs]."
+> P1: “If you're building a scheduling tool… notification in red… you're not meeting the regulatory requirements.”
+
+> P2: “We… get penalties if we don't meet… localization percentage… bandaids… versus out of the box.”
 
 ---
 
-### Theme 2: Search, matching, and AI-assisted discovery
+### Theme 2: Omnichannel candidate engagement (WhatsApp-led)
 
-**Description:** Customers want stronger Boolean and field logic plus database-wide matching of non-applicants to open reqs.
+**Description:** **Immediate, mobile-first** messaging is how recruiters expect to move candidates in GCC; email alone is too slow.
 
-**Evidence:** P1 (interest in AI for workflow and historic insight), P2 (Boolean weak; 2M-candidate database; "who else matches"), P3 (prioritisation across high apply volume—HiredScore / AI)
+**Evidence:** **P1** (strong); **P2** (WhatsApp + campaigns); **P3** diverges (**policy** blocks WhatsApp).
 
-**Triangulation:** 3/3 customer convergence
+**Triangulation:** Converge **P1–P2**; **diverge** with **P3** (enterprise policy).
 
-**Implication:** Semantic search, similar-candidate surfacing, and explainable ranking address a shared global need with extra payoff in large talent pools.
+**Implication:** Build for **channel choice**, consent, and **auditability**; enable GCC customers without assuming every tenant enables WhatsApp.
 
 **Representative quotes:**
-> P2: "Can I look at all of the people in our database [and] who are the people that have not applied for this job but are matching."
+
+> P1: “Emails will take whenever… WhatsApp… immediate responses.”
+
+> P3: “We… can't use WhatsApp for official business… scamming gimmicks.”
 
 ---
 
-### Theme 3: Interview scheduling friction and end-to-end orchestration
+### Theme 3: Recruiter efficiency – grid, search, and AI-assisted matching
 
-**Description:** Scheduling is either external or perceived as harder than calendaring tools; desire for compliant, panel-aware scheduling in-product.
+**Description:** Recruiters lose time in **tab navigation**, **weak search**, and **finding best-fit talent** across large databases.
 
-**Evidence:** P1 (external system; end-to-end in Workday; KSA notice and panel rules), P2 (Workday scheduling vs Outlook), P3 (less direct on scheduling—operations-heavy model)
+**Evidence:** **P2** primary; **P1** on dashboards and data presentation; **P3** on AI for volume.
 
-**Triangulation:** 2/3 strong (P1, P2); P3 indirect via franchise / ops model
+**Triangulation:** Customer-only.
 
-**Implication:** Native or deeply integrated scheduling (e.g. Paradox) plus configurable compliance hints for KSA notice and panel composition.
+**Implication:** Tie UX improvements to **Priority 2** (matching, explainability) and **Priority 3** (grid/parity).
 
 **Representative quotes:**
-> P1: "If you're building a scheduling tool … it wouldn't block you but it will give you a notification in red … you're not meeting the regulatory requirements."
 
-> P2: "It felt more complicated than scheduling a meeting via Outlook."
+> P2: “Can I see who else is matching that requirement… two million candidates in our workday database.”
+
+> P1: “Present the data… select and choose what data is important to you.”
 
 ---
 
-### Theme 4: Offers, documents, and configuration rigidity
+### Theme 4: Interview scheduling parity and calendar reality
 
-**Description:** Offer letters and document workflows break when grades, languages, or processes fall outside standard configuration.
+**Description:** Native scheduling is **not** trusted vs Outlook; recruiters want fewer system hops.
 
-**Evidence:** P1 (rigid offers, long change cycles, offline contracts), P3 (Arabic glyphs in Workday Docs), P1 (candidate document upload vs email)
+**Evidence:** **P1**, **P2**.
 
-**Triangulation:** 2/3 explicit (P1, P3)
+**Triangulation:** Customer-only.
 
-**Implication:** Flexible offer/document templates, RTL and Arabic character support in generated documents, and in-flow document collection reduce GCC and global risk.
+**Implication:** Paradox positioning and **Microsoft 365** depth matter for **Priority 3**; KSA rules overlay **Theme 1**.
 
 **Representative quotes:**
-> P3: "It would just be squares rather than the actual characters."
 
-> P1: "Every time we say … we need this included, we're given a two months deadline for developers."
+> P2: “Felt more complicated than scheduling a meeting via Outlook.”
+
+> P1: “If I can click my fingers… the scheduling piece.”
 
 ---
 
-### Theme 5: Nationalization, diversity, and OOB compliance reporting
+### Theme 5: Reporting, dashboards, and franchise / local roll-ups
 
-**Description:** GCC customers track nationality and localization targets; many use custom fields and want first-class, regional OOB reporting.
+**Description:** Leadership and recruiters need **configurable, readable** operational views; some **franchise** markets export or manualise compliance.
 
-**Evidence:** P1 (Emiratization, Saudization, Kuwaitization, gender, PWD), P2 (UAE/Saudi nationality capture; penalties; "bandaids" vs OOB), P3 (franchise local reporting often manual; Shell de-prioritises GCC vs Western quota rigour)
+**Evidence:** **P1** (dashboard UX); **P3** (PowerBI, small GCC volumes, Excel suspicion); **P2** (penalties, reporting on localization).
 
-**Triangulation:** 2/3 strong product gap signal (P1, P2); P3 contextual (franchise / volume)
+**Triangulation:** Customer-only.
 
-**Implication:** Native nationalization dimensions and audit-ready reporting for KSA/UAE/Kuwait etc., without every customer re-implementing custom fields.
-
-**Representative quotes:**
-> P2: "If you're able to add more in terms of the local requirements … more out of the box … versus … bandaids."
+**Implication:** Improve **in-product** reporting for recruiting KPIs and compliance slices; acknowledge **low-volume** markets may still export if in-product views are credible and easy.
 
 ---
 
-### Theme 6: WhatsApp, campaigns, and channel policy divergence
+### Theme 6: Offer and document experience (rigidity, Arabic, uploads)
 
-**Description:** GCC recruiters treat WhatsApp as essential for speed; enterprise policy may forbid it (Shell), driving need for configurable official channels and strong email/ SMS in-product.
+**Description:** **Offer** flexibility and **document** capture matter; **Arabic** in generated documents is a hard blocker for some.
 
-**Evidence:** P1 ("absolute necessary"), P2 (WhatsApp via Phenom; email-only campaigns in Workday), P3 (official restriction; email, text, Teams)
+**Evidence:** **P1** (offers, uploads); **P3** (Arabic in Docs); **P2** (mobile apply, language mix).
 
-**Triangulation:** 3/3 discuss channels; 2/3 active WhatsApp use for hiring
+**Triangulation:** Customer-only.
 
-**Implication:** Native WhatsApp where policy allows; robust campaign and two-way comms in Workday for customers who cannot use WhatsApp officially.
+**Implication:** Priority 1 **localisation** includes **Docs/rendering** and secure **candidate document** intake.
 
 **Representative quotes:**
-> P1: "When you're looking at WhatsApp, you get immediate responses, almost immediate responses."
 
-> P3: "We just avoid … WhatsApp … classified as something that we … can't use for official business."
+> P3: “It would just be squares rather than the actual characters.”
+
+> P1: “If candidates can upload it on the system… confidentiality.”
 
 ---
 
-### Theme 7: Mobile-first apply and career site experience
+### Theme 7: Career site and recruiting marketing (tension with Q2 strategy)
 
-**Description:** Large share of applications from phones; multi-hop apply redirect (partner career site → Workday) hurts experience.
+**Description:** Strong desire for **branded career experience** and richer **marketing** journeys; conflicts with **Q2 de-prioritisation** of career site redesign and recruiting marketing automation.
 
-**Evidence:** P2 (~40%+ mobile; Arabic for operational roles; Phenom redirect path), P1/P3 less numeric but aligned on digital journeys
+**Evidence:** **P2** explicit.
 
-**Triangulation:** 1/3 explicit metric; regional pattern reinforced by P2
+**Triangulation:** Customer-only.
 
-**Implication:** Mobile-optimised apply, language choice by segment, and tighter career site / apply path options.
-
-**Representative quotes:**
-> P2: "Almost say 40% or more actually coming via a mobile or a handheld device."
-
----
-
-### Theme 8: Reporting, dashboards, and BI spill-over
-
-**Description:** In-app dashboards and reporting perceived as insufficient; customers export or rebuild in PowerBI or Excel.
-
-**Evidence:** P1 (dashboards "gave me a headache"; download and rebuild), P2 (team feedback on presentation of data), P3 (PowerBI for multi-audience views; franchise Excel for tiny volumes)
-
-**Triangulation:** 3/3 customer convergence
-
-**Implication:** Configurable recruiter and leader dashboards, clearer funnel analytics per req, and export patterns that match how franchise and global teams consume data.
-
-**Representative quotes:**
-> P3: "The dashboard capabilities of workday was not able to accommodate what we needed."
-
-> P1: "I can't go into workday and select … a nice dashboard of all these roles … I'll need to sort of download it and create my own."
+**Implication:** For **120**, score **Business Impact** lower unless tied to packaged Paradox path or Q3; still capture **Customer Impact** as high for this participant set.
 
 ---
 
 ## Recommendations for Primary Research Slides
 
-**For 120 / 130 to use when building the PMF report and roadmap deck:**
+**For 120 / 130 – SECTION 03: Primary Research**
 
-**SECTION 03: Primary Research - User Interviews**
+**Slide 1: Interview Participants**
 
-**Slide 1: Interview Participants Overview**
-- Title: "Interview Participants"
-- Content: Table with P1–P3, role, company (Accenture, Baker Hughes, Shell)
+- Table: P1–P3 with role and company (as above).
 
-**Slide 2–4: One slide per participant**
-- Title: "P1 - Recruiter Lead, Accenture" (and similarly for P2, P3)
-- Content: Role context, 2–3 key quotes, pain points, GCC notes where stated
+**Slides 2–4: One slide per participant**
 
-**Slide 5: Key Themes from Interviews**
-- Title: "Key Themes from User Research"
-- Content: Themes 1–8 above in short bullet form (navigation tax, search/AI, scheduling, offers/docs, nationalization OOB, WhatsApp vs policy, mobile apply, reporting/BI)
+- P1: Compliance + WhatsApp + scheduling + dashboards + offers (2–3 short quotes).
+- P2: Grid + search + AI + scheduling + career site + mobile + nationalisation OOTB.
+- P3: Reporting/PowerBI + Arabic Docs + franchise + channel policy + HiredScore.
+
+**Slide 5: Key Themes from User Research**
+
+- Bullets: Compliance/scheduling rules; omnichannel (with policy caveat); grid/search/AI; scheduling parity; reporting; offers/docs/Arabic; career site tension.
+
+---
+
+## Opportunity Solution Tree (sketch for 200 / 120)
+
+- **Outcome:** Faster, compliant hiring in GCC with fewer offline workarounds and higher recruiter NPS.
+- **Opportunities:** Regulatory scheduling and panels; channel fragmentation; candidate data scattered in email; weak funnel visibility; offer/doc localization; career site fragmentation.
+- **Solution directions (illustrative):** Native compliance-aware scheduling; WhatsApp/SMS with governance; in-product document requests; Arabic-safe document generation; improved grid and search; AI matching with explainability; career site roadmap alignment (Q3+).
 
 ---
 
-### Full Thematic Analysis Report
+## Limitations
 
-**Location:** To be produced by **120** at `research/GCC/thematic-analysis/[date]-GCC-PMF-Analysis.md` when PMF analysis runs.
+- **n=3**; not statistically representative of all GCC tenants.
+- **P3** is globally oriented; GCC-specific signal is **franchise / localization** weighted, not volume hiring.
+- No internal SME transcripts this run; triangulation is **customer-only**.
 
 ---
+
+*End of 105 findings. Next handoff: **120** should re-read the same transcript paths per Phase 1 and link `## 105 inputs (this run)` to this file.*

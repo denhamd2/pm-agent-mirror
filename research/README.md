@@ -1,9 +1,9 @@
 # PMF Research Workspace
 
 **Organization:** Country-based qualitative research with Braun & Clarke thematic analysis  
-**Method:** 6-phase triangulated analysis (SME + Customer + CSV; optional Internal Team + Win-Loss via **106** / **107**)  
-**Agents:** **105** (customer + SME synthesis) → optional **106** / **107** → **120-pmf-thematic-analysis.mdc** (report) → **130-pmf-slide-generator.mdc** (full PMF roadmap `.pptx` when needed)  
-**Updated:** 22 March 2026
+**Method:** 6-phase triangulated analysis (SME + Customer + CSV; optional Internal Team + Gap Data via **106** / **108**)  
+**Agents:** **105** (customer + SME synthesis) → optional **106** / **108** → **120-pmf-thematic-analysis.mdc** (report) → **130-pmf-slide-generator.mdc** (full PMF roadmap `.pptx` when needed)  
+**Updated:** 27 March 2026
 
 ---
 
@@ -29,12 +29,12 @@ research/
 │   ├── brainstorm-sessions/           # .txt — optional input for **106-brainstorm-analyser**
 │   │   └── brainstorm_[topic]_[YYYY-MM-DD].txt
 │   │
-│   ├── win-loss-interviews/          # .txt — optional input for **107-win-loss-analyser**
-│   │   ├── win_[Customer]_[date].txt
-│   │   └── loss_[Customer]_[Competitor]_[date].txt
+│   ├── gap-data/                      # .csv/.xlsx/.xls — optional input for **108-tableau-gap-analyser**
+│   │   ├── Opportunity Detail.xlsx
+│   │   └── presales-gaps-export.csv
 │   │
 │   ├── brainstorm-analysis/          # **106** output (dated markdown)
-│   ├── win-loss-analysis/            # **107** output (dated markdown)
+│   ├── gap-analysis/                 # **108** output (dated markdown)
 │   │
 │   └── thematic-analysis/             # Generated reports
 │       └── [YYYY-MM-DD]-[Country]-PMF-Analysis.md
@@ -96,13 +96,13 @@ Place interview transcripts from customers:
 - **Format:** `.txt`, `.csv`, `.xlsx`, or `.xls` (workshop notes, ideation dumps, idea dashboard exports)
 - **Naming:** `brainstorm_[topic]_[YYYY-MM-DD].txt` or spreadsheet exports (suggested)
 - **Agent:** **106-brainstorm-analyser.mdc** writes to `brainstorm-analysis/[YYYY-MM-DD]-brainstorm-analysis.md`; uses `scripts/dump_research_folder_to_text.py` + `scripts/requirements-research-xlsx.txt` for spreadsheets
-- **GCC E2E:** Orchestrator runs **106** as Step 2.5 when this folder contains any of those file types
+- **Regional E2E:** Orchestrator runs **106** as Step 2.5 when this folder contains any of those file types
 
-#### Win-loss interviews → `win-loss-interviews/` (optional, **107**)
-- **Format:** `.txt`, `.csv`, `.xlsx`, or `.xls` (transcripts or **Opportunity Detail** exports)
-- **Naming:** `win_[Customer]_[date].txt`, `loss_...`, or `Opportunity Detail.xlsx` (suggested)
-- **Agent:** **107-win-loss-analyser.mdc** writes to `win-loss-analysis/[YYYY-MM-DD]-win-loss-analysis.md`; same spreadsheet helper as **106**
-- **GCC E2E:** Orchestrator runs **107** as Step 2.75 when this folder contains any of those file types
+#### Presales product gaps → `gap-data/` (optional, **108**)
+- **Format:** `.csv`, `.xlsx`, or `.xls` (Tableau underlying exports, Opportunity Detail files)
+- **Naming:** `Opportunity Detail.xlsx`, `presales-gaps-export.csv` (suggested)
+- **Agent:** **108-tableau-gap-analyser.mdc** writes to `gap-analysis/[YYYY-MM-DD]-gap-analysis.md`; uses `scripts/dump_research_folder_to_text.py` for spreadsheets
+- **Regional E2E:** Orchestrator runs **108** as Step 2.75 when this folder contains any of those file types
 
 ### Step 3: Request Analysis
 
@@ -144,7 +144,7 @@ research/[Country]/thematic-analysis/[YYYY-MM-DD]-[Country]-PMF-Analysis.md
 | Theme | SME Perspective | Customer Perspective | Convergence | Divergence | PMF Impact |
 |-------|----------------|---------------------|-------------|-----------|-----------|
 
-When **106** (brainstorm analysis) and/or **107** (win-loss analysis) outputs exist for the same run, **120** adds **Internal Team (106)** and/or **Win-Loss (107)** columns (see **120-pmf-thematic-analysis.mdc**).
+When **106** (brainstorm analysis) and/or **108** (gap data analysis) outputs exist for the same run, **120** adds **Internal Team (106)** and/or **Gap Data (108)** columns (see **120-pmf-thematic-analysis.mdc**).
 
 This shows where internal experts and customers align or disagree on PMF challenges.
 
