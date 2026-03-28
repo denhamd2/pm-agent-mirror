@@ -37,6 +37,7 @@ import {
   SANA_LINK_ACCENT,
   SanaCommMessageBubble,
   SanaCommComposer,
+  sanaCommFormControlStyle,
 } from './components';
 
 /** 319-approved copy — do not change without a new 319 pass */
@@ -553,51 +554,90 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
 
       {/* RIGHT SIDEBAR: Detail View */}
       <Flex flexDirection="column" flex={1} minWidth={0} style={{ backgroundColor: colors.frenchVanilla100 }}>
+        {/* Header with Close Button */}
         <Box padding="m" style={{ borderBottom: `1px solid ${colors.soap300}`, flexShrink: 0, backgroundColor: SANA_COMM_PANEL_SURFACE }}>
-          <Flex justifyContent="flex-end" marginBottom="s">
+          <Flex justifyContent="flex-end">
             <ToolbarIconButton icon={xSmallIcon} aria-label={COPY.closePanel} onClick={collapseMessaging} />
           </Flex>
-          
+        </Box>
+
+        {/* Thread History (Scrollable) */}
+        <Box
+          ref={emailScrollRef}
+          padding="l"
+          style={{ flex: 1, minHeight: 0, overflowY: 'auto', backgroundColor: colors.frenchVanilla100 }}
+        >
+          {activeEmailThreadId === null ? (
+            <Flex flex={1} alignItems="center" justifyContent="center" height="100%">
+              <BodyText size="small" color={colors.blackPepper500}>
+                Start a new email or select a thread from the list.
+              </BodyText>
+            </Flex>
+          ) : (
+            emailThreads.find(t => t.id === activeEmailThreadId)?.messages.map(msg => (
+              <SanaCommMessageBubble key={msg.id} align={msg.align} timestamp={msg.timestamp}>
+                <Box>
+                  <BodyText size="small">{msg.text}</BodyText>
+                  {msg.attachments && msg.attachments.length > 0 && (
+                    <Flex gap="xs" marginTop="s" alignItems="center">
+                      <SystemIcon icon={uploadClipIcon} size={16} color={colors.blackPepper500} />
+                      <BodyText size="small" color={SANA_LINK_ACCENT}>
+                        {msg.attachments[0]}
+                      </BodyText>
+                    </Flex>
+                  )}
+                </Box>
+              </SanaCommMessageBubble>
+            ))
+          )}
+        </Box>
+
+        {/* Composer Footer (Fixed at bottom) */}
+        <Box padding="m" style={{ borderTop: `1px solid ${colors.soap300}`, flexShrink: 0, backgroundColor: SANA_COMM_PANEL_SURFACE }}>
           <Flex flexDirection="column" gap="xs" marginBottom="s">
             <Flex alignItems="center" gap="s">
               <BodyText size="small" color={colors.blackPepper500} style={{ width: 60 }}>
                 From:
               </BodyText>
-              <TextInput
+              <Box
+                as="input"
                 value={emailFrom}
-                onChange={(e) => setEmailFrom(e.target.value)}
-                style={{ flex: 1, padding: '4px 8px', height: 32, borderRadius: 12 }}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmailFrom(e.target.value)}
+                style={{ ...sanaCommFormControlStyle(), flex: 1, minHeight: 32, padding: '4px 8px' }}
               />
             </Flex>
             <Flex alignItems="center" gap="s">
               <BodyText size="small" color={colors.blackPepper500} style={{ width: 60 }}>
                 To:
               </BodyText>
-              <TextInput
+              <Box
+                as="input"
                 value={emailTo}
-                onChange={(e) => setEmailTo(e.target.value)}
-                style={{ flex: 1, padding: '4px 8px', height: 32, borderRadius: 12 }}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmailTo(e.target.value)}
+                style={{ ...sanaCommFormControlStyle(), flex: 1, minHeight: 32, padding: '4px 8px' }}
               />
             </Flex>
             <Flex alignItems="center" gap="s">
               <BodyText size="small" color={colors.blackPepper500} style={{ width: 60 }}>
                 Cc:
               </BodyText>
-              <TextInput
+              <Box
+                as="input"
                 value={emailCc}
-                onChange={(e) => setEmailCc(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmailCc(e.target.value)}
                 placeholder="Add Cc..."
-                style={{ flex: 1, padding: '4px 8px', height: 32, borderRadius: 12 }}
+                style={{ ...sanaCommFormControlStyle(), flex: 1, minHeight: 32, padding: '4px 8px' }}
               />
             </Flex>
             <Flex alignItems="center" gap="s">
               <BodyText size="small" color={colors.blackPepper500} style={{ width: 60 }}>
                 Subj:
               </BodyText>
-              <TextInput
+              <Box
+                as="input"
                 value={emailSubject}
-                onChange={(e) => setEmailSubject(e.target.value)}
-                style={{ flex: 1, padding: '4px 8px', height: 32, borderRadius: 12 }}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmailSubject(e.target.value)}
+                style={{ ...sanaCommFormControlStyle(), flex: 1, minHeight: 32, padding: '4px 8px' }}
               />
             </Flex>
           </Flex>
@@ -633,15 +673,12 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEmailText(e.target.value)}
             placeholder="Type an email..."
             style={{
+              ...sanaCommFormControlStyle(),
               width: '100%',
               height: 100,
               padding: 8,
-              border: `1px solid ${colors.soap300}`,
               borderRadius: '0 0 12px 12px',
               resize: 'vertical',
-              fontFamily: 'inherit',
-              fontSize: 14,
-              outline: 'none',
             }}
           />
 
@@ -659,38 +696,6 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
             </PrimaryButton>
           </Flex>
         </Box>
-
-        {activeEmailThreadId === null && (
-          <Box padding="l" style={{ flex: 1, minHeight: 0, backgroundColor: colors.frenchVanilla100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <BodyText size="small" color={colors.blackPepper500}>
-              Start a new email or select a thread from the list.
-            </BodyText>
-          </Box>
-        )}
-
-        {activeEmailThreadId && (
-          <Box
-            ref={emailScrollRef}
-            padding="l"
-            style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}
-          >
-            {emailThreads.find(t => t.id === activeEmailThreadId)?.messages.map(msg => (
-              <SanaCommMessageBubble key={msg.id} align={msg.align} timestamp={msg.timestamp}>
-                <Box>
-                  <BodyText size="small">{msg.text}</BodyText>
-                  {msg.attachments && msg.attachments.length > 0 && (
-                    <Flex gap="xs" marginTop="s" alignItems="center">
-                      <SystemIcon icon={uploadClipIcon} size={16} color={colors.blackPepper500} />
-                      <BodyText size="small" color={SANA_LINK_ACCENT}>
-                        {msg.attachments[0]}
-                      </BodyText>
-                    </Flex>
-                  )}
-                </Box>
-              </SanaCommMessageBubble>
-            ))}
-          </Box>
-        )}
       </Flex>
     </Flex>
   );

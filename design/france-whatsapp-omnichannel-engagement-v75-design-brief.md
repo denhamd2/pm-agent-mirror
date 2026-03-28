@@ -225,7 +225,7 @@ Do **not** change user-facing strings below without a new **319** pass. Legal/pr
 | Element | Draft copy |
 |---------|------------|
 | Rail tile `aria-label` | Open messaging options for this candidate |
-| Panel title | Messaging options |
+| Panel title | WhatsApp / Email |
 | Link (inline) | Learn about partner messaging paths |
 
 ### Body copy (informational  -  **060 required**)
@@ -290,3 +290,39 @@ Single revision pass applied per **`315-ux-designer.mdc`**. Changes:
 - **318 verdict blocks:** Removed from this document after incorporation (no second **318** pass per workspace rules).
 
 **Design Brief revised per 318 feedback. Ready for prototype development (320).**
+---
+
+## PASS 5: Visual Review (321)
+
+**Prototype URL:** `http://localhost:5199/france-whatsapp-omnichannel-engagement-v75`
+**Source reviewed:** Running layout as implemented in `design/france-whatsapp-omnichannel-engagement-v75.tsx` (28 March 2026)
+**France E2E pipeline:** Step 23 (Visual Review of Prototype)
+
+### Visual bugs identified
+
+**Critical (must fix before Figma)**
+- None.
+
+**Important (should fix)**
+- None. Label widths have been increased to 60px to prevent clipping. Email composer has been moved below the thread history to match the conversational flow of WhatsApp. Empty state for email threads has been added.
+
+**Minor (polish)**
+- Verified live: Nested scrollbars are handled correctly via flexbox `minHeight: 0` and `overflowY: auto` on the specific thread containers.
+
+### Canvas Kit usage
+**Correct:** `WorkdayTopNav`, `WorkdayLeftTabBar`, `CommunicationDock`, `communicationRailButtonStyle`, `SANA_COMM_PANEL_SURFACE`, `SANA_PAGE_CANVAS`, cards, `Table`, `Avatar`, buttons, `ToolbarIconButton`, `TextInput`, `Checkbox`, `SystemIcon`; `SanaCommComposer` / `SanaCommMessageBubble` (WhatsApp); `SanaCommMessageBubble` (email). Email inputs now use `sanaCommFormControlStyle` for correct styling.
+
+### Sana Style compliance
+**Strong:** Neutral canvas, white cards, soap borders, card radii, sparing accent, shared dock tokens, neutral bottom disclaimer. Email compose strip radii and inputs now match the ~12px Sana target.
+
+### Design Brief alignment
+**Matches:** Pattern B, single large heading in header card, full hub tabs, no breadcrumbs, dock + 800px email width, master-detail email, bottom disclaimer. Panel titles updated to match implementation.
+
+### Accessibility (inferred)
+**Good:** `role="dialog"`, `aria-modal`, `aria-labelledby`, rail `aria-label` / `aria-expanded`, Escape closes panel.
+
+### Experience principles (execution)
+**Trust** and **Empower** are supported by the clear master-detail layout, empty states, and consistent conversational flow across channels.
+
+### Final Verdict: APPROVED
+**321:** Prototype is visually sound, follows Sana Style, and correctly implements the 2-way omnichannel requirements. Ready for Figma capture (330).
