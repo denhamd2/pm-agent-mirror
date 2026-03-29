@@ -1,94 +1,19 @@
 ---
-description: Style guide and product context for all Product Manager Agent outputs
-alwaysApply: true
+description: Deck Generation standards for Slide Deck MCP (typography, layout, formatting)
+globs:
+  - "slides_spec*.json"
+  - ".cursor/rules/110-slide-generator.mdc"
+  - ".cursor/rules/130-pmf-slide-generator.mdc"
+alwaysApply: false
 ---
 
-# Product Manager Agent Style Guide
-
-## Language & Style
-
-### British English
-- Use British spelling throughout: analyse (not analyze), optimise (not optimize), realise (not realize), colour (not color), labour (not labor), centre (not center)
-- Date format: DD Month YYYY (e.g., 17 March 2026)
-- Use -ise endings: prioritise, recognise, summarise, visualise
-
-### Punctuation & Formatting
-- **No em-dashes (—)**: Use hyphens (-) or commas for parenthetical statements
-- Use single quotes for emphasis unless nested quotes required
-- Use bullet points (•) for lists, not numbered lists by default
-
-### Tone
-- Avoid AI-sounding patterns that signal generation
-- Professional, direct, data-driven
-- No unnecessary superlatives or marketing language
-
-## Product Context
-
-### Workday Acquisitions (Assumed Integrated)
-
-**HiredScore** (acquired, assumed integrated)
-- AI-powered candidate screening and matching
-- High-volume candidate prioritisation
-- Built into Workday Recruiting workflows
-- Activate for customers; do not treat as separate add-on
-
-**Paradox** (acquired, assumed integrated)
-- Conversational AI for candidate engagement
-- Interview scheduling automation
-- Self-service interview booking
-- Embedded in Workday Recruiting UI
-
-### Jobs Board Strategy
-
-**Workday does NOT build direct job board integrations.**
-
-Instead, Workday partners with **Broadbean** (certified partner) for job distribution.
-
-**When you find job board gaps:**
-1. Search Broadbean's website (broadbean.com) to verify if the local/regional job board is supported
-2. If Broadbean supports it, Workday has coverage via partnership
-3. If Broadbean does NOT support it, flag as a gap with recommendation to request Broadbean add it
-4. Common Broadbean-supported regions: UK, US, EMEA, APAC, GCC
-
-**Example Job Boards:**
-- GCC: Bayt.com, GulfTalent, Naukrigulf (check Broadbean support)
-- UK: Reed, Totaljobs, CV-Library
-- US: Indeed, LinkedIn, Monster
-- APAC: JobStreet, SEEK
-
-**Do NOT recommend Workday build native job board integrations.** Always check Broadbean first, then recommend partnership expansion if needed.
-
-## Design & Deck Standards
-
-For detailed guidance, see:
-- **Sana Style UI**: `.cursor/rules/design-specific/015-sana-style-ui.mdc` (Canvas Kit prototypes, colours, typography, shell patterns)
-- **Deck Generation**: `.cursor/rules/deck-specific/018-deck-generation-standards.mdc` (slide typography, layout, formatting for Slide Deck MCP)
-
-## Research & Analysis Standards
-
-### Citations
-- Use authoritative sources: government sites, Statista, Gartner, Forrester, McKinsey, Deloitte, Mondaq
-- Include URLs where available
-- For customer quotes, cite participant anonymously (P1, P2, P3) with company name
-
-### Participant Anonymization
-- **Customer interviews:** Always anonymize participant names as P1, P2, P3, etc.
-- **Preserve:** Company name and job title (e.g., "P1 - Senior Recruiter, Accenture")
-- **Apply consistently:** Reports, slide decks, triangulation matrices, quotes, all documentation
-- **Format examples:** "P1 (Accenture)", "P2 - HR Director, Baker Hughes", "P3 - Talent Acquisition Lead, Shell"
-
-### Product Recommendations
-- Assume HiredScore and Paradox are integrated; recommend activation, not integration
-- For job boards, check Broadbean coverage first
-- Prioritise native Workday capabilities over third-party tools where feasible
-
-## Deck Generation
+# Deck Generation
 
 **Applies to**: All slide decks generated via Slide Deck MCP (`user-slide-deck-mcp`), including **110-slide-generator** (short decks) and **130-pmf-slide-generator** (full PMF roadmap decks).
 
 **This section is the CANONICAL source** for slide typography, layout, and formatting. Individual deck generator rules (110, 130) reference these standards and add deck-specific logic only (e.g., PESTEL depth requirements, framework selection).
 
-### Slide Content Guidelines
+## Slide Content Guidelines
 - Use British English spelling throughout
 - **Maximum lines per slide**: Never exceed 7-8 total lines of text per slide (including main bullets, sub-bullets, and product implications) to prevent vertical overflow.
 - **Bullet length**: Keep individual bullets to 1-2 lines maximum. If a bullet wraps to a 3rd line, rewrite it to be more concise.
@@ -99,7 +24,7 @@ For detailed guidance, see:
 - Numbers: use commas for thousands (e.g., 9,922 not 9922)
 - Percentages: 79% (no space before %)
 
-### Typography Standards (Workday Slide Deck MCP)
+## Typography Standards (Workday Slide Deck MCP)
 
 **Canvas dimensions:**
 - Canvas: 10.0in x 5.63in
@@ -155,10 +80,10 @@ For detailed guidance, see:
 - Start with "Product implication:" prefix
 - 12pt retained for dense PESTEL context even when standard slides use 14pt
 
-### Formatting
+## Formatting
 - Content position: Body text `top_inches: 1.2` (not 1.6) to avoid excess gap below title
 
-### Speaker Notes (MANDATORY for content slides)
+## Speaker Notes (MANDATORY for content slides)
 - Add `speaker_notes` to every content slide except: TITLE, Section Title, Bumper Slide
 - Format: Bullet-pointed presenter guidance, then a "References:" section with live, working URLs
 - Example:
@@ -166,13 +91,13 @@ For detailed guidance, see:
 "speaker_notes": "• Key point to emphasise.\n• Second talking point.\n\nReferences:\n• Source name: https://example.com/live-link"
 ```
 
-### Agenda Slide & Section Title Pattern (Critical Fix)
+## Agenda Slide & Section Title Pattern (Critical Fix)
 
 **Problem**: The Slide Deck MCP auto-generates an agenda slide by extracting text from Section Title slides. This can create duplicate agendas or malformed agenda text.
 
 **Solution**: Use plain `text` property (not `paragraphs`) in Section Title slides to prevent auto-extraction while still rendering section names.
 
-#### Custom Agenda Slide (Recommended Pattern)
+### Custom Agenda Slide (Recommended Pattern)
 
 When you need custom agenda formatting (numbered list, specific font size, positioning):
 
@@ -202,7 +127,7 @@ When you need custom agenda formatting (numbered list, specific font size, posit
       "font_size_pt": 14,
       "color": "ink",
       "alignment": "left",
-      "text": "1.  Section One\n\n2.  Section Two\n\n3.  Section Three"
+      "text": "1. Section One\n\n2. Section Two\n\n3. Section Three"
     }
   ]
 }
@@ -216,7 +141,7 @@ When you need custom agenda formatting (numbered list, specific font size, posit
 - Double newlines (`\n\n`) create spacing between items
 - Font size 14pt for readability (not 16pt)
 
-#### Section Title Slides (Anti-Extraction Pattern)
+### Section Title Slides (Anti-Extraction Pattern)
 
 To display section names WITHOUT triggering auto-agenda extraction:
 
@@ -252,7 +177,7 @@ To display section names WITHOUT triggering auto-agenda extraction:
 - ❌ Omitting section names entirely (creates blank divider slides)
 - ❌ Using "Blank White Background" layout for agenda (not standard layout)
 
-### Agenda Slide Formatting Standards
+## Agenda Slide Formatting Standards
 
 **Default behavior**: The Slide Deck MCP auto-generates an agenda slide (slide 2) from Section Title placeholders and slide titles.
 
@@ -286,7 +211,7 @@ Override the auto-generation by explicitly defining slide 2 in your JSON spec:
       "font_size_pt": 14,
       "color": "ink",
       "alignment": "left",
-      "text": "1.  Section One\n\n2.  Section Two\n\n3.  Section Three\n\n4.  Section Four\n\n5.  Section Five"
+      "text": "1. Section One\n\n2. Section Two\n\n3. Section Three\n\n4. Section Four\n\n5. Section Five"
     }
   ]
 }
@@ -296,7 +221,7 @@ Override the auto-generation by explicitly defining slide 2 in your JSON spec:
 - **Layout**: "Section Title" for branded gradient panel on left side
 - **Heading**: "Agenda" at 20pt bold, positioned at `left: 3.7` (on white right panel)
 - **Font size**: 14pt for list items (not 16pt)
-- **Numbering**: Plain text format "1.  Item" with double-space indent after number
+- **Numbering**: Plain text format "1. Item" with double-space indent after number
 - **Spacing**: Double newlines (`\n\n`) between each numbered item for visual breathing room
 - **Position**: Text boxes positioned for Section Title layout's white content area on right
 - **Color**: "ink" (dark navy) for all text
@@ -308,7 +233,7 @@ Override the auto-generation by explicitly defining slide 2 in your JSON spec:
 
 **Implementation note**: Insert the explicit agenda slide as position 2 in your JSON array (after TITLE slide, before first content slide). The MCP will use your explicit slide instead of auto-generating.
 
-### Slide Title Length Standards
+## Slide Title Length Standards
 
 **Constraint hierarchy** (applies to ALL slide titles except TITLE and Bumper Slide):
 - **Hard limit**: 45 characters (including spaces) — titles longer than this WILL wrap to second line
@@ -353,19 +278,11 @@ Override the auto-generation by explicitly defining slide 2 in your JSON spec:
 4. Consider rewriting 40-45 character titles for maximum impact
 5. Verify final spec has no titles >45 characters before calling MCP
 
-### Chart Styling
-- Add `speaker_notes` to every content slide except: TITLE, Section Title, Bumper Slide
-- Format: Bullet-pointed presenter guidance, then a "References:" section with live, working URLs
-- Example:
-```
-"speaker_notes": "• Key point to emphasise.\n• Second talking point.\n\nReferences:\n• Source name: https://example.com/live-link"
-```
-
-### Chart Styling
+## Chart Styling
 - **One label per bar:** Use exactly one series for simple bar/column charts so each category has one bar and one Y-axis label. For stacked bars, use `bar_stacked`.
 - **Font sizes:** Always set `category_axis_font_size_pt: 9`, `value_axis_font_size_pt: 9`, `title_font_size_pt: 10` to keep chart text readable
 
-### Table Styling
+## Table Styling
 - **Font size:** Use 7-10pt for table content to maximize readability while fitting content
   - **Standard tables**: 8-9pt for VP-friendly readability
   - **SWOT Analysis**: **9pt ONLY** - set at table level to ensure consistency across all cells
@@ -450,7 +367,7 @@ Override the auto-generation by explicitly defining slide 2 in your JSON spec:
 }
 ```
 
-### Deck-Specific Rules
+## Deck-Specific Rules
 
 **Individual deck generators add specialized logic:**
 
@@ -466,17 +383,3 @@ Override the auto-generation by explicitly defining slide 2 in your JSON spec:
 
 **Historical reference:**
 - `docs/decks/gcc-pmf-roadmap-v65-typography.md`: Technical measurements from actual v30 deck (archival; references 010 for current standards)
-
----
-
-## Application
-
-This rule applies to:
-- All PMF research reports
-- Slide deck generation
-- PRD documents
-- Roadmap recommendations
-- Internal documentation
-- **Canvas Kit prototypes** and **design** specs in `design/` (including **Sana Style UI** above)
-
-Always apply these standards unless explicitly instructed otherwise by the user.
