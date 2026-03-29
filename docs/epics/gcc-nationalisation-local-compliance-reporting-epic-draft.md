@@ -1,101 +1,81 @@
-# Epic draft: GCC nationalisation and local workforce compliance reporting
+# Epic draft: Native GCC nationalisation and local compliance reporting
 
-**Mission:** GCC-E2E-029 Step 11.5 (Regional E2E backlog)  
 **PRD:** `docs/prds/gcc-nationalisation-local-compliance-reporting-prd.md`  
 **Status:** Draft — **Jira epic is created in 430** after story map approval (420 HITL).  
-**UX / Figma:** Per PRD (`UX designs for TBD release`); link in Jira when capture exists.
+**Pipeline:** GCC E2E (backlog step 410).
 
 ## Epic summary (for Jira Summary field)
 
-GCC nationalisation and local workforce compliance reporting (Recruiting-sourced reference packs)
+Native GCC nationalisation tracking, dashboards, and offer-stage compliance signals (KSA and UAE v1)
 
 ## User story
 
-As an HR professional (Recruiting) leading nationalisation evidence in the GCC  
-I want reference dimensions, catalogued audit-oriented report packs, dashboards, and transparent run metadata with column lineage on Recruiting-sourced data  
-So that I can meet standard Recruiting-only audit scenarios with less configuration churn and spreadsheet rebuild, reduce compliance risk from opaque workarounds, and support honest buyer conversations (Recruiting evidence only unless an HCM addendum applies)
+As a GCC talent acquisition lead managing Saudization, Nitaqat, or Emiratisation obligations  
+I want governed nationalisation data, real-time quota and pipeline views, and clear offer-stage warnings (with optional blocks where legally and operationally approved)  
+So that we reduce manual spreadsheet reconciliation, surface quota risk before irreversible offer steps, and improve defensible reporting to leadership and authorities without mis-stating statutory automation
 
 ## Jira-ready description
 
 Paste body for Jira epic description (markdown):
 
-### User story (repeat)
+**User story**
 
-As an HR professional (Recruiting) leading nationalisation evidence in the GCC, I want reference dimensions, catalogued audit-oriented report packs, dashboards, and transparent run metadata with column lineage on Recruiting-sourced data, so that I can meet standard Recruiting-only audit scenarios with less configuration churn and spreadsheet rebuild, reduce compliance risk from opaque workarounds, and support honest buyer conversations (Recruiting evidence only unless an HCM addendum applies).
+As a GCC talent acquisition lead managing Saudization, Nitaqat, or Emiratisation obligations, I want governed nationalisation data, real-time quota and pipeline views, and clear offer-stage warnings (with optional blocks where legally and operationally approved), so that we reduce manual spreadsheet reconciliation, surface quota risk before irreversible offer steps, and improve defensible reporting to leadership and authorities without mis-stating statutory automation.
 
-### PRD (canonical)
+**PRD (canonical):** `docs/prds/gcc-nationalisation-local-compliance-reporting-prd.md`
 
-`docs/prds/gcc-nationalisation-local-compliance-reporting-prd.md`
+**Problem**
 
-### Problem and outcome (summary)
+GCC recruiters and HR leaders must track and report nationalisation quotas during hiring, not only after hire. Today they rely on custom fields, calculated fields, and external spreadsheets, which increases compliance risk, slows offers, and weakens franchise and low-volume roll-ups.
 
-GCC enterprises face mandated nationalisation reporting (Nitaqat / Saudisation, Emiratisation, Kuwaitisation). Today Workday Recruiting relies heavily on custom fields, manual Excel exports, and PS reconfiguration. v1 elevates **Workaround**-class nationalisation / MOHRE-oriented reporting (per baseline CI) with a **reference model**, **standard packs**, **documented PS patterns**, and **clear data lineage** — without claiming government certification, statutory filing completeness, or packaged Qiwa / Mudad connectors (**True Gap**).
+**Scope (version one)**
 
-### In scope (v1 — full PRD feature solution)
+- Country and programme packs with **KSA** and **UAE** as the v1 minimum; pre-modelled nationalisation concepts and configurable rules (customer retains legal interpretation of statutory bands).
+- Native tracking of nationality- and residency-relevant attributes across **candidates, applications, and hire handoff**, aligned with existing Core patterns post-hire where applicable.
+- **Real-time quota and composition dashboards** at agreed levels (for example legal entity, supervisory organisation, location, requisition portfolio) with counts, percentages, and trends against **customer-maintained** targets and thresholds.
+- **Offer-stage evaluation**: informational, warning, and (where configured and safeguarded) **block** behaviours; v1 should **bias to warn + audit** unless the tenant explicitly configures block with governance. Hard blocks require Legal-approved messaging, documented override with approver accountability, and candidate or employee transparency alignment.
+- **Audit trail** for views or changes to compliance classifications, thresholds, and offer decisions linked to warnings or overrides.
+- **Role-based security** and minimisation of sensitive attributes in high-traffic recruiter surfaces.
+- **Exports** (for example CSV or XLSX) to support **customer-operated** manual filing; **no** automated submission to government portals in v1.
+- **Administrator experience** to activate packs, map organisations to programmes, set targets and effective dates, and apply approved overrides with audit.
 
-• **Reference data model** — Dimensions and attributes for nationalisation / local compliance reporting (UAE, KSA, Kuwait as primary slices; extensions per legal / field). Tenant configuration for programme report groupings without forcing one-off custom fields for standard metrics; **coexistence** with existing custom fields (no mandatory retirement).
+**Explicitly out of scope (version one)**
 
-• **Catalogue of standard reports and dashboards** — Pre-built definitions for pipeline and hire views per agreed programme slice; manual **on-demand** runs plus export; goal of in-product completion for agreed in-scope audit scenarios (pilot KPIs per PRD).
+- Direct **API integration** with **Qiwa**, **Mudad**, or other government endpoints for automated exchange (reserved for a subsequent release; v1 may define export layouts that ease manual upload only).
 
-• **Run metadata and audit posture** — Surface runner, timestamp, report definition version, and **column lineage** to Recruiting objects / fields; integrate with **existing Report Run History** (and related Recruiting reporting audit patterns) rather than a parallel run store unless discovery documents a gap. **Retention:** engineering selects and documents path **(A)** no new persistent row-level snapshot beyond existing patterns, or **(B)** explicit retention and purge hooks aligned to candidate/application purge and legal hold.
+**Personas**
 
-• **Data quality and transparency** — Document required fields per pack; coverage indicators and gap treatment (no silent omission); **UDMF / candidate merge** behaviour for programme fields defined for aggregates and audit views; empty states and copy that do not imply compliance when data is incomplete.
+- **Primary:** HR Professional / talent acquisition lead (GCC).  
+- **Secondary:** HR or people analytics / COE partner (quota models, cadence, methodology).  
+- **Tertiary:** Hiring manager on GCC-facing requisitions (minimal, outcome-oriented signals).
 
-• **Onboarding and migration** — **PS playbook** mapping legacy custom fields to reference dimensions; **validation** reports for gaps and inconsistent legacy data.
+**Success criteria (from PRD)**
 
-• **In-product and buyer transparency** — Clear labels: customer-configured programme definitions; **no** legal advice, **no** government fine calculation, **no** positioning as certifying or filing Nitaqat / Emiratisation / Kuwaitisation submissions; standard **scope blurb** on collateral (Recruiting-sourced v1; not full workforce filings without HCM addendum).
+- **Adoption:** 10 GCC enterprise customers live on native nationalisation reporting within 6 months of GA (customer count).  
+- **Efficiency:** ~30% reduction in time spent compiling nationalisation compliance reports among adopters (baseline vs post-implementation methodology per CS).  
+- **Quality / risk:** Zero quota miscalculation incidents attributed to Workday-native calculations for the early adopter cohort during the initial 12-month observation window (defined with Legal and DPIA context).  
+- **Compliance readiness:** DPIA or regional equivalent completed before GA where Legal mandates it for design-partner and GA-blocking cohorts (target 100% where mandated).
 
-• **GTM alignment** — Internal and external language consistent with PRD competitive allowlist (DA30-class **Workaround** elevation; **True Gap** on packaged Qiwa / Mudad recruiting connectors); triangulate PS + tenant UAT before absolute customer claims.
+**Related research (supporting)**
 
-• **Localisation** — English plus Arabic for new surfaces where required (per PRD releases section).
+- PMF thematic analysis: `research/GCC/thematic-analysis/2026-03-28-GCC-PMF-Analysis-GCC-E2E-031.md`  
+- Competitive scan: `research/competitive/gcc/gcc-competitive-scan-2026-03-27-GCC-E2E-031.md`  
+- Competitive matrix: `research/competitive/matrices/gcc-competitive-matrix.md`
 
-### Explicitly out of v1 (PM-approved boundaries)
+**Functional context (Workday)**
 
-• Direct government portal integrations (Qiwa, Mudad APIs).  
-• Advanced predictive analytics or AI-powered quota optimisation.  
-• EEOC, OFCCP, or non-GCC compliance domains.  
-• Mandatory elimination of customer custom fields.  
-• **HCM-composite / post-hire** packs and v1 success-metric numerators unless a **written HCM addendum** extends scope.  
-• Scheduled recurring report runs unless handled as a separate change request.  
-• Regulator-grade immutability, third-party audit repository, tamper-evident chains, direct portal schema mapping.
+This epic extends **Recruiting** and **Core** identity and reporting patterns (nationality, government ID where used) and must align with **security**, **retention and purge** (Recruiting Data Purge functional overview), and **offer** workflows (Offer and Employment Agreement functional overview) without introducing sole automated hiring decisions.
 
-### Personas
+## Notes for story mapping
 
-• **Primary:** HR Professional (Recruiting), GCC.  
-• **Secondary:** Recruiting / TA leadership (roll-ups by LOB, location, programme).  
-• **Tertiary:** Implementation / value consulting (reference setup, PS patterns).
-
-### Success metrics (PRD — baselines required before external claims)
-
-Targets apply only to **Recruiting-only, in-scope** scenarios in the PRD audit-scenario matrix; configuration-time and Excel-bypass claims require frozen baselines, published reference catalogue + PS playbook where stated, and minimum pilot N per PRD appendix. Commercial pursuit metrics tie to regional OKR definitions in the PRD.
-
-### Compliance and security (epic-level expectations)
-
-Nationality and programme fields are sensitive (GDPR Article 9 where EU/EEA in scope; GCC PDPL-class treatment). Purge alignment for runs and exports; DAP / security domains consult at design kickoff per PRD; Legal / Privacy outcomes (DPIA, pilot worksheet) tracked via PRD open questions.
-
-### Functional knowledge touchpoints (for engineering / QA)
-
-Reporting and exports interact with **Recruiting Data Purge** behaviour, **UDMF** merge outcomes, and **security** (DAP, Recruiting and Candidate Reporting access). Validate detailed behaviour against `@functional-knowledge` PDFs during design and story breakdown.
-
-### Jira creation (430)
-
-Project **HRREC**, issue type **Epic**, component **Recruiting Purge**, assignee **David Denham** (per workspace defaults).
-
-## Notes for story mapping (420)
-
-• Map an **end-to-end walking skeleton (VS1)** that spans: enable / configure reference programme grouping → validation and data-quality feedback → discover and run standard packs (catalogue) → dashboard consumption → export with run metadata and lineage — before layering efficiency and breadth (additional programme slices, leadership roll-ups, playbook deliverables as VS2/VS3 as appropriate).
-
-• Flag **legal-sensitive** UI and GTM strings early for **319** / **060** in **430** (disclaimers, empty states, coverage messaging, export notices).
-
-• **Do not** story-map HCM Worker joins or full-workforce statutory readiness unless PM adds an HCM addendum; keep **Qiwa / Mudad** integration as strategy/documentation only, not shippable integration stories in v1.
-
-• Include explicit stories or spikes for: Report Run History / lineage integration; **retention path (A) vs (B)** decision and implementation; DAP-aligned report access; UDMF / merge rules for programme fields; Arabic / RTL scope per PRD; **PS playbook** and validation reports as deliverables (product + enablement).
-
-• **Per-country gating** (Qatar, Bahrain, Oman, Kuwait depth) may remain behind flags or off by default until legal sign-off — reflect in slice ordering and open questions.
-
-• **Open questions** in the PRD (programme catalogue finalisation, telemetry, named DAP SME, DPIA) should inform spikes or pre-GA gates in the map rather than hidden scope.
+- **420** should preserve an **end-to-end walking skeleton** in VS1: activate pack → see pipeline or req-level composition → reach offer with a visible compliance outcome → export or executive view → audit evidence. Split heavy **admin configuration**, **security tiers**, and **analytics depth** across VS2 or VS3 as needed.
+- **Compliance and Legal (060):** Nationality and derived classifications are **high-sensitivity**; stories must allow **319** + **060** on block, override, privacy notice hooks, and export warnings. **DPIA** before GA is a **release readiness** theme, not a single UI story unless productised.
+- **Discrimination and UX:** Do not default to protected-characteristic filters for exclusion; flag any grid or filter stories for counsel review in AC.
+- **Data and retention:** Align new audit and configuration artefacts with the PRD **retention and purge matrix**; call out dependencies on existing candidate or worker purge behaviour.
+- **Open questions (PRD):** Additional GCC countries beyond KSA and UAE, Nitaqat or MOHRE band depth (product vs customer tables), Prism vs standalone analytics, franchise or multinational roll-up boundaries, default warn vs block by segment, export field minimisation vs authority templates — capture spikes or placeholders in the map where they affect sequencing.
+- **430 defaults (when epic is created):** Project **HRREC**, issue type **Epic**, component **Recruiting Purge**, assignee **David Denham** (per workspace convention).
 
 ---
 
-**Epic draft path:** `docs/epics/gcc-nationalisation-local-compliance-reporting-epic-draft.md`  
-**Proposed Jira epic summary:** GCC nationalisation and local workforce compliance reporting (Recruiting-sourced reference packs)
+**Handoff:** Epic draft path for **420-story-mapping:** `docs/epics/gcc-nationalisation-local-compliance-reporting-epic-draft.md`  
+**Proposed Jira epic title:** same as **Epic summary** above.

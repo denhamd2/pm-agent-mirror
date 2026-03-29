@@ -92,9 +92,9 @@ You orchestrate four specialized framework Skills stored in `~/.cursor/skills-cu
 
 **Downstream consumers:**
 - **101** (Step 4): Uses strategy context and PESTEL for competitive scan prioritization
-- **105** (Step 5): Uses strategy context and PESTEL Social/Legal for research lens
-- **120** (Step 8): Reads and incorporates all 3 artifacts; performs thematic analysis (not PESTEL/SWOT research)
-- **130** (Step 10): Reads PESTEL and SWOT for deck slides; uses strategy context for Product Strategy section
+- **105** (Steps 5 and 6): Uses strategy context and PESTEL Social/Legal for research lens
+- **120** (Step 9): Reads and incorporates all 3 artifacts; performs thematic analysis (not PESTEL/SWOT research)
+- **130** (Step 11): Reads PESTEL and SWOT for deck slides; uses strategy context for Product Strategy section
 
 ### Mode 2: Standalone Strategic Analysis
 
@@ -402,7 +402,7 @@ Before reading strategy files, verify they exist:
 
 **Strategy extraction:**
 1. Read `strategy/markdown/product-priorities-q2-2026.md` (REQUIRED)
-2. Read `strategy/pdfs/workday-talent-acquisition-strategy-march-2026.pdf` (use Read tool - PDFs auto-convert to text)
+2. Read `/Users/david.denham/product-manager-agent/strategy/pdfs/workday-talent-acquisition-strategy-march-2026.pdf` (use Read tool with absolute path - PDFs auto-convert to text)
    - If file not found: Note "PDF not available" in Sources section, proceed with quarterly markdown only
    - If file exists: Extract annual vision, multi-year themes, roadmap waves, competitive positioning
 3. Extract: Priorities, OKRs, Regional Focus, Competitive Positioning, NOT Priority, Annual Vision (if PDF available)
@@ -581,25 +581,25 @@ Your outputs are consumed by:
 - Reads pestel-analysis.md for regulatory and social context (Legal factor informs compliance positioning, Social factor highlights communication gaps)
 - Prioritizes competitive features that align with strategic priorities
 
-**105 (User Research) - Step 5:**
+**105 (User Research) - Steps 5 and 6:**
 - Reads strategy-context.md to flag strategy-customer tensions
 - Reads pestel-analysis.md for Social/Legal context lens
 - Notes when customer pain diverges from business strategy
 
-**120 (PMF Thematic Analysis) - Step 8:**
+**120 (PMF Thematic Analysis) - Step 9:**
 - Reads all 3 artifacts (strategy-context, pestel-analysis, swot-analysis)
 - Uses RICE Business Impact scoring rubric from strategy-context
 - Incorporates PESTEL and SWOT insights into Cross-Theme Analysis
 - References your outputs in Product Roadmap recommendations
 - **Does NOT perform PESTEL or SWOT research itself** (consumes your analysis)
 
-**130 (PMF Deck Generator) - Step 10:**
+**130 (PMF Deck Generator) - Step 11:**
 - Reads pestel-analysis.md to generate 6 PESTEL slides (one per factor)
 - Reads swot-analysis.md to generate 1 SWOT slide (two-table layout)
 - Reads strategy-context.md to generate 1-3 Product Strategy slides
 - Uses your analysis verbatim (no regeneration from 120 content)
 
-**200 (PRD Writer) - Step 14:**
+**200 (PRD Writer) - Step 15:**
 - Reads pestel-analysis.md Legal factor for Compliance Considerations section
 - Reads swot-analysis.md for competitive differentiation and business case
 - Reads strategy-context.md for strategic alignment justification
@@ -661,7 +661,7 @@ Since 060 no longer validates, you ensure:
 
 **060 (Legal Advisor):**
 - You now own Legal PESTEL (former Step 2b.1 removed)
-- 060 still reviews Roadmap Recommendations (Step 9)
+- 060 still reviews Roadmap Recommendations (Step 10)
 - Consult 060-legal-advisor.mdc for legal framework reference if needed
 
 **101 (Competitive Intelligence):**
@@ -692,7 +692,7 @@ Since 060 no longer validates, you ensure:
 **Step 1 - Strategy Context:**
 1. Read `strategy/markdown/product-priorities-q2-2026.md`
    - Extract: Priority 1 = GCC Market Readiness (WhatsApp, nationalisation), OKR = Win 10 GCC customers
-2. Read `strategy/pdfs/workday-talent-acquisition-strategy-march-2026.pdf`
+2. Read `/Users/david.denham/product-manager-agent/strategy/pdfs/workday-talent-acquisition-strategy-march-2026.pdf`
    - Extract: GCC strategic expansion, compliance differentiation theme
 3. Generate `research/GCC/strategy-context-2026-03-27-GCC-E2E-029.md`
    - GCC Priority: **High** (Q2 Priority 1)
@@ -842,7 +842,7 @@ Before finalizing PESTEL, verify Legal factor includes:
 - [ ] **Authoritative sources**: Government sites, gdpr-info.eu, artificialintelligenceact.eu, Mondaq legal analysis
 - [ ] **Live URLs**: All citations include working URLs
 
-**Safety net**: 060 still reviews Roadmap Recommendations at Step 9, providing downstream compliance check on high-risk features.
+**Safety net**: 060 still reviews Roadmap Recommendations at Step 10, providing downstream compliance check on high-risk features.
 
 ---
 

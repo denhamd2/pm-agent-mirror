@@ -14,10 +14,11 @@ import { Avatar } from '@workday/canvas-kit-react/avatar';
 import { Card } from '@workday/canvas-kit-react/card';
 import { Flex, Box } from '@workday/canvas-kit-react/layout';
 import { Table } from '@workday/canvas-kit-react/table';
+import { StatusIndicator } from '@workday/canvas-kit-react/status-indicator';
 import { colors, space } from '@workday/canvas-kit-react/tokens';
 import { Heading, BodyText } from '@workday/canvas-kit-react/text';
 import { SystemIcon } from '@workday/canvas-kit-react/icon';
-import { speechBubbleIcon, xSmallIcon, mailIcon, uploadClipIcon, boldIcon, italicsIcon, underlineIcon, linkIcon, unorderedListIcon, chevronDownIcon, documentIcon, checkCircleIcon } from '@workday/canvas-system-icons-web';
+import { speechBubbleIcon, xSmallIcon, mailIcon, uploadClipIcon, boldIcon, italicsIcon, underlineIcon, linkIcon, unorderedListIcon, chevronDownIcon, documentIcon, checkCircleIcon, dotIcon } from '@workday/canvas-system-icons-web';
 import { Checkbox } from '@workday/canvas-kit-react/checkbox';
 import { TextInput } from '@workday/canvas-kit-react/text-input';
 
@@ -38,6 +39,8 @@ import {
   SanaCommMessageBubble,
   SanaCommComposer,
   sanaCommFormControlStyle,
+  EmailPanel,
+  type EmailThread,
 } from './components';
 
 /** 319-approved copy — do not change without a new 319 pass */
@@ -107,7 +110,7 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
     { id: 2, text: 'Yes, I am available on Tuesday or Thursday afternoon.', align: 'start' as const, timestamp: '18 Mar, 10:15' },
   ]);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const emailScrollRef = useRef<HTMLDivElement>(null);
+  // emailScrollRef removed - using single scroll area
 
   // Email state
   const [activeEmailThreadId, setActiveEmailThreadId] = useState<string | null>(null);
@@ -149,10 +152,7 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-    if (emailScrollRef.current) {
-      emailScrollRef.current.scrollTop = emailScrollRef.current.scrollHeight;
-    }
-  }, [messages, emailThreads, messagingOpen, activeChannel, activeEmailThreadId]);
+  }, [messages, messagingOpen]);
 
   const handleSendMessage = () => {
     if (!messageText.trim()) return;
@@ -235,9 +235,12 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
                   </BodyText>
                   <Flex gap="xs" flexWrap="wrap">
                     {['Figma', 'Design Systems', 'Accessibility', 'Prototyping'].map(skill => (
-                      <Box key={skill} padding="xxs xs" style={{ backgroundColor: colors.soap100, borderRadius: 12, border: `1px solid ${colors.soap300}` }}>
-                        <BodyText size="small" color={colors.blackPepper600}>{skill}</BodyText>
-                      </Box>
+                      <StatusIndicator
+                        key={skill}
+                        type={StatusIndicator.Type.Gray}
+                        emphasis={StatusIndicator.Emphasis.Low}
+                        label={skill}
+                      />
                     ))}
                   </Flex>
                 </Card>
@@ -250,17 +253,29 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
                   <BodyText size="small" fontWeight="bold">Senior Product Designer</BodyText>
                   <BodyText size="small" color={colors.blackPepper600} marginBottom="m">REQ-2026-8841 · Paris, France</BodyText>
                   
-                  <Flex alignItems="center" gap="s" marginBottom="s">
-                    <Box style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: colors.blueberry400 }} />
-                    <BodyText size="small" fontWeight="bold">Stage: Interview</BodyText>
-                  </Flex>
+                  <Box marginBottom="s">
+                    <StatusIndicator
+                      type={StatusIndicator.Type.Blue}
+                      emphasis={StatusIndicator.Emphasis.Low}
+                      label="Stage: Interview"
+                      icon={dotIcon}
+                    />
+                  </Box>
                   <BodyText size="small" color={colors.blackPepper600} marginBottom="m">In progress for 10 days. Next step: Panel Interview.</BodyText>
                   
-                  <Flex gap="s" flexWrap="wrap">
-                    <SecondaryButton size="small" onClick={() => setActiveChannel('whatsapp')}>
+                  <Flex gap="s" flexWrap="wrap" marginBottom="m">
+                    <SecondaryButton 
+                      size="small" 
+                      onClick={() => setActiveChannel('whatsapp')}
+                      style={activeChannel === 'whatsapp' ? { backgroundColor: colors.blueberry400, color: colors.frenchVanilla100 } : undefined}
+                    >
                       WhatsApp
                     </SecondaryButton>
-                    <SecondaryButton size="small" onClick={() => setActiveChannel('email')}>
+                    <SecondaryButton 
+                      size="small" 
+                      onClick={() => setActiveChannel('email')}
+                      style={activeChannel === 'email' ? { backgroundColor: colors.blueberry400, color: colors.frenchVanilla100 } : undefined}
+                    >
                       Email
                     </SecondaryButton>
                   </Flex>
@@ -287,13 +302,25 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
               <Table.Body>
                 <Table.Row>
                   <Table.Cell><BodyText size="small" fontWeight="bold" color={SANA_LINK_ACCENT}>Senior Product Designer (REQ-2026-8841)</BodyText></Table.Cell>
-                  <Table.Cell><Box padding="xxs s" style={{ display: 'inline-block', backgroundColor: colors.blueberry100, color: colors.blueberry600, borderRadius: 4, fontSize: 12, fontWeight: 'bold' }}>Interview</Box></Table.Cell>
+                  <Table.Cell>
+                    <StatusIndicator
+                      type={StatusIndicator.Type.Blue}
+                      emphasis={StatusIndicator.Emphasis.Low}
+                      label="Interview"
+                    />
+                  </Table.Cell>
                   <Table.Cell>18 Mar 2026</Table.Cell>
                   <Table.Cell>LinkedIn</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><BodyText size="small" fontWeight="bold" color={SANA_LINK_ACCENT}>Product Designer (REQ-2025-1102)</BodyText></Table.Cell>
-                  <Table.Cell><Box padding="xxs s" style={{ display: 'inline-block', backgroundColor: colors.soap200, color: colors.blackPepper600, borderRadius: 4, fontSize: 12, fontWeight: 'bold' }}>Rejected</Box></Table.Cell>
+                  <Table.Cell>
+                    <StatusIndicator
+                      type={StatusIndicator.Type.Gray}
+                      emphasis={StatusIndicator.Emphasis.Low}
+                      label="Rejected"
+                    />
+                  </Table.Cell>
                   <Table.Cell>2 Feb 2025</Table.Cell>
                   <Table.Cell>Careers Site</Table.Cell>
                 </Table.Row>
@@ -611,212 +638,6 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
     </Flex>
   );
 
-  const emailPanel = (
-    <Flex
-      flexDirection="row"
-      flex={1}
-      minHeight={0}
-      style={{ overflow: 'hidden' }}
-      role={messagingOpen ? 'dialog' : undefined}
-      aria-modal={messagingOpen ? true : undefined}
-      aria-labelledby={messagingOpen ? 'fr-email-panel-title' : undefined}
-    >
-      {/* LEFT SIDEBAR: Thread List */}
-      <Flex
-        flexDirection="column"
-        width={250}
-        style={{ borderRight: `1px solid ${colors.soap300}`, backgroundColor: SANA_COMM_PANEL_SURFACE }}
-      >
-        <Box padding="m" style={{ borderBottom: `1px solid ${colors.soap300}`, flexShrink: 0 }}>
-          <Flex alignItems="center" gap="s">
-            <SystemIcon icon={mailIcon} size={22} color={SANA_LINK_ACCENT} aria-hidden />
-            <Heading size="small" id="fr-email-panel-title">
-              Email
-            </Heading>
-          </Flex>
-        </Box>
-        <Box padding="m" style={{ flexShrink: 0 }}>
-          <PrimaryButton size="small" style={{ width: '100%' }} onClick={() => {
-            setActiveEmailThreadId(null);
-            setEmailSubject('');
-            setEmailText('');
-          }}>
-            New
-          </PrimaryButton>
-        </Box>
-        <Box style={{ flex: 1, overflowY: 'auto' }}>
-          {emailThreads.map(thread => (
-            <Box
-              key={thread.id}
-              padding="s"
-              style={{
-                cursor: 'pointer',
-                backgroundColor: activeEmailThreadId === thread.id ? colors.soap200 : 'transparent',
-                borderBottom: `1px solid ${colors.soap200}`
-              }}
-              onClick={() => {
-                setActiveEmailThreadId(thread.id);
-                setEmailSubject(thread.subject);
-                setEmailText('');
-              }}
-            >
-              <BodyText size="small" fontWeight="bold">{thread.subject}</BodyText>
-              <BodyText size="small" color={colors.blackPepper500}>
-                {thread.messages[thread.messages.length - 1]?.timestamp}
-              </BodyText>
-            </Box>
-          ))}
-        </Box>
-      </Flex>
-
-      {/* RIGHT SIDEBAR: Detail View */}
-      <Flex flexDirection="column" flex={1} minWidth={0} style={{ backgroundColor: colors.frenchVanilla100 }}>
-        {/* Header with Close Button */}
-        <Box padding="m" style={{ borderBottom: `1px solid ${colors.soap300}`, flexShrink: 0, backgroundColor: SANA_COMM_PANEL_SURFACE }}>
-          <Flex justifyContent="flex-end">
-            <ToolbarIconButton icon={xSmallIcon} aria-label={COPY.closePanel} onClick={collapseMessaging} />
-          </Flex>
-        </Box>
-
-        {/* Thread History (Scrollable) */}
-        <Box
-          ref={emailScrollRef}
-          padding="l"
-          style={{ flex: 1, minHeight: 0, overflowY: 'auto', backgroundColor: colors.frenchVanilla100 }}
-        >
-          {activeEmailThreadId === null ? (
-            <Flex flex={1} alignItems="center" justifyContent="center" height="100%">
-              <BodyText size="small" color={colors.blackPepper500}>
-                Start a new email or select a thread from the list.
-              </BodyText>
-            </Flex>
-          ) : (
-            emailThreads.find(t => t.id === activeEmailThreadId)?.messages.map(msg => (
-              <SanaCommMessageBubble key={msg.id} align={msg.align} timestamp={msg.timestamp}>
-                <Box>
-                  <BodyText size="small">{msg.text}</BodyText>
-                  {msg.attachments && msg.attachments.length > 0 && (
-                    <Flex gap="xs" marginTop="s" alignItems="center">
-                      <SystemIcon icon={uploadClipIcon} size={16} color={colors.blackPepper500} />
-                      <BodyText size="small" color={SANA_LINK_ACCENT}>
-                        {msg.attachments[0]}
-                      </BodyText>
-                    </Flex>
-                  )}
-                </Box>
-              </SanaCommMessageBubble>
-            ))
-          )}
-        </Box>
-
-        {/* Composer Footer (Fixed at bottom) */}
-        <Box padding="m" style={{ borderTop: `1px solid ${colors.soap300}`, flexShrink: 0, backgroundColor: SANA_COMM_PANEL_SURFACE }}>
-          <Flex flexDirection="column" gap="xs" marginBottom="s">
-            <Flex alignItems="center" gap="s">
-              <BodyText size="small" color={colors.blackPepper500} style={{ width: 60 }}>
-                From:
-              </BodyText>
-              <Box
-                as="input"
-                value={emailFrom}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmailFrom(e.target.value)}
-                style={{ ...sanaCommFormControlStyle(), flex: 1, minHeight: 32, padding: '4px 8px' }}
-              />
-            </Flex>
-            <Flex alignItems="center" gap="s">
-              <BodyText size="small" color={colors.blackPepper500} style={{ width: 60 }}>
-                To:
-              </BodyText>
-              <Box
-                as="input"
-                value={emailTo}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmailTo(e.target.value)}
-                style={{ ...sanaCommFormControlStyle(), flex: 1, minHeight: 32, padding: '4px 8px' }}
-              />
-            </Flex>
-            <Flex alignItems="center" gap="s">
-              <BodyText size="small" color={colors.blackPepper500} style={{ width: 60 }}>
-                Cc:
-              </BodyText>
-              <Box
-                as="input"
-                value={emailCc}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmailCc(e.target.value)}
-                placeholder="Add Cc..."
-                style={{ ...sanaCommFormControlStyle(), flex: 1, minHeight: 32, padding: '4px 8px' }}
-              />
-            </Flex>
-            <Flex alignItems="center" gap="s">
-              <BodyText size="small" color={colors.blackPepper500} style={{ width: 60 }}>
-                Subj:
-              </BodyText>
-              <Box
-                as="input"
-                value={emailSubject}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmailSubject(e.target.value)}
-                style={{ ...sanaCommFormControlStyle(), flex: 1, minHeight: 32, padding: '4px 8px' }}
-              />
-            </Flex>
-          </Flex>
-
-          <Flex
-            justifyContent="space-between"
-            alignItems="center"
-            padding="xxs"
-            style={{
-              border: `1px solid ${colors.soap300}`,
-              borderRadius: '12px 12px 0 0',
-              borderBottom: 'none',
-              backgroundColor: colors.soap100,
-            }}
-          >
-            <Flex gap="xxs">
-              <ToolbarIconButton icon={boldIcon} aria-label="Bold" />
-              <ToolbarIconButton icon={italicsIcon} aria-label="Italic" />
-              <ToolbarIconButton icon={underlineIcon} aria-label="Underline" />
-              <ToolbarIconButton icon={linkIcon} aria-label="Link" />
-              <ToolbarIconButton icon={unorderedListIcon} aria-label="Bulleted list" />
-            </Flex>
-            <Flex gap="s" alignItems="center">
-              <SecondaryButton size="small" icon={chevronDownIcon} iconPosition="end">
-                Templates
-              </SecondaryButton>
-            </Flex>
-          </Flex>
-
-          <Box
-            as="textarea"
-            value={emailText}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEmailText(e.target.value)}
-            placeholder="Type an email..."
-            style={{
-              ...sanaCommFormControlStyle(),
-              width: '100%',
-              height: 100,
-              padding: 8,
-              borderRadius: '0 0 12px 12px',
-              resize: 'vertical',
-            }}
-          />
-
-          <Flex justifyContent="space-between" alignItems="center" marginTop="s">
-            <Flex gap="m" alignItems="center">
-              <ToolbarIconButton icon={uploadClipIcon} aria-label="Attach file" />
-              <Checkbox
-                checked={applyBranding}
-                onChange={(e) => setApplyBranding(e.target.checked)}
-                label="Apply company branding"
-              />
-            </Flex>
-            <PrimaryButton size="small" onClick={handleSendEmail} disabled={!emailText.trim()}>
-              Send Email
-            </PrimaryButton>
-          </Flex>
-        </Box>
-      </Flex>
-    </Flex>
-  );
-
   const railReserve = DEFAULT_COMM_RAIL_PX;
 
   return (
@@ -866,7 +687,7 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
                 </BodyText>
                 <Flex gap="s" flexWrap="wrap">
                   <SecondaryButton size="small">Move forward</SecondaryButton>
-                  <TertiaryButton size="small">Reject</TertiaryButton>
+                  <SecondaryButton size="small">Reject</SecondaryButton>
                 </Flex>
               </Box>
             </Flex>
@@ -886,8 +707,45 @@ export default function FranceWhatsappOmnichannelEngagementV75() {
         headerOffsetPx={WORKDAY_TOP_NAV_HEIGHT_PX}
         expanded={messagingOpen}
         railWidthPx={DEFAULT_COMM_RAIL_PX}
-        expandedWidthPx={activeChannel === 'email' ? 800 : DEFAULT_COMM_EXPANDED_PX}
-        panel={activeChannel === 'email' ? emailPanel : messagingPanel}
+        expandedWidthPx={activeChannel === 'email' ? 950 : DEFAULT_COMM_EXPANDED_PX}
+        panel={
+          activeChannel === 'email' ? (
+            <EmailPanel
+              threads={emailThreads}
+              activeThreadId={activeEmailThreadId}
+              onThreadSelect={(id) => {
+                setActiveEmailThreadId(id);
+                if (id) {
+                  const thread = emailThreads.find((t) => t.id === id);
+                  if (thread) setEmailSubject(thread.subject);
+                  setEmailText('');
+                }
+              }}
+              onNewEmail={() => {
+                setActiveEmailThreadId(null);
+                setEmailSubject('');
+                setEmailText('');
+              }}
+              from={emailFrom}
+              to={emailTo}
+              cc={emailCc}
+              subject={emailSubject}
+              body={emailText}
+              onFromChange={setEmailFrom}
+              onToChange={setEmailTo}
+              onCcChange={setEmailCc}
+              onSubjectChange={setEmailSubject}
+              onBodyChange={(html, text) => setEmailText(text)}
+              onSend={handleSendEmail}
+              onClosePanel={collapseMessaging}
+              showBranding
+              brandingChecked={applyBranding}
+              onBrandingChange={setApplyBranding}
+            />
+          ) : (
+            messagingPanel
+          )
+        }
         rail={
           <Flex flexDirection="column" gap="xs" style={{ width: '100%', alignItems: 'center', paddingTop: space.s }}>
             <button

@@ -94,6 +94,20 @@ When reviewing UI text, check these elements:
   - ✅ "Unable to save changes. Check your connection and try again."
   - ✅ "Email address is required. Enter your work email."
 
+### 3a. ✅ Visual Indicator Copy (Status Badges, Chips, Labels)
+- **Context**: Status badges, skill chips, timeline labels, and metadata are part of the UI copy system
+- **Review scope**: When reviewing prototypes or Jira story copy, validate:
+  - Status badge text (e.g., "Interview", "Completed", "Rejected") follows sentence case
+  - Skill chip labels are consistent and accurate
+  - Timeline/process step labels use clear, active language
+  - Metadata labels (e.g., "Added by", "Size", "Duration") use consistent terminology
+- **Example patterns**:
+  - ✅ Status: "Interview" (not "IN INTERVIEW")
+  - ✅ Skill: "Figma" (not "figma design")
+  - ✅ Timeline: "Submitted application" (not "Application Was Submitted")
+  - ✅ Metadata: "Added by Candidate · 18 Mar 2026 · 1.2 MB" (consistent formatting)
+- **Note**: These visual indicators are specified in 315 PASS 2 (Visual Indicators Specification) and implemented in 320 using the patterns in 320-prototype-developer.mdc
+
 ### 4. ✅ Success Messages
 - **Pattern**: Past tense + context
 - **Examples**:

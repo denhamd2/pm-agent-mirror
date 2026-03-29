@@ -1,150 +1,201 @@
-# Story Map: GCC nationalisation and local workforce compliance reporting
+# Story Map: Native GCC nationalisation and local compliance reporting
 
 **Epic draft:** `docs/epics/gcc-nationalisation-local-compliance-reporting-epic-draft.md`  
-**Jira epic:** [HRREC-91122](https://jira2.workday.com/browse/HRREC-91122)  
+**Jira epic:** [HRREC-91144](https://jira2.workday.com/browse/HRREC-91144) *(created 430, GCC E2E Step 30)*  
 **PRD:** `docs/prds/gcc-nationalisation-local-compliance-reporting-prd.md`  
-**Figma:** `https://www.figma.com/design/31oiDR6ciYEsk0aJp89Y0S`  
-**Created:** 27 March 2026  
-**Last revised:** 27 March 2026 (Red Team story map pre-flight — 1 revision pass)  
+**Created:** 28 March 2026  
 **Author:** AI Story Mapping Specialist
+
+## Functional grounding (Workday)
+
+**Deployment Agent (thread `61f74e54-9865-4676-b1c3-80f0423ca01c`):** Standard Recruiting fields include primary nationality, additional nationalities, and configurable government or national IDs (may be collected at multiple recruiting stages). Offer sits in the **Job Application** business process; recruiters initiate **Offer** / **Make Offer**, approvals route to hiring manager, HR, compensation, etc., and post-approval steps can include **Change Government Identifiers** or **Change Personal Information**. Today, nationalisation-style views are typically **custom reports** on candidate and job application objects, **calculated fields** for groupings or flags, **dashboard worklets**, and **exports** from reports (manual or scheduled) — consistent with v1 productising in-product dashboards and exports without Qiwa/Mudad APIs.
+
+**Functional knowledge (folder):** Extend patterns aligned with **Offer & Employment Agreement** (offer sub-process, approvals), **Recruiting Data Purge** (retention and purge for candidate/application data and new audit artefacts — see PRD retention matrix), and **security** (RBAC, domain policies, minimisation of sensitive attributes on high-traffic surfaces). **No** sole automated hiring decisions; flags inform humans at offer.
 
 ## Epic context
 
-**Epic summary:** GCC nationalisation and local workforce compliance reporting (Recruiting-sourced packs)
+**User story (from epic draft):**  
+As a GCC talent acquisition lead managing Saudization, Nitaqat, or Emiratisation obligations, I want governed nationalisation data, real-time quota and pipeline views, and clear offer-stage warnings (with optional blocks where legally and operationally approved), so that we reduce manual spreadsheet reconciliation, surface quota risk before irreversible offer steps, and improve defensible reporting to leadership and authorities without mis-stating statutory automation.
 
-**User story:**  
-As an HR professional (Recruiting) operating in the GCC, I want audit-oriented nationalisation and local workforce compliance reporting built on reference dimensions, standard report packs, and dashboards with clear data lineage, so that I can produce defensible evidence for standard Recruiting-only audit scenarios with less manual rebuild in spreadsheets.
+**Key personas:** Primary — HR Professional / TA lead (GCC). Secondary — HR / people analytics / COE. Tertiary — Hiring manager (minimal signals).
 
-**Key personas:** GCC recruiter / recruiting operations; TA leadership; implementation and value consulting  
-**Business goals:** Reduce time on compliance reporting (PM target vs frozen baseline); eliminate Excel for standard in-scope audits where the pack applies; honest parity with 101/DA26 positioning; no v1 portal API scope
+**Business goals:** Adoption (10 GCC enterprise customers in 6 months post-GA), ~30% reduction in time compiling nationalisation reports, zero quota miscalculation incidents attributed to native calculations (early adopter cohort, 12 months), DPIA (or equivalent) where Legal mandates before GA.
 
-## Cross-cutting constraints (Red Team dependency and scope)
+**420 notes from epic:** VS1 must be an **end-to-end walking skeleton**: activate pack → pipeline or req-level composition → offer with visible compliance outcome → export or executive view → audit evidence. Heavy admin, security tiers, and analytics depth may split to VS2/VS3. **319 + 060** on block, override, privacy, export warnings. **Counsel review** on any default filters that could imply exclusion by protected characteristics. **Spikes** for open PRD items (extra countries, Nitaqat/MOHRE band depth, Prism vs standalone, franchise roll-up, export field minimisation).
 
-Apply to **VS1** implementation and acceptance criteria unless explicitly deferred:
-
-• **HCM alignment:** A named **sign-off artefact** (e.g. workbook or recorded decision) is required that aligns **Recruiting reference dimensions** with **HCM-authoritative fields** so Recruiting does not silently duplicate Worker truth.  
-• **Reporting platform ownership:** Stories that touch **catalogue, run, export, or dashboard** must name **owning platform** (Recruiting vs HRIS / central reporting) and integration expectations; avoid orphan UI on undefined execution path.  
-• **Candidate PII and security domains:** New surfaces must document **security domain** behaviour for **candidate personal information** (access, masking, segregation) alongside role behaviour.  
-• **VS1 metrics scope:** **VS1** dashboard and programme report **metrics stay on Recruiting objects only** — **no implicit Worker joins** or HCM-derived roll-ups in v1 unless covered by the HCM sign-off artefact and a dedicated story.
+---
 
 ## User activities (horizontal backbone)
 
-1. Align dimensions and configure programme groupings  
-2. Map legacy data, validate coverage, and remediate gaps  
-3. Discover standard reports and consume dashboards  
-4. Produce evidence on demand  
-5. Review roll-up views for leadership  
-6. Enable services, GTM alignment, and operational governance (non-API)
+1. Configure nationalisation programmes and targets  
+2. Govern identity and classification on candidates and applications  
+3. Monitor quota, composition, and pipeline health  
+4. Resolve exceptions and approved overrides  
+5. Complete offers with compliance signals  
+6. Export, report, and brief leadership  
+7. Evidence compliance through audit trails and access control  
+
+---
 
 ## User tasks (vertical slices)
 
-### Activity 1: Align dimensions and configure programme groupings
+### Activity 1: Configure nationalisation programmes and targets
 
-- Produce HCM–Recruiting reference dimension alignment sign-off artefact → **VS1**  
-- Enable UAE, KSA, and Kuwait programme configuration for nationalisation reporting (reference dimensions do not duplicate Worker-authoritative fields) → **VS1**  
-- Define security and access model for new compliance surfaces (roles, domain behaviour, candidate PII) → **VS1**  
+- Activate **KSA** and **UAE** programme packs for the tenant → **VS1**  
+- Map legal entities, supervisory organisations, and/or locations to programmes (v1 scope per design) → **VS1**  
+- Maintain targets, thresholds, and **effective dates** for quota comparisons → **VS1**  
+- Set tenant policy for offer-stage **severity** (inform / warn; optional block behind explicit configuration) → **VS1**  
+- Version programme configuration and show change history to COE → **VS2**  
+- Bulk import or update targets from customer template (CSV/XLSX) → **VS2**  
+- **Spike / placeholder:** Deeper **Nitaqat / MOHRE** band logic as product vs customer-maintained reference data → **VS3**  
 
-### Activity 2: Map legacy data, validate coverage, and remediate gaps
+### Activity 2: Govern identity and classification on candidates and applications
 
-- Configure mapping from legacy custom fields to reference dimensions → **VS1**  
-- Run validation report and surface data gaps or inconsistencies → **VS1**  
-- Remediate or route mapping gaps (workflow or guidance; in-product or documented path per PRD) → **VS1**  
+- Ensure **primary nationality**, **additional nationalities**, and **government ID** patterns remain available and aligned to programme needs → **VS1**  
+- Derive and display **nationalisation classification** (for example local / national / expat / GCC) from configured rules → **VS1**  
+- Apply **role-based visibility** so sensitive attributes are minimised on default recruiter grids → **VS1**  
+- Route **classification exceptions** to COE with reason capture → **VS2**  
+- Support **just-in-time** help or notice patterns for sensitive fields (copy via **319** / **060**) → **VS2**  
 
-### Activity 3: Discover standard reports and consume dashboards
+### Activity 3: Monitor quota, composition, and pipeline health
 
-- Surface browseable catalogue of standard programme report definitions (Recruiting shell; **reporting platform ownership** stated in AC) → **VS1**  
-- Render compliance dashboard for a programme slice with explicit **data source**, **refresh model**, and platform ownership → **VS1**  
+- View **real-time** composition metrics at **requisition** or **pipeline** scope (counts, percentages vs target) → **VS1**  
+- View **trend** over a selected period at agreed scope → **VS1**  
+- **Drill into** the population contributing to a metric (transparent calculation) → **VS2**  
+- **Executive** or leadership dashboard across org hierarchy (aggregated) → **VS2**  
+- **Spike / placeholder:** **Franchise** or multinational **roll-up** boundaries (PRD open question) → **VS3**  
+- **Spike / placeholder:** **Prism** vs Recruiting-only analytics integration → **VS3**  
 
-### Activity 4: Produce evidence on demand
+### Activity 4: Resolve exceptions and approved overrides
 
-- Run a standard programme report manually and view in-product results → **VS1**  
-  - **NFR AC (embed in story):** acceptable run duration / timeout behaviour; degraded or partial-result messaging where applicable  
-- Export results when required and capture run metadata (runner, timestamp, definition version) → **VS1**  
-  - **NFR AC (embed in story):** export size limits, concurrent runs, load behaviour  
-- Establish **NFR and scale acceptance** for programme report run and export (limits, load, timeouts) as testable backlog criteria → **VS1**  
-- Show transparency copy (non-authoritative government interpretation; customer-configured metrics) → **VS1**  
+- Record **approved override** of classification or threshold with approver, reason, and timestamp → **VS1** (minimal path tied to offer or COE workflow)  
+- **Queue** or worklist of pending classification exceptions for COE → **VS2**  
+- Enforce **segregation of duties** between override requester and approver (where configured) → **VS2**  
 
-### Activity 5: Review roll-up views for leadership
+### Activity 5: Complete offers with compliance signals
 
-- Apply line-of-business and location **filter model** to compliance dashboard within product rules → **VS2**  
-- Execute **security test matrix** for LOB/location filters (role, domain, candidate PII boundaries) → **VS2**  
-- Share evidence pack narrative for stakeholders (in-product only; no new portal) → **VS2**  
+- **Evaluate** impact on quota / composition at **offer initiation** or **approval** step (configurable hook) → **VS1**  
+- Present **informational** or **warning** panel with plain-language explanation and drill link (no silent auto-reject) → **VS1**  
+- **Log** recruiter or approver **decision** when proceeding past a warning → **VS1**  
+- Optional **hard block** with Legal-approved messaging, documented override path, and accountability (tenant opt-in) → **VS2**  
+- **Minimal hiring manager signal** when policy requires visibility on GCC-facing reqs → **VS2**  
 
-### Activity 6: Enable services, GTM alignment, and operational governance (non-API)
+### Activity 6: Export, report, and brief leadership
 
-- Publish PS migration guidance for mapping custom fields to reference dimensions (artefact or in-product help per PRD) → **VS3**  
-- Ensure internal parity positioning hooks do not contradict appendix allowlist → **VS3**  
-- Operational and release **governance** for **definition version**, **catalogue updates**, and customer-visible change cadence → **VS3**  
+- **Export** period composition / compliance **CSV or XLSX** for **customer-operated** manual filing → **VS1**  
+- Show **export disclaimer** (customer responsibility for downloaded files; copy **319** / **060**) → **VS1**  
+- Support **data minimisation** export profile vs full field set (Legal-aligned options) → **VS2**  
+- Scheduled or saved report layouts for recurring board or authority cadence → **VS2**  
+
+### Activity 7: Evidence compliance through audit trails and access control
+
+- **Audit** views or changes to **compliance classifications**, **thresholds**, and **programme mappings** → **VS1**  
+- **Audit** offer-stage **warnings**, **blocks**, and **overrides** with user and timestamp → **VS1**  
+- Run **compliance investigator** view (filterable audit report) → **VS2**  
+- Align **retention and purge** behaviour for new artefacts with **Recruiting Data Purge** and PRD matrix (engineering / functional dependency) → **VS2**  
+
+---
 
 ## Value slices
 
-### VS1: Evidence pack (Recruiting-only walking skeleton)
+### VS1: Governed compliance spine
 
-**Goal:** Complete one Recruiting-only, in-scope audit path: **HCM-aligned dimensions** → **security model** → configure → map → validate → remediate → **catalogue** → **dashboard (source + refresh)** → **run** → **export** → **NFR/scale criteria** → transparency copy, suitable for **319**/**060** review. **Metrics in VS1 use Recruiting objects only** (no implicit Worker joins).
+**Goal:** A design-partner tenant can **activate** KSA/UAE programmes, see **live composition** against targets on at least one agreed scope (requisition or pipeline), encounter a **documented inform or warn** at offer with **decision logging**, **export** a period file for manual authority steps, and produce **audit evidence** for configuration and offer-linked events — without claiming automated government submission.
 
-**Stories:**
+**Stories (tasks):**
 
-1. Produce HCM–Recruiting reference dimension alignment sign-off artefact — *Activity 1*  
-2. Enable GCC programme configuration for nationalisation reporting dimensions (reference dimensions do not duplicate Worker-authoritative fields) — *Activity 1*  
-3. Define security and access model for compliance surfaces (roles, domains, candidate PII) — *Activity 1*  
-4. Configure mapping from legacy custom fields to reference dimensions — *Activity 2*  
-5. Run validation report and surface data gaps or inconsistencies — *Activity 2*  
-6. Remediate or route mapping gaps per PRD — *Activity 2*  
-7. Browse standard compliance report catalogue (platform ownership in AC) — *Activity 3*  
-8. View compliance dashboard with defined data source and refresh model (platform ownership in AC) — *Activity 3*  
-9. Run standard programme report on demand and view in-product results — *Activity 4* (include **NFR AC:** performance / timeouts)  
-10. Export report results with run metadata — *Activity 4* (include **NFR AC:** limits / load behaviour)  
-11. Establish NFR and scale acceptance for programme report run and export — *Activity 4*  
-12. Display transparency and legal-adjacent disclaimers for compliance reporting — *Activity 4*  
+1. Activate KSA/UAE packs and map org scope — *Activity 1*  
+2. Maintain targets, thresholds, and effective dates — *Activity 1*  
+3. Configure offer-stage severity defaulting to inform/warn — *Activity 1*  
+4. Align nationality / ID capture with programme (visibility and rules input) — *Activity 2*  
+5. Derive and show nationalisation classification on application — *Activity 2*  
+6. Apply role-based minimisation of sensitive fields on default recruiter surfaces — *Activity 2*  
+7. View requisition or pipeline composition vs target (counts, %) — *Activity 3*  
+8. Show trend for selected period at same scope — *Activity 3*  
+9. Evaluate compliance at offer step and show inform/warn panel — *Activity 5*  
+10. Log proceed / decision when user continues past warning — *Activity 5*  
+11. Export period CSV/XLSX with customer-responsibility disclaimer — *Activity 6*  
+12. Record audit events for programme config, classification changes, offer warnings — *Activity 7*  
+13. Minimal approved override path with reason (linked to offer or COE) — *Activity 4*  
 
-**Total stories:** 12  
+**Total stories:** 13  
 
-### VS2: Leadership and operational efficiency
+### VS2: Operating scale and depth
 
-**Goal:** Recruiting and TA leadership can roll up compliance views by LOB and location with **explicit filter semantics** and a **documented security test matrix**; evidence handoff stays in-product.
+**Goal:** Move adopters toward the PRD **~30% reporting time reduction** through **faster admin**, **deeper transparency** (drill-down), **leadership roll-ups**, **exception operations**, optional **block-with-override**, **HM signals**, and **richer exports** — still without Qiwa/Mudad automation.
 
-**Stories:**
+**Stories (tasks):**
 
-1. Apply LOB and location filter model to compliance dashboard — *Activity 5*  
-2. Security test matrix for LOB/location filters (roles, domains, candidate PII) — *Activity 5*  
-3. Prepare stakeholder summary view of compliance evidence (in-product) — *Activity 5*  
+1. Versioned programme configuration history for COE — *Activity 1*  
+2. Bulk import/update of targets — *Activity 1*  
+3. Classification exception queue for COE — *Activity 2*  
+4. Just-in-time sensitive-field copy and help — *Activity 2*  
+5. Drill into population driving a metric — *Activity 3*  
+6. Executive dashboard across hierarchy — *Activity 3*  
+7. Segregation of duties for overrides — *Activity 4*  
+8. Optional hard block with Legal-approved UX and override — *Activity 5*  
+9. Minimal hiring manager compliance signal on GCC reqs — *Activity 5*  
+10. Data minimisation vs full export profiles — *Activity 6*  
+11. Saved / scheduled export layouts — *Activity 6*  
+12. Compliance investigator audit reporting — *Activity 7*  
+13. Retention and purge alignment for new artefacts — *Activity 7*  
 
-**Total stories:** 3  
+**Total stories:** 13  
 
-### VS3: Services enablement, GTM-safe positioning, and catalogue governance
+### VS3: Statutory depth and platform fit
 
-**Goal:** PS and field teams can onboard tenants with documented mapping patterns; **GTM** language stays within PRD appendix and DA25/DA26 triangulation; **definition version and catalogue updates** are operationally governed.
+**Goal:** Reduce delivery risk from **open PRD questions** by time-boxed discovery and optional follow-on delivery: **extra GCC countries**, **band depth**, **Prism** alignment, **franchise roll-ups**, and **support access** models — without blocking VS1/VS2 GA narratives.
 
-**Stories:**
+**Stories (tasks):**
 
-1. Ship PS migration playbook and mapping guidance (linked from product or docs per PRD) — *Activity 6*  
-2. Align in-product GTM helper copy with Appendix allowlist (no scope bleed) — *Activity 6*  
-3. Operational and release governance for definition version and catalogue updates — *Activity 6*  
+1. Spike: Nitaqat / MOHRE band depth — product vs customer tables — *Activity 1*  
+2. Spike: Franchise and multinational roll-up architecture — *Activity 3*  
+3. Spike: Prism vs standalone Recruiting analytics — *Activity 3*  
+4. Spike: Additional GCC country pack priority (post KSA/UAE) — *Activity 1*  
+5. Spike: Workday support access model for classification disputes — *Activity 7*  
 
-**Total stories:** 3  
+**Total stories:** 5  
 
-## Story map visualization
+---
+
+## Story map visualisation
 
 ```
-Backbone →     [1] Align / configure    [2] Map / validate / remediate    [3] Discover    [4] Produce evidence    [5] Leadership    [6] Ops / GTM
-               ---------------------    ------------------------------    ------------    --------------------    --------------    ---------------
-VS1 stories         3                        3                              2                  4                   —                  —
-VS2 / VS3           —                        —                              —                  —                VS2: 3            VS3: 3
+Configure        Govern data       Monitor           Exceptions        Offer             Export            Audit
+---------        -----------       -------           ----------        -----             ------            -----
+VS1: packs       VS1: derive       VS1: req view     VS1: override     VS1: eval+warn    VS1: CSV+XLSX     VS1: audit core
+VS1: map org     VS1: RBAC         VS1: trend        VS2: queue        VS1: log decide    VS1: disclaimer   VS1: offer audit
+VS1: targets     VS2: exceptions  VS2: drill        VS2: SoD          VS2: block opt     VS2: minimise     VS2: investigator
+VS1: severity    VS2: JIT copy     VS2: exec         (spikes VS3)      VS2: HM signal     VS2: schedules    VS2: retention
+VS2: history     (spikes VS3)      VS3: franchise
+VS2: bulk                          VS3: Prism
+VS3: bands spike
+VS3: countries spike
 ```
+
+---
 
 ## Summary
 
 | Metric | Count |
-|--------|------|
-| Total activities | 6 |
-| Total tasks / stories | 18 |
-| Value slices | 3 |
-| VS1 stories | 12 |
-| VS2 stories | 3 |
-| VS3 stories | 3 |
+|--------|------:|
+| **Total activities** | 7 |
+| **Total tasks** | 31 |
+| **Value slices** | 3 |
+| **VS1 stories** | 13 |
+| **VS2 stories** | 13 |
+| **VS3 stories** | 5 |
 
-## Functional knowledge note
+---
 
-Reporting and purge-adjacent patterns in Workday often rely on **custom reports** and security domains; this epic elevates **reference dimensions** and **catalogued packs** per PRD. Detailed field names belong in design and implementation.
+## Orchestrator handoff (GCC E2E Step 27)
 
-**Red Team carry-over:** Implementation backlog should trace **HCM sign-off**, **reporting platform owner**, **candidate PII domain rules**, and **Recruiting-only VS1 metrics** from the **Cross-cutting constraints** section into epic or story **Description / AC** so **430** does not drop them at Jira create.
+- **Story map path:** `docs/story-maps/gcc-nationalisation-local-compliance-reporting-story-map.md`  
+- **Activities:** 7 (configure → govern data → monitor → exceptions → offer → export → audit)  
+- **Total user tasks in map:** 31  
+- **Value slices:**  
+  - **VS1 — Governed compliance spine:** Goal = end-to-end walking skeleton for design partner; **13** stories  
+  - **VS2 — Operating scale and depth:** Goal = efficiency and leadership depth toward ~30% reporting time reduction; **13** stories  
+  - **VS3 — Statutory depth and platform fit:** Goal = spikes / optional follow-on for open PRD items; **5** stories  
+
+**HITL:** Orchestrator presents **Story Map Review** (approve all, VS1 only, or request changes). **Do not** invoke **430** until PM selection is recorded.

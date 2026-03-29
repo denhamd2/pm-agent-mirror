@@ -6,106 +6,58 @@ import { fonts } from '@workday/canvas-kit-react-fonts';
 import '@workday/canvas-tokens-web/css/base/_variables.css';
 import '@workday/canvas-tokens-web/css/system/_variables.css';
 import '@workday/canvas-tokens-web/css/brand/_variables.css';
-import GccWhatsappOmnichannelEngagementV45 from './gcc-whatsapp-omnichannel-engagement-v45';
-import { GccCandidateGridV46 } from './gcc-candidate-grid-v46';
-import { GccCandidateGridRedesignV52 } from './gcc-candidate-grid-redesign-v52';
-import { GccCandidateGridRedesignV68 } from './gcc-candidate-grid-redesign-v68';
-import { GccCandidateReviewExperienceV54 } from './gcc-candidate-review-experience-v54';
-import { GccCandidateReviewCvCarouselV54 } from './gcc-candidate-review-cv-carousel-v54';
+import FranceWhatsappOmnichannelEngagementV75 from './france-whatsapp-omnichannel-engagement-v75';
 import { GccRecruiterDashboard } from './gcc-recruiter-dashboard';
-import GccNationalizationOobV56 from './gcc-nationalization-oob-v56';
 import { GccUnifiedCandidateReviewV57 } from './gcc-unified-candidate-review-v57';
-import GccNationalisationLocalComplianceReportingV58 from './gcc-nationalisation-local-compliance-reporting-v58';
-import GccNationalisationLocalComplianceReportingV59 from './gcc-nationalisation-local-compliance-reporting-v59';
-import GccNationalisationLocalComplianceReportingV60 from './gcc-nationalisation-local-compliance-reporting-v60';
 import GccNationalisationLocalComplianceReportingV61 from './gcc-nationalisation-local-compliance-reporting-v61';
+import GccNationalisationLocalComplianceReportingV62 from './gcc-nationalisation-local-compliance-reporting-v62';
 import { SANA_PAGE_CANVAS } from './components';
 
+/** Prototype slugs backed by `design/*.tsx` modules in this branch (see `vite.config.ts` `slugs` Set). */
 function prototypeFromLocation():
-  | 'whatsapp-v45'
-  | 'gcc-candidate-grid-v46'
-  | 'gcc-candidate-grid-redesign-v52'
-  | 'gcc-candidate-grid-redesign-v68'
-  | 'gcc-candidate-review-experience-v54'
-  | 'gcc-candidate-review-cv-carousel-v54'
+  | 'france-whatsapp-omnichannel-engagement-v75'
   | 'gcc-recruiter-dashboard'
-  | 'gcc-nationalization-oob-v56'
   | 'gcc-unified-candidate-review-v57'
-  | 'gcc-nationalisation-local-compliance-reporting-v58'
-  | 'gcc-nationalisation-local-compliance-reporting-v59'
-  | 'gcc-nationalisation-local-compliance-reporting-v60'
-  | 'gcc-nationalisation-local-compliance-reporting-v61' {
+  | 'gcc-nationalisation-local-compliance-reporting-v61'
+  | 'gcc-nationalisation-local-compliance-reporting-v62' {
   const path = window.location.pathname.replace(/\/+$/, '') || '/';
+  if (path.endsWith('france-whatsapp-omnichannel-engagement-v75')) {
+    return 'france-whatsapp-omnichannel-engagement-v75';
+  }
+  if (path.endsWith('gcc-nationalisation-local-compliance-reporting-v62')) {
+    return 'gcc-nationalisation-local-compliance-reporting-v62';
+  }
   if (path.endsWith('gcc-nationalisation-local-compliance-reporting-v61')) {
     return 'gcc-nationalisation-local-compliance-reporting-v61';
   }
-  if (path.endsWith('gcc-nationalisation-local-compliance-reporting-v60')) {
-    return 'gcc-nationalisation-local-compliance-reporting-v60';
-  }
-  if (path.endsWith('gcc-nationalisation-local-compliance-reporting-v59')) {
-    return 'gcc-nationalisation-local-compliance-reporting-v59';
-  }
-  if (path.endsWith('gcc-nationalisation-local-compliance-reporting-v58')) {
-    return 'gcc-nationalisation-local-compliance-reporting-v58';
-  }
   if (path.endsWith('gcc-unified-candidate-review-v57')) return 'gcc-unified-candidate-review-v57';
-  if (path.endsWith('gcc-nationalization-oob-v56')) return 'gcc-nationalization-oob-v56';
-  if (path.endsWith('gcc-candidate-review-cv-carousel-v54')) return 'gcc-candidate-review-cv-carousel-v54';
-  if (path.endsWith('gcc-candidate-review-experience-v54')) return 'gcc-candidate-review-experience-v54';
-  if (path.endsWith('gcc-candidate-grid-redesign-v68')) return 'gcc-candidate-grid-redesign-v68';
-  if (path.endsWith('gcc-candidate-grid-redesign-v52')) return 'gcc-candidate-grid-redesign-v52';
-  if (path.endsWith('gcc-candidate-grid-v46')) return 'gcc-candidate-grid-v46';
   if (path.endsWith('gcc-recruiter-dashboard')) return 'gcc-recruiter-dashboard';
   const h = window.location.hash.replace(/^#\/?/, '');
+  if (
+    h === 'france-whatsapp-omnichannel-engagement-v75' ||
+    h.startsWith('france-whatsapp-omnichannel-engagement-v75')
+  ) {
+    return 'france-whatsapp-omnichannel-engagement-v75';
+  }
+  if (
+    h === 'gcc-nationalisation-local-compliance-reporting-v62' ||
+    h.startsWith('gcc-nationalisation-local-compliance-reporting-v62')
+  ) {
+    return 'gcc-nationalisation-local-compliance-reporting-v62';
+  }
   if (
     h === 'gcc-nationalisation-local-compliance-reporting-v61' ||
     h.startsWith('gcc-nationalisation-local-compliance-reporting-v61')
   ) {
     return 'gcc-nationalisation-local-compliance-reporting-v61';
   }
-  if (
-    h === 'gcc-nationalisation-local-compliance-reporting-v60' ||
-    h.startsWith('gcc-nationalisation-local-compliance-reporting-v60')
-  ) {
-    return 'gcc-nationalisation-local-compliance-reporting-v60';
-  }
-  if (
-    h === 'gcc-nationalisation-local-compliance-reporting-v59' ||
-    h.startsWith('gcc-nationalisation-local-compliance-reporting-v59')
-  ) {
-    return 'gcc-nationalisation-local-compliance-reporting-v59';
-  }
-  if (
-    h === 'gcc-nationalisation-local-compliance-reporting-v58' ||
-    h.startsWith('gcc-nationalisation-local-compliance-reporting-v58')
-  ) {
-    return 'gcc-nationalisation-local-compliance-reporting-v58';
-  }
   if (h === 'gcc-unified-candidate-review-v57' || h.startsWith('gcc-unified-candidate-review-v57')) {
     return 'gcc-unified-candidate-review-v57';
-  }
-  if (h === 'gcc-nationalization-oob-v56' || h.startsWith('gcc-nationalization-oob-v56')) {
-    return 'gcc-nationalization-oob-v56';
-  }
-  if (h === 'gcc-candidate-review-cv-carousel-v54' || h.startsWith('gcc-candidate-review-cv-carousel-v54')) {
-    return 'gcc-candidate-review-cv-carousel-v54';
-  }
-  if (h === 'gcc-candidate-review-experience-v54' || h.startsWith('gcc-candidate-review-experience-v54')) {
-    return 'gcc-candidate-review-experience-v54';
-  }
-  if (h === 'gcc-candidate-grid-redesign-v68' || h.startsWith('gcc-candidate-grid-redesign-v68')) {
-    return 'gcc-candidate-grid-redesign-v68';
-  }
-  if (h === 'gcc-candidate-grid-redesign-v52' || h.startsWith('gcc-candidate-grid-redesign-v52')) {
-    return 'gcc-candidate-grid-redesign-v52';
-  }
-  if (h === 'gcc-candidate-grid-v46' || h.startsWith('gcc-candidate-grid-v46')) {
-    return 'gcc-candidate-grid-v46';
   }
   if (h === 'gcc-recruiter-dashboard' || h.startsWith('gcc-recruiter-dashboard')) {
     return 'gcc-recruiter-dashboard';
   }
-  return 'whatsapp-v45';
+  return 'france-whatsapp-omnichannel-engagement-v75';
 }
 
 function AppRoot() {
@@ -119,27 +71,18 @@ function AppRoot() {
       window.removeEventListener('hashchange', sync);
     };
   }, []);
+  if (route === 'france-whatsapp-omnichannel-engagement-v75') {
+    return <FranceWhatsappOmnichannelEngagementV75 />;
+  }
+  if (route === 'gcc-nationalisation-local-compliance-reporting-v62') {
+    return <GccNationalisationLocalComplianceReportingV62 />;
+  }
   if (route === 'gcc-nationalisation-local-compliance-reporting-v61') {
     return <GccNationalisationLocalComplianceReportingV61 />;
   }
-  if (route === 'gcc-nationalisation-local-compliance-reporting-v60') {
-    return <GccNationalisationLocalComplianceReportingV60 />;
-  }
-  if (route === 'gcc-nationalisation-local-compliance-reporting-v59') {
-    return <GccNationalisationLocalComplianceReportingV59 />;
-  }
-  if (route === 'gcc-nationalisation-local-compliance-reporting-v58') {
-    return <GccNationalisationLocalComplianceReportingV58 />;
-  }
   if (route === 'gcc-unified-candidate-review-v57') return <GccUnifiedCandidateReviewV57 />;
-  if (route === 'gcc-nationalization-oob-v56') return <GccNationalizationOobV56 />;
-  if (route === 'gcc-candidate-review-cv-carousel-v54') return <GccCandidateReviewCvCarouselV54 />;
-  if (route === 'gcc-candidate-review-experience-v54') return <GccCandidateReviewExperienceV54 />;
-  if (route === 'gcc-candidate-grid-redesign-v68') return <GccCandidateGridRedesignV68 />;
-  if (route === 'gcc-candidate-grid-redesign-v52') return <GccCandidateGridRedesignV52 />;
-  if (route === 'gcc-candidate-grid-v46') return <GccCandidateGridV46 />;
   if (route === 'gcc-recruiter-dashboard') return <GccRecruiterDashboard />;
-  return <GccWhatsappOmnichannelEngagementV45 />;
+  return <FranceWhatsappOmnichannelEngagementV75 />;
 }
 
 const FIGMA_CAPTURE_SCRIPT_SRC =

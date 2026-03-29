@@ -42,7 +42,11 @@ When invoked after 320 builds a prototype, you:
 
 ### Canvas Kit Usage
 - [ ] Components visually match Canvas Kit patterns
+- [ ] **Status badges use `StatusIndicator` component** (NOT custom Box with inline bg/border)
+- [ ] **Skills/tags use `StatusIndicator type=Gray emphasis=Low`** (NOT custom pill divs)
+- [ ] **Stage displays with dots use `StatusIndicator` + icon** (e.g., `dotIcon`, NOT custom circular Box)
 - [ ] Buttons use correct variants (Primary/Secondary/Tertiary)
+- [ ] **Button hierarchy correct**: Destructive actions use SecondaryButton (NEVER TertiaryButton which appears as text link)
 - [ ] Tables use proper structure (headers, rows, cells)
 - [ ] Forms use FormField wrappers with proper labels
 - [ ] Icons are SystemIcon (not custom SVGs)
@@ -64,6 +68,19 @@ When invoked after 320 builds a prototype, you:
 - [ ] No breadcrumbs or chevron path strips
 - [ ] CommunicationDock placement correct (if applicable)
 - [ ] Filters/controls positioned as specified
+
+### Content Quality (from v75 learnings)
+- [ ] **Every tab has rich content** - Not just presence but depth: realistic job titles, dates, company names, file names, detailed feedback quotes, structured metadata
+- [ ] **Visual indicators applied with Canvas Kit** - Status badges use `StatusIndicator` with correct type (Blue=active, Green=complete, Grey=neutral, Orange=caution); skill chips use `StatusIndicator` Gray/Low; stage dots use `StatusIndicator` with `dotIcon`; avatars use `Avatar` component
+- [ ] **Metadata layers present** - Timestamps, sources, participant roles, file sizes, durations, added-by info where contextually relevant
+- [ ] **Structured formatting** - Proper hierarchies, sections, and groupings (not flat lists or minimal placeholders)
+- [ ] **Clickable elements styled** - Links, document names, job titles use `SANA_LINK_ACCENT` consistently
+- [ ] **Tables have structured content** - Representative production-like data (not just ["Value1", "Value2"])
+- [ ] **Professional polish** - Every tab feels like a shipped product screen with realistic detail, not a wireframe or stub
+- [ ] **Status badges formatted correctly** - Use inline Box style with semantic colors from 320 patterns (not hardcoded hex)
+- [ ] **Skill chips formatted correctly** - `soap100` bg, `soap300` border, `12px` radius, proper spacing
+- [ ] **Timeline indicators present** - Where process/history shown, use `green500` dots or checkmarks + metadata
+- [ ] **Document/attachment styling** - Icons, file names as clickable links, metadata (added-by, date, size)
 
 ### Experience Principles (Interactive Lens)
 Read `docs/experience-principles.md` to validate how the RUNNING prototype delivers on principles:
@@ -174,7 +191,7 @@ Append findings to the Design Brief as:
 ## Triggers
 
 You activate when:
-- Orchestrator: After Step 8 (320 prototype build), before Step 10 (330 Figma capture) in Regional E2E
+- Orchestrator: After Step 22 (320 prototype build), before Step 25 (330 Figma capture) in Regional E2E
 - User: "Visual review of prototype", "Check prototype for UX bugs", "Review [prototype URL]"
 - Standalone: "Analyze http://localhost:5199/[slug] for visual bugs"
 

@@ -5,6 +5,7 @@ import { colors, space } from '@workday/canvas-kit-react/tokens';
 import {
   SANA_COMM_RAIL_ACTIVE_BG,
   SANA_COMM_RAIL_ACTIVE_ICON,
+  SANA_PANEL_SHADOW,
 } from './sanaShellTheme';
 
 export const DEFAULT_COMM_RAIL_PX = 56;
@@ -62,6 +63,7 @@ export const CommunicationDock: React.FC<CommunicationDockProps> = ({
           display: 'flex',
           flexDirection: 'column',
           flexShrink: 0,
+          boxShadow: expanded ? SANA_PANEL_SHADOW : 'none',
         }}
       >
         <Card
@@ -76,7 +78,6 @@ export const CommunicationDock: React.FC<CommunicationDockProps> = ({
             borderRadius: 0,
             border: 'none',
             borderLeft: `1px solid ${colors.soap300}`,
-            boxShadow: expanded ? '-8px 0 24px rgba(15, 46, 102, 0.16)' : 'none',
           }}
         >
           {panel}

@@ -84,7 +84,7 @@ Before finalizing analysis:
 
 ## 100-series — fresh pass (mandatory)
 
-On **every** invocation (standalone or orchestrated Regional E2E Step 6), execute a **fresh** pass:
+On **every** invocation (standalone or orchestrated Regional E2E Step 5), execute a **fresh** pass:
 
 - Re-read **all** in-scope source files in `research/[Country]/brainstorm-sessions/` for this run (extensions below)
 - Regenerate or overwrite the analysis file for this mission with **## Fresh pass attestation** (see below)
@@ -154,7 +154,7 @@ You activate when the user or **000-master-orchestrator** says:
 - "Analyse customer ideation sessions" / "Analyze ideation sessions" for **[Country]**
 - "Synthesise customer ideation hub" / "Synthesize ideation data"
 - "Run **106**" / "Customer Ideation Hub analyser"
-- **Regional E2E Step 6** (optional): after **105** Step 5, if any `*.txt`, `*.csv`, `*.xlsx`, or `*.xls` exists under `research/[Country]/brainstorm-sessions/`
+- **Regional E2E Step 5** (optional): after **101** Step 4, if any `*.txt`, `*.csv`, `*.xlsx`, or `*.xls` exists under `research/[Country]/brainstorm-sessions/`
 
 **Disambiguation:** "Brainstorm **improvements** to my agent setup" or "brainstorm improvements" → **090-agent-improvement-advisor**, not **106**.
 
@@ -165,7 +165,7 @@ You activate when the user or **000-master-orchestrator** says:
 
 ## Integration with orchestrator
 
-- **Regional E2E:** Optional **Step 6** only if brainstorm source files exist; never blocks **120** if the folder is empty
+- **Regional E2E:** Optional **Step 5** only if brainstorm source files exist; never blocks **105** or **120** if the folder is empty
 - Log output path + mission ID in **MISSION_LOG.md** when orchestrated
 
 ---

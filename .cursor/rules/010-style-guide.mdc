@@ -88,11 +88,38 @@ Apply to **all** in-repo Canvas Kit prototypes under `design/`, Figma capture ta
 - **Compact UI** (chips, message bubbles, small controls): **~12px** radius for a softer, conversational feel.
 
 ### Prototype shell (mandatory for `design/*.tsx` Recruiting prototypes)
-- **`WorkdayTopNav`** (`design/components/WorkdayTopNav.tsx`): Grey bar (**`SANA_TOP_NAV_BG`**); Canvas Kit **`InputGroup`** + **`InputGroup.Input`** for **white** pill search; **`ToolbarIconButton`** utilities (dark icons); **`CountBadge`** on inbox/notifications; **`Avatar`**; optional tenant **`Heading`**. Extend via props (`trailingActions`, `showMenuWordmark`, `showWMark`, `compactTrailing`, etc.); **do not** reimplement top chrome inline for new prototypes.
+- **`WorkdayTopNav`** (`design/components/WorkdayTopNav.tsx`): Grey bar (**`SANA_TOP_NAV_BG`**); Canvas Kit **`InputGroup`** + **`InputGroup.Input`** for **white** pill search; **`ToolbarIconButton`** utilities (dark icons); **`CountBadge`** on inbox/notifications; **`Avatar`**; optional tenant **`Heading`**. The **Workday logo** (`WorkdayWMark`) renders **without a white background circle** - just the orange swoosh and navy W directly on the grey bar for a cleaner appearance. Extend via props (`trailingActions`, `showMenuWordmark`, `showWMark`, `compactTrailing`, etc.); **do not** reimplement top chrome inline for new prototypes.
 - **`WorkdayLeftTabBar`** (`design/components/WorkdayLeftTabBar.tsx`): Primary rail = **`SystemIcon`** + **uppercase micro-label** (9px, wide letter-spacing, pepper grey). Secondary column = **same grey** as rail; hub **`Heading`** + optional **`userIcon`**; section tabs = **full pill** radius, **inactive** medium grey / **active** darker grey pill + bold near-black (tokens in **`sanaShellTheme.ts`**). Do not use **`TertiaryButton`** for section tabs. Use on every full-page prototype unless the brief explicitly scopes a modal-only or single-panel demo.
 - **No breadcrumbs in prototypes (hard rule)**: In **`design/*.tsx`** (and any future prototype entrypoints), do **not** import or render Canvas Kit **`Breadcrumbs`**, and do **not** build **ad hoc hierarchy strips** (labels separated by chevrons or slashes meant to read like a path, e.g. `Recruiting › Reqs › …`). **No exceptions** — not even when a PRD mentions hierarchy. Instead, you **MUST** use a primary Page Title (`<Heading size="large">`) at the top of the main content area to establish clear hierarchy before any tabs or cards. Secondary context belongs in subtitle lines, table captions, or metadata under the title — never a path strip.
 - **`CommunicationDock`**: sliding column wrapped in Canvas Kit **`Card`** (`padding="zero"`); **defaults to collapsed** (user clicks rail icon to open). Narrow **right rail** uses **`communicationRailButtonStyle`** (Sana: **~10px rounded tile**, active channel = **light blue fill** + **link-colour** icon ring per `sanaShellTheme`). Panel **header** on **white** (`SANA_COMM_PANEL_SURFACE`); body fields use **shared comm patterns** below — **not** ad hoc 4px corners or soap100 fills for primary inputs.
-- **Communication sliding panel (all channels)**: For **Email, SMS, Notes, LINE, WhatsApp**, and similar, reuse **`SanaCommComposer`**, **`SanaCommMessageBubble`**, and **`sanaCommFormControlStyle`** from `design/components/SanaCommPanelPatterns.tsx` (exported via `design/components/index.ts`). **Composer**: pill container (**`SANA_COMM_COMPOSER_RADIUS_PX`**), **white** fill, **soap300** border, **link-colour** border + outer ring on **focus**, **circular send** control inset bottom-right. **Thread bubbles**: **white** background, **`soap300`** hairline border, **`SANA_COMM_MESSAGE_RADIUS_PX`** (~12px), small **grey** timestamps. **Form controls** in the panel (selects, one-line inputs): **white** background, **12px** radius, **44px** min height — match `design/references/sana/Sana_Style_UI-candidate-profile-whatsapp-panel.png`.
+- **Communication sliding panel (all channels)**: 
+  - **WhatsApp, SMS, Notes, LINE** (simple messaging): Use `SanaCommComposer` + `SanaCommMessageBubble` inline per `SanaCommPanelPatterns.tsx`
+  - **Email** (full-featured): Use `EmailPanel` component (950px width) - includes thread sidebar, rich text composer, Gmail-style expansion, templates, branding
+  - **Email** (simple compose): Use `EmailComposer` component (no thread sidebar) - includes From/To/Cc/Subject + rich text
+  - **Rich text** (any context): Use `RichTextEditor` component - functional formatting toolbar (Bold/Italic/Underline/Link/List)
+  - **Thread expansion** (any channel): Use `ThreadExpansion` for Gmail-style inline collapsible history
+
+### Depth and Shadows
+
+**Card shadows (in-flow content):**
+- Standard cards: `SANA_CARD_SHADOW` - subtle depth (`0 1px 2px rgba(15, 46, 102, 0.04)`)
+- Lifted/hover: `SANA_CARD_SHADOW_LIFTED` - slightly more prominent (`0 1px 3px rgba(15, 46, 102, 0.08)`)
+
+**Panel shadows (overlays and sliding drawers):**
+- Sliding panels: `SANA_PANEL_SHADOW` - layered depth for overlays
+  - Primary layer: `-8px 0 32px rgba(15, 46, 102, 0.20)` (wide blur, stronger opacity)
+  - Secondary layer: `-2px 0 8px rgba(15, 46, 102, 0.10)` (tight edge definition)
+  - Applied to Box wrapper (parent), NOT Card (avoids overflow:hidden clipping)
+  - Use for: CommunicationDock, modal overlays, drawers, flyouts
+
+**Implementation note:** When building sliding panels with `overflow: hidden` for animation, apply `boxShadow` to the animating container (Box wrapper), not to inner content (Card), to prevent shadow clipping.
+
+- **Profile page layout component**: For hub-style pages (candidate profiles, worker profiles, requisition details, hiring manager views), use **`ProfilePageLayout`** (`design/components/ProfilePageLayout.tsx`) - handles header card (avatar, title, subtitle, actions), tab navigation via `WorkdayLeftTabBar`, optional `CommunicationDock` integration, and consistent Sana styling. Provide tab content via `renderTabContent` render prop. Reduces boilerplate from ~200 lines of shell code to ~30 lines of props. Ensures consistency across all profile pages.
+- **Profile content patterns (Canvas Kit components)**: Within profile page tabs, ALWAYS use proper Canvas Kit components for common patterns:
+  - **Skills/tags**: Use `StatusIndicator` with `type={StatusIndicator.Type.Gray}` and `emphasis={StatusIndicator.Emphasis.Low}` - NEVER custom Box with inline styling
+  - **Status badges**: Use `StatusIndicator` with appropriate type (Blue for active, Green for success, Gray for inactive, Orange for caution) and Low emphasis
+  - **Why**: Ensures Canvas Kit design tokens, WCAG contrast compliance, consistent shape (borderRadius.s), and accessibility
+  - **See**: `design/README.md` Content Patterns section and `320-prototype-developer.mdc` for detailed examples
 - **Candidate profile (full page)**: Follow **`design/references/sana/Sana_Style_UI-candidate-profile-whatsapp-panel.png`** together with existing shell references: **large header card** on **light grey** with **avatar**, name line, job meta; **vertical sub-nav** in the secondary column with **pill** active state (**`WorkdayLeftTabBar`**); **white** rounded **content cards** on **`SANA_PAGE_CANVAS`** with **thin soap borders**; **two-column grid** for overview + job/history where appropriate. **Do not** add **breadcrumb / chevron path** strips (see hard rule above). Reserve **`DEFAULT_COMM_RAIL_PX`** on the right when the **CommunicationDock** is present.
 - **Theme exports**: Import **`SANA_PAGE_CANVAS`**, **`SANA_CARD_SHADOW`**, **`SANA_SHELL_RADIUS`**, etc. from `design/components/sanaShellTheme.ts` (re-exported in `design/components/index.ts`) instead of scattering one-off hexes.
 
@@ -415,14 +442,21 @@ Override the auto-generation by explicitly defining slide 2 in your JSON spec:
 ### Table Styling
 - **Font size:** Use 7-10pt for table content to maximize readability while fitting content
   - **Standard tables**: 8-9pt for VP-friendly readability
-  - **SWOT Analysis**: **10pt** (VP executive presentation standard)
+  - **SWOT Analysis**: **9pt ONLY** - set at table level to ensure consistency across all cells
   - **Competitive Landscape tables (Regional Specialists, Global Platforms)**: **8pt ONLY** - set at table level only
 - **Headers:** Navy background (`ink` color) with white text (`paper` color)
 - **Header height:** **MUST be `header_height_inches: 0.25`** for compact, professional headers (especially SWOT analysis)
   - **CRITICAL**: Do NOT omit this property - default header heights are too tall
   - **Note**: This only controls header row height; content rows auto-size based on text
 - **SWOT Analysis tables:** Use **SINGLE 2x2 table** with all four quadrants (Strengths|Weaknesses in first content row, Opportunities|Threats in second content row)
-- **SWOT content formatting**: Each cell should contain **bullet-pointed content** (use `\n• ` for bullets within table cells) with 3-5 detailed points per quadrant for VP audience
+  - **CRITICAL - Font size**: Set `font_size_pt: 9` at table level (NOT 10pt) - this ensures consistent 9pt rendering for all cells
+  - **CRITICAL - No row heights**: Do NOT specify `height_inches` for content rows - let PowerPoint auto-calculate based on content for compact, balanced layout
+  - **CRITICAL - Consistent row styling**: ALL content rows (Strengths/Weaknesses AND Opportunities/Threats) must have identical styling - no special background colors or text colors for different quadrant rows
+- **SWOT content formatting**: Each cell should contain **bullet-pointed content** using native PowerPoint bullets with proper `paragraphs` array structure (NOT Unicode `\n• ` text)
+  - Use `paragraphs` array with `level: 1` for each bullet point
+  - Each bullet is a separate paragraph object in the array
+  - PowerPoint will render native bullets automatically
+  - 3-5 detailed points per quadrant for VP audience
 - **Competitive Landscape table content formatting (MANDATORY)**: Use **plain text with semicolons or commas as separators** (NOT bullet-formatted text within cells)
   - ❌ FORBIDDEN: `"• Point 1\n• Point 2\n• Point 3"` in competitive tables (causes rendering inconsistency)
   - ✅ CORRECT: `"Point 1; Point 2; Point 3"` (ensures consistent 8pt rendering)
@@ -438,17 +472,49 @@ Override the auto-generation by explicitly defining slide 2 in your JSON spec:
       "rows": [
         ["Strengths", "Weaknesses"], 
         [
-          "• Suite integration and HCM adjacency for hire-to-retire governance\n• Enterprise security, audit, and GDPR-class tooling for RFP legal reviews\n• HiredScore and Paradox when activated for volume and scheduling\n• Multi-country templates for GCC HQs standardising policy with local fields\n• Broadbean-certified job-board strategy avoiding native board sprawl",
-          "• WhatsApp and omnichannel gap risk until SKU and UAT clarity lands\n• Government portal and nationalisation executive experience wants native-feeling dashboards\n• Arabic and RTL document fidelity historically trust-breaking for some tenants\n• SMS and messaging framework answers drift across internal capability research notes; triangulate before claims\n• Semantic AI match without add-ons creates demo risk if sellers imply free parity"
+          {
+            "paragraphs": [
+              {"level": 1, "text": "Suite integration and HCM adjacency for hire-to-retire governance"},
+              {"level": 1, "text": "Compliance-first architecture with GDPR-class tooling and DPDP-aligned programme paths"},
+              {"level": 1, "text": "HiredScore and Paradox differentiation when activated with governance"},
+              {"level": 1, "text": "Enterprise security, audit, and multinational rollout proof points"},
+              {"level": 1, "text": "Strategic alignment to India Q2 scale growth, DPDP, and partner-led boards"}
+            ]
+          },
+          {
+            "paragraphs": [
+              {"level": 1, "text": "India competitive narrative requires crisp SKU clarity on SMS, WhatsApp, and AI"},
+              {"level": 1, "text": "Local suite bundling and TCO pressure from India-first HR suites"},
+              {"level": 1, "text": "Messaging channel fit versus WhatsApp-first culture under enterprise policy constraints"},
+              {"level": 1, "text": "Job board story depends on Broadbean verification for India must-post boards"},
+              {"level": 1, "text": "Table-stakes execution risk on mobile, bulk, and scheduling without Paradox activation"}
+            ]
+          }
         ],
         ["Opportunities", "Threats"], 
         [
-          "• Q2 GCC OKR tailwinds tie features to permit and fine avoidance narratives\n• PDPL plus AI governance differentiation if collateral is credible and fast\n• Paradox and HiredScore activation programmes convert latent entitlement\n• Broadbean depth closes integration objections without native board builds\n• Dubai expansion improves local execution credibility with partners",
-          "• Regional bundle competitors win TCO on payroll plus compliance packaging\n• Oracle and SAP feature marketing on WhatsApp and AI in enterprise RFPs\n• Legal and AI compliance burden slows roadmaps if legal review is not pre-staged\n• Inconsistent capability answers erode trust if sales over-rotates single threads\n• Global policy forbidding casual WhatsApp may block GCC UX without approved channels"
+          {
+            "paragraphs": [
+              {"level": 1, "text": "DPDP enforcement increases demand for prescriptive defaults and evidence packs"},
+              {"level": 1, "text": "Q2 India eight-customer mandate creates coherent GTM story on trusted data and volume efficiency"},
+              {"level": 1, "text": "Omnichannel differentiation if SMS and WhatsApp SKU plus policy story lands"},
+              {"level": 1, "text": "HiredScore and Paradox activation programmes convert latent entitlement to competitive talking points"},
+              {"level": 1, "text": "Bangalore and Mumbai expansion improves local execution credibility with partners"}
+            ]
+          },
+          {
+            "paragraphs": [
+              {"level": 1, "text": "Darwinbox, Keka, Zoho bundle speed and INR pricing for mid-market anchoring"},
+              {"level": 1, "text": "SAP and Oracle incumbency in ERP-aligned India enterprises"},
+              {"level": 1, "text": "DPDP complexity and procurement elongation on legal review cycles"},
+              {"level": 1, "text": "Messaging framework answers drift erodes trust if sales over-rotates incomplete research"},
+              {"level": 1, "text": "Global policy forbidding casual WhatsApp may block India UX without approved enterprise channels"}
+            ]
+          }
         ]
       ],
       "top_inches": 1.0,
-      "font_size_pt": 10,
+      "font_size_pt": 9,
       "header_row": true,
       "header_bg_color": "ink",
       "header_font_color": "paper",

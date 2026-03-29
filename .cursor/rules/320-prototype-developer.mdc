@@ -29,6 +29,7 @@ When the user mentions "implement", "prototype", "Canvas Kit", or provides desig
 
 1. Read `design/[feature]-design-brief.md` for **Jobs to be done (worksheet-aligned)**, **Reusable layout components**, and **Visual shell & references**. Align demo flow and copy with the **synthesised JTBD**; use **`docs/jtbd-recruiting-hr-professional-and-manager.md`** if the brief references it and you need fuller wording. When the brief names **candidate**-primary or **frontline manager** flows, skim the relevant PDF under **`docs/workday-user-research/`** (see **`README.md`**) for **realistic tasks and labels** — still implement with Canvas Kit + Sana per **`010-style-guide.mdc`**.
 2. **`WorkdayTopNav`** (mandatory for full-page Recruiting prototypes unless the brief says **custom**): import from `design/components/WorkdayTopNav.tsx` (or `design/components`). Default configuration matches **Sana** reference (W mark, pill search with placeholder *Search or ask a question*, refresh + apps grid, separate `notificationBadge` and `inboxBadge`, avatar). Configure via props (`trailingActions`, `showMenuWordmark`, `showWMark`, `compactTrailing`, `showLayoutUtilities`, etc.). **Do not** duplicate top chrome inline.
+   - **Workday logo styling**: The `WorkdayWMark` component has **no white background circle** - it renders the orange swoosh and navy W directly on the grey top nav bar for a cleaner, more modern appearance. This is intentional and should not be changed.
 3. **Check shared form components** before building filters/forms:
    - `FormSelect` - dropdown filters (Stage, Source, Location, Status)
    - `FormTextInput` - text inputs with validation
@@ -39,6 +40,176 @@ When the user mentions "implement", "prototype", "Canvas Kit", or provides desig
 5. **No breadcrumbs** — **Never** use Canvas Kit **`Breadcrumbs`** or custom **chevron-separated path strips** (hierarchy trails) in any prototype under `design/`. **PRDs cannot override** this workspace rule. Rely on **`Heading`** + **`WorkdayLeftTabBar`** + **`Tabs`** and optional **metadata `BodyText`** under the title for req ID / location.
 6. **Page canvas and tokens**: use **`SANA_PAGE_CANVAS`** and related exports from `design/components/sanaShellTheme.ts` (barrel `design/components/index.ts`) for viewport background, card radii, and shadows so new prototypes align with **`010-style-guide.mdc` → Sana** and `design/references/sana/`.
 7. If the brief marks **`CommunicationDock`**: **Yes** → import from `design/components/CommunicationDock.tsx`, pass `panel` and `rail` children. **IMPORTANT: Always default to collapsed** (`expanded={false}` or controlled via state with initial `false`); user clicks rail icon button to open the panel. **Rail**: use **`communicationRailButtonStyle`** (Sana **light blue active tile**, ~10px radius). **Panel**: **white** header surface (`SANA_COMM_PANEL_SURFACE`); for **Email, SMS, Notes, LINE, WhatsApp**, etc., use **`SanaCommComposer`**, **`SanaCommMessageBubble`**, and **`sanaCommFormControlStyle`** from `design/components/SanaCommPanelPatterns.tsx` for **pill composer**, **thread bubbles**, and **rounded form controls** — see **`010-style-guide.mdc`** and **`design/references/sana/Sana_Style_UI-candidate-profile-whatsapp-panel.png`**. The dock wraps the sliding column in a Canvas Kit **`Card`** (`padding="zero"`); inner sections may use `Card`, `Banner`, `FormField`. **Do not** reimplement the fixed rail + overlay sheet unless the brief says **custom**.
+
+**Email channel implementation:**
+- **Full email** (thread sidebar, history, Gmail pattern): Use `EmailPanel` component from `design/components/EmailPanel.tsx`
+- **Simple email** (compose only, no threading): Use `EmailComposer` component from `design/components/EmailComposer.tsx`
+- **Rich text** (any context): Use `RichTextEditor` component from `design/components/RichTextEditor.tsx`
+  - **Templates**: Enable `showTemplates` to show 6 recruiting email templates (Interview Availability, Interview Confirmation, Offer Renegotiation, Application Status, Documents Request, Pre-Screen Follow-Up)
+  - **Token system**: Templates include `{{candidateFirstName}}`, `{{jobTitle}}`, `{{recruiterName}}`, etc. Pass `candidateData` prop to auto-replace tokens
+  - **GenAI**: Enable `showGenAI` to show sparkle icon in toolbar; clicking improves text with realistic mock transformations (1.5s delay, professional tone, greeting/closing fixes)
+  - **Example with templates + GenAI**:
+    ```tsx
+    <RichTextEditor
+      value={body}
+      onChange={(html, text) => setBody(text)}
+      showTemplates
+      showGenAI
+      candidateData={{
+        firstName: 'Sarah',
+        jobTitle: 'Senior Product Manager',
+        recruiterName: 'David Denham',
+        companyName: 'Workday'
+      }}
+    />
+    ```
+- Pass to `CommunicationDock` with `expandedWidthPx: 950` for email (wider than WhatsApp's 450px)
+- All email-specific styling, threading, and rich text patterns are built-in
+- Example (full email):
+  ```tsx
+  import { EmailPanel, type EmailThread } from './components';
+  
+  <CommunicationDock
+    channels={[
+      { 
+        id: 'email', 
+        icon: mailIcon, 
+        label: 'Email', 
+        expandedWidthPx: 950,
+        panel: (
+          <EmailPanel
+            threads={emailThreads}
+            activeThreadId={activeEmailThreadId}
+            onThreadSelect={setActiveEmailThreadId}
+            onNewEmail={() => { /* reset fields */ }}
+            from={from} to={to} cc={cc} subject={subject} body={body}
+            onFromChange={setFrom} onToChange={setTo}
+            onCcChange={setCc} onSubjectChange={setSubject}
+            onBodyChange={(html, text) => setBody(text)}
+            onSend={sendEmail}
+            onClosePanel={collapse}
+            showBranding brandingChecked={branding}
+            onBrandingChange={setBranding}
+          />
+        )
+      }
+    ]}
+  />
+  ```
+
+**WhatsApp channel implementation (unchanged):**
+- Continue using `SanaCommComposer` + `SanaCommMessageBubble` inline
+- No additional abstraction needed
+- Pattern is proven and documented
+
+**Profile page layout pattern:**
+- **Use `ProfilePageLayout`** for hub-style pages with header card, tab navigation, and optional communication channels
+- **When to use**: Candidate profiles, worker profiles, requisition details, hiring manager views
+- **When NOT to use**: Simple list views, single-panel pages, settings pages without tabs
+- Component handles shell structure (header, tabs, dock), you provide content via render props
+- **Content standards**: Use proper Canvas Kit components for common patterns (see Content Patterns below)
+- Example (candidate profile):
+  ```tsx
+  import { ProfilePageLayout, type ProfileTab, cardStyle } from './components';
+  import { StatusIndicator } from '@workday/canvas-kit-react/status-indicator';
+  
+  const TABS: ProfileTab[] = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'applications', label: 'Job applications' },
+    { id: 'screening', label: 'Screening' },
+    // ... etc
+  ];
+  
+  <ProfilePageLayout
+    // Header card
+    avatar={<Avatar size={64} altText={candidate.name} as="div" />}
+    name={candidate.name}
+    subtitle={`${candidate.title} · ${candidate.jobReq} · ${candidate.location}`}
+    headerActions={[
+      <SecondaryButton size="small">Move forward</SecondaryButton>,
+      <SecondaryButton size="small">Reject</SecondaryButton>
+    ]}
+    
+    // Tab navigation
+    tabs={TABS}
+    activeTabId={activeTab}
+    onTabChange={setActiveTab}
+    secondaryTitle="Candidate"
+    showSecondaryTitleIcon
+    
+    // Tab content (render prop)
+    renderTabContent={(tabId) => {
+      switch (tabId) {
+        case 'overview':
+          return (
+            <Flex flexDirection="column" gap="l">
+              <Card padding="l" style={cardStyle()}>
+                <Heading size="small" marginBottom="m">Candidate Summary</Heading>
+                {/* Use StatusIndicator for skills/tags */}
+                <BodyText size="small" fontWeight="bold" marginBottom="xxs">
+                  Top Skills
+                </BodyText>
+                <Flex gap="xs" flexWrap="wrap" marginBottom="m">
+                  {['React', 'TypeScript', 'Figma'].map(skill => (
+                    <StatusIndicator
+                      key={skill}
+                      type={StatusIndicator.Type.Gray}
+                      emphasis={StatusIndicator.Emphasis.Low}
+                      label={skill}
+                    />
+                  ))}
+                </Flex>
+              </Card>
+            </Flex>
+          );
+        case 'applications':
+          return (
+            <Card padding="l" style={cardStyle()}>
+              <Heading size="small" marginBottom="m">Applications</Heading>
+              <Table>
+                <Table.Head>
+                  <Table.Row>
+                    <Table.Header>Job Requisition</Table.Header>
+                    <Table.Header>Status</Table.Header>
+                  </Table.Row>
+                </Table.Head>
+                <Table.Body>
+                  <Table.Row>
+                    <Table.Cell>Senior Designer (REQ-2026-1234)</Table.Cell>
+                    <Table.Cell>
+                      {/* Use StatusIndicator for status badges */}
+                      <StatusIndicator
+                        type={StatusIndicator.Type.Blue}
+                        emphasis={StatusIndicator.Emphasis.Low}
+                        label="Interview"
+                      />
+                    </Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+              </Table>
+            </Card>
+          );
+        // ... other tabs
+      }
+    }}
+    
+    // Optional: Communication dock
+    communicationDock={{
+      channels: ['whatsapp', 'email'],
+      activeChannel: activeChannel,
+      onChannelChange: setActiveChannel,
+      getExpandedWidth: (ch) => ch === 'email' ? 950 : 450,
+      renderPanel: (ch) => ch === 'email' ? <EmailPanel {...} /> : <WhatsAppPanel />,
+      renderRail: () => <Flex flexDirection="column" gap="xs">{/* rail buttons */}</Flex>
+    }}
+    
+    // Optional: Footer disclaimer
+    footerDisclaimer="This screen is a prototype for review."
+  />
+  ```
+- **Content standards**: Every tab passed to `renderTabContent` must follow world-class content richness standards (see below)
+- **Shell benefits**: Consistent header structure, standardized tab pattern, automatic dock integration, Sana styling built-in
+
 7. For Recruiting chrome density, icons, and layout cues, cross-check **`design/references/recruiter-flow/README.md`** and the reference PNG paths named in the brief.
 
 If there is **no** Design Brief, still use **`WorkdayTopNav` + `WorkdayLeftTabBar` + Sana shell tokens** for new full-page Recruiting flows under `design/`, and cross-check patterns A–D in the recruiter-flow README where applicable.
@@ -63,6 +234,168 @@ When **`design/[feature]-design-brief.md`** exists, confirm it ends with **Final
 2. **No yellow / warning-styled `Banner` for mock-data disclaimers** — Do **not** use Canvas Kit **`Banner`** (warning/default styling reads as yellow-orange) only to say metrics are mocked, illustrative, or for PM review. Legal notices, compliance disclaimers, and mock-data notes MUST be placed at the **bottom** of the page (below all main content) using small, neutral `BodyText`. Reserve **`Banner`** for **in-flow** states the persona would see (e.g. submit error, success after action, blocking validation).
 
 3. **Every navigation tab is prototyped** — For **`WorkdayLeftTabBar`** `tabs` and for page-level **`Tabs`**, ship **representative UI** (filters, `Table`, `Card`, key actions) on **every** tab. Do **not** use one fully built tab and **stubs** ("out of scope", "see other file") on siblings unless the PRD **explicitly** scopes a single-tab demo and the Design Brief records that exception.
+
+4. **Content richness standards** — Every tab must demonstrate **world-class** content quality, not just functional presence:
+   - **Realistic detail**: Use representative data that mirrors production (job titles, dates, names, email addresses, file names with extensions, company names, role titles)
+   - **Visual indicators**: Apply status badges, chips, icons, avatars where semantically appropriate (see patterns below)
+   - **Metadata layers**: Include secondary information (timestamps, sources, file sizes, participant roles, stage durations)
+   - **Structured formatting**: Use proper hierarchies, groupings, and separators (not flat text blocks or minimal lists)
+   - **Professional polish**: Make every tab feel like a shipped product screen, not a wireframe placeholder
+
+**Canvas Kit component patterns for common content:**
+
+5. **Status badges and indicators** — Use Canvas Kit `StatusIndicator` component (NEVER custom Box with inline styles):
+```tsx
+import { StatusIndicator } from '@workday/canvas-kit-react/status-indicator';
+
+{/* Active/In-Progress status */}
+<StatusIndicator
+  type={StatusIndicator.Type.Blue}
+  emphasis={StatusIndicator.Emphasis.Low}
+  label="Interview"
+/>
+
+{/* Completed/Success status */}
+<StatusIndicator
+  type={StatusIndicator.Type.Green}
+  emphasis={StatusIndicator.Emphasis.Low}
+  label="Completed"
+/>
+
+{/* Inactive/Rejected status */}
+<StatusIndicator
+  type={StatusIndicator.Type.Gray}
+  emphasis={StatusIndicator.Emphasis.Low}
+  label="Rejected"
+/>
+```
+
+**Why StatusIndicator**: Automatically uses Canvas Kit design tokens (borderRadius.s, semantic colors), ensures WCAG contrast compliance, consistent with Workday design system, accessible by default.
+
+6. **Skills, tags, and categories** — Use Canvas Kit `StatusIndicator` with Gray/Low for neutral pill appearance (NEVER custom Box):
+```tsx
+import { StatusIndicator } from '@workday/canvas-kit-react/status-indicator';
+
+{/* Skills list */}
+<Flex gap="xs" flexWrap="wrap">
+  {['Figma', 'Design Systems', 'Accessibility', 'Prototyping'].map(skill => (
+    <StatusIndicator
+      key={skill}
+      type={StatusIndicator.Type.Gray}
+      emphasis={StatusIndicator.Emphasis.Low}
+      label={skill}
+    />
+  ))}
+</Flex>
+```
+
+**Anti-pattern to avoid**:
+```tsx
+// ❌ WRONG - Custom Box with inline styling
+<Box padding="xxs xs" style={{ 
+  backgroundColor: colors.soap100, 
+  borderRadius: 12, 
+  border: `1px solid ${colors.soap300}` 
+}}>
+  <BodyText size="small">{skill}</BodyText>
+</Box>
+
+// ✅ CORRECT - Canvas Kit StatusIndicator
+<StatusIndicator
+  type={StatusIndicator.Type.Gray}
+  emphasis={StatusIndicator.Emphasis.Low}
+  label={skill}
+/>
+```
+
+8. **Communication channel selectors** - Use state-styled SecondaryButtons (current) or Canvas Kit `SegmentedControl` (future):
+```tsx
+import { SecondaryButton } from '@workday/canvas-kit-react/button';
+import { colors } from '@workday/canvas-kit-react/tokens';
+
+// ✅ CURRENT PATTERN - SecondaryButton with state styling (working)
+<Flex gap="s">
+  <SecondaryButton 
+    size="small" 
+    onClick={() => setChannel('email')}
+    style={channel === 'email' ? { 
+      backgroundColor: colors.blueberry400, 
+      color: colors.frenchVanilla100 
+    } : undefined}
+  >
+    Email
+  </SecondaryButton>
+  <SecondaryButton 
+    size="small" 
+    onClick={() => setChannel('sms')}
+    style={channel === 'sms' ? { 
+      backgroundColor: colors.blueberry400, 
+      color: colors.frenchVanilla100 
+    } : undefined}
+  >
+    SMS
+  </SecondaryButton>
+</Flex>
+
+// ✅ FUTURE PATTERN - SegmentedControl (requires model-based API setup)
+import { SegmentedControl } from '@workday/canvas-kit-preview-react/segmented-control';
+
+<SegmentedControl
+  initialValue={channel}
+  onChange={(event) => setChannel(event.target.value)}
+>
+  <SegmentedControl.List aria-label="Communication channel selector">
+    <SegmentedControl.Item value="email">Email</SegmentedControl.Item>
+    <SegmentedControl.Item value="sms">SMS</SegmentedControl.Item>
+  </SegmentedControl.List>
+</SegmentedControl>
+```
+
+**Current**: SecondaryButton approach works today, provides visual feedback. **Future**: SegmentedControl is semantically correct (toggle, not action), better accessibility (toggle group semantics), matches Canvas Kit view-switching patterns. Upgrade when team has capacity for model-based API integration.
+
+9. **Timeline/Process indicator pattern**:
+```tsx
+<Flex gap="m">
+  <Box style={{ 
+    width: 12, 
+    height: 12, 
+    borderRadius: '50%', 
+    backgroundColor: colors.green500, 
+    marginTop: 4 
+  }} />
+  <Box>
+    <BodyText size="small" fontWeight="bold">Step Name</BodyText>
+    <BodyText size="small" color={colors.blackPepper600}>
+      Completed by Sophie Laurent · 19 Mar 2026
+    </BodyText>
+  </Box>
+</Flex>
+```
+
+**Clickable links pattern** (for table cells, document names):
+```tsx
+<BodyText size="small" fontWeight="bold" color={SANA_LINK_ACCENT}>
+  Senior Product Designer (REQ-2026-8841)
+</BodyText>
+```
+
+**Document/Attachment pattern with icon**:
+```tsx
+<Flex alignItems="center" gap="m" padding="s" style={{ 
+  border: `1px solid ${colors.soap300}`, 
+  borderRadius: 8 
+}}>
+  <SystemIcon icon={documentIcon} size={24} color={colors.blackPepper500} />
+  <Box flex={1}>
+    <BodyText size="small" fontWeight="bold" color={SANA_LINK_ACCENT}>
+      CV_Camille_Dubois_2026.pdf
+    </BodyText>
+    <BodyText size="small" color={colors.blackPepper500}>
+      Added by Candidate · 18 Mar 2026 · 1.2 MB
+    </BodyText>
+  </Box>
+</Flex>
+```
 
 ## MCP Integration
 
@@ -129,6 +462,46 @@ colors.blackPepper400, colors.blackPepper600
 // Spacing (use these, not pixel values)
 space.xxxs, space.xxs, space.xs, space.s, space.m, space.l, space.xl, space.xxl, space.xxxl
 ```
+
+**Sana Color Roles (semantic usage in prototypes):**
+
+```tsx
+// Status and semantic colors
+// Active/In-Progress states
+colors.blueberry100  // Background for active badges
+colors.blueberry600  // Text for active badges
+
+// Success/Completed states
+colors.green100      // Background for success badges
+colors.green500      // Icon color for completion dots
+colors.green600      // Text for success messages
+colors.green700      // Text for completed badges
+
+// Error/Warning states
+colors.cinnamon100   // Background for warning badges
+colors.cinnamon600   // Text for warnings
+
+// Inactive/Neutral states
+colors.soap100       // Background for inactive chips/badges
+colors.soap200       // Background for neutral badges
+colors.soap300       // Borders for cards and separators
+
+// Text hierarchy
+colors.blackPepper600  // Primary body text
+colors.blackPepper500  // Secondary metadata (dates, timestamps, sources)
+colors.blackPepper400  // Disabled or tertiary text
+
+// Interactive elements
+SANA_LINK_ACCENT     // Clickable links, selected states (~#005CB9)
+colors.blueberry500  // Primary button fills, focus rings
+```
+
+**Usage examples:**
+- Interview stage badge: `blueberry100` bg + `blueberry600` text
+- Completed step: `green500` dot + `blackPepper600` label
+- Rejected status: `soap200` bg + `blackPepper600` text
+- Metadata timestamp: `blackPepper500` color
+- Clickable file name: `SANA_LINK_ACCENT` color
 
 **Component Props Pattern:**
 Canvas Kit components use:

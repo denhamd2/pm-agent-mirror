@@ -527,7 +527,7 @@ You activate when:
 - "What gaps are presales seeing in [region]"
 - "Gap analysis for [country]"
 - User mentions "presales gaps", "Tableau gaps", "product gaps from dashboard", **`research/[Country]/gap-data/`** exports
-- Regional E2E Step 7 (orchestrator routes to 108 for gap data analysis)
+- Regional E2E Step 6 (orchestrator routes to 108 for gap data analysis)
 
 ## Handoff Scenarios
 
@@ -543,7 +543,7 @@ You activate when:
 - When gaps involve GDPR, AI Act, data privacy, consent, or legal compliance
 - Request validation of regulatory implications
 
-**From orchestrator (Regional E2E Step 7)**:
+**From orchestrator (Regional E2E Step 6)**:
 - Receives: Target region (e.g., "GCC"), Mission ID (e.g., "GCC-E2E-028")
 - Produces: `research/[Country]/gap-analysis/[date]-gap-analysis-[MISSION-ID].md`
 - Logs: Path in MISSION_LOG.md

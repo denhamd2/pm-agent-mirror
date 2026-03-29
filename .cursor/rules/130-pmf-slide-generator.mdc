@@ -236,6 +236,38 @@ The Slide Deck MCP **injects** an agenda immediately after the TITLE slide. The 
      - Content: Strategic priorities from Step 1 (e.g., "GCC Market Readiness", "AI Candidate Matching", "Compliance-First Design")
      - Format: Bullet list with initiative name + 1-2 sentence description + target outcomes
      - Speaker notes: Context on why these are priorities, how they inform roadmap
+   
+   **Regional Narrative Adaptation (CRITICAL for Non-GCC Decks):**
+   
+   When generating Product Strategy slides for NON-GCC regional decks (India, France, Japan, UK, Germany, Canada, Australia):
+   
+   **Slide 1 (Q2 Priorities) - Focal Region First:**
+   - **Lead bullet**: Start with the FOCAL REGION's strategic importance, target, and key features
+     - Extract from strategy-context Regional Expansion table: [Region] row with Priority Level, Q2 Target, Key Features
+     - Format: "[REGION] [priority descriptor]: [target] targeted; [key features]; [why now/strategic rationale]"
+     - Example for India: "India scale growth: 8 customers targeted in Q2 with focus on DPDP compliance programmes and local job board reach through certified partner distribution"
+   - **Supporting bullets**: Reframe corporate priorities (GCC if Priority 1, AI, Core ATS) in terms of how they SUPPORT or CONTEXTUALIZE the focal region
+     - Add regional relevance clause: "...India [direct/indirect benefit]"
+     - Example: "AI candidate matching: India volume hiring aligns strongly when disclosure and human oversight are credible"
+   - **Order**: Focal region first, then corporate priorities adapted with regional lens
+   
+   **Slide 2 (Regional Expansion) - Focal Region at Top:**
+   - **First bullet**: Focal region with full detail (priority level, target, key features)
+   - **Subsequent bullets**: Other strategic regions (GCC, Japan, etc.) as context
+   - **Order matters**: An India deck lists India first, NOT GCC first
+   - Example for India deck:
+     1. "India: high priority for scale growth with 8 customers targeted; DPDP compliance and local boards"
+     2. "GCC: highest corporate priority with 10 customers; provides patterns for compliance"
+     3. "Japan: medium-high with 5 expansions; multinational templates cross-link in RFPs"
+   
+   **Detection Rule:**
+   - If deck [REGION] == "GCC": Use corporate order (Priority 1 GCC first)
+   - If deck [REGION] != "GCC": Apply regional adaptation (focal region first)
+   
+   **Verification:**
+   - Read strategy-context Regional Expansion table to get focal region's row data
+   - Ensure focal region appears in first bullet of BOTH slides (Q2 Priorities and Regional Expansion)
+   
    - **Slide 2 (optional)**: "Regional Expansion Strategy" (GCC/APAC/EMEA priorities)
      - Content: Which regions are strategic priorities (High/Medium/Low)
      - Include only if regional context is relevant to deck audience
@@ -410,16 +442,20 @@ The Slide Deck MCP **injects** an agenda immediately after the TITLE slide. The 
 
    **Rationale**: Matches the working Win/Loss table pattern where plain text renders consistently at 8pt without PowerPoint applying default paragraph formatting to bullet lists.
 
-   **SWOT slide requirements (VP audience):**
-   - Follow **`010-style-guide.mdc` → Table Styling → SWOT Analysis tables** for structure
-   - **Font size: 10pt** (VP executive presentation standard)
-   - **Header height: MUST set `header_height_inches: 0.25`** (CRITICAL - prevents tall navy bars)
-   - **CRITICAL: NEVER specify `height_inches` on table object** - omit entirely to allow PowerPoint auto-height based on content
-   - **Structure: SINGLE 2x2 table** with all four quadrants - first row: Strengths|Weaknesses headers + content, second row: Opportunities|Threats headers + content
-   - **Content format**: Each SWOT quadrant cell contains **bullet-pointed text** using `\n• ` within table cell strings (SWOT exception to plain text rule)
-   - **Detail level**: **EXACTLY 3-5 bullets per quadrant** (target 4-5 for VP density) with specific capabilities, gaps, opportunities, and competitive threats
-   - Each bullet: Concise but detailed (1-2 sentences) - NOT single-word items or massive paragraphs
-   - Example Strengths cell: `"• Suite depth, security model, global HCM adjacency\n• Paradox narrative for conversational engagement\n• Skills Cloud integration for talent intelligence\n• Compliance strength (GDPR, localization)\n• Enterprise security and audit controls"`
+  **SWOT slide requirements (VP audience):**
+  - Follow **`010-style-guide.mdc` → Table Styling → SWOT Analysis tables** for structure
+  - **Font size: 9pt ONLY** (set at table level for consistent rendering across all cells)
+  - **Header height: MUST set `header_height_inches: 0.25`** (CRITICAL - prevents tall navy bars)
+  - **CRITICAL: NEVER specify `height_inches` on table object** - omit entirely to allow PowerPoint auto-height based on content (creates compact, balanced layout)
+  - **CRITICAL: Consistent row styling** - ALL content rows (Strengths/Weaknesses AND Opportunities/Threats) must have identical styling - no special background colors or text colors for different quadrant rows
+  - **Structure: SINGLE 2x2 table** with all four quadrants - first row: Strengths|Weaknesses headers + content, second row: Opportunities|Threats headers + content
+  - **Content format**: Each SWOT quadrant cell uses **`paragraphs` array** with `level: 1` for native PowerPoint bullets (NOT Unicode `\n• ` text strings)
+    - Each bullet point is a separate paragraph object: `{"level": 1, "text": "Bullet content here"}`
+    - PowerPoint renders native bullets automatically
+    - NO Unicode bullet characters in text strings
+  - **Detail level**: **EXACTLY 3-5 bullets per quadrant** (target 4-5 for VP density) with specific capabilities, gaps, opportunities, and competitive threats
+  - Each bullet: Concise but detailed (1-2 sentences) - NOT single-word items or massive paragraphs
+  - Example cell structure: `{"paragraphs": [{"level": 1, "text": "Suite depth..."}, {"level": 1, "text": "Paradox narrative..."}, ...]}`
    
    **FORBIDDEN**: Using `paragraphs` with bullets for competitive landscape slides. These MUST be `tables` arrays.
 
@@ -547,11 +583,40 @@ The Slide Deck MCP **injects** an agenda immediately after the TITLE slide. The 
    ...
    ```
 
-8. **SECTION: Primary Research** (section divider + **interviews** — **v65 parity**)
-   - Section Title: "Primary Research | Interview participants"
+8. **SECTION: Internal SME Interviews** (section divider + **3-7 slides** when SME transcripts exist)
+   - Section Title: "Internal SME Interviews | Workday expert perspectives"
+   - **Intro slide**: "Internal SME Interviews - Workday Experts"
+     - 5-6 bullets: Population (N Workday SMEs), roles (VP Product, Field Readiness, Global Services, Enterprise Architects, etc.), multi-customer visibility, timing (date range), triangulation purpose ("Cross-validated with customer interviews for convergence analysis"), limitations ("Internal perspectives supplement but do not replace customer voices")
+     - Speaker notes: Overview of SME selection criteria, why internal experts matter for triangulation, how this section complements customer interviews
+   - **SME Participants table**: Columns: SME ID, Name, Role, Organisation/Context
+     - Rows: SME1-SMEN with actual names (NOT P1-P5 format - these are internal Workday experts with attributable expertise, not customer privacy protection case)
+     - Example: SME1 | Bernie | VP of Talent Product Management | Workday strategy and India FY27 focus
+     - Speaker notes: Context on each SME's customer portfolio, credibility, and relevance to this research
+   - **Individual slides per SME** (SME1, SME2, SME3, etc.):
+     - Title format: "SME[N] - [Name], [Role]"
+     - Content structure (**7-8 bullet lines total** to match customer slide density):
+       - **2-3 theme subheaders** (level 0, 14pt bold): Theme names from their notes (e.g., "Fraud at India Scale", "Offer Flexibility Patterns", "WhatsApp Ubiquity")
+       - **Key insights** (level 1 bullets): 2-3 bullets per theme with specific multi-customer patterns observed
+       - **Hypotheses** (level 1 bullets): 1-2 bullets on what this SME believes needs building/testing
+       - **Customer triangulation** (level 1 bullets): 1 bullet noting where customer evidence confirms or contradicts SME perspective
+     - Speaker notes: Context on SME's customer portfolio, role credibility, how their perspective complements customer evidence, limitations or biases to note
+   
+   **Placement**: After Ideation Hub (Section 7), before Customer Interviews (renumber to Section 9)
+   
+   **Content source**: Extract from 120 report's structured SME section (when present) OR from `research/[REGION]/105-sme-research-findings.md` (Step 7 output)
+   
+   **SME Naming Convention**: Use actual SME names (Bernie, Fabiola Navarro, Santosh Gulia, etc.), NOT P1-P5 anonymization. Rationale: Internal Workday employees with attributable expertise, not customer privacy protection case.
+   
+   **Slide count**: 3-7 slides (section divider + intro + participants table + 1 slide per SME). For India (5 SMEs) = 8 slides total for this section.
+   
+   **Conditional**: Only generate this section if `research/[REGION]/internal-sme-transcripts/` contains ≥1 .txt file OR if `research/[REGION]/105-sme-research-findings.md` exists. If no SME transcripts, skip section entirely.
+
+9. **SECTION: Primary Research** (section divider + **interviews** — **v65 parity**)
+   - Section Title: "Primary Research | Customer interview participants"
    - Strip intro (e.g. participant count, date range)
    - Interview Participants (P1, P2, P3 with roles and companies)
    - One slide per customer: P1, P2, P3… (quotes + themes)
+
 
    **v65 depth (Primary research / customer interview slides — do not ship theme stubs):**
    - **Strip intro slide title:** Use executive-friendly format: "1:1 Customer Interviews - [Region] Enterprise" (NOT technical format like "Customer Interviews | 3 GCC-market enterprise participants (semi-structured)"). Put methodology detail in bullets and speaker notes.
@@ -590,7 +655,7 @@ The Slide Deck MCP **injects** an agenda immediately after the TITLE slide. The 
        - YES: "Interview scheduling requires phone confirmation and three-day notice per Saudi labor law; automation gaps force manual calendar coordination"
    - **Speaker notes (per-customer slides):** Minimum **five** presenter bullets (which theme to stress, follow-up quotes, contradictions, commercial tone) plus **References:** transcript filename or path from the report.
 
-9. **SECTION: Thematic Analysis** (**2-3 grouped slides** + section divider + triangulation matrix)
+10. **SECTION: Thematic Analysis** (**2-3 grouped slides** + section divider + triangulation matrix)
    - Section Title: "Thematic Analysis | Validated themes and triangulation"
    - **GROUP THEMES ONTO 2-3 SLIDES**: Do NOT create one slide per theme. v65 groups multiple themes together for better pacing.
    - **Pattern (v65 actual)**: 
@@ -639,7 +704,7 @@ The Slide Deck MCP **injects** an agenda immediately after the TITLE slide. The 
    - Fewer than 3 bullets per theme
    - More than 4 themes on one slide (causes overflow)
 
-10. **SECTION: Full Funnel / Gap Diagnostic** (**1–2 slides** — **v65 parity**)
+12. **SECTION: Full Funnel / Gap Diagnostic** (**1–2 slides** — **v65 parity**)
    - Title: "Gap Analysis" (exactly this, do not use other titles)
    - **TABLE FORMAT MANDATORY** (NOT bullets):
      - Columns: Funnel Stage | Gap Description | Severity | Workaround | Evidence | Product Implication
@@ -741,7 +806,7 @@ The Slide Deck MCP **injects** an agenda immediately after the TITLE slide. The 
    ```
 
 
-11. **SECTION: Roadmap Recommendations** (**MAX 5 recommendations** + section divider)
+12. **SECTION: Roadmap Recommendations** (**MAX 5 recommendations** + section divider)
    - Section Title: "Roadmap Recommendations | Priority 1 and Priority 2"
    - **MAXIMUM 5 recommendations** (select top Priority 1 items from the 120 report). Do not exceed 5.
    - Slide titles MUST be formatted as "Recommendation N: [Title]" (e.g., "Recommendation 1: Nationalisation Reporting"). Do NOT use "Rec N: [Title]".
@@ -768,7 +833,7 @@ The Slide Deck MCP **injects** an agenda immediately after the TITLE slide. The 
    
    **Target bullet count per recommendation slide**: 5-6 total bullets (across all 5 sections) to prevent vertical overflow
    
-   - **Priority Recommendations Summary table**: Include when deck is for E2E pipeline (shows all recommendations in table for PM selection). Transform "E2E Handoff" terminology to executive language: use title "Priority Recommendations for Roadmap" (NOT "E2E Handoff - Research Recommendations (HITL selection)"). Table columns: #, Title, Action, Reach, Impact, Confidence, Effort, RICE Score. Extract values from E2E Handoff table in 120 report.
+   - **Priority Recommendations Summary table**: Include when deck is for E2E pipeline (shows all recommendations in table for PM selection). Transform "E2E Handoff" terminology to executive language: use title "Priority Recommendations for Roadmap" (NOT "E2E Handoff - Research Recommendations (HITL selection)"). **Table columns (MANDATORY - 9 columns required)**: #, Title, Action, Reach, Impact, Confidence, Effort, RICE Score, Legal / compliance (060). Extract RICE component values from Priority 1 & 2 recommendation text in 120 report E2E Handoff table (e.g., "Reach 2,000, Business 3.0, Customer 3.0, Confidence 70%, Effort 5 pm" → separate table cells). Format: Reach as "2,000", Impact as "3.0", Confidence as "70%", Effort as "5 pm", RICE Score as "840". The "Legal / compliance (060)" column contains compliance notes.
    - **Override**: If PM explicitly requests "all recommendations" or "include all 10", generate individual slides for all recommendations and accept 52-56 slide count
 
 12. **Bumper Slide**
@@ -903,6 +968,7 @@ ACTION: Expanding content from source files before generation...
 - [ ] **Section divider subtitles: SHORT** (2-4 words: "PESTEL", "Primary research", "Win / Loss"), plain string format, no verbose pipe descriptions
 - [ ] **Section dividers have `placeholders`** for agenda generation (see **`010-style-guide.mdc`** Agenda Fix)
 - [ ] **Product Strategy slides present** (1-3 slides after Strategic Context section, sourced from `research/[REGION]/strategy-context-*.md` from Step 1). If Step 1 file doesn't exist (standalone invocation), Product Strategy section can be omitted.
+- [ ] **Product Strategy regional adaptation**: If deck is non-GCC regional (India, France, Japan, UK, Germany, Canada, Australia), verify Q2 Priorities slide leads with focal region (not GCC) and Regional Expansion slide lists focal region first (not GCC first). Extract region row from strategy-context Regional Expansion table for bullet content.
 
 **Typography and formatting (see `010-style-guide.mdc` → Deck Generation):**
 - [ ] **Font sizing by density (STRICT ENFORCEMENT - 14PT DEFAULT)**: 
@@ -927,6 +993,7 @@ ACTION: Expanding content from source files before generation...
 - [ ] **PESTEL titles: factor name only** (no "PESTEL -" prefix: use "Political", "Economic", etc.)
 - [ ] **PESTEL source: 099 output file** (`research/[Country]/pestel-analysis-[Country]-[YYYY-MM-DD]-[MISSION-ID].md`) — do NOT extract from 120 report
 - [ ] PESTEL: 6 individual slides (one per factor), each with **EXACTLY 5** level-1 bullets (4 for Environmental if DATA GAP), **EVERY bullet has 2-3 sentences** (40-80 words), **≥5** total anchors per slide, **≥50-word** Product Implication with two clear clauses
+- [ ] **SME Interviews section present** (when SME transcripts exist): Section divider + intro slide ("Internal SME Interviews - Workday Experts") + participants table + 1 slide per SME (7-8 lines each, 2-3 theme subheaders, key insights, hypotheses, triangulation). SME names used (Bernie, Fabiola Navarro, etc. - NOT P1-P5 anonymization). Placed after Ideation Hub section, before Customer Interviews section. Content sourced from `research/[REGION]/105-sme-research-findings.md` (Step 7) or 120 SME structured section.
 - [ ] **Interview slides (P1, P2, P3…): MANDATORY DENSITY CHECK (BLOCKING VALIDATION)**
   **For EACH per-participant slide, verify ALL requirements BEFORE finalizing JSON:**
   - [ ] **7-8 bullet lines total** (7 minimum, 8 target; 6 BLOCKS generation; count all level-0/1/2 paragraphs)
@@ -1014,7 +1081,7 @@ ACTION: Expanding content from source files before generation...
   - ❌ Missing customer evidence in Evidence section
   
   **If ANY recommendation slide fails this check**: Expand each section with detailed content from 120 report. Pull from Product Roadmap Impact Summary in report for Problem/Why Now. Pull from research themes for Evidence. Add specific metrics with quantified targets for Success Metrics.
-- [ ] **Priority Recommendations Summary table**: Include for E2E pipeline decks (use executive title: "Priority Recommendations for Roadmap" NOT "E2E Handoff"). Table columns: #, Title, Action, Reach, Impact, Confidence, Effort, RICE Score. Extract from 120 E2E Handoff table.
+- [ ] **Priority Recommendations Summary table**: Include for E2E pipeline decks (use executive title: "Priority Recommendations for Roadmap" NOT "E2E Handoff"). **Table columns (MANDATORY - 9 columns)**: #, Title, Action, Reach, Impact, Confidence, Effort, RICE Score, Legal / compliance (060). Extract RICE component values from 120 E2E Handoff table. Verify table in JSON spec has 9 header cells and 9 data cells per row before create_presentation.
 - [ ] Product implication formatting (PESTEL slides: 12pt bold, FFFF00 highlight)
 - [ ] **Agenda (slide 2):** no `[{` / `'text':` artefacts; Section Title **subtitles** are plain strings with SHORT 2-4 word section names
 - [ ] **Deployment Agent validation logged**: If Gap Analysis table present, speaker_notes include: "Gap severities validated via Deployment Agent queries ([Month YYYY])" + thread ID + list of gaps where severity reduced + References section
@@ -1117,13 +1184,13 @@ The v65 baseline represents the default PMF deck format. Deviations are acceptab
 - **120-pmf-thematic-analysis.mdc:** Primary upstream for themes, customer evidence, and roadmap recommendations; supplies the markdown report. **Does NOT perform PESTEL or SWOT** (consumed from 099).
 - **060-legal-advisor.mdc:** Legal validation of **recommendations** occurs in **120** before the report is treated as final; **130** does not re-run that logic.
 - **110-slide-generator.mdc:** Short decks only; **130** owns this PMF roadmap pattern.
-- **000-master-orchestrator.mdc:** Regional E2E chains **099 (Steps 1-3)** → **101 (Step 4)** → **105 (Step 5)** → **optional 106/108 (Steps 6-7)** → **120 (Step 8)** → **130 (Step 10)** before HITL.
+- **000-master-orchestrator.mdc:** Regional E2E chains **099 (Steps 1-3)** → **101 (Step 4)** → **optional 106 (Step 5)** → **optional 108 (Step 6)** → **105 SME (Step 7)** → **105 Customer (Step 8)** → **120 (Step 9)** → **130 (Step 11)** before HITL.
 
 ## Triggers
 
 You activate when:
 - User or orchestrator says **"Generate PMF roadmap deck"**, **"match v65 deck"**, **"run 130"**, **"slides from [Country] PMF analysis"**, after **120** completes
-- **Regional E2E** Step 10 (after **120** saves the report) — supports all 8 regions (GCC, UK, France, Germany, Japan, India, Canada, Australia)
+- **Regional E2E** Step 11 (after **120** saves the report) — supports all 8 regions (GCC, UK, France, Germany, Japan, India, Canada, Australia)
 - User provides an existing PMF analysis path and asks to **regenerate** `slides_spec_vN` + `.pptx` only (no re-run **120**)
 
 ---

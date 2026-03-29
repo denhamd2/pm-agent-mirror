@@ -66,9 +66,9 @@ Execute all phases sequentially for the specified folder (e.g., `research/Japan/
 3. **Read all .txt transcripts** in `research/[Country]/customer-transcripts/`
 4. **Read CSV verbatims** in `research/[Country]/raw-data/` or filtered output from `research/raw-data/`
 5. **Initial Observations:** What are customers saying? What are SMEs saying? Where do they align or diverge? How do they relate to 099's PESTEL/SWOT findings?
-6. **Optional — 106 / 108:** If `research/[Country]/brainstorm-analysis/*.md` exists for this pipeline run (orchestrator Step 6), **read** the latest file and note customer ideation hypotheses and themes. If `research/[Country]/gap-analysis/*.md` exists (orchestrator Step 7), **read** the latest file and note presales gap severity patterns and capability themes. **Do not** treat these as substitutes for re-reading customer transcripts and SME files; they are **additional** lenses for triangulation.
+6. **Optional — 106 / 108:** If `research/[Country]/brainstorm-analysis/*.md` exists for this pipeline run (orchestrator Step 5), **read** the latest file and note customer ideation hypotheses and themes. If `research/[Country]/gap-analysis/*.md` exists (orchestrator Step 6), **read** the latest file and note presales gap severity patterns and capability themes. **Do not** treat these as substitutes for re-reading customer transcripts and SME files; they are **additional** lenses for triangulation.
 
-**105-user-research-findings.md (Regional E2E):** **000-master-orchestrator** runs **105** as **Step 5** **before** **120**. By the time **120** starts, `research/[Country]/105-user-research-findings.md` should already exist with **## Fresh pass attestation** per **105-user-researcher.mdc**. **120** Phase 1 must **still re-read** the underlying `customer-transcripts/` and SME files (and CSVs); **120** must **not** skip transcript ingestion by relying only on the **105** markdown summary.
+**105-user-research-findings.md (Regional E2E):** **000-master-orchestrator** runs **105** as **Step 8** **before** **120**. By the time **120** starts, `research/[Country]/105-user-research-findings.md` should already exist with **## Fresh pass attestation** per **105-user-researcher.mdc**. **120** Phase 1 must **still re-read** the underlying `customer-transcripts/` and SME files (and CSVs); **120** must **not** skip transcript ingestion by relying only on the **105** markdown summary.
 
 **Anonymization (MANDATORY):**
 - **Customer interview participants:** Always anonymize names as P1, P2, P3, etc.
@@ -153,7 +153,7 @@ Execute all phases sequentially for the specified folder (e.g., `research/Japan/
 Before generating the **Product Roadmap Impact Summary** section in Phase 6:
 
 1. **Read strategy context from Step 1** (Regional E2E only):
-   - If invoked as Step 8 in Regional E2E pipeline, read `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md` (from Step 1)
+   - If invoked as Step 10 in Regional E2E pipeline, read `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md` (from Step 1)
    - Extract: Strategic priorities, OKRs, [REGION] regional focus level, competitive positioning themes, what's NOT priority, RICE Business Impact guidance
    - **Standalone 120 invocations:** If Step 1 context doesn't exist, search `strategy/markdown/` and `strategy/pdfs/` directly as before
 2. **Extract strategic context** (from Step 1 file OR direct search):
@@ -172,7 +172,7 @@ Before generating the **Product Roadmap Impact Summary** section in Phase 6:
    - Flag strategic tensions when Business/Customer Impact diverge by >1.0 points
    - Cite **Step 1 strategy context** (or strategy docs if standalone) for Business Impact; cite research evidence for Customer Impact
 
-**Regional E2E — `## 105 inputs (this run)` (mandatory when orchestrator Step 5 ran):** After Methodology (or immediately after Executive Summary), add a short section linking to `research/[Country]/105-user-research-findings.md`, quoting the **Mission ID** from that file's attestation, and confirming that Phase 1 re-read the listed transcript paths (not only the **105** doc). If **105** attestation is missing, **stop** and return to orchestrator — do not ship the PMF report without **105** Step 5 complete.
+**Regional E2E — `## 105 inputs (this run)` (mandatory when orchestrator Step 7/8 ran):** After Methodology (or immediately after Executive Summary), add a short section linking to `research/[Country]/105-sme-research-findings.md` (Step 7) and `research/[Country]/105-user-research-findings.md` (Step 8), quoting the **Mission ID** from those files' attestations, and confirming that Phase 1 re-read the listed transcript paths (not only the **105** docs). If **105** attestation is missing, **stop** and return to orchestrator — do not ship the PMF report without **105** Step 7/8 complete.
 
 **Regional E2E — `## 101 inputs (Step 4)` (when Step 4 competitive scan was performed):** If a `research/competitive/[region-code]/[region-code]-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md` file exists matching this mission ID, include a section after `## 105 inputs (this run)`:
 
@@ -188,20 +188,20 @@ The Competitive Landscape section below is sourced from 101's research (Step 4 o
 
 This confirms for readers that 120 used 101's findings rather than performing duplicate research.
 
-**Regional E2E — `## 106 inputs (Step 6)` (when customer ideation hub analysis ran):** If orchestrator Step 6 produced `research/[Country]/brainstorm-analysis/[YYYY-MM-DD]-brainstorm-analysis.md` for this mission, add after the **101** section (or after **105** if no 101 section applies):
+**Regional E2E — `## 106 inputs (Step 5)` (when customer ideation hub analysis ran):** If orchestrator Step 5 produced `research/[Country]/brainstorm-analysis/[YYYY-MM-DD]-brainstorm-analysis.md` for this mission, add after the **101** section (or after **105** if no 101 section applies):
 
 ```markdown
-## 106 Customer Ideation Hub inputs (Step 6)
+## 106 Customer Ideation Hub inputs (Step 5)
 
 **Report:** [path to brainstorm-analysis markdown]
 
 Customer ideation hypotheses and themes below are triangulated in the matrix; they are **not** customer ground truth until validated by **105** evidence.
 ```
 
-**Regional E2E — `## 108 inputs (Step 7)` (when gap analysis ran):** If orchestrator Step 7 produced `research/[Country]/gap-analysis/[YYYY-MM-DD]-gap-analysis-[MISSION-ID].md` for this mission, add:
+**Regional E2E — `## 108 inputs (Step 6)` (when gap analysis ran):** If orchestrator Step 6 produced `research/[Country]/gap-analysis/[YYYY-MM-DD]-gap-analysis-[MISSION-ID].md` for this mission, add:
 
 ```markdown
-## 108 Gap Data inputs (Step 7)
+## 108 Gap Data inputs (Step 6)
 
 **Report:** [path to gap-analysis markdown]
 
@@ -213,18 +213,74 @@ Gap severity themes are **presales-reported**; competitive claims require **101*
 ```markdown
 ## E2E Handoff: Research Recommendations
 
-| # | Title | Action | RICE Score | Legal / compliance (060) |
-|---|-------|--------|------------|---------------------------|
-| 1 | [From Priority 1, item 1] | [Full action text] | [RICE value] | [060 flags if any] |
-| 2 | [From Priority 1, item 2] | [Full action text] | [RICE value] | [060 flags if any] |
-| 3 | [From Priority 2, item 1] | [Full action text] | [RICE value] | [060 flags if any] |
-| 4 | [From Priority 2, item 2] | [Full action text] | [RICE value] | [060 flags if any] |
-| 5 | [From Priority 2, item 3] | [Full action text] | [RICE value] | [060 flags if any] |
+| # | Title | Action | Reach | Impact | Confidence | Effort | RICE Score | Legal / compliance (060) |
+|---|-------|--------|-------|--------|------------|--------|------------|--------------------------|
+| 1 | [From Priority 1, item 1] | [Full action text] | [Reach value] | [Impact value] | [Confidence %] | [Effort pm] | [RICE value] | [060 flags if any] |
+| 2 | [From Priority 1, item 2] | [Full action text] | [Reach value] | [Impact value] | [Confidence %] | [Effort pm] | [RICE value] | [060 flags if any] |
+| 3 | [From Priority 2, item 1] | [Full action text] | [Reach value] | [Impact value] | [Confidence %] | [Effort pm] | [RICE value] | [060 flags if any] |
+| 4 | [From Priority 2, item 2] | [Full action text] | [Reach value] | [Impact value] | [Confidence %] | [Effort pm] | [RICE value] | [060 flags if any] |
+| 5 | [From Priority 2, item 3] | [Full action text] | [Reach value] | [Impact value] | [Confidence %] | [Effort pm] | [RICE value] | [060 flags if any] |
+```
+
+**RICE component extraction guidance:**
+- **Reach**: Extract from RICE breakdown text (e.g., "Reach 2,000 India recruiters" → "2,000"). Format with comma separator for thousands.
+- **Impact**: Extract composite impact score (e.g., "Business 3.0, Customer 3.0 → Composite 3.0" → "3.0"). Use 1 decimal place.
+- **Confidence**: Extract from text (e.g., "Confidence 70% (validated with 3 customers)" → "70%"). Include % symbol.
+- **Effort**: Extract from text (e.g., "Effort 5 person-months" → "5 pm"). Use "pm" abbreviation.
+- **RICE Score**: Calculated value from RICE formula (e.g., "840"). No decimals.
+- **Legal / compliance (060)**: Summarise 060 findings (e.g., "DPDP; DPIA likely", "EU AI Act (High-Risk)", "No issues").
+
+**Example row** (showing proper formatting):
+```
+| 1 | India statutory ID, OTP, and offer-path alignment | Deliver journey patterns for Aadhaar, PAN, UAN collection; OTP reliability; offer revisions with compliance | 2,000 | 3.0 | 70% | 5 pm | 840 | DPDP; DPIA likely |
 ```
 
 **HITL:** The **000-master-orchestrator** blocks the pipeline until the PM explicitly selects a recommendation — **no default** (do not assume #1 or any row if the PM has not chosen).
 
 This enables the orchestrator to present all recommendations to the PM for human-in-the-loop selection before **200** (PRD creation).
+
+**SME Structured Output (for 130 consumption):** When internal SME transcripts exist (`research/[REGION]/internal-sme-transcripts/*.txt` or `research/[REGION]/105-sme-research-findings.md`), add a structured section after the E2E Handoff table for 130 to extract SME interview slides:
+
+```markdown
+## Internal SME Participants
+
+| SME ID | Name | Role | Organisation/Context |
+|--------|------|------|----------------------|
+| SME1 | Bernie | VP of Talent Product Management | Workday strategy and India FY27 focus |
+| SME2 | Fabiola Navarro | Sr. Product Advisor, Field Readiness | Lowe's India patterns, offer complexity |
+| SME3 | Santosh Gulia | Solutions Manager, Global Services | WhatsApp ubiquity, marketing opt-in friction |
+| SME4 | David Lodola | Principal Enterprise Architect, Genpact | Mass actions, KYC, career site gaps |
+| SME5 | David Phillips | Principal Enterprise Architect, Accenture | Fraud/trickery at scale, blacklist automation |
+
+## Key Findings per SME
+
+### SME1 - Bernie, VP of Talent Product Management
+
+**Role Context**: Strategic product owner for Workday Recruiting with visibility across global enterprise customers. India focus area for FY27 OKRs. Multi-year roadmap perspective.
+
+**Key Insights**:
+- [Multi-customer pattern 1: What Bernie observes across multiple India implementations]
+- [Multi-customer pattern 2: Strategic priorities or product gaps]
+
+**Hypotheses**:
+- [What Bernie believes needs building or testing based on multi-customer trends]
+
+**Customer Triangulation**: [Note where customer evidence (P1-P5) confirms or contradicts Bernie's perspective]
+
+### SME2 - [Name], [Role]
+
+[Repeat structure for each SME]
+
+---
+
+[Continue with Themes section...]
+```
+
+**SME slide content structure for 130:**
+- Each SME gets one slide with title "SME[N] - [Name], [Role]"
+- Content: 7-8 bullet lines total (2-3 theme subheaders as level 0 14pt bold, key insights as level 1, hypotheses as level 1, triangulation as level 1)
+- Speaker notes: Context on SME's customer portfolio, credibility, how their perspective complements customer evidence
+
 
 **E2E note:** The **130-pmf-slide-generator** builds the roadmap **.pptx** from this report (orchestrator chains **120 → 130** before HITL when a deck is required).
 
@@ -243,13 +299,13 @@ This enables the orchestrator to present all recommendations to the PM for human
 
 **130 outputs:** `slides_spec_vN.json` at project root; `~/Downloads/[Country]_Recruiting_PMF_Roadmap_vN.pptx`. Full deck structure, typography, checklist, and MCP steps live in **`130-pmf-slide-generator.mdc`**.
 
-**Before finalising Roadmap Recommendations in the report:** **Orchestrator invokes 060-legal-advisor** (Step 9 in Regional E2E pipeline) to review recommendations for legal/compliance implications (GDPR, AI Act, local regulations). 120 addresses any flags **in the markdown** before handoff to **130** (slides will mirror report wording).
+**Before finalising Roadmap Recommendations in the report:** **Orchestrator invokes 060-legal-advisor** (Step 10 in Regional E2E pipeline) to review recommendations for legal/compliance implications (GDPR, AI Act, local regulations). 120 addresses any flags **in the markdown** before handoff to **130** (slides will mirror report wording).
 
 ---
 
 ### Strategic Context and PESTEL/SWOT Consumption (from Steps 1-3 - 099)
 
-**In Regional E2E pipelines**, the **099-product-strategist** performs comprehensive strategic analysis as **Steps 1-3** (before 101, 105, and 120). By the time 120 starts at Step 8, you have access to three foundational inputs:
+**In Regional E2E pipelines**, the **099-product-strategist** performs comprehensive strategic analysis as **Steps 1-3** (before 101, 105, and 120). By the time 120 starts at Step 9, you have access to three foundational inputs:
 
 **1. Strategy Context**: `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md`
 - Strategic priorities and OKRs for current quarter
@@ -339,7 +395,7 @@ Adapt paths for country-based: `research/[Country]/raw-data/` or `research/raw-d
 ## Integration with Other Agents
 
 - **099-product-strategist:** Provides strategy context, PESTEL analysis (all 6 factors with Legal/compliance depth), and SWOT analysis in Step 0 (before 120); 120 reads and incorporates these outputs
-- **060-legal-advisor.mdc:** Reviews Roadmap Recommendations for compliance implications (Step 2b.1 in Regional E2E, renumbered from former 2b.3)
+- **060-legal-advisor.mdc:** Reviews Roadmap Recommendations for compliance implications (Step 10 in Regional E2E, renumbered from former 2b.3)
 - **100-market-intelligence.mdc:** Qualitative depth to quantitative analysis
 - **200-prd-writer.mdc:** Feed PMF themes into PRD problem statements
 - **400-backlog-refinement.mdc:** Themes become epics; codes become user stories

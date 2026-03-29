@@ -29,8 +29,6 @@ export const WorkdayWMark: React.FC<{ size?: number }> = ({ size = 36 }) => {
   const scale = size / 36;
   return (
     <svg width={size} height={size} viewBox="0 0 36 36" aria-label="Workday" role="img">
-      {/* White background circle */}
-      <circle cx={18} cy={18} r={17} fill="#FFFFFF" />
       {/* Orange swoosh above the W */}
       <path
         d="M 10 12 Q 18 8 28 13"
@@ -55,8 +53,6 @@ export const WorkdayWMark: React.FC<{ size?: number }> = ({ size = 36 }) => {
       >
         W
       </text>
-      {/* Subtle border */}
-      <circle cx={18} cy={18} r={17} fill="none" stroke="#E6E8EA" strokeWidth={0.5} />
     </svg>
   );
 };

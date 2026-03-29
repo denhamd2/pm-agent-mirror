@@ -286,16 +286,16 @@ You are **automatically invoked** by other agents during their workflows. When i
 
 | Invoked By | When | Your Task |
 |------------|------|-----------|
-| **120-pmf-thematic-analysis** | **Explicit orchestrator step** (Regional E2E Step 9 for Roadmap Recommendations) | Review roadmap recommendations for compliance implications (GDPR, AI Act, local regulations) |
-| **200-prd-writer** | **Explicit orchestrator step** (Regional E2E Step 15 - after PRD creation) | Review PRD for GDPR, EU AI Act, country-specific compliance; flag high-risk features requiring DPIA, consent, or data transfer mechanisms |
+| **120-pmf-thematic-analysis** | **Explicit orchestrator step** (Regional E2E Step 10 for Roadmap Recommendations) | Review roadmap recommendations for compliance implications (GDPR, AI Act, local regulations) |
+| **200-prd-writer** | **Explicit orchestrator step** (Regional E2E Step 16 - after PRD creation) | Review PRD for GDPR, EU AI Act, country-specific compliance; flag high-risk features requiring DPIA, consent, or data transfer mechanisms |
 | **100-market-intelligence** | After Strategic Recommendations in synthesis | Validate legal implications of each recommendation |
 | **320-prototype-developer** | Before handoff to 330 (prototype complete) | Compliance review of prototype (consent, privacy, AI disclosure) |
 | **330-figma-creator** | After design analysis or after capture to Figma | Compliance review of design (consent placement, privacy, forms) |
 | **319-doc-writer** | When copy is legal-sensitive | Review consent text, privacy notices, AI disclosure, data messages |
 
 **Regional E2E Pipeline Context**: 060 is **explicitly orchestrated** at two quality gates in the E2E pipeline:
-1. **During 120 (Step 9)**: Review roadmap recommendations before deck generation
-2. **After 200 (Step 15)**: PRD compliance review before Red Team (080) and design phases
+1. **During 120 (Step 10)**: Review roadmap recommendations before deck generation
+2. **After 200 (Step 16)**: PRD compliance review before Red Team (080) and design phases
 
 Both follow the advisory pattern with one revision pass. For other agents (100, 319, 320, 330), invocation remains internal to those agents' workflows.
 

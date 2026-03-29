@@ -236,6 +236,9 @@ export const WorkdayLeftTabBar: React.FC<WorkdayLeftTabBarProps> = ({
                     fontWeight: 400,
                     color: SANA_SECONDARY_TAB_INACTIVE_FG,
                     paddingLeft: showSecondaryTitleIcon ? 26 : 0,
+                    maxWidth: '100%',
+                    overflowWrap: 'break-word',
+                    wordBreak: 'break-word',
                   }}
                 >
                   {secondarySubtitle}
@@ -298,6 +301,11 @@ export const WorkdayLeftTabBar: React.FC<WorkdayLeftTabBarProps> = ({
                     fontWeight: active ? 700 : 400,
                     color: active ? SANA_SECONDARY_TAB_ACTIVE_FG : SANA_SECONDARY_TAB_INACTIVE_FG,
                     letterSpacing: active ? '-0.01em' : '0',
+                    display: 'block',
+                    maxWidth: '100%',
+                    overflowWrap: 'break-word',
+                    wordBreak: 'break-word',
+                    whiteSpace: 'normal',
                   }}
                 >
                   {tab.label}

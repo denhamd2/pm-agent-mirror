@@ -345,7 +345,7 @@ When invoked as **Step 4** in Regional E2E (after Steps 1-3 strategy review):
 
 **Timeline**: This runs BEFORE user research analysis, so 120 can reference competitive context when synthesizing themes.
 
-**Handoff**: 120 (Step 8) and 130 (Step 10) will read these outputs for Competitive Landscape sections.
+**Handoff**: 120 (Step 9) and 130 (Step 11) will read these outputs for Competitive Landscape sections.
 
 ### Pattern 2: Competitive Battle Card Generation
 
@@ -466,7 +466,7 @@ Every orchestrated **Pattern 5** invocation is a **full fresh pass** for **that*
 **Inputs** (passed in invoke string from orchestrator):
 - **Region**: **GCC** (fixed for this pipeline).
 - **Selected recommendation**: Title and action from E2E Handoff table (HITL).
-- **Source PMF report**: Path to latest `research/GCC/thematic-analysis/*.md` produced in E2E Step **2b** (**120**).
+- **Source PMF report**: Path to latest `research/GCC/thematic-analysis/*.md` produced in E2E Step **9** (**120**).
 - **Mission ID**: **GCC-E2E-0NN** from MISSION_LOG (Step 4) — required for output filename when orchestrated. **Standalone** Pattern 5 (rare): if no mission ID, use suffix `-adhoc-[HHmm]` (UTC) on the same date so the file does not collide with an orchestrated run.
 
 **Scope** (keep bounded – target **15–25 minutes**, not a full global scan):
@@ -484,7 +484,7 @@ Every orchestrated **Pattern 5** invocation is a **full fresh pass** for **that*
    - Link to PMF source path
 2. **Delta update** to [`research/competitive/matrices/gcc-competitive-matrix.md`](research/competitive/matrices/gcc-competitive-matrix.md): new or revised rows, Recent Activity lines, or Workday Competitive Response table entries for this initiative – **not** a full matrix rewrite in one step.
 
-**Hand off to**: **200-prd-writer** – PRD must read this brief and the matrix per orchestrator Step 14.
+**Hand off to**: **200-prd-writer** – PRD must read this brief and the matrix per orchestrator Step 15.
 
 **Output**: E2E CI brief path + updated gcc matrix (logged in MISSION_LOG by orchestrator).
 

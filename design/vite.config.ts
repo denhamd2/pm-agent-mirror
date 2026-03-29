@@ -23,18 +23,11 @@ function normaliseBase(raw: string | undefined): string {
  */
 function prototypeSpaSlugFallback(): Plugin {
   const slugs = new Set([
-    'gcc-candidate-review-cv-carousel-v54',
-    'gcc-candidate-review-experience-v54',
-    'gcc-candidate-grid-redesign-v52',
-    'gcc-candidate-grid-redesign-v68',
-    'gcc-candidate-grid-v46',
+    'france-whatsapp-omnichannel-engagement-v75',
     'gcc-recruiter-dashboard',
-    'gcc-nationalization-oob-v56',
     'gcc-unified-candidate-review-v57',
-    'gcc-nationalisation-local-compliance-reporting-v58',
-    'gcc-nationalisation-local-compliance-reporting-v59',
-    'gcc-nationalisation-local-compliance-reporting-v60',
     'gcc-nationalisation-local-compliance-reporting-v61',
+    'gcc-nationalisation-local-compliance-reporting-v62',
   ]);
   return {
     name: 'prototype-spa-slug-fallback',

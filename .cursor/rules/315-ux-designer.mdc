@@ -107,6 +107,8 @@ Translate layout into UI.
    - `CommunicationDock` (if applicable)
    - **Form controls**: `FormSelect`, `FormTextInput`, `FormDateInput` from `design/components/SharedFormControls.tsx` for consistent styling
    - **Filters**: Use `FormSelect` (shared component) for simple dropdowns, NOT Canvas Kit Select compound component
+   - **Profile layouts**: `ProfilePageLayout` from `design/components/ProfilePageLayout.tsx` for hub-style profile pages (candidate/worker profiles)
+   - **Communication panels**: `EmailPanel`, `EmailComposer`, `RichTextEditor`, `ThreadExpansion` for email features; `SanaCommMessageBubble`, `SanaCommComposer` for WhatsApp/SMS
 
 5. **Validate against Experience Principles** (MANDATORY):
    - **READ** `docs/experience-principles.md` before finalizing PASS 2
@@ -165,6 +167,56 @@ After defining all UI components, extract ALL user-facing text:
 - AI disclosure: [text]
 
 **Output**: This copy inventory is handed to 319 for review before PASS 3.
+
+7. **Visual Indicators Specification (Canvas Kit Components for 320)**
+
+After defining the copy inventory, specify visual patterns using **explicit Canvas Kit components** (not generic descriptions):
+
+**Status Badges and Indicators (ALWAYS use StatusIndicator):**
+- [Context]: [Status/stage name] → `StatusIndicator type=[Blue/Green/Grey/Orange/Red] emphasis=[Low/High]` + Optional icon
+- Example: "Interview stage → `StatusIndicator type={StatusIndicator.Type.Blue} emphasis={StatusIndicator.Emphasis.Low} label="Stage: Interview" icon={dotIcon}`"
+- Example: "Completed step → `StatusIndicator type={StatusIndicator.Type.Green} emphasis={StatusIndicator.Emphasis.Low} label="Complete"`"
+- **NEVER specify**: Custom Box with inline backgroundColor/border/padding for status badges
+
+**Skills, Tags, Categories (ALWAYS use StatusIndicator Gray/Low):**
+- [Context]: [Tag purpose] → `StatusIndicator type={StatusIndicator.Type.Gray} emphasis={StatusIndicator.Emphasis.Low} label="[text]"`
+- Example: "Top skills → `StatusIndicator` Gray/Low for each skill chip"
+- Example: "Job categories → `StatusIndicator` Gray/Low tags"
+- **NEVER specify**: Custom pill chips with soap100 bg and soap300 border (StatusIndicator handles styling)
+
+**Button Hierarchy (Action Pairs):**
+- [Context]: [Positive + negative action pair] → Button types: `SecondaryButton` + `SecondaryButton` OR `PrimaryButton` + `SecondaryButton`
+- Example: "Profile header actions → `<SecondaryButton>Move forward</SecondaryButton>` + `<SecondaryButton>Reject</SecondaryButton>` (equal weight)"
+- Example: "Emphasized positive → `<PrimaryButton>Move forward</PrimaryButton>` + `<SecondaryButton>Reject</SecondaryButton>`"
+- **NEVER specify**: `TertiaryButton` for destructive/negative actions (too casual, accessibility issues)
+
+**Icons (Canvas Kit SystemIcon):**
+- [Context]: [Icon purpose] → `SystemIcon` with icon from `@workday/canvas-system-icons-web` + Size [16/20/24]
+- Example: "Document attachment → `<SystemIcon icon={documentIcon} size={24} />`"
+- Example: "Completion indicator → `<SystemIcon icon={checkCircleIcon} size={16} color={colors.greenery500} />`"
+
+**Avatars:**
+- [Context]: [Avatar purpose] → `Avatar` size=[24/32/64/80]
+- Example: "Candidate header → `<Avatar size={Avatar.Size.xl} />` (64px)"
+- Example: "Interviewer list → `<Avatar size={Avatar.Size.s} />` (24px)"
+
+**Communication Channel Selectors:**
+- [Context]: Toggle between channels → `SecondaryButton` with state-based styling (active gets blueberry400 bg)
+- Example: "WhatsApp/Email toggle → Two `SecondaryButton`s, active channel styled with `backgroundColor: colors.blueberry400`"
+- **Future upgrade**: Note that `SegmentedControl` from Canvas Kit Preview is semantically correct but requires model-based API
+
+**Metadata Formatting:**
+- [Context]: Secondary info → `BodyText size="small" color={colors.blackPepper600}` with middot separators
+- Example: "File metadata → `Added by Sophie Laurent · 18 Mar 2026 · 2.4 MB`"
+- Example: "Interview timing → `19 March 2026 · 14:00-15:00 · Conference Room A`"
+
+**Profile Page Reusability:**
+- If designing candidate profile, worker profile, or similar hub-style detail view → Consider reusing `ProfilePageLayout` component
+- `ProfilePageLayout` provides: header card with avatar/actions, WorkdayLeftTabBar integration, CommunicationDock support
+- Only build from scratch if layout significantly deviates from standard profile pattern
+- Reference: `design/components/ProfilePageLayout.tsx` and `design/README.md` Profile page layout section
+
+**Output**: This specification is handed to 320 for implementation alongside the Copy Inventory.
 
 ---
 

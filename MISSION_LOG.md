@@ -50,6 +50,92 @@ This log tracks the state of all active product initiatives, decisions, and hand
 
 ## Active Missions
 
+## Mission: AGENT-IMPROVE-001 - Integrate v75 Quality Standards into Agent Rules
+**Status:** Complete
+**Date:** 28 March 2026
+**Owner:** 090-agent-improvement-advisor
+**Objective:** Integrate content richness, visual indicator patterns, and Sana styling standards demonstrated in `france-whatsapp-omnichannel-engagement-v75.tsx` into agent rules (315, 319, 320, 321) to ensure consistent world-class quality for all future prototypes.
+
+**Context:** FR-E2E-002 prototype (v75) achieved significantly higher content quality and visual polish than previous prototypes. User requested these improvements be codified into rules for consistency.
+
+**Rule Updates Implemented:**
+1. **320-prototype-developer.mdc** (Content Richness Standards):
+   - Added "Content richness standards" section (point 4) with patterns for status badges, skill chips, timeline indicators, clickable links, and document attachments
+   - Added "Sana Color Roles" quick reference with semantic color usage guidelines (active/success/inactive/text hierarchy/interactive elements)
+   - Includes code examples for each pattern
+
+2. **315-ux-designer.mdc** (Visual Indicators Specification):
+   - Added "Visual Indicators Specification (for 320 implementation)" as point 7 in PASS 2
+   - Requires designers to explicitly specify: status badges, icons, chips/tags, avatars, completion indicators, and metadata formatting
+   - Ensures 320 has clear implementation guidance for visual richness
+
+3. **321-prototype-visual-reviewer.mdc** (Content Quality Checklist):
+   - Added "Content Quality" section to visual review checklist
+   - Validates: rich content depth, visual indicators, metadata layers, structured formatting, clickable styling, professional polish
+   - Includes specific checks for status badges, skill chips, timeline indicators, document styling
+
+4. **319-doc-writer.mdc** (Visual Indicator Copy):
+   - Added point 3a: "Visual Indicator Copy (Status Badges, Chips, Labels)"
+   - Reviews copy within status badges, skill chips, timeline labels, metadata
+   - Validates sentence case, consistency, and terminology
+   - Links to 315 PASS 2 and 320 patterns
+
+**Artifacts:**
+- Updated rules: `.cursor/rules/315-ux-designer.mdc`, `.cursor/rules/319-doc-writer.mdc`, `.cursor/rules/320-prototype-developer.mdc`, `.cursor/rules/321-prototype-visual-reviewer.mdc`
+- Reference prototype: `design/france-whatsapp-omnichannel-engagement-v75.tsx`
+
+**Impact:** Future prototypes will automatically include:
+- Realistic, production-quality content (not wireframe placeholders)
+- Semantic visual indicators (status badges, chips, icons, avatars)
+- Structured metadata layers (timestamps, sources, file info)
+- Consistent Sana styling and Canvas Kit usage
+- Professional polish across all tabs
+
+**Next:** Apply these updated rules starting with next prototype mission (any new E2E or standalone prototype request).
+
+## Mission: AGENT-IMPROVE-002 - Standardize Sliding Panel Shadow
+**Status:** Complete
+**Date:** 29 March 2026
+**Owner:** 090-agent-improvement-advisor
+**Objective:** Codify the sliding panel shadow fix (moving boxShadow from Card to Box wrapper to avoid overflow:hidden clipping) as a permanent Sana design token and document it in style guides.
+
+**Context:** During France E2E v75 prototype work, discovered that sliding panel shadows were being clipped by `overflow: hidden` on parent containers. The fix was to apply the shadow to the Box wrapper instead of the nested Card. This pattern needs to be standardized for all future prototypes.
+
+**Implementation:**
+1. **design/components/sanaShellTheme.ts**: Added `SANA_PANEL_SHADOW` constant with layered shadow definition:
+   - Primary layer: `-8px 0 32px rgba(15, 46, 102, 0.20)` (wide blur, stronger opacity)
+   - Secondary layer: `-2px 0 8px rgba(15, 46, 102, 0.10)` (tight edge definition)
+   
+2. **design/components/CommunicationDock.tsx**: Updated to import and use `SANA_PANEL_SHADOW` constant (replaced hardcoded shadow values)
+
+3. **design/components/index.ts**: Exported `SANA_PANEL_SHADOW` for use across all prototypes
+
+4. **.cursor/rules/010-style-guide.mdc**: Added "Depth and Shadows" subsection documenting:
+   - Card shadows (`SANA_CARD_SHADOW`, `SANA_CARD_SHADOW_LIFTED`)
+   - Panel shadows (`SANA_PANEL_SHADOW`)
+   - Implementation note: Apply to Box wrapper, not Card, to avoid overflow:hidden clipping
+
+5. **design/README.md**: Added "Sliding panel depth" note explaining `SANA_PANEL_SHADOW` usage in `CommunicationDock`
+
+**Verification:**
+- ✅ `SANA_PANEL_SHADOW` exported from `design/components/index.ts`
+- ✅ `CommunicationDock.tsx` imports and uses the constant
+- ✅ 010-style-guide.mdc documents the pattern with rationale
+- ✅ design/README.md references the standard
+- ✅ Build succeeds without errors
+- ✅ v75 prototype shadow still renders correctly
+
+**Impact:**
+- All future prototypes using `CommunicationDock` will automatically have proper depth shadows
+- Designers (315) will reference the documented pattern in design briefs
+- Developers (320) will import the constant rather than hardcoding values
+- Visual reviewers (321) will validate against the documented standard
+- Consistent depth treatment across all sliding panels (Email, WhatsApp, SMS, Notes, etc.)
+
+**Artifacts:**
+- Updated files: `design/components/sanaShellTheme.ts`, `design/components/CommunicationDock.tsx`, `design/components/index.ts`, `.cursor/rules/010-style-guide.mdc`, `design/README.md`
+- Reference: Plan at `/Users/david.denham/.cursor/plans/standardize_panel_shadow_847b98ad.plan.md`
+
 ## Mission: GCC-E2E-033 - GCC Research to Design Pipeline
 **Status:** In Progress
 **Pipeline Step:** 0 of 27 (**Strategy (099)** → **CI (101)** → **105** → **106 (Step 2.5)** → **108 (Step 2.75)** → **120** Research → **060 Roadmap Legal** → **130** Deck → **Cleanup** → HITL → **PM Framing** → PRD → **060 Legal PRD** → Red Team PRD → Design Brief (315) → Prototype → **Visual Review** → Copy → Figma → **Epic (410)** → **Story Map (420)** → **Story Map Review** → Red Team Stories → **Jira Stories (430)** → Complete)
@@ -92,6 +178,18 @@ This log tracks the state of all active product initiatives, decisions, and hand
 **Selected Recommendation:** TBD
 **Artifacts:** **Strategy (Step 0):** `research/France/strategy-context-2026-03-27-FR-E2E-001.md` | **CI (Step 1 — 101):** `research/competitive/matrices/fr-competitive-matrix.md` (**v1.1**, changelog **FR-E2E-001**) + `research/competitive/fr/fr-competitive-scan-2026-03-27-FR-E2E-001.md` | **Deployment Agent:** thread `53144170-68c8-41fd-97bb-7c9a9085ce02` (**DA-FR001**; triangulate SMS classification with GCC DA threads) | **108 (Step 2.75):** `research/France/gap-analysis/2026-03-27-gap-analysis-FR-E2E-001.md` (**## Fresh pass attestation**; mission **FR-E2E-001**; scratch: `research/France/gap-analysis/_scratch-gap-sources-FR-E2E-001.md`; source: `research/France/gap-data/presales-gaps-export-unfiltered.csv`)
 
+## Mission: FRANCE-E2E-002 - France Research to Design Pipeline
+**Status:** In Progress
+**Pipeline Step:** 27 of 30 (**Strategy (099)** ✓ Steps 1–3 → **CI (101) Step 4** ✓ → optional **106** (Step 5, skipped) → **108 (Step 6)** ✓ → **105 SME (Step 7)** ✓ → **105 Customer (Step 8)** ✓ → **120 (Step 9)** ✓ → **060 Roadmap (Step 10)** ✓ → **130 (Step 11)** ✓ → **Cleanup (Step 12)** ✓ → **HITL (Step 13)** ✓ → **PM Framing (Step 14)** ✓ → **PRD (Step 15)** ✓ → **060 Legal PRD (Step 16)** ✓ → **Red Team (Step 18)** ✓ → **Design Brief (Step 19)** ✓ → **Copy Review (Step 20)** ✓ → **Peer Review (Step 21)** ✓ → **Prototype (Step 22)** ✓ → **Visual Review (Step 23)** ✓ → **Spot-Check (Step 24)** ✓ → **Figma (Step 25)** ✓ → **Epic (Step 26)** ✓ → **Story Map (Step 27)** 🔄 → Story Map Review → Red Team Stories → Jira Creation)
+**Selected Recommendation:** Native WhatsApp gap response (NATIVE implementation with omnichannel Email added)
+**Artifacts:** **Strategy (Steps 1–3):** `research/France/strategy-context-2026-03-28-FR-E2E-002.md` + `research/France/pestel-analysis-France-2026-03-28-FR-E2E-002.md` + `research/France/swot-analysis-France-2026-03-28-FR-E2E-002.md` | **CI (Step 4 — 101 Pattern 1a):** `research/competitive/matrices/fr-competitive-matrix.md` (**v1.2**, changelog **FR-E2E-002**) + `research/competitive/fr/fr-competitive-scan-2026-03-28-FR-E2E-002.md` | **Deployment Agent:** thread `72acf33b-3896-4144-a68f-6f58e89a95fe` (**DA-FR002**) | **108 (Step 6):** `research/France/gap-analysis/2026-03-28-gap-analysis-FR-E2E-002.md` | **105 SME (Step 7):** `research/France/105-sme-research-findings.md` | **105 Customer (Step 8):** `research/France/105-user-research-findings.md` | **PMF Report (Step 9):** `research/France/thematic-analysis/2026-03-28-France-PMF-Analysis.md` | **Deck (Step 11):** `~/Downloads/France_Recruiting_PMF_Roadmap_v2.pptx` | **PRD (Step 15):** `docs/prds/france-whatsapp-omnichannel-engagement-prd.md` (UPDATED for native WhatsApp + Email) | **Design Brief (Step 19):** `design/france-whatsapp-omnichannel-engagement-v75-design-brief.md` (APPROVED) | **Prototype (Step 22):** `design/france-whatsapp-omnichannel-engagement-v75.tsx` (route: `http://localhost:5199/france-whatsapp-omnichannel-engagement-v75`) - **World-class content quality with rich metadata, visual indicators, and professional polish across all 8 tabs** | **Figma (Step 25):** [URL pending capture] | **Epic Draft (Step 26):** `docs/epics/france-whatsapp-omnichannel-engagement-epic-draft.md` (NOTE: Outdated - needs update for native scope) | **Story Map (Step 27 - IN PROGRESS):** `docs/story-maps/france-whatsapp-omnichannel-engagement-story-map.md` (420 in progress)
+
+## Mission: INDIA-E2E-001 - India Research to Design Pipeline
+**Status:** In Progress
+**Pipeline Step:** 4 of 29 (**Strategy (099)** ✓ artefacts in `research/India/` → **CI (101) Step 4** ✓ → **105** next → optional **106** / **108** → **120** → …)
+**Selected Recommendation:** TBD
+**Artifacts:** **Strategy (Steps 1–3):** `research/India/strategy-context-2026-03-28-INDIA-E2E-001.md` + `research/India/pestel-analysis-India-2026-03-28-INDIA-E2E-001.md` + `research/India/swot-analysis-India-2026-03-28-INDIA-E2E-001.md` | **CI (Step 4 — 101 Pattern 1a):** `research/competitive/matrices/in-competitive-matrix.md` (**v1.1**, changelog **INDIA-E2E-001**) + `research/competitive/in/in-competitive-scan-2026-03-28-INDIA-E2E-001.md` | **Deployment Agent:** thread `bd19c0a6-7644-4763-821e-a87199218558` (**DA-IN001**; **India SMS = Workaround** vs **DA-FR001** Native — triangulate before global SMS claims)
+
 ## Mission: GCC-E2E-030 — GCC E2E Pipeline (Steps 1, 2.5, 2.75)
 
 **Status:** Step 1 complete (**101**); Step 2.5 complete (**106**); Step 2.75 complete (**108**)  
@@ -131,11 +229,10 @@ This log tracks the state of all active product initiatives, decisions, and hand
 
 **Next:** Orchestrator continues pipeline (**120** with `## 106 inputs (Step 2.5)` and `## 108 inputs (Step 2.75)` linking the files above).
 
-**Step 10.5 (330 — Figma capture), 27 March 2026 (subagent attempt):**
+**Step 10.5 (330 — Figma capture):**
 
-- **Prototype verify:** `http://localhost:5199/gcc-nationalisation-local-compliance-reporting-v61` returns **200**; IDE browser snapshot shows v61 shell (e.g. *Local compliance reporting*, Compliance hub, Report catalogue tab).
-- **Blocker:** Official **Figma MCP** (`generate_figma_design`) was **not enabled** in this Cursor session (server not in available MCP list). **No `captureId` / Figma file URL** produced here.
-- **Retry (when Figma MCP is on):** Call `generate_figma_design` with `outputMode: newFile`, `fileName: GCC Local Compliance Reporting v61 [GCC-E2E-029]` (optional `planKey` or omit for account default per prior E2E). Open **once:** `http://localhost:5199/gcc-nationalisation-local-compliance-reporting-v61#figmacapture=<id>&figmaendpoint=<endpoint>` (add `&figmadelay=8000` if capture is empty). Poll with `captureId` until `completed`; log `https://www.figma.com/design/<fileKey>/…` in this mission block.
+- **27 March 2026 (subagent attempt):** `http://localhost:5199/gcc-nationalisation-local-compliance-reporting-v61` **200**; **Figma MCP** was not enabled in that session (no `captureId`).
+- **28 March 2026 (completed — GCC E2E / v62 prototype):** `http://localhost:5199/` and **`http://localhost:5199/gcc-nationalisation-local-compliance-reporting-v62`** verified **200** before capture. **Figma MCP** `generate_figma_design` with `outputMode: newFile`, `fileName` *GCC Nationalisation Local Compliance v62 — 28 Mar 2026 — E2E* (`planKey` omitted). **`captureId`** `1e043eff-4191-4e49-a757-79a124cad68d`. Opened **once:** `http://localhost:5199/gcc-nationalisation-local-compliance-reporting-v62#figmacapture=1e043eff-4191-4e49-a757-79a124cad68d&figmaendpoint=…&figmadelay=8000` (macOS `open`). Polled until **`completed`**. **Figma file:** **https://www.figma.com/design/9Lv4aNAsPkXAGSecQO75SH** (`fileKey` `9Lv4aNAsPkXAGSecQO75SH`) ✅
 
 ---
 
@@ -1921,3 +2018,16 @@ _Items requiring attention or delegation will appear here._
 - [ ] Step 4: HITL Recommendation Selection
 - [ ] Steps 5-15: PRD through Jira story creation
 **Selected Recommendation:** Candidate Grid Redesign - Redesign grid with custom fields and quick filters
+
+## Mission: IN-E2E-002 - India Research to Design Pipeline
+**Status:** In Progress
+**Pipeline Step:** 1 of 30 (**Strategy (099)** → **PESTEL (099)** → **SWOT (099)** → **CI (101)** → **105 SME** → **105 Customer** → **106** → **108** → **120** Research → **060 Roadmap Legal** → **130** Deck → **Cleanup** → HITL → **PM Framing** → PRD → **060 Legal PRD** → Red Team PRD → Design Brief (315) → Prototype → **Visual Review** → Copy → Figma → **Epic (410)** → **Story Map (420)** → **Story Map Review** → Red Team Stories → **Jira Stories (430)** → Complete)
+**Selected Recommendation:** TBD
+**Artifacts:** 
+
+## Mission: IN-E2E-003 - India Research to Design Pipeline
+**Status:** In Progress
+**Pipeline Step:** 4 of 30 (**Strategy (099)** ✓ → **PESTEL (099)** ✓ → **SWOT (099)** ✓ → **CI (101) Step 4** ✓ → **105 SME** next → optional **106** / **108** → **120** Research → **060 Roadmap Legal** → **130** Deck → **Cleanup** → HITL → **PM Framing** → PRD → **060 Legal PRD** → Red Team PRD → Design Brief (315) → Prototype → **Visual Review** → Copy → Figma → **Epic (410)** → **Story Map (420)** → **Story Map Review** → Red Team Stories → **Jira Stories (430)** → Complete)
+**Selected Recommendation:** TBD
+**Artifacts:** **Strategy (Steps 1–3):** `research/India/strategy-context-2026-03-28-IN-E2E-003.md` + `research/India/pestel-analysis-India-2026-03-28-IN-E2E-003.md` + `research/India/swot-analysis-India-2026-03-28-IN-E2E-003.md` | **CI (Step 4 — 101 Pattern 1a):** `research/competitive/matrices/in-competitive-matrix.md` (**v1.2**, changelog **IN-E2E-003**) + `research/competitive/in/in-competitive-scan-2026-03-28-IN-E2E-003.md` | **Deployment Agent:** thread `9f7b1bf1-44f4-4ee0-97c6-7fdf892747a8` (**DA-IN003**; **native +91 SMS = True Gap** — triangulate **DA-IN001** `bd19c0a6-7644-4763-821e-a87199218558` for partner SMS paths)
+**Selected Recommendation:** 2. India statutory ID, OTP, and offer orchestration

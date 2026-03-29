@@ -27,6 +27,7 @@ export {
   SANA_TAB_PILL_RADIUS,
   SANA_CARD_SHADOW,
   SANA_CARD_SHADOW_LIFTED,
+  SANA_PANEL_SHADOW,
   SANA_PRIMARY_RAIL_WIDTH_PX,
   SANA_SECONDARY_NAV_WIDTH_PX,
   SANA_COMM_MESSAGE_RADIUS_PX,
@@ -50,6 +51,12 @@ export {
   SanaCommMessageBubble,
   SanaCommComposer,
 } from './SanaCommPanelPatterns';
+export { RichTextEditor, RECRUITING_EMAIL_TEMPLATES, type RichTextEditorProps, type EmailTemplate } from './RichTextEditor';
+export { EmailComposer, type EmailComposerProps } from './EmailComposer';
+export { ThreadExpansion, type ThreadExpansionProps } from './ThreadExpansion';
+export { EmailPanel, type EmailPanelProps, type EmailThread } from './EmailPanel';
+export { ProfilePageLayout, type ProfilePageLayoutProps, type ProfileTab, type CommunicationDockConfig } from './ProfilePageLayout';
+export { cardStyle } from './profileHelpers';
 export {
   FormSelect,
   FormTextInput,

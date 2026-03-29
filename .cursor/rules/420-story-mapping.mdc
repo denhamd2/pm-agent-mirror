@@ -281,7 +281,7 @@ When invoked as **part of backlog refinement chain** (400 or Regional E2E), buil
    - Value slices: Name, Goal, Story count for each
    - High-level story list per value slice (numbered)
 
-**Orchestrator handles AskQuestion**: In Regional E2E, the orchestrator (000) presents this summary to PM and waits for approval at **Step 11.1**. In standalone 420 usage, YOU still present AskQuestion directly.
+**Orchestrator handles AskQuestion**: In Regional E2E, the orchestrator (000) presents this summary to PM and waits for approval at **Step 27**. In standalone 420 usage, YOU still present AskQuestion directly.
 
 **Key distinction**:
 - **Standalone 420 invocation**: You present AskQuestion yourself and wait for approval

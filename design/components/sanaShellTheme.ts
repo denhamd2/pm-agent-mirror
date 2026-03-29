@@ -41,6 +41,9 @@ export const SANA_TAB_PILL_RADIUS = 999;
 export const SANA_CARD_SHADOW = '0 1px 2px rgba(15, 46, 102, 0.04)';
 export const SANA_CARD_SHADOW_LIFTED = '0 1px 3px rgba(15, 46, 102, 0.08)';
 
+/** Sliding panel depth shadow (2-layer for prominence on overlays) */
+export const SANA_PANEL_SHADOW = '-8px 0 32px rgba(15, 46, 102, 0.20), -2px 0 8px rgba(15, 46, 102, 0.10)';
+
 /** Primary icon rail — wide enough for stacked icon + uppercase label (Sana reference) */
 export const SANA_PRIMARY_RAIL_WIDTH_PX = 64;
 

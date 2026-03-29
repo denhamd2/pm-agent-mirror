@@ -52,6 +52,171 @@ This message comes from **Figma’s html-to-design service**, not from a broken 
 
 **Fix:** In Cursor, ask the agent to call Figma MCP **`generate_figma_design`** again (same `outputMode` / file target) to get a **new** `captureId`, then open **`http://localhost:5199/#figmacapture=<new-id>&figmaendpoint=…`** **once**. Use MCP **polling** with the new id only — do not rely on reloading the browser to "retry".
 
+## Reusable Component Library
+
+### Shell Components
+- **`WorkdayTopNav`** - Global navigation: grey bar, pill search, utilities, avatar, tenant heading
+- **`WorkdayLeftTabBar`** - Primary icon rail + secondary vertical tabs (grey columns, pill active state)
+- **`CommunicationDock`** - Sliding panel wrapper: rail buttons, animated panel, shadow depth
+- **`ProfilePageLayout`** - Hub-style page layout: header card (avatar/title/actions) + tab navigation + optional communication dock (for candidate profiles, worker profiles, requisition details, hiring manager views)
+
+### Communication Components
+- **`SanaCommComposer`** - Simple pill textarea + circular send button (WhatsApp, SMS, Notes, LINE)
+- **`SanaCommMessageBubble`** - Message threading bubbles (white bg, soap border, 12px radius)
+- **`EmailPanel`** - Full email UI: thread sidebar (250px) + rich text composer + Gmail threading (950px total)
+- **`EmailComposer`** - Email composition: From/To/Cc/Subject + rich text + branding + send (no thread sidebar)
+- **`RichTextEditor`** - Standalone rich text input: contentEditable + formatting toolbar (Bold/Italic/Underline/Link/List) + email templates (6 recruiting templates with token replacement) + GenAI improvement (mocked with realistic transformations)
+- **`ThreadExpansion`** - Gmail-style inline thread toggle: "Show N messages" / "Hide previous messages"
+
+### Usage Patterns
+
+**Simple messaging (WhatsApp, SMS):**
+```tsx
+<SanaCommComposer 
+  value={msg} 
+  onChange={setMsg} 
+  placeholder="Type message..."
+  onSend={send} 
+/>
+{messages.map(m => (
+  <SanaCommMessageBubble align={m.align} timestamp={m.timestamp}>
+    {m.text}
+  </SanaCommMessageBubble>
+))}
+```
+
+**Full email (with threading):**
+```tsx
+<CommunicationDock
+  channels={[
+    {
+      id: 'email',
+      icon: mailIcon,
+      label: 'Email',
+      expandedWidthPx: 950,
+      panel: (
+        <EmailPanel
+          threads={emailThreads}
+          activeThreadId={activeId}
+          onThreadSelect={setActiveId}
+          onNewEmail={resetFields}
+          from={from} to={to} cc={cc} subject={subject} body={body}
+          onFromChange={setFrom} onToChange={setTo}
+          onCcChange={setCc} onSubjectChange={setSubject}
+          onBodyChange={(html, text) => setBody(text)}
+          onSend={sendEmail}
+          onClosePanel={collapse}
+          showBranding brandingChecked={branding}
+          onBrandingChange={setBranding}
+        />
+      )
+    }
+  ]}
+/>
+```
+
+**Simple email (compose only):**
+```tsx
+<EmailComposer
+  from={from} to={to} subject={subject} body={body}
+  onFromChange={setFrom} onToChange={setTo}
+  onSubjectChange={setSubject}
+  onBodyChange={(html, text) => setBody(text)}
+  onSend={sendEmail}
+/>
+```
+
+**Standalone rich text:**
+```tsx
+// Basic usage
+<RichTextEditor
+  value={content}
+  onChange={(html, text) => setContent(text)}
+  placeholder="Type here..."
+  minHeight={200}
+/>
+
+// With templates and GenAI (recruiting email example)
+<RichTextEditor
+  value={emailBody}
+  onChange={(html, text) => setEmailBody(text)}
+  placeholder="Type your email..."
+  showTemplates  // Shows 6 recruiting email templates dropdown
+  showGenAI      // Shows sparkle icon for text improvement
+  candidateData={{
+    firstName: 'Sarah',
+    jobTitle: 'Senior Product Manager',
+    requisitionId: 'REQ-2024-1234',
+    recruiterName: 'David Denham',
+    companyName: 'Workday'
+  }}
+/>
+
+// Available templates (auto-populated with token replacement):
+// 1. Interview Availability Request
+// 2. Interview Confirmation
+// 3. Offer Renegotiation
+// 4. Application Status Update
+// 5. Additional Documents Request
+// 6. Pre-Screen Questions Follow-Up
+```
+
+**Profile page layout:**
+```tsx
+import { ProfilePageLayout, type ProfileTab, cardStyle } from './components';
+
+const TABS: ProfileTab[] = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'applications', label: 'Job applications' },
+  { id: 'screening', label: 'Screening' },
+  // ... more tabs
+];
+
+<ProfilePageLayout
+  // Header
+  avatar={<Avatar size={64} altText={candidate.name} as="div" />}
+  name={candidate.name}
+  subtitle={`${candidate.title} · ${candidate.jobReq} · ${candidate.location}`}
+  headerActions={[
+    <SecondaryButton size="small">Move forward</SecondaryButton>,
+    <SecondaryButton size="small">Reject</SecondaryButton>
+  ]}
+  
+  // Tabs
+  tabs={TABS}
+  activeTabId={activeTab}
+  onTabChange={setActiveTab}
+  secondaryTitle="Candidate"
+  showSecondaryTitleIcon
+  
+  // Content (render prop)
+  renderTabContent={(tabId) => {
+    switch (tabId) {
+      case 'overview':
+        return (
+          <Card padding="l" style={cardStyle()}>
+            <Heading size="small" marginBottom="m">Candidate Summary</Heading>
+            <BodyText size="small">{/* Rich content */}</BodyText>
+          </Card>
+        );
+      // ... other tabs
+    }
+  }}
+  
+  // Optional: Communication dock
+  communicationDock={{
+    channels: ['whatsapp', 'email'],
+    activeChannel: activeChannel,
+    onChannelChange: setActiveChannel,
+    getExpandedWidth: (ch) => ch === 'email' ? 950 : 450,
+    renderPanel: (ch) => ch === 'email' ? <EmailPanel {...} /> : <WhatsAppPanel />,
+    renderRail: () => <Flex>{/* rail buttons */}</Flex>
+  }}
+  
+  footerDisclaimer="This screen is a prototype for review."
+/>
+```
+
 #### Troubleshooting: new Figma file opens but looks **blank**
 
 Html-to-design snapshots the DOM after a delay. This stack loads **Roboto from `design.workdaycdn.com`** (Canvas Kit fonts). If capture runs **before** fonts and layout settle, Figma can create a file with **empty or nearly empty** frames.
@@ -185,6 +350,8 @@ design/
 
 **Shared Sana shell (full-page Recruiting prototypes):** import **`WorkdayTopNav`** and **`WorkdayLeftTabBar`** from `./components`, set the page background to **`SANA_PAGE_CANVAS`**, and follow **`010-style-guide.mdc`** and **`design/references/sana/`**. For **communication sliding panels** (Email, SMS, Notes, LINE, WhatsApp), use **`SanaCommComposer`**, **`SanaCommMessageBubble`**, **`sanaCommFormControlStyle`**, and **`communicationRailButtonStyle`** per **`Sana_Style_UI-candidate-profile-whatsapp-panel.png`**.
 
+**Sliding panel depth:** `CommunicationDock` applies `SANA_PANEL_SHADOW` to create visible depth separation. This layered shadow (primary -8px blur + secondary -2px edge) is applied to the Box wrapper (not the Card) to avoid overflow:hidden clipping during slide animation.
+
 ## Building a Prototype
 
 ### 1. Review PRD or Spec
@@ -298,6 +465,209 @@ Save to `[feature]-implementation.md` with:
   <Tabs.Panel data-id="step3">Step 3 content</Tabs.Panel>
 </Tabs>
 ```
+
+## Content Patterns (Canvas Kit Components)
+
+When building candidate profiles, worker profiles, or similar hub pages, always use proper Canvas Kit components for common content patterns. NEVER use custom Box components with inline styling.
+
+### Status Badges and Indicators
+
+Use `StatusIndicator` for all status displays (application stage, workflow state, completion status):
+
+```tsx
+import { StatusIndicator } from '@workday/canvas-kit-react/status-indicator';
+
+// Active/In-Progress states (blue)
+<StatusIndicator
+  type={StatusIndicator.Type.Blue}
+  emphasis={StatusIndicator.Emphasis.Low}
+  label="Interview"
+/>
+
+// Success/Completed states (green)
+<StatusIndicator
+  type={StatusIndicator.Type.Green}
+  emphasis={StatusIndicator.Emphasis.Low}
+  label="Completed"
+/>
+
+// Inactive/Rejected states (gray)
+<StatusIndicator
+  type={StatusIndicator.Type.Gray}
+  emphasis={StatusIndicator.Emphasis.Low}
+  label="Rejected"
+/>
+
+// Caution/Warning states (orange)
+<StatusIndicator
+  type={StatusIndicator.Type.Orange}
+  emphasis={StatusIndicator.Emphasis.Low}
+  label="Action Required"
+/>
+```
+
+### Skills, Tags, and Categories
+
+Use `StatusIndicator` with Gray/Low emphasis for neutral pill appearance:
+
+```tsx
+import { StatusIndicator } from '@workday/canvas-kit-react/status-indicator';
+
+<Flex gap="xs" flexWrap="wrap">
+  {['Figma', 'Design Systems', 'Accessibility', 'Prototyping'].map(skill => (
+    <StatusIndicator
+      key={skill}
+      type={StatusIndicator.Type.Gray}
+      emphasis={StatusIndicator.Emphasis.Low}
+      label={skill}
+    />
+  ))}
+</Flex>
+```
+
+### Why Use StatusIndicator
+
+- Automatically uses Canvas Kit design tokens (borderRadius.s, semantic colors)
+- Ensures WCAG AA contrast compliance (4.5:1 for text)
+- Consistent with Workday design system across all products
+- Accessible by default (proper ARIA labels, keyboard support)
+- Maintainable (future Canvas Kit updates apply automatically)
+
+### Anti-Pattern to Avoid
+
+```tsx
+// ❌ WRONG - Custom Box with inline styling
+<Box padding="xxs xs" style={{ 
+  backgroundColor: colors.soap100, 
+  borderRadius: 12, 
+  border: `1px solid ${colors.soap300}` 
+}}>
+  <BodyText size="small">{skill}</BodyText>
+</Box>
+
+// ❌ WRONG - Hardcoded status badge
+<Box style={{ 
+  display: 'inline-block', 
+  backgroundColor: colors.blueberry100, 
+  color: colors.blueberry600, 
+  borderRadius: 4 
+}}>
+  Interview
+</Box>
+
+// ✅ CORRECT - Canvas Kit StatusIndicator
+<StatusIndicator
+  type={StatusIndicator.Type.Gray}
+  emphasis={StatusIndicator.Emphasis.Low}
+  label="Skill Name"
+/>
+```
+
+### Button Hierarchy for Action Pairs
+
+When displaying paired actions (positive + negative/destructive), use proper Canvas Kit button hierarchy:
+
+```tsx
+import { SecondaryButton } from '@workday/canvas-kit-react/button';
+
+// Profile header actions (equal visual weight)
+<Flex gap="s">
+  <SecondaryButton size="small">Move forward</SecondaryButton>
+  <SecondaryButton size="small">Reject</SecondaryButton>
+</Flex>
+
+// Alternative: Primary + Secondary (emphasized positive action)
+<Flex gap="s">
+  <PrimaryButton size="small">Move forward</PrimaryButton>
+  <SecondaryButton size="small">Reject</SecondaryButton>
+</Flex>
+```
+
+**Button hierarchy rules:**
+- **Primary actions** (positive, forward-moving): `PrimaryButton` (solid) or `SecondaryButton` (outlined)
+- **Negative/destructive actions**: `SecondaryButton` (outlined) for equal weight
+- **NEVER** use `TertiaryButton` for destructive actions - too casual, looks like a link
+- **Equal weight pattern** (both `SecondaryButton`): Use when actions have similar importance
+- **Emphasized pattern** (Primary + Secondary): Use when one action is clearly preferred
+
+**Why not TertiaryButton for destructive actions:**
+- Appears as text link, too casual for important negative action
+- Doesn't convey destructive/negative nature
+- Could lead to accidental clicks
+- Not accessible for users with motor impairments (smaller click target)
+
+### Communication Channel Selectors
+
+**Current Pattern (Working):**
+Use `SecondaryButton` with state-based styling for mutually exclusive channel toggles:
+
+```tsx
+import { SecondaryButton } from '@workday/canvas-kit-react/button';
+import { colors } from '@workday/canvas-kit-react/tokens';
+
+<Flex gap="s">
+  <SecondaryButton 
+    size="small" 
+    onClick={() => setActiveChannel('whatsapp')}
+    style={activeChannel === 'whatsapp' ? { 
+      backgroundColor: colors.blueberry400, 
+      color: colors.frenchVanilla100 
+    } : undefined}
+  >
+    WhatsApp
+  </SecondaryButton>
+  <SecondaryButton 
+    size="small" 
+    onClick={() => setActiveChannel('email')}
+    style={activeChannel === 'email' ? { 
+      backgroundColor: colors.blueberry400, 
+      color: colors.frenchVanilla100 
+    } : undefined}
+  >
+    Email
+  </SecondaryButton>
+</Flex>
+```
+
+**Future Pattern (SegmentedControl - Canvas Kit Preview):**
+The semantically correct component is `SegmentedControl` from `@workday/canvas-kit-preview-react/segmented-control`. However, it requires a model-based API that's more complex to integrate:
+
+```tsx
+import { SegmentedControl } from '@workday/canvas-kit-preview-react/segmented-control';
+
+<SegmentedControl
+  initialValue={activeChannel}
+  onChange={(event) => setActiveChannel(event.target.value)}
+>
+  <SegmentedControl.List aria-label="Communication channel selector">
+    <SegmentedControl.Item value="whatsapp">WhatsApp</SegmentedControl.Item>
+    <SegmentedControl.Item value="email">Email</SegmentedControl.Item>
+    <SegmentedControl.Item value="sms">SMS</SegmentedControl.Item>
+  </SegmentedControl.List>
+</SegmentedControl>
+```
+
+**Why SegmentedControl is preferred (when implemented):**
+- Semantically correct for mutually exclusive toggles
+- Visually distinct from action buttons
+- Better accessibility (toggle group semantics)
+- Matches Canvas Kit patterns for view switching
+
+**API notes for SegmentedControl:**
+- Use `initialValue` for uncontrolled behavior (Canvas Kit manages state internally)
+- `onChange` receives native change event; access value via `event.target.value`
+- `aria-label` is required on `SegmentedControl.List` for accessibility
+- Requires proper model setup with `useSegmentedControlModel` for advanced use cases
+
+**When to use:**
+- Switching between different views of same content (email view vs WhatsApp view)
+- Channel selectors in communication panels
+- Tab-like toggles that change displayed content
+
+**When NOT to use:**
+- Action buttons that trigger operations (use PrimaryButton/SecondaryButton)
+- Non-mutually-exclusive options (use checkboxes)
+- Navigation between different pages (use navigation components)
 
 ## Resources
 
