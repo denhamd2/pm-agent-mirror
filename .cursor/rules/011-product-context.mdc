@@ -1,0 +1,47 @@
+---
+description: Workday Recruiting product context - acquisitions and integration strategy
+globs:
+  - "**/*"
+alwaysApply: false
+---
+
+# Product Context
+
+## Workday Acquisitions (Assumed Integrated)
+
+**HiredScore** (acquired, assumed integrated)
+- AI-powered candidate screening and matching
+- High-volume candidate prioritisation
+- Built into Workday Recruiting workflows
+- Activate for customers; do not treat as separate add-on
+
+**Paradox** (acquired, assumed integrated)
+- Conversational AI for candidate engagement
+- Interview scheduling automation
+- Self-service interview booking
+- Embedded in Workday Recruiting UI
+
+## Jobs Board Strategy
+
+**Workday does NOT build direct job board integrations.**
+
+Instead, Workday partners with **Broadbean** (certified partner) for job distribution.
+
+**When you find job board gaps:**
+1. Search Broadbean's website (broadbean.com) to verify if the local/regional job board is supported
+2. If Broadbean supports it, Workday has coverage via partnership
+3. If Broadbean does NOT support it, flag as a gap with recommendation to request Broadbean add it
+4. Common Broadbean-supported regions: UK, US, EMEA, APAC, GCC
+
+**Example Job Boards:**
+- GCC: Bayt.com, GulfTalent, Naukrigulf (check Broadbean support)
+- UK: Reed, Totaljobs, CV-Library
+- US: Indeed, LinkedIn, Monster
+- APAC: JobStreet, SEEK
+
+**Do NOT recommend Workday build native job board integrations.** Always check Broadbean first, then recommend partnership expansion if needed.
+
+## Product Recommendations in Analysis
+- Assume HiredScore and Paradox are integrated; recommend activation, not integration
+- For job boards, check Broadbean coverage first
+- Prioritise native Workday capabilities over third-party tools where feasible

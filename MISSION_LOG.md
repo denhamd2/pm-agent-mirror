@@ -1734,9 +1734,9 @@ research/
 - Sample strategy document: `strategy/markdown/product-priorities-q2-2026.md` (Q2 priorities, OKRs, regional focus, competitive positioning, "What's NOT a Priority")
 - Updated 5 agent rules to search strategy/ folder:
   - **100-market-intelligence**: Search before Strategic Recommendations; cite strategic alignment
-  - **101-competitive-intelligence**: Search before battle card generation; align messaging with GTM strategy
-  - **105-user-researcher**: Search when creating Research Briefs; connect research to strategic priorities
-  - **120-pmf-thematic-analysis**: Search before Product Roadmap Impact Summary; invoke RICE skill for strategy-aware scoring
+  - **@competitive-intel**: Search before battle card generation; align messaging with GTM strategy
+  - **105-research-planning-analysis**: Search when creating Research Briefs; connect research to strategic priorities
+  - **@pmf-analyst**: Search before Product Roadmap Impact Summary; invoke RICE skill for strategy-aware scoring
   - **090-agent-improvement-advisor**: Include strategy/ in Discovery Phase; ensure improvement suggestions align with business priorities
 **Pattern:**
 - Markdown for frequently updated priorities (quarterly)

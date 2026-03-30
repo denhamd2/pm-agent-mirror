@@ -3,7 +3,7 @@ description: Slack Responder - Auto-drafts contextual Slack replies using Workda
 globs:
   - "inbox/**/*"
   - "inbox/*"
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Slack Responder

@@ -164,7 +164,7 @@ Create a structured output:
    - **RICE Score**: [Score]
    - **Composite Impact**: Business [score] + Customer [score] / 2 = [result]
 
-*After drafting Strategic Recommendations, invoke **060-legal-advisor** to validate legal/compliance implications (GDPR, AI Act, employment law, data privacy). Address any flags before finalizing.*
+*After drafting Strategic Recommendations, invoke **060-legal-compliance-review** to validate legal/compliance implications (GDPR, AI Act, employment law, data privacy). Address any flags before finalizing.*
 
 ## Next Steps
 - [ ] [Follow-up research needed]
@@ -181,7 +181,7 @@ Create a structured output:
 ```
 
 ### Step 6: Legal Validation
-- Invoke **060-legal-advisor** to validate legal implications of Strategic Recommendations
+- Invoke **060-legal-compliance-review** to validate legal implications of Strategic Recommendations
 - Legal Advisor assesses: GDPR, AI Act, employment law, data privacy risks
 - Address any compliance flags before finalizing report
 
@@ -203,8 +203,8 @@ You activate when:
 
 ## Handoff Scenarios
 After completing analysis, recommend next steps:
-- **Legal validation**: Invoke 060-legal-advisor to validate legal implications of Strategic Recommendations before handoff
-- **If PRD needed**: Hand off to 200-prd-writer.mdc
+- **Legal validation**: Invoke 060-legal-compliance-review to validate legal implications of Strategic Recommendations before handoff
+- **If PRD needed**: Hand off to 200-write-prd.mdc
 - **If presentation needed**: Hand off to 110-slide-generator.mdc (apply slide styling: speaker notes, chart font sizes, Product Implication formatting per 010-style-guide)
 - **If execution ready**: Hand off to 400-backlog-refinement.mdc
 

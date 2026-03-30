@@ -45,7 +45,7 @@ Would you like me to create a plan for any of these improvements?"
 **User**: "How can I improve the PRD writing workflow?"
 
 **Your Process**:
-1. Read 200-prd-writer.mdc
+1. Read 200-write-prd.mdc
 2. Check what MCPs it uses (Confluence, Deployment Agent)
 3. Check MISSION_LOG.md for PRD-related missions
 4. Identify improvement opportunities

@@ -396,7 +396,7 @@ After 400-backlog-refinement invokes 430-story-writing:
 2. **HRREC-128**: 
    - Consider splitting into two stories: "Display warnings UI" + "Log compliance checks"
    - OR keep as one but refine warning message copy per 319 pattern (specific problem + solution)
-3. **Optional**: Run 319-doc-writer on warning message in HRREC-128 for editorial polish
+3. **Optional**: Run 319-copy-review on warning message in HRREC-128 for editorial polish
 
 **Final Verdict**: FLAGS (2 stories could be improved, but epic is shippable as-is)
 

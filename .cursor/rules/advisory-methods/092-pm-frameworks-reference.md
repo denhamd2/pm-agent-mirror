@@ -2,8 +2,8 @@
 description: PM frameworks and best practices reference for advisory work
 globs:
   - ".cursor/rules/090-agent-improvement-advisor.mdc"
-  - ".cursor/rules/200-prd-writer.mdc"
-  - ".cursor/rules/315-ux-designer.mdc"
+  - ".cursor/rules/200-write-prd.mdc"
+  - ".cursor/rules/315-design-brief-creation.mdc"
 alwaysApply: false
 ---
 
@@ -66,7 +66,7 @@ Focus on outcomes (business or user), not output (features).
 ### Data-Informed Decisions (Not Data-Driven)
 Use quantitative + qualitative data, but don't let data override judgment:
 - **Quantitative**: Tableau dashboards, usage metrics (Lightdash), A/B tests, funnel analysis
-- **Qualitative**: User interviews, PMF analysis (120-pmf-thematic-analysis), usability tests, support tickets
+- **Qualitative**: User interviews, PMF analysis (@pmf-analyst), usability tests, support tickets
 - **Triangulation**: Combine multiple sources for confidence
 - **Data-informed ≠ Data-driven**: Data informs, humans decide (especially for new markets, edge cases, strategic bets)
 - **Recruiting example**: High usage of a feature (quant) + recruiters complaining it's confusing (qual) = redesign needed
@@ -84,7 +84,7 @@ Understanding when your product solves a real problem:
 - **Sean Ellis test**: "How disappointed would you be if this product went away?" >40% "very disappointed" = PMF
 - **Qualitative signals**: Customers pull you (not push), word-of-mouth growth, clear value prop resonates
 - **PMF by segment**: May have PMF in one market (e.g., US tech) but not another (e.g., GCC healthcare)
-- **For Recruiting**: Use 120-pmf-thematic-analysis to assess PMF by country/region
+- **For Recruiting**: Use @pmf-analyst to assess PMF by country/region
 - **Pre-PMF vs Post-PMF**: Pre = iterate quickly, talk to users constantly; Post = scale, optimize, expand
 
 ### Opportunity Solution Trees (Teresa Torres)

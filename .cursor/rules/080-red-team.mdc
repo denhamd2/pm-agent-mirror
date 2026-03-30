@@ -64,7 +64,7 @@ Use **sparingly** only when truly ambiguous trade-offs exist. Default to reasoni
 - **Hidden dependencies**: Integrations, data availability, org readiness, cross-team work
 - **Real-world failure scenarios**: Scale issues, edge cases, cross-region problems
 - **Workday feasibility deep-dive**: Use Deployment Agent + functional knowledge
-- **Competitive claims vs CI artifacts (Regional E2E)**: When `research/competitive/[region-code]/e2e-ci-brief-*.md` and/or `research/competitive/matrices/[region-code]-competitive-matrix.md` exist for this initiative, cross-check PRD competitive or differentiation language against **101** outputs. Flag **over-claims**, **missing parity risks**, or narrative that **contradicts** Native / Workaround / True Gap classifications in the brief or matrix.
+- **Competitive claims vs CI artifacts (Regional E2E)**: When `research/competitive/[region-code]/e2e-ci-brief-*.md` and/or `research/competitive/matrices/[region-code]-competitive-matrix.md` exist for this initiative, cross-check PRD competitive or differentiation language against **@competitive-intel** outputs. Flag **over-claims**, **missing parity risks**, or narrative that **contradicts** Native / Workaround / True Gap classifications in the brief or matrix.
 - **Strategic Clarity & PM Ownership**: Validate that PM thinking is evident in the PRD (not just research synthesis)
 
 **Risk Categories to Assess**:
@@ -188,7 +188,7 @@ For 200 to implement in revision:
 
 **Behavioral Rules for PRD Review**:
 - Be **concrete**: "Assumes 4.5% adoption but GCC v43 achieved 0.8%" NOT "adoption might be lower"
-- **Cite evidence**: Reference functional knowledge PDFs, Deployment Agent responses, prior GCC analyses, and **101** E2E CI brief / gcc matrix when present
+- **Cite evidence**: Reference functional knowledge PDFs, Deployment Agent responses, prior GCC analyses, and **@competitive-intel** E2E CI brief / gcc matrix when present
 - **Focus on cross-functional impact**: What other teams/systems does this affect?
 - **Stress-test at scale**: "What breaks at 10x volume? 100x users?"
 - **Consider global**: "How does this fail in Japan? GCC? Germany?"
@@ -392,13 +392,13 @@ After you complete your review:
 
 ### Hands off to:
 - **Orchestrator**: Findings summary (orchestrator handles reinvoking original agent)
-- **315-ux-designer**: Proceeds after PRD review (may reference documented risks)
+- **315-design-brief-creation**: Proceeds after PRD review (may reference documented risks)
 - **430-story-writing**: Proceeds after story map review (with any noted complexity flags)
 
 ### Does NOT invoke:
-- **060-legal-advisor**: Legal review is out of scope (already auto-invoked by other agents)
-- **319-doc-writer**: Copy review is out of scope
-- **315-ux-designer**: Design review is out of scope
+- **060-legal-compliance-review**: Legal review is out of scope (already auto-invoked by other agents)
+- **319-copy-review**: Copy review is out of scope
+- **315-design-brief-creation**: Design review is out of scope
 
 ## Quality Standards
 

@@ -75,13 +75,13 @@ Curated list of live Confluence strategy pages with descriptions.
 - **Search for**: Competitive positioning, differentiation themes, key messages
 - **Output**: Battle card messaging that mirrors strategy docs
 
-**105-user-researcher:**
+**105-research-planning-analysis:**
 - **When**: During Research Brief creation (Path A - planning)
 - **Why**: Focus research questions on strategically important areas
 - **Search for**: Product priorities, regional strategies, OKRs
 - **Output**: Research objectives aligned with business goals
 
-**120-pmf-thematic-analysis:**
+**@pmf-analyst:**
 - **When**: Before Product Roadmap Impact Summary (recommendations section)
 - **Why**: Prioritise recommendations by strategic alignment + customer pain
 - **Search for**: Product priorities, OKRs, regional strategies, competitive positioning
@@ -90,7 +90,7 @@ Curated list of live Confluence strategy pages with descriptions.
 
 ### Other Agents (Optional, Context-Dependent)
 
-**200-prd-writer:**
+**200-write-prd:**
 - **When**: Writing "Why Now?" section, defining success metrics
 - **Why**: Connect PRD to strategic initiatives and OKRs
 - **Search for**: Current priorities, OKRs, regional strategies
@@ -141,9 +141,9 @@ This folder enables **dual-dimension Impact scoring** for recommendations:
 
 ## Example Usage
 
-### Example 1: 120-pmf-thematic-analysis Searches Strategy
+### Example 1: @pmf-analyst Searches Strategy
 
-**Context**: 120 is generating Product Roadmap Impact Summary for GCC research.
+**Context**: @pmf-analyst is generating Product Roadmap Impact Summary for GCC research.
 
 **Agent Actions**:
 1. Search `strategy/markdown/` for "GCC" or "Q2 2026 priorities"
@@ -155,9 +155,9 @@ This folder enables **dual-dimension Impact scoring** for recommendations:
 5. Invoke enhanced RICE Skill for Business Impact scoring
 6. Output recommendations with strategy-aware RICE scores
 
-### Example 2: 101-competitive-intelligence Creates Battle Card
+### Example 2: @competitive-intel Creates Battle Card
 
-**Context**: 101 is creating battle card for "Workday vs. SAP SuccessFactors".
+**Context**: @competitive-intel is creating battle card for "Workday vs. SAP SuccessFactors".
 
 **Agent Actions**:
 1. Search `strategy/pdfs/competitive-strategy-ats-market.pdf`

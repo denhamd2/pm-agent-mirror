@@ -684,7 +684,7 @@ import { SegmentedControl } from '@workday/canvas-kit-preview-react/segmented-co
 - **Test accessibility** - Keyboard navigation, screen readers, contrast
 - **Match Figma fidelity** - Use Figma as visual target for styling
 - **Document as you go** - Save implementation notes for handoff
-- **Run locally** - Ensure prototype works before handoff to 330-figma-creator
+- **Run locally** - Ensure prototype works before handoff to 330-figma-integration
 
 ## Questions?
 

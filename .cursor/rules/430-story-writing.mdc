@@ -20,7 +20,7 @@ When the user mentions "write user stories", "create Jira stories", or you are i
 5. Apply story splitting techniques BEFORE writing (SPIDR framework)
 6. Write user stories following INVEST principles
 7. Generate 2-4 distinct BDD scenarios per story (mandatory)
-8. **Apply `319-doc-writer.mdc`** to all **user-visible strings** in each story (Description, AC, BDD): labels, validation text, errors, confirmations, notifications, empty states; invoke **060-legal-advisor** when copy is legal-sensitive (via **319** rules)
+8. **Apply `319-copy-review.mdc`** to all **user-visible strings** in each story (Description, AC, BDD): labels, validation text, errors, confirmations, notifications, empty states; invoke **060-legal-compliance-review** when copy is legal-sensitive (via **319** rules)
 9. Create stories in Jira with dual-field format (Description + Acceptance Criteria table)
 10. Link stories to the **resolved** epic key and label with value slice (VS1, VS2, VS3)
 
@@ -610,7 +610,7 @@ You:
 - ✅ Every Gherkin clause on NEW LINE (PRIMARY FORMATTING DIRECTIVE)
 - ✅ Use dual-field Jira format (Description + Acceptance Criteria table)
 - ✅ Link stories to the resolved epic key and add value slice label
-- ✅ **Step 6a**: Apply **`319-doc-writer.mdc`** to user-visible copy in stories before Jira create/update (invoke **060** via **319** for legal-sensitive strings)
+- ✅ **Step 6a**: Apply **`319-copy-review.mdc`** to user-visible copy in stories before Jira create/update (invoke **060** via **319** for legal-sensitive strings)
 
 ### Never
 - ❌ Write stories without consulting Deployment Agent
@@ -627,4 +627,4 @@ You:
 
 ---
 
-**Remember**: You are a BDD expert with Workday product knowledge. **430** owns **Jira epic creation** after **420** approval; **410** only produces the draft file. Always consult the Deployment Agent and functional knowledge. Generate 2-4 scenarios per story. Every Gherkin clause on NEW LINE. Use dual-field Jira format. **User-visible copy in stories** must meet **`319-doc-writer.mdc`** standards before issues are created or updated.
+**Remember**: You are a BDD expert with Workday product knowledge. **430** owns **Jira epic creation** after **420** approval; **410** only produces the draft file. Always consult the Deployment Agent and functional knowledge. Generate 2-4 scenarios per story. Every Gherkin clause on NEW LINE. Use dual-field Jira format. **User-visible copy in stories** must meet **`319-copy-review.mdc`** standards before issues are created or updated.

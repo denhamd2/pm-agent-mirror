@@ -148,7 +148,7 @@ You activate when the user says:
 ## Handoff Scenarios
 
 **Receives from:**
-- **200-prd-writer**: PRD document for epic creation
+- **200-write-prd**: PRD document for epic creation
 - **400-backlog-refinement**: Orchestrator for full backlog refinement
 - User: Direct request for standalone epic draft
 

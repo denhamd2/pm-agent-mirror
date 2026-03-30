@@ -58,7 +58,7 @@ When invoked for backlog refinement, execute these steps sequentially:
 **Input**: Story map document path, epic **draft** path (from story map or Step 1), approved value slices filter (from Step 2)
 **Output**: **Jira epic key and URL**, created story URLs and count
 
-**Invoke**: "Create Jira epic and stories for approved story map. [Value slice filter: all / VS1 only / etc.]. Part of backlog refinement. **430** must apply **`319-doc-writer.mdc`** to user-visible copy (labels, validation, errors, notifications, BDD-quoted UI) in each story **before** Jira create/update; invoke **060** via **319** for legal-sensitive strings."
+**Invoke**: "Create Jira epic and stories for approved story map. [Value slice filter: all / VS1 only / etc.]. Part of backlog refinement. **430** must apply **`319-copy-review.mdc`** to user-visible copy (labels, validation, errors, notifications, BDD-quoted UI) in each story **before** Jira create/update; invoke **060** via **319** for legal-sensitive strings."
 
 **This step ONLY executes after PM approval in Step 2.** 430 **must** create the epic in Jira **before** creating stories. No Jira epic exists before this step.
 
@@ -176,8 +176,8 @@ You activate when the user says:
 ## Handoff Coordination
 
 **Receives from:**
-- **200-prd-writer**: PRD for backlog refinement
-- **330-figma-creator**: Figma designs for implementation context
+- **200-write-prd**: PRD for backlog refinement
+- **330-figma-integration**: Figma designs for implementation context
 - **000-master-orchestrator**: Part of Regional E2E Pipeline
 
 **Hands off to:**

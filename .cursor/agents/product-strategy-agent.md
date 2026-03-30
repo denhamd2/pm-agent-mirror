@@ -1,5 +1,5 @@
 ---
-name: Product Strategist
+name: Product Strategy Agent
 description: Principal Product Strategist performing comprehensive strategic analysis using PESTEL, SWOT, Porter's 5 Forces, and Business Model Canvas frameworks for Workday Recruiting
 model: default
 readonly: false
