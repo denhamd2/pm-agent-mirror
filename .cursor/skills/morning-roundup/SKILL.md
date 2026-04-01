@@ -32,7 +32,7 @@ This finds Jiras where David was mentioned in comments over the past 2 weeks.
 Use `user-jira-ghe` MCP `searchJiraTickets` tool with JQL:
 
 ```
-issuetype = Bug AND assignee is EMPTY AND status in (Open, Reopened) ORDER BY updated DESC
+issuetype = Bug AND assignee = "David Denham" AND status in (Open, Reopened) ORDER BY updated DESC
 ```
 
 This finds unassigned Bug-type issues in Open or Reopened status.
@@ -53,7 +53,8 @@ For each Jira found in Steps 1-2, use `user-jira-ghe` MCP `getTicketDetails` too
 2. Check if "David Denham" is mentioned in the **most recent comment only**
 3. If David is mentioned in the latest comment: INCLUDE in results
 4. If David is only mentioned in older comments: DISCARD from results
-5. Extract the latest comment author, date, and body for TLDR generation
+5. If the latest comment **author** is "David Denham" or "david.denham": EXCLUDE from results (David has already responded)
+6. Extract the latest comment author, date, and body for TLDR generation
 
 **Customer Issues filtering (from Step 2):**
 1. For each ticket, check custom fields for Customer data AND Scrum Team
@@ -102,10 +103,11 @@ Use `WebSearch` tool to find latest news from these competitors (past 7 days):
 - Oracle Taleo
 - SAP SuccessFactors
 
-**Search queries** (run 3-4 searches total, pick highest-value results):
+**Search queries** (run 4-5 searches total, pick highest-value results):
 1. "Greenhouse OR Lever OR iCIMS feature release announcement 2026"
 2. "SmartRecruiters OR Jobvite AI recruiting announcement 2026"
 3. "Oracle Taleo OR SAP SuccessFactors release notes latest"
+4. "ATS recruiting software announcement OR release 2026"
 
 Focus on:
 - Feature releases
@@ -113,7 +115,7 @@ Focus on:
 - Press releases
 - Product updates
 
-Return top 3 most relevant news items total (across all competitors).
+Return 3-5 most relevant news items total (across all competitors).
 
 ### Step 6a: Generate Workday Implications per News Item
 
@@ -134,73 +136,6 @@ For each competitor news item gathered in Step 6:
 **Output**: Add `workdayImplication` field to each `competitorNews` object in the JSON data structure.
 
 **Fallback**: If no competitive matrix exists or the news item does not map to a clear Workday capability, generate the implication based on general ATS market knowledge.
-
-### Step 6b: Read Customer Ideation Hub Data
-
-Read local Customer Ideation Hub data for the "Latest Customer Ideas" section.
-
-**Data source**: `research/brainstorm-sessions/` directory. Look for `.xlsx`, `.xls`, or `.csv` files (e.g. `P&T Idea Results Dashboard*.xlsx`).
-
-**Processing:**
-1. Parse the file (use openpyxl for xlsx, CSV reader for csv)
-2. Look for the sheet/data containing idea records with fields like: `Idea Title`, `Product Capability`, `Business_Value`, `Workaround`, `Created Date`, `Votes`, `Status`
-3. Filter for Talent Acquisition product area (if `Product Area` or `Product Capability` column exists)
-4. Sort by date descending (newest first)
-5. Take the top 10 records
-6. Extract for each idea: title/description, product capability, business value summary, date, votes/popularity if available
-
-**If no file exists:**
-- Return empty `customerIdeas` array
-- The HTML will show an empty state with instructions to place the CSV/XLSX file in `research/brainstorm-sessions/`
-
-**Output structure:**
-```json
-{
-  "customerIdeas": [
-    {
-      "title": "Aadhaar-based eSign for Indian offers",
-      "capability": "Offers & Contracts",
-      "businessValue": "Critical for India compliance; 85% of offers require Aadhaar eSign",
-      "date": "2026-03-15",
-      "votes": 12,
-      "source": "P&T Idea Results Dashboard"
-    }
-  ]
-}
-```
-
-### Step 6c: Read Win-Loss / Presales Gap Data
-
-Read local presales gap data for the "Latest Win-Loss Data" section.
-
-**Data source**: All CSV/XLSX files across `research/*/gap-data/` directories. Also check `research/raw-data/*.csv`.
-
-**Processing:**
-1. Read all CSV/XLSX files found in the above paths
-2. Parse each file, normalising column names (handle variations: `Gap Name`/`Gap ID`/`Product Area`/`Product Area Name`/`Created Date`/`Created`/`Severity`/`Pain point(s)`/`Pain Points`/`CI Notes`/`Product Capability`/`Capability`/`Opp Region`/`Opp Segment`)
-3. Filter rows where `Product Area` = `Talent Acquisition` (if column exists). If no Product Area column, include all rows (these are likely pre-filtered exports).
-4. Exclude aggregated/crosstab rows (skip rows where key fields are counts or contain `*`)
-5. Sort by `Created Date` descending (parse DD/MM/YYYY or YYYY-MM-DD). If no date column, use file modification date.
-6. Take the top 10 records
-7. Extract for each record: gap name, gap ID, pain point summary, severity, product capability, region, date
-
-**Output structure:**
-```json
-{
-  "winLossData": [
-    {
-      "gapName": "PG-90001001",
-      "gapId": "x1",
-      "painPoint": "Recruiter needs offer templates aligned to French labour practice",
-      "severity": "Risk of Deal Loss (3)",
-      "capability": "Offers & Contracts",
-      "region": "France MFG HC & Edu",
-      "date": "2025-01-15",
-      "source": "presales-gaps-export-unfiltered.csv"
-    }
-  ]
-}
-```
 
 ### Step 7: Generate JSON Data File
 
@@ -248,28 +183,6 @@ Write results to `docs/morning-roundup-data.json`:
       "summary": "Greenhouse released an AI scheduling assistant that automatically finds interview times across multiple calendars...",
       "type": "feature-release",
       "workdayImplication": "Greenhouse closing scheduling gap; our native HCM calendar integration remains a differentiator"
-    }
-  ],
-  "customerIdeas": [
-    {
-      "title": "Aadhaar-based eSign for Indian offers",
-      "capability": "Offers & Contracts",
-      "businessValue": "Critical for India compliance",
-      "date": "2026-03-15",
-      "votes": 12,
-      "source": "P&T Idea Results Dashboard"
-    }
-  ],
-  "winLossData": [
-    {
-      "gapName": "PG-90001001",
-      "gapId": "x1",
-      "painPoint": "Recruiter needs offer templates aligned to French labour practice",
-      "severity": "Risk of Deal Loss (3)",
-      "capability": "Offers & Contracts",
-      "region": "France MFG HC & Edu",
-      "date": "2025-01-15",
-      "source": "presales-gaps-export-unfiltered.csv"
     }
   ]
 }

@@ -36,8 +36,6 @@ body { background: var(--paper); color: var(--ink); }
 .container { max-width: 1400px; margin: 80px auto 40px; padding: 0 24px; }
 .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
 .page-title { font-size: 28px; font-weight: 700; color: var(--ink); }
-.refresh-btn { padding: 8px 18px; background: var(--water); color: white; border: none; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-.refresh-btn:hover { background: #0284c7; transform: translateY(-1px); }
 .timestamp { font-size: 12px; color: var(--laptop); margin-top: 4px; }
 
 .section { background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(11,31,66,0.08); }
@@ -70,8 +68,8 @@ body { background: var(--paper); color: var(--ink); }
 .btn-subtle { display: inline-block; padding: 4px 12px; background: white; border: 1px solid var(--staple); border-radius: 16px; font-size: 11px; font-weight: 600; color: var(--ink); text-decoration: none; transition: all 0.2s; }
 .btn-subtle:hover { border-color: var(--water); color: var(--water); background: rgba(0,117,180,0.05); }
 
-.news-item { padding: 16px; background: white; border: 1px solid var(--staple); border-left: 4px solid var(--staple); margin-bottom: 12px; border-radius: 8px; transition: all 0.2s; box-shadow: 0 1px 3px rgba(11,31,66,0.04); }
-.news-item:hover { border-left-color: var(--green); box-shadow: 0 4px 12px rgba(11,31,66,0.08); transform: translateY(-1px); }
+.news-item { padding: 16px; background: white; border: 1px solid var(--staple); margin-bottom: 12px; border-radius: 8px; transition: all 0.2s; box-shadow: 0 1px 3px rgba(11,31,66,0.04); }
+.news-item:hover { box-shadow: 0 4px 12px rgba(11,31,66,0.08); transform: translateY(-1px); }
 .news-competitor { font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.05em; }
 .news-title { font-size: 14px; font-weight: 600; color: var(--ink); margin: 4px 0; }
 .news-title a { color: var(--ink); text-decoration: none; }
@@ -81,31 +79,6 @@ body { background: var(--paper); color: var(--ink); }
 .news-implication::before { content: "Workday implication: "; font-weight: 700; color: #6366f1; }
 .news-date { font-size: 12px; color: var(--laptop); margin-top: 8px; }
 
-.idea-item { padding: 14px; background: white; border: 1px solid var(--staple); border-left: 4px solid var(--staple); margin-bottom: 10px; border-radius: 8px; transition: all 0.2s; box-shadow: 0 1px 3px rgba(11,31,66,0.04); }
-.idea-item:hover { border-left-color: #8b5cf6; box-shadow: 0 4px 12px rgba(11,31,66,0.08); transform: translateY(-1px); }
-.idea-capability { font-size: 10px; font-weight: 700; color: #8b5cf6; text-transform: uppercase; letter-spacing: 0.05em; }
-.idea-title { font-size: 13px; font-weight: 600; color: var(--ink); margin: 4px 0; line-height: 1.3; }
-.idea-value { font-size: 12px; color: var(--laptop); line-height: 1.4; }
-.idea-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 11px; color: var(--desk); }
-.idea-votes { display: inline-flex; align-items: center; gap: 3px; padding: 1px 6px; background: rgba(139,92,246,0.08); border-radius: 10px; font-size: 10px; font-weight: 600; color: #7c3aed; }
-
-.gap-item { padding: 14px; background: white; border: 1px solid var(--staple); border-left: 4px solid var(--staple); margin-bottom: 10px; border-radius: 8px; transition: all 0.2s; box-shadow: 0 1px 3px rgba(11,31,66,0.04); }
-.gap-item:hover { border-left-color: #e11d48; box-shadow: 0 4px 12px rgba(11,31,66,0.08); transform: translateY(-1px); }
-.gap-severity-high { border-left-color: #ef4444; }
-.gap-severity-medium { border-left-color: #f59e0b; }
-.gap-severity-low { border-left-color: var(--staple); }
-.gap-id { font-size: 10px; font-weight: 700; color: #e11d48; font-family: 'JetBrains Mono', monospace; }
-.gap-capability { font-size: 10px; font-weight: 700; color: var(--water); text-transform: uppercase; letter-spacing: 0.05em; margin-left: 8px; }
-.gap-pain { font-size: 12px; color: var(--ink); line-height: 1.4; margin: 4px 0; }
-.gap-meta { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--desk); flex-wrap: wrap; }
-.severity-badge { display: inline-block; padding: 1px 6px; border-radius: 10px; font-size: 10px; font-weight: 600; }
-.severity-deal-loss { background: #fee2e2; color: #b91c1c; }
-.severity-sku-removal { background: #fef3c7; color: #92400e; }
-.severity-tolerable { background: #e0e7ff; color: #3730a3; }
-
-.data-source { font-size: 10px; font-weight: 600; color: var(--desk); padding: 2px 8px; background: var(--paper); border-radius: 10px; display: inline-flex; align-items: center; gap: 4px; }
-.data-source::before { content: "📄"; }
-
 .empty-state { text-align: center; padding: 40px 20px; color: var(--laptop); }
 .empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.3; }
 .empty-text { font-size: 14px; }
@@ -113,8 +86,6 @@ body { background: var(--paper); color: var(--ink); }
 .stale-warning { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 12px 16px; margin-bottom: 24px; font-size: 12px; color: #78350f; display: none; }
 .stale-warning.show { display: block; }
 
-.priority-urgent { border-left-color: #ef4444 !important; }
-.priority-high { border-left-color: #f59e0b !important; }
 .diagnosis-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; margin-top: 4px; cursor: help; }
 .diagnosis-bug { background: #fee2e2; color: #b91c1c; }
 .diagnosis-config { background: #fef3c7; color: #92400e; }
@@ -171,7 +142,6 @@ body { background: var(--paper); color: var(--ink); }
       <h1 class="page-title">Morning Roundup</h1>
       <div class="timestamp" id="timestamp">Loading...</div>
     </div>
-    <button class="refresh-btn" onclick="showRefreshInstructions()">Refresh</button>
   </div>
 
   <div id="stale-warning" class="stale-warning">
@@ -201,7 +171,7 @@ body { background: var(--paper); color: var(--ink); }
               <span class="jql-tooltip">
                 <span class="jql-icon">?</span>
                 <span class="jql-popup">
-                  <div class="jql-popup-label">JQL Query</div>issuetype = Bug AND assignee is EMPTY AND status in (Open, Reopened) ORDER BY updated DESC<div class="jql-popup-filter">Post-filters: Customer IS NOT EMPTY, Scrum Team IS EMPTY</div>
+                  <div class="jql-popup-label">JQL Query</div>issuetype = Bug AND assignee = "David Denham" AND status in (Open, Reopened) ORDER BY updated DESC<div class="jql-popup-filter">Post-filters: Customer IS NOT EMPTY, Scrum Team IS EMPTY</div>
                 </span>
               </span>
             </div>
@@ -216,36 +186,6 @@ body { background: var(--paper); color: var(--ink); }
       <div class="section-title">Competitor News This Week</div>
     </div>
     <div id="news-list"></div>
-  </div>
-
-  <!-- Latest Customer Ideas -->
-  <div class="section">
-    <div class="section-header">
-      <div class="section-title">Latest Customer Ideas
-        <span class="jql-tooltip">
-          <span class="jql-icon">?</span>
-          <span class="jql-popup">
-            <div class="jql-popup-label">Data Source</div>Local: research/brainstorm-sessions/*.csv or *.xlsx<div class="jql-popup-filter">Filter: Product Area = Talent Acquisition, latest 10</div>
-          </span>
-        </span>
-      </div>
-    </div>
-    <div id="ideas-list"></div>
-  </div>
-
-  <!-- Latest Win-Loss Data -->
-  <div class="section">
-    <div class="section-header">
-      <div class="section-title">Latest Win-Loss Data
-        <span class="jql-tooltip">
-          <span class="jql-icon">?</span>
-          <span class="jql-popup">
-            <div class="jql-popup-label">Data Source</div>Local: research/*/gap-data/*.csv<div class="jql-popup-filter">Filter: Product Area = Talent Acquisition, latest 10</div>
-          </span>
-        </span>
-      </div>
-    </div>
-    <div id="gap-list"></div>
   </div>
 </div>
 
@@ -277,79 +217,6 @@ body { background: var(--paper); color: var(--ink); }
       "summary": "Greenhouse released an AI scheduling assistant that automatically finds interview times across multiple calendars...",
       "type": "feature-release",
       "workdayImplication": "Greenhouse closing scheduling gap; our native HCM calendar integration remains a differentiator"
-    }
-  ],
-  "customerIdeas": [],
-  "winLossData": [
-    {
-      "gapName": "PG-00009165",
-      "gapId": "aTEVT0000001ueT4AQ",
-      "painPoint": "GCC High populations cannot use WD's integrations with Outlook for interview scheduling or MS Team's HiredScore experience.",
-      "severity": "Tolerable, but Requires Some Manual Effort (5)",
-      "capability": "",
-      "region": "",
-      "date": "2026-01-01",
-      "source": "presales-gaps-export.csv"
-    },
-    {
-      "gapName": "PG-00005541",
-      "gapId": "aTEVT0000000OYb4AM",
-      "painPoint": "No integration would require that the prospect post their jobs in CareerPlug (a competitor) and then move applied candidate data from CareerPlug to Workday Recruiting. Alternatively, they will choose to continue to use only CareerPlug.",
-      "severity": "Risk of Removal of SKU from Deal (3)",
-      "capability": "Job Postings",
-      "region": "",
-      "date": "2026-01-01",
-      "source": "presales-gaps-export.csv"
-    },
-    {
-      "gapName": "PG-90001002",
-      "gapId": "x2",
-      "painPoint": "Should not appear in France slice.",
-      "severity": "Tolerable but Requires Some Manual Effort (5)",
-      "capability": "Career Sites",
-      "region": "Canada LE & Industries",
-      "date": "20/02/2025",
-      "source": "presales-gaps-export-unfiltered.csv"
-    },
-    {
-      "gapName": "PG-90001001",
-      "gapId": "x1",
-      "painPoint": "Recruiter needs offer templates aligned to French labour practice.",
-      "severity": "Risk of Deal Loss (3)",
-      "capability": "Offers & Contracts",
-      "region": "France MFG HC & Edu",
-      "date": "15/01/2025",
-      "source": "presales-gaps-export-unfiltered.csv"
-    },
-    {
-      "gapName": "PG-90001006",
-      "gapId": "x6",
-      "painPoint": "Should not appear in France slice (DACH \u2260 France).",
-      "severity": "Tolerable but Requires Some Manual Effort (5)",
-      "capability": "Sourcing",
-      "region": "Germany LE",
-      "date": "14/03/2025",
-      "source": "presales-gaps-export-unfiltered.csv"
-    },
-    {
-      "gapName": "PG-90001004",
-      "gapId": "x4",
-      "painPoint": "APJ noise row.",
-      "severity": "Tolerable but Requires Some Manual Effort (5)",
-      "capability": "Interview Scheduling",
-      "region": "APJ 1",
-      "date": "10/03/2025",
-      "source": "presales-gaps-export-unfiltered.csv"
-    },
-    {
-      "gapName": "PG-90001003",
-      "gapId": "x3",
-      "painPoint": "France opp in correct France Opp Region bucket.",
-      "severity": "Risk of Removal of SKU from Deal (2)",
-      "capability": "Job Postings",
-      "region": "France Services Tech Media",
-      "date": "01/03/2025",
-      "source": "presales-gaps-export-unfiltered.csv"
     }
   ]
 }
@@ -479,69 +346,10 @@ body { background: var(--paper); color: var(--ink); }
       newsList.innerHTML = '<div class="empty-state"><div class="empty-icon">📰</div><div class="empty-text">No recent competitor news found</div></div>';
     }
     
-    // Render Customer Ideas
-    const ideasList = document.getElementById('ideas-list');
-    if (data.customerIdeas && data.customerIdeas.length > 0) {
-      const ideasHtml = data.customerIdeas.map(idea => `
-        <div class="idea-item">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span class="idea-capability">${idea.capability || 'General'}</span>
-            ${idea.votes ? `<span class="idea-votes">▲ ${idea.votes}</span>` : ''}
-          </div>
-          <div class="idea-title">${idea.title}</div>
-          ${idea.businessValue ? `<div class="idea-value">${idea.businessValue}</div>` : ''}
-          <div class="idea-meta">
-            ${idea.date ? `<span>${idea.date}</span>` : ''}
-            ${idea.source ? `<span class="data-source">${idea.source}</span>` : ''}
-          </div>
-        </div>
-      `).join('');
-      ideasList.innerHTML = ideasHtml;
-    } else {
-      ideasList.innerHTML = '<div class="empty-state"><div class="empty-icon">💡</div><div class="empty-text">No ideation data available.<br><span style="font-size:12px;color:var(--desk);">Place P&amp;T Idea Results CSV/XLSX<br>in research/brainstorm-sessions/</span></div></div>';
-    }
-    
-    // Render Win-Loss / Presales Gap Data
-    const gapList = document.getElementById('gap-list');
-    if (data.winLossData && data.winLossData.length > 0) {
-      const gapHtml = data.winLossData.map(gap => {
-        let sevClass = 'gap-severity-low';
-        let sevBadgeClass = 'severity-tolerable';
-        const sevLower = (gap.severity || '').toLowerCase();
-        if (sevLower.includes('deal loss')) { sevClass = 'gap-severity-high'; sevBadgeClass = 'severity-deal-loss'; }
-        else if (sevLower.includes('removal') || sevLower.includes('sku')) { sevClass = 'gap-severity-medium'; sevBadgeClass = 'severity-sku-removal'; }
-        
-        const painTruncated = gap.painPoint && gap.painPoint.length > 160 ? gap.painPoint.substring(0, 157) + '...' : gap.painPoint;
-        
-        return `
-          <div class="gap-item ${sevClass}">
-            <div style="display:flex;align-items:center;flex-wrap:wrap;">
-              <span class="gap-id">${gap.gapName || gap.gapId}</span>
-              ${gap.capability ? `<span class="gap-capability">${gap.capability}</span>` : ''}
-              ${gap.severity ? `<span class="severity-badge ${sevBadgeClass}" style="margin-left:auto;">${gap.severity}</span>` : ''}
-            </div>
-            ${painTruncated ? `<div class="gap-pain">${painTruncated}</div>` : ''}
-            <div class="gap-meta">
-              ${gap.region ? `<span>🌍 ${gap.region}</span>` : ''}
-              ${gap.date ? `<span>📅 ${gap.date}</span>` : ''}
-              ${gap.source ? `<span class="data-source">${gap.source}</span>` : ''}
-            </div>
-          </div>
-        `;
-      }).join('');
-      gapList.innerHTML = gapHtml;
-    } else {
-      gapList.innerHTML = '<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-text">No presales gap data available.<br><span style="font-size:12px;color:var(--desk);">Place presales gap CSV/XLSX<br>in research/[region]/gap-data/</span></div></div>';
-    }
-    
   } catch (err) {
     document.body.innerHTML += `<div style="padding: 40px; text-align: center; color: #ef4444;">Error: ${err.message}<br>Run /morning-roundup in Cursor to generate data.</div>`;
   }
 })();
-
-function showRefreshInstructions() {
-  alert('To refresh data:\n\n1. Open Cursor\n2. Type: /morning-roundup\n3. Press Enter\n\nThe page will automatically reload with fresh data.');
-}
 </script>
 <script src="dashboard-nav.js"></script>
 </body>
