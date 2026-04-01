@@ -1,0 +1,42 @@
+# Deploy PM Agent Dashboard (docs/*.html) to gh-pages root
+# Requires: repo Settings → Pages → Build from branch "gh-pages" / root.
+
+name: Deploy PM Agent Dashboard
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/pm-agent-*.html'
+      - 'docs/dashboard-nav.js'
+      - '.github/workflows/deploy-dashboard.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: pages-dashboard-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare dashboard files
+        run: |
+          mkdir -p dashboard-dist
+          cp docs/pm-agent-*.html dashboard-dist/
+          cp docs/dashboard-nav.js dashboard-dist/ 2>/dev/null || true
+          echo "Files to deploy:"
+          ls -la dashboard-dist/
+
+      - name: Deploy to gh-pages branch
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dashboard-dist
+          target-folder: dashboard
+          clean: false
