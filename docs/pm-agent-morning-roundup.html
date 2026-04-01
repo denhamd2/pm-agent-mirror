@@ -45,21 +45,21 @@ body { background: var(--paper); color: var(--ink); }
 .section-title { font-size: 16px; font-weight: 700; color: var(--ink); }
 .badge { padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; background: var(--water); color: white; }
 
-.ticket-item { padding: 16px; background: white; border: 1px solid var(--staple); border-left: 4px solid var(--staple); margin-bottom: 12px; border-radius: 8px; transition: all 0.2s; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 3px rgba(11,31,66,0.04); }
-.ticket-item:hover { border-left-color: var(--water); box-shadow: 0 4px 12px rgba(11,31,66,0.08); transform: translateY(-1px); }
+.ticket-item { padding: 16px; background: white; border: 1px solid var(--staple); margin-bottom: 12px; border-radius: 8px; transition: all 0.2s; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 3px rgba(11,31,66,0.04); }
+.ticket-item:hover { box-shadow: 0 4px 12px rgba(11,31,66,0.08); transform: translateY(-1px); }
 .ticket-top-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .ticket-middle-row { margin: 2px 0; }
 .ticket-bottom-row { display: flex; flex-direction: column; gap: 8px; }
 .ticket-meta-row { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; padding-top: 12px; border-top: 1px dashed var(--staple); }
 
-.ticket-key { font-size: 11px; font-weight: 700; color: var(--water); text-decoration: none; }
+.ticket-key { font-size: 13px; font-weight: 700; color: var(--water); text-decoration: none; }
 .ticket-key:hover { text-decoration: underline; }
-.ticket-summary { font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.3; }
-.ticket-tldr { font-size: 13px; color: var(--laptop); line-height: 1.5; }
-.ticket-meta { font-size: 12px; color: var(--laptop); }
+.ticket-summary { font-size: 17px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.ticket-tldr { font-size: 15px; color: var(--laptop); line-height: 1.5; }
+.ticket-meta { font-size: 13px; color: var(--laptop); }
 .customer-badge { display: inline-block; padding: 2px 8px; background: var(--pencil); color: white; border-radius: 10px; font-size: 10px; font-weight: 600; }
 
-.priority-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+.priority-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
 .priority-badge.urgent { background: #fee2e2; color: #b91c1c; }
 .priority-badge.high { background: #fef3c7; color: #92400e; }
 .priority-badge.normal { background: var(--staple); color: var(--laptop); }
@@ -132,6 +132,16 @@ body { background: var(--paper); color: var(--ink); }
 .jql-popup-label { font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--sky); margin-bottom: 6px; }
 .jql-popup-filter { font-family: 'DM Sans', sans-serif; font-size: 10px; color: var(--desk); margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 6px; }
 
+.jira-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+@media (max-width: 1024px) {
+  .jira-grid { grid-template-columns: 1fr; }
+}
+
 </style>
 </head>
 <body>
@@ -168,34 +178,36 @@ body { background: var(--paper); color: var(--ink); }
     ⚠️ Data is more than 24 hours old. Run <code>/morning-roundup</code> in Cursor to refresh.
   </div>
 
-  <!-- Customer Issues to Review (Highest Priority) -->
-  <div class="section">
-    <div class="section-header">
-          <div class="section-title">Unassigned Customer Issues to Review
-            <span class="jql-tooltip">
-              <span class="jql-icon">?</span>
-              <span class="jql-popup">
-                <div class="jql-popup-label">JQL Query</div>issuetype = Bug AND assignee is EMPTY AND status in (Open, Reopened) ORDER BY updated DESC<div class="jql-popup-filter">Post-filters: Customer IS NOT EMPTY, Scrum Team IS EMPTY</div>
-              </span>
+  <div class="jira-grid">
+    <!-- Jiras I Need to Respond To -->
+    <div class="section" style="margin-bottom: 0;">
+      <div class="section-header">
+        <div class="section-title">Jiras I Need to Respond To
+          <span class="jql-tooltip">
+            <span class="jql-icon">?</span>
+            <span class="jql-popup">
+              <div class="jql-popup-label">JQL Query</div>comment ~ "David Denham" AND updated >= -14d AND status not in (Done, Resolved, Closed) ORDER BY updated DESC<div class="jql-popup-filter">Post-filter: David mentioned in LATEST comment only</div>
             </span>
-          </div>
-    </div>
-    <div id="customer-list"></div>
-  </div>
-
-  <!-- Jiras I Need to Respond To -->
-  <div class="section">
-    <div class="section-header">
-      <div class="section-title">Jiras I Need to Respond To
-        <span class="jql-tooltip">
-          <span class="jql-icon">?</span>
-          <span class="jql-popup">
-            <div class="jql-popup-label">JQL Query</div>comment ~ "David Denham" AND updated >= -14d AND status not in (Done, Resolved, Closed) ORDER BY updated DESC<div class="jql-popup-filter">Post-filter: David mentioned in LATEST comment only</div>
           </span>
-        </span>
+        </div>
       </div>
+      <div id="jira-list"></div>
     </div>
-    <div id="jira-list"></div>
+
+    <!-- Customer Issues to Review (Highest Priority) -->
+    <div class="section" style="margin-bottom: 0;">
+      <div class="section-header">
+            <div class="section-title">Unassigned Customer Issues to Review
+              <span class="jql-tooltip">
+                <span class="jql-icon">?</span>
+                <span class="jql-popup">
+                  <div class="jql-popup-label">JQL Query</div>issuetype = Bug AND assignee is EMPTY AND status in (Open, Reopened) ORDER BY updated DESC<div class="jql-popup-filter">Post-filters: Customer IS NOT EMPTY, Scrum Team IS EMPTY</div>
+                </span>
+              </span>
+            </div>
+      </div>
+      <div id="customer-list"></div>
+    </div>
   </div>
 
   <!-- Competitor News This Week -->
