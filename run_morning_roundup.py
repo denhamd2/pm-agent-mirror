@@ -46,10 +46,10 @@ def build_nav_links():
             m = re.search(r'-v(\d+)$', r)
             if m:
                 versions.append((int(m.group(1)), r))
-        if versions:
-            versions.sort(key=lambda x: x[0], reverse=True)
-            latest_route = versions[0][1]
-            nav['prototype'] = {'href': f'http://localhost:5173/#/{latest_route}', 'title': latest_route}
+            if versions:
+                versions.sort(key=lambda x: x[0], reverse=True)
+                latest_route = versions[0][1]
+                nav['prototype'] = {'href': f'http://localhost:5199/#/{latest_route}', 'title': latest_route}
     except FileNotFoundError:
         pass
 

@@ -217,7 +217,7 @@ After writing `docs/morning-roundup-data.json`, generate navigation links for al
 3. **Build nav-links JSON** with fully resolved URLs:
    ```json
    {
-     "prototype": {"href": "http://localhost:5173/#/<latest-route>", "title": "<latest-route>"},
+     "prototype": {"href": "http://localhost:5199/#/<latest-route>", "title": "<latest-route>"},
      "deck": {"href": "docs/downloads/<deck-filename>", "title": "<deck-filename>"},
      "prd": {"href": "docs/pm-agent-viewer.html?file=docs/prds/<prd-filename>", "title": "<prd-filename>"},
      "brief": {"href": "docs/pm-agent-viewer.html?file=design/<brief-filename>", "title": "<brief-filename>"},

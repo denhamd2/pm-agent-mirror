@@ -312,12 +312,10 @@ _Target ~50-60 slides for v65 parity; McKinsey-style tone._
    **No-Data Slide Spec:**
    - Section divider: "Win/Loss Analysis"
    - EXACTLY 1 content slide (layout: Title Only_Alt)
-   - Title: "Win/Loss Analysis - Data Availability"
+   - Title: "Win/Loss Analysis"
    - Content: Centered text box (2.0, 2.3, 6.0, 1.5) with message:
-     - "No Win-Loss data is currently available for this market."
-     - (blank line)
-     - "Analysis relies on customer interviews (105), internal ideation signals (106), and competitive intelligence (@competitive-intel) for gap identification and roadmap prioritization."
-   - Speaker notes: Note data gap, emphasize triangulation strength, commit to enriching exports
+     - "No Pre-Sales Data exists for [Region name]."
+   - Speaker notes: Note data gap, mention triangulation with customer interviews, ideation signals, and competitive intelligence
    - **DO NOT create**: Gap themes table, charts, or proxy gaps slides when data absent
    
    **Participant Anonymization in Win-Loss Slides (MANDATORY):**
@@ -937,7 +935,7 @@ ACTION: Expanding content from source files before generation...
 - [ ] **Competitive: 3 slides** — Regional Specialists TABLE (NOT bullets), Global Platforms TABLE (NOT bullets), **SWOT source: @product-strategy-agent output file** (`research/[Country]/swot-analysis-[Country]-[YYYY-MM-DD]-[MISSION-ID].md`) — do NOT extract from @pmf-analyst report — **SINGLE 2x2 table** with all four quadrants, **10pt font**, **bullet-pointed content in cells**, `header_height_inches: 0.25`, **NO `height_inches` property on table object - must auto-calculate**). Each vendor row: 3-4 detail points per cell. **CRITICAL VALIDATION**: Regional + Global tables MUST have `font_size_pt: 8` ONLY at table level (not cell/run level, not 14pt anywhere).
 - [ ] **SWOT PRE-GENERATION CHECK**: For each of the 4 quadrants (Strengths, Weaknesses, Opportunities, Threats), count bullets in cell text - MUST have 3-5 bullets each, with 4-5 preferred for VP audience. Each bullet concise (1-2 sentences max).
 - [ ] **Win/Loss: EXACTLY 3 slides ONLY** (NO "Dataset Overview", NO "CRM Hygiene", NO data quality explanation slides — jump directly to: (1) Top Gap Themes table, (2) Gap Theme Chart, (3) GCC & Proxy Gaps table). Data quality notes belong in speaker_notes, NOT separate slides.
-- [ ] **Win-Loss data availability validated**: If 108 returns 0 region-relevant rows, Win-Loss section = 1 "No Win-Loss data" slide ONLY (no gap themes, charts, or proxy tables)
+- [ ] **Win-Loss data availability validated**: If 108 returns 0 region-relevant rows, Win-Loss section = 1 "No Pre-Sales Data exists for [Region]" slide ONLY
 - [ ] **Win-Loss customer attribution**: P1/P2/P3 format used consistently (NOT real names) in gap evidence, quotes, and attributions. Format: "P1 (Company)" or "P1 - Role, Company"
 - [ ] **Win-Loss gap detail**: Each gap description = 3-4 sentences with scale indicators (volumes, time costs, fines), workflow context, and business impact
 - [ ] **Win-Loss customer quotes**: Minimum 2-3 verbatim quotes (≤20 words each) with P1/P2/P3 attribution: "P1 (Company)" or "P1 - JobTitle, Company"

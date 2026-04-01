@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PM Agent Dashboard — Scorecard</title>
+<title>PM Agent Dashboard — Agent Health Dashboard</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -58,9 +58,9 @@ canvas { max-height: 260px; }
   <span class="dashboard-brand">PM Agent Dashboard</span>
   <div class="dashboard-tabs">
     <a href="pm-agent-morning-roundup.html" class="dashboard-tab">Morning Roundup</a>
-    <a href="pm-agent-scorecard.html" class="dashboard-tab active">Scorecard</a>
-    <a href="pm-agent-architecture.html" class="dashboard-tab">Architecture Map</a>
-    <a href="pm-agent-design-system.html" class="dashboard-tab">Design System</a>
+    <a href="pm-agent-scorecard.html" class="dashboard-tab active">Agent Health Dashboard</a>
+    <a href="pm-agent-architecture.html" class="dashboard-tab">Agent Flow</a>
+    <a href="pm-agent-design-system.html" class="dashboard-tab">Design System Components</a>
   </div>
   <div class="dashboard-external">
     <a id="proto-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Prototype &#x2197;</a>
@@ -76,7 +76,7 @@ canvas { max-height: 260px; }
 <!-- Header -->
 <div class="flex items-center justify-between mb-8">
   <div>
-    <h1 class="text-3xl font-bold" style="color: var(--ink);">PM Agent Architecture Scorecard</h1>
+    <h1 class="text-3xl font-bold" style="color: var(--ink);">PM Agent Health Dashboard</h1>
     <p class="text-sm mt-1" style="color: var(--laptop);">Post-improvement audit &middot; 1 April 2026 &middot; Workday Recruiting PM Workspace v1.4</p>
   </div>
   <div class="flex items-center gap-3">
@@ -524,30 +524,7 @@ new Chart(document.getElementById('improvementChart'), {
 </script>
 
 </div>
-<script id="nav-links" type="application/json">
-{
-  "prototype": {
-    "href": "http://localhost:5173/#/candidate-smart-view-v86",
-    "title": "candidate-smart-view-v86"
-  },
-  "deck": {
-    "href": "docs/downloads/India_Recruiting_PMF_Roadmap_v84 (1).pptx",
-    "title": "India_Recruiting_PMF_Roadmap_v84 (1).pptx"
-  },
-  "prd": {
-    "href": "docs/pm-agent-viewer.html?file=docs/prds/india-aadhaar-adobe-sign-offer-prd.md",
-    "title": "india-aadhaar-adobe-sign-offer-prd.md"
-  },
-  "brief": {
-    "href": "docs/pm-agent-viewer.html?file=design/candidate-smart-view-v86-design-brief.md",
-    "title": "candidate-smart-view-v86-design-brief.md"
-  },
-  "epic": {
-    "href": "docs/pm-agent-viewer.html?file=docs/epics/gcc-nationalisation-local-compliance-reporting-epic-draft.md",
-    "title": "gcc-nationalisation-local-compliance-reporting-epic-draft.md"
-  }
-}
-</script>
-<script src="dashboard-nav.js?v=3"></script>
+<script id="nav-links" type="application/json">{"prototype": {"href": "../design/dist/index.html#/candidate-smart-view-v86", "title": "candidate-smart-view-v86"}, "deck": {"href": "docs/downloads/India_Recruiting_PMF_Roadmap_v84.pptx", "title": "India_Recruiting_PMF_Roadmap_v84.pptx"}, "prd": {"href": "pm-agent-viewer.html?file=docs/prds/india-aadhaar-adobe-sign-offer-prd.md", "title": "india-aadhaar-adobe-sign-offer-prd.md"}, "brief": {"href": "pm-agent-viewer.html?file=design/candidate-smart-view-v86-design-brief.md", "title": "candidate-smart-view-v86-design-brief.md"}, "epic": {"href": "pm-agent-viewer.html?file=docs/epics/gcc-nationalisation-local-compliance-reporting-epic-draft.md", "title": "gcc-nationalisation-local-compliance-reporting-epic-draft.md"}}</script>
+<script src="dashboard-nav.js?v=4"></script>
 </body>
 </html>

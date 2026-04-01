@@ -85,7 +85,7 @@ function openChromeAndCursorBrowser(): Plugin {
 }
 
 export default defineConfig({
-  base: normaliseBase(process.env.VITE_BASE_PATH),
+  base: process.env.VITE_BASE_PATH ? normaliseBase(process.env.VITE_BASE_PATH) : './',
   plugins: [prototypeSpaSlugFallback(), react(), openChromeAndCursorBrowser()],
   root: '.',
   server: {

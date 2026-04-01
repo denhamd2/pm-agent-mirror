@@ -4,19 +4,15 @@
   try {
     var links = JSON.parse(el.textContent);
     
-    var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
     
-    // Fix paths to work in both local (/docs/) and GH Pages (root)
+    // Fix paths to work in both local (/docs/) and GH Pages (/dashboard/)
+    // by prefixing with ../ so they resolve from the parent directory
     var fixPath = function(path) {
       if (!path) return '#';
       if (path.startsWith('http')) return path;
-      if (isLocal) {
-        if (path.startsWith('../')) return path;
-        return '../' + path;
-      } else {
-        if (path.startsWith('../')) return path.substring(3);
-        return path;
-      }
+      if (path.startsWith('../')) return path;
+      return '../' + path;
     };
 
     // Handle prototype link dynamically based on environment
@@ -24,9 +20,11 @@
     if (links.prototype && links.prototype.title) {
       var route = links.prototype.title; // e.g. 'candidate-smart-view-v86'
       if (isLocal) {
-        protoHref = 'http://localhost:5173/#/' + route;
+        // Locally, link to the built dist folder instead of Vite dev server
+        // so it works without needing to run npm run dev
+        protoHref = '../design/dist/index.html#/' + route;
       } else {
-        protoHref = 'preview/latest/#/' + route;
+        protoHref = '../preview/latest/#/' + route;
       }
     }
 
@@ -53,13 +51,4 @@
       if (a) { a.style.opacity = '0.5'; a.title = 'Run /morning-roundup to generate links'; }
     });
   }
-  
-  // DEBUG: Print resolved links
-  setTimeout(() => {
-    console.warn("DEBUG LINKS:");
-    ['proto-link','deck-link','prd-link','brief-link','epic-link'].forEach(function(id) {
-      var a = document.getElementById(id);
-      console.warn(id + " -> " + (a ? a.href : 'null'));
-    });
-  }, 1000);
 })();

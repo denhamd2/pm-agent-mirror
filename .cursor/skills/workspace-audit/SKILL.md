@@ -1,11 +1,11 @@
 # Workspace Audit Skill
 
-Generates interactive HTML dashboards (scorecard + architecture map) that visualize the PM agent workspace health, rule inventory, workflow structure, and architectural metrics.
+Generates interactive HTML dashboards (Agent Health Dashboard + Agent Flow) that visualize the PM agent workspace health, rule inventory, workflow structure, and architectural metrics.
 
 ## When to Use This Skill
 
 Use when:
-- User explicitly requests: `/workspace-audit` or "update the scorecard"
+- User explicitly requests: `/workspace-audit` or "update the Agent Health Dashboard"
 - 090 Improvement Advisor completes an audit and needs to render dashboards
 - After implementing architectural improvements to visualize impact
 - Periodically to check workspace health (monthly or after major refactors)
@@ -99,7 +99,7 @@ Parse validation output for:
 - Total slides
 - Pass/fail verdict
 
-### Step 3: Generate Scorecard HTML
+### Step 3: Generate Agent Health Dashboard HTML
 
 Update `docs/pm-agent-scorecard.html` with:
 - Current metrics (rules, subagents, skills, MCPs, alwaysApply lines, total rule lines)
@@ -125,7 +125,7 @@ Update `docs/pm-agent-scorecard.html` with:
 | **Deck Quality** | Validator enforced, low violation rate | C to A |
 | **Hygiene** | No orphans, mission log clean, stale missions archived | A- to A |
 
-### Step 4: Generate Architecture Map HTML
+### Step 4: Generate Agent Flow HTML
 
 Update `docs/pm-agent-architecture.html` with:
 - Structured workflow lane layout (4 lanes: WF1-WF4)
@@ -197,10 +197,10 @@ sleep 1
 ```
 
 Return the URLs to the user:
-- Scorecard: `http://localhost:8765/docs/pm-agent-scorecard.html`
+- Agent Health Dashboard: `http://localhost:8765/docs/pm-agent-scorecard.html`
 - Morning Roundup: `http://localhost:8765/docs/pm-agent-morning-roundup.html` (landing page)
-- Architecture Map: `http://localhost:8765/docs/pm-agent-architecture.html`
-- Design System: `http://localhost:8765/docs/pm-agent-design-system.html`
+- Agent Flow: `http://localhost:8765/docs/pm-agent-architecture.html`
+- Design System Components: `http://localhost:8765/docs/pm-agent-design-system.html`
 
 ## Output Format
 
@@ -209,18 +209,18 @@ After skill completes, provide this summary:
 ```markdown
 ## PM Agent Dashboard Updated
 
-**Scorecard**: http://localhost:8765/docs/pm-agent-scorecard.html
+**Agent Health Dashboard**: http://localhost:8765/docs/pm-agent-scorecard.html
 **Morning Roundup** (landing page): http://localhost:8765/docs/pm-agent-morning-roundup.html
 - Overall Grade: [A- to D]
 - AlwaysApply Budget: [X lines / 500 target]
 - Active Missions: [N]
 - Key Findings: [brief summary]
 
-**Architecture Map**: http://localhost:8765/docs/pm-agent-architecture.html
+**Agent Flow**: http://localhost:8765/docs/pm-agent-architecture.html
 - 4 workflow lanes (WF1-WF4) with step numbers
 - [N] rules, [N] subagents, [N] skills, [N] MCPs visualised
 
-**Design System**: http://localhost:8765/docs/pm-agent-design-system.html
+**Design System Components**: http://localhost:8765/docs/pm-agent-design-system.html
 - Component showcase with Sana Shell theme tokens
 
 **Dynamic Links** (via manifest.json):
@@ -249,9 +249,9 @@ When 090 completes an architectural audit and has specific findings/recommendati
 ## File Locations
 
 - **Morning Roundup**: `docs/pm-agent-morning-roundup.html` (landing page)
-- **Scorecard**: `docs/pm-agent-scorecard.html`
-- **Architecture Map**: `docs/pm-agent-architecture.html`
-- **Design System**: `docs/pm-agent-design-system.html`
+- **Agent Health Dashboard**: `docs/pm-agent-scorecard.html`
+- **Agent Flow**: `docs/pm-agent-architecture.html`
+- **Design System Components**: `docs/pm-agent-design-system.html`
 - **Markdown Viewer**: `docs/pm-agent-viewer.html` (reusable, takes `?file=` param)
 - **Dashboard Nav**: `docs/dashboard-nav.js` (shared navigation + dynamic link resolution)
 - **Manifest**: `docs/manifest.json` (generated, gitignored)
@@ -264,7 +264,7 @@ When 090 completes an architectural audit and has specific findings/recommendati
 ### Always
 - Collect fresh metrics (never cache)
 - Run validator against latest spec if one exists
-- Update both dashboards (scorecard + map)
+- Update both dashboards (Agent Health Dashboard + Agent Flow)
 - Serve and open in browser
 - Return URLs to user
 - Keep HTML clean, accessible, responsive
@@ -281,7 +281,7 @@ When 090 completes an architectural audit and has specific findings/recommendati
 ## Success Criteria
 
 Skill succeeds when:
-- Both HTML dashboards are generated/updated with current metrics
+- Both the Agent Health Dashboard and Agent Flow HTML files are generated/updated with current metrics
 - Dashboards open in Cursor browser
 - URLs returned to user
 - Metrics are accurate and up-to-date
