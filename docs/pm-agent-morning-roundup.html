@@ -34,9 +34,10 @@ body { background: var(--paper); color: var(--ink); }
 .dashboard-ext-link:hover { border-color:var(--water);background:rgba(0,117,180,0.05); }
 
 .container { max-width: 1400px; margin: 80px auto 40px; padding: 0 24px; }
-.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
-.page-title { font-size: 28px; font-weight: 700; color: var(--ink); }
-.timestamp { font-size: 12px; color: var(--laptop); margin-top: 4px; }
+.page-header { margin-bottom: 32px; }
+.greeting { font-size: 32px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.greeting-sub { font-size: 16px; font-weight: 400; color: var(--laptop); margin-top: 4px; }
+.timestamp { font-size: 12px; color: var(--desk); margin-top: 8px; }
 
 .section { background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(11,31,66,0.08); }
 .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--staple); }
@@ -65,26 +66,34 @@ body { background: var(--paper); color: var(--ink); }
 .action-required { font-size: 12px; font-weight: 600; color: var(--water); display: flex; align-items: center; gap: 4px; }
 .action-required.urgent { color: #ef4444; }
 
-.btn-subtle { display: inline-block; padding: 4px 12px; background: white; border: 1px solid var(--staple); border-radius: 16px; font-size: 11px; font-weight: 600; color: var(--ink); text-decoration: none; transition: all 0.2s; }
+.btn-subtle { display: inline-block; padding: 4px 12px; background: white; border: 1px solid var(--staple); border-radius: 16px; font-size: 11px; font-weight: 600; color: var(--ink); text-decoration: none; transition: all 0.2s; white-space: nowrap; flex-shrink: 0; }
 .btn-subtle:hover { border-color: var(--water); color: var(--water); background: rgba(0,117,180,0.05); }
 
-.news-item { padding: 16px; background: white; border: 1px solid var(--staple); margin-bottom: 12px; border-radius: 8px; transition: all 0.2s; box-shadow: 0 1px 3px rgba(11,31,66,0.04); }
+.news-item { padding: 0; background: white; border: 1px solid var(--staple); margin-bottom: 12px; border-radius: 8px; transition: all 0.2s; box-shadow: 0 1px 3px rgba(11,31,66,0.04); display: flex; overflow: hidden; }
 .news-item:hover { box-shadow: 0 4px 12px rgba(11,31,66,0.08); transform: translateY(-1px); }
+.news-left { flex: 1; padding: 16px; min-width: 0; }
+.news-right { flex: 1; padding: 16px; background: rgba(0,117,180,0.04); border-left: 3px solid var(--water); display: flex; flex-direction: column; justify-content: center; }
+@media (max-width: 768px) { .news-item { flex-direction: column; } .news-right { width: 100%; border-left: none; border-top: 3px solid var(--water); } }
 .news-competitor { font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.05em; }
-.news-title { font-size: 14px; font-weight: 600; color: var(--ink); margin: 4px 0; }
+.news-title { font-size: 16px; font-weight: 700; color: var(--ink); margin: 6px 0 10px; line-height: 1.3; }
 .news-title a { color: var(--ink); text-decoration: none; }
 .news-title a:hover { color: var(--water); text-decoration: underline; }
-.news-summary { font-size: 13px; color: var(--laptop); line-height: 1.5; margin-top: 6px; }
-.news-implication { font-size: 12px; font-weight: 600; color: var(--ink); line-height: 1.4; margin-top: 8px; padding: 6px 10px; background: rgba(99,102,241,0.06); border-left: 2px solid #6366f1; border-radius: 0 4px 4px 0; }
-.news-implication::before { content: "Workday implication: "; font-weight: 700; color: #6366f1; }
-.news-date { font-size: 12px; color: var(--laptop); margin-top: 8px; }
+.news-bullets { margin: 0; padding: 0 0 0 18px; list-style: disc; }
+.news-bullets li { font-size: 13px; color: var(--laptop); line-height: 1.5; padding: 2px 0; }
+.news-implication-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--water); margin-bottom: 6px; }
+.news-implication { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.5; }
+.news-date { font-size: 12px; color: var(--laptop); margin-top: 10px; }
 
 .empty-state { text-align: center; padding: 40px 20px; color: var(--laptop); }
 .empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.3; }
 .empty-text { font-size: 14px; }
 
-.stale-warning { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 12px 16px; margin-bottom: 24px; font-size: 12px; color: #78350f; display: none; }
-.stale-warning.show { display: block; }
+.gate-screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; text-align: center; padding: 40px 24px; }
+.gate-icon { font-size: 56px; margin-bottom: 16px; opacity: 0.4; }
+.gate-heading { font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+.gate-subtext { font-size: 14px; color: var(--laptop); margin-bottom: 20px; line-height: 1.5; max-width: 460px; }
+.gate-command { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 600; background: var(--ink); color: #e2e8f0; padding: 10px 20px; border-radius: 8px; margin-bottom: 12px; letter-spacing: 0.02em; }
+.gate-timestamp { font-size: 12px; color: var(--desk); }
 
 .diagnosis-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; margin-top: 4px; cursor: help; }
 .diagnosis-bug { background: #fee2e2; color: #b91c1c; }
@@ -135,17 +144,22 @@ body { background: var(--paper); color: var(--ink); }
   </div>
 </nav>
 
-<!-- Main Content -->
-<div class="container">
-  <div class="page-header">
-    <div>
-      <h1 class="page-title">Morning Roundup</h1>
-      <div class="timestamp" id="timestamp">Loading...</div>
-    </div>
-  </div>
+<!-- Gate Screen (shown when data is stale) -->
+<div id="gate-screen" class="gate-screen">
+  <div class="gate-icon">&#x1F504;</div>
+  <div class="gate-heading">Data is not current</div>
+  <div class="gate-subtext">Morning Roundup uses live Jira and web search data that can only be fetched from within Cursor.</div>
+  <div class="gate-command">/morning-roundup</div>
+  <div class="gate-subtext">Run this command in Cursor to fetch live data</div>
+  <div class="gate-timestamp" id="gate-timestamp"></div>
+</div>
 
-  <div id="stale-warning" class="stale-warning">
-    ⚠️ Data is more than 24 hours old. Run <code>/morning-roundup</code> in Cursor to refresh.
+<!-- Main Content -->
+<div id="main-content" class="container">
+  <div class="page-header">
+    <div class="greeting">&#x2615; Good Morning, David!</div>
+    <div class="greeting-sub">Here's your latest roundup.</div>
+    <div class="timestamp" id="timestamp">Loading...</div>
   </div>
 
   <div class="jira-grid">
@@ -192,7 +206,7 @@ body { background: var(--paper); color: var(--ink); }
 <!-- Data (will be generated by /morning-roundup skill) -->
 <script id="morning-data" type="application/json">
 {
-  "generated": "2026-04-01T13:01:52.121630+00:00",
+  "generated": "2026-04-01T13:32:26.586072+00:00",
   "jiraResponses": [
     {
       "key": "CTD-1795",
@@ -204,7 +218,8 @@ body { background: var(--paper); color: var(--ink); }
         "body": "This issue was flagged because it was in management review for more than two weeks. Email has been sent to Assignee david.denham and Reporter david.denham.",
         "tldr": "Automated flag: CTD in management review for over 2 weeks, needs status update"
       },
-      "tldrSummary": "Cross-team dependency for OE team to build 2-way email framework for Recruiting; critical for Japan sales"
+      "tldrSummary": "Cross-team dependency for OE team to build 2-way email framework for Recruiting; critical for Japan sales",
+      "priority": "Critical"
     },
     {
       "key": "TRANMGMT-2385",
@@ -216,68 +231,58 @@ body { background: var(--paper); color: var(--ink); }
         "body": "Hi David. Big apology that we failed to triage this Jira by now. The issue related to (Do Not Use) is because of not working on this Jira on 26R1. Let's review and do the necessary.",
         "tldr": "Translation team apologised for missed triage; will now review PDT name/description localisation for 26R1"
       },
-      "tldrSummary": "Translation team needs to localise 'Do Not Use' labels appended to obsolete Purgeable Data Types for Purge Plans"
-    },
-    {
-      "key": "HRREC-89453",
-      "summary": "Purged Job Application intermittently gets an unassigned task with Disposition Job Applications Before Purge tenant parameter enabled",
-      "url": "https://jira2.workday.com/browse/HRREC-89453",
-      "latestComment": {
-        "author": "Rainie Chou",
-        "date": "2026-03-30",
-        "body": "Hi David, I see toggle HRREC-88145 has intended delivery date May 01 and May 22. Can you kindly confirm if this is also the intended fix delivery dates for this issue here?",
-        "tldr": "Rainie asking David to confirm May delivery dates for Samsung (160K candidates), Airbus, Hitachi, NatWest purge fix"
-      },
-      "tldrSummary": "Samsung, Airbus, Hitachi, NatWest impacted by unassigned tasks during purge; Support asking for fix delivery timeline"
+      "tldrSummary": "Translation team needs to localise 'Do Not Use' labels appended to obsolete Purgeable Data Types for Purge Plans",
+      "priority": "Major"
     }
   ],
-  "customerIssues": [
-    {
-      "key": "HRREC-77940",
-      "summary": "Diff seen in Questionnaire Answers CRFs in report Job Applications HRRecruiting Automation",
-      "url": "https://jira2.workday.com/browse/HRREC-77940",
-      "customer": "Christie's International Plc",
-      "tldrSummary": "Inconsistent display IDs for questionnaire answers with multiple file attachments across builds",
-      "status": "Open",
-      "created": "2024-02-09",
-      "diagnosis": {
-        "classification": "Bug",
-        "confidence": "High",
-        "reasoning": "Method Questionnaire Answer@get Attachment Filename does not iterate through multiple attachments consistently - code flaw, not configuration"
-      }
-    }
-  ],
+  "customerIssues": [],
   "competitorNews": [
     {
       "competitor": "iCIMS",
       "title": "iCIMS Spring 2026: Frontline AI with Automation and Sourcing Insights",
       "url": "https://www.icims.com/en-gb/company/newsroom/springrelease2026uk/",
       "date": "2026-03-16",
-      "summary": "iCIMS launched Frontline AI for high-volume recruiting with 24/7 conversational candidate experience via SMS, WhatsApp, and web, plus automated screening and scheduling for hiring managers.",
+      "bullets": [
+        "Launched Frontline AI for high-volume recruiting with 24/7 conversational candidate engagement",
+        "Multi-channel reach via SMS, WhatsApp, and web chatbot for frontline hiring",
+        "Automated screening and interview scheduling aimed at hiring managers in retail, logistics, and healthcare",
+        "New sourcing insights dashboard surfaces pipeline bottlenecks and conversion metrics"
+      ],
       "type": "feature-release",
-      "workdayImplication": "iCIMS frontline AI/WhatsApp push mirrors our HiredScore and Paradox plays; watch for overlap in high-volume verticals"
+      "workdayImplication": "iCIMS frontline AI/WhatsApp push mirrors our HiredScore and Paradox plays; watch for overlap in high-volume verticals like retail and logistics"
     },
     {
       "competitor": "SmartRecruiters",
       "title": "SmartRecruiters Launches Agentic AI Hiring Platform with Winston",
       "url": "https://natlawreview.com/press-releases/smartrecruiters-launches-agentic-ai-hiring-platform",
       "date": "2026-03-01",
-      "summary": "SmartRecruiters launched Winston, an agentic AI recruiting companion claiming 300+ hours saved per recruiter, 2x candidate conversion, and 60% faster time-to-hire.",
+      "bullets": [
+        "Winston is an agentic AI recruiting companion that automates sourcing, screening, and scheduling end-to-end",
+        "Claims 300+ hours saved per recruiter annually and 2x candidate conversion rates",
+        "60% faster time-to-hire reported in early adopter programme across enterprise accounts",
+        "Positions SmartRecruiters as an AI-native platform rather than an AI bolt-on",
+        "SAP acquisition backing accelerates enterprise credibility and go-to-market reach"
+      ],
       "type": "feature-release",
-      "workdayImplication": "Winston agent competes directly with Workday Recruiting Agent; SAP acquisition amplifies enterprise threat"
+      "workdayImplication": "Winston agent competes directly with Workday Recruiting Agent; SAP acquisition amplifies enterprise threat and sales reach"
     },
     {
       "competitor": "SAP SuccessFactors",
       "title": "SAP Expands SmartRecruiters Integration for AI-Driven Hiring",
       "url": "https://news.sap.com/2026/03/smartrecruiters-for-sap-successfactors-ai-driven-hiring-connected-hcm/",
       "date": "2026-03-01",
-      "summary": "SAP announced expanded integration between SmartRecruiters and SuccessFactors following 2025 acquisition, creating a unified hiring platform with embedded Winston AI and connected HCM.",
+      "bullets": [
+        "Expanded integration merges SmartRecruiters and SuccessFactors into a unified hiring platform post-2025 acquisition",
+        "Winston AI now embedded natively within the SuccessFactors HCM suite for end-to-end hiring",
+        "Connected HCM flow from requisition through onboarding without manual data handoffs",
+        "Targeting large enterprise customers with a 'best of both' recruiting-plus-HCM narrative"
+      ],
       "type": "strategic-update",
-      "workdayImplication": "SAP closing unified platform gap via SmartRecruiters; our native HCM architecture remains core differentiator"
+      "workdayImplication": "SAP closing the unified platform gap via SmartRecruiters; our native HCM architecture and single data model remain a core differentiator"
     }
   ]
 }
-  </script>
+</script>
 
 <!-- Main JavaScript -->
 <script>
@@ -285,12 +290,14 @@ body { background: var(--paper); color: var(--ink); }
   try {
     const data = JSON.parse(document.getElementById('morning-data').textContent);
     
-    // Update timestamp
+    // Update timestamp and enforce freshness gate
     const generated = new Date(data.generated);
     const now = new Date();
-    const hoursAgo = Math.floor((now - generated) / (1000 * 60 * 60));
+    const minutesAgo = Math.floor((now - generated) / (1000 * 60));
+    const hoursAgo = Math.floor(minutesAgo / 60);
     let timeStr = '';
-    if (hoursAgo < 1) timeStr = 'Just now';
+    if (minutesAgo < 1) timeStr = 'Just now';
+    else if (minutesAgo < 60) timeStr = `${minutesAgo} min${minutesAgo > 1 ? 's' : ''} ago`;
     else if (hoursAgo < 24) timeStr = `${hoursAgo} hour${hoursAgo > 1 ? 's' : ''} ago`;
     else {
       const daysAgo = Math.floor(hoursAgo / 24);
@@ -298,18 +305,24 @@ body { background: var(--paper); color: var(--ink); }
     }
     document.getElementById('timestamp').textContent = `Last updated: ${timeStr} (${generated.toLocaleString()})`;
     
-    // Show stale warning if > 24 hours
-    if (hoursAgo > 24) {
-      document.getElementById('stale-warning').classList.add('show');
+    if (minutesAgo > 30) {
+      document.getElementById('gate-screen').style.display = 'flex';
+      document.getElementById('main-content').style.display = 'none';
+      document.getElementById('gate-timestamp').textContent = 'Last fetched: ' + generated.toLocaleString();
+      return;
     }
     
     // Render Jira responses
     const jiraList = document.getElementById('jira-list');
     if (data.jiraResponses && data.jiraResponses.length > 0) {
-      const jiraHtml = data.jiraResponses.map(ticket => `
-        <div class="ticket-item priority-high">
+      const jiraHtml = data.jiraResponses.map(ticket => {
+        const p = (ticket.priority || 'Major').toLowerCase();
+        const pBadgeClass = (p === 'blocker' || p === 'critical') ? 'urgent' : p === 'major' ? 'high' : 'normal';
+        const pLabel = ticket.priority || 'Major';
+        return `
+        <div class="ticket-item">
           <div class="ticket-top-row">
-            <span class="priority-badge high">⚠️ High</span>
+            <span class="priority-badge ${pBadgeClass}">${pLabel}</span>
             <a href="${ticket.url}" target="_blank" class="ticket-key">${ticket.key}</a>
           </div>
           <div class="ticket-middle-row">
@@ -319,7 +332,6 @@ body { background: var(--paper); color: var(--ink); }
             <div class="ticket-tldr">${ticket.tldrSummary}</div>
           </div>
           <div class="ticket-meta-row">
-            <div class="action-required urgent">Your response needed</div>
             ${ticket.latestComment ? `
               <div class="ticket-meta">
                 💬 ${ticket.latestComment.author} (${ticket.latestComment.date}): ${ticket.latestComment.tldr}
@@ -328,7 +340,7 @@ body { background: var(--paper); color: var(--ink); }
             <a href="${ticket.url}" target="_blank" class="btn-subtle">View in Jira</a>
           </div>
         </div>
-      `).join('');
+      `}).join('');
       jiraList.innerHTML = jiraHtml;
     } else {
       jiraList.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">No action items - you are all caught up!</div></div>';
@@ -383,21 +395,30 @@ body { background: var(--paper); color: var(--ink); }
       }).join('');
       customerList.innerHTML = customerHtml;
     } else {
-      customerList.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">No customer escalations awaiting triage</div></div>';
+      customerList.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">No unassigned customer issues to review currently</div></div>';
     }
     
     // Render competitor news
     const newsList = document.getElementById('news-list');
     if (data.competitorNews && data.competitorNews.length > 0) {
-      const newsHtml = data.competitorNews.map(news => `
+      const newsHtml = data.competitorNews.map(news => {
+        const bullets = news.bullets || (news.summary ? [news.summary] : []);
+        const bulletsHtml = bullets.map(b => `<li>${b}</li>`).join('');
+        return `
         <div class="news-item">
-          <div class="news-competitor">${news.competitor}</div>
-          <div class="news-title"><a href="${news.url}" target="_blank">${news.title}</a></div>
-          <div class="news-summary">${news.summary}</div>
-          ${news.workdayImplication ? `<div class="news-implication">${news.workdayImplication}</div>` : ''}
-          <div class="news-date">📅 ${news.date}${news.type ? ` • ${news.type}` : ''}</div>
-        </div>
-      `).join('');
+          <div class="news-left">
+            <div class="news-competitor">${news.competitor}</div>
+            <div class="news-title"><a href="${news.url}" target="_blank">${news.title}</a></div>
+            ${bulletsHtml ? `<ul class="news-bullets">${bulletsHtml}</ul>` : ''}
+            <div class="news-date">📅 ${news.date}${news.type ? ` • ${news.type}` : ''}</div>
+          </div>
+          ${news.workdayImplication ? `
+          <div class="news-right">
+            <div class="news-implication-label">Workday Implication</div>
+            <div class="news-implication">${news.workdayImplication}</div>
+          </div>` : ''}
+        </div>`;
+      }).join('');
       newsList.innerHTML = newsHtml;
     } else {
       newsList.innerHTML = '<div class="empty-state"><div class="empty-icon">📰</div><div class="empty-text">No recent competitor news found</div></div>';
@@ -408,6 +429,30 @@ body { background: var(--paper); color: var(--ink); }
   }
 })();
 </script>
-<script src="dashboard-nav.js"></script>
+<script id="nav-links" type="application/json">
+{
+  "prototype": {
+    "href": "http://localhost:5173/#/candidate-smart-view-v86",
+    "title": "candidate-smart-view-v86"
+  },
+  "deck": {
+    "href": "docs/downloads/India_Recruiting_PMF_Roadmap_v84 (1).pptx",
+    "title": "India_Recruiting_PMF_Roadmap_v84 (1).pptx"
+  },
+  "prd": {
+    "href": "docs/pm-agent-viewer.html?file=docs/prds/india-aadhaar-adobe-sign-offer-prd.md",
+    "title": "india-aadhaar-adobe-sign-offer-prd.md"
+  },
+  "brief": {
+    "href": "docs/pm-agent-viewer.html?file=design/candidate-smart-view-v86-design-brief.md",
+    "title": "candidate-smart-view-v86-design-brief.md"
+  },
+  "epic": {
+    "href": "docs/pm-agent-viewer.html?file=docs/epics/gcc-nationalisation-local-compliance-reporting-epic-draft.md",
+    "title": "gcc-nationalisation-local-compliance-reporting-epic-draft.md"
+  }
+}
+</script>
+<script src="dashboard-nav.js?v=2"></script>
 </body>
 </html>

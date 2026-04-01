@@ -68,7 +68,7 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
 .d3-node { cursor: pointer; transition: opacity 0.2s; }
 .d3-node:hover { opacity: 0.8; }
 .d3-node-circle { stroke: white; stroke-width: 2px; }
-.d3-node-circle.subagent-thin { stroke-dasharray: 4; }
+.d3-node-circle.subagent-thin { }
 .d3-node-label { font-size: 10px; font-weight: 600; pointer-events: none; }
 .d3-link { stroke: #c4bdb3; stroke-opacity: 0.4; fill: none; }
 .d3-link.delegate { stroke-dasharray: 3; stroke: #f59e0b; stroke-opacity: 0.6; }
@@ -121,9 +121,9 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
 .node.orchestrator { background: var(--wf1); color: white; border: 3px solid #4338ca; border-radius: 50%; width: 100px; height: 100px; }
 .node.rule { background: var(--water); color: white; border: 2px solid #0284c7; }
 .node.rule-always { background: #ef4444; color: white; border: 2px solid #b91c1c; }
-.node.subagent { background: #22c55e; color: white; border: 2px solid #16a34a; border-radius: 16px; width: 130px; height: 85px; padding: 8px; }
-.node.subagent-thin { background: #22c55e; color: white; border: 2px dashed #16a34a; border-radius: 16px; width: 130px; height: 85px; padding: 8px; opacity: 0.85; }
-.node.skill { background: white; color: var(--ink); border: 2px solid #16a34a; border-top: 4px solid #16a34a; border-radius: 20px; padding: 8px 16px; min-width: 110px; }
+.node.subagent { background: #15803d; color: white; border: 2px solid #166534; border-radius: 16px; width: 130px; height: 85px; padding: 8px; }
+.node.subagent-thin { background: #15803d; color: white; border: 2px solid #166534; border-radius: 16px; width: 130px; height: 85px; padding: 8px; }
+.node.skill { background: white; color: var(--ink); border: 2px solid #15803d; border-top: 4px solid #15803d; border-radius: 20px; padding: 8px 16px; min-width: 110px; }
 .node.mcp { background: #a855f7; color: white; border: 2px solid #7c3aed; transform: rotate(45deg); width: 80px; height: 80px; }
 .node.mcp span { transform: rotate(-45deg); display: block; }
 
@@ -208,8 +208,7 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
         <div class="flex items-center gap-2"><div class="legend-dot" style="background: #6366f1;"></div> Orchestrator (000)</div>
         <div class="flex items-center gap-2"><div class="legend-rect" style="background: #0ea5e9;"></div> Rules (glob-scoped)</div>
         <div class="flex items-center gap-2"><div class="legend-rect" style="background: #ef4444;"></div> Rules (alwaysApply)</div>
-        <div class="flex items-center gap-2"><div class="legend-dot" style="background: #f59e0b;"></div> Subagents (heavy)</div>
-        <div class="flex items-center gap-2"><div class="legend-dot" style="background: #f59e0b; opacity:0.6; border: 2px dashed #d97706;"></div> Subagents (thin wrapper)</div>
+        <div class="flex items-center gap-2"><div class="legend-dot" style="background: #15803d;"></div> Subagents</div>
         <div class="flex items-center gap-2"><div class="legend-rect" style="background: white; border: 2px solid #16a34a; border-top: 3px solid #16a34a;"></div> Skills</div>
         <div class="flex items-center gap-2"><svg width="14" height="14"><polygon points="7,0 14,7 7,14 0,7" fill="#a855f7"/></svg> MCPs</div>
       </div>
@@ -1113,8 +1112,8 @@ function initD3Graph() {
     orchestrator: '#6366f1',
     rule: '#0ea5e9',
     'rule-always': '#ef4444',
-    subagent: '#22c55e',
-    'subagent-thin': '#22c55e',
+    subagent: '#15803d',
+    'subagent-thin': '#15803d',
     skill: '#16a34a',
     mcp: '#a855f7'
   };
@@ -1153,7 +1152,7 @@ function initD3Graph() {
     const el = d3.select(this);
     if (d.type.startsWith('subagent')) {
       el.append('rect')
-        .attr('class', `d3-node-circle ${d.type === 'subagent-thin' ? 'subagent-thin' : ''}`)
+        .attr('class', 'd3-node-circle')
         .attr('width', 100)
         .attr('height', 50)
         .attr('x', -50)
@@ -1242,6 +1241,30 @@ function initD3Graph() {
 }
 
 </script>
-<script src="dashboard-nav.js"></script>
+<script id="nav-links" type="application/json">
+{
+  "prototype": {
+    "href": "http://localhost:5173/#/candidate-smart-view-v86",
+    "title": "candidate-smart-view-v86"
+  },
+  "deck": {
+    "href": "docs/downloads/India_Recruiting_PMF_Roadmap_v84 (1).pptx",
+    "title": "India_Recruiting_PMF_Roadmap_v84 (1).pptx"
+  },
+  "prd": {
+    "href": "docs/pm-agent-viewer.html?file=docs/prds/india-aadhaar-adobe-sign-offer-prd.md",
+    "title": "india-aadhaar-adobe-sign-offer-prd.md"
+  },
+  "brief": {
+    "href": "docs/pm-agent-viewer.html?file=design/candidate-smart-view-v86-design-brief.md",
+    "title": "candidate-smart-view-v86-design-brief.md"
+  },
+  "epic": {
+    "href": "docs/pm-agent-viewer.html?file=docs/epics/gcc-nationalisation-local-compliance-reporting-epic-draft.md",
+    "title": "gcc-nationalisation-local-compliance-reporting-epic-draft.md"
+  }
+}
+</script>
+<script src="dashboard-nav.js?v=2"></script>
 </body>
 </html>

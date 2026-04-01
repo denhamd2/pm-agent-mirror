@@ -55,6 +55,7 @@ For each Jira found in Steps 1-2, use `user-jira-ghe` MCP `getTicketDetails` too
 4. If David is only mentioned in older comments: DISCARD from results
 5. If the latest comment **author** is "David Denham" or "david.denham": EXCLUDE from results (David has already responded)
 6. Extract the latest comment author, date, and body for TLDR generation
+7. Extract `fields.priority.name` (e.g., Blocker, Critical, Major, Minor, Trivial) and include as `priority` in the output
 
 **Customer Issues filtering (from Step 2):**
 1. For each ticket, check custom fields for Customer data AND Scrum Team
@@ -117,6 +118,15 @@ Focus on:
 
 Return 3-5 most relevant news items total (across all competitors).
 
+**For each news item, generate 3-5 concise bullet points** summarising the key facts:
+- What was announced or released
+- Key capabilities or features mentioned
+- Market positioning or competitive angle
+- Metrics or claims (if any)
+- Target segment or use case
+
+Store bullets as a `bullets` array of strings in the JSON output (not a single `summary` string).
+
 ### Step 6a: Generate Workday Implications per News Item
 
 For each competitor news item gathered in Step 6:
@@ -155,7 +165,8 @@ Write results to `docs/morning-roundup-data.json`:
         "body": "David, can you review the architecture here?",
         "tldr": "Jane is asking for architecture review"
       },
-      "tldrSummary": "Feature request for bulk candidate import with Excel"
+      "tldrSummary": "Feature request for bulk candidate import with Excel",
+      "priority": "Major"
     }
   ],
   "customerIssues": [
@@ -180,13 +191,48 @@ Write results to `docs/morning-roundup-data.json`:
       "title": "Greenhouse Announces AI-Powered Interview Scheduling",
       "url": "https://www.greenhouse.io/blog/...",
       "date": "2026-03-30",
-      "summary": "Greenhouse released an AI scheduling assistant that automatically finds interview times across multiple calendars...",
+      "bullets": [
+        "AI scheduling assistant finds optimal interview times across multiple calendars",
+        "Reduces recruiter scheduling time by up to 80% according to Greenhouse",
+        "Supports multi-panel interviews with timezone-aware coordination",
+        "Targets mid-market and enterprise segments with self-service scheduling"
+      ],
       "type": "feature-release",
       "workdayImplication": "Greenhouse closing scheduling gap; our native HCM calendar integration remains a differentiator"
     }
   ]
 }
 ```
+
+### Step 7a: Generate Manifest and Embed Nav Links
+
+After writing `docs/morning-roundup-data.json`, generate navigation links for all dashboard pages:
+
+1. **Scan for latest artefacts** using the same logic as `/workspace-audit` Step 5:
+   - Latest deck: scan `~/Downloads/*_Roadmap_v*.pptx`, copy newest to `docs/downloads/`
+   - Latest PRD: scan `docs/prds/*.md` (exclude `*-red-team*.md`)
+   - Latest Design Brief: scan `design/*-design-brief*.md`
+   - Latest Epic: scan `docs/epics/*.md` (exclude `README.md`)
+2. **Read `design/main.tsx`** and extract all versioned route strings (regex for `'([\w-]+-v\d+)'`), pick the one with the highest version number
+3. **Build nav-links JSON** with fully resolved URLs:
+   ```json
+   {
+     "prototype": {"href": "http://localhost:5173/#/<latest-route>", "title": "<latest-route>"},
+     "deck": {"href": "docs/downloads/<deck-filename>", "title": "<deck-filename>"},
+     "prd": {"href": "docs/pm-agent-viewer.html?file=docs/prds/<prd-filename>", "title": "<prd-filename>"},
+     "brief": {"href": "docs/pm-agent-viewer.html?file=design/<brief-filename>", "title": "<brief-filename>"},
+     "epic": {"href": "docs/pm-agent-viewer.html?file=docs/epics/<epic-filename>", "title": "<epic-filename>"}
+   }
+   ```
+4. **Embed into ALL dashboard HTML pages** by replacing the content of `<script id="nav-links" type="application/json">` tag in:
+   - `docs/pm-agent-morning-roundup.html`
+   - `docs/pm-agent-scorecard.html`
+   - `docs/pm-agent-architecture.html`
+   - `docs/pm-agent-design-system.html`
+   - `docs/pm-agent-viewer.html`
+5. **Also embed morning data** into `docs/pm-agent-morning-roundup.html` by replacing the content of `<script id="morning-data" type="application/json">` tag with the JSON from `docs/morning-roundup-data.json`
+
+This ensures nav links stay current every time `/morning-roundup` runs, without any runtime `fetch()` calls.
 
 ### Step 8: Open in Browser
 
@@ -212,4 +258,5 @@ User sees:
 - Jira queries use David's display name "David Denham" (not email)
 - Competitor news searches prioritize announcements from past 7 days
 - TLDRs should be actionable and concise (1-2 sentences max)
-- Page will display stale data warning if JSON is > 24 hours old
+- Page enforces a 30-minute freshness gate: if data is older than 30 minutes, a full-screen gate prompts the user to run `/morning-roundup` and hides all content
+- Nav links across all dashboard pages are refreshed every time this skill runs (Step 7a)

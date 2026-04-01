@@ -156,7 +156,7 @@ if decks:
     newest = decks[0]
     dest = os.path.join('docs/downloads', os.path.basename(newest))
     shutil.copy2(newest, dest)
-    manifest['latestDeck'] = {'filename': os.path.basename(newest), 'path': 'downloads/' + os.path.basename(newest)}
+    manifest['latestDeck'] = {'filename': os.path.basename(newest), 'path': 'docs/downloads/' + os.path.basename(newest)}
 
 # Latest PRD: scan docs/prds/*.md (exclude *-red-team*.md)
 prds = [f for f in sorted(glob.glob('docs/prds/*.md'), key=os.path.getmtime, reverse=True) if 'red-team' not in os.path.basename(f)]
