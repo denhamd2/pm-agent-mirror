@@ -19,27 +19,44 @@
 Use `user-jira-ghe` MCP `searchJiraTickets` tool with JQL:
 
 ```
-comment ~ "David Denham" AND updated >= -7d AND status not in (Done, Resolved, Closed) ORDER BY updated DESC
+comment ~ "David Denham" AND updated >= -14d AND status not in (Done, Resolved, Closed) ORDER BY updated DESC
 ```
 
-This finds Jiras where David was mentioned in comments over the past 7 days.
+This finds Jiras where David was mentioned in comments over the past 2 weeks.
+
+**Important**: This query returns tickets where David is mentioned in ANY comment. Step 3 will filter to only include tickets where David is mentioned in the **LATEST** comment.
 
 ### Step 2: Query Jira for Customer Escalations
 
 Use `user-jira-ghe` MCP `searchJiraTickets` tool with JQL:
 
 ```
-assignee = "David Denham" AND "Customer[Dropdown]" is not EMPTY AND "Scrum Team" is EMPTY AND status not in (Done, Resolved, Closed) ORDER BY created DESC
+issuetype = Bug AND assignee = "David Denham" AND status in (Open, Reopened) ORDER BY updated DESC
 ```
 
-This finds customer issues assigned to David that haven't been triaged to a scrum team yet.
+This finds Bug-type issues assigned to David in Open or Reopened status.
 
-### Step 3: Get Ticket Details
+**Post-processing filter**: After fetching ticket details in Step 3, check if the ticket has a non-empty Customer field (custom field names may vary: `customfield_XXXXX`, `Customer`, `Customer[Dropdown]`). Only include tickets with Customer data populated.
+
+### Step 3: Get Ticket Details and Filter
 
 For each Jira found in Steps 1-2, use `user-jira-ghe` MCP `getTicketDetails` tool to fetch:
 - Full description
-- Latest comment (for action items)
+- All comments (sorted by date)
 - Custom fields (Customer name, Scrum Team, etc.)
+
+**Action Items filtering (from Step 1):**
+1. For each ticket, sort comments by creation date (newest first)
+2. Check if "David Denham" is mentioned in the **most recent comment only**
+3. If David is mentioned in the latest comment: INCLUDE in results
+4. If David is only mentioned in older comments: DISCARD from results
+5. Extract the latest comment author, date, and body for TLDR generation
+
+**Customer Issues filtering (from Step 2):**
+1. For each ticket, check custom fields for Customer data
+2. Look for fields like: `customfield_XXXXX`, `Customer`, `Customer[Dropdown]`
+3. If Customer field is populated: INCLUDE in results
+4. If Customer field is empty or null: DISCARD from results
 
 ### Step 4: Generate TLDRs
 
