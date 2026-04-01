@@ -4,23 +4,29 @@
   try {
     var links = JSON.parse(el.textContent);
     
-    // Fix paths to work in both local (/docs/) and GH Pages (/dashboard/)
-    // by prefixing with ../ so they resolve from the parent directory
+    var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    
+    // Fix paths to work in both local (/docs/) and GH Pages (root)
     var fixPath = function(path) {
       if (!path) return '#';
       if (path.startsWith('http')) return path;
-      if (path.startsWith('../')) return path;
-      return '../' + path;
+      if (isLocal) {
+        if (path.startsWith('../')) return path;
+        return '../' + path;
+      } else {
+        if (path.startsWith('../')) return path.substring(3);
+        return path;
+      }
     };
 
     // Handle prototype link dynamically based on environment
     var protoHref = '#';
     if (links.prototype && links.prototype.title) {
       var route = links.prototype.title; // e.g. 'candidate-smart-view-v86'
-      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      if (isLocal) {
         protoHref = 'http://localhost:5173/#/' + route;
       } else {
-        protoHref = '../preview/latest/#/' + route;
+        protoHref = 'preview/latest/#/' + route;
       }
     }
 
