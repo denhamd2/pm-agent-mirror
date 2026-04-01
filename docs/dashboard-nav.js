@@ -17,11 +17,12 @@
         // If we are on localhost, link to dev server. Otherwise, we can't easily link to the dynamic preview folder.
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
           protoLink.href = 'http://localhost:5173/#/' + latest;
+          protoLink.title = latest + ' (Requires local dev server)';
         } else {
-          // On GitHub Pages, link to the source file as a fallback, or just leave it pointing to localhost
-          protoLink.href = 'http://localhost:5173/#/' + latest;
+          // On GitHub Pages, link to the latest preview redirect folder
+          protoLink.href = '../preview/latest/#/' + latest;
+          protoLink.title = latest + ' (Latest deployed preview)';
         }
-        protoLink.title = latest + ' (Requires local dev server)';
       })
       .catch((err) => {
         protoLink.href = 'http://localhost:5173/';
