@@ -203,7 +203,7 @@ body { background: var(--paper); color: var(--ink); }
     const jiraList = document.getElementById('jira-list');
     document.getElementById('jira-count').textContent = (data.jiraResponses || []).length;
     if (data.jiraResponses && data.jiraResponses.length > 0) {
-      jiraList.innerHTML = data.jiraResponses.map(ticket => `
+      const jiraHtml = data.jiraResponses.map(ticket => `
         <div class="ticket-item">
           <a href="${ticket.url}" target="_blank" class="ticket-key">${ticket.key}</a>
           <div class="ticket-summary">${ticket.summary}</div>
@@ -215,15 +215,16 @@ body { background: var(--paper); color: var(--ink); }
           ` : ''}
         </div>
       `).join('');
+      jiraList.innerHTML = jiraHtml;
     } else {
-      jiraList.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">No action items - you're all caught up!</div></div>';
+      jiraList.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">No action items - you are all caught up!</div></div>';
     }
     
     // Render customer issues
     const customerList = document.getElementById('customer-list');
     document.getElementById('customer-count').textContent = (data.customerIssues || []).length;
     if (data.customerIssues && data.customerIssues.length > 0) {
-      customerList.innerHTML = data.customerIssues.map(ticket => `
+      const customerHtml = data.customerIssues.map(ticket => `
         <div class="ticket-item">
           <a href="${ticket.url}" target="_blank" class="ticket-key">${ticket.key}</a>
           ${ticket.customer ? `<span class="customer-badge">${ticket.customer}</span>` : ''}
@@ -232,6 +233,7 @@ body { background: var(--paper); color: var(--ink); }
           <div class="ticket-meta">Status: ${ticket.status} • Created: ${ticket.created}</div>
         </div>
       `).join('');
+      customerList.innerHTML = customerHtml;
     } else {
       customerList.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">No customer escalations awaiting triage</div></div>';
     }
@@ -240,7 +242,7 @@ body { background: var(--paper); color: var(--ink); }
     const newsList = document.getElementById('news-list');
     document.getElementById('news-count').textContent = (data.competitorNews || []).length;
     if (data.competitorNews && data.competitorNews.length > 0) {
-      newsList.innerHTML = data.competitorNews.map(news => `
+      const newsHtml = data.competitorNews.map(news => `
         <div class="news-item">
           <div class="news-competitor">${news.competitor}</div>
           <div class="news-title"><a href="${news.url}" target="_blank">${news.title}</a></div>
@@ -248,9 +250,11 @@ body { background: var(--paper); color: var(--ink); }
           <div class="news-date">📅 ${news.date}${news.type ? ` • ${news.type}` : ''}</div>
         </div>
       `).join('');
+      newsList.innerHTML = newsHtml;
     } else {
       newsList.innerHTML = '<div class="empty-state"><div class="empty-icon">📰</div><div class="empty-text">No recent competitor news found</div></div>';
     }
+    
   } catch (err) {
     document.body.innerHTML += `<div style="padding: 40px; text-align: center; color: #ef4444;">Error: ${err.message}<br>Run /morning-roundup in Cursor to generate data.</div>`;
   }

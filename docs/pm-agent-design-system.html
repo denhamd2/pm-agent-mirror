@@ -84,6 +84,9 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 
 <h1 style="font-size: 28px; font-weight: 700; color: var(--ink);">Design System</h1>
 <p style="font-size: 14px; color: var(--laptop); margin-top: 4px;">Workday Recruiting Prototype Component Library &mdash; Canvas Kit + Sana Style</p>
+<div style="background: #E3F2FD; border-left: 4px solid var(--sana-accent); padding: 12px 16px; border-radius: 8px; margin: 16px 0; font-size: 12px; color: var(--ink);">
+  <strong>Note:</strong> These are HTML approximations of Canvas Kit React components for visual reference. Actual prototypes in <code style="background: white; padding: 2px 6px; border-radius: 4px;">design/</code> use real Canvas Kit components from <code style="background: white; padding: 2px 6px; border-radius: 4px;">@workday/canvas-kit-react</code> with Canvas Kit tokens and Sana Shell theme.
+</div>
 
 <!-- SECTION 1: Shell & Navigation -->
 <div class="section-header">Section 1: Shell &amp; Navigation</div>
@@ -232,6 +235,60 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 
 <!-- SECTION 3: Data Display -->
 <div class="section-header">Section 3: Data Display</div>
+
+<div class="comp-card">
+  <div class="comp-title">Table / Grid</div>
+  <div class="comp-desc">Canvas Kit Table component for tabular data display. Used throughout recruiting workflows for candidate grids, requisition lists, and report views. Supports sorting, row selection, and custom cell rendering.</div>
+  <div class="comp-source"><code>@workday/canvas-kit-react/table</code> (used in gcc-candidate-grid-search.tsx, candidate-smart-view-v86.tsx, france-whatsapp-v75.tsx)</div>
+  <div class="comp-preview" style="flex-direction: column; gap: 0; padding: 0;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+      <thead>
+        <tr style="background: #F9FAFB; border-bottom: 2px solid #E5E7EB;">
+          <th style="text-align: left; padding: 12px 16px; font-weight: 600; color: var(--ink);">Candidate</th>
+          <th style="text-align: left; padding: 12px 16px; font-weight: 600; color: var(--ink);">Stage</th>
+          <th style="text-align: left; padding: 12px 16px; font-weight: 600; color: var(--ink);">Location</th>
+          <th style="text-align: left; padding: 12px 16px; font-weight: 600; color: var(--ink);">Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid #F0EDE9; cursor: pointer;" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='white'">
+          <td style="padding: 12px 16px; color: var(--ink); font-weight: 500;">Priya Sharma</td>
+          <td style="padding: 12px 16px; color: var(--laptop);">Interview</td>
+          <td style="padding: 12px 16px; color: var(--laptop);">Mumbai</td>
+          <td style="padding: 12px 16px;">
+            <span style="display: inline-flex; align-items: center; gap: 6px;">
+              <span style="width: 28px; height: 28px; border-radius: 50%; background: #D4EED8; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #309840;">A</span>
+              <span style="font-weight: 600; color: var(--ink);">92%</span>
+            </span>
+          </td>
+        </tr>
+        <tr style="border-bottom: 1px solid #F0EDE9; cursor: pointer;" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='white'">
+          <td style="padding: 12px 16px; color: var(--ink); font-weight: 500;">James Chen</td>
+          <td style="padding: 12px 16px; color: var(--laptop);">Review</td>
+          <td style="padding: 12px 16px; color: var(--laptop);">Singapore</td>
+          <td style="padding: 12px 16px;">
+            <span style="display: inline-flex; align-items: center; gap: 6px;">
+              <span style="width: 28px; height: 28px; border-radius: 50%; background: #D8E3F3; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #4068AD;">B</span>
+              <span style="font-weight: 600; color: var(--ink);">84%</span>
+            </span>
+          </td>
+        </tr>
+        <tr style="cursor: pointer;" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='white'">
+          <td style="padding: 12px 16px; color: var(--ink); font-weight: 500;">Sarah Williams</td>
+          <td style="padding: 12px 16px; color: var(--laptop);">Screen</td>
+          <td style="padding: 12px 16px; color: var(--laptop);">London</td>
+          <td style="padding: 12px 16px;">
+            <span style="display: inline-flex; align-items: center; gap: 6px;">
+              <span style="width: 28px; height: 28px; border-radius: 50%; background: #FFECD1; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #D68B00;">C</span>
+              <span style="font-weight: 600; color: var(--ink);">76%</span>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="comp-props">Canvas Kit: <code>Table</code> <code>Table.Head</code> <code>Table.Row</code> <code>Table.Header</code> <code>Table.Cell</code> <code>Table.Body</code></div>
+</div>
 
 <div class="comp-card">
   <div class="comp-title">CandidateGradeBadge</div>

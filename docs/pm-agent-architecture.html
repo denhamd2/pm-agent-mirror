@@ -120,13 +120,13 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
   box-shadow: 0 1px 3px rgba(11,31,66,0.08);
 }
 .node:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(11,31,66,0.15); }
-.node-icon { font-size: 18px; margin-bottom: 2px; line-height: 1; }
+.node-icon { font-size: 28px; margin-bottom: 2px; line-height: 1; }
 
 .node.orchestrator { background: var(--wf1); color: white; border: 3px solid #4338ca; border-radius: 50%; width: 100px; height: 100px; }
 .node.rule { background: var(--water); color: white; border: 2px solid #0284c7; }
 .node.rule-always { background: #ef4444; color: white; border: 2px solid #b91c1c; }
-.node.subagent { background: var(--pencil); color: white; border: 2px solid #d97706; border-radius: 50%; width: 90px; height: 90px; }
-.node.subagent-thin { background: var(--pencil); color: white; border: 2px dashed #d97706; border-radius: 50%; width: 80px; height: 80px; opacity: 0.85; }
+.node.subagent { background: #7c3aed; color: white; border: 2px solid #6d28d9; border-radius: 50%; width: 90px; height: 90px; }
+.node.subagent-thin { background: #7c3aed; color: white; border: 2px dashed #6d28d9; border-radius: 50%; width: 80px; height: 80px; opacity: 0.85; }
 .node.skill { background: white; color: var(--ink); border: 2px solid #16a34a; border-top: 4px solid #16a34a; border-radius: 20px; padding: 8px 16px; min-width: 110px; }
 .node.mcp { background: #a855f7; color: white; border: 2px solid #7c3aed; transform: rotate(45deg); width: 80px; height: 80px; }
 .node.mcp span { transform: rotate(-45deg); display: block; }
@@ -1093,8 +1093,8 @@ function initD3Graph() {
     orchestrator: '#6366f1',
     rule: '#0ea5e9',
     'rule-always': '#ef4444',
-    subagent: '#f59e0b',
-    'subagent-thin': '#f59e0b',
+    subagent: '#7c3aed',
+    'subagent-thin': '#7c3aed',
     skill: '#16a34a',
     mcp: '#a855f7'
   };
@@ -1106,8 +1106,11 @@ function initD3Graph() {
     .force('center', d3.forceCenter(width / 2, height / 2))
     .force('collision', d3.forceCollide().radius(d => nodeRadius[d.type] + 10));
   
+  // Create container for all graph content (for zoom)
+  const graphContent = svg.append('g').attr('id', 'graph-content');
+  
   // Create links
-  const link = svg.append('g')
+  const link = graphContent.append('g')
     .selectAll('line')
     .data(links)
     .join('line')
@@ -1115,7 +1118,7 @@ function initD3Graph() {
     .attr('stroke-width', 1.5);
   
   // Create node groups
-  const node = svg.append('g')
+  const node = graphContent.append('g')
     .selectAll('g')
     .data(nodes)
     .join('g')
@@ -1193,11 +1196,11 @@ function initD3Graph() {
     d.fy = null;
   }
   
-  // Zoom behavior
+  // Zoom behavior - apply only to graph content container
   const zoom = d3.zoom()
     .scaleExtent([0.3, 3])
     .on('zoom', (event) => {
-      svg.selectAll('g').attr('transform', event.transform);
+      graphContent.attr('transform', event.transform);
     });
   
   svg.call(zoom);
