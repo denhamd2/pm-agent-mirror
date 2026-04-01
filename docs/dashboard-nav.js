@@ -1,16 +1,27 @@
 (function() {
-  // 1. Latest Prototype - fetch main.tsx from Vite dev server
+  // 1. Latest Prototype - fetch main.tsx
   const protoLink = document.getElementById('proto-link');
   if (protoLink) {
-    fetch('http://localhost:5173/design/main.tsx')
-      .then(r => r.text())
+    // Try fetching from local design folder first (works on gh-pages and locally if served from root)
+    fetch('../design/main.tsx')
+      .then(r => {
+        if (!r.ok) throw new Error('Not found');
+        return r.text();
+      })
       .then(src => {
         const matches = [...src.matchAll(/['"]([a-z0-9-]+-v(\d+))['"]/g)];
         if (matches.length === 0) throw new Error('No versioned routes found');
         matches.sort((a, b) => parseInt(b[2], 10) - parseInt(a[2], 10));
         const latest = matches[0][1];
-        protoLink.href = 'http://localhost:5173/#/' + latest;
-        protoLink.title = latest;
+        
+        // If we are on localhost, link to dev server. Otherwise, we can't easily link to the dynamic preview folder.
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+          protoLink.href = 'http://localhost:5173/#/' + latest;
+        } else {
+          // On GitHub Pages, link to the source file as a fallback, or just leave it pointing to localhost
+          protoLink.href = 'http://localhost:5173/#/' + latest;
+        }
+        protoLink.title = latest + ' (Requires local dev server)';
       })
       .catch((err) => {
         protoLink.href = 'http://localhost:5173/';
@@ -26,7 +37,7 @@
       // Latest Deck
       const deckLink = document.getElementById('deck-link');
       if (deckLink && m.latestDeck) {
-        deckLink.href = m.latestDeck.path;
+        deckLink.href = '../' + m.latestDeck.path;
         deckLink.title = m.latestDeck.filename;
       } else if (deckLink) {
         deckLink.style.opacity = '0.5';
