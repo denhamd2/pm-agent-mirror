@@ -45,23 +45,66 @@ body { background: var(--paper); color: var(--ink); }
 .section-title { font-size: 16px; font-weight: 700; color: var(--ink); }
 .badge { padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; background: var(--water); color: white; }
 
-.ticket-item { padding: 16px; border-left: 3px solid var(--staple); margin-bottom: 12px; background: rgba(247,245,242,0.5); border-radius: 6px; transition: all 0.2s; }
-.ticket-item:hover { border-left-color: var(--water); background: white; }
+.ticket-item { padding: 16px; background: white; border: 1px solid var(--staple); border-left: 4px solid var(--staple); margin-bottom: 12px; border-radius: 8px; transition: all 0.2s; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 3px rgba(11,31,66,0.04); }
+.ticket-item:hover { border-left-color: var(--water); box-shadow: 0 4px 12px rgba(11,31,66,0.08); transform: translateY(-1px); }
+.ticket-top-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ticket-middle-row { margin: 2px 0; }
+.ticket-bottom-row { display: flex; flex-direction: column; gap: 8px; }
+.ticket-meta-row { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; padding-top: 12px; border-top: 1px dashed var(--staple); }
+
 .ticket-key { font-size: 11px; font-weight: 700; color: var(--water); text-decoration: none; }
 .ticket-key:hover { text-decoration: underline; }
-.ticket-summary { font-size: 14px; font-weight: 600; color: var(--ink); margin: 4px 0; }
-.ticket-tldr { font-size: 12px; color: var(--laptop); line-height: 1.5; }
-.ticket-meta { font-size: 11px; color: var(--desk); margin-top: 6px; }
-.customer-badge { display: inline-block; padding: 2px 8px; background: var(--pencil); color: white; border-radius: 10px; font-size: 10px; font-weight: 600; margin-right: 8px; }
+.ticket-summary { font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.ticket-tldr { font-size: 13px; color: var(--laptop); line-height: 1.5; }
+.ticket-meta { font-size: 12px; color: var(--laptop); }
+.customer-badge { display: inline-block; padding: 2px 8px; background: var(--pencil); color: white; border-radius: 10px; font-size: 10px; font-weight: 600; }
 
-.news-item { padding: 16px; border-left: 3px solid var(--green); margin-bottom: 12px; background: rgba(34,197,94,0.05); border-radius: 6px; transition: all 0.2s; }
-.news-item:hover { border-left-color: var(--green); background: white; box-shadow: 0 2px 8px rgba(34,197,94,0.1); }
+.priority-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+.priority-badge.urgent { background: #fee2e2; color: #b91c1c; }
+.priority-badge.high { background: #fef3c7; color: #92400e; }
+.priority-badge.normal { background: var(--staple); color: var(--laptop); }
+
+.action-required { font-size: 12px; font-weight: 600; color: var(--water); display: flex; align-items: center; gap: 4px; }
+.action-required.urgent { color: #ef4444; }
+
+.btn-subtle { display: inline-block; padding: 4px 12px; background: white; border: 1px solid var(--staple); border-radius: 16px; font-size: 11px; font-weight: 600; color: var(--ink); text-decoration: none; transition: all 0.2s; }
+.btn-subtle:hover { border-color: var(--water); color: var(--water); background: rgba(0,117,180,0.05); }
+
+.news-item { padding: 16px; background: white; border: 1px solid var(--staple); border-left: 4px solid var(--staple); margin-bottom: 12px; border-radius: 8px; transition: all 0.2s; box-shadow: 0 1px 3px rgba(11,31,66,0.04); }
+.news-item:hover { border-left-color: var(--green); box-shadow: 0 4px 12px rgba(11,31,66,0.08); transform: translateY(-1px); }
 .news-competitor { font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.05em; }
 .news-title { font-size: 14px; font-weight: 600; color: var(--ink); margin: 4px 0; }
 .news-title a { color: var(--ink); text-decoration: none; }
 .news-title a:hover { color: var(--water); text-decoration: underline; }
-.news-summary { font-size: 12px; color: var(--laptop); line-height: 1.5; margin-top: 6px; }
-.news-date { font-size: 11px; color: var(--desk); margin-top: 8px; }
+.news-summary { font-size: 13px; color: var(--laptop); line-height: 1.5; margin-top: 6px; }
+.news-implication { font-size: 12px; font-weight: 600; color: var(--ink); line-height: 1.4; margin-top: 8px; padding: 6px 10px; background: rgba(99,102,241,0.06); border-left: 2px solid #6366f1; border-radius: 0 4px 4px 0; }
+.news-implication::before { content: "Workday implication: "; font-weight: 700; color: #6366f1; }
+.news-date { font-size: 12px; color: var(--laptop); margin-top: 8px; }
+
+.idea-item { padding: 14px; background: white; border: 1px solid var(--staple); border-left: 4px solid var(--staple); margin-bottom: 10px; border-radius: 8px; transition: all 0.2s; box-shadow: 0 1px 3px rgba(11,31,66,0.04); }
+.idea-item:hover { border-left-color: #8b5cf6; box-shadow: 0 4px 12px rgba(11,31,66,0.08); transform: translateY(-1px); }
+.idea-capability { font-size: 10px; font-weight: 700; color: #8b5cf6; text-transform: uppercase; letter-spacing: 0.05em; }
+.idea-title { font-size: 13px; font-weight: 600; color: var(--ink); margin: 4px 0; line-height: 1.3; }
+.idea-value { font-size: 12px; color: var(--laptop); line-height: 1.4; }
+.idea-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 11px; color: var(--desk); }
+.idea-votes { display: inline-flex; align-items: center; gap: 3px; padding: 1px 6px; background: rgba(139,92,246,0.08); border-radius: 10px; font-size: 10px; font-weight: 600; color: #7c3aed; }
+
+.gap-item { padding: 14px; background: white; border: 1px solid var(--staple); border-left: 4px solid var(--staple); margin-bottom: 10px; border-radius: 8px; transition: all 0.2s; box-shadow: 0 1px 3px rgba(11,31,66,0.04); }
+.gap-item:hover { border-left-color: #e11d48; box-shadow: 0 4px 12px rgba(11,31,66,0.08); transform: translateY(-1px); }
+.gap-severity-high { border-left-color: #ef4444; }
+.gap-severity-medium { border-left-color: #f59e0b; }
+.gap-severity-low { border-left-color: var(--staple); }
+.gap-id { font-size: 10px; font-weight: 700; color: #e11d48; font-family: 'JetBrains Mono', monospace; }
+.gap-capability { font-size: 10px; font-weight: 700; color: var(--water); text-transform: uppercase; letter-spacing: 0.05em; margin-left: 8px; }
+.gap-pain { font-size: 12px; color: var(--ink); line-height: 1.4; margin: 4px 0; }
+.gap-meta { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--desk); flex-wrap: wrap; }
+.severity-badge { display: inline-block; padding: 1px 6px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+.severity-deal-loss { background: #fee2e2; color: #b91c1c; }
+.severity-sku-removal { background: #fef3c7; color: #92400e; }
+.severity-tolerable { background: #e0e7ff; color: #3730a3; }
+
+.data-source { font-size: 10px; font-weight: 600; color: var(--desk); padding: 2px 8px; background: var(--paper); border-radius: 10px; display: inline-flex; align-items: center; gap: 4px; }
+.data-source::before { content: "📄"; }
 
 .empty-state { text-align: center; padding: 40px 20px; color: var(--laptop); }
 .empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.3; }
@@ -69,6 +112,26 @@ body { background: var(--paper); color: var(--ink); }
 
 .stale-warning { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 12px 16px; margin-bottom: 24px; font-size: 12px; color: #78350f; display: none; }
 .stale-warning.show { display: block; }
+
+.priority-urgent { border-left-color: #ef4444 !important; }
+.priority-high { border-left-color: #f59e0b !important; }
+.diagnosis-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; margin-top: 4px; cursor: help; }
+.diagnosis-bug { background: #fee2e2; color: #b91c1c; }
+.diagnosis-config { background: #fef3c7; color: #92400e; }
+.diagnosis-wad { background: #e0e7ff; color: #3730a3; }
+.status-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; margin-left: 8px; }
+.status-open { background: #dbeafe; color: #1e40af; }
+.status-triage { background: #fef3c7; color: #92400e; }
+.status-reopened { background: #fee2e2; color: #b91c1c; }
+
+.jql-tooltip { position: relative; display: inline-flex; align-items: center; cursor: help; margin-left: 6px; }
+.jql-tooltip .jql-icon { width: 18px; height: 18px; border-radius: 50%; background: var(--staple); color: var(--laptop); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.jql-tooltip:hover .jql-icon { background: var(--water); color: white; }
+.jql-tooltip .jql-popup { display: none; position: absolute; top: 28px; left: 0; z-index: 100; background: var(--ink); color: #e2e8f0; padding: 12px 14px; border-radius: 8px; font-size: 11px; font-family: 'JetBrains Mono', monospace; line-height: 1.5; white-space: pre-wrap; max-width: 480px; min-width: 320px; box-shadow: 0 8px 24px rgba(11,31,66,0.25); }
+.jql-tooltip:hover .jql-popup { display: block; }
+.jql-popup-label { font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--sky); margin-bottom: 6px; }
+.jql-popup-filter { font-family: 'DM Sans', sans-serif; font-size: 10px; color: var(--desk); margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 6px; }
+
 </style>
 </head>
 <body>
@@ -105,129 +168,233 @@ body { background: var(--paper); color: var(--ink); }
     ⚠️ Data is more than 24 hours old. Run <code>/morning-roundup</code> in Cursor to refresh.
   </div>
 
+  <!-- Customer Issues to Review (Highest Priority) -->
+  <div class="section">
+    <div class="section-header">
+          <div class="section-title">Unassigned Customer Issues to Review
+            <span class="jql-tooltip">
+              <span class="jql-icon">?</span>
+              <span class="jql-popup">
+                <div class="jql-popup-label">JQL Query</div>issuetype = Bug AND assignee is EMPTY AND status in (Open, Reopened) ORDER BY updated DESC<div class="jql-popup-filter">Post-filters: Customer IS NOT EMPTY, Scrum Team IS EMPTY</div>
+              </span>
+            </span>
+          </div>
+    </div>
+    <div id="customer-list"></div>
+  </div>
+
   <!-- Jiras I Need to Respond To -->
   <div class="section">
     <div class="section-header">
-      <div class="section-title">Jiras I Need to Respond To</div>
-      <div class="badge" id="jira-count">0</div>
+      <div class="section-title">Jiras I Need to Respond To
+        <span class="jql-tooltip">
+          <span class="jql-icon">?</span>
+          <span class="jql-popup">
+            <div class="jql-popup-label">JQL Query</div>comment ~ "David Denham" AND updated >= -14d AND status not in (Done, Resolved, Closed) ORDER BY updated DESC<div class="jql-popup-filter">Post-filter: David mentioned in LATEST comment only</div>
+          </span>
+        </span>
+      </div>
     </div>
     <div id="jira-list"></div>
-  </div>
-
-  <!-- Customer Issues to Review -->
-  <div class="section">
-    <div class="section-header">
-      <div class="section-title">Customer Issues to Review</div>
-      <div class="badge" id="customer-count">0</div>
-    </div>
-    <div id="customer-list"></div>
   </div>
 
   <!-- Competitor News This Week -->
   <div class="section">
     <div class="section-header">
       <div class="section-title">Competitor News This Week</div>
-      <div class="badge" id="news-count">0</div>
     </div>
     <div id="news-list"></div>
+  </div>
+
+  <!-- Latest Customer Ideas -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Latest Customer Ideas
+        <span class="jql-tooltip">
+          <span class="jql-icon">?</span>
+          <span class="jql-popup">
+            <div class="jql-popup-label">Data Source</div>Local: research/brainstorm-sessions/*.csv or *.xlsx<div class="jql-popup-filter">Filter: Product Area = Talent Acquisition, latest 10</div>
+          </span>
+        </span>
+      </div>
+    </div>
+    <div id="ideas-list"></div>
+  </div>
+
+  <!-- Latest Win-Loss Data -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Latest Win-Loss Data
+        <span class="jql-tooltip">
+          <span class="jql-icon">?</span>
+          <span class="jql-popup">
+            <div class="jql-popup-label">Data Source</div>Local: research/*/gap-data/*.csv<div class="jql-popup-filter">Filter: Product Area = Talent Acquisition, latest 10</div>
+          </span>
+        </span>
+      </div>
+    </div>
+    <div id="gap-list"></div>
   </div>
 </div>
 
 <!-- Data (will be generated by /morning-roundup skill) -->
 <script id="morning-data" type="application/json">
 {
-  "generated": "2026-04-01T10:15:00Z",
+  "generated": "2026-04-01T14:30:00Z",
   "jiraResponses": [
-    {
-      "key": "LEGAL-9723",
-      "summary": "Interview Team Optimization Skill (GA under SSA) - AI / TPE Review Change Request",
-      "url": "https://jira2.workday.com/browse/LEGAL-9723",
-      "latestComment": {
-        "author": "Marshall Dear",
-        "date": "2026-03-31",
-        "body": "Per review, determined that this feature relies on IDD data and will require for this feature to be an Enhanced Feature...",
-        "tldr": "Marshall completed review - PCA needs update, IDD data requirements identified for ITO skill GA"
-      },
-      "tldrSummary": "Interview Team Optimization going GA under Self Service Agent - requires data contribution review"
-    },
     {
       "key": "CTD-1795",
       "summary": "2-way Email Communication",
       "url": "https://jira2.workday.com/browse/CTD-1795",
       "latestComment": {
-        "author": "System",
+        "author": "wd-atlassian",
         "date": "2026-03-29",
-        "body": "This issue was flagged because it was in management review for more than two weeks.",
-        "tldr": "CDT ticket flagged for management review - needs status update"
+        "body": "This issue was flagged because it was in management review for more than two weeks. Email has been sent to Assignee david.denham and Reporter david.denham.",
+        "tldr": "Automated flag: CTD in management review for over 2 weeks, needs status update"
       },
-      "tldrSummary": "Cross-team dependency for 2-way email framework - OE team pre-requisite for Recruiting"
+      "tldrSummary": "Cross-team dependency for OE team to build 2-way email framework for Recruiting; critical for Japan sales"
     },
     {
-      "key": "HRREC-48636",
-      "summary": "Refer a candidate URL reuse - Enhance Referral Job Application logic",
-      "url": "https://jira2.workday.com/browse/HRREC-48636",
+      "key": "TRANMGMT-2385",
+      "summary": "Conversions to Update Names and Descriptions of Obsolete Purgeable Data Types",
+      "url": "https://jira2.workday.com/browse/TRANMGMT-2385",
       "latestComment": {
-        "author": "Chelsea Layton",
-        "date": "2026-03-30",
-        "body": "Report attached for review",
-        "tldr": "Chelsea attached report - may need PM review of referral validation logic"
+        "author": "Shiho Yamagishi",
+        "date": "2026-03-31",
+        "body": "Hi David. Big apology that we failed to triage this Jira by now. The issue related to (Do Not Use) is because of not working on this Jira on 26R1. Let us review and do the necessary.",
+        "tldr": "Translation team apologised for missed triage; will now review PDT name/description localisation for 26R1"
       },
-      "tldrSummary": "Story to block job applications when referral URL is reused with mismatched details"
+      "tldrSummary": "Translation team needs to localise 'Do Not Use' labels appended to obsolete Purgeable Data Types for Purge Plans"
+    },
+    {
+      "key": "HRREC-89453",
+      "summary": "Purged Job Application intermittently gets an unassigned task with Disposition Job Applications Before Purge tenant parameter enabled",
+      "url": "https://jira2.workday.com/browse/HRREC-89453",
+      "latestComment": {
+        "author": "Rainie Chou",
+        "date": "2026-03-30",
+        "body": "Hi David, I see toggle HRREC-88145 has intended delivery date May 01 and May 22. Can you kindly confirm if this is also the intended fix delivery dates for this issue here?",
+        "tldr": "Rainie asking David to confirm May delivery dates for Samsung (160K candidates), Airbus, Hitachi, NatWest purge fix"
+      },
+      "tldrSummary": "Samsung, Airbus, Hitachi, NatWest impacted by unassigned tasks during purge; Support asking for fix delivery timeline"
     }
   ],
   "customerIssues": [
     {
-      "key": "CXS-17691",
-      "summary": "Candidate not able to accept the offer due to error message",
-      "url": "https://jira2.workday.com/browse/CXS-17691",
-      "customer": "Customer Escalation",
-      "tldrSummary": "Critical bug - candidates blocked from accepting offers, in Triage status",
-      "status": "Triage",
-      "created": "2025-08-15"
-    },
-    {
-      "key": "HRREC-89150",
-      "summary": "Job Requisition still active and active candidate not actionable",
-      "url": "https://jira2.workday.com/browse/HRREC-89150",
-      "customer": "Novozymes",
-      "tldrSummary": "Critical bug - active candidates not actionable despite open requisition",
-      "status": "Triage",
-      "created": "2025-11-27"
-    },
-    {
-      "key": "DOCENG-8677",
-      "summary": "Adobe Review Document Signing Error [longer-term]",
-      "url": "https://jira2.workday.com/browse/DOCENG-8677",
-      "customer": "Multiple Customers",
-      "tldrSummary": "Adobe Sign integration errors affecting document signing workflow",
+      "key": "HRREC-77940",
+      "summary": "Diff seen in Questionnaire Answers CRFs in report Job Applications HRRecruiting Automation",
+      "url": "https://jira2.workday.com/browse/HRREC-77940",
+      "customer": "Christie's International Plc",
+      "tldrSummary": "Inconsistent display IDs for questionnaire answers with multiple file attachments across builds",
       "status": "Open",
-      "created": "2025-10-03"
+      "created": "2024-02-09",
+      "diagnosis": {
+        "classification": "Bug",
+        "confidence": "High",
+        "reasoning": "Method Questionnaire Answer@get Attachment Filename does not iterate through multiple attachments consistently - code flaw, not configuration"
+      }
     }
   ],
   "competitorNews": [
     {
-      "competitor": "Greenhouse",
-      "title": "Greenhouse March 2026 Release: Workday Integration & Duplicate Detection",
-      "url": "https://support.greenhouse.io/hc/en-us/articles/48148047128987-Release-Notes-March-2026",
-      "date": "2026-03-31",
-      "summary": "New Hire Link integration auto-exports to Workday for onboarding. Duplicate detection now uses email/phone/LinkedIn only (reduced false positives). Multi-calendar view for interview scheduling.",
-      "type": "feature-release"
-    },
-    {
       "competitor": "iCIMS",
-      "title": "iCIMS Launches Frontline AI for High-Volume Hiring",
+      "title": "iCIMS Spring 2026: Frontline AI with Automation and Sourcing Insights",
       "url": "https://www.icims.com/en-gb/company/newsroom/springrelease2026uk/",
       "date": "2026-03-16",
-      "summary": "Purpose-built AI for frontline hiring with conversational candidate experience across SMS, WhatsApp, and web. Streamlined mobile hiring manager experience.",
-      "type": "product-launch"
+      "summary": "iCIMS launched Frontline AI for high-volume recruiting with 24/7 conversational candidate experience via SMS, WhatsApp, and web, plus automated screening and scheduling for hiring managers.",
+      "type": "feature-release",
+      "workdayImplication": "iCIMS frontline AI/WhatsApp push mirrors our HiredScore and Paradox plays; watch for overlap in high-volume verticals"
     },
     {
       "competitor": "SmartRecruiters",
-      "title": "SmartRecruiters Winston: Agentic AI Hiring Platform",
+      "title": "SmartRecruiters Launches Agentic AI Hiring Platform with Winston",
       "url": "https://natlawreview.com/press-releases/smartrecruiters-launches-agentic-ai-hiring-platform",
-      "date": "2026-03-15",
-      "summary": "Agentic AI companion Winston automates recruiting tasks. Claims 300+ hours saved per recruiter per year, 95% reduction in interview scheduling time, 2X higher candidate conversion.",
-      "type": "ai-announcement"
+      "date": "2026-03-01",
+      "summary": "SmartRecruiters launched Winston, an agentic AI recruiting companion claiming 300+ hours saved per recruiter, 2x candidate conversion, and 60% faster time-to-hire.",
+      "type": "feature-release",
+      "workdayImplication": "Winston agent competes directly with Workday Recruiting Agent; SAP acquisition amplifies enterprise threat"
+    },
+    {
+      "competitor": "SAP SuccessFactors",
+      "title": "SAP Expands SmartRecruiters Integration for AI-Driven Hiring",
+      "url": "https://news.sap.com/2026/03/smartrecruiters-for-sap-successfactors-ai-driven-hiring-connected-hcm/",
+      "date": "2026-03-01",
+      "summary": "SAP announced expanded integration between SmartRecruiters and SuccessFactors following 2025 acquisition, creating a unified hiring platform with embedded Winston AI and connected HCM.",
+      "type": "strategic-update",
+      "workdayImplication": "SAP closing unified platform gap via SmartRecruiters; our native HCM architecture remains core differentiator"
+    }
+  ],
+  "customerIdeas": [],
+  "winLossData": [
+    {
+      "gapName": "PG-90001006",
+      "gapId": "x6",
+      "painPoint": "Should not appear in France slice (DACH region, not France).",
+      "severity": "Tolerable but Requires Some Manual Effort (5)",
+      "capability": "Sourcing",
+      "region": "Germany LE",
+      "date": "14/03/2025",
+      "source": "presales-gaps-export-unfiltered.csv"
+    },
+    {
+      "gapName": "PG-90001004",
+      "gapId": "x4",
+      "painPoint": "APJ noise row.",
+      "severity": "Tolerable but Requires Some Manual Effort (5)",
+      "capability": "Interview Scheduling",
+      "region": "APJ 1",
+      "date": "10/03/2025",
+      "source": "presales-gaps-export-unfiltered.csv"
+    },
+    {
+      "gapName": "PG-90001003",
+      "gapId": "x3",
+      "painPoint": "France opp in correct France Opp Region bucket.",
+      "severity": "Risk of Removal of SKU from Deal (2)",
+      "capability": "Job Postings",
+      "region": "France Services Tech Media",
+      "date": "01/03/2025",
+      "source": "presales-gaps-export-unfiltered.csv"
+    },
+    {
+      "gapName": "PG-90001002",
+      "gapId": "x2",
+      "painPoint": "Should not appear in France slice.",
+      "severity": "Tolerable but Requires Some Manual Effort (5)",
+      "capability": "Career Sites",
+      "region": "Canada LE & Industries",
+      "date": "20/02/2025",
+      "source": "presales-gaps-export-unfiltered.csv"
+    },
+    {
+      "gapName": "PG-90001001",
+      "gapId": "x1",
+      "painPoint": "Recruiter needs offer templates aligned to French labour practice.",
+      "severity": "Risk of Deal Loss (3)",
+      "capability": "Offers & Contracts",
+      "region": "France MFG HC & Edu",
+      "date": "15/01/2025",
+      "source": "presales-gaps-export-unfiltered.csv"
+    },
+    {
+      "gapName": "PG-00009165",
+      "gapId": "aTEVT0000001ueT4AQ",
+      "painPoint": "GCC high populations cannot use Workday integrations with Outlook for interview scheduling or MS Teams HiredScore experience.",
+      "severity": "Tolerable, but Requires Some Manual Effort (5)",
+      "capability": "Interview Scheduling",
+      "region": "GCC",
+      "date": "",
+      "source": "presales-gaps-export.csv"
+    },
+    {
+      "gapName": "PG-00005541",
+      "gapId": "aTEVT0000000OYb4AM",
+      "painPoint": "No integration would require that the prospect post their jobs in CareerPlug (a competitor) and then move applied candidate data from CareerPlug to Workday Recruiting.",
+      "severity": "Risk of Removal of SKU from Deal (3)",
+      "capability": "Job Postings",
+      "region": "GCC",
+      "date": "",
+      "source": "presales-gaps-export.csv"
     }
   ]
 }
@@ -259,18 +426,28 @@ body { background: var(--paper); color: var(--ink); }
     
     // Render Jira responses
     const jiraList = document.getElementById('jira-list');
-    document.getElementById('jira-count').textContent = (data.jiraResponses || []).length;
     if (data.jiraResponses && data.jiraResponses.length > 0) {
       const jiraHtml = data.jiraResponses.map(ticket => `
-        <div class="ticket-item">
-          <a href="${ticket.url}" target="_blank" class="ticket-key">${ticket.key}</a>
-          <div class="ticket-summary">${ticket.summary}</div>
-          <div class="ticket-tldr">${ticket.tldrSummary}</div>
-          ${ticket.latestComment ? `
-            <div class="ticket-meta">
-              💬 ${ticket.latestComment.author} (${ticket.latestComment.date}): ${ticket.latestComment.tldr}
-            </div>
-          ` : ''}
+        <div class="ticket-item priority-high">
+          <div class="ticket-top-row">
+            <span class="priority-badge high">⚠️ High</span>
+            <a href="${ticket.url}" target="_blank" class="ticket-key">${ticket.key}</a>
+          </div>
+          <div class="ticket-middle-row">
+            <div class="ticket-summary">${ticket.summary}</div>
+          </div>
+          <div class="ticket-bottom-row">
+            <div class="ticket-tldr">${ticket.tldrSummary}</div>
+          </div>
+          <div class="ticket-meta-row">
+            <div class="action-required urgent">Your response needed</div>
+            ${ticket.latestComment ? `
+              <div class="ticket-meta">
+                💬 ${ticket.latestComment.author} (${ticket.latestComment.date}): ${ticket.latestComment.tldr}
+              </div>
+            ` : ''}
+            <a href="${ticket.url}" target="_blank" class="btn-subtle">View in Jira</a>
+          </div>
         </div>
       `).join('');
       jiraList.innerHTML = jiraHtml;
@@ -280,17 +457,51 @@ body { background: var(--paper); color: var(--ink); }
     
     // Render customer issues
     const customerList = document.getElementById('customer-list');
-    document.getElementById('customer-count').textContent = (data.customerIssues || []).length;
     if (data.customerIssues && data.customerIssues.length > 0) {
-      const customerHtml = data.customerIssues.map(ticket => `
-        <div class="ticket-item">
-          <a href="${ticket.url}" target="_blank" class="ticket-key">${ticket.key}</a>
-          ${ticket.customer ? `<span class="customer-badge">${ticket.customer}</span>` : ''}
-          <div class="ticket-summary">${ticket.summary}</div>
-          <div class="ticket-tldr">${ticket.tldrSummary}</div>
-          <div class="ticket-meta">Status: ${ticket.status} • Created: ${ticket.created}</div>
-        </div>
-      `).join('');
+      const customerHtml = data.customerIssues.map(ticket => {
+        // Calculate priority based on age
+        const createdDate = new Date(ticket.created);
+        const daysOld = Math.floor((new Date() - createdDate) / (1000 * 60 * 60 * 24));
+        const priorityClass = daysOld > 90 ? 'priority-urgent' : daysOld > 30 ? 'priority-high' : '';
+        const priorityBadge = daysOld > 90 ? '<span class="priority-badge urgent">🔥 Urgent</span>' : daysOld > 30 ? '<span class="priority-badge high">⚠️ High</span>' : '<span class="priority-badge normal">• Normal</span>';
+        
+        // Diagnosis badge
+        const diagnosisBadge = ticket.diagnosis ? `
+          <div class="diagnosis-badge diagnosis-${ticket.diagnosis.classification.toLowerCase()}" title="${ticket.diagnosis.reasoning || ''}">
+            ${ticket.diagnosis.classification === 'Bug' ? '🐛' : ticket.diagnosis.classification === 'Config' ? '⚙️' : '✓'} 
+            ${ticket.diagnosis.classification} 
+            (${ticket.diagnosis.confidence})
+          </div>
+        ` : '';
+        
+        // Status badge
+        const statusClass = ticket.status.toLowerCase().replace(' ', '-');
+        const statusBadge = `<span class="status-badge status-${statusClass}">${ticket.status}</span>`;
+        
+        return `
+          <div class="ticket-item ${priorityClass}">
+            <div class="ticket-top-row">
+              ${priorityBadge}
+              <a href="${ticket.url}" target="_blank" class="ticket-key">${ticket.key}</a>
+              ${ticket.customer ? `<span class="customer-badge">${ticket.customer}</span>` : ''}
+              ${statusBadge}
+              <span class="ticket-meta" style="margin-left: auto;">${daysOld} days old</span>
+            </div>
+            <div class="ticket-middle-row">
+              <div class="ticket-summary">${ticket.summary}</div>
+            </div>
+            <div class="ticket-bottom-row">
+              <div class="ticket-tldr">${ticket.tldrSummary}</div>
+              ${diagnosisBadge}
+            </div>
+            <div class="ticket-meta-row">
+              <div class="action-required">Awaiting triage</div>
+              <div class="ticket-meta">Created: ${ticket.created}</div>
+              <a href="${ticket.url}" target="_blank" class="btn-subtle">View in Jira</a>
+            </div>
+          </div>
+        `;
+      }).join('');
       customerList.innerHTML = customerHtml;
     } else {
       customerList.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">No customer escalations awaiting triage</div></div>';
@@ -298,19 +509,74 @@ body { background: var(--paper); color: var(--ink); }
     
     // Render competitor news
     const newsList = document.getElementById('news-list');
-    document.getElementById('news-count').textContent = (data.competitorNews || []).length;
     if (data.competitorNews && data.competitorNews.length > 0) {
       const newsHtml = data.competitorNews.map(news => `
         <div class="news-item">
           <div class="news-competitor">${news.competitor}</div>
           <div class="news-title"><a href="${news.url}" target="_blank">${news.title}</a></div>
           <div class="news-summary">${news.summary}</div>
+          ${news.workdayImplication ? `<div class="news-implication">${news.workdayImplication}</div>` : ''}
           <div class="news-date">📅 ${news.date}${news.type ? ` • ${news.type}` : ''}</div>
         </div>
       `).join('');
       newsList.innerHTML = newsHtml;
     } else {
       newsList.innerHTML = '<div class="empty-state"><div class="empty-icon">📰</div><div class="empty-text">No recent competitor news found</div></div>';
+    }
+    
+    // Render Customer Ideas
+    const ideasList = document.getElementById('ideas-list');
+    if (data.customerIdeas && data.customerIdeas.length > 0) {
+      const ideasHtml = data.customerIdeas.map(idea => `
+        <div class="idea-item">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="idea-capability">${idea.capability || 'General'}</span>
+            ${idea.votes ? `<span class="idea-votes">▲ ${idea.votes}</span>` : ''}
+          </div>
+          <div class="idea-title">${idea.title}</div>
+          ${idea.businessValue ? `<div class="idea-value">${idea.businessValue}</div>` : ''}
+          <div class="idea-meta">
+            ${idea.date ? `<span>${idea.date}</span>` : ''}
+            ${idea.source ? `<span class="data-source">${idea.source}</span>` : ''}
+          </div>
+        </div>
+      `).join('');
+      ideasList.innerHTML = ideasHtml;
+    } else {
+      ideasList.innerHTML = '<div class="empty-state"><div class="empty-icon">💡</div><div class="empty-text">No ideation data available.<br><span style="font-size:12px;color:var(--desk);">Place P&amp;T Idea Results CSV/XLSX<br>in research/brainstorm-sessions/</span></div></div>';
+    }
+    
+    // Render Win-Loss / Presales Gap Data
+    const gapList = document.getElementById('gap-list');
+    if (data.winLossData && data.winLossData.length > 0) {
+      const gapHtml = data.winLossData.map(gap => {
+        let sevClass = 'gap-severity-low';
+        let sevBadgeClass = 'severity-tolerable';
+        const sevLower = (gap.severity || '').toLowerCase();
+        if (sevLower.includes('deal loss')) { sevClass = 'gap-severity-high'; sevBadgeClass = 'severity-deal-loss'; }
+        else if (sevLower.includes('removal') || sevLower.includes('sku')) { sevClass = 'gap-severity-medium'; sevBadgeClass = 'severity-sku-removal'; }
+        
+        const painTruncated = gap.painPoint && gap.painPoint.length > 160 ? gap.painPoint.substring(0, 157) + '...' : gap.painPoint;
+        
+        return `
+          <div class="gap-item ${sevClass}">
+            <div style="display:flex;align-items:center;flex-wrap:wrap;">
+              <span class="gap-id">${gap.gapName || gap.gapId}</span>
+              ${gap.capability ? `<span class="gap-capability">${gap.capability}</span>` : ''}
+              ${gap.severity ? `<span class="severity-badge ${sevBadgeClass}" style="margin-left:auto;">${gap.severity}</span>` : ''}
+            </div>
+            ${painTruncated ? `<div class="gap-pain">${painTruncated}</div>` : ''}
+            <div class="gap-meta">
+              ${gap.region ? `<span>🌍 ${gap.region}</span>` : ''}
+              ${gap.date ? `<span>📅 ${gap.date}</span>` : ''}
+              ${gap.source ? `<span class="data-source">${gap.source}</span>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+      gapList.innerHTML = gapHtml;
+    } else {
+      gapList.innerHTML = '<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-text">No presales gap data available.<br><span style="font-size:12px;color:var(--desk);">Place presales gap CSV/XLSX<br>in research/[region]/gap-data/</span></div></div>';
     }
     
   } catch (err) {

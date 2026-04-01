@@ -9,8 +9,9 @@
 1. **Queries Jira** for action items requiring David's response
 2. **Queries Jira** for customer escalations awaiting triage
 3. **Searches web** for latest competitor news from major ATS vendors
-4. **Generates JSON data** file with structured results
-5. **Opens Morning Roundup page** in Cursor browser
+4. **Analyses competitive implications** of each news item for Workday Recruiting
+5. **Generates JSON data** file with structured results
+6. **Opens Morning Roundup page** in Cursor browser
 
 ## Steps
 
@@ -26,17 +27,19 @@ This finds Jiras where David was mentioned in comments over the past 2 weeks.
 
 **Important**: This query returns tickets where David is mentioned in ANY comment. Step 3 will filter to only include tickets where David is mentioned in the **LATEST** comment.
 
-### Step 2: Query Jira for Customer Escalations
+### Step 2: Query Jira for Unassigned Customer Issues
 
 Use `user-jira-ghe` MCP `searchJiraTickets` tool with JQL:
 
 ```
-issuetype = Bug AND assignee = "David Denham" AND status in (Open, Reopened) ORDER BY updated DESC
+issuetype = Bug AND assignee is EMPTY AND status in (Open, Reopened) ORDER BY updated DESC
 ```
 
-This finds Bug-type issues assigned to David in Open or Reopened status.
+This finds unassigned Bug-type issues in Open or Reopened status.
 
-**Post-processing filter**: After fetching ticket details in Step 3, check if the ticket has a non-empty Customer field (custom field names may vary: `customfield_XXXXX`, `Customer`, `Customer[Dropdown]`). Only include tickets with Customer data populated.
+**Post-processing filter**: After fetching ticket details in Step 3, apply BOTH filters:
+1. Check if the ticket has a non-empty Customer field (custom field names may vary: `customfield_XXXXX`, `Customer`, `Customer[Dropdown]`). Only include tickets with Customer data populated.
+2. Check if the Scrum Team field is EMPTY. Only include tickets where Scrum Team is blank/null. Discard tickets with a Scrum Team assigned (these are already being worked by a team).
 
 ### Step 3: Get Ticket Details and Filter
 
@@ -53,12 +56,34 @@ For each Jira found in Steps 1-2, use `user-jira-ghe` MCP `getTicketDetails` too
 5. Extract the latest comment author, date, and body for TLDR generation
 
 **Customer Issues filtering (from Step 2):**
-1. For each ticket, check custom fields for Customer data
-2. Look for fields like: `customfield_XXXXX`, `Customer`, `Customer[Dropdown]`
-3. If Customer field is populated: INCLUDE in results
-4. If Customer field is empty or null: DISCARD from results
+1. For each ticket, check custom fields for Customer data AND Scrum Team
+2. Look for Customer fields like: `customfield_XXXXX`, `Customer`, `Customer[Dropdown]`
+3. Look for Scrum Team fields like: `customfield_XXXXX`, `Scrum Team`, `Scrum team`
+4. If Customer field is populated AND Scrum Team field is empty/null: INCLUDE in results
+5. If Customer field is empty or null: DISCARD from results
+6. If Scrum Team field is populated: DISCARD from results (team is already working on it)
 
-### Step 4: Generate TLDRs
+### Step 3a: Classify Customer Issues with Deployment Agent
+
+For each customer issue ticket that passed Step 3 filtering:
+1. Use `user-deployment-agent` MCP `ask_deployment_agent` tool
+2. Query format: "Analyze this Workday Recruiting bug ticket. Is this likely: (A) Working as Designed, (B) Configuration Error, or (C) Product Bug? Provide classification with confidence level (High/Medium/Low) and brief reasoning. Ticket [key]: [summary]. Description: [first 500 chars of description]"
+3. Parse Deployment Agent response to extract:
+   - Classification: Bug | Config | WAD
+   - Confidence: High | Medium | Low
+   - Reasoning: 1-sentence explanation
+4. Add `diagnosis` object to ticket data structure:
+   ```json
+   {
+     "diagnosis": {
+       "classification": "Bug",
+       "confidence": "High",
+       "reasoning": "Error message indicates null pointer in offer acceptance workflow"
+     }
+   }
+   ```
+
+### Step 5: Generate TLDRs
 
 For each Jira:
 - **Action Items**: Extract latest comment author, date, and body. Generate TLDR: "What is [commenter] asking David to do?"
@@ -66,7 +91,7 @@ For each Jira:
 
 Keep TLDRs to 1-2 sentences maximum, focusing on actionable information.
 
-### Step 5: Search for Competitor News
+### Step 6: Search for Competitor News
 
 Use `WebSearch` tool to find latest news from these competitors (past 7 days):
 - Greenhouse
@@ -90,7 +115,94 @@ Focus on:
 
 Return top 3 most relevant news items total (across all competitors).
 
-### Step 6: Generate JSON Data File
+### Step 6a: Generate Workday Implications per News Item
+
+For each competitor news item gathered in Step 6:
+
+1. Read the relevant competitive matrix from `research/competitive/matrices/` (e.g., `global-competitive-matrix.md` or region-specific matrix if applicable)
+2. Identify which Workday Recruiting capability area the news item relates to (e.g., onboarding, AI screening, scheduling, duplicate detection)
+3. Analyse the news in context of Workday's competitive position from the matrix
+4. Generate a 1-line `workdayImplication` string (max 120 characters) answering: "What does this mean for Workday Recruiting?"
+
+**Tone**: VP-facing, strategic, concise. Frame as competitive positioning insight.
+
+**Examples**:
+- "Greenhouse closing Workday onboarding gap; our native HCM handoff remains a differentiator"
+- "iCIMS frontline AI push mirrors our HiredScore play; watch for overlap in high-volume verticals"
+- "G2 ranking pressure; Greenhouse enterprise penetration growing, need to defend mid-market share"
+
+**Output**: Add `workdayImplication` field to each `competitorNews` object in the JSON data structure.
+
+**Fallback**: If no competitive matrix exists or the news item does not map to a clear Workday capability, generate the implication based on general ATS market knowledge.
+
+### Step 6b: Read Customer Ideation Hub Data
+
+Read local Customer Ideation Hub data for the "Latest Customer Ideas" section.
+
+**Data source**: `research/brainstorm-sessions/` directory. Look for `.xlsx`, `.xls`, or `.csv` files (e.g. `P&T Idea Results Dashboard*.xlsx`).
+
+**Processing:**
+1. Parse the file (use openpyxl for xlsx, CSV reader for csv)
+2. Look for the sheet/data containing idea records with fields like: `Idea Title`, `Product Capability`, `Business_Value`, `Workaround`, `Created Date`, `Votes`, `Status`
+3. Filter for Talent Acquisition product area (if `Product Area` or `Product Capability` column exists)
+4. Sort by date descending (newest first)
+5. Take the top 10 records
+6. Extract for each idea: title/description, product capability, business value summary, date, votes/popularity if available
+
+**If no file exists:**
+- Return empty `customerIdeas` array
+- The HTML will show an empty state with instructions to place the CSV/XLSX file in `research/brainstorm-sessions/`
+
+**Output structure:**
+```json
+{
+  "customerIdeas": [
+    {
+      "title": "Aadhaar-based eSign for Indian offers",
+      "capability": "Offers & Contracts",
+      "businessValue": "Critical for India compliance; 85% of offers require Aadhaar eSign",
+      "date": "2026-03-15",
+      "votes": 12,
+      "source": "P&T Idea Results Dashboard"
+    }
+  ]
+}
+```
+
+### Step 6c: Read Win-Loss / Presales Gap Data
+
+Read local presales gap data for the "Latest Win-Loss Data" section.
+
+**Data source**: All CSV/XLSX files across `research/*/gap-data/` directories. Also check `research/raw-data/*.csv`.
+
+**Processing:**
+1. Read all CSV/XLSX files found in the above paths
+2. Parse each file, normalising column names (handle variations: `Gap Name`/`Gap ID`/`Product Area`/`Product Area Name`/`Created Date`/`Created`/`Severity`/`Pain point(s)`/`Pain Points`/`CI Notes`/`Product Capability`/`Capability`/`Opp Region`/`Opp Segment`)
+3. Filter rows where `Product Area` = `Talent Acquisition` (if column exists). If no Product Area column, include all rows (these are likely pre-filtered exports).
+4. Exclude aggregated/crosstab rows (skip rows where key fields are counts or contain `*`)
+5. Sort by `Created Date` descending (parse DD/MM/YYYY or YYYY-MM-DD). If no date column, use file modification date.
+6. Take the top 10 records
+7. Extract for each record: gap name, gap ID, pain point summary, severity, product capability, region, date
+
+**Output structure:**
+```json
+{
+  "winLossData": [
+    {
+      "gapName": "PG-90001001",
+      "gapId": "x1",
+      "painPoint": "Recruiter needs offer templates aligned to French labour practice",
+      "severity": "Risk of Deal Loss (3)",
+      "capability": "Offers & Contracts",
+      "region": "France MFG HC & Edu",
+      "date": "2025-01-15",
+      "source": "presales-gaps-export-unfiltered.csv"
+    }
+  ]
+}
+```
+
+### Step 7: Generate JSON Data File
 
 Write results to `docs/morning-roundup-data.json`:
 
@@ -119,7 +231,12 @@ Write results to `docs/morning-roundup-data.json`:
       "customer": "Accenture",
       "tldrSummary": "P1 escalation - API timing out when sending 500+ offers",
       "status": "Open",
-      "created": "2026-03-29"
+      "created": "2026-03-29",
+      "diagnosis": {
+        "classification": "Bug",
+        "confidence": "High",
+        "reasoning": "API timeout suggests performance issue or resource contention in bulk processing"
+      }
     }
   ],
   "competitorNews": [
@@ -129,13 +246,36 @@ Write results to `docs/morning-roundup-data.json`:
       "url": "https://www.greenhouse.io/blog/...",
       "date": "2026-03-30",
       "summary": "Greenhouse released an AI scheduling assistant that automatically finds interview times across multiple calendars...",
-      "type": "feature-release"
+      "type": "feature-release",
+      "workdayImplication": "Greenhouse closing scheduling gap; our native HCM calendar integration remains a differentiator"
+    }
+  ],
+  "customerIdeas": [
+    {
+      "title": "Aadhaar-based eSign for Indian offers",
+      "capability": "Offers & Contracts",
+      "businessValue": "Critical for India compliance",
+      "date": "2026-03-15",
+      "votes": 12,
+      "source": "P&T Idea Results Dashboard"
+    }
+  ],
+  "winLossData": [
+    {
+      "gapName": "PG-90001001",
+      "gapId": "x1",
+      "painPoint": "Recruiter needs offer templates aligned to French labour practice",
+      "severity": "Risk of Deal Loss (3)",
+      "capability": "Offers & Contracts",
+      "region": "France MFG HC & Edu",
+      "date": "2025-01-15",
+      "source": "presales-gaps-export-unfiltered.csv"
     }
   ]
 }
 ```
 
-### Step 7: Open in Browser
+### Step 8: Open in Browser
 
 Open `http://localhost:8765/docs/pm-agent-morning-roundup.html` in Cursor browser using the `cursor-ide-browser` MCP `browser_navigate` tool.
 

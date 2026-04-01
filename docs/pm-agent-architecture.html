@@ -47,20 +47,21 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
   position: fixed; top: 90px; right: 0; width: 380px; bottom: 0; z-index: 90;
   background: white; border-left: 1px solid var(--staple);
   overflow-y: auto; padding: 20px; transition: transform 0.3s;
+  transform: translateX(380px);
 }
-#sidebar.collapsed { transform: translateX(380px); }
+#sidebar.open { transform: translateX(0); }
 
 #graph-container { 
-  position: fixed; top: 90px; left: 0; right: 380px; bottom: 0; 
+  position: fixed; top: 90px; left: 0; right: 0; bottom: 0; 
   overflow: auto; background: var(--paper);
 }
-#graph-container.full { right: 0; }
+#graph-container.with-sidebar { right: 380px; }
 
 #node-view-container {
-  position: fixed; top: 90px; left: 0; right: 380px; bottom: 0;
+  position: fixed; top: 90px; left: 0; right: 0; bottom: 0;
   overflow: hidden; background: var(--paper); display: none;
 }
-#node-view-container.full { right: 0; }
+#node-view-container.with-sidebar { right: 380px; }
 #node-view-container.active { display: block; }
 
 #node-view-svg { width: 100%; height: 100%; }
@@ -102,12 +103,7 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
 
 .workflow-diagram { min-width: 1600px; padding: 40px; }
 .orchestrator-row { margin-bottom: 50px; }
-.support-row { margin-bottom: 40px; }
-.workflow-lane { margin-bottom: 36px; padding: 20px 24px; border-radius: 12px; position: relative; }
-.workflow-lane.wf1 { background: rgba(99,102,241,0.05); border: 2px solid var(--wf1); }
-.workflow-lane.wf2 { background: rgba(245,158,11,0.05); border: 2px solid var(--wf2); }
-.workflow-lane.wf3 { background: rgba(34,197,94,0.05); border: 2px solid var(--wf3); }
-.workflow-lane.wf4 { background: rgba(236,72,153,0.05); border: 2px solid var(--wf4); }
+.workflow-lane { margin-bottom: 36px; padding: 20px 24px; border-radius: 12px; position: relative; background: white; border: 1px solid var(--staple); }
 
 .lane-header { font-size: 14px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
 .lane-desc { font-size: 11px; color: var(--laptop); margin-bottom: 14px; font-style: italic; }
@@ -125,13 +121,13 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
 .node.orchestrator { background: var(--wf1); color: white; border: 3px solid #4338ca; border-radius: 50%; width: 100px; height: 100px; }
 .node.rule { background: var(--water); color: white; border: 2px solid #0284c7; }
 .node.rule-always { background: #ef4444; color: white; border: 2px solid #b91c1c; }
-.node.subagent { background: #7c3aed; color: white; border: 2px solid #6d28d9; border-radius: 50%; width: 90px; height: 90px; }
-.node.subagent-thin { background: #7c3aed; color: white; border: 2px dashed #6d28d9; border-radius: 50%; width: 80px; height: 80px; opacity: 0.85; }
+.node.subagent { background: #7c3aed; color: white; border: 2px solid #6d28d9; border-radius: 16px; width: 130px; height: 85px; padding: 8px; }
+.node.subagent-thin { background: #7c3aed; color: white; border: 2px dashed #6d28d9; border-radius: 16px; width: 130px; height: 85px; padding: 8px; opacity: 0.85; }
 .node.skill { background: white; color: var(--ink); border: 2px solid #16a34a; border-top: 4px solid #16a34a; border-radius: 20px; padding: 8px 16px; min-width: 110px; }
 .node.mcp { background: #a855f7; color: white; border: 2px solid #7c3aed; transform: rotate(45deg); width: 80px; height: 80px; }
 .node.mcp span { transform: rotate(-45deg); display: block; }
 
-.arrow { display: inline-block; margin: 0 6px; font-size: 18px; color: var(--laptop); opacity: 0.4; font-weight: 400; }
+.arrow { display: inline-block; margin: 0 6px; font-size: 18px; color: var(--ink); opacity: 0.7; font-weight: 700; }
 .seq-arrow { display: inline-block; margin: 0 6px; font-size: 18px; color: #ef4444; opacity: 0.7; font-weight: 700; }
 
 .step-number { 
@@ -145,8 +141,9 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
 .skills-row { display: flex; gap: 16px; flex-wrap: wrap; padding: 20px; background: rgba(34,197,94,0.03); border-radius: 12px; }
 .mcps-column { display: flex; gap: 16px; flex-wrap: wrap; padding: 20px; background: rgba(168,85,247,0.03); border-radius: 12px; }
 
-.section-title-header { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--laptop); font-weight: 700; margin-bottom: 12px; }
+.section-title-header { font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink); font-weight: 700; margin-bottom: 16px; text-align: center; width: 100%; }
 .sub-group-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--desk); font-weight: 600; margin-bottom: 6px; }
+.section-divider { border: none; border-top: 2px solid var(--staple); margin: 40px 0; }
 
 .node.dimmed { opacity: 0.2; }
 .hidden { display: none !important; }
@@ -251,6 +248,7 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
   <div class="workflow-diagram">
     
     <!-- Orchestrator -->
+    <div class="section-title-header">Orchestrator Agent</div>
     <div class="orchestrator-row">
       <div style="text-align: center;">
         <div class="node orchestrator" data-id="000" data-type="orchestrator">
@@ -260,56 +258,43 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
       </div>
     </div>
 
-    <!-- Quality Gates and Advisors -->
-    <div class="support-row">
-      <div class="section-title-header">Quality Gates and Advisors</div>
-      <div style="display: flex; gap: 32px; justify-content: center; flex-wrap: wrap;">
-        <div>
-          <div class="sub-group-label">Quality Gates</div>
-          <div style="display: flex; gap: 12px;">
-            <div class="node rule" data-id="060" data-type="rule">060<br>Legal<br>Compliance</div>
-            <div class="node rule" data-id="080" data-type="rule">080<br>Red Team</div>
-          </div>
+    <hr class="section-divider">
+
+    <!-- Sub-Agents -->
+    <div class="support-row" style="margin-bottom: 40px;">
+      <div class="section-title-header">Sub-Agents</div>
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <div class="node subagent" data-id="sa-strategy" data-type="subagent">
+          <div class="node-icon">&#127919;</div>
+          @product<br>strategy
         </div>
-        <div>
-          <div class="sub-group-label">Advisors</div>
-          <div style="display: flex; gap: 12px;">
-            <div class="node rule" data-id="090" data-type="rule">090<br>Improvement<br>Advisor</div>
-            <div class="node rule" data-id="100" data-type="rule">100<br>Market<br>Intelligence</div>
-            <div class="node rule" data-id="500" data-type="rule">500<br>Slack<br>Responder</div>
-          </div>
+        <div class="node subagent" data-id="sa-ci" data-type="subagent">
+          <div class="node-icon">&#128301;</div>
+          @competitive<br>intel
         </div>
-        <div>
-          <div class="sub-group-label">Sub-Agents</div>
-          <div style="display: flex; gap: 12px; flex-wrap: wrap; max-width: 320px; justify-content: center;">
-            <div class="node subagent" data-id="sa-strategy" data-type="subagent">
-              <div class="node-icon">&#127919;</div>
-              @product<br>strategy
-            </div>
-            <div class="node subagent" data-id="sa-ci" data-type="subagent">
-              <div class="node-icon">&#128301;</div>
-              @competitive<br>intel
-            </div>
-            <div class="node subagent" data-id="sa-pmf" data-type="subagent">
-              <div class="node-icon">&#128300;</div>
-              @pmf<br>analyst
-            </div>
-            <div class="node subagent-thin" data-id="sa-ux-researcher" data-type="subagent">
-              <div class="node-icon">&#128270;</div>
-              @ux<br>researcher
-            </div>
-            <div class="node subagent-thin" data-id="sa-ux-designer" data-type="subagent">
-              <div class="node-icon">&#127912;</div>
-              @ux<br>designer
-            </div>
-            <div class="node subagent-thin" data-id="sa-doc-writer" data-type="subagent">
-              <div class="node-icon">&#9998;</div>
-              @doc<br>writer
-            </div>
-          </div>
+        <div class="node subagent" data-id="sa-pmf" data-type="subagent">
+          <div class="node-icon">&#128300;</div>
+          @pmf<br>analyst
+        </div>
+        <div class="node subagent-thin" data-id="sa-ux-researcher" data-type="subagent">
+          <div class="node-icon">&#128270;</div>
+          @ux<br>researcher
+        </div>
+        <div class="node subagent-thin" data-id="sa-ux-designer" data-type="subagent">
+          <div class="node-icon">&#127912;</div>
+          @ux<br>designer
+        </div>
+        <div class="node subagent-thin" data-id="sa-doc-writer" data-type="subagent">
+          <div class="node-icon">&#9998;</div>
+          @doc<br>writer
         </div>
       </div>
     </div>
+
+    <hr class="section-divider">
+
+    <!-- Workflows -->
+    <div class="section-title-header">Workflows</div>
 
     <!-- WF1: PMF Research & Deck -->
     <div class="workflow-lane wf1">
@@ -384,12 +369,12 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
           200 PRD Writer
         </div>
         <span class="arrow">&rarr;</span>
-        <div class="node rule" data-id="060-wf2" data-type="rule">
+        <div class="node rule" data-id="060-wf2" data-type="rule" style="background: #dc2626; border-color: #991b1b;">
           <div class="step-number" style="color: var(--wf2);">15</div>
           060 Legal Review
         </div>
         <span class="arrow">&rarr;</span>
-        <div class="node rule" data-id="080-wf2" data-type="rule">
+        <div class="node rule" data-id="080-wf2" data-type="rule" style="background: #dc2626; border-color: #991b1b;">
           <div class="step-number" style="color: var(--wf2);">17</div>
           080 Red Team
         </div>
@@ -468,6 +453,11 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
           420 Story Mapping
         </div>
         <span class="arrow">&rarr;</span>
+        <div class="node rule" data-id="080-wf4" data-type="rule" style="background: #dc2626; border-color: #991b1b;">
+          <div class="step-number" style="color: var(--wf4);">28</div>
+          080 Red Team
+        </div>
+        <span class="arrow">&rarr;</span>
         <div class="node rule" data-id="430" data-type="rule">
           <div class="step-number" style="color: var(--wf4);">29</div>
           430 Jira Stories
@@ -479,9 +469,23 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
         </div>
       </div>
       <div class="text-xs mt-3" style="color: var(--laptop); padding-left: 12px;">
-        <strong>Orchestrator:</strong> 400 Backlog Refinement chains 410 &rarr; 420 &rarr; 430
+        <strong>Orchestrator:</strong> 400 Backlog Refinement chains 410 &rarr; 420 &rarr; 080 Red Team &rarr; 430
       </div>
     </div>
+
+    <hr class="section-divider">
+
+    <!-- Standalone Rules -->
+    <div class="standalone-row" style="margin-top: 36px; display: flex; gap: 16px; flex-wrap: wrap; padding: 20px; background: rgba(0,117,180,0.03); border-radius: 12px;">
+      <div class="section-title-header" style="width: 100%;">Standalone Rules (Advisors)</div>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <div class="node rule" data-id="090" data-type="rule">090<br>Improvement<br>Advisor</div>
+        <div class="node rule" data-id="100" data-type="rule">100<br>Market<br>Intelligence</div>
+        <div class="node rule" data-id="500" data-type="rule">500<br>Slack<br>Responder</div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
 
     <!-- Skills Row -->
     <div class="skills-row">
@@ -495,6 +499,8 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
         <div class="node skill" data-id="sk-audit" data-type="skill">/workspace-audit</div>
       </div>
     </div>
+
+    <hr class="section-divider">
 
     <!-- MCPs Column -->
     <div class="mcps-column">
@@ -653,14 +659,23 @@ const nodeData = {
     mcps: [],
     pattern: 'Same as 060 - quality gate invocation in WF2' },
   '080-wf2': { label: '080 Red Team', type: 'rule',
-    summary: 'PRD stress testing (Step 17). Same agent as 080 above, invoked to challenge the PRD from multiple perspectives before design phase begins.',
+    summary: 'PRD stress testing (Step 17). Same agent as 080, invoked to challenge the PRD from multiple perspectives before design phase begins.',
     whenUsed: 'E2E Step 17, after legal revision.',
     inputs: ['Revised PRD'],
     outputs: ['Red team review document'],
     upstream: ['060 Legal Review'],
     downstream: ['315 Design Brief (WF3)'],
     mcps: [],
-    pattern: 'Same as 080 - quality gate invocation in WF2' },
+    pattern: 'Quality gate invocation in WF2' },
+  '080-wf4': { label: '080 Red Team', type: 'rule',
+    summary: 'Story map stress testing (Step 28). Same agent as 080, invoked to challenge the story map from engineering, security, and UX perspectives before Jira story creation.',
+    whenUsed: 'E2E Step 28, after story map HITL approval.',
+    inputs: ['Approved story map', 'Epic draft'],
+    outputs: ['Red team review document with story map risk findings'],
+    upstream: ['420 Story Mapping'],
+    downstream: ['430 Jira Stories'],
+    mcps: [],
+    pattern: 'Quality gate invocation in WF4' },
   '315': { label: '315 Design Brief', type: 'rule',
     summary: 'Multi-pass Design Brief creation. Grounds features in Workday context using Deployment Agent and functional knowledge. Produces Canvas Kit component mapping, shell pattern selection, JTBD alignment, and copy inventory following Sana Style.',
     whenUsed: 'E2E Step 18. Also standalone: "Design Brief for [feature]", "Ground in Workday".',
@@ -840,6 +855,9 @@ nodes.forEach(node => {
 });
 
 function showDetail(d) {
+  if (!sidebar.classList.contains('open')) {
+    toggleSidebar();
+  }
   const typeLabel = { orchestrator:'Orchestrator', rule:'Rule (glob)', 'rule-always':'Rule (alwaysApply)', subagent:'Subagent', skill:'Skill', mcp:'MCP' };
   const typeColor = { orchestrator:'#6366f1', rule:'#0ea5e9', 'rule-always':'#ef4444', subagent:'#f59e0b', skill:'#16a34a', mcp:'#a855f7' };
   const c = typeColor[d.type] || '#6b7a8d';
@@ -903,20 +921,22 @@ document.querySelectorAll('.filter-btn[data-filter]').forEach(function(btn) {
     btn.classList.add('active');
     var f = btn.dataset.filter;
     var wf = document.querySelectorAll('.workflow-lane');
-    var sup = document.querySelector('.support-row');
+    var sa = document.querySelector('.standalone-row');
     var sk = document.querySelector('.skills-row');
     var mc = document.querySelector('.mcps-column');
-    if (f === 'all') { wf.forEach(function(w){w.classList.remove('hidden');}); sup.classList.remove('hidden'); sk.classList.remove('hidden'); mc.classList.remove('hidden'); }
-    else if (f === 'workflow') { wf.forEach(function(w){w.classList.remove('hidden');}); sup.classList.add('hidden'); sk.classList.add('hidden'); mc.classList.add('hidden'); }
-    else if (f === 'skills-mcps') { wf.forEach(function(w){w.classList.add('hidden');}); sup.classList.add('hidden'); sk.classList.remove('hidden'); mc.classList.remove('hidden'); }
+    if (f === 'all') { wf.forEach(function(w){w.classList.remove('hidden');}); sa.classList.remove('hidden'); sk.classList.remove('hidden'); mc.classList.remove('hidden'); }
+    else if (f === 'workflow') { wf.forEach(function(w){w.classList.remove('hidden');}); sa.classList.remove('hidden'); sk.classList.add('hidden'); mc.classList.add('hidden'); }
+    else if (f === 'skills-mcps') { wf.forEach(function(w){w.classList.add('hidden');}); sa.classList.add('hidden'); sk.classList.remove('hidden'); mc.classList.remove('hidden'); }
   });
 });
 
-document.getElementById('toggleSidebar').addEventListener('click', function() {
-  sidebar.classList.toggle('collapsed');
-  document.getElementById('graph-container').classList.toggle('full');
-  document.getElementById('node-view-container').classList.toggle('full');
-});
+function toggleSidebar() {
+  sidebar.classList.toggle('open');
+  document.getElementById('graph-container').classList.toggle('with-sidebar');
+  document.getElementById('node-view-container').classList.toggle('with-sidebar');
+}
+
+document.getElementById('toggleSidebar').addEventListener('click', toggleSidebar);
 
 // View toggle: Workflow vs Node View
 const graphContainer = document.getElementById('graph-container');
@@ -1083,8 +1103,8 @@ function initD3Graph() {
     orchestrator: 35,
     rule: 20,
     'rule-always': 20,
-    subagent: 28,
-    'subagent-thin': 25,
+    subagent: 60,
+    'subagent-thin': 55,
     skill: 18,
     mcp: 16
   };
@@ -1128,16 +1148,31 @@ function initD3Graph() {
       .on('drag', dragged)
       .on('end', dragended));
   
-  // Add circles
-  node.append('circle')
-    .attr('class', d => `d3-node-circle ${d.type === 'subagent-thin' ? 'subagent-thin' : ''}`)
-    .attr('r', d => nodeRadius[d.type])
-    .attr('fill', d => nodeColor[d.type]);
+  // Add shapes
+  node.each(function(d) {
+    const el = d3.select(this);
+    if (d.type.startsWith('subagent')) {
+      el.append('rect')
+        .attr('class', `d3-node-circle ${d.type === 'subagent-thin' ? 'subagent-thin' : ''}`)
+        .attr('width', 100)
+        .attr('height', 50)
+        .attr('x', -50)
+        .attr('y', -25)
+        .attr('rx', 12)
+        .attr('ry', 12)
+        .attr('fill', nodeColor[d.type]);
+    } else {
+      el.append('circle')
+        .attr('class', 'd3-node-circle')
+        .attr('r', nodeRadius[d.type])
+        .attr('fill', nodeColor[d.type]);
+    }
+  });
   
   // Add labels
   node.append('text')
     .attr('class', 'd3-node-label')
-    .attr('dy', d => nodeRadius[d.type] + 14)
+    .attr('dy', d => d.type.startsWith('subagent') ? 4 : nodeRadius[d.type] + 14)
     .attr('text-anchor', 'middle')
     .text(d => {
       // Abbreviate long labels
@@ -1147,7 +1182,7 @@ function initD3Graph() {
       }
       return label;
     })
-    .style('fill', 'var(--ink)');
+    .style('fill', d => d.type.startsWith('subagent') ? 'white' : 'var(--ink)');
   
   // Add hover and click interactions
   node.on('mouseenter', function(event, d) {
