@@ -1,268 +1,295 @@
-# User Research Findings: India Recruiting PMF (Customer Interviews)
+# User Research Findings: India Recruiting (TP Customer Interviews)
 
-**Analysis Date:** 28 March 2026  
-**Data Sources:** 2 customer interview transcript files (group sessions, multiple recruiter voices per file)  
-**Methodology:** Structured synthesis aligned with Braun & Clarke thematic coding (customer-only; Step 8)
+**Analysis Date:** 31 March 2026  
+**Data Sources:** 2 customer transcript files (5 distinct participant voices: 3 specialist/confidential recruiters; 2 high-volume front-line leads)  
+**Methodology:** Braun & Clarke 6-phase thematic analysis (familiarisation, coding, theme generation, review, definition, reporting)  
+**Scope:** Customer transcripts only (SME analysis completed in Step 7; not re-read here)
 
 ---
 
 ## Fresh pass attestation
 
-- **Mission ID:** IN-E2E-003
+- **Mission ID:** IN-E2E-005
 - **Transcript files read (this run):**
-  - `research/India/customer-transcripts/TP Onsite - High Volume Front-line Recruiters Interview Transcript x2 - 3 Dec 2025 (1).txt`
   - `research/India/customer-transcripts/TP Onsite - Specialist & Confidential Recruiters Interview Transcript x3 - 2 Dec 2025 (1).txt`
-- **SME files read (this run):** *None* (SME analysis completed in Step 7; this output is customer-only.)
-- **Completed (UTC):** 2026-03-28T12:00:00Z
+  - `research/India/customer-transcripts/TP Onsite - High Volume Front-line Recruiters Interview Transcript x2 - 3 Dec 2025 (1).txt`
+- **SME files read (this run):** *None* (Step 7 covered internal SME transcripts separately)
+- **Completed (UTC):** 31 March 2026
 
 ---
 
-### Interview Participants
+## Interview Participants
 
-| ID | Role (as stated) | Organisation |
-|----|------------------|--------------|
-| **P1** | Recruiting lead (agent / frontline hiring, India delivery site) | TP |
-| **P2** | Frontline hiring lead (North & East India, multi-site) | TP |
-| **P3** | Recruitment Manager, specialised internal recruiting team | TP |
-| **P4** | Recruitment Manager, job requisitions & onboarding handoff | TP |
-| **P5** | Recruitment Manager, leadership / confidential hiring (end-to-end per role) | TP |
-
-*Note:* Transcripts are group interviews; additional colleagues (e.g. workforce, operations, analytics) are referenced but primary recruiter voices are mapped to P1–P5.
+| ID | Role (as described) | Organisation |
+|----|---------------------|--------------|
+| **P1** | Recruitment Manager (specialised internal team; sourcing through offer) | TP (India) |
+| **P2** | Recruitment Manager (job requisition creation, onboarding to payroll; large team) | TP (India) |
+| **P3** | Leadership / confidential hiring (requisition through offer; executive pipeline) | TP (India) |
+| **P4** | Agent hiring lead (high-volume agent grades; East / Kolkata focus) | TP (India) |
+| **P5** | Frontline hiring manager (North & East India; multi-site high volume) | TP (India) |
 
 ---
 
-### Key Findings per Participant
+## Key Findings per Participant
 
-#### P1 – Recruiting lead, TP (agent hiring, India)
+### P1 - Recruitment Manager, TP (India)
 
-**Role context:** Owns recruiting stages from review through ready for hire and onboarding coordination for agent hiring (grade bands A1/B2); ~9 years with TP; moved from legacy HRMS to Workday; security-scoped to agent hiring for India; Kolkata-focused volumes ~800–1,000 hires per month (India-wide TP can be higher).
+**Role context:** Manages three specialised recruiters; day-to-day covers sourcing, interview alignment, resumes, offers, and follow-up; also team attendance in Workday.
 
 **Key quotes:**
+> "So, my day-to-day routine is like sourcing the candidates, aligning their interviews, passing their resume if they selected and processing for offers and followup."
 
-> "In a week… normally the numbers would be somewhere around 100… when there are peak, then we… it goes up to, say, 150… average, in a month, we hire around 800… to 1,000."
-
-> "For an example, if I'm creating a job requisition for… process ADC. There is a supervisory org which you need to attach to it… the business does not give us the clarity to which it has to be attached… we are randomly picking up right now to create the job requisition."
-
-> "For any application which comes in from referral, or from vendor, or a social media… it's a manual activity which a recruiter has to go… under that candidate profile, you have that duplicate check option."
+> "Their performance setting their goals and their performance how they working set the agenda for day-to-day basis also and BT reviews."
 
 **Pain points:**
+- Split attention between hands-on recruiting and managerial duties (performance, goals, attendance).
+- Same employer context as P2/P3 on email-based approvals and offline governance (referenced in roundtable).
 
-- Seasonal and campaign-driven volume spikes (e.g. e-commerce, Diwali season) amplify any system friction.
-- Supervisory organisation selection when business does not specify correct manager / org at scale; internal workaround (random pick) creates downstream alignment risk; framed as process + data governance more than pure product defect.
-- Duplicate checking is manual and high-risk at volume; hygiene checks on paper are hard to enforce across all recruiters.
-
-**JTBD (illustrative):** When we run high-volume agent hiring in India, I want demand, reqs, and candidate records to stay clean without per-profile manual checks, so we avoid wrong org tagging, duplicate submissions, and agency disputes.
+**JTBD:** When managing a small specialised recruiting pod, I want clear system-of-record for hiring steps and team admin, so I can spend less time on parallel tools and status chasing.
 
 ---
 
-#### P2 – Frontline hiring lead, TP (North & East India)
+### P2 - Recruitment Manager, TP (India)
 
-**Role context:** Manages frontline hiring across ~8–9 sites, multiple states; collective throughput ~1,500–2,000 people per week; seasonal ramps (e.g. Diwali) with very large short-window hiring; Workday go-live in July coincided with peak.
+**Role context:** Creates job requisitions in Workday after email-based approvals; owns onboarding command (push to payroll, no-show handling); does not personally release offers; candidate engagement; ~60-person team; positions mapped with unique codes via email before reqs.
 
 **Key quotes:**
+> "On email we have approvals on right now and then once I have all of these approvals is when I raise a job requiring managers."
 
-> "When there was a peak… that's when we got really hit bad during our hiring this year… we were not able to onboard people… delays in joining… we lost business days… their NTID creation got delayed."
-
-> "For a recruiter's life cycle, I think most of the time they spend on Workday… the overall candidate journey starts from Workday application."
-
-> "Duplication… I would say duplication needs to get automated… validation needs to be on more parameters than just first name, phone numbers, and email address… Aadhar in India… if that duplication check is done on their ADHAR number, we'll be able to identify that."
+> "I'm creating them on work day as a job I'm raising them on work day as a job requisition but on email they come to us."
 
 **Pain points:**
+- **Dual system:** Demand and approvals live in email; execution in Workday, increasing latency and traceability gaps.
+- Hiring managers not always owning requisition creation drives back-and-forth on cost centre, line of business, and tagging.
 
-- Hire-to-productivity impact when provisioning / credentials / Workday issues delay onboarding during peak.
-- Duplicate detection and source attribution at agency scale (~300–400 agencies, thousands of profiles per day) drives dedicated headcount for manual review and approvals.
-- Offer letter regeneration limitations (compensation / date changes) and lack of practical rescind / resend force manual, legally reviewed letters at very high daily offer volume (~100–150 offers/day across span).
-- Scheduled Saturday maintenance clashes with India working week, causing material productivity loss.
-
-**JTBD (illustrative):** When we run national frontline ramps, I want hiring, offers, and day-one readiness to stay on the critical path without manual rescues, so revenue and client SLAs hold.
+**JTBD:** When opening approved headcount, I want hiring managers to raise accurate requisitions with correct org and finance tags, so I avoid rework before candidates apply.
 
 ---
 
-#### P3 – Recruitment Manager, specialised team, TP
+### P3 - Leadership Recruiter (confidential hiring), TP (India)
 
-**Role context:** Manages a small team of specialised recruiters; day-to-day includes sourcing, interview alignment, offer processing, and people management (performance, goals, attendance in Workday).
+**Role context:** Leadership hiring team; confidential requisitions end-to-end; heavy use of offline approvals, manual metrics (Excel), Thrive for some dashboards; Workday used for posting, candidates, offers but reporting and governance gaps.
 
 **Key quotes:**
+> "Work day is just a tool for us wherein we open the requisition and it is helping us to release the offers there is no other potential thing… we are not able to pull any reports from there."
 
-> "Their performance… setting their goals… how they working… set the agenda for day-to-day basis."
+> "The first priority if we can work around it is um having the approvals through work… hiring managers are approving the positions on work day itself."
+
+> "We are losing about 16 17% people who are in the time that it takes for us to release the offer for them to accept it… a lot of people drop out before they even accept our offer because process is so [onerous]."
 
 **Pain points:**
+- **Offline approvals** for position, compensation, and leadership sign-off; documents attached manually before offer.
+- **No team/progress visibility** in Workday for leadership pipeline; Excel and email tracking (including approval audit six months later).
+- **Government IDs (PAN, Aadhaar-related OTP, UAN):** policy requires three IDs before offer; UX allows partial completion; fields "vanish"; candidates repeat steps; OTP delivery failures; escalations to support; **~82–83% join** cited vs drop-off before join.
+- **Parsing / bulk upload:** cannot parse from Naukri/LinkedIn into Workday; must send external links; **800–900** career-site postings described as not truly "open" but used to obtain apply links.
+- **High application volume** on posted reqs (e.g. **~700** on one role); **cannot review in bulk**; must open profiles one-by-one; resume not always mandatory on apply.
+- **Offer acceptance:** simple acknowledgement, not DocuSign; recruiters take screenshots for audit; **no useful recruiter notification** when candidate accepts (generic task inbox with thousands of tasks).
+- **Referrals:** scattered; hard to match referred candidate to correct requisition without deep search.
+- **E-sign:** Donkey Sign outside integrated offer signing in Workday (as described).
+- **HCM adjacent:** attendance marking unstable (hours reverting); pay group reassignment issues; no-show process blocked when onboarding tasks incomplete.
 
-- Manager overhead split between recruiting delivery and HR systems (e.g. attendance) that are slow or error-prone; reduces bandwidth for candidate-facing work.
-
-**JTBD (illustrative):** When I lead a recruiting pod, I want people and hiring workflows in one reliable system, so admin does not crowd out sourcing and closing.
+**JTBD:** When closing leadership hires under strict India compliance, I want gated, mandatory ID capture, reliable OTP, and in-system approvals, so I protect join rates and audit trails without phone-chasing executives.
 
 ---
 
-#### P4 – Recruitment Manager, requisitions & onboarding, TP
+### P4 - Agent hiring lead, TP (India)
 
-**Role context:** Creates job requisitions in Workday after email-based approvals; responsible for onboarding steps and payroll handoff (push to payroll, no-show handling); does not personally release all offers but owns candidate engagement and positioning.
+**Role context:** End-to-end recruiting for agent grades (A1/B2 etc.) for India; security-scoped to agent hiring; Kolkata focus discussed; **~100 hires/week** (peak **~150**); **~800–1,000/month** in region; India scale cited up to **8,000–9,000/month** nationally for TP.
 
 **Key quotes:**
+> "Whatever is there from a recruiting perspective I'm managing that."
 
-> "On email we have approvals… once I have all of these approvals… is when I raise a job requisition… I'm raising them on Workday as a job requisition."
-
-> "Once a person joins… you have to go back and complete the onboarding steps… if you don't do that then you're not a part of the payroll."
+> "For India, we get requisition… on an average, if you talk about every day, yes, the team would have been spending some one or two hours… on an average… one and a half hours… on a requisition."
 
 **Pain points:**
+- **Supervisory organisation selection:** business does not always specify which manager/org attachs to high-volume indents; teams **randomly pick** supervisory org to unblock req creation; operations feedback that this is incorrect vs true reporting line after training.
+- **Vendor upload + duplicate check:** manual per upload; recruiter must approve each lead; at **300–400 agencies** × **10–20 profiles/day**, dedicated FTEs spend full days clicking; **cannot remove vendor approval** without blocking rehire/pre-hire flows (compliance: no delete of worker data).
+- **Duplicate and source ownership:** legacy tool enforced cooling-off and blocked duplicate source; Workday **does not reliably block** or attribute **first source**; **Agency B** can be credited over **Agency A** with **fee / contract implications**; manual pile of correction cases.
+- **Regenerate offer letter:** cannot use for **compensation correction** after acceptance; **400–500** wrong-compensation cases cited around go-live period; cannot store corrected PDF as system of record in Workday (as described).
+- **Chase on mandatory IDs** at offer despite configuration; recruiters still chase for timeliness.
 
-- End-to-end approval and financial metadata (cost centre, line of business) often unclear when recruiters intermediate hiring-manager demand; causes multi-day back-and-forth and missed offer SLAs (24–48h on paper vs actual delays).
-- No-show processing blocked when onboarding tasks incomplete or system state inconsistent; creates attrition reporting and stakeholder friction.
-
-**JTBD (illustrative):** When I open reqs and onboard joiners, I want correct org and approval data captured up front, so I do not rework reqs or fight payroll and no-show status later.
+**JTBD:** When running thousands of agency-sourced applications, I want automated duplicate detection (incl. government IDs), correct source attribution, and safe bulk processing, so I eliminate full-time "click approval" roles and pay agencies fairly.
 
 ---
 
-#### P5 – Recruitment Manager, leadership / confidential hiring, TP
+### P5 - Frontline hiring manager, TP (India)
 
-**Role context:** Handles confidential leadership reqs from creation through offer; describes Workday as tool for opening reqs and releasing offers but with major reporting and workflow gaps versus legacy/parallel ATS (Thrive) for dashboards, parsing, and recruiter productivity.
+**Role context:** Frontline hiring for TP North and East India; **~1,500–2,000 people/week** across **8–9 sites**; seasonal peaks (e.g. **~12,000** in **8–10 weeks**); Workday go-live **July** during peak caused **NTID / credential delays** and lost training days.
 
 **Key quotes:**
+> "When we come to objective issues on where our recruitment process used to get stuck, we were not able to onboard people… CCMS IDs done on Workday… we lost business days being able to start their training."
 
-> "Workday is just a tool wherein we open the requisition… there is no other potential thing… we are not able to pull any reports… there is no view on the reports."
+> "Duplication… needs to get automated… validation needs to be on more parameters than just first name, phone numbers, and email address… if that duplication check is done on their Aadhar number, we'll be able to identify that."
 
-> "The first priority if we can work around it is… having the approvals through Workday… all the approvals… we are taking it offline."
-
-> "Government identifiers… it's not always active… once the candidate accept all the policies suddenly it vanishes… TP policy is that you need to have all three IDs before an offer can be extended… it will not let you do that but it also doesn't mark it as mandatory."
-
-> "Specialized… join… at about 82, 83%… we're losing about 16, 17% people… in the time that it takes for us to release the offer."
+> "Lot of downtimes are planned on a Saturday for… Workday… India, we don't have Saturday as an off day… it is also impacting our business a lot."
 
 **Pain points:**
+- **Peak-season cutover** amplified pain (onboarding blockers).
+- **Requisition creation:** demand still via **email** with workforce/ops; **no approval workflow in Workday** today (known product capability not in use).
+- **Evergreen + business reqs:** client-confidential naming → **delivery reqs not on public career site**; only evergreen exposed; process works but is sensitive to volume.
+- **Pre-apply bot + landing page** workaround (outside Workday) had link expiry and delay issues; **Workday apply itself** acceptable once reached.
+- **Offers:** cannot resend/regenerate for **date or compensation** changes at scale (**100–150 offers/day** span cited); **manual/legal-reviewed letters** as workaround; **no mass offer** actions.
+- **eSign:** candidate **acknowledgement** only on candidate home (as described).
+- **Positive:** overall flow and **manager visibility** (requisitions, fill rate) improved vs legacy; issues are **"small at volume = huge"**; **training on the job** during live hiring.
 
-- Offline approvals for position, compensation, and leadership sign-off; wants auditable in-system threads.
-- No in-product dashboards / Excel exports for pipeline, aging, SLA, and recruiter load; parallel ATS (Thrive) used for what they perceive Workday lacks.
-- Sourcing friction: cannot parse or bulk-upload CVs from channels such as Naukri / LinkedIn; many career-site postings exist only to generate candidate registration links.
-- High application volume without gating (e.g. hundreds of applicants per req); resume not always mandatory; parser accuracy ~60–70% when used.
-- India government ID + OTP flow: OTP reliability issues; partial ID submission allowed while policy requires three IDs; drives multi-day recruiter chase, candidate anxiety, and estimated 16–17% offer-to-join leakage for specialised hiring.
-- Offer acknowledgement is weak for audit (screenshots, no DocuSign in Workday); generic task emails (thousands in inbox) without req context; wants recruiter-targeted notifications.
-- Referral experience fragmented; internal posting and confidential job promotion workflows need clearer process and permissions.
-- Pay group assignment instability and attendance marking bugs called out as major time sinks (broader HCM but affects manager bandwidth).
-
-**JTBD (illustrative):** When I run confidential leadership searches, I want approvals, evidence, reporting, and candidate compliance steps in one auditable flow, so we meet executive expectations and stop losing candidates to process delay.
+**JTBD:** When hiring thousands per week across sites, I want zero Saturday maintenance windows in India business days, resilient onboarding IDs, and scalable offer amendments, so peaks do not cost revenue or compliance risk.
 
 ---
 
-### Synthesised Themes
+## Synthesized Themes
 
-#### Theme 1: Scale breaks manual duplicate, source, and agency workflows
+#### Theme 1: Governance and approvals outside Workday
 
-**Description:** At agency and campaign scale, manual duplicate review, vendor upload approval, and last-touch source attribution do not match legacy-tool expectations (cooling-off periods, clear duplicate narratives). Financial exposure when wrong agency gets credit.
+**Description:** Position and compensation approvals, leadership sign-off, and audit trails often live in **email and spreadsheets**, not in workflow. Recruiters re-key data and attach evidence manually.
 
-**Evidence:** P1, P2 (quantified agency counts and daily upload volumes); P2 explicit “duplication needs to get automated” and Aadhaar as desired match key.
+**Evidence:** P2, P3, P4, P5 (all five voices).
 
-**Triangulation:** Customer-only in this file (await Step 7 SME file for convergence).
+**Triangulation:** *Customer-only in this file.* SME views may add configuration vs product gap (Step 7).
 
-**Implication:** Prioritise UDMF / matching parameter expansion, bulk-safe duplicate handling, and source-ownership rules that survive concurrent submissions; consider India ID fields in matching with DPDP governance.
+**Implication:** India enterprise deals need **in-system approval chains**, attachment policies, and discoverable audit history to reduce cycle time and risk.
 
 **Representative quotes:**
+> P3: "All the approvals whether it's the compensation approval the position approval we are taking it offline and then we are enclosing it as the documents before rolling out offers."
 
-> "Workday will identify that candidate to be referred by Agency B… Agency A who actually uploaded the profile first will not get paid." (P2)
-
----
-
-#### Theme 2: Offer and compliance path rigidity (regenerate, rescind, India IDs)
-
-**Description:** Customers need to revise offers after acceptance or ready-for-hire transitions (compensation errors, batch date moves, candidate-driven date changes). Regenerate offer and rescind / resend paths perceived as missing or inaccessible; India statutory steps (PAN, Aadhaar, UAN, OTP) misaligned with policy (partial completion allowed in UX, fields disappearing), stretching timelines and compliance risk.
-
-**Evidence:** P1, P2 (bulk compensation errors, regenerate limits); P5 (three IDs, OTP failures, 16–17% leakage estimate).
-
-**Implication:** Map India offer and pre-offer steps to DPDP consent and data minimisation; product gaps touch offer orchestration, candidate task UX, OTP reliability, and audit evidence (not only Recruiting configuration).
+> P5: "There is no approval process on Workday… I know that Workday has an option of… stage-wise approvals… today, it's just a requisition which gets created, and we start working on it."
 
 ---
 
-#### Theme 3: Approvals and financial metadata live outside Workday
+#### Theme 2: India identity, offer readiness, and candidate drop-off
 
-**Description:** Headcount, CHR, global, and compensation approvals often live in email; recruiters lack hiring-manager context on cost centre / LOB; wrong metadata forces req edits and sometimes restarting candidate apply journey.
+**Description:** **PAN / Aadhaar (OTP) / UAN** and policy timing create **partial completion**, **OTP failures**, and **repeated candidate tasks**; recruiters report **material drop-off** and executive frustration; compliance intent clashes with UX gating.
 
-**Evidence:** P1 (supervisory org ambiguity); P2 (no in-WD req approval); P4, P5 (24h+ loops, “start from scratch”).
+**Evidence:** P3 (primary), P4, P5.
 
-**Implication:** Hiring manager and finance self-service in req creation, plus in-flow approval and aging visibility, directly reduces recruiter toil and time-to-offer.
+**Implication:** Harden **mandatory gating**, **re-entry/edit** for government IDs, **OTP reliability**, and **recruiter + candidate notifications**; align with **DPDP** consent and transparency (see 060 in PMF/PRD).
 
----
+**Representative quotes:**
+> P3: "The PP policy is that you need to have all three IDs before an offer can be extended… it also doesn't mark it as mandatory… the candidate will upload one ID and then they're free to move forward."
 
-#### Theme 4: Reporting, notifications, and task noise at executive and volume scale
-
-**Description:** Leaders need pipeline aging, SLA, and recruiter dashboards; instead they export or maintain Excel and parallel tools. Task and notification emails are voluminous and generic; recruiters miss offer accept events and must phone candidates.
-
-**Evidence:** P5 (no reports, manual Excel aging, 3,500 tasks, delete-all-email behaviour); P2 (acknowledgement-only offers).
-
-**Implication:** Improve actionable notifications (req/candidate context), manager insights, and filtered task experiences for high-volume tenants.
+> P3: "Candidates come back and say that we are not even receiving the OTP."
 
 ---
 
-#### Theme 5: Candidate experience and channel design under India constraints
+#### Theme 3: High-volume duplicate detection, vendor upload, and source attribution
 
-**Description:** Bridge pages and bot pre-steps before Workday apply caused earlier pain; in-Workday apply seen as OK once reached. Email preferred over SMS/WhatsApp for compliance trail. Desire for better gating, mandatory resume, and parsing/bulk upload to reduce junk applicants and manual review.
+**Description:** **Manual duplicate checks** and **per-upload approvals** do not scale at **thousands of profiles/day**. **First-source / cooling-off** logic from legacy ATS is missed; **financial and contractual** consequences for agency credit.
 
-**Evidence:** P2 (legacy bot bridge issues vs “objectively… no issues” once in Workday); P5 (email for compliance; parsing and 600-applicant example).
+**Evidence:** P4 (primary), P5; P3 on referral scatter.
 
-**Implication:** India programme should pair channel expansion (strategy mentions WhatsApp) with customer-specific compliance preferences and evidence trails.
+**Implication:** Invest in **UDMF / duplicate framework** parameters (e.g. government ID), **bulk-safe automation**, and **source precedence** rules that respect India commercial and compliance constraints.
+
+**Representative quotes:**
+> P5: "Duplication needs to get automated… validation needs to be on more parameters than just first name, phone numbers, and email address… Aadhar number."
+
+> P4: "Workday is capturing the second source… employee referral uploaded on 3rd December… vendor uploaded on 4th December… ideally my source should be 3rd December."
 
 ---
 
-#### Theme 6: Operational risk at go-live and maintenance windows
+#### Theme 4: Offer document lifecycle and scale (regenerate, rescind, mass actions, eSign)
 
-**Description:** Go-live during peak hiring amplified issues; Saturday maintenance windows hurt India operations that work six-day weeks.
+**Description:** **Regenerate offer** limitations for **compensation and date changes**, **rescind** access unclear to users, **no mass offer** corrections for batch moves, **acknowledgement-only** acceptance drives **screenshot** workarounds and **weak recruiter signals**.
 
-**Evidence:** P2 (July peak, newness factor); P2 closing feedback on Saturday downtimes.
+**Evidence:** P3, P4, P5.
 
-**Implication:** Platform reliability and regional scheduling remain executive-level India account risks alongside feature gaps.
+**Implication:** Roadmap items for **offer versioning**, **controlled rescind/resend**, **batch corrections**, and **integrated eSign** (e.g. Adobe Sign India/Aadhaar where required) with clear audit.
+
+**Representative quotes:**
+> P4: "Regenerate offer letter… I cannot use it for compensation change… 400-500 people who came back with a wrong compensation."
+
+> P3: "There is no mail triggered when the candidate accepted our offer… we have to go back and check everything."
+
+---
+
+#### Theme 5: Reporting, dashboards, and operational visibility
+
+**Description:** Leadership and specialised teams **export or use parallel tools (Thrive, Excel)** for aging, SLA, and team KPIs; Workday **reporting gaps** drive manual **Excel formulas** and **full-time analytics roles**.
+
+**Evidence:** P3 (primary), P1/P2 context.
+
+**Implication:** Prioritise **recruiting operational dashboards**, requisition aging, and **role-scoped notifications** (not generic task floods).
+
+**Representative quotes:**
+> P3: "There is no view on the reports… if I have a team around me… what is the progress on their positions… we are not able to do currently."
+
+> P3: "Thrive gives us a better clarity… Workday doesn't give us that option."
+
+---
+
+#### Theme 6: Sourcing efficiency and application volume
+
+**Description:** **No parsing** from major channels; **fake-open postings** to generate apply links; **very large applicant counts** with **no bulk review** and **optional resume** causing wasted recruiter time.
+
+**Evidence:** P3 (primary); P5 on channel volume.
+
+**Implication:** **Parser accuracy**, **mandatory resume**, **bulk disposition**, and **screening automation** (strategy-aligned: HiredScore, fraud detection) for India scale.
+
+**Representative quotes:**
+> P3: "I cannot parse CVs from… LinkedIn to work day… there should be an option… bulk uploading."
+
+> P3: "I still have about 700 applications on that… I have to open each one separately."
 
 ---
 
 ## Strategic Alignment Assessment
 
-**Step 1 Strategy Context:** `research/India/strategy-context-2026-03-28-IN-E2E-003.md`
+**Step 1 Strategy Context:** `research/India/strategy-context-2026-03-31-IN-E2E-005.md`
 
 **Alignment analysis:**
 
 - **High alignment**
-  - **Core ATS parity, bulk, and scale efficiency:** Customer pain on manual duplicate handling, approvals, reporting, and offer-path friction supports Q2 narrative on table-stakes ATS depth and **8 India customer wins** tied to trust and execution.
-  - **AI matching (HiredScore):** Volume hiring and screening load (hundreds of applicants per req, manual review) aligns with strategy to activate matching **with** governance; customers also use external AI shortlisting (e.g. Naukri portal) pre-Workday.
-  - **DPDP and trust:** Government ID collection, OTP, consent, and audit evidence are central to customer stories; aligns with strategy emphasis on compliance-first India positioning.
+  - **Core ATS parity / scale** (Priority 3): Duplicate handling, bulk workflows, mobile/recruiter efficiency, and BGV-related identity capture match TP's pain (P4, P5, P3).
+  - **AI matching and fraud** (Priority 2): High-volume grading and fraudulent-application detection align with **manual screening overload** and duplicate evasion (P4, P5).
+  - **India regional pillars** (DPDP, identity, local workflows): Government ID, consent, and offer-stage data map directly to research themes.
 
 - **Strategy–customer tension**
-  - **WhatsApp / SMS vs compliance preference:** Strategy and roadmap stress omnichannel candidate engagement; P5 explicitly prefers email for regulatories and traceability. India GTM needs **channel optionality** and policy-controlled templates, not a single-channel assumption.
-  - **GCC-first priority vs India severity:** GCC is Q2 Priority 1; India duplicate/agency and offer-admin pain is existential at described scale. **120** should still score India customer impact highly even when global priority list is GCC-heavy.
+  - **Q2 GCC-first OKRs** vs **India revenue impact**: Saturday maintenance and **India working week** friction (P5) are not GCC-specific but affect **global reliability** narrative; India **8-customer** scale goal still needs **zero-downtime** and **peak-season readiness** story.
 
-- **Neutral / adjacent**
-  - **Attendance and pay group issues** are HCM / payroll adjacency; still erode recruiter-manager trust in Workday and should be noted as portfolio noise in India accounts.
+- **Neutral / cross-cutting**
+  - **HCM processes** (attendance, pay group, no-show) affect same tenant journey but sit outside Recruiting-only scope; flag for **suite** conversations, not only Recruiting PM.
 
-**Implications for 120:**
+**Implications for @pmf-analyst**
 
-- Weight recommendations that remove **manual duplicate and source-ownership** work and **offer / India ID** friction as high customer impact for India scale.
-- Flag **WhatsApp** recommendations for PM decision where customers require **email-first** audit trails.
-- Treat **supervisory org + approval** gaps as hiring-manager and finance enablement, not only recruiter training.
-
----
-
-### Recommendations for Primary Research Slides
-
-**For 120 / 130 to use when building the PMF report and roadmap deck:**
-
-**SECTION 09: Customer Interviews (or equivalent)**
-
-**Slide 1: Interview Participants Overview**
-
-- Title: "Interview Participants"
-- Content: Table with P1–P5, role summary, TP (note: two onsite sessions, Dec 2025)
-
-**Slide 2–6: One slide per participant (P1–P5)**
-
-- Title: "P1 – Recruiting lead, TP" (etc.)
-- Content: Role context; 2–3 short quotes; top pain bullets
-
-**Slide 7: Key Themes from User Research**
-
-- Title: "Key Themes from User Research"
-- Content: Themes 1–6 (one line each)
+- Weight **duplicate/source**, **offer lifecycle**, and **India ID/OTP** themes heavily in India PMF recommendations and RICE.
+- Pair customer quotes with **060** on DPDP, EU AI Act (if AI screening), and **India-specific** identity handling.
+- Treat **Thrive / Excel** as **workaround signal** for dashboard and notification gaps.
 
 ---
 
-### Full Thematic Analysis Report
+## Recommendations (product and research)
 
-**Location:** *To be produced by 120 in* `research/India/thematic-analysis/` *after triangulation with Step 7 SME findings, 099 outputs, and Step 4 CI.*
+1. **Ship or enable in-system requisition and offer approvals** with audit trail and attachments, targeted at **email-first** enterprises in India; provide **adoption playbook** for stage-wise approvals (P2, P3, P5).
+2. **Government ID and OTP reliability programme:** mandatory gates, editable pre-offer states, clear candidate messaging, and **support playbooks** for OTP failures; track **join-rate** pre/post (P3, P4).
+3. **Scale duplicate and source ownership:** expand matching to **Aadhaar/PAN/UAN** where legally permissible; **first-source wins** within cooling-off; reduce **vendor approval** toil without breaking **rehire/compliance** (P4, P5).
+4. **Offer management:** **regenerate** for compensation and start date, **rescind/resend** permissions, **batch** amend for cohort moves, **recruiter notifications** on acceptance, roadmap to **integrated eSign** (P3, P4, P5).
+5. **High-volume UX:** **bulk candidate review**, **mandatory resume**, **parsing** and **bulk upload** from key India sources; align with **HiredScore** and roadmap **fraud detection** (P3, P4).
+6. **Operational analytics:** requisition **aging**, SLA, and **role-scoped** alerts replacing generic task emails (P3, P5).
+7. **Platform:** **Saturday / regional window** maintenance review for **India 6-day week** customers (P5).
+8. **Next research:** validate with **1–2 additional India BPO/IT** tenants whether **agency fee / source** and **offer regeneration** patterns generalise beyond TP.
 
 ---
 
-*End of Step 8 customer-only findings (IN-E2E-003).*
+## Recommendations for Primary Research Slides
+
+**For @pmf-analyst / 130 (SECTION 03: Primary Research - User Interviews)**
+
+**Slide 1: Interview Participants**  
+Table: P1–P5, role, TP (India).
+
+**Slides 2–6: One slide per participant**  
+Title: `P[n] - [Role], TP (India)`  
+Body: Role context (2–3 bullets), 2 short quotes, top pain points.
+
+**Slide 7: Key Themes from User Research**  
+Bullets: (1) Approvals outside Workday, (2) India IDs and drop-off, (3) Duplicate/source at scale, (4) Offer lifecycle, (5) Reporting gaps, (6) Parsing and volume.
+
+**Speaker note:** Cite transcript file paths and mission **IN-E2E-005** for audit.
+
+---
+
+## Full Thematic Analysis Report
+
+**This document** contains the Braun & Clarke synthesis for Step 8. A separate deep-dive file under `research/India/thematic-analysis/` may be added if the PMF pipeline requires a standalone coded extract; **this run** treats `105-user-research-findings.md` as the canonical customer input for @pmf-analyst triangulation with `105-sme-research-findings.md`.
+
+---
+
+*End of report.*

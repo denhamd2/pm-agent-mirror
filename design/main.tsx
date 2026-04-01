@@ -8,29 +8,39 @@ import '@workday/canvas-tokens-web/css/system/_variables.css';
 import '@workday/canvas-tokens-web/css/brand/_variables.css';
 import FranceWhatsappOmnichannelEngagementV75 from './france-whatsapp-omnichannel-engagement-v75';
 import { GccRecruiterDashboard } from './gcc-recruiter-dashboard';
-import { GccUnifiedCandidateReviewV57 } from './gcc-unified-candidate-review-v57';
-import GccNationalisationLocalComplianceReportingV61 from './gcc-nationalisation-local-compliance-reporting-v61';
+import AadhaarAdobeSignV01 from './aadhaar-adobe-sign-v01';
 import GccNationalisationLocalComplianceReportingV62 from './gcc-nationalisation-local-compliance-reporting-v62';
+import { GccCandidateGridSearch } from './gcc-candidate-grid-search';
+import { RecruiterHomeV85 } from './recruiter-home-v85';
+import { CandidateSmartViewV86 } from './candidate-smart-view-v86';
 import { SANA_PAGE_CANVAS } from './components';
 
 /** Prototype slugs backed by `design/*.tsx` modules in this branch (see `vite.config.ts` `slugs` Set). */
 function prototypeFromLocation():
   | 'france-whatsapp-omnichannel-engagement-v75'
   | 'gcc-recruiter-dashboard'
-  | 'gcc-unified-candidate-review-v57'
-  | 'gcc-nationalisation-local-compliance-reporting-v61'
-  | 'gcc-nationalisation-local-compliance-reporting-v62' {
+  | 'aadhaar-adobe-sign-v01'
+  | 'gcc-nationalisation-local-compliance-reporting-v62'
+  | 'candidate-grid-v84'
+  | 'recruiter-home-v85'
+  | 'candidate-smart-view-v86' {
   const path = window.location.pathname.replace(/\/+$/, '') || '/';
+  if (path.endsWith('candidate-smart-view-v86')) {
+    return 'candidate-smart-view-v86';
+  }
+  if (path.endsWith('recruiter-home-v85')) {
+    return 'recruiter-home-v85';
+  }
+  if (path.endsWith('candidate-grid-v84')) {
+    return 'candidate-grid-v84';
+  }
   if (path.endsWith('france-whatsapp-omnichannel-engagement-v75')) {
     return 'france-whatsapp-omnichannel-engagement-v75';
   }
   if (path.endsWith('gcc-nationalisation-local-compliance-reporting-v62')) {
     return 'gcc-nationalisation-local-compliance-reporting-v62';
   }
-  if (path.endsWith('gcc-nationalisation-local-compliance-reporting-v61')) {
-    return 'gcc-nationalisation-local-compliance-reporting-v61';
-  }
-  if (path.endsWith('gcc-unified-candidate-review-v57')) return 'gcc-unified-candidate-review-v57';
+  if (path.endsWith('aadhaar-adobe-sign-v01')) return 'aadhaar-adobe-sign-v01';
   if (path.endsWith('gcc-recruiter-dashboard')) return 'gcc-recruiter-dashboard';
   const h = window.location.hash.replace(/^#\/?/, '');
   if (
@@ -45,19 +55,22 @@ function prototypeFromLocation():
   ) {
     return 'gcc-nationalisation-local-compliance-reporting-v62';
   }
-  if (
-    h === 'gcc-nationalisation-local-compliance-reporting-v61' ||
-    h.startsWith('gcc-nationalisation-local-compliance-reporting-v61')
-  ) {
-    return 'gcc-nationalisation-local-compliance-reporting-v61';
-  }
-  if (h === 'gcc-unified-candidate-review-v57' || h.startsWith('gcc-unified-candidate-review-v57')) {
-    return 'gcc-unified-candidate-review-v57';
+  if (h === 'aadhaar-adobe-sign-v01' || h.startsWith('aadhaar-adobe-sign-v01')) {
+    return 'aadhaar-adobe-sign-v01';
   }
   if (h === 'gcc-recruiter-dashboard' || h.startsWith('gcc-recruiter-dashboard')) {
     return 'gcc-recruiter-dashboard';
   }
-  return 'france-whatsapp-omnichannel-engagement-v75';
+  if (h === 'candidate-grid-v84' || h.startsWith('candidate-grid-v84')) {
+    return 'candidate-grid-v84';
+  }
+  if (h === 'recruiter-home-v85' || h.startsWith('recruiter-home-v85')) {
+    return 'recruiter-home-v85';
+  }
+  if (h === 'candidate-smart-view-v86' || h.startsWith('candidate-smart-view-v86')) {
+    return 'candidate-smart-view-v86';
+  }
+  return 'recruiter-home-v85';
 }
 
 function AppRoot() {
@@ -71,16 +84,22 @@ function AppRoot() {
       window.removeEventListener('hashchange', sync);
     };
   }, []);
+  if (route === 'candidate-smart-view-v86') {
+    return <CandidateSmartViewV86 />;
+  }
+  if (route === 'recruiter-home-v85') {
+    return <RecruiterHomeV85 />;
+  }
+  if (route === 'candidate-grid-v84') {
+    return <GccCandidateGridSearch />;
+  }
   if (route === 'france-whatsapp-omnichannel-engagement-v75') {
     return <FranceWhatsappOmnichannelEngagementV75 />;
   }
   if (route === 'gcc-nationalisation-local-compliance-reporting-v62') {
     return <GccNationalisationLocalComplianceReportingV62 />;
   }
-  if (route === 'gcc-nationalisation-local-compliance-reporting-v61') {
-    return <GccNationalisationLocalComplianceReportingV61 />;
-  }
-  if (route === 'gcc-unified-candidate-review-v57') return <GccUnifiedCandidateReviewV57 />;
+  if (route === 'aadhaar-adobe-sign-v01') return <AadhaarAdobeSignV01 />;
   if (route === 'gcc-recruiter-dashboard') return <GccRecruiterDashboard />;
   return <FranceWhatsappOmnichannelEngagementV75 />;
 }

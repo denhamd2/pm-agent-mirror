@@ -148,6 +148,87 @@ research/
    - Prioritize by RICE score (highest first)
    - Flag strategic tensions when Business/Customer Impact diverge by >1.0 points
 
+### Recommendation Quality Filter (Execute Before Metrics Invocation)
+
+Before invoking `/value-metrics` for recommendations, validate each is **feature/capability-focused** for the Recruiting Product Roadmap:
+
+**✅ Valid recommendations** (product capabilities/features):
+- Native product capabilities (e.g., "AI candidate screening", "WhatsApp messaging", "Duplicate matching")
+- Workflow automation (e.g., "Interview scheduling", "Bulk offer generation")
+- Compliance features (e.g., "Nationalisation reporting", "DPDP consent management")
+- Integration capabilities (e.g., "Government portal exchange", "Job board reach")
+- UX improvements to core workflows (e.g., "Candidate grid redesign", "Mobile-first apply")
+
+**❌ Invalid recommendations** (NOT product capabilities - filter these out):
+- "Develop language pack" (localization/content, not product roadmap)
+- "Work with pre-sales" (process improvement, not feature)
+- "Partner with job boards" (business development, not capability)
+- "Train customer success" (enablement, not product)
+- "Improve documentation" (content, not feature)
+- "Conduct regional workshop" (GTM activity, not roadmap)
+
+**Filter action**: Before finalizing Product Roadmap Impact Summary:
+1. Review all Priority 1 and Priority 2 recommendations
+2. Remove any that are NOT product capabilities
+3. If needed, reframe vague items as specific product actions:
+   - ❌ "Improve GCC compliance" → ✅ "Nationalisation reporting module with MOHRE export"
+   - ❌ "Language support" → ✅ "RTL UI rendering for Arabic job postings"
+4. Only invoke `/value-metrics` for valid product/capability recommendations
+
+### Step 3.5: Suggest Value Metrics per Recommendation
+
+**When**: After generating RICE-scored recommendations and applying quality filter, before finalizing Product Roadmap Impact Summary
+
+**Process**:
+
+1. **For each Priority 1 recommendation** (limit to top 5 maximum):
+   - Extract recommendation capability description (e.g., "Government-ID-aware duplicate matching")
+   - Invoke `/value-metrics suggest [capability description]`
+   - Receive complete 3-tier metrics package (BV + PV + Adoption/Usage)
+   - **Select 1 Business Value (BV) metric ONLY** as primary outcome measure for roadmap-level tracking
+
+2. **BV metric selection criteria**:
+   - Direct relevance to capability impact (Time/Efficiency → Time to Hire; Quality → Candidate Experience)
+   - Status: "Delivered" preferred (baseline data available for forecasting)
+   - Aligns with RICE Business Impact dimension (e.g., Business Impact 3.0 → strategic metrics like Time to Hire)
+   - If multiple BV metrics apply, select the most strategic (typically Time to Hire, Quality of Hire, or Recruiter Capacity for enterprise PMF)
+
+3. **Document in recommendation write-up** (add "Success Metric" subsection):
+   ```markdown
+   **Success Metric**: [BV Metric Name]
+   - **Baseline**: [Current state] (if Status = Delivered)
+   - **Target**: [Desired outcome based on customer evidence]
+   - **Calculation**: [From CSV formula]
+   - **Year 1 Forecast**: [Using forecast from CSV if applicable]
+   ```
+
+4. **Example invocation**:
+
+   **Recommendation**: "AI-powered candidate screening for high-volume roles"
+   
+   **Invoke**: `/value-metrics suggest AI-powered candidate screening`
+   
+   **Receive BV options**:
+   1. Time to Hire (Status: Delivered, Category: Time to Hire)
+   2. Productivity: Recruiter Capacity (Status: Delivered, Category: Productivity)
+   3. Candidate Experience: Reach (Status: Not delivered, Category: Candidate Experience)
+   
+   **Selection rationale**:
+   - #1 (Time to Hire) selected: Aligns with "quickly identify candidates" JTBD outcome; Status = Delivered (baseline available); Business Impact 3.0 matches strategic priority
+   
+   **Document in recommendation**:
+   ```markdown
+   **Success Metric**: Time to Hire
+   - **Baseline**: 45 days (GCC enterprise average from Workday benchmarks)
+   - **Target**: 30 days (33% reduction from AI screening efficiency)
+   - **Calculation**: Days from JR posted to Offer accepted
+   - **Year 1 Forecast**: 15% improvement (conservative AI adoption curve)
+   ```
+
+**Output format**: Each Priority 1 recommendation in "Product Roadmap Impact Summary" gains a "Success Metric" subsection.
+
+**Handoff to 130**: Recommendation slides extract "Success Metric" subsection for the "Success Metrics" slide component (5-part recommendation structure).
+
 ## E2E Handoff Table (Regional E2E Pipelines)
 
 When invoked as Step 9 in Regional E2E pipeline, append to the report:
@@ -155,10 +236,10 @@ When invoked as Step 9 in Regional E2E pipeline, append to the report:
 ```markdown
 ## E2E Handoff: Research Recommendations
 
-| # | Title | Action | Reach | Impact | Confidence | Effort | RICE Score | Legal / compliance (060) |
-|---|-------|--------|-------|--------|------------|--------|------------|--------------------------|
-| 1 | [From Priority 1, item 1] | [Full action text] | [Reach value] | [Impact value] | [Confidence %] | [Effort pm] | [RICE value] | [060 flags if any] |
-| 2 | [From Priority 1, item 2] | [Full action text] | [Reach value] | [Impact value] | [Confidence %] | [Effort pm] | [RICE value] | [060 flags if any] |
+| # | Title | Action | Reach | Impact | Confidence | Effort | RICE Score |
+|---|-------|--------|-------|--------|------------|--------|------------|
+| 1 | [From Priority 1, item 1] | [Full action text] | [Reach value] | [Impact value] | [Confidence %] | [Effort pm] | [RICE value] |
+| 2 | [From Priority 1, item 2] | [Full action text] | [Reach value] | [Impact value] | [Confidence %] | [Effort pm] | [RICE value] |
 ...
 ```
 
@@ -228,6 +309,8 @@ Gap severity themes are presales-reported; competitive claims validated via 101.
 - Read ALL data sources (SME transcripts, Customer transcripts, CSVs)
 - Generate shorthand PM-friendly codes; create triangulation matrix
 - Include high-intensity direct quotes; cite specific sources
+- **Apply Recommendation Quality Filter:** Ensure all recommendations are feature/capability-focused (NOT "language pack", "work with pre-sales", etc.)
+- **Invoke `/value-metrics` per Priority 1 recommendation:** Generate 1 BV metric with baseline/target for each recommendation (Step 3.5)
 - Save markdown report to `research/[Country]/thematic-analysis/`
 - **Hand off to 130** for PMF roadmap .pptx when full deck required
 

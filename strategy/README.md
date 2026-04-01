@@ -61,7 +61,7 @@ Curated list of live Confluence strategy pages with descriptions.
 
 ## When Agents Should Search Strategy Docs
 
-### Research Agents (100, 101, 105, 120)
+### Research Agents (100, @competitive-intel, 105, @pmf-analyst)
 
 **100-market-intelligence:**
 - **When**: Before Strategic Recommendations section in synthesis
@@ -69,7 +69,7 @@ Curated list of live Confluence strategy pages with descriptions.
 - **Search for**: Product priorities, competitive positioning, regional strategies
 - **Output**: "Strategic Alignment" note in each recommendation
 
-**101-competitive-intelligence:**
+**@competitive-intel:**
 - **When**: Before battle card creation, before competitive positioning synthesis
 - **Why**: Ensure battle cards align with GTM messaging and positioning strategy
 - **Search for**: Competitive positioning, differentiation themes, key messages

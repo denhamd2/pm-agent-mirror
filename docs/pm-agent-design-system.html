@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PM Agent Dashboard — Design System</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0b1f42;
+  --water: #0075b4;
+  --pencil: #f5a623;
+  --paper: #f7f5f2;
+  --laptop: #6b7a8d;
+  --staple: #e2ddd7;
+  --desk: #c4bdb3;
+  --sana-canvas: #F3F5F7;
+  --sana-nav: #F3F4F6;
+  --sana-tab-active: #E5E7EB;
+  --sana-accent: #005CB9;
+  --sana-badge-red: #D73B3E;
+  --grade-a-bg: #D4EED8;
+  --grade-a-fg: #309840;
+  --grade-b-bg: #D8E3F3;
+  --grade-b-fg: #4068AD;
+  --grade-c-bg: #FFECD1;
+  --grade-c-fg: #D68B00;
+  --grade-d-bg: #D8E3F3;
+  --grade-d-fg: #333333;
+}
+* { font-family: 'DM Sans', system-ui, sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); }
+code, .mono { font-family: 'JetBrains Mono', monospace; }
+
+.dashboard-nav { position:sticky;top:0;z-index:100;background:rgba(247,245,242,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--staple);padding:10px 24px;display:flex;align-items:center;gap:16px; }
+.dashboard-brand { font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap; }
+.dashboard-tabs { display:flex;gap:4px; }
+.dashboard-tab { padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;text-decoration:none;color:var(--laptop);transition:all 0.2s; }
+.dashboard-tab:hover { background:var(--staple);color:var(--ink); }
+.dashboard-tab.active { background:var(--ink);color:white; }
+.dashboard-external { display:flex;gap:4px;margin-left:auto; }
+.dashboard-ext-link { padding:4px 10px;border-radius:16px;font-size:11px;font-weight:600;text-decoration:none;color:var(--water);border:1px solid var(--staple);transition:all 0.2s;white-space:nowrap; }
+.dashboard-ext-link:hover { border-color:var(--water);background:rgba(0,117,180,0.05); }
+
+.page-content { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+.section-header { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--laptop); font-weight: 700; margin: 40px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--staple); }
+.comp-card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(11,31,66,0.06); }
+.comp-title { font-size: 16px; font-weight: 700; color: var(--ink); }
+.comp-desc { font-size: 12px; color: var(--laptop); margin-top: 4px; }
+.comp-source { font-size: 11px; color: var(--desk); margin-top: 2px; }
+.comp-source code { font-size: 10px; background: #f5f5f0; padding: 1px 6px; border-radius: 4px; }
+.comp-preview { background: var(--sana-canvas); border-radius: 8px; padding: 24px; margin-top: 16px; display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+.comp-props { margin-top: 12px; font-size: 11px; color: var(--laptop); }
+.comp-props code { background: #f5f5f0; padding: 0 4px; border-radius: 3px; font-size: 10px; }
+
+.swatch { width: 48px; height: 48px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; color: white; }
+.token-row { display: flex; align-items: center; gap: 12px; padding: 6px 0; border-bottom: 1px solid #f0ede9; font-size: 12px; }
+.token-name { font-weight: 600; min-width: 200px; }
+.token-value { color: var(--laptop); }
+</style>
+</head>
+<body>
+
+<!-- Shared Dashboard Nav -->
+<nav class="dashboard-nav">
+  <span class="dashboard-brand">PM Agent Dashboard</span>
+  <div class="dashboard-tabs">
+    <a href="pm-agent-morning-roundup.html" class="dashboard-tab">Morning Roundup</a>
+    <a href="pm-agent-scorecard.html" class="dashboard-tab">Scorecard</a>
+    <a href="pm-agent-architecture.html" class="dashboard-tab">Architecture Map</a>
+    <a href="pm-agent-design-system.html" class="dashboard-tab active">Design System</a>
+  </div>
+  <div class="dashboard-external">
+    <a id="proto-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Prototype &#x2197;</a>
+    <a id="deck-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Deck &#x2197;</a>
+    <a id="prd-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">PRD &#x2197;</a>
+    <a id="brief-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Brief &#x2197;</a>
+    <a id="epic-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Epic &#x2197;</a>
+  </div>
+</nav>
+
+<div class="page-content">
+
+<h1 style="font-size: 28px; font-weight: 700; color: var(--ink);">Design System</h1>
+<p style="font-size: 14px; color: var(--laptop); margin-top: 4px;">Workday Recruiting Prototype Component Library &mdash; Canvas Kit + Sana Style</p>
+
+<!-- SECTION 1: Shell & Navigation -->
+<div class="section-header">Section 1: Shell &amp; Navigation</div>
+
+<div class="comp-card">
+  <div class="comp-title">WorkdayTopNav</div>
+  <div class="comp-desc">Top navigation bar with W mark, search pill, notification icons, and user avatar. Sana-aligned neutral grey surface.</div>
+  <div class="comp-source"><code>design/components/WorkdayTopNav.tsx</code></div>
+  <div class="comp-preview" style="padding: 0; overflow: hidden; border-radius: 8px;">
+    <div style="width: 100%; height: 48px; background: var(--sana-nav); display: flex; align-items: center; padding: 0 16px; gap: 16px;">
+      <div style="width: 32px; height: 32px; background: var(--sana-accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px;">W</div>
+      <div style="flex: 1; max-width: 400px; height: 32px; background: white; border-radius: 16px; display: flex; align-items: center; padding: 0 14px; font-size: 13px; color: #999;">Search or ask anything...</div>
+      <div style="margin-left: auto; display: flex; gap: 16px; align-items: center;">
+        <div style="width: 20px; height: 20px; background: var(--desk); border-radius: 4px; opacity: 0.5;"></div>
+        <div style="width: 20px; height: 20px; background: var(--desk); border-radius: 4px; opacity: 0.5;"></div>
+        <div style="position: relative;">
+          <div style="width: 20px; height: 20px; background: var(--desk); border-radius: 4px; opacity: 0.5;"></div>
+          <div style="position: absolute; top: -4px; right: -6px; width: 14px; height: 14px; background: var(--sana-badge-red); border-radius: 50%; font-size: 8px; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700;">3</div>
+        </div>
+        <div style="width: 28px; height: 28px; background: var(--sana-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 600;">DD</div>
+      </div>
+    </div>
+  </div>
+  <div class="comp-props">Props: <code>userName</code> <code>notificationCount</code> <code>avatarInitials</code> <code>onSearch</code></div>
+</div>
+
+<div class="comp-card">
+  <div class="comp-title">WorkdayLeftTabBar</div>
+  <div class="comp-desc">Two-zone left navigation: primary icon rail (64px) with stacked icon+label, and secondary text tab column (232px) with pill-highlighted active tab.</div>
+  <div class="comp-source"><code>design/components/WorkdayLeftTabBar.tsx</code></div>
+  <div class="comp-preview" style="padding: 0; overflow: hidden; border-radius: 8px;">
+    <div style="display: flex; height: 200px;">
+      <div style="width: 64px; background: var(--sana-nav); display: flex; flex-direction: column; align-items: center; padding-top: 12px; gap: 16px; border-right: 1px solid #e5e7eb;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 2px; opacity: 0.7;">
+          <div style="width: 20px; height: 20px; background: var(--desk); border-radius: 4px;"></div>
+          <span style="font-size: 8px; color: #6B6B6B; text-transform: uppercase; letter-spacing: 0.04em;">Home</span>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+          <div style="width: 20px; height: 20px; background: var(--sana-accent); border-radius: 4px;"></div>
+          <span style="font-size: 8px; color: var(--sana-accent); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700;">Recruit</span>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 2px; opacity: 0.7;">
+          <div style="width: 20px; height: 20px; background: var(--desk); border-radius: 4px;"></div>
+          <span style="font-size: 8px; color: #6B6B6B; text-transform: uppercase; letter-spacing: 0.04em;">HCM</span>
+        </div>
+      </div>
+      <div style="width: 232px; background: var(--sana-nav); padding: 12px 8px; display: flex; flex-direction: column; gap: 2px;">
+        <div style="padding: 8px 12px; border-radius: 999px; background: var(--sana-tab-active); font-size: 13px; font-weight: 600; color: #1D1D1D;">Candidates</div>
+        <div style="padding: 8px 12px; border-radius: 999px; font-size: 13px; color: #6B6B6B;">Requisitions</div>
+        <div style="padding: 8px 12px; border-radius: 999px; font-size: 13px; color: #6B6B6B;">Interviews</div>
+        <div style="padding: 8px 12px; border-radius: 999px; font-size: 13px; color: #6B6B6B;">Reports</div>
+      </div>
+    </div>
+  </div>
+  <div class="comp-props">Props: <code>primaryItems[]</code> <code>secondaryTabs[]</code> <code>activeSection</code> <code>activeTab</code></div>
+</div>
+
+<!-- SECTION 2: Cards & Containers -->
+<div class="section-header">Section 2: Cards &amp; Containers</div>
+
+<div class="comp-card">
+  <div class="comp-title">MetricCard</div>
+  <div class="comp-desc">KPI display card with label, value, helper text, and optional change indicator. Supports positive, negative, and neutral sentiment colours.</div>
+  <div class="comp-source"><code>design/components/MetricCard.tsx</code></div>
+  <div class="comp-preview">
+    <div style="background: white; border-radius: 20px; padding: 20px; min-width: 180px; box-shadow: 0 1px 2px rgba(15,46,102,0.04);">
+      <div style="font-size: 12px; color: var(--laptop); font-weight: 500;">Open requisitions</div>
+      <div style="font-size: 28px; font-weight: 700; color: var(--ink); margin: 4px 0;">38</div>
+      <div style="font-size: 11px; color: var(--laptop);">Assigned to you</div>
+      <div style="font-size: 11px; color: #309840; font-weight: 600; margin-top: 4px;">+5 this week</div>
+    </div>
+    <div style="background: white; border-radius: 20px; padding: 20px; min-width: 180px; box-shadow: 0 1px 2px rgba(15,46,102,0.04);">
+      <div style="font-size: 12px; color: var(--laptop); font-weight: 500;">Time to fill</div>
+      <div style="font-size: 28px; font-weight: 700; color: var(--ink); margin: 4px 0;">42d</div>
+      <div style="font-size: 11px; color: var(--laptop);">Average this quarter</div>
+      <div style="font-size: 11px; color: #D73B3E; font-weight: 600; margin-top: 4px;">+3d vs target</div>
+    </div>
+    <div style="background: white; border-radius: 20px; padding: 20px; min-width: 180px; box-shadow: 0 1px 2px rgba(15,46,102,0.04);">
+      <div style="font-size: 12px; color: var(--laptop); font-weight: 500;">Interviews scheduled</div>
+      <div style="font-size: 28px; font-weight: 700; color: var(--ink); margin: 4px 0;">12</div>
+      <div style="font-size: 11px; color: var(--laptop);">This week</div>
+    </div>
+  </div>
+  <div class="comp-props">Props: <code>label</code> <code>value</code> <code>helperText</code> <code>changeIndicator?: {text, sentiment}</code> <code>onClick?</code></div>
+</div>
+
+<div class="comp-card">
+  <div class="comp-title">ReportCard</div>
+  <div class="comp-desc">Report library item displaying report name, description, metadata (type, last run), and action button.</div>
+  <div class="comp-source"><code>design/components/ReportCard.tsx</code></div>
+  <div class="comp-preview">
+    <div style="background: white; border-radius: 16px; padding: 16px 20px; width: 320px; box-shadow: 0 1px 2px rgba(15,46,102,0.04); display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div style="font-size: 14px; font-weight: 600; color: var(--ink);">Diversity Pipeline Report</div>
+        <div style="font-size: 11px; color: var(--laptop); margin-top: 2px;">Weekly &middot; Last run 28 Mar 2026</div>
+      </div>
+      <div style="padding: 6px 14px; border-radius: 20px; background: var(--sana-canvas); font-size: 11px; font-weight: 600; color: var(--sana-accent); cursor: pointer;">Run</div>
+    </div>
+  </div>
+  <div class="comp-props">Props: <code>title</code> <code>description</code> <code>reportType</code> <code>lastRun</code> <code>onRun</code></div>
+</div>
+
+<div class="comp-card">
+  <div class="comp-title">ListItemCard</div>
+  <div class="comp-desc">Generic list item with leading content, text, and trailing element. Used in task lists, candidate lists, and settings.</div>
+  <div class="comp-source"><code>design/components/ListItemCard.tsx</code></div>
+  <div class="comp-preview" style="flex-direction: column; gap: 8px;">
+    <div style="background: white; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; box-shadow: 0 1px 2px rgba(15,46,102,0.04); width: 100%; max-width: 420px;">
+      <div style="width: 8px; height: 8px; border-radius: 50%; background: #309840;"></div>
+      <div style="flex: 1;"><div style="font-size: 13px; font-weight: 500;">Complete I-9 verification</div><div style="font-size: 11px; color: var(--laptop);">Due 2 Apr 2026</div></div>
+      <div style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: #FFECD1; color: #D68B00;">Pending</div>
+    </div>
+    <div style="background: white; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; box-shadow: 0 1px 2px rgba(15,46,102,0.04); width: 100%; max-width: 420px;">
+      <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--sana-accent);"></div>
+      <div style="flex: 1;"><div style="font-size: 13px; font-weight: 500;">Review offer letter</div><div style="font-size: 11px; color: var(--laptop);">Due 5 Apr 2026</div></div>
+      <div style="font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: #D4EED8; color: #309840;">Complete</div>
+    </div>
+  </div>
+  <div class="comp-props">Props: <code>leading</code> <code>title</code> <code>subtitle</code> <code>trailing</code> <code>onClick?</code></div>
+</div>
+
+<div class="comp-card">
+  <div class="comp-title">CollapsibleSection</div>
+  <div class="comp-desc">Expandable/collapsible content area with chevron indicator. Used for grouping related content in forms and detail views.</div>
+  <div class="comp-source"><code>design/components/CollapsibleSection.tsx</code></div>
+  <div class="comp-preview" style="flex-direction: column; gap: 8px;">
+    <div style="background: white; border-radius: 12px; padding: 14px 16px; width: 100%; max-width: 420px; box-shadow: 0 1px 2px rgba(15,46,102,0.04);">
+      <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+        <span style="font-size: 13px; font-weight: 600; color: var(--ink);">Education &amp; Certifications</span>
+        <span style="font-size: 14px; color: var(--laptop);">&#9660;</span>
+      </div>
+      <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0ede9; font-size: 12px; color: var(--laptop);">
+        <div>BSc Computer Science, University of Mumbai (2018)</div>
+        <div style="margin-top: 4px;">AWS Solutions Architect - Associate</div>
+      </div>
+    </div>
+    <div style="background: white; border-radius: 12px; padding: 14px 16px; width: 100%; max-width: 420px; box-shadow: 0 1px 2px rgba(15,46,102,0.04);">
+      <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+        <span style="font-size: 13px; font-weight: 600; color: var(--ink);">Work Experience</span>
+        <span style="font-size: 14px; color: var(--laptop);">&#9654;</span>
+      </div>
+    </div>
+  </div>
+  <div class="comp-props">Props: <code>title</code> <code>defaultExpanded?</code> <code>children</code></div>
+</div>
+
+<!-- SECTION 3: Data Display -->
+<div class="section-header">Section 3: Data Display</div>
+
+<div class="comp-card">
+  <div class="comp-title">CandidateGradeBadge</div>
+  <div class="comp-desc">Circular letter grade badge (A/B/C/D) with colour-coded backgrounds. Used for HiredScore AI fit grading throughout candidate views.</div>
+  <div class="comp-source"><code>design/components/CandidateGradeBadge.tsx</code></div>
+  <div class="comp-preview" style="align-items: center;">
+    <div style="display: flex; gap: 16px; align-items: flex-end;">
+      <div style="text-align: center;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: var(--grade-a-bg); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: var(--grade-a-fg);">A</div>
+        <div style="font-size: 10px; color: var(--laptop); margin-top: 4px;">Large</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--grade-b-bg); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: var(--grade-b-fg);">B</div>
+        <div style="font-size: 10px; color: var(--laptop); margin-top: 4px;">Medium</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--grade-c-bg); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: var(--grade-c-fg);">C</div>
+        <div style="font-size: 10px; color: var(--laptop); margin-top: 4px;">Medium</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--grade-d-bg); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--grade-d-fg);">D</div>
+        <div style="font-size: 10px; color: var(--laptop); margin-top: 4px;">Small</div>
+      </div>
+    </div>
+  </div>
+  <div class="comp-props">Props: <code>grade: 'A'|'B'|'C'|'D'</code> <code>size?: 'small'|'medium'|'large'</code></div>
+</div>
+
+<div class="comp-card">
+  <div class="comp-title">ProgressBarWithBadge</div>
+  <div class="comp-desc">Horizontal distribution bar showing grade proportions with a leading letter badge. Used in HiredScore summary views.</div>
+  <div class="comp-source"><code>design/components/ProgressBarWithBadge.tsx</code></div>
+  <div class="comp-preview">
+    <div style="display: flex; align-items: center; gap: 12px; width: 100%; max-width: 400px;">
+      <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--grade-a-bg); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--grade-a-fg);">A</div>
+      <div style="flex: 1; height: 8px; border-radius: 4px; background: #e5e7eb; overflow: hidden; display: flex;">
+        <div style="width: 45%; background: var(--grade-a-fg); border-radius: 4px 0 0 4px;"></div>
+        <div style="width: 25%; background: var(--grade-b-fg);"></div>
+        <div style="width: 20%; background: var(--grade-c-fg);"></div>
+        <div style="width: 10%; background: var(--grade-d-fg); border-radius: 0 4px 4px 0;"></div>
+      </div>
+      <span style="font-size: 12px; font-weight: 600; color: var(--ink);">45%</span>
+    </div>
+  </div>
+  <div class="comp-props">Props: <code>grade</code> <code>distribution: {A,B,C,D}</code> <code>percentage</code></div>
+</div>
+
+<div class="comp-card">
+  <div class="comp-title">InsightListItem</div>
+  <div class="comp-desc">Icon + text insight row with optional action link. Used in AI insight panels and recommendation lists.</div>
+  <div class="comp-source"><code>design/components/InsightListItem.tsx</code></div>
+  <div class="comp-preview" style="flex-direction: column; gap: 8px;">
+    <div style="background: white; border-radius: 12px; padding: 12px 16px; display: flex; align-items: flex-start; gap: 10px; width: 100%; max-width: 420px; box-shadow: 0 1px 2px rgba(15,46,102,0.04);">
+      <div style="width: 20px; height: 20px; background: #E3F2FD; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0;">&#128161;</div>
+      <div style="flex: 1;">
+        <div style="font-size: 12px; color: var(--ink); line-height: 1.4;">Strong match for Senior Engineer role based on 7+ years experience and cloud certifications</div>
+        <a href="#" style="font-size: 11px; color: var(--sana-accent); text-decoration: none; font-weight: 500;">View analysis</a>
+      </div>
+    </div>
+  </div>
+  <div class="comp-props">Props: <code>icon</code> <code>text</code> <code>linkText?</code> <code>onLinkClick?</code></div>
+</div>
+
+<!-- SECTION 4: Controls & Filters -->
+<div class="section-header">Section 4: Controls &amp; Filters</div>
+
+<div class="comp-card">
+  <div class="comp-title">FilterPill</div>
+  <div class="comp-desc">Interactive pill-shaped filter button with optional count badge. Active state uses accent colour fill; inactive uses outline.</div>
+  <div class="comp-source"><code>design/components/FilterPill.tsx</code></div>
+  <div class="comp-preview" style="align-items: center;">
+    <div style="padding: 6px 16px; border-radius: 20px; background: var(--sana-accent); color: white; font-size: 13px; font-weight: 600; cursor: pointer;">All (38)</div>
+    <div style="padding: 6px 16px; border-radius: 20px; background: white; color: var(--ink); font-size: 13px; font-weight: 500; border: 1px solid #e5e7eb; cursor: pointer;">Review (12)</div>
+    <div style="padding: 6px 16px; border-radius: 20px; background: white; color: var(--ink); font-size: 13px; font-weight: 500; border: 1px solid #e5e7eb; cursor: pointer;">Screen (8)</div>
+    <div style="padding: 6px 16px; border-radius: 20px; background: white; color: var(--ink); font-size: 13px; font-weight: 500; border: 1px solid #e5e7eb; cursor: pointer;">Offer (5)</div>
+  </div>
+  <div class="comp-props">Props: <code>id</code> <code>label</code> <code>count?</code> <code>active</code> <code>onClick</code></div>
+</div>
+
+<div class="comp-card">
+  <div class="comp-title">Form Controls</div>
+  <div class="comp-desc">Shared form controls: FormSelect (dropdown), FormTextInput (text field), FormDateInput (date picker). All with label, placeholder, and error state support.</div>
+  <div class="comp-source"><code>design/components/SharedFormControls.tsx</code></div>
+  <div class="comp-preview" style="flex-direction: column; gap: 12px;">
+    <div style="max-width: 300px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 4px;">Department</div>
+      <div style="padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; color: var(--laptop); background: white; display: flex; justify-content: space-between; align-items: center;">
+        <span>Select department</span>
+        <span style="font-size: 10px;">&#9660;</span>
+      </div>
+    </div>
+    <div style="max-width: 300px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 4px;">Candidate name</div>
+      <div style="padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; color: #333; background: white;">Priya Sharma</div>
+    </div>
+    <div style="max-width: 300px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 4px;">Start date</div>
+      <div style="padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; color: var(--laptop); background: white;">DD/MM/YYYY</div>
+    </div>
+  </div>
+  <div class="comp-props">Props: <code>label</code> <code>placeholder</code> <code>value</code> <code>error?</code> <code>onChange</code></div>
+</div>
+
+<!-- SECTION 5: Communication -->
+<div class="section-header">Section 5: Communication</div>
+
+<div class="comp-card">
+  <div class="comp-title">CommunicationDock</div>
+  <div class="comp-desc">Sliding panel dock with channel rail (Email, SMS, Notes, LINE, WhatsApp). White panel surface with depth shadow. Houses EmailPanel, EmailComposer, and ThreadExpansion.</div>
+  <div class="comp-source"><code>design/components/CommunicationDock.tsx</code></div>
+  <div class="comp-preview" style="padding: 0; overflow: hidden; border-radius: 8px;">
+    <div style="display: flex; height: 220px; width: 100%;">
+      <div style="width: 48px; background: var(--sana-nav); display: flex; flex-direction: column; align-items: center; padding-top: 12px; gap: 12px; border-right: 1px solid #e5e7eb;">
+        <div style="width: 32px; height: 32px; border-radius: 8px; background: #E3F2FD; display: flex; align-items: center; justify-content: center; font-size: 14px;">&#9993;</div>
+        <div style="width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; opacity: 0.5;">&#128172;</div>
+        <div style="width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; opacity: 0.5;">&#128221;</div>
+      </div>
+      <div style="flex: 1; background: white; padding: 16px; display: flex; flex-direction: column; box-shadow: -8px 0 32px rgba(15,46,102,0.08);">
+        <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--ink);">Email</div>
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 8px; overflow: hidden;">
+          <div style="background: var(--sana-canvas); border-radius: 12px; padding: 10px 14px; max-width: 80%; font-size: 12px; color: var(--ink); line-height: 1.4;">
+            Thank you for your application. We would like to schedule an interview...
+            <div style="font-size: 10px; color: var(--laptop); margin-top: 4px;">28 Mar 2026, 10:15</div>
+          </div>
+          <div style="background: #E3F2FD; border-radius: 12px; padding: 10px 14px; max-width: 80%; align-self: flex-end; font-size: 12px; color: var(--ink); line-height: 1.4;">
+            I am available on Tuesday or Wednesday afternoon.
+            <div style="font-size: 10px; color: var(--laptop); margin-top: 4px;">28 Mar 2026, 14:30</div>
+          </div>
+        </div>
+        <div style="margin-top: 12px; padding: 8px 14px; border-radius: 999px; border: 1px solid #e5e7eb; font-size: 12px; color: var(--laptop); background: white;">Type a message...</div>
+      </div>
+    </div>
+  </div>
+  <div class="comp-props">Props: <code>channels[]</code> <code>activeChannel</code> <code>messages[]</code> <code>onSend</code></div>
+</div>
+
+<!-- SECTION 6: Specialised Flows -->
+<div class="section-header">Section 6: Specialised Flows</div>
+
+<div class="comp-card">
+  <div class="comp-title">AdobeSignAadhaarFlow</div>
+  <div class="comp-desc">Multi-step document signing flow for India Aadhaar eSign integration. Displays step progress, document preview, and signature capture.</div>
+  <div class="comp-source"><code>design/components/AdobeSignAadhaarFlow.tsx</code></div>
+  <div class="comp-preview">
+    <div style="background: white; border-radius: 16px; padding: 20px; width: 100%; max-width: 420px; box-shadow: 0 1px 3px rgba(15,46,102,0.08);">
+      <div style="font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 12px;">Aadhaar eSign - Offer Letter</div>
+      <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+        <div style="flex: 1; height: 4px; border-radius: 2px; background: var(--sana-accent);"></div>
+        <div style="flex: 1; height: 4px; border-radius: 2px; background: var(--sana-accent);"></div>
+        <div style="flex: 1; height: 4px; border-radius: 2px; background: #e5e7eb;"></div>
+      </div>
+      <div style="display: flex; gap: 8px; font-size: 11px; margin-bottom: 16px;">
+        <div style="padding: 3px 10px; border-radius: 12px; background: #D4EED8; color: #309840; font-weight: 600;">1. Verify ID &#10003;</div>
+        <div style="padding: 3px 10px; border-radius: 12px; background: #E3F2FD; color: var(--sana-accent); font-weight: 600;">2. Review doc</div>
+        <div style="padding: 3px 10px; border-radius: 12px; background: var(--sana-canvas); color: var(--laptop);">3. Sign</div>
+      </div>
+      <div style="background: var(--sana-canvas); border-radius: 8px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--laptop);">Document preview area</div>
+    </div>
+  </div>
+  <div class="comp-props">Props: <code>currentStep</code> <code>documentUrl</code> <code>aadhaarVerified</code> <code>onSign</code></div>
+</div>
+
+<div class="comp-card">
+  <div class="comp-title">HiredScoreGrading</div>
+  <div class="comp-desc">AI fit score panel showing letter grade (A-D), percentage score, and breakdown by skills, experience, and education.</div>
+  <div class="comp-source"><code>design/components/HiredScoreGrading.tsx</code></div>
+  <div class="comp-preview">
+    <div style="background: white; border-radius: 16px; padding: 20px; min-width: 220px; box-shadow: 0 1px 3px rgba(15,46,102,0.08); text-align: center;">
+      <div style="font-size: 12px; color: var(--laptop); font-weight: 500; margin-bottom: 8px;">HiredScore AI Fit</div>
+      <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--grade-a-bg); display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; color: var(--grade-a-fg); margin: 0 auto;">A</div>
+      <div style="font-size: 20px; font-weight: 700; color: var(--ink); margin-top: 8px;">92%</div>
+      <div style="font-size: 11px; color: var(--laptop); margin-top: 2px;">Strong match</div>
+      <div style="margin-top: 12px; text-align: left;">
+        <div style="display: flex; justify-content: space-between; font-size: 11px; padding: 4px 0; border-bottom: 1px solid #f0ede9;"><span style="color: var(--laptop);">Skills</span><span style="font-weight: 600;">95%</span></div>
+        <div style="display: flex; justify-content: space-between; font-size: 11px; padding: 4px 0; border-bottom: 1px solid #f0ede9;"><span style="color: var(--laptop);">Experience</span><span style="font-weight: 600;">88%</span></div>
+        <div style="display: flex; justify-content: space-between; font-size: 11px; padding: 4px 0;"><span style="color: var(--laptop);">Education</span><span style="font-weight: 600;">91%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="comp-props">Props: <code>grade</code> <code>score</code> <code>breakdown: {skills,experience,education}</code></div>
+</div>
+
+<!-- SECTION 7: Theme Tokens -->
+<div class="section-header">Section 7: Sana Shell Theme Tokens</div>
+
+<div class="comp-card">
+  <div class="comp-title">Colour Palette</div>
+  <div class="comp-desc">Sana-aligned colour tokens from sanaShellTheme.ts</div>
+  <div class="comp-preview" style="flex-direction: column; gap: 0; padding: 16px;">
+    <div class="token-row">
+      <div class="swatch" style="background: #F3F5F7; color: var(--ink); font-size: 8px;">F3F5F7</div>
+      <div class="token-name mono">SANA_PAGE_CANVAS</div>
+      <div class="token-value">Page canvas behind cards</div>
+    </div>
+    <div class="token-row">
+      <div class="swatch" style="background: #F3F4F6; color: var(--ink); font-size: 8px;">F3F4F6</div>
+      <div class="token-name mono">SANA_TOP_NAV_BG</div>
+      <div class="token-value">Top nav / primary rail / secondary nav</div>
+    </div>
+    <div class="token-row">
+      <div class="swatch" style="background: #E5E7EB; color: var(--ink); font-size: 8px;">E5E7EB</div>
+      <div class="token-name mono">SANA_SECONDARY_TAB_ACTIVE_BG</div>
+      <div class="token-value">Active tab pill highlight</div>
+    </div>
+    <div class="token-row">
+      <div class="swatch" style="background: #005CB9;">005CB9</div>
+      <div class="token-name mono">SANA_LINK_ACCENT</div>
+      <div class="token-value">Links, primary actions, active icons</div>
+    </div>
+    <div class="token-row">
+      <div class="swatch" style="background: #D73B3E;">D73B3E</div>
+      <div class="token-name mono">SANA_BADGE_RED</div>
+      <div class="token-value">Notification badge</div>
+    </div>
+    <div class="token-row">
+      <div class="swatch" style="background: #E3F2FD; color: var(--ink); font-size: 8px;">E3F2FD</div>
+      <div class="token-name mono">SANA_COMM_RAIL_ACTIVE_BG</div>
+      <div class="token-value">Active channel tile (communication dock)</div>
+    </div>
+  </div>
+</div>
+
+<div class="comp-card">
+  <div class="comp-title">Spacing &amp; Radius Tokens</div>
+  <div class="comp-desc">Border radius and shadow values from sanaShellTheme.ts</div>
+  <div class="comp-preview" style="flex-direction: column; gap: 0; padding: 16px;">
+    <div class="token-row">
+      <div class="token-name mono">SANA_CARD_RADIUS_LG</div>
+      <div class="token-value">20px - Card border radius</div>
+    </div>
+    <div class="token-row">
+      <div class="token-name mono">SANA_SHELL_RADIUS</div>
+      <div class="token-value">24px - Shell/page border radius</div>
+    </div>
+    <div class="token-row">
+      <div class="token-name mono">SANA_TAB_PILL_RADIUS</div>
+      <div class="token-value">999px - Fully rounded pill</div>
+    </div>
+    <div class="token-row">
+      <div class="token-name mono">SANA_PRIMARY_RAIL_WIDTH_PX</div>
+      <div class="token-value">64px - Primary icon rail</div>
+    </div>
+    <div class="token-row">
+      <div class="token-name mono">SANA_SECONDARY_NAV_WIDTH_PX</div>
+      <div class="token-value">232px - Secondary tab column</div>
+    </div>
+    <div class="token-row">
+      <div class="token-name mono">SANA_CARD_SHADOW</div>
+      <div class="token-value">0 1px 2px rgba(15,46,102,0.04) - Resting</div>
+    </div>
+    <div class="token-row">
+      <div class="token-name mono">SANA_PANEL_SHADOW</div>
+      <div class="token-value">-8px 0 32px rgba(15,46,102,0.20) - Overlay depth</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script src="dashboard-nav.js"></script>
+</body>
+</html>

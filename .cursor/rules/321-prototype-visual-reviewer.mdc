@@ -25,10 +25,43 @@ When invoked after 320 builds a prototype, you:
 
 **Input**: Prototype URL (e.g., `http://localhost:5199/gcc-candidate-grid-redesign-v68`)
 
-**Screenshot capture** (using cursor-ide-browser MCP):
-1. Desktop: 1920x1080 (full page scroll)
-2. Tablet: 1024x768 (optional - if responsive matters)
-3. Mobile: 375x667 (optional - if responsive matters)
+**Screenshot capture workflow (MANDATORY - use cursor-ide-browser MCP)**:
+
+1. **Navigate to prototype in Cursor browser**:
+   ```
+   CallMcpTool:
+   - Server: "cursor-ide-browser"
+   - Tool: "browser_navigate"
+   - Arguments: {
+       "url": "http://localhost:5199/[prototype-slug]",
+       "position": "side",
+       "take_screenshot_afterwards": true,
+       "newTab": true
+     }
+   ```
+   - Opens prototype in Cursor Simple Browser (side panel)
+   - Automatically captures screenshot after page loads
+   - Screenshot is returned in the tool response and available for vision analysis
+
+2. **Analyze the screenshot** using your vision capabilities:
+   - Check layout quality (scrollbars, alignment, overflow)
+   - Validate Canvas Kit component usage visually
+   - Verify Sana Style adherence (colors, surfaces, typography)
+   - Assess accessibility (contrast, focus indicators)
+   - Compare against Design Brief intent
+
+3. **Optional: Capture additional states** (if prototype has tabs, filters, modals):
+   ```
+   CallMcpTool:
+   - Server: "cursor-ide-browser"
+   - Tool: "browser_click"
+   - Arguments: {"selector": "[data-id='details-tab']"}
+   ```
+   Then use `browser_snapshot` with `take_screenshot_afterwards: true` to capture the new state.
+
+4. **Analyze all screenshots** and document findings
+
+**CRITICAL**: Do NOT skip screenshot capture. Vision-based analysis is the primary value of this review. Without screenshots, this becomes a code review (which 318 already did).
 
 **Analysis checklist for each screenshot**:
 
@@ -42,6 +75,7 @@ When invoked after 320 builds a prototype, you:
 
 ### Canvas Kit Usage
 - [ ] Components visually match Canvas Kit patterns
+- [ ] **HiredScore grading (if present) uses `HiredScoreGrading` component** with correct color bands (A=green, B=blue/grey, C=orange, D=grey) and appropriate variant (`variant="full"` for grids, `variant="compact"` for cards)
 - [ ] **Status badges use `StatusIndicator` component** (NOT custom Box with inline bg/border)
 - [ ] **Skills/tags use `StatusIndicator type=Gray emphasis=Low`** (NOT custom pill divs)
 - [ ] **Stage displays with dots use `StatusIndicator` + icon** (e.g., `dotIcon`, NOT custom circular Box)
@@ -114,79 +148,150 @@ Read `docs/experience-principles.md` to validate how the RUNNING prototype deliv
 
 ## Output Format
 
-Append findings to the Design Brief as:
+**Create a new markdown file**: `design/[feature-slug]-visual-review.md`
 
-### PASS 5: Visual Review (321)
+Structure:
+
+```markdown
+# Visual Review: [Feature Name]
 
 **Prototype URL**: `http://localhost:5199/[slug]`
-**Screenshots analyzed**: Desktop 1920x1080
+**Screenshots captured**: [Number] screenshots ([states captured])
 **Review date**: [Date]
+**Reviewer**: 321-prototype-visual-reviewer
 
-### Visual Bugs Identified
+## Screenshot Analysis
+
+### Screenshot 1: Default State
+[Screenshot is attached/referenced]
+
+**Observations**:
+- [Visual observation 1]
+- [Visual observation 2]
+
+### Screenshot 2: [Other State] (if applicable)
+[Screenshot is attached/referenced]
+
+**Observations**:
+- [Visual observation 1]
+
+## Visual Bugs Identified
 
 **Critical (Must fix before Figma)**:
-1. [Bug description, screenshot reference, recommended fix]
-2. [Bug description, screenshot reference, recommended fix]
+1. [Bug description from screenshot, recommended fix]
+2. [Bug description from screenshot, recommended fix]
 
 **Important (Should fix)**:
-1. [Issue description, recommended fix]
+1. [Issue description from visual analysis, recommended fix]
 
 **Minor (Optional polish)**:
 1. [Issue description, suggested improvement]
 
-### Canvas Kit Usage
+## Canvas Kit Usage
 
 **Correct**:
-- [Component usage that's good]
+- [Component usage that's visually correct]
 
 **Incorrect or Questionable**:
-- [Component that should be different, with recommendation]
+- [Component that should be different based on visual appearance]
 
-### Sana Style Compliance
+## Sana Style Compliance
 
 **Strong**:
-- [What aligns well with Sana]
+- [What visually aligns with Sana Style]
 
 **Needs adjustment**:
-- [What violates Sana Style, with recommendation]
+- [What violates Sana Style based on screenshots]
 
-### Design Brief Alignment
+## Design Brief Alignment
 
 **Matches intent**:
-- [Aspects that match Design Brief]
+- [Aspects that match Design Brief from visual inspection]
 
 **Deviates from brief**:
-- [Where prototype diverges from Design Brief strategy]
+- [Where prototype visually diverges from Design Brief]
 
-### Accessibility Observations
+## Accessibility Observations
 
 **Good**:
-- [Accessibility aspects that work]
+- [Accessibility aspects visible in screenshots]
 
 **Needs attention**:
 - [Accessibility concerns from visual inspection]
 
-### Experience Principles (Interactive Assessment)
+## Experience Principles (Interactive Assessment)
 
-**Empower - User Control:**
-- [How prototype delivers (or fails) on empowerment in practice]
-- [Specific examples from screenshots]
+**Empower - User Control**:
+- [How prototype visually delivers on empowerment]
 
-**Trust - Confidence Building:**
-- [How prototype builds (or undermines) trust in practice]
-- [State visibility, terminology clarity, execution quality observations]
+**Trust - Confidence Building**:
+- [Visual trust indicators or defects]
 
-**Grow - Change Enablement:**
-- [How prototype enables (or blocks) revision/iteration]
-- [Affordance visibility, reversibility observations]
+**Grow - Change Enablement**:
+- [Visual affordances for change/editing]
 
-**Overall**: [Summary of whether prototype delivers on Workday's experience philosophy]
+**Overall**: [Summary of experience quality from screenshots]
 
-### Final Verdict: APPROVED | NEEDS REVISION
+## Final Verdict: APPROVED | NEEDS REVISION
 
-**If APPROVED**: "Prototype is visually sound. Proceed to 330 Figma capture."
+**APPROVED**: Prototype is visually sound. No critical bugs identified. Proceed to 330 Figma capture.
 
-**If NEEDS REVISION**: "Prototype has visual bugs. 320 should address [critical + important issues] before Figma capture. Revision pass: 1 attempt."
+**OR**
+
+**NEEDS REVISION**: Prototype has [N] critical visual bugs. 320 should address issues listed above before Figma capture. One revision pass recommended.
+
+---
+
+**Next Steps**:
+- If APPROVED: Hand off to 330-figma-integration for Figma capture
+- If NEEDS REVISION: Return to 320-prototype-developer with specific fix list
+```
+
+## Workflow Steps (Execute in Order)
+
+**Step 1: Open prototype in Cursor browser**
+```
+CallMcpTool:
+- Server: "cursor-ide-browser"
+- Tool: "browser_navigate"
+- Arguments: {
+    "url": "http://localhost:5199/[prototype-slug]",
+    "position": "side",
+    "take_screenshot_afterwards": true,
+    "newTab": true
+  }
+```
+- Screenshot is returned in tool response
+- Browser tab stays open in Cursor for user to see
+
+**Step 2: Analyze the screenshot**
+Using vision capabilities, review the screenshot for:
+- Layout bugs (duplicate scrollbars, misalignment, overflow)
+- Canvas Kit correctness (proper components, not custom recreations)
+- Sana Style adherence (neutral surfaces, minimal blue, proper spacing)
+- Content richness (all tabs populated, professional detail level)
+- Accessibility indicators (contrast, focus styles)
+
+**Step 3: Capture additional states (if needed)**
+If prototype has multiple tabs, filters, or modal states:
+- Use `browser_click` to navigate to other tabs
+- Use `browser_snapshot` with `take_screenshot_afterwards: true` after each interaction
+- Analyze each screenshot
+
+**Step 4: Write findings document**
+Create `design/[prototype-slug]-visual-review.md` with:
+- Screenshots analyzed (reference which states)
+- Visual bugs categorized (Critical/Important/Minor)
+- Canvas Kit usage assessment
+- Sana Style compliance
+- Design Brief alignment
+- Accessibility observations
+- Experience Principles assessment
+- **Final Verdict: APPROVED or NEEDS REVISION**
+
+**Step 5: Communicate verdict**
+- If APPROVED: "Visual review complete. Proceed to 330."
+- If NEEDS REVISION: "Visual bugs found. 320 should fix [list] before Figma capture."
 
 ## Triggers
 

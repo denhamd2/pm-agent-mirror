@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PM Agent Dashboard — Morning Roundup</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0b1f42;
+  --water: #0075b4;
+  --sky: #4a9fd4;
+  --pencil: #f5a623;
+  --paper: #f7f5f2;
+  --laptop: #6b7a8d;
+  --staple: #e2ddd7;
+  --desk: #c4bdb3;
+  --green: #22c55e;
+  --red: #ef4444;
+}
+* { font-family: 'DM Sans', system-ui, sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+.dashboard-nav { position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(247,245,242,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--staple);padding:10px 24px;display:flex;align-items:center;gap:16px; }
+.dashboard-brand { font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap; }
+.dashboard-tabs { display:flex;gap:4px; }
+.dashboard-tab { padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;text-decoration:none;color:var(--laptop);transition:all 0.2s; }
+.dashboard-tab:hover { background:var(--staple);color:var(--ink); }
+.dashboard-tab.active { background:var(--ink);color:white; }
+.dashboard-external { display:flex;gap:4px;margin-left:auto; }
+.dashboard-ext-link { padding:4px 10px;border-radius:16px;font-size:11px;font-weight:600;text-decoration:none;color:var(--water);border:1px solid var(--staple);transition:all 0.2s;white-space:nowrap; }
+.dashboard-ext-link:hover { border-color:var(--water);background:rgba(0,117,180,0.05); }
+
+.container { max-width: 1400px; margin: 80px auto 40px; padding: 0 24px; }
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+.page-title { font-size: 28px; font-weight: 700; color: var(--ink); }
+.refresh-btn { padding: 8px 18px; background: var(--water); color: white; border: none; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.refresh-btn:hover { background: #0284c7; transform: translateY(-1px); }
+.timestamp { font-size: 12px; color: var(--laptop); margin-top: 4px; }
+
+.section { background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(11,31,66,0.08); }
+.section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--staple); }
+.section-title { font-size: 16px; font-weight: 700; color: var(--ink); }
+.badge { padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; background: var(--water); color: white; }
+
+.ticket-item { padding: 16px; border-left: 3px solid var(--staple); margin-bottom: 12px; background: rgba(247,245,242,0.5); border-radius: 6px; transition: all 0.2s; }
+.ticket-item:hover { border-left-color: var(--water); background: white; }
+.ticket-key { font-size: 11px; font-weight: 700; color: var(--water); text-decoration: none; }
+.ticket-key:hover { text-decoration: underline; }
+.ticket-summary { font-size: 14px; font-weight: 600; color: var(--ink); margin: 4px 0; }
+.ticket-tldr { font-size: 12px; color: var(--laptop); line-height: 1.5; }
+.ticket-meta { font-size: 11px; color: var(--desk); margin-top: 6px; }
+.customer-badge { display: inline-block; padding: 2px 8px; background: var(--pencil); color: white; border-radius: 10px; font-size: 10px; font-weight: 600; margin-right: 8px; }
+
+.news-item { padding: 16px; border-left: 3px solid var(--green); margin-bottom: 12px; background: rgba(34,197,94,0.05); border-radius: 6px; transition: all 0.2s; }
+.news-item:hover { border-left-color: var(--green); background: white; box-shadow: 0 2px 8px rgba(34,197,94,0.1); }
+.news-competitor { font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.05em; }
+.news-title { font-size: 14px; font-weight: 600; color: var(--ink); margin: 4px 0; }
+.news-title a { color: var(--ink); text-decoration: none; }
+.news-title a:hover { color: var(--water); text-decoration: underline; }
+.news-summary { font-size: 12px; color: var(--laptop); line-height: 1.5; margin-top: 6px; }
+.news-date { font-size: 11px; color: var(--desk); margin-top: 8px; }
+
+.empty-state { text-align: center; padding: 40px 20px; color: var(--laptop); }
+.empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.3; }
+.empty-text { font-size: 14px; }
+
+.stale-warning { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 12px 16px; margin-bottom: 24px; font-size: 12px; color: #78350f; display: none; }
+.stale-warning.show { display: block; }
+</style>
+</head>
+<body>
+
+<!-- Shared Dashboard Nav -->
+<nav class="dashboard-nav">
+  <span class="dashboard-brand">PM Agent Dashboard</span>
+  <div class="dashboard-tabs">
+    <a href="pm-agent-morning-roundup.html" class="dashboard-tab active">Morning Roundup</a>
+    <a href="pm-agent-scorecard.html" class="dashboard-tab">Scorecard</a>
+    <a href="pm-agent-architecture.html" class="dashboard-tab">Architecture Map</a>
+    <a href="pm-agent-design-system.html" class="dashboard-tab">Design System</a>
+  </div>
+  <div class="dashboard-external">
+    <a id="proto-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Prototype &#x2197;</a>
+    <a id="deck-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Deck &#x2197;</a>
+    <a id="prd-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">PRD &#x2197;</a>
+    <a id="brief-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Brief &#x2197;</a>
+    <a id="epic-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Epic &#x2197;</a>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Morning Roundup</h1>
+      <div class="timestamp" id="timestamp">Loading...</div>
+    </div>
+    <button class="refresh-btn" onclick="showRefreshInstructions()">Refresh</button>
+  </div>
+
+  <div id="stale-warning" class="stale-warning">
+    ⚠️ Data is more than 24 hours old. Run <code>/morning-roundup</code> in Cursor to refresh.
+  </div>
+
+  <!-- Jiras I Need to Respond To -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Jiras I Need to Respond To</div>
+      <div class="badge" id="jira-count">0</div>
+    </div>
+    <div id="jira-list"></div>
+  </div>
+
+  <!-- Customer Issues to Review -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Customer Issues to Review</div>
+      <div class="badge" id="customer-count">0</div>
+    </div>
+    <div id="customer-list"></div>
+  </div>
+
+  <!-- Competitor News This Week -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Competitor News This Week</div>
+      <div class="badge" id="news-count">0</div>
+    </div>
+    <div id="news-list"></div>
+  </div>
+</div>
+
+<!-- Data (will be generated by /morning-roundup skill) -->
+<script id="morning-data" type="application/json">
+{
+  "generated": "2026-04-01T09:30:00Z",
+  "jiraResponses": [
+    {
+      "key": "REC-1234",
+      "summary": "Add bulk candidate import API endpoint",
+      "url": "https://jira.workday.com/browse/REC-1234",
+      "latestComment": {
+        "author": "Jane Smith",
+        "date": "2026-03-31",
+        "body": "David, can you review the API design here?",
+        "tldr": "Jane is asking for API architecture review"
+      },
+      "tldrSummary": "Feature request for bulk candidate import with Excel support"
+    }
+  ],
+  "customerIssues": [
+    {
+      "key": "REC-6789",
+      "summary": "API timeout in bulk offer flow - Accenture P1",
+      "url": "https://jira.workday.com/browse/REC-6789",
+      "customer": "Accenture",
+      "tldrSummary": "P1 escalation - API timing out when sending 500+ offers",
+      "status": "Open",
+      "created": "2026-03-29"
+    }
+  ],
+  "competitorNews": [
+    {
+      "competitor": "Greenhouse",
+      "title": "Greenhouse Announces AI-Powered Interview Scheduling",
+      "url": "https://www.greenhouse.io/blog/ai-scheduling",
+      "date": "2026-03-30",
+      "summary": "Greenhouse released an AI scheduling assistant that automatically finds interview times...",
+      "type": "feature-release"
+    }
+  ]
+}
+</script>
+
+<!-- Main JavaScript -->
+<script>
+(function() {
+  try {
+    const data = JSON.parse(document.getElementById('morning-data').textContent);
+    
+    // Update timestamp
+    const generated = new Date(data.generated);
+    const now = new Date();
+    const hoursAgo = Math.floor((now - generated) / (1000 * 60 * 60));
+    let timeStr = '';
+    if (hoursAgo < 1) timeStr = 'Just now';
+    else if (hoursAgo < 24) timeStr = `${hoursAgo} hour${hoursAgo > 1 ? 's' : ''} ago`;
+    else {
+      const daysAgo = Math.floor(hoursAgo / 24);
+      timeStr = `${daysAgo} day${daysAgo > 1 ? 's' : ''} ago`;
+    }
+    document.getElementById('timestamp').textContent = `Last updated: ${timeStr} (${generated.toLocaleString()})`;
+    
+    // Show stale warning if > 24 hours
+    if (hoursAgo > 24) {
+      document.getElementById('stale-warning').classList.add('show');
+    }
+    
+    // Render Jira responses
+    const jiraList = document.getElementById('jira-list');
+    document.getElementById('jira-count').textContent = (data.jiraResponses || []).length;
+    if (data.jiraResponses && data.jiraResponses.length > 0) {
+      jiraList.innerHTML = data.jiraResponses.map(ticket => `
+        <div class="ticket-item">
+          <a href="${ticket.url}" target="_blank" class="ticket-key">${ticket.key}</a>
+          <div class="ticket-summary">${ticket.summary}</div>
+          <div class="ticket-tldr">${ticket.tldrSummary}</div>
+          ${ticket.latestComment ? `
+            <div class="ticket-meta">
+              💬 ${ticket.latestComment.author} (${ticket.latestComment.date}): ${ticket.latestComment.tldr}
+            </div>
+          ` : ''}
+        </div>
+      `).join('');
+    } else {
+      jiraList.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">No action items - you're all caught up!</div></div>';
+    }
+    
+    // Render customer issues
+    const customerList = document.getElementById('customer-list');
+    document.getElementById('customer-count').textContent = (data.customerIssues || []).length;
+    if (data.customerIssues && data.customerIssues.length > 0) {
+      customerList.innerHTML = data.customerIssues.map(ticket => `
+        <div class="ticket-item">
+          <a href="${ticket.url}" target="_blank" class="ticket-key">${ticket.key}</a>
+          ${ticket.customer ? `<span class="customer-badge">${ticket.customer}</span>` : ''}
+          <div class="ticket-summary">${ticket.summary}</div>
+          <div class="ticket-tldr">${ticket.tldrSummary}</div>
+          <div class="ticket-meta">Status: ${ticket.status} • Created: ${ticket.created}</div>
+        </div>
+      `).join('');
+    } else {
+      customerList.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">No customer escalations awaiting triage</div></div>';
+    }
+    
+    // Render competitor news
+    const newsList = document.getElementById('news-list');
+    document.getElementById('news-count').textContent = (data.competitorNews || []).length;
+    if (data.competitorNews && data.competitorNews.length > 0) {
+      newsList.innerHTML = data.competitorNews.map(news => `
+        <div class="news-item">
+          <div class="news-competitor">${news.competitor}</div>
+          <div class="news-title"><a href="${news.url}" target="_blank">${news.title}</a></div>
+          <div class="news-summary">${news.summary}</div>
+          <div class="news-date">📅 ${news.date}${news.type ? ` • ${news.type}` : ''}</div>
+        </div>
+      `).join('');
+    } else {
+      newsList.innerHTML = '<div class="empty-state"><div class="empty-icon">📰</div><div class="empty-text">No recent competitor news found</div></div>';
+    }
+  } catch (err) {
+    document.body.innerHTML += `<div style="padding: 40px; text-align: center; color: #ef4444;">Error: ${err.message}<br>Run /morning-roundup in Cursor to generate data.</div>`;
+  }
+})();
+
+function showRefreshInstructions() {
+  alert('To refresh data:\n\n1. Open Cursor\n2. Type: /morning-roundup\n3. Press Enter\n\nThe page will automatically reload with fresh data.');
+}
+</script>
+<script src="dashboard-nav.js"></script>
+</body>
+</html>

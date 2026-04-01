@@ -1,0 +1,3255 @@
+[
+  {
+    "master_index": 1,
+    "layout_name": "TITLE",
+    "placeholders": {
+      "0": {
+        "text": "India Recruiting Product-Market Fit Research"
+      },
+      "1": {
+        "text": "March 2026"
+      }
+    }
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "text": "S E C T I O N  0 1\nResearch challenge"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Executive Summary"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 14,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Headline outcomes",
+                "bold": true,
+                "font_size_pt": 14
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "India PMF combines scale, trust, and compliance: SMEs and Teleperformance India converge on impersonation, resume fraud at volume, industrial duplicate and agency flows, and India offer or BGC paths that clash with US-default rigidity."
+          },
+          {
+            "level": 1,
+            "text": "Governance often sits outside Workday: compensation and position approvals run on email before evidence attaches to reqs; OTP and ID friction, weak offer acceptance signals, task noise, and Thrive or Excel reporting push leadership to parallel tools."
+          },
+          {
+            "level": 1,
+            "text": "Competitive scans flag gaps on native +91 SMS, WhatsApp in core UI, UIDAI Aadhaar eKYC, and Naukri multipost; suite depth, UDMF, BGV framework, and DPDP-style privacy beat Keka, Zoho, Darwinbox, and SAP or Oracle March 2026 AI positioning."
+          },
+          {
+            "level": 1,
+            "text": "Priority bets: government-ID-aware dedupe, hardened identity and OTP paths, bulk review with governed HiredScore, flexible offer or EA lifecycle, audited career-site PII edits, and in-system approvals with attachments for India audit readiness."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Stress trust chain plus throughput as one problem.\n• Cite DPDP and labour code timing as forcing functions.\n• Land on partner-truth for channels and boards.\n\nReferences:\n• PMF analysis: research/India/thematic-analysis/2026-03-31-India-PMF-Analysis-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "text": "S E C T I O N  0 2\nResearch challenge"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Research Question and Objectives"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "How should Workday Recruiting win India enterprise and high-volume programmes on trust, compliance, and recruiter throughput?"
+          },
+          {
+            "level": 1,
+            "text": "Objectives: validate funnel frictions, channel reality, identity and dedupe needs, offer or BGC flexibility, and governance gaps versus global suite strengths."
+          },
+          {
+            "level": 1,
+            "text": "Methods: strategy context, PESTEL, SWOT, competitive intelligence, five internal SMEs, five customer voices (P1–P5), thematic synthesis with triangulation."
+          },
+          {
+            "level": 1,
+            "text": "Scope: India-hosted recruiting; presales win or loss exports and ideation CSV corpora were not available for this cycle (explicit data-gap slides follow)."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Keep questions executive; avoid methodology jargon in-room.\n• Note data gaps honestly; primary research still converges.\n\nReferences:\n• Strategy context: research/India/strategy-context-2026-03-31-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "text": "S E C T I O N  0 3\nContext review"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Strategic Context - Why India Now"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 14,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "Labour Codes central commencement (21 November 2025) and phased DPDP Act 2023 plus 2025 Rules through 2026–2027 increase documentation, granular consent, retention, and audit expectations across hiring, onboarding, and cross-border subprocessors."
+          },
+          {
+            "level": 1,
+            "text": "IMARC sizes India ATS near USD 0.30 billion (2024) toward USD 0.50 billion by 2033 at about 7.2% CAGR inside a faster-growing HCM envelope; macro growth near 6–7% real GDP supports continued enterprise ATS and suite investment."
+          },
+          {
+            "level": 1,
+            "text": "Buyers compare global suite depth with local omnichannel stories from regional HRMS vendors; honest parity on SMS, WhatsApp, Aadhaar handling, and Naukri-class distribution is now a recurring RFP and demo fixture, not a niche ask."
+          },
+          {
+            "level": 1,
+            "text": "Quarterly strategy assigns India medium priority with eight Q2 customer wins, explicit DPDP compliance programmes, and local job board reach via certified partner distribution alongside corporate GCC and AI matching OKRs."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Tie political and legal timing to sales urgency.\n• Anchor growth stats to IMARC and strategy markdown.\n\nReferences:\n• PESTEL: research/India/pestel-analysis-India-2026-03-31-IN-E2E-005.md\n• Strategy: strategy/markdown/product-priorities-q2-2026.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "India Market Momentum - Key Indicators"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 14,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "IMARC cites India HCM software near USD 927.5 million (2024) toward USD 2,861.9 million by 2033 at 12.35% CAGR (2025–2033), signalling suite budget headroom that rewards compliance-aware, mobile-ready differentiators."
+          },
+          {
+            "level": 1,
+            "text": "WhatsApp user bases in India are cited in mid-hundreds of millions with very high smartphone-user penetration; mobile apply, messaging-first candidate journeys, and recruiter mobility are default expectations, not optional channels."
+          },
+          {
+            "level": 1,
+            "text": "IDC narrative sizes India public cloud near USD 10.9 billion (2024) toward USD 30.4 billion by 2029 at 22.6% CAGR, reinforcing SaaS delivery, API ecosystems, and integration depth as procurement baselines for enterprise TA stacks."
+          },
+          {
+            "level": 1,
+            "text": "GenAI in HR is widely piloted but shallow on realised outcomes; BCG-style India reporting notes privacy as a stated brake, which supports consent-first automation, human-in-the-loop screening, and audit logging as buyer-safe positioning."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Use ranges cautiously; cite analyst definitions.\n• Bridge cloud growth to integration and security expectations.\n\nReferences:\n• IMARC HCM and ATS pages; IDC India cloud PR"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "text": "S E C T I O N  0 4\nProduct strategy"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Q2 2026 Product Priorities"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 14,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "India scale growth: eight customers targeted in Q2 with DPDP compliance programmes and local job board reach via certified partner distribution."
+          },
+          {
+            "level": 1,
+            "text": "AI candidate matching: HiredScore activation with explainability and human review aligns to India volume hiring when consent and oversight are credible."
+          },
+          {
+            "level": 1,
+            "text": "Core ATS parity: bulk actions, mobile recruiter experience, BGV integrations, and Paradox scheduling reduce table-stakes objections in India cycles."
+          },
+          {
+            "level": 1,
+            "text": "GCC market readiness remains corporate Priority 1; messaging and compliance patterns there still inform India buyer expectations on channels and auditability."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Lead with India row first; then corporate priorities for context.\n• Cross-check product-priorities-q2-2026.md.\n\nReferences:\n• research/India/strategy-context-2026-03-31-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Regional Expansion Strategy"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 14,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "India: medium priority; eight Q2 wins; DPDP compliance and local boards as explicit hooks in quarterly markdown."
+          },
+          {
+            "level": 1,
+            "text": "GCC: high priority; ten Q2 wins; WhatsApp, nationalisation, Arabic, and boards blockers drive corporate OKR focus."
+          },
+          {
+            "level": 1,
+            "text": "Japan: medium; five expansions; two-step offer and APPI compliance deepen multinational templates."
+          },
+          {
+            "level": 1,
+            "text": "Australia: medium; three expansions; Fair Work Act and SEEK integration maintain leadership narrative."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Table sourced from strategy context regional expansion section.\n\nReferences:\n• strategy/markdown/product-priorities-q2-2026.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Competitive Positioning - Differentiation"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 14,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "Suite depth: hire-to-retire coherence, security model, and global rollout patterns versus point ATS and regional HRMS bundles."
+          },
+          {
+            "level": 1,
+            "text": "AI-powered: HiredScore and Workday AI with human-in-the-loop versus undifferentiated agentic demos from enterprise incumbents."
+          },
+          {
+            "level": 1,
+            "text": "Compliance-first: configurable consent, retention, and purge levers mapped to DPDP expectations when paired with customer legal programmes."
+          },
+          {
+            "level": 1,
+            "text": "Vulnerabilities: job board coverage via partners first, mobile recruiter parity gaps, and scheduling depth tied to Paradox activation."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Align to strategy context competitive positioning bullets.\n\nReferences:\n• research/India/strategy-context-2026-03-31-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "text": "S E C T I O N  0 5\nPESTEL"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Political"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "Four Labour Codes commenced on 21 November 2025, consolidating twenty-nine legacy statutes into wages, social security, industrial relations, and OSH; state rules still evolve, so hiring templates must stay configurable and auditable."
+          },
+          {
+            "level": 1,
+            "text": "EPFO accelerated UAN onboarding via UMANG with Aadhaar face authentication from 1 August 2025 (press, EPFO), reinforcing trusted digital identity for statutory benefits enrolment adjacent to recruiting."
+          },
+          {
+            "level": 1,
+            "text": "Code on Social Security 2020 framing plus e-Shram registration narratives in PIB-style reporting expand formal workforce coverage toward gig and platform workers, widening the addressable compliance surface for flexible hiring models."
+          },
+          {
+            "level": 1,
+            "text": "Centre–state alignment on wages, social security contributions, and OSH implementation is still evolving (Mint, Lexology commentary); enterprises expect auditable hiring documentation, contract-type flexibility, and dispute-ready records."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Product implication: ",
+                "bold": true,
+                "font_size_pt": 12,
+                "highlight": "FFFF00"
+              },
+              {
+                "text": "Treat India as a market where hiring workflows must align to newly unified labour-code compliance and routine digital identity touches: ship country-specific contract and documentation configuration, clear separation between recruiting marketing data and benefits enrolment integrations, and partner-led WhatsApp-class messaging rather than email-only candidate journeys.",
+                "bold": true,
+                "font_size_pt": 12,
+                "highlight": "FFFF00"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Present factor anchors; keep implication visible.\n\nReferences:\n• research/India/pestel-analysis-India-2026-03-31-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Economic"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "IMF and OECD commentary in early 2026 cluster near 6–7%+ real GDP growth for FY26–FY27 (Indian press summaries), supporting continued enterprise software investment where vendors prove time-to-fill, compliance efficiency, and suite TCO."
+          },
+          {
+            "level": 1,
+            "text": "IMARC cites India HCM at USD 927.5 million (2024) toward USD 2,861.9 million by 2033 at 12.35% CAGR (2025–2033), embedding recruiting spend inside a faster-growing human capital management envelope than ATS alone."
+          },
+          {
+            "level": 1,
+            "text": "India ATS is sized USD 0.30 billion (2024) toward USD 0.50 billion by 2033 at about 7.2% CAGR; IMARC drivers include AI automation, cloud adoption, remote hiring, and evolving labour law compliance automation expectations."
+          },
+          {
+            "level": 1,
+            "text": "Naukri JobSpeak 2025 shows resilient white-collar hiring with strong non-IT pockets (hospitality, insurance, education) and AI or ML role growth, keeping enterprise liquidity in metros and industrial corridors."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Product implication: ",
+                "bold": true,
+                "font_size_pt": 12,
+                "highlight": "FFFF00"
+              },
+              {
+                "text": "Prioritise cloud-native, compliance-aware differentiators—DPDP-ready consent and retention, mobile apply, integration depth—that capture ATS growth inside the HCM envelope while defending suite total cost of ownership narratives against point ATS and mid-market bundles.",
+                "bold": true,
+                "font_size_pt": 12,
+                "highlight": "FFFF00"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Present factor anchors; keep implication visible.\n\nReferences:\n• research/India/pestel-analysis-India-2026-03-31-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Social"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "India is WhatsApp’s largest national market; third-party summaries cite 535–550 million+ users and high penetration among smartphone users (Findly, Hyperleap, 2025–2026), making messaging-layer recruiting parity a social default."
+          },
+          {
+            "level": 1,
+            "text": "Government survey summaries indicate 85.5% of households had at least one smartphone in early 2025, with high shares among younger cohorts in urban and rural splits, underpinning mobile-first apply and recruiter workflows."
+          },
+          {
+            "level": 1,
+            "text": "Internet penetration cited near 70% in DataReportal 2026 India with roughly 1.03 billion users; TRAI press cites about 1,028 million subscribers by December 2025—methodology-sensitive but implies mobile-first scale."
+          },
+          {
+            "level": 1,
+            "text": "Enterprise hiring liquidity remains metro-heavy (Bengaluru, Pune, Gujarat industrial pockets per Naukri commentary) with English dominant in MNC recruiting, while regional language demand matters for public-sector and localised roles."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Product implication: ",
+                "bold": true,
+                "font_size_pt": 12,
+                "highlight": "FFFF00"
+              },
+              {
+                "text": "Assume mobile apply and mobile recruiter workflows by default; integrate partner-led WhatsApp Business API patterns for candidate engagement while keeping DPDP-aligned consent, retention, and logging on every messaging touchpoint alongside email and portal channels for formal documentation.",
+                "bold": true,
+                "font_size_pt": 12,
+                "highlight": "FFFF00"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Present factor anchors; keep implication visible.\n\nReferences:\n• research/India/pestel-analysis-India-2026-03-31-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Technological"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "IDC sizes India public cloud services at USD 10.9 billion (2024) toward USD 30.4 billion (2029) at 22.6% CAGR; SaaS and AI workloads are cited catalysts, raising expectations for APIs, webhooks, and certified integrations."
+          },
+          {
+            "level": 1,
+            "text": "BCG-style India press summaries state more than 90% of companies pilot GenAI in HR but only about 38% see strong relevance, with roughly 51% citing data privacy and compliance concerns as brakes on scaled deployment."
+          },
+          {
+            "level": 1,
+            "text": "MeitY India AI Governance Guidelines launched 5 November 2025 under the IndiaAI Mission articulate trust, people-first, fairness, accountability, and safety—soft law shaping enterprise RFP diligence absent hard ATS mandates."
+          },
+          {
+            "level": 1,
+            "text": "CERT-In expectations on logging, incident reporting, and audit evidence intersect candidate databases and identity documents; dual notification with DPDP Data Protection Board processes increases vendor security and playbook scrutiny."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Product implication: ",
+                "bold": true,
+                "font_size_pt": 12,
+                "highlight": "FFFF00"
+              },
+              {
+                "text": "Ship India-ready AI with privacy-by-design defaults, tenant-configurable human review for high-impact matching and screening, strong audit logs for recruiting AI actions, and ecosystem APIs that fit cloud-forward procurement while meeting CERT-In and DPDP combined security expectations.",
+                "bold": true,
+                "font_size_pt": 12,
+                "highlight": "FFFF00"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Present factor anchors; keep implication visible.\n\nReferences:\n• research/India/pestel-analysis-India-2026-03-31-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Environmental"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "SEBI BRSR and BRSR Core tighten workforce, gender, welfare, and DEI disclosures for top listed entities (2025 ESG commentary), pulling recruiting funnel metrics into analytics sustainability consumers rely on."
+          },
+          {
+            "level": 1,
+            "text": "Renewables hiring press cites high-teens percentage hiring growth for FY25 with skill-gap and attrition risks (IANS-style summaries), informing skills taxonomies and sourcing for energy and infrastructure customers."
+          },
+          {
+            "level": 1,
+            "text": "No single Indian statute obliges an ATS to capture carbon-per-hire; environmental signal is indirect via customer sustainability reporting and sector hiring demand rather than recruiting-specific emissions regulation."
+          },
+          {
+            "level": 1,
+            "text": "DATA GAP: limited recruiting-specific environmental mandates; still surface diversity and funnel analytics that reconcile to HCM without over-rotating the core ATS roadmap toward carbon accounting scope."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Product implication: ",
+                "bold": true,
+                "font_size_pt": 12,
+                "highlight": "FFFF00"
+              },
+              {
+                "text": "Expose diversity and hiring funnel metrics that reconcile to HCM and analytics for BRSR reporting consumers, support skills and job-family metadata for green roles, and avoid carbon-accounting scope creep in the core recruiting roadmap while meeting listed-company disclosure pull-through.",
+                "bold": true,
+                "font_size_pt": 12,
+                "highlight": "FFFF00"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Present factor anchors; keep implication visible.\n\nReferences:\n• research/India/pestel-analysis-India-2026-03-31-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Legal"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "DPDP Act 2023 and 2025 Rules phase in through 2026–2027 with Data Protection Board of India processes; consent must be free, specific, informed, unconditional, and unambiguous with clear withdrawal paths (LiveLaw, CADP summaries)."
+          },
+          {
+            "level": 1,
+            "text": "IT Act Section 43A and SPDI Rules 2011 remain operational for sensitive personal data and reasonable security (WIPO Lex text), layering legacy duties alongside DPDP fiduciary expectations for candidate databases."
+          },
+          {
+            "level": 1,
+            "text": "November 2025 Labour Codes raise documentation, fixed-term parity, and industrial-relations expectations; BGV needs DPDP-aligned standalone consent beyond offer boilerplate and processor agreements with vendors (practitioner themes)."
+          },
+          {
+            "level": 1,
+            "text": "GDPR Article 22 automated decision-making safeguards and EU AI Act Annex III high-risk recruitment AI still bind EU-affected processing; technical documentation, human oversight, and transparency duties apply to multinational India tenants."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Product implication: ",
+                "bold": true,
+                "font_size_pt": 12,
+                "highlight": "FFFF00"
+              },
+              {
+                "text": "Implement granular consent and notice UX, retention and erasure workflows, sub-processor governance for BGV and messaging partners, breach playbooks reconciling CERT-In and DPBI timelines, and AI action logging that satisfies India customer diligence plus GDPR Article 22 and EU AI Act deployer duties where applicable.",
+                "bold": true,
+                "font_size_pt": 12,
+                "highlight": "FFFF00"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Present factor anchors; keep implication visible.\n\nReferences:\n• research/India/pestel-analysis-India-2026-03-31-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "text": "S E C T I O N  0 6\nCompetitive landscape"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Competitive Landscape - Regional Specialists"
+      }
+    },
+    "tables": [
+      {
+        "rows": [
+          [
+            "Vendor",
+            "Key Strengths",
+            "Key Weaknesses",
+            "India Fit",
+            "Notes"
+          ],
+          [
+            "Keka",
+            "INR packaging; multipost and SMS narratives; SpringVerify BGV guides; mid-market velocity",
+            "Narrower global enterprise depth vs suite vendors",
+            "Strong for high-volume India SMB and mid-market",
+            "RFP benchmark on local channels"
+          ],
+          [
+            "Darwinbox",
+            "AI and Microsoft fabric stories; PDP landing pages; regional HRMS bundle",
+            "Enterprise security and global template depth varies",
+            "Competes on time-to-value in India enterprise",
+            "Omnichannel marketing pressure"
+          ],
+          [
+            "Zoho Recruit",
+            "Marketplace WhatsApp and Zia mobile; TCO story; verification apps ecosystem",
+            "Enterprise RFP depth vs global HCM suite",
+            "Strong self-serve and SMB appeal",
+            "Sets expectations on marketplace ID flows"
+          ],
+          [
+            "PeopleStrong / greytHR",
+            "Omnichannel and India payroll adjacency; Zwayam Amplify posting narratives",
+            "Global multinational template comparisons",
+            "Bundled HRMS positioning in India",
+            "Local board reach cited in marketing"
+          ]
+        ],
+        "left_inches": 0.35,
+        "top_inches": 1.0,
+        "width_inches": 9.3,
+        "font_size_pt": 8,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.25
+      }
+    ],
+    "speaker_notes": "• Ground claims in in-competitive-matrix.md v1.8.\n\nReferences:\n• research/competitive/in/in-competitive-scan-2026-03-31-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Competitive Landscape - Global Platforms"
+      }
+    },
+    "tables": [
+      {
+        "rows": [
+          [
+            "Vendor",
+            "Key Strengths",
+            "Key Weaknesses",
+            "India Fit",
+            "Notes"
+          ],
+          [
+            "SAP SuccessFactors",
+            "SmartRecruiters embedded narrative; enterprise incumbency; India press Mar 2026",
+            "Slower innovation perception vs best-of-breed ATS in some cycles",
+            "MNC India RFP staple",
+            "AI story narrowing differentiation"
+          ],
+          [
+            "Oracle Fusion",
+            "Agentic applications and Recruiting Booster narratives; global ERP footprint",
+            "Complexity and implementation cost",
+            "Large enterprise India deals",
+            "Mar 2026 India announcements"
+          ],
+          [
+            "iCIMS",
+            "Frontline AI and omnichannel flows; high-volume story Mar 2026",
+            "Suite adjacency vs Workday HCM",
+            "BPO and high-volume segments",
+            "Raises SMS and web conversational bar"
+          ],
+          [
+            "Workable",
+            "Paid Naukri integration marketing; SMB ease of use",
+            "Limited enterprise India suite depth",
+            "Benchmark for board posting UX",
+            "Partner-first board pattern contrast"
+          ]
+        ],
+        "left_inches": 0.35,
+        "top_inches": 1.0,
+        "width_inches": 9.3,
+        "font_size_pt": 8,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.25
+      }
+    ],
+    "speaker_notes": "• Align to scan headlines; avoid unsourced claims.\n\nReferences:\n• research/competitive/matrices/in-competitive-matrix.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Competitive SWOT - Workday in India"
+      }
+    },
+    "tables": [
+      {
+        "rows": [
+          [
+            "Strengths",
+            "Weaknesses"
+          ],
+          [
+            "Suite hire-to-retire coherence for MNC India; native BGV business process and connectors; UDMF duplicate management; DPDP-style configurable consent, retention, and purge; bulk grid and baseline matching",
+            "True gaps: native +91 SMS, native WhatsApp in core Recruiting UI, native UIDAI Aadhaar eKYC, OOTB Naukri-class multipost; mobile recruiter partial parity; Paradox-grade scheduling without partners"
+          ],
+          [
+            "Opportunities",
+            "Threats"
+          ],
+          [
+            "Q2 India eight-customer row with DPDP and boards; AI matching activation with human-in-the-loop; Labour Code Nov 2025 documentation demand; partner-led channel closure; BRSR metrics consumers",
+            "Darwinbox, Keka, Zoho omnichannel bundling; SAP and Oracle AI press; DPDP and CERT-In dual breach optics; RFP risk if Aadhaar or SMS paths are overclaimed; high-volume churn if scale pain persists"
+          ]
+        ],
+        "left_inches": 0.35,
+        "top_inches": 1.0,
+        "width_inches": 9.3,
+        "font_size_pt": 9,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.25
+      }
+    ],
+    "speaker_notes": "• Single four-quadrant SWOT table; semicolon-separated cells.\n\nReferences:\n• research/India/swot-analysis-India-2026-03-31-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "text": "S E C T I O N  0 7\nWin / Loss"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Win/Loss - Dataset Not Available"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 14,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "Presales win and loss gap exports were not run for this research cycle; no severity-weighted CRM extract is available to chart."
+          },
+          {
+            "level": 1,
+            "text": "Roadmap prioritisation therefore leans on customer interviews, internal SME perspectives, competitive matrix true gaps, and strategy context."
+          },
+          {
+            "level": 1,
+            "text": "When exports resume, regenerate standard gap theme, chart, and proxy slides to align sales loss reasons with product investment cases."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Explain absence of presales gap export for this mission.\n• Point to interviews and competitive intelligence for gap identification.\n\nReferences:\n• Mission scope: no presales gap-analysis export ingested"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Win/Loss - Theme Analysis Deferred"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 14,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "Top-N gap theme tables require structured opportunity fields and consistent region tagging in presales exports."
+          },
+          {
+            "level": 1,
+            "text": "Until hygiene is restored, treat competitive scan severity labels and customer quotes as primary gap evidence, not win-loss frequency counts."
+          },
+          {
+            "level": 1,
+            "text": "Product teams should agree a single India gap taxonomy with Sales Ops before rebuilding charts."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Explain absence of presales gap export for this mission.\n• Point to interviews and competitive intelligence for gap identification.\n\nReferences:\n• Mission scope: no presales gap-analysis export ingested"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Win/Loss - Charts Placeholder"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 14,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "Horizontal bar charts of gap themes are omitted because no numeric frequency series exists for this mission."
+          },
+          {
+            "level": 1,
+            "text": "Use competitive matrix Native, Workaround, True Gap columns plus TP India scale anecdotes to illustrate impact qualitatively."
+          },
+          {
+            "level": 1,
+            "text": "Revisit chart slide after next presales export refresh."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Explain absence of presales gap export for this mission.\n• Point to interviews and competitive intelligence for gap identification.\n\nReferences:\n• Mission scope: no presales gap-analysis export ingested"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Win/Loss - Evidence Sources This Cycle"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 14,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "Customer evidence: P1–P5 at Teleperformance India on approvals, IDs, duplicates, offers, and dashboards."
+          },
+          {
+            "level": 1,
+            "text": "Competitive evidence: India competitive scan and matrix v1.8 with validated true-gap callouts on SMS, WhatsApp, Aadhaar, and boards."
+          },
+          {
+            "level": 1,
+            "text": "Internal evidence: five Workday SMEs on fraud scale, offer flexibility, BGC orchestration, and WhatsApp behaviour."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Explain absence of presales gap export for this mission.\n• Point to interviews and competitive intelligence for gap identification.\n\nReferences:\n• Mission scope: no presales gap-analysis export ingested"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "text": "S E C T I O N  0 8\nIdeation Hub"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Ideation Hub - Corpus Not Available"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 14,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "No customer ideation CSV or raw idea export was available for this mission; overview counts and histograms are omitted by design."
+          },
+          {
+            "level": 1,
+            "text": "Use SME and customer interviews to prioritise themes instead of idea-volume rankings."
+          },
+          {
+            "level": 1,
+            "text": "When ideation exports return, rebuild the standard three-slide ideation block."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Internal brainstorm corpora and idea CSVs were not in scope.\n• Primary research substitutes for ideation volume signals.\n\nReferences:\n• research/India raw-data not present for this mission"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Ideation Hub - Top Areas Deferred"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 14,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "Capability-area bar charts require aggregated idea taxonomies and stable product component mappings."
+          },
+          {
+            "level": 1,
+            "text": "Interim proxy: competitive matrix gap themes plus PMF recommendation RICE table for prioritisation narrative."
+          },
+          {
+            "level": 1,
+            "text": "Coordinate with Ideas portal owners for India-tagged exports."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Internal brainstorm corpora and idea CSVs were not in scope.\n• Primary research substitutes for ideation volume signals.\n\nReferences:\n• research/India raw-data not present for this mission"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Ideation Hub - Verbatims Deferred"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 14,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "Key verbatim theme slides need scrubbed internal quotes with component tags; none were cleared for this deck build."
+          },
+          {
+            "level": 1,
+            "text": "Customer quotes on slides P1–P5 and SME slides carry the qualitative weight instead."
+          },
+          {
+            "level": 1,
+            "text": "Add ideation quotes only after privacy review."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Internal brainstorm corpora and idea CSVs were not in scope.\n• Primary research substitutes for ideation volume signals.\n\nReferences:\n• research/India raw-data not present for this mission"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Ideation Hub - Triangulation Instead"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 14,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "Six-source triangulation matrix in the thematic section replaces ideation volume storytelling for this version."
+          },
+          {
+            "level": 1,
+            "text": "Convergence on trust chain, industrial operations, India offer or BGC, governance, channels, and throughput is strong despite missing ideation counts."
+          },
+          {
+            "level": 1,
+            "text": "Next refresh: pair triangulation with ideation counts when both exist."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Internal brainstorm corpora and idea CSVs were not in scope.\n• Primary research substitutes for ideation volume signals.\n\nReferences:\n• research/India raw-data not present for this mission"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "text": "S E C T I O N  0 9\nPrimary research"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Internal SME Interviews - Workday Experts"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 2.8,
+        "font_name": "Archivo",
+        "font_size_pt": 14,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "Five Workday SMEs: product leadership, field readiness, global services, India enterprise architecture, and Accenture strategic customer engagement."
+          },
+          {
+            "level": 1,
+            "text": "Multi-customer visibility spans Lowe’s high-volume India paths, Genpact talent supply chain, Accenture-scale fraud and duplicates, and major partner programmes."
+          },
+          {
+            "level": 1,
+            "text": "Timing: January 2025 through November 2024 notes depending on SME; materials support triangulation before customer readout."
+          },
+          {
+            "level": 1,
+            "text": "Purpose: stress-test India scale, Know Your Candidate, offer or BGC flexibility, and channel behaviour hypotheses."
+          },
+          {
+            "level": 1,
+            "text": "Limitation: internal lens supplements but does not replace P1–P5 customer voices in the following section."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Name SMEs on next slide; customers stay P1–P5.\n\nReferences:\n• research/India/105-sme-research-findings.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Internal SME Interview Participants"
+      }
+    },
+    "tables": [
+      {
+        "rows": [
+          [
+            "SME ID",
+            "Role",
+            "Context"
+          ],
+          [
+            "SME1",
+            "VP, Talent Product Management",
+            "India FY27; KYC and resume fraud at enterprise scale"
+          ],
+          [
+            "SME2",
+            "Sr. Product Advisor, Field Readiness",
+            "Enterprise programmes; India offer and BGC complexity"
+          ],
+          [
+            "SME3",
+            "Sr. Functional Consultant, Global Services",
+            "BGC variability; WhatsApp; document and consent patterns"
+          ],
+          [
+            "SME4",
+            "Enterprise Architect, India Services",
+            "Genpact-scale hiring; impersonation; career site PII risk"
+          ],
+          [
+            "SME5",
+            "Director, Strategic Customer Engagement",
+            "Accenture-scale duplicates; DNH; interview-stage ID checks"
+          ]
+        ],
+        "left_inches": 0.5,
+        "top_inches": 1.2,
+        "width_inches": 9.0,
+        "font_size_pt": 10,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.25
+      }
+    ],
+    "speaker_notes": "• Internal name map (do not read aloud): SME1 = Bernie (VP Talent PM); SME2 = Fabiola Navarro; SME3 = Santosh Gulia; SME4 = David Lodola; SME5 = David Phillips (Accenture SCE).\n• Cite internal transcript paths in appendix verbally.\n\nReferences:\n• research/India/internal-sme-transcripts/"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "SME1 - VP Talent Product Management"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.35,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "KYC and fraud at scale",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Internal notes frame India resume fraud like banking KYC, citing order-of-magnitude one hundred thousand resumes monthly with Accenture named as a heavy enterprise segment for scale and pattern-detection urgency."
+          },
+          {
+            "level": 1,
+            "text": "Interview-stage identity checks align with impersonation narratives where the attendee is not the applicant, raising BGC and offer risk if trust chain stays document-light only."
+          },
+          {
+            "level": 1,
+            "text": "BrightHire partnership discussed to anchor interview evidence on skills consistency where resumes inflate or misrepresent capability in high-stakes leadership funnels."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Roadmap and hypotheses",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Product leadership flagged India gaps and local address rollout for FY27 planning tied to revenue opportunity and compliance-adjacent identity narratives across global accounts."
+          },
+          {
+            "level": 1,
+            "text": "AI-assisted fraud triage with human review hypothesised to recover recruiter capacity when manual screening cannot pace vendor-inflated application volumes on India programmes."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Customer triangulation",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "P4 duplicate and vendor-upload toil plus P5 Aadhaar dedupe ask converge with SME scale claims; P3 adds offer-stage ID friction echoing pre-interview assurance themes from other experts."
+          },
+          {
+            "level": 1,
+            "text": "Native UIDAI eKYC must not be claimed in demos without 060 and Deployment Agent alignment; partner document and verification paths remain the battle-card-safe posture per March 2026 matrix notes."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• SME1 internal: Bernie, VP Talent PM. Tie claims to P3–P5 customer slides.\n\nReferences:\n• research/India/105-sme-research-findings.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "SME2 - Sr. Product Advisor, Field Readiness"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.35,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "India offer and compensation",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Compensation disclosure is complex on every India-scoped project: tables, calculations, and often two candidate-facing documents where US templates assume a single packet and final numbers."
+          },
+          {
+            "level": 1,
+            "text": "Start-date and compensation changes after milestones appear routinely versus US defaults that treat offer as immutable, driving regenerate, batch amend, and legal-review workarounds at scale."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "BGC and documents",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "India populations may progress before all BGC results return; operators need reinitiate UX, async vendor outcomes, and loop-back stages without breaking audit expectations on hire milestones."
+          },
+          {
+            "level": 1,
+            "text": "Review-document sprawl across offer and BGC business processes hurts candidate experience and recruiter throughput when rigid templates cannot absorb India document volume."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Hypotheses and triangulation",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Configurable offer versioning and richer pre-vendor BGC payload hypothesised to cut Extend snowflakes while preserving legal review gates customers already run offline today."
+          },
+          {
+            "level": 1,
+            "text": "P3 sixteen to seventeen percent pre-accept drop and P4 hundreds of post-accept compensation cases align with SME insistence that India offer or EA lifecycle cannot stay US-cloned rigidity."
+          },
+          {
+            "level": 1,
+            "text": "Retail and BPO references in field notes show two-document offer patterns and post-hire change waves as norm for India-scoped projects, not rare exceptions requiring custom Studio only."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• SME2 internal: Fabiola Navarro, Field Readiness. Tie to P3–P5 offer quotes.\n\nReferences:\n• 105-sme-research-findings.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "SME3 - Sr. Functional Consultant, Global Services"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.35,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Documents and interview gates",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Candidate attachment hub requested for non-standard documents beyond rigid templates so India programmes can collect vendor-specific packets without awkward offer or BGC step proliferation."
+          },
+          {
+            "level": 1,
+            "text": "ID proof before interview matters for fraud on a major partner programme roughly seven lakh people cited, aligning field services view with SME4 impersonation and SME5 interview-check themes."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Channels and consent",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "WhatsApp preferred over SMS for back-and-forth and link sharing given India smartphone and WhatsApp penetration; competitive scans flag native core UI as True Gap versus partner paths."
+          },
+          {
+            "level": 1,
+            "text": "EU-style marketing opt-in starves reach at India volumes; customers ask whether tenant-configurable opt-out models are viable where 060 confirms DPDP-aligned legality and notice quality."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Hypotheses and triangulation",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Reference architecture for CPaaS plus Studio SMS and Paradox WhatsApp hypothesised to close demo friction if consent, logging, and opt-out are first-class admin and audit artefacts."
+          },
+          {
+            "level": 1,
+            "text": "P3 OTP and messaging pain plus P5 operational comms context support channel urgency; still diverge on native versus partner truth that matrix and DA threads must govern in sales claims."
+          },
+          {
+            "level": 1,
+            "text": "Services-scale partner programmes cited in notes validate why attachment hubs and stage flexibility beat one-size document wizards when agencies and direct apply both flood the same reqs."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• SME3 internal: Santosh Gulia, Global Services.\n\nReferences:\n• 105-sme-research-findings.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "SME4 - Enterprise Architect, India Services"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.35,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Mass hiring operations",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Genpact-style programmes run one hundred to two hundred requisitions with too many clicks; mass offers, mass employment agreements, and cohort approvals are recurring India implementation asks versus per-record-only UX."
+          },
+          {
+            "level": 1,
+            "text": "Worksheets and Extend patterns cover some flows today; productising governed mass actions would reduce snowflakes while keeping security and compliance constraints visible to services teams."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Trust chain and impersonation",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Impersonation risk cited: applicant is not the same person as interview attendee; facial recognition raised as example only, not a product commitment, underscoring identity assurance gap in default flows."
+          },
+          {
+            "level": 1,
+            "text": "Tydy and other BGC middleware patterns show India customers need rich vendor payloads collected upfront in Workday rather than scattered attachments that break downstream verification."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Career site integrity",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Career site edits to name, address, and phone carry weak audit trails, creating BGC mismatch and fraud windows that audited PII change tracking and recruiter-visible flags could mitigate under 060 guidance."
+          },
+          {
+            "level": 1,
+            "text": "Triangulation: P5 peak-hiring and onboarding ID delays plus P3 reporting gaps echo architect view that trust and throughput fail together when master data edits lack accountability in the system of record."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• SME4 internal: David Lodola, India enterprise architect.\n\nReferences:\n• 105-sme-research-findings.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "SME5 - Director, Strategic Customer Engagement"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.35,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Duplicate volume and merge policy",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Strategic engagement notes cite roughly two hundred thousand duplicate applications at Accenture-scale programmes; auto-merge limited to two records forces costly manual merges and correction queues."
+          },
+          {
+            "level": 1,
+            "text": "Multi-way merge beyond two records and DNH auto-disposition against ex-employee lists are repeated asks so India volume hiring does not drown operators in exception handling and spreadsheet reconciliation."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Fraud and interview-stage ID",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "High competition drives application fraud and trickery; AI-assisted pattern detection with human oversight hypothesised to return time to hiring managers without auto-reject liability under EU AI Act framing."
+          },
+          {
+            "level": 1,
+            "text": "Interview-stage ID validation aligns with SME4 impersonation theme and with customer desire for stronger government-ID signals before offer release where law permits minimised collection."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Hypotheses and triangulation",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Vendor fee disputes and first-source attribution failures from P4 map directly to duplicate and source-precedence gaps SME5 highlights; fixing UDMF parameters is revenue and relationship risk, not hygiene."
+          },
+          {
+            "level": 1,
+            "text": "Competitive matrix positions UDMF as native strength; honest India tuning plus bulk vendor rules converts differentiator from slide claim to measurable recruiter hour savings in high-volume tenants."
+          },
+          {
+            "level": 1,
+            "text": "March 2026 scans show Darwinbox, Keka, and Zoho pressing speed; Accenture-scale duplicate data supports investing in industrial merge policy before undifferentiated AI-only positioning in India RFPs."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• SME5 internal: David Phillips, Accenture strategic customer engagement.\n\nReferences:\n• 105-sme-research-findings.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "text": "S E C T I O N  1 0\nPrimary research"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "1:1 Customer Interviews - India Enterprise"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.1,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 1,
+            "text": "Five senior recruiting leaders and hiring managers from Teleperformance India covering specialist, leadership, and high-volume agent programmes."
+          },
+          {
+            "level": 1,
+            "text": "Organisations operate India-scale hiring with agency networks, confidential leadership pipelines, and multi-site peaks up to thousands of hires per week."
+          },
+          {
+            "level": 1,
+            "text": "Research conducted December 2025; semi-structured interviews on workflows, compliance, and Workday friction points."
+          },
+          {
+            "level": 1,
+            "text": "Transcripts analysed for themes; findings triangulated with internal SMEs, competitive intelligence, and strategy context."
+          },
+          {
+            "level": 1,
+            "text": "Participants anonymised as P1–P5 with company retained for enterprise credibility."
+          },
+          {
+            "level": 1,
+            "text": "Limitation: single-employer deep dive; patterns require validation with additional India BPO and IT tenants."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Keep methodology in notes; slide stays executive.\n\nReferences:\n• research/India/105-user-research-findings.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Customer Interview Participants"
+      }
+    },
+    "tables": [
+      {
+        "rows": [
+          [
+            "Participant",
+            "Role",
+            "Company"
+          ],
+          [
+            "P1",
+            "Recruitment Manager (specialist team)",
+            "TP (India)"
+          ],
+          [
+            "P2",
+            "Recruitment Manager (JR to payroll)",
+            "TP (India)"
+          ],
+          [
+            "P3",
+            "Leadership or confidential hiring",
+            "TP (India)"
+          ],
+          [
+            "P4",
+            "Agent hiring lead (high volume)",
+            "TP (India)"
+          ],
+          [
+            "P5",
+            "Frontline hiring manager (multi-site)",
+            "TP (India)"
+          ]
+        ],
+        "left_inches": 0.5,
+        "top_inches": 1.2,
+        "width_inches": 9.0,
+        "font_size_pt": 10,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.25
+      }
+    ],
+    "speaker_notes": "• Map P IDs consistently across deck.\n\nReferences:\n• TP India transcripts Dec 2025"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "P1 - Recruitment Manager, TP (India)"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.45,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Role focus",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Participant anchors daily work in sourcing, interviews, resumes, offers, and follow-up for a compact specialist pod, balancing hands-on recruiting with team goals, attendance, and performance routines across high-touch leadership and confidential pipelines."
+          },
+          {
+            "level": 1,
+            "text": "The pod operates as a single squad covering end-to-end candidate touchpoints; friction shows up when system-of-record steps fragment across tools or when status chasing replaces structured in-product progress for managers and recruiters."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Voice of participant",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "\"So, my day-to-day routine is like sourcing the candidates, aligning their interviews, passing their resume if they selected and processing for offers and followup.\" (P1, TP India)"
+          },
+          {
+            "level": 1,
+            "text": "Performance goals and business-review cadences also sit in the same role, so any hiring-tool friction directly competes with people-management time on a small team where every hour is already over-allocated across reqs."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Governance echo",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Same employer context as P2 and P3 on email-based approvals and offline governance referenced in the roundtable; P1’s squad feels downstream latency when upstream approvals are not visible inside Workday workflows."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "JTBD",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "When leading a specialist pod, I want one trustworthy system of record for hiring steps and team administration, so I reduce parallel email and spreadsheet chasing while keeping audit-friendly evidence for leadership reviews."
+          },
+          {
+            "level": 1,
+            "text": "Specialist and confidential pipelines intersect leadership hiring where audit trails matter as much as speed; offline evidence habits elsewhere at TP India amplify P1’s need for visible approval state inside the tenant, not only in inboxes."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Emphasise quotes that resonate with India scale.\n\nReferences:\n• P1 transcript TP India Dec 2025"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "P2 - Recruitment Manager, TP (India)"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.45,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Email-first approvals",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Approvals for compensation and positions live on email first; the participant then raises the job requisition in Workday, creating dual-system latency, attachment sprawl, and weak in-product approval history for downstream audit or disputes."
+          },
+          {
+            "level": 1,
+            "text": "Roughly sixty-person team pattern: managers send mapped position codes and approval evidence via email before reqs appear in Workday, which slows time-to-post and complicates traceability when finance or HRBP questions org or grading tags."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Voice of participant",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "\"On email we have approvals on right now and then once I have all of these approvals is when I raise a job requiring managers.\" (P2, TP India)"
+          },
+          {
+            "level": 1,
+            "text": "Creates requisitions in Workday after email packets arrive, so the tenant shows reqs without showing the decision trail that justified headcount, comp, or org mapping—exactly the governance gap Recommendation 5 targets for India scale."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Operational drag",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Hiring managers who do not own requisition creation drive back-and-forth on cost centre, line of business, and tagging, amplifying India high-volume pain when every correction delays posting and candidate pipelines."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "JTBD",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "When opening approved headcount, I want managers to raise accurate requisitions with correct org and finance tags inside the system, so I avoid rework before candidates apply and preserve a clean approval chain for India compliance reviews."
+          },
+          {
+            "level": 1,
+            "text": "Owns onboarding command through to payroll, so defects in upstream email approvals cascade into downstream credential, pay-group, and no-show handling that other TP India voices tie to peak-season operational risk."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Emphasise quotes that resonate with India scale.\n\nReferences:\n• P2 transcript TP India Dec 2025"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "P3 - Leadership Recruiter, TP (India)"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.5,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Governance and reporting",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "No useful Workday reports for leadership pipeline health; Thrive and Excel carry progress views instead, which fragments executive narrative and invites shadow governance outside the tenant despite sensitive leadership and confidential hiring scope."
+          },
+          {
+            "level": 1,
+            "text": "About sixteen to seventeen percent drop before offer accept cited: process weight from ID steps, notification gaps, and slow release cycles erodes join-rate on competitive leadership roles where speed and candidate experience decide outcomes."
+          },
+          {
+            "level": 1,
+            "text": "\"The first priority if we can work around it is um having the approvals through work… hiring managers are approving the positions on work day itself.\" (P3, TP India)"
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "IDs and volume",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Candidates report not receiving OTP on government-ID paths; partial mandatory gating versus soft UI behaviour creates policy versus experience mismatch that stalls offer release and frustrates recruiters chasing identity completion under deadlines."
+          },
+          {
+            "level": 1,
+            "text": "Roughly seven hundred applications on a single requisition with no bulk review: participant must open each application separately, which is incompatible with India volume hiring economics and crowds out time for quality conversations."
+          },
+          {
+            "level": 1,
+            "text": "Offer acceptance is acknowledgement-only with recruiters taking screenshots for audit and no actionable notification when candidates accept, drowning signal in thousands of generic tasks—directly feeding Recommendation 2 and 3 themes."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "JTBD",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "When closing leadership hires under India compliance, I want mandatory ID capture, reliable OTP, and in-system approvals with notifications, so I protect join rates, reduce screenshot audits, and strengthen DPDP-aligned evidence trails."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Emphasise quotes that resonate with India scale.\n\nReferences:\n• P3 transcript TP India Dec 2025"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "P4 - Agent Hiring Lead, TP (India)"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.5,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Agency scale",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Three hundred to four hundred agencies with manual per-upload approval consumes full days of recruiter time at ten to twenty profiles per day each, a pure scale tax before any shortlisting or assessment work begins on the floor."
+          },
+          {
+            "level": 1,
+            "text": "Duplicate source attribution errors drive agency fee disputes; first-source versus last-approved logic from legacy ATS is missed in Workday, creating financial exposure and relationship conflict with high-volume vendor networks."
+          },
+          {
+            "level": 1,
+            "text": "End-to-end ownership for agent grades at India scale cited near one hundred hires weekly and peaks near one hundred fifty, with regional and national TP volumes framing why per-record clicks are structurally unaffordable at maturity."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Offers and IDs",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Regenerate offer cannot fix compensation after accept in participant’s go-live narrative, with hundreds of correction cases; manual legal letters and offline amendments replace configurable India-flexible offer and EA lifecycle patterns."
+          },
+          {
+            "level": 1,
+            "text": "Mandatory ID steps still require recruiter chasing despite configuration, echoing P3 OTP friction and reinforcing that policy toggles without UX persistence do not solve India join-rate risk on competitive agent labour markets."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "JTBD",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "When running thousands of agency applications, I want government-ID-aware dedupe and fair first-source rules with bulk-safe approvals, so I remove click-approval toil and pay agencies correctly without daily reconciliation firefights."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Emphasise quotes that resonate with India scale.\n\nReferences:\n• P4 transcript TP India Dec 2025"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "P5 - Hiring Manager, TP (India)"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.5,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Peak operations",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Saturday maintenance windows clash with India six-day operations, tying platform downtime to revenue-impacting hiring peaks when sites run seven-day candidate pipelines and weekend offer releases for BPO-scale programmes."
+          },
+          {
+            "level": 1,
+            "text": "Duplication checks should validate on Aadhaar number, not only name, phone, and email; participant states stronger government-ID matching is needed to catch industrial-scale duplicate and impersonation patterns at weekly hiring peaks."
+          },
+          {
+            "level": 1,
+            "text": "\"if that duplication check is done on their Aadhar number, we'll be able to identify that.\" (P5, TP India)"
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Offers and governance",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "One hundred to one hundred fifty offers per day with limited regenerate and no mass offer actions drives manual legal letters and cohort exceptions; India-flexible mass employment agreement and batch amend patterns are missing at peak."
+          },
+          {
+            "level": 1,
+            "text": "Demand still arrives via email with workforce and operations; no Workday approval workflow in use today despite product capability, aligning P5 with P2–P4 on governance outside the system during the highest-volume hiring moments."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "JTBD",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "When hiring thousands weekly across sites, I want resilient onboarding IDs and scalable offer amendments inside the system, so peaks do not create revenue leakage, compliance risk, or weekend maintenance collisions with live hiring."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Emphasise quotes that resonate with India scale.\n\nReferences:\n• P5 transcript TP India Dec 2025"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "text": "S E C T I O N  1 1\nThematic analysis"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Validated Themes 1-2 (Trust and Scale)"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.0,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Know Your Candidate",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "P5 demands Aadhaar-class dedupe; SME1 and SME4 narratives cite impersonation and resume fraud at roughly one hundred thousand resumes monthly—trust chain is revenue and compliance, not only fraud tooling."
+          },
+          {
+            "level": 1,
+            "text": "Business impact: fee disputes, BGC reopen risk, and executive distrust when identity and career-site edits lack audit trails or recruiter-visible risk flags tied to verification vendors."
+          },
+          {
+            "level": 1,
+            "text": "Product direction: government-ID-aware UDMF with legal minimisation on native UIDAI claims, interview-stage assurance patterns, and audited external PII change tracking aligned to DPDP accountability narratives."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Industrial operations",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "P4 cites full-day vendor upload approvals; SME5 cites roughly two hundred thousand duplicates and auto-merge limited to two records—industrial India volume breaks per-record UX without bulk and policy."
+          },
+          {
+            "level": 1,
+            "text": "Business impact: manual scale spawns shadow spreadsheets, agency conflict, and recruiter burnout before shortlisting; competitive mid-market vendors weaponise speed narratives in RFP bake-offs."
+          },
+          {
+            "level": 1,
+            "text": "Product direction: bulk-safe vendor rules, multi-way merge policy, DNH auto-disposition, and mass actions that preserve rehire and compliance constraints rather than Extend-only snowflakes."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Two themes per slide for density control.\n\nReferences:\n• 2026-03-31 India PMF Analysis IN-E2E-005"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Validated Themes 3-4 (India HR Reality)"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.0,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Offer and BGC flexibility",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "SMEs and customers cite two-document offers, post-hire compensation or date changes, BGC reinitiate, and regenerate limits that US templates treat as final—India implementations need configurable progression, not cloned US rigidity."
+          },
+          {
+            "level": 1,
+            "text": "Business impact: join-rate loss when offer release is slow or onerous; hundreds of compensation correction cases cited at go-live when regenerate cannot fix post-accept changes."
+          },
+          {
+            "level": 1,
+            "text": "Product direction: controlled regenerate for compensation and dates, batch cohort amend, richer pre-vendor BGC payload, and async outcomes with operator UX for reopening stages."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Governance in system of record",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "P3 and P5 describe approvals outside Workday with screenshot audits on acceptance; all five customers signal email-parallel governance while reqs and offers execute in the tenant without first-class approval chains."
+          },
+          {
+            "level": 1,
+            "text": "Business impact: weak in-product visibility invites Excel and Thrive workarounds, slows cycle time, and weakens DPDP purpose-limitation and evidence stories for leadership and auditors."
+          },
+          {
+            "level": 1,
+            "text": "Product direction: stage-wise requisition and offer approvals with attachments, role-scoped dashboards, acceptance notifications, and reduced generic task floods in recruiter inboxes."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Two themes per slide for density control.\n\nReferences:\n• 2026-03-31 India PMF Analysis IN-E2E-005"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Validated Themes 5-6 (Channels and Funnel)"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.0,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Channels and consent",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "WhatsApp is socially default; competitive matrix lists native WhatsApp and plus-nine-one SMS as true gaps versus Zoho, PeopleStrong, and iCIMS Frontline AI omnichannel bars in India RFPs."
+          },
+          {
+            "level": 1,
+            "text": "Santosh synthesis notes EU-style marketing opt-in can starve reach at India volumes; tenant-configurable consent models need legal sign-off before product commitment."
+          },
+          {
+            "level": 1,
+            "text": "Product direction: CPaaS plus Studio SMS and Paradox WhatsApp reference architectures with consent, logging, opt-out, and honest GTM—avoid false native parity claims in demos or battle cards."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Throughput and screening",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "P3 cannot parse from major boards; optional resume inflates review cost; roughly seven hundred applications per req with one-by-one opens is economically impossible at India hiring peaks."
+          },
+          {
+            "level": 1,
+            "text": "SME1 and SME5 emphasise fraud detection and pattern signals at extreme volumes; shallow GenAI pilots elsewhere reinforce governed automation positioning over undifferentiated AI demos."
+          },
+          {
+            "level": 1,
+            "text": "Product direction: bulk disposition, mandatory resume where customers choose, HiredScore activation with explainability and human review defaults aligned to EU AI Act and DPDP narratives."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Two themes per slide for density control.\n\nReferences:\n• 2026-03-31 India PMF Analysis IN-E2E-005"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Cross-Source Validation Matrix"
+      }
+    },
+    "tables": [
+      {
+        "rows": [
+          [
+            "Theme",
+            "Strategy",
+            "PESTEL",
+            "SWOT",
+            "CI",
+            "SME",
+            "Customer"
+          ],
+          [
+            "Trust chain",
+            "AI and India compliance",
+            "DPDP and identity rails",
+            "UDMF strength; Aadhaar gap",
+            "True Gap Aadhaar",
+            "Strong",
+            "P3–P5"
+          ],
+          [
+            "Industrial ops",
+            "Core ATS parity",
+            "Economic scale",
+            "Bulk grid strength",
+            "UDMF native",
+            "Accenture scale",
+            "P4 vendor load"
+          ],
+          [
+            "Offer and BGC",
+            "Local workflows",
+            "Labour codes Nov 2025",
+            "BGC BP strength",
+            "eSign competition",
+            "SME2, SME3",
+            "P3–P5"
+          ],
+          [
+            "Governance",
+            "India eight-customer row",
+            "Auditability",
+            "Excel workaround",
+            "Enterprise AI noise",
+            "Config vs adoption",
+            "All five"
+          ],
+          [
+            "Channels",
+            "Messaging roadmap",
+            "WhatsApp social",
+            "True Gap SMS or WA",
+            "Paradox path",
+            "Santosh",
+            "P5 ops context"
+          ],
+          [
+            "Throughput",
+            "Priority 2 AI",
+            "GenAI shallow",
+            "HiredScore opportunity",
+            "SAP or Oracle AI",
+            "SME1 fraud scale",
+            "P3 700 applicants"
+          ]
+        ],
+        "left_inches": 0.25,
+        "top_inches": 1.05,
+        "width_inches": 9.5,
+        "font_size_pt": 7,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.22
+      }
+    ],
+    "speaker_notes": "• Walk row by row; cite convergence verbally.\n\nReferences:\n• PMF triangulation table IN-E2E-005"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "text": "S E C T I O N  1 2\nFull funnel"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Gap Analysis"
+      }
+    },
+    "tables": [
+      {
+        "rows": [
+          [
+            "Stage",
+            "Gap",
+            "Severity",
+            "Workaround",
+            "Evidence",
+            "Product implication"
+          ],
+          [
+            "Attract",
+            "Limited native multipost to Naukri-class boards",
+            "MEDIUM",
+            "Broadbean multiposter; Studio custom",
+            "Competitive matrix; P3 link posting",
+            "Validate board lists per deal; honest RFP tables"
+          ],
+          [
+            "Convert",
+            "Government ID and OTP friction before offer",
+            "HIGH",
+            "Manual chasing; support escalations",
+            "P3 OTP failures; policy vs UX mismatch",
+            "Mandatory gating, persistence, notifications"
+          ],
+          [
+            "Screen",
+            "No bulk candidate review; optional resume",
+            "HIGH",
+            "One-by-one opens",
+            "P3 ~700 applicants",
+            "Bulk grid disposition; mandatory resume option"
+          ],
+          [
+            "Offer",
+            "Regenerate limits; weak accept signals",
+            "HIGH",
+            "Screenshots; manual checks",
+            "P3–P5 acceptance and regenerate quotes",
+            "Offer lifecycle: notify, regenerate, batch amend"
+          ],
+          [
+            "Comply",
+            "Approvals and evidence outside Workday",
+            "HIGH",
+            "Email packets",
+            "P2–P5 offline approvals",
+            "In-system approvals with attachments and audit"
+          ],
+          [
+            "Measure",
+            "Leadership dashboards and aging weak",
+            "MEDIUM",
+            "Thrive and Excel",
+            "P3 reporting quotes",
+            "Role-scoped recruiting operational analytics"
+          ]
+        ],
+        "left_inches": 0.2,
+        "top_inches": 1.0,
+        "width_inches": 9.6,
+        "font_size_pt": 7,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.22
+      }
+    ],
+    "speaker_notes": "• Severity is directional; validate with Deployment Agent in sales cycles.\n\nReferences:\n• PMF recommendations and TP India interviews"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Section Title",
+    "text_boxes": [
+      {
+        "left_inches": 3.3,
+        "top_inches": 1.5,
+        "width_inches": 5.6,
+        "height_inches": 2.2,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "text": "S E C T I O N  1 3\nRoadmap"
+      }
+    ]
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Recommendation 1: ID-Aware Dedupe Rules"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.15,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Problem",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Agency-heavy India programmes lose fee integrity when duplicates clear vendor gates and last-approved uploads win credit; three to four hundred agencies at ten to twenty profiles daily turns per-click approval into dedicated FTE lines before shortlisting."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Evidence",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "P4 cites full days on vendor-upload approval and first-source loss; SME5 notes roughly two hundred thousand duplicates with merge capped at two records, matching matrix emphasis on UDMF as native yet under-tuned for India."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Recommendation",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Extend UDMF matching and source-of-hire for India-legal PAN, Aadhaar where 060 permits, and UAN with minimisation; add first-source-within-cooling-off, bulk-safe vendor rules, and auditable attribution that preserve rehire and compliance locks customers require."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Why now",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Q2 India eight-win row and DPDP accountability elevate duplicate prevention; March 2026 scans show regional suites weaponising speed while honest UDMF India tuning must land in product, not only services."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Success metrics",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Productivity Recruiter Capacity: baseline high manual vendor hours per P4; target material reduction in approval toil and duplicate corrections with twenty to thirty-five percent India high-volume adoption year one per PMF tracking assumptions."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Five-part structure per 130 v84; cite HRREC-86870 when discussing instrumentation.\n\nReferences:\n• research/India/thematic-analysis/2026-03-31-India-PMF-Analysis-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Recommendation 2: Identity Capture and OTP Paths"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.15,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Problem",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Policy mandates PAN, Aadhaar-related OTP, and UAN before offer while UX allows partial completion, vanishing fields, and silent OTP failures; recruiters chase IDs and join-rate suffers before candidates ever reach acceptance."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Evidence",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "P3 cites sixteen to seventeen percent drop before offer accept tied to process weight and ID friction; competitive matrix lists native UIDAI eKYC as True Gap, so product must harden lawful capture without overclaiming government rails."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Recommendation",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Ship consistent mandatory gating UX, field persistence, OTP failure notifications for candidates and recruiters, and clear re-entry states; pair granular notices and consent with customer DPDP programmes under 060 review before launch."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Why now",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "DPDP phased implementation through 2026–2027 and India row scale goals make identity handling a board-visible risk; SAP, Oracle, and Zoho March 2026 narratives increase scrutiny on every demo claim."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Success metrics",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Time to Hire (BV): shorten offer-stage segment from final interview to accepted offer; target ten to fifteen percent improvement on that slice for tenants enabling full gating fix, using HRREC-81527 definitions per PMF success metric block."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• OTP reliability has vendor dependencies; flag confidence at seventy percent from PMF.\n\nReferences:\n• research/India/thematic-analysis/2026-03-31-India-PMF-Analysis-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Recommendation 3: Bulk Review and HiredScore"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.15,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Problem",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "High-volume reqs carry hundreds of applications yet recruiters must open profiles one-by-one; optional resume and missing bulk disposition waste capacity while fraud inflates top-of-funnel noise across India BPO and services programmes."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Evidence",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "P3 cites roughly seven hundred applications on one requisition without bulk review; SME1 and SME5 highlight fraud and pattern volume at enterprise scale, aligning with Q2 Priority 2 AI matching and fraud phase one strategy themes."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Recommendation",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Enhance bulk grid for shortlist and disposition, offer mandatory resume where customers choose, and activate HiredScore for India tenants with explainability and human-review defaults that satisfy EU AI Act and DPDP diligence narratives."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Why now",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Corporate OKR targets five AI matching betas by quarter end; India volume tenants are natural adopters when governance story is credible versus iCIMS Frontline AI March 2026 omnichannel bar."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Success metrics",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Productivity Recruiter Capacity: raise managed applications per recruiter per week without headcount; target fifteen to twenty-five percent throughput gain on high-volume reqs where HiredScore is active per PMF pilot assumptions and HRREC-86870 load metrics."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Human-in-the-loop is non-negotiable for high-risk AI positioning in EU and India enterprise deals.\n\nReferences:\n• research/India/thematic-analysis/2026-03-31-India-PMF-Analysis-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only_Alt",
+    "placeholders": {
+      "0": {
+        "text": "Recommendation 4: Career Site PII Audit Trail"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.15,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Problem",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Candidates can change name, address, and phone on external career experiences with limited audit trails, opening impersonation windows and BGC mismatches that recruiters discover only after time-consuming rework or vendor reopen loops."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Evidence",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "SME4 anchors weak career-site edit tracking in internal notes; P3–P5 trust themes on IDs and duplicates imply the same master-data integrity gap; triangulation matrix rates Know Your Candidate very strong across six sources."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Recommendation",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Strengthen audited change history for PII edits on external experiences, surface recruiter-visible risk flags when edits cluster around verification milestones, and integrate signals with BGC orchestration narratives customers already run with vendors."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Why now",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "DPDP accountability and CERT-In logging expectations increase pressure for provable candidate data lineage; competitive POC risk on Aadhaar claims makes honest audit trails a safer differentiator than speculative native eKYC promises."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Success metrics",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Time to Hire segment and incident proxy: target five to ten percent reduction in BGC reopen cases tied to career-site edits year one per PMF assumption; pair with HRREC-81527 until retention dashboards unblock per value-metrics notes."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• SME4 internal identity: see SME participants speaker notes map.\n\nReferences:\n• research/India/thematic-analysis/2026-03-31-India-PMF-Analysis-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Recommendation 5: In-System Approval Chains"
+      }
+    },
+    "text_boxes": [
+      {
+        "left_inches": 0.7,
+        "top_inches": 1.2,
+        "width_inches": 8.6,
+        "height_inches": 3.15,
+        "font_name": "Archivo",
+        "font_size_pt": 12,
+        "color": "ink",
+        "paragraphs": [
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Problem",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Position and compensation approvals, leadership sign-off, and evidence packets often live in email while Workday executes reqs and offers, creating dual-system latency, weak in-tenant audit history, and manual re-keying before India compliance reviews."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Evidence",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "P2 describes approvals on email before raising reqs; P3 encloses offline packets before offers; P5 states no approval workflow in Workday today despite known capability—unanimous P1–P5 signal on governance outside the system of record."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Recommendation",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Deliver first-party approval chains for position and compensation with attachments, stage-wise routing, and immutable history; reduce email parallel system while preserving customer legal review gates and DPDP-aligned purpose limitation on evidence stores."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Why now",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "India eight-win row and DPDP auditability elevate in-product evidence; sixteen to seventeen percent pre-accept drop P3 ties partly to slow, opaque approval-to-offer segments competitors market as instant in omnichannel demos."
+          },
+          {
+            "level": 0,
+            "text": [
+              {
+                "text": "Success metrics",
+                "bold": true,
+                "font_size_pt": 12
+              }
+            ]
+          },
+          {
+            "level": 1,
+            "text": "Time to Hire (BV): baseline end-to-end JR posted to latest offer accepted; target eight to twelve percent improvement in approval-to-offer-released interval for adopting tenants using HRREC-81527, reducing join-rate risk from offline delays."
+          }
+        ]
+      }
+    ],
+    "speaker_notes": "• Align enablement so customers actually turn on workflows versus capability-only wins.\n\nReferences:\n• research/India/thematic-analysis/2026-03-31-India-PMF-Analysis-IN-E2E-005.md"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Title Only",
+    "placeholders": {
+      "0": {
+        "text": "Priority Recommendations for Roadmap"
+      }
+    },
+    "tables": [
+      {
+        "rows": [
+          [
+            "#",
+            "Title",
+            "RICE",
+            "Reach",
+            "Impact",
+            "Conf",
+            "Effort"
+          ],
+          [
+            "1",
+            "ID-aware dedupe and source precedence",
+            "2267",
+            "8000",
+            "3.0",
+            "85%",
+            "9 pm"
+          ],
+          [
+            "2",
+            "Identity capture and OTP reliability",
+            "4200",
+            "12000",
+            "3.0",
+            "70%",
+            "6 pm"
+          ],
+          [
+            "3",
+            "Bulk review and HiredScore activation",
+            "2362",
+            "9000",
+            "3.0",
+            "70%",
+            "8 pm"
+          ],
+          [
+            "4",
+            "Career site PII audit trail",
+            "2340",
+            "8000",
+            "2.25",
+            "65%",
+            "5 pm"
+          ],
+          [
+            "5",
+            "In-system req and offer approvals",
+            "2109",
+            "10000",
+            "2.25",
+            "75%",
+            "8 pm"
+          ],
+          [
+            "6",
+            "Offer and EA lifecycle improvements",
+            "1100",
+            "6000",
+            "2.75",
+            "80%",
+            "12 pm"
+          ],
+          [
+            "7",
+            "DNH auto-disposition",
+            "840",
+            "3000",
+            "2.0",
+            "70%",
+            "5 pm"
+          ],
+          [
+            "8",
+            "Multi-way duplicate merge",
+            "422",
+            "2500",
+            "2.25",
+            "60%",
+            "8 pm"
+          ],
+          [
+            "9",
+            "BGC orchestration depth",
+            "844",
+            "5000",
+            "2.25",
+            "75%",
+            "10 pm"
+          ],
+          [
+            "10",
+            "Mass offer and EA actions",
+            "682",
+            "4000",
+            "2.5",
+            "75%",
+            "11 pm"
+          ]
+        ],
+        "left_inches": 0.25,
+        "top_inches": 1.1,
+        "width_inches": 9.5,
+        "font_size_pt": 8,
+        "header_row": true,
+        "header_bg_color": "ink",
+        "header_font_color": "paper",
+        "header_height_inches": 0.25
+      }
+    ],
+    "speaker_notes": "• Full sixteen-row table lives in PMF markdown; top ten shown for legibility.\n\nReferences:\n• Research handoff table in PMF analysis"
+  },
+  {
+    "master_index": 1,
+    "layout_name": "Bumper Slide"
+  }
+]

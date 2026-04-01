@@ -51,7 +51,14 @@ For detailed guidance, see:
 
 ### Slide Content Guidelines
 - Use British English spelling throughout
-- **Maximum lines per slide**: Never exceed 7-8 total lines of text per slide (including main bullets, sub-bullets, and product implications) to prevent vertical overflow.
+- **Maximum lines per slide**: Never exceed **7 rendered lines** of text per slide (8 lines ONLY for executive summary synthesis or unavoidable table complexity). **Rendered lines** = actual lines after text wrapping, not bullet count.
+- **Character limits by bullet type** (prevents unpredictable overflow):
+  - **Dense slides (PESTEL, Customer P1-P5, Recommendations)**: 180-240 characters per bullet (~2-3 lines rendered)
+  - **Synthesis slides (Executive Summary)**: 200-250 characters per bullet (~2.5-3 lines rendered, max 4 bullets)
+  - **Theme consolidation slides (Validated Themes)**: 140-180 characters per bullet (~1.5-2 lines rendered, max 2 themes per slide)
+  - **SME slides**: 160-200 characters per bullet (~2 lines rendered, 7-8 total bullets including theme subheaders)
+- **Calculation method**: `rendered_lines = bullet_count × avg_lines_per_bullet + subheaders + product_implication_lines`
+- **Overflow indicators**: If any bullet exceeds character limit by >20%, or total rendered lines > 7, content MUST be split across 2 slides or moved to speaker notes.
 - **Bullet length**: Keep individual bullets to 1-2 lines maximum. If a bullet wraps to a 3rd line, rewrite it to be more concise.
 - Replace em-dashes with hyphens or commas
 - Keep bullets concise; avoid run-on sentences
@@ -91,6 +98,73 @@ For detailed guidance, see:
 **Body text box (Title Only / Title Only_Alt layouts):**
 - Standard dimensions: `left_inches: 0.7`, `top_inches: 1.2`, `width_inches: 8.6`, `height_inches: 2.8`
 - Increase `height_inches` only for tables, charts, or unavoidably dense slides
+
+### Density Validation Examples
+
+These examples show how to calculate rendered lines and prevent overspill using character limits and bullet count caps.
+
+**Example 1: PESTEL slide (Economic Factor) - COMPLIANT**
+
+❌ **Before (Overspill - 15 rendered lines)**:
+- 5 bullets × 3 lines each (300-400 chars per bullet) = 15 lines
+- Product implication: 80 words = 4 lines
+- **Total**: 19 lines → Text cut off at bottom ❌
+
+✅ **After (Compliant - 7.5 rendered lines)**:
+- 4 bullets × 2 lines each (180-220 chars per bullet) = 8 lines
+- Product implication: 50 words = 2 lines
+- **Total**: 10 lines → Use 12pt font for dense PESTEL = **7.5 rendered lines** ✅
+
+**Revision technique**: Trim each bullet from 350 chars to 200 chars by consolidating related points into compound sentences with clear anchors. Example:
+- Before (350 chars): "Industry reporting sizes India HR technology in the hundreds of millions USD with mid-single-digit to high-single-digit CAGR through the early 2030s across multiple analyst narratives from MarketsandMarkets and others. IMARC specifically cites India ATS market at approximately USD 0.30 billion in 2024 projecting toward USD 0.50 billion by 2033 at about 7.2 percent CAGR driven by AI adoption, cloud migration, mobile-first, and compliance automation themes"
+- After (210 chars): "India ATS market sized at USD 0.30B (2024) toward USD 0.50B by 2033, 7.2% CAGR; AI, cloud, mobile, compliance automation drive growth (IMARC 2025). Industry syntheses cite hundreds of millions USD scale with mid-to-high single-digit growth toward 2030."
+
+**Example 2: Executive Summary (Headline Outcomes) - COMPLIANT**
+
+❌ **Before (Overspill - 11 rendered lines)**:
+- 5 bullets × 2.2 lines each (200-280 chars per bullet) = 11 lines → Last bullet cut off ❌
+
+✅ **After (Compliant - 10 lines, acceptable with 14pt font)**:
+- 4 bullets × 2.5 lines each (200-230 chars per bullet) = 10 lines ✅ (acceptable for exec synthesis with rich context)
+
+**Revision technique**: Reduce from 5 bullets to 4 bullets by consolidating related insights. Example:
+- Before (2 separate bullets): "Triangulation is strong on identity, duplicates, and document UX; presales gap exports were not available" + "Priority direction: government-ID-aware dedupe with Legal minimisation, DPDP-aligned BGV consent"
+- After (1 consolidated bullet, 223 chars): "Priority: government-ID-aware dedupe with legal minimization, DPDP-aligned BGV consent, hardened KYC gating, first-class BGC reinitiate, governed HiredScore activation—triangulation strong on identity and documents despite presales data gap."
+
+**Example 3: Validated Themes - COMPLIANT (Split Across 2 Slides)**
+
+❌ **Before (Overspill - 14 rendered lines on 1 slide)**:
+- 3 theme subheaders = 1.5 lines
+- 9 bullets × 1.8 lines each (140-160 chars) = 16.2 lines
+- **Total**: 17.7 lines → Bottom content cut off ❌
+
+✅ **After (Compliant - 7-8 lines per slide, split into 2 slides)**:
+
+**Slide 1: Validated Themes 1-2**
+- 2 subheaders + 6 bullets × 1.7 lines (140-160 chars each) = 1 + 10.2 = **11.2 lines** → Use **12pt font** = **8.4 lines** ✅
+
+**Slide 2: Validated Theme 3**
+- 1 subheader + 3 bullets × 1.7 lines (140-160 chars each) = 0.5 + 5.1 = **5.6 lines** ✅
+
+**Revision technique**: Split 3 themes across 2 slides instead of cramming all on 1 slide. Maintain 3 bullets per theme structure. Use 12pt font when needed for density.
+
+**Example 4: Customer Interview (P1) - COMPLIANT**
+
+❌ **Before (Overspill - 11 rendered lines)**:
+- 2 theme subheaders = 1 line
+- 7 bullets × 2 lines each (180-220 chars) = 14 lines
+- **Total**: 15 lines → Overspill ❌
+
+✅ **After (Compliant - 8 lines with 12pt font)**:
+- 2 theme subheaders = 1 line
+- 5 bullets × 2 lines each (180-200 chars) = 10 lines
+- **Total**: 11 lines → Use **12pt font** = **8.25 lines** ✅
+
+**Revision technique**: Reduce from 7 bullets to 5 bullets by consolidating related insights, keeping character count to 180-200 per bullet for richness. Use 12pt font per 010-style-guide.mdc (>6 bullets threshold).
+
+---
+
+**Key Takeaway**: Rich bullet content (180-240 chars) + reduced bullet counts (4-5) + smart font sizing (12pt for >6 bullets) = v65-level density without overspill.
 
 **Bullets - use `paragraphs` structure:**
 - Prefer `text_boxes[].paragraphs` with `level: 1` for native PowerPoint bullets

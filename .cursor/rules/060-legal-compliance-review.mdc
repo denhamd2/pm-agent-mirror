@@ -1,6 +1,12 @@
 ---
 description: Legal Compliance Review - Expert guidance on legal compliance, data privacy, EU AI Act, GDPR, and global data protection regulations for Workday Recruiting
-alwaysApply: true
+globs:
+  - "docs/prds/**"
+  - "design/**"
+  - "research/**"
+  - ".cursor/rules/060-*"
+  - ".cursor/rules/061-*"
+alwaysApply: false
 ---
 
 # Legal Compliance Review

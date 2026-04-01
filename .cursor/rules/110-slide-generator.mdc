@@ -29,7 +29,8 @@ When the user mentions "create slides", "make a presentation", or "deck", you:
 **Workflow** (FOLLOW EXACTLY):
 1. Call `parse_template` (no args) to learn available layouts, colors, icons
 2. Write slide spec JSON to `slides_spec.json` at project root
-3. Call `create_presentation` with:
+3. **Run validator**: `python3 scripts/validate_slide_spec.py slides_spec.json` — if exit code 1, fix errors and re-run until pass
+4. Call `create_presentation` with:
    - `template_path`: from parse_template output
    - `slides_json`: absolute path to slides_spec.json
    - `output_path`: `~/Downloads/[descriptive-name].pptx`
@@ -636,7 +637,37 @@ Based on HITL responses, apply the appropriate framework from "Presentation Fram
 5. **Choose templates**: Map framework sections to Workday layouts (TITLE, Section Title, Title Only, etc.)
 6. **Plan visual variety**: Alternate layouts per Best Practices section
 
-### Step 3: Create Slide Spec
+### Step 3: Transform Language for VP Audience
+
+**Before writing slide spec JSON**, invoke `/slide-writer` skill to transform content:
+
+1. **Extract raw content**: Gather all bullets, insights, data from source materials
+2. **Invoke `/slide-writer`**: Transform research/technical language → executive-ready language
+3. **Validate clarity**: Ensure content passes 10-second comprehension test
+4. **Preserve structure**: Keep framework flow and density limits
+
+**Language transformation applies to:**
+- All slide bullets and text boxes
+- Key takeaways and recommendations
+- Data insights and findings
+- Speaker notes (citations remain technical)
+
+**What `/slide-writer` does:**
+- Simplifies language (use vs utilise, improve vs optimise)
+- Removes jargon and technical terms
+- Makes sentences shorter and clearer
+- Maintains executive tone (professional, not casual)
+
+**What 110 still controls:**
+- Framework selection and structure
+- Section flow and layout variety
+- Density validation and character limits
+- Typography standards from 010-style-guide.mdc
+- JSON spec generation
+
+**Reference**: `.cursor/skills/slide-writer/SKILL.md` for transformation patterns and examples
+
+### Step 4: Create Slide Spec
 - Write JSON array to `slides_spec.json` at project root
 - Use appropriate layouts with visual variety
 - **Apply typography standards from `010-style-guide.mdc` → Deck Generation**
@@ -647,7 +678,7 @@ Based on HITL responses, apply the appropriate framework from "Presentation Fram
 - For PESTEL-style slides: end with **Product implication:** using **run-level `highlight` `FFFF00`** (do not rely on auto-highlight)
 - For charts: include `category_axis_font_size_pt: 9`, `value_axis_font_size_pt: 9`, `title_font_size_pt: 10`
 
-### Step 4: Generate Presentation
+### Step 5: Generate Presentation
 1. Read parse_template output for template_path
 2. Call create_presentation with:
    - template_path from parse_template
@@ -655,7 +686,7 @@ Based on HITL responses, apply the appropriate framework from "Presentation Fram
    - output_path: ~/Downloads/[descriptive-name].pptx
 3. Confirm file created
 
-### Step 5: Report Results
+### Step 6: Report Results
 - Inform user of output location
 - Summarize slide count and structure
 - Suggest any follow-up edits

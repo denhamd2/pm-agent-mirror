@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PM Agent Viewer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-css.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-clike.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-typescript.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-json.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markdown.min.js"></script>
+<style>
+:root {
+  --ink: #0b1f42;
+  --ballpoint: #1a3a6e;
+  --water-cooler: #0075b4;
+  --blue-sky: #4a9fd4;
+  --pencil: #f5a623;
+  --paper: #f7f5f2;
+  --laptop: #6b7a8d;
+  --staple: #e2ddd7;
+  --desk: #c4bdb3;
+  --surface: #fafaf9;
+  --code-bg: #f5f5f0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', system-ui, sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; }
+
+.dashboard-nav { position:sticky;top:0;z-index:100;background:rgba(247,245,242,0.97);backdrop-filter:blur(12px);border-bottom:1px solid #e2ddd7;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px; }
+.dashboard-brand { font-size:15px;font-weight:700;color:#0b1f42;white-space:nowrap; }
+.dashboard-tabs { display:flex;gap:4px; }
+.dashboard-tab { padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;text-decoration:none;color:#6b7a8d;transition:all 0.2s; }
+.dashboard-tab:hover { background:#e2ddd7;color:#0b1f42; }
+.dashboard-tab.active { background:#0b1f42;color:white; }
+.dashboard-external { display:flex;gap:4px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end; }
+.dashboard-ext-link { padding:4px 10px;border-radius:16px;font-size:11px;font-weight:600;text-decoration:none;color:#0075b4;border:1px solid #e2ddd7;transition:all 0.2s;white-space:nowrap; }
+.dashboard-ext-link:hover { border-color:#0075b4;background:rgba(0,117,180,0.05); }
+
+.viewer-wrap { max-width: 900px; margin: 0 auto; padding: 24px 24px 64px; }
+.viewer-breadcrumb {
+  font-size: 13px;
+  color: var(--laptop);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+.viewer-breadcrumb a {
+  color: var(--water-cooler);
+  font-weight: 600;
+  text-decoration: none;
+}
+.viewer-breadcrumb a:hover { text-decoration: underline; }
+.viewer-breadcrumb .sep { margin: 0 6px; color: var(--staple); }
+
+#md-error {
+  display: none;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+#md-error.visible { display: block; }
+
+.md-content {
+  background: white;
+  border-radius: 12px;
+  padding: 32px 36px;
+  box-shadow: 0 1px 3px rgba(11,31,66,0.08), 0 1px 2px rgba(11,31,66,0.06);
+}
+.md-content h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  border-bottom: 1px solid var(--staple);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  line-height: 1.25;
+}
+.md-content h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 32px;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+.md-content h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-top: 24px;
+  margin-bottom: 10px;
+  line-height: 1.35;
+}
+.md-content h4, .md-content h5, .md-content h6 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  color: var(--ballpoint);
+}
+.md-content p {
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+.md-content ul, .md-content ol {
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 0 0 14px 1.25em;
+  padding-left: 0.5em;
+}
+.md-content li { margin-bottom: 6px; }
+.md-content li > ul, .md-content li > ol { margin-top: 6px; margin-bottom: 6px; }
+
+.md-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 16px 0 20px;
+}
+.md-content th, .md-content td {
+  border: 1px solid var(--staple);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+.md-content th {
+  background: var(--surface);
+  font-weight: 600;
+  color: var(--ink);
+}
+.md-content tbody tr:nth-child(even) { background: var(--surface); }
+
+.md-content pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.55;
+  background: var(--code-bg);
+  border-radius: 8px;
+  padding: 16px 18px;
+  overflow-x: auto;
+  margin: 16px 0 20px;
+  border: 1px solid var(--staple);
+}
+.md-content pre code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+.md-content code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--staple);
+}
+
+.md-content blockquote {
+  border-left: 4px solid #0075b4;
+  margin: 16px 0 20px;
+  padding: 12px 18px;
+  background: var(--surface);
+  font-style: italic;
+  color: var(--laptop);
+  font-size: 14px;
+  line-height: 1.65;
+}
+.md-content blockquote p:last-child { margin-bottom: 0; }
+
+.md-content a {
+  color: #0075b4;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.md-content a:hover { color: var(--ballpoint); }
+
+.md-content hr {
+  border: none;
+  border-top: 1px solid #e2ddd7;
+  margin: 28px 0;
+}
+
+.md-content img { max-width: 100%; height: auto; border-radius: 8px; }
+.md-content strong { font-weight: 600; color: var(--ink); }
+</style>
+</head>
+<body>
+
+<nav class="dashboard-nav" aria-label="Dashboard">
+  <span class="dashboard-brand">PM Agent Dashboard</span>
+  <div class="dashboard-tabs">
+    <a href="pm-agent-morning-roundup.html" class="dashboard-tab">Morning Roundup</a>
+    <a href="pm-agent-scorecard.html" class="dashboard-tab">Scorecard</a>
+    <a href="pm-agent-architecture.html" class="dashboard-tab">Architecture Map</a>
+    <a href="pm-agent-design-system.html" class="dashboard-tab">Design System</a>
+  </div>
+  <div class="dashboard-external">
+    <a id="proto-link" class="dashboard-ext-link" href="#" target="_blank" title="Detecting...">Prototype &#x2197;</a>
+    <a id="deck-link" class="dashboard-ext-link" href="#" target="_blank" title="Detecting...">Deck &#x2197;</a>
+    <a id="prd-link" class="dashboard-ext-link" href="#" target="_blank" title="Detecting...">PRD &#x2197;</a>
+    <a id="brief-link" class="dashboard-ext-link" href="#" target="_blank" title="Detecting...">Brief &#x2197;</a>
+    <a id="epic-link" class="dashboard-ext-link" href="#" target="_blank" title="Detecting...">Epic &#x2197;</a>
+  </div>
+</nav>
+
+<div class="viewer-wrap">
+  <div class="viewer-breadcrumb" id="breadcrumb" aria-live="polite"></div>
+  <div id="md-error" role="alert"></div>
+  <article id="md-root" class="md-content" aria-busy="true"></article>
+</div>
+
+<script>
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const fileParam = params.get('file');
+  const errorEl = document.getElementById('md-error');
+  const rootEl = document.getElementById('md-root');
+  const crumbEl = document.getElementById('breadcrumb');
+
+  function basename(path) {
+    const parts = path.replace(/\\/g, '/').split('/').filter(Boolean);
+    return parts.length ? parts[parts.length - 1] : path;
+  }
+
+  function documentType(path) {
+    const lower = path.toLowerCase();
+    if (/\/prds\//.test(lower) || /-prd\.md$/i.test(lower)) return 'PRD';
+    if (/\/epics\//.test(lower)) return 'Epic';
+    if (/design-brief/i.test(lower) || /-design-brief\.md$/i.test(lower)) return 'Design Brief';
+    if (/\/design\//.test(lower)) return 'Design';
+    return 'Document';
+  }
+
+  function resolveMarkdownUrl(file) {
+    const trimmed = file.trim().replace(/^\/+/, '');
+    if (!trimmed) return null;
+    try {
+      const pathEncoded = trimmed.split('/').map(encodeURIComponent).join('/');
+      return new URL('../' + pathEncoded, window.location.href).href;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function escapeHtml(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  function prismHighlight(code, lang) {
+    const L = (lang && Prism.languages[lang]) ? lang : 'markup';
+    const grammar = Prism.languages[L] || Prism.languages.markup;
+    try {
+      return Prism.highlight(code, grammar, L);
+    } catch (e) {
+      return Prism.highlight(code, Prism.languages.markup, 'markup');
+    }
+  }
+
+  function firstHeadingTitle(md) {
+    const m = md.match(/^#\s+(.+)$/m);
+    return m ? m[1].trim() : null;
+  }
+
+  function showError(msg) {
+    errorEl.textContent = msg;
+    errorEl.classList.add('visible');
+    rootEl.innerHTML = '';
+    rootEl.removeAttribute('aria-busy');
+    document.title = 'PM Agent Viewer — Error';
+    crumbEl.innerHTML = '<a href="pm-agent-scorecard.html">PM Agent Dashboard</a><span class="sep">›</span><span>Error</span>';
+  }
+
+  if (!fileParam) {
+    showError('Missing file parameter. Add ?file= to the URL (for example ?file=docs/prds/example-prd.md).');
+    return;
+  }
+
+  const url = resolveMarkdownUrl(fileParam);
+  if (!url) {
+    showError('Invalid file path.');
+    return;
+  }
+
+  const filename = basename(fileParam);
+  const typeLabel = documentType(fileParam);
+  crumbEl.innerHTML =
+    '<a href="pm-agent-scorecard.html">PM Agent Dashboard</a>' +
+    '<span class="sep">›</span>' +
+    '<span>' + escapeHtml(typeLabel) + '</span>' +
+    '<span class="sep">›</span>' +
+    '<span style="color:var(--ink);font-weight:600;">' + escapeHtml(filename) + '</span>';
+
+  marked.setOptions({
+    gfm: true,
+    breaks: false,
+    langPrefix: 'language-',
+    highlight: function(code, lang) {
+      return prismHighlight(code, lang);
+    }
+  });
+
+  fetch(url, { credentials: 'same-origin' })
+    .then(function(r) {
+      if (!r.ok) throw new Error(r.status === 404 ? 'File not found.' : 'Could not load file (HTTP ' + r.status + ').');
+      return r.text();
+    })
+    .then(function(md) {
+      const title = firstHeadingTitle(md);
+      if (title) document.title = title + ' — PM Agent Viewer';
+
+      rootEl.innerHTML = marked.parse(md);
+      rootEl.removeAttribute('aria-busy');
+    })
+    .catch(function(err) {
+      var msg = err && err.message ? err.message : 'Failed to load markdown.';
+      if (String(err.message || '').includes('Failed to fetch')) {
+        msg = 'Could not fetch the file. Serve the repo from a local HTTP root so paths like docs/prds/… resolve, or check the path.';
+      }
+      showError(msg);
+    });
+})();
+</script>
+<script src="dashboard-nav.js"></script>
+</body>
+</html>

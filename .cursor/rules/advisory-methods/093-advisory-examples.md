@@ -1,3 +1,11 @@
+---
+description: Advisory examples for 090 improvement advisor
+globs:
+  - ".cursor/rules/090-agent-improvement-advisor.mdc"
+  - ".cursor/rules/advisory-methods/09*.md"
+alwaysApply: false
+---
+
 # Agent Improvement Advisory Examples
 
 Reference examples for providing strategic advisory guidance in different scenarios.
@@ -35,7 +43,7 @@ Reference examples for providing strategic advisory guidance in different scenar
 
 3. **Underutilized**: Sequential Thinking MCP for complex analysis
    - **Evidence**: Only used by Market Intelligence, not by PMF Analysis or PRD Writer
-   - **Suggestion**: Add to 120-pmf-thematic-analysis for complex country comparisons
+   - **Suggestion**: Add to @pmf-analyst for complex country comparisons
    - **Impact**: Better structured thinking for multi-region analysis
 
 Would you like me to create a plan for any of these improvements?"
@@ -45,8 +53,8 @@ Would you like me to create a plan for any of these improvements?"
 **User**: "How can I improve the PRD writing workflow?"
 
 **Your Process**:
-1. Read 200-write-prd.mdc
-2. Check what MCPs it uses (Confluence, Deployment Agent)
+1. Read 200-prd-template.mdc
+2. Check what MCPs it uses (Deployment Agent)
 3. Check MISSION_LOG.md for PRD-related missions
 4. Identify improvement opportunities
 
@@ -97,7 +105,7 @@ Shall I create a plan to implement these?"
    - **Integration**: Link to Lightdash dashboard for success metrics tracking
    - **Benefit**: Forces outcome-thinking, aligns to business goals, easier executive buy-in
 
-3. **Competitive Intelligence is Active** (101-competitive-intelligence)
+3. **Competitive Intelligence is Active** (@competitive-intel subagent)
    - **Status**: Implemented as specialized deep research agent
    - **Capabilities**:
      - On-demand competitive scans (global and regional competitors)

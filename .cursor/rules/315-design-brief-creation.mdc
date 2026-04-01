@@ -54,7 +54,14 @@ Define the experience **before** UI.
 3. **Reference real layouts & pattern libraries**:
    - Identify 1–2 screens from:
      `design/references/recruiter-flow/`
-   - **MANDATORY**: If designing a data grid or list view, READ `design/references/pattern-hired-score-grid.md`. If designing a candidate profile or detail view, READ `design/references/pattern-candidate-smart-view.md`.
+   - **MANDATORY**: If designing a data grid or list view, READ `design/references/pattern-hired-score-grid.md`. This pattern is CANONICAL (Figma node 490-62877) for:
+     - Candidate grids under Job Req Detail
+     - Dashboard candidate lists
+     - All Candidates view
+     - All Actions view
+     - Any recruiter-facing list with HiredScore integration
+   - **HiredScore requirement**: If candidates have HiredScore data, design MUST specify `HiredScoreGrading` component with appropriate variant (`variant="full"` for grids with progress bar, `variant="compact"` for cards/condensed views).
+   - If designing a candidate profile or detail view, READ `design/references/pattern-candidate-smart-view.md`.
    - *Note: You may optionally use the Figma MCP to inspect the live URLs linked in those pattern documents ONLY if the local guide lacks necessary detail, but be mindful of rate limits.*
    - Reuse patterns (do **NOT** invent layouts)
 

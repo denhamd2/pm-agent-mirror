@@ -2,7 +2,7 @@
 description: PM frameworks and best practices reference for advisory work
 globs:
   - ".cursor/rules/090-agent-improvement-advisor.mdc"
-  - ".cursor/rules/200-write-prd.mdc"
+  - ".cursor/rules/200-prd-template.mdc"
   - ".cursor/rules/315-design-brief-creation.mdc"
 alwaysApply: false
 ---

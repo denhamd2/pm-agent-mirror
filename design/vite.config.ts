@@ -25,9 +25,11 @@ function prototypeSpaSlugFallback(): Plugin {
   const slugs = new Set([
     'france-whatsapp-omnichannel-engagement-v75',
     'gcc-recruiter-dashboard',
-    'gcc-unified-candidate-review-v57',
-    'gcc-nationalisation-local-compliance-reporting-v61',
+    'aadhaar-adobe-sign-v01',
     'gcc-nationalisation-local-compliance-reporting-v62',
+    'candidate-grid-v84',
+    'candidate-smart-view-v86',
+    'recruiter-home-v85',
   ]);
   return {
     name: 'prototype-spa-slug-fallback',

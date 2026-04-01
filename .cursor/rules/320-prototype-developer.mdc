@@ -269,8 +269,13 @@ Before writing prototype code, **ALWAYS verify**:
 
 ### Component Selection
 - **Always use Canvas Kit first** - don't recreate components
+- **For candidate grids with HiredScore**: Use shared `HiredScoreGrading` component (do NOT inline grade logic)
+  - Full variant (`variant="full"`): Candidate grids, profile headers (shows A-D badge, percentage, label, progress bar)
+  - Compact variant (`variant="compact"`): Dashboard cards, condensed lists (shows badge + percentage + label only)
+  - See `design/references/pattern-hired-score-grid.md` for canonical layout (Figma node 490-62877)
+- **For grid layouts**: Reference `pattern-hired-score-grid.md` for canonical structure (Job Req Detail, Dashboard, All Candidates, All Actions)
 - Check Canvas Kit docs via MCP before custom implementation
-- Use shared components (FormSelect, WorkdayTopNav, ProfilePageLayout)
+- Use shared components (FormSelect, WorkdayTopNav, ProfilePageLayout, HiredScoreGrading)
 - Reference pattern docs for detailed guidance
 
 ### Code Quality
@@ -356,10 +361,49 @@ When receiving **"Build prototype from the Design Brief at design/[feature]-desi
    - Add route case to `prototypeFromLocation()` (pathname + hash)
    - Add render case to `AppRoot()`
    - **CRITICAL**: Add slug to `design/vite.config.ts` in `prototypeSpaSlugFallback` plugin's `slugs` Set
-6. **Start dev server with prototype slug**:
-   - `VITE_PROTOTYPE_SLUG=[feature-slug-vNN] npm run dev` (from `design/` directory in background)
-   - First Vite listen triggers Chrome + Cursor Simple Browser to versioned URL
-   - If server already running, run from repo root: `bash scripts/open-url-chrome-and-cursor-browser.sh 'http://localhost:5199/[feature-slug-vNN]'`
+6. **Start dev server with prototype slug (MANDATORY URL VERIFICATION)**:
+   
+   **CRITICAL: Always check if server is running first**
+   ```bash
+   # From workspace root - check port status
+   lsof -ti:5199
+   ```
+   
+   **Case 1: Port 5199 is FREE (command returns empty/error)**
+   ```bash
+   # Start new server with prototype slug
+   cd design && VITE_PROTOTYPE_SLUG=[feature-slug-vNN] npm run dev
+   ```
+   - Vite's `openChromeAndCursorBrowser` plugin reads `VITE_PROTOTYPE_SLUG` and constructs `http://localhost:5199/[feature-slug-vNN]`
+   - Browser opens automatically to versioned URL
+   - **Verify in output**: Browser should show full URL with prototype slug, NOT root URL
+   
+   **Case 2: Port 5199 is IN USE (server already running)**
+   ```bash
+   # From workspace root - manually open correct URL
+   bash scripts/open-url-chrome-and-cursor-browser.sh 'http://localhost:5199/[feature-slug-vNN]'
+   ```
+   - Do NOT attempt to start a new server (will fail with "Port in use")
+   - Script opens the full versioned URL in existing server
+   - **Verify**: Confirm URL in browser address bar shows `/[feature-slug-vNN]` path
+   
+   **FORBIDDEN**:
+   - ❌ Starting dev server without `VITE_PROTOTYPE_SLUG` environment variable
+   - ❌ Opening browser to root URL (`http://localhost:5199/`) without prototype slug
+   - ❌ Assuming server will route correctly without checking URL
+   - ❌ Skipping port check (leads to ambiguous behavior)
+   
+   **Template for actual execution** (replace placeholders):
+   ```bash
+   # Check port
+   lsof -ti:5199
+   
+   # If free:
+   cd design && VITE_PROTOTYPE_SLUG=candidate-grid-v84 npm run dev
+   
+   # If in use:
+   bash scripts/open-url-chrome-and-cursor-browser.sh 'http://localhost:5199/candidate-grid-v84'
+   ```
 7. After build + 060 review, orchestrator sequences 319 (copy) and 330 (capture). **330** uses Figma MCP `generate_figma_design` and opens returned hash URL - no in-prototype capture UI.
 
 **Example**: If Design Brief says "Extend Campaigns app with WhatsApp channel", build:

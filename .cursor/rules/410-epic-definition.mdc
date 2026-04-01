@@ -51,6 +51,56 @@ Read the PRD to extract:
 - **Target persona**: Who benefits? (GCC recruiter, hiring manager, candidate, etc.)
 - **Business outcome**: Why does this matter? What improves?
 
+### Step 1.5: Extract or Generate Value Metrics
+
+**Scenario A: Epic from PRD (value metrics exist in PRD)**
+
+1. Read PRD section "What customer benefits and value does our solution deliver?"
+2. Extract 3-tier metrics hierarchy:
+   - **Impact (Business Value)**: 1-3 BV metrics with baselines and targets
+   - **Product Outcomes**: 3 PV metrics with BV linkages
+   - **Outputs (Product Catalogue)**: Adoption and Usage metrics with Year 1 targets
+3. Carry forward to epic draft for 420/430 handoff
+
+**Scenario B: Standalone epic (no PRD, ad-hoc epic creation)**
+
+1. Extract epic description/capability from user request or context
+2. Invoke `/value-metrics suggest [epic description]`
+3. Receive complete 3-tier metrics package (BV + PV + Adoption/Usage)
+4. Present to PM for validation (quick review <2 min)
+5. PM selects final metrics based on epic scope
+6. Document selected metrics in epic draft
+
+**Why this matters**: Epics are strategic containers; carrying value metrics from PRD ensures continuity and enables epic-level success tracking in Jira. For standalone epics, generating metrics ensures consistent value framing even without a formal PRD.
+
+**Example (Scenario A - from PRD)**:
+
+PRD has:
+```
+Impact (Business Value):
+• Time to Hire: 45 days → 30 days (33% reduction)
+• Productivity: Recruiter Capacity: 8 JRs → 12 JRs per recruiter (50% increase)
+
+Product Outcomes:
+• Avg. time to shortlist 10 candidates (PV) → drives BV#1
+• # of applications auto-screened per recruiter/month (PV) → drives BV#2
+• Qualified candidate match accuracy (PV) → drives BV#1, BV#2
+
+Outputs:
+• Usage: AI screening invocations per recruiter/month (Target: 50+)
+• Adoption: % of recruiters using AI screening (Target: 25% Year 1)
+```
+
+→ Copy these metrics to epic draft "Success Metrics" section
+
+**Example (Scenario B - standalone, no PRD)**:
+
+User: "Create epic for bulk candidate messaging feature"
+
+→ Invoke: `/value-metrics suggest bulk candidate messaging for recruiter engagement`
+
+→ Receive metrics package → PM selects → Document in epic draft
+
 ### Step 2: Consult Functional Knowledge and Deployment Agent
 
 **CRITICAL**: Before writing the epic, ensure you understand current Workday functionality.
@@ -97,7 +147,7 @@ Write **`docs/epics/[feature-slug]-epic-draft.md`** using this structure (430 wi
 ```markdown
 # Epic draft: [Short title]
 
-**PRD:** `docs/prds/...`
+**PRD:** `docs/prds/...` (or "Standalone epic - no PRD" if Scenario B)
 **Status:** Draft — **Jira epic is created in 430** after story map approval (420 HITL).
 
 ## Epic summary (for Jira Summary field)
@@ -110,13 +160,29 @@ As a [persona]
 I want [goal/capability]
 So that [business outcome]
 
+## Success metrics (for Jira epic)
+
+**Impact (Business Value):**
+- [BV Metric 1]: [Baseline] → [Target] ([% improvement])
+- [BV Metric 2]: [Baseline] → [Target] ([% improvement]) (if applicable)
+
+**Product Outcomes:**
+- [PV Metric 1] → drives BV#[N]
+- [PV Metric 2] → drives BV#[N]
+- [PV Metric 3] → drives BV#[N, N] (if multi-BV link)
+
+**Outputs (Product Catalogue):**
+- Usage: [Metric] (Target: [Value])
+- Adoption: [Metric] (Target: [X]% Year 1)
+
 ## Jira-ready description
 
 Paste body for Jira epic description (markdown):
 
 - User story (repeat)
-- Link to PRD
+- Link to PRD (or "Standalone epic" if no PRD)
 - Scope bullets, personas, business value (as in your PRD analysis)
+- Success metrics (copy from above)
 
 ## Notes for story mapping
 
@@ -231,9 +297,10 @@ You:
 - ✅ Search functional knowledge before writing epic
 - ✅ Query Deployment Agent MCP if questions about current functionality
 - ✅ Read PRD before writing epic
+- ✅ **Extract or generate value metrics** (Step 1.5) — from PRD if exists, via `/value-metrics` if standalone
 - ✅ Write epic in user story format (As a... I want... So that...)
 - ✅ Include measurable business outcome
-- ✅ Save **`docs/epics/[slug]-epic-draft.md`** with PRD link and Jira-ready body
+- ✅ Save **`docs/epics/[slug]-epic-draft.md`** with PRD link, value metrics, and Jira-ready body
 - ✅ Return **draft path** and proposed **summary title** for 420/430
 - ✅ Be specific about persona (not generic "user")
 

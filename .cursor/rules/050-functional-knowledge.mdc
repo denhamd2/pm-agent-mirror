@@ -1,8 +1,17 @@
 ---
 description: Provides core Workday functional logic and configuration standards from the @functional-knowledge folder
 globs:
-  - "functional-knowledge/*.pdf"
-alwaysApply: true
+  - "functional-knowledge/**"
+  - "docs/prds/**"
+  - "design/**"
+  - "research/**"
+  - ".cursor/rules/050-*"
+  - ".cursor/rules/200-*"
+  - ".cursor/rules/315-*"
+  - ".cursor/rules/320-*"
+  - ".cursor/rules/410-*"
+  - ".cursor/rules/430-*"
+alwaysApply: false
 ---
 
 # Functional Knowledge Authority

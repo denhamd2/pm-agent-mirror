@@ -6,7 +6,9 @@ This folder contains prototypes, design documentation, and reference materials f
 
 With **`npm run dev`** (port **5199**):
 
-- **`http://localhost:5199/`** — default shell loads **WhatsApp omnichannel engagement v45**.
+- **`http://localhost:5199/`** — default shell loads **Recruiter Homepage v85** (AI-native homepage).
+- **`http://localhost:5199/#/recruiter-home-v85`** — **Recruiter Homepage v85** (AI Daily Briefing, smart candidate recommendations, pipeline health, personalized metrics).
+- **`http://localhost:5199/#/candidate-grid-v84`** — **Candidate grid redesign v84** (enhanced tabs: Dashboard, Job Requisitions, Candidates, Reports with full functionality and HiredScore integration).
 - **`http://localhost:5199/gcc-candidate-grid-redesign-v52`** — **Candidate grid redesign v52** (GCC-E2E-011; copy from **319**; unified modal, hub tabs).
 - **`http://localhost:5199/gcc-candidate-grid-v46`** — **Candidate grid redesign v46** (unified modal, hub tabs Requisitions / Candidates / Offers / Analytics).
 - **`http://localhost:5199/gcc-candidate-grid-v46?mode=anonymised`** — same prototype in **anonymised review** mode (Works Council–style masking).
@@ -67,6 +69,12 @@ This message comes from **Figma’s html-to-design service**, not from a broken 
 - **`EmailComposer`** - Email composition: From/To/Cc/Subject + rich text + branding + send (no thread sidebar)
 - **`RichTextEditor`** - Standalone rich text input: contentEditable + formatting toolbar (Bold/Italic/Underline/Link/List) + email templates (6 recruiting templates with token replacement) + GenAI improvement (mocked with realistic transformations)
 - **`ThreadExpansion`** - Gmail-style inline thread toggle: "Show N messages" / "Hide previous messages"
+
+### Candidate Portal Components
+- **`CandidateHomeLayout`** - Full-page candidate home: blue header, two-column layout (tasks + applications in main, sidebar widgets in sidebar)
+- **`CandidateTaskModal`** - Generic modal overlay for candidate tasks (dark overlay + centered card with close handling)
+- **`AdobeSignAadhaarFlow`** - 4-step Adobe Sign simulation with NSDL e-Gov Aadhaar authentication (NSDL consent → Aadhaar entry → OTP → Success)
+- **`DocumentReviewTask`** - Offer document review with consent and Adobe Sign integration (pre-Adobe consent state, post-Adobe confirmation state)
 
 ### Usage Patterns
 
@@ -214,6 +222,106 @@ const TABS: ProfileTab[] = [
   }}
   
   footerDisclaimer="This screen is a prototype for review."
+/>
+```
+
+**Candidate home layout:**
+```tsx
+import { 
+  CandidateHomeLayout, 
+  type CandidateTask, 
+  type CandidateApplication, 
+  type SidebarWidget 
+} from './components';
+
+const tasks: CandidateTask[] = [
+  { 
+    id: '1', 
+    title: 'Review document', 
+    description: 'Senior Engineer — Cloud Platform',
+    status: 'todo',
+    onAction: () => openTask(),
+    actionLabel: 'Start'
+  },
+  {
+    id: '2',
+    title: 'Complete background check',
+    description: 'Senior Engineer — Cloud Platform',
+    status: 'completed',
+    onAction: () => {},
+    onView: () => viewDocument(),
+    completedLabel: 'Completed'
+  }
+];
+
+const applications: CandidateApplication[] = [
+  {
+    id: 'app-1',
+    jobTitle: 'Senior Engineer — Cloud Platform',
+    reqNumber: 'REQ-2026-IND-4412',
+    location: 'Bengaluru, India',
+    status: 'active',
+    statusLabel: 'Offer',
+    statusType: StatusIndicator.Type.Blue,
+    appliedDate: '15 Feb 2026'
+  }
+];
+
+const widgets: SidebarWidget[] = [
+  {
+    id: 'schedule',
+    title: 'Interview Schedule',
+    content: <BodyText>No upcoming interviews.</BodyText>
+  },
+  {
+    id: 'alerts',
+    title: 'Job Alerts',
+    content: (
+      <>
+        <BodyText>Engineering roles in India</BodyText>
+        <StatusIndicator type={StatusIndicator.Type.Green} label="Active" />
+      </>
+    )
+  }
+];
+
+<CandidateHomeLayout
+  userName="Candidate Home"
+  userSubtitle="Welcome, Ananya! Manage your applications and tasks here."
+  tasks={tasks}
+  applications={applications}
+  sidebarWidgets={widgets}
+/>
+```
+
+**Task modal with document review:**
+```tsx
+import { CandidateTaskModal, DocumentReviewTask, AdobeSignAadhaarFlow } from './components';
+
+<CandidateTaskModal 
+  open={showTask} 
+  onClose={() => setShowTask(false)}
+  maxWidth={600}
+>
+  <DocumentReviewTask
+    preAdobe={!hasSigned}
+    orgName="Acme Corporation"
+    onOpenAdobe={() => setShowAdobeFlow(true)}
+    onComplete={() => {
+      setTaskCompleted(true);
+      setShowTask(false);
+    }}
+    onCancel={() => setShowTask(false)}
+  />
+</CandidateTaskModal>
+
+<AdobeSignAadhaarFlow 
+  open={showAdobeFlow} 
+  onComplete={() => {
+    setHasSigned(true);
+    setShowAdobeFlow(false);
+  }}
+  orgName="Acme Corporation"
 />
 ```
 

@@ -48,7 +48,11 @@ Evaluate the design draft harshly:
     - Pill search and pill active states?
     - Soft radii (~16-20px cards, ~12px compact elements)?
     - Sparing blue (links/focus only, not heavy chrome)?
-  - If grid/list: Does it follow `design/references/pattern-hired-score-grid.md`?
+  - **If grid/list with HiredScore**: Does it match canonical `pattern-hired-score-grid.md` (Figma node 490-62877)?
+    - [ ] HiredScoreGrading component specified (not custom grade UI)
+    - [ ] Correct variant (`variant="full"` for grids with progress bar, `variant="compact"` for cards/condensed views)
+    - [ ] A-D color bands match canonical pattern (A=green, B=blue/grey, C=orange, D=grey)
+    - [ ] Layout applies to correct contexts (Job Req Detail, Dashboard, All Candidates, All Actions)
   - If profile/detail: Does it follow `design/references/pattern-candidate-smart-view.md`?
 
 ### Design System Validation (Canvas Kit Component Correctness)

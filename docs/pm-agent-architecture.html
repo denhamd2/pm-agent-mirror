@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PM Agent Dashboard — Architecture Map</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0b1f42;
+  --water: #0075b4;
+  --sky: #4a9fd4;
+  --pencil: #f5a623;
+  --paper: #f7f5f2;
+  --laptop: #6b7a8d;
+  --staple: #e2ddd7;
+  --desk: #c4bdb3;
+  --wf1: #6366f1;
+  --wf2: #f59e0b;
+  --wf3: #22c55e;
+  --wf4: #ec4899;
+}
+* { font-family: 'DM Sans', system-ui, sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); overflow: hidden; height: 100vh; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+.dashboard-nav { position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(247,245,242,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--staple);padding:10px 24px;display:flex;align-items:center;gap:16px; }
+.dashboard-brand { font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap; }
+.dashboard-tabs { display:flex;gap:4px; }
+.dashboard-tab { padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;text-decoration:none;color:var(--laptop);transition:all 0.2s; }
+.dashboard-tab:hover { background:var(--staple);color:var(--ink); }
+.dashboard-tab.active { background:var(--ink);color:white; }
+.dashboard-external { display:flex;gap:4px;margin-left:auto; }
+.dashboard-ext-link { padding:4px 10px;border-radius:16px;font-size:11px;font-weight:600;text-decoration:none;color:var(--water);border:1px solid var(--staple);transition:all 0.2s;white-space:nowrap; }
+.dashboard-ext-link:hover { border-color:var(--water);background:rgba(0,117,180,0.05); }
+
+#controls {
+  position: fixed; top: 46px; left: 0; right: 0; z-index: 100;
+  background: rgba(247,245,242,0.92); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--staple);
+  padding: 8px 24px; display: flex; align-items: center; justify-content: space-between;
+}
+
+#sidebar {
+  position: fixed; top: 90px; right: 0; width: 380px; bottom: 0; z-index: 90;
+  background: white; border-left: 1px solid var(--staple);
+  overflow-y: auto; padding: 20px; transition: transform 0.3s;
+}
+#sidebar.collapsed { transform: translateX(380px); }
+
+#graph-container { 
+  position: fixed; top: 90px; left: 0; right: 380px; bottom: 0; 
+  overflow: auto; background: var(--paper);
+}
+#graph-container.full { right: 0; }
+
+#node-view-container {
+  position: fixed; top: 90px; left: 0; right: 380px; bottom: 0;
+  overflow: hidden; background: var(--paper); display: none;
+}
+#node-view-container.full { right: 0; }
+#node-view-container.active { display: block; }
+
+#node-view-svg { width: 100%; height: 100%; }
+.d3-node { cursor: pointer; transition: opacity 0.2s; }
+.d3-node:hover { opacity: 0.8; }
+.d3-node-circle { stroke: white; stroke-width: 2px; }
+.d3-node-circle.subagent-thin { stroke-dasharray: 4; }
+.d3-node-label { font-size: 10px; font-weight: 600; pointer-events: none; }
+.d3-link { stroke: #c4bdb3; stroke-opacity: 0.4; fill: none; }
+.d3-link.delegate { stroke-dasharray: 3; stroke: #f59e0b; stroke-opacity: 0.6; }
+.d3-link.mcp { stroke: #a855f7; stroke-opacity: 0.5; }
+
+.filter-btn {
+  padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  border: 1.5px solid var(--staple); background: white; cursor: pointer; transition: all 0.2s;
+}
+.filter-btn:hover { border-color: var(--water); }
+.filter-btn.active { background: var(--ink); color: white; border-color: var(--ink); }
+
+.view-toggle-btn {
+  padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  border: 2px solid var(--staple); background: white; cursor: pointer; transition: all 0.2s;
+}
+.view-toggle-btn:hover { border-color: var(--water); background: rgba(0,117,180,0.05); }
+.view-toggle-btn.active { background: var(--water); color: white; border-color: var(--water); }
+
+.legend-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+.legend-rect { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+
+.detail-section { margin-bottom: 16px; }
+.detail-section h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--laptop); font-weight: 700; margin-bottom: 8px; }
+.detail-item { font-size: 12px; padding: 6px 0; border-bottom: 1px solid #f0ede9; }
+.detail-badge { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+.detail-kv { display: flex; gap: 8px; font-size: 12px; padding: 4px 0; }
+.detail-kv .k { color: var(--laptop); font-weight: 600; min-width: 80px; }
+.detail-kv .v { color: var(--ink); }
+.detail-list { font-size: 12px; padding-left: 16px; margin: 4px 0; }
+.detail-list li { padding: 2px 0; color: var(--ink); }
+
+.workflow-diagram { min-width: 1600px; padding: 40px; }
+.orchestrator-row { margin-bottom: 50px; }
+.support-row { margin-bottom: 40px; }
+.workflow-lane { margin-bottom: 36px; padding: 20px 24px; border-radius: 12px; position: relative; }
+.workflow-lane.wf1 { background: rgba(99,102,241,0.05); border: 2px solid var(--wf1); }
+.workflow-lane.wf2 { background: rgba(245,158,11,0.05); border: 2px solid var(--wf2); }
+.workflow-lane.wf3 { background: rgba(34,197,94,0.05); border: 2px solid var(--wf3); }
+.workflow-lane.wf4 { background: rgba(236,72,153,0.05); border: 2px solid var(--wf4); }
+
+.lane-header { font-size: 14px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+.lane-desc { font-size: 11px; color: var(--laptop); margin-bottom: 14px; font-style: italic; }
+.lane-steps { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+
+.node {
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+  min-width: 96px; padding: 10px 14px; border-radius: 8px; font-size: 11px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s; position: relative; text-align: center;
+  box-shadow: 0 1px 3px rgba(11,31,66,0.08);
+}
+.node:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(11,31,66,0.15); }
+.node-icon { font-size: 18px; margin-bottom: 2px; line-height: 1; }
+
+.node.orchestrator { background: var(--wf1); color: white; border: 3px solid #4338ca; border-radius: 50%; width: 100px; height: 100px; }
+.node.rule { background: var(--water); color: white; border: 2px solid #0284c7; }
+.node.rule-always { background: #ef4444; color: white; border: 2px solid #b91c1c; }
+.node.subagent { background: var(--pencil); color: white; border: 2px solid #d97706; border-radius: 50%; width: 90px; height: 90px; }
+.node.subagent-thin { background: var(--pencil); color: white; border: 2px dashed #d97706; border-radius: 50%; width: 80px; height: 80px; opacity: 0.85; }
+.node.skill { background: white; color: var(--ink); border: 2px solid #16a34a; border-top: 4px solid #16a34a; border-radius: 20px; padding: 8px 16px; min-width: 110px; }
+.node.mcp { background: #a855f7; color: white; border: 2px solid #7c3aed; transform: rotate(45deg); width: 80px; height: 80px; }
+.node.mcp span { transform: rotate(-45deg); display: block; }
+
+.arrow { display: inline-block; margin: 0 6px; font-size: 18px; color: var(--laptop); opacity: 0.4; font-weight: 400; }
+.seq-arrow { display: inline-block; margin: 0 6px; font-size: 18px; color: #ef4444; opacity: 0.7; font-weight: 700; }
+
+.step-number { 
+  position: absolute; top: -8px; left: -8px; 
+  background: white; border: 2px solid currentColor; border-radius: 50%; 
+  width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+}
+
+.skills-row, .mcps-column { margin-top: 36px; }
+.skills-row { display: flex; gap: 16px; flex-wrap: wrap; padding: 20px; background: rgba(34,197,94,0.03); border-radius: 12px; }
+.mcps-column { display: flex; gap: 16px; flex-wrap: wrap; padding: 20px; background: rgba(168,85,247,0.03); border-radius: 12px; }
+
+.section-title-header { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--laptop); font-weight: 700; margin-bottom: 12px; }
+.sub-group-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--desk); font-weight: 600; margin-bottom: 6px; }
+
+.node.dimmed { opacity: 0.2; }
+.hidden { display: none !important; }
+
+.tooltip {
+  position: fixed; padding: 10px 14px; background: var(--ink); color: white;
+  border-radius: 8px; font-size: 12px; pointer-events: none; z-index: 300;
+  max-width: 300px; box-shadow: 0 8px 24px rgba(11,31,66,0.2);
+  opacity: 0; transition: opacity 0.15s;
+}
+.tooltip.visible { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- Shared Dashboard Nav -->
+<nav class="dashboard-nav">
+  <span class="dashboard-brand">PM Agent Dashboard</span>
+  <div class="dashboard-tabs">
+    <a href="pm-agent-morning-roundup.html" class="dashboard-tab">Morning Roundup</a>
+    <a href="pm-agent-scorecard.html" class="dashboard-tab">Scorecard</a>
+    <a href="pm-agent-architecture.html" class="dashboard-tab active">Architecture Map</a>
+    <a href="pm-agent-design-system.html" class="dashboard-tab">Design System</a>
+  </div>
+  <div class="dashboard-external">
+    <a id="proto-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Prototype &#x2197;</a>
+    <a id="deck-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Deck &#x2197;</a>
+    <a id="prd-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">PRD &#x2197;</a>
+    <a id="brief-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Brief &#x2197;</a>
+    <a id="epic-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Epic &#x2197;</a>
+  </div>
+</nav>
+
+<!-- Filter Controls -->
+<div id="controls">
+  <div class="flex items-center gap-2">
+    <button class="view-toggle-btn active" data-view="workflow">Workflow</button>
+    <button class="view-toggle-btn" data-view="node">Node View</button>
+    <div style="width: 1px; height: 20px; background: var(--staple); margin: 0 8px;"></div>
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="workflow">Workflows Only</button>
+    <button class="filter-btn" data-filter="skills-mcps">Skills &amp; MCPs</button>
+    <button id="toggleSidebar" class="filter-btn" style="margin-left: 8px;">Panel</button>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar">
+  <div id="sidebar-default">
+    <div class="detail-section">
+      <h3>Architecture Overview</h3>
+      <div class="space-y-2 text-xs">
+        <div><strong>38 rules</strong> (2 alwaysApply, 36 glob-scoped)</div>
+        <div><strong>6 subagents</strong> (3 heavy-logic, 3 thin wrappers)</div>
+        <div><strong>6 skills</strong> (workspace + global)</div>
+        <div><strong>11 MCPs</strong> (integration layer)</div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <h3>Node Types</h3>
+      <div class="space-y-2 text-xs">
+        <div class="flex items-center gap-2"><div class="legend-dot" style="background: #6366f1;"></div> Orchestrator (000)</div>
+        <div class="flex items-center gap-2"><div class="legend-rect" style="background: #0ea5e9;"></div> Rules (glob-scoped)</div>
+        <div class="flex items-center gap-2"><div class="legend-rect" style="background: #ef4444;"></div> Rules (alwaysApply)</div>
+        <div class="flex items-center gap-2"><div class="legend-dot" style="background: #f59e0b;"></div> Subagents (heavy)</div>
+        <div class="flex items-center gap-2"><div class="legend-dot" style="background: #f59e0b; opacity:0.6; border: 2px dashed #d97706;"></div> Subagents (thin wrapper)</div>
+        <div class="flex items-center gap-2"><div class="legend-rect" style="background: white; border: 2px solid #16a34a; border-top: 3px solid #16a34a;"></div> Skills</div>
+        <div class="flex items-center gap-2"><svg width="14" height="14"><polygon points="7,0 14,7 7,14 0,7" fill="#a855f7"/></svg> MCPs</div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <h3>Workflows (E2E Pipeline)</h3>
+      <div class="space-y-3 text-xs">
+        <div class="p-2 rounded" style="background: #f0f0ff; border-left: 3px solid #6366f1;">
+          <div class="font-bold mb-1">WF1: PMF Research &amp; Deck</div>
+          Analyse a regional market and produce a PMF roadmap deck for VP review
+        </div>
+        <div class="p-2 rounded" style="background: #fef3c7; border-left: 3px solid #f59e0b;">
+          <div class="font-bold mb-1">WF2: PRD Writing</div>
+          Write a product requirements document with legal and risk review
+        </div>
+        <div class="p-2 rounded" style="background: #ecfdf5; border-left: 3px solid #22c55e;">
+          <div class="font-bold mb-1">WF3: Design &amp; Prototype</div>
+          Design, prototype, and capture a feature in Canvas Kit and Figma
+        </div>
+        <div class="p-2 rounded" style="background: #fce7f3; border-left: 3px solid #ec4899;">
+          <div class="font-bold mb-1">WF4: Backlog Refinement</div>
+          Break down requirements into an epic, story map, and Jira stories
+        </div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <h3>Interactions</h3>
+      <div class="text-xs" style="color: var(--laptop);">Click any node to see its connections and details. Use filter buttons to focus on specific aspects.</div>
+    </div>
+  </div>
+  <div id="sidebar-detail" style="display: none;"></div>
+</div>
+
+<!-- Main Diagram -->
+<div id="graph-container">
+  <div class="workflow-diagram">
+    
+    <!-- Orchestrator -->
+    <div class="orchestrator-row">
+      <div style="text-align: center;">
+        <div class="node orchestrator" data-id="000" data-type="orchestrator">
+          000<br>Orchestrator
+        </div>
+        <div class="text-xs mt-2" style="color: var(--laptop);">Routes to all agents &middot; alwaysApply</div>
+      </div>
+    </div>
+
+    <!-- Quality Gates and Advisors -->
+    <div class="support-row">
+      <div class="section-title-header">Quality Gates and Advisors</div>
+      <div style="display: flex; gap: 32px; justify-content: center; flex-wrap: wrap;">
+        <div>
+          <div class="sub-group-label">Quality Gates</div>
+          <div style="display: flex; gap: 12px;">
+            <div class="node rule" data-id="060" data-type="rule">060<br>Legal<br>Compliance</div>
+            <div class="node rule" data-id="080" data-type="rule">080<br>Red Team</div>
+          </div>
+        </div>
+        <div>
+          <div class="sub-group-label">Advisors</div>
+          <div style="display: flex; gap: 12px;">
+            <div class="node rule" data-id="090" data-type="rule">090<br>Improvement<br>Advisor</div>
+            <div class="node rule" data-id="100" data-type="rule">100<br>Market<br>Intelligence</div>
+            <div class="node rule" data-id="500" data-type="rule">500<br>Slack<br>Responder</div>
+          </div>
+        </div>
+        <div>
+          <div class="sub-group-label">Sub-Agents</div>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; max-width: 320px; justify-content: center;">
+            <div class="node subagent" data-id="sa-strategy" data-type="subagent">
+              <div class="node-icon">&#127919;</div>
+              @product<br>strategy
+            </div>
+            <div class="node subagent" data-id="sa-ci" data-type="subagent">
+              <div class="node-icon">&#128301;</div>
+              @competitive<br>intel
+            </div>
+            <div class="node subagent" data-id="sa-pmf" data-type="subagent">
+              <div class="node-icon">&#128300;</div>
+              @pmf<br>analyst
+            </div>
+            <div class="node subagent-thin" data-id="sa-ux-researcher" data-type="subagent">
+              <div class="node-icon">&#128270;</div>
+              @ux<br>researcher
+            </div>
+            <div class="node subagent-thin" data-id="sa-ux-designer" data-type="subagent">
+              <div class="node-icon">&#127912;</div>
+              @ux<br>designer
+            </div>
+            <div class="node subagent-thin" data-id="sa-doc-writer" data-type="subagent">
+              <div class="node-icon">&#9998;</div>
+              @doc<br>writer
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WF1: PMF Research & Deck -->
+    <div class="workflow-lane wf1">
+      <div class="lane-header">
+        <span style="color: var(--wf1);">&#9679;</span>
+        <span>WF1: PMF Research &amp; Deck</span>
+        <span class="text-xs font-normal" style="color: var(--laptop);">(Steps 1-11)</span>
+      </div>
+      <div class="lane-desc">Analyse a regional market and produce a PMF roadmap deck for VP review</div>
+      <div class="lane-steps">
+        <div class="node subagent" data-id="sa-strategy" data-type="subagent">
+          <div class="step-number" style="color: var(--wf1);">1-3</div>
+          <div class="node-icon">&#127919;</div>
+          @product<br>strategy
+        </div>
+        <span class="arrow">&rarr;</span>
+        <div class="node subagent" data-id="sa-ci" data-type="subagent">
+          <div class="step-number" style="color: var(--wf1);">4</div>
+          <div class="node-icon">&#128301;</div>
+          @competitive<br>intel
+        </div>
+        <span class="arrow">&rarr;</span>
+        <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <div class="node rule" data-id="105" data-type="rule">
+              <div class="step-number" style="color: var(--wf1);">7-8</div>
+              105 User Research
+            </div>
+            <div class="node subagent-thin" data-id="sa-ux-researcher" data-type="subagent">
+              <div class="node-icon">&#128270;</div>
+              @ux<br>researcher
+            </div>
+          </div>
+          <div class="node rule" data-id="108" data-type="rule">
+            <div class="step-number" style="color: var(--wf1);">6</div>
+            108 Gap Analyser
+          </div>
+        </div>
+        <span class="seq-arrow">&rarr;</span>
+        <div class="node rule" data-id="106" data-type="rule">
+          <div class="step-number" style="color: var(--wf1);">5</div>
+          106 Ideation Hub
+        </div>
+        <span class="arrow">&rarr;</span>
+        <div class="node subagent" data-id="sa-pmf" data-type="subagent">
+          <div class="step-number" style="color: var(--wf1);">9</div>
+          <div class="node-icon">&#128300;</div>
+          @pmf<br>analyst
+        </div>
+        <span class="arrow">&rarr;</span>
+        <div class="node rule" data-id="130" data-type="rule">
+          <div class="step-number" style="color: var(--wf1);">10</div>
+          130 PMF Slide Gen
+        </div>
+      </div>
+      <div class="text-xs mt-3" style="color: var(--laptop); padding-left: 12px;">
+        <strong>Sequential:</strong> 106 runs after 105 completes (needs theme inputs). Red arrow = sequential dependency.
+      </div>
+    </div>
+
+    <!-- WF2: PRD Writing -->
+    <div class="workflow-lane wf2">
+      <div class="lane-header">
+        <span style="color: var(--wf2);">&#9679;</span>
+        <span>WF2: PRD Writing</span>
+        <span class="text-xs font-normal" style="color: var(--laptop);">(Steps 13-17)</span>
+      </div>
+      <div class="lane-desc">Write a product requirements document with legal and risk review</div>
+      <div class="lane-steps">
+        <div class="node rule" data-id="200" data-type="rule">
+          <div class="step-number" style="color: var(--wf2);">14</div>
+          200 PRD Writer
+        </div>
+        <span class="arrow">&rarr;</span>
+        <div class="node rule" data-id="060-wf2" data-type="rule">
+          <div class="step-number" style="color: var(--wf2);">15</div>
+          060 Legal Review
+        </div>
+        <span class="arrow">&rarr;</span>
+        <div class="node rule" data-id="080-wf2" data-type="rule">
+          <div class="step-number" style="color: var(--wf2);">17</div>
+          080 Red Team
+        </div>
+      </div>
+    </div>
+
+    <!-- WF3: Design & Prototype -->
+    <div class="workflow-lane wf3">
+      <div class="lane-header">
+        <span style="color: var(--wf3);">&#9679;</span>
+        <span>WF3: Design &amp; Prototype</span>
+        <span class="text-xs font-normal" style="color: var(--laptop);">(Steps 18-24)</span>
+      </div>
+      <div class="lane-desc">Design, prototype, and capture a feature in Canvas Kit and Figma</div>
+      <div class="lane-steps">
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <div class="node rule" data-id="315" data-type="rule">
+            <div class="step-number" style="color: var(--wf3);">18</div>
+            315 Design Brief
+          </div>
+          <div class="node subagent-thin" data-id="sa-ux-designer" data-type="subagent">
+            <div class="node-icon">&#127912;</div>
+            @ux<br>designer
+          </div>
+        </div>
+        <span class="arrow">&rarr;</span>
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <div class="node rule" data-id="319" data-type="rule">
+            <div class="step-number" style="color: var(--wf3);">19</div>
+            319 Copy Review
+          </div>
+          <div class="node subagent-thin" data-id="sa-doc-writer" data-type="subagent">
+            <div class="node-icon">&#9998;</div>
+            @doc<br>writer
+          </div>
+        </div>
+        <span class="arrow">&rarr;</span>
+        <div class="node rule" data-id="318" data-type="rule">
+          <div class="step-number" style="color: var(--wf3);">20</div>
+          318 Peer Review
+        </div>
+        <span class="arrow">&rarr;</span>
+        <div class="node rule" data-id="320" data-type="rule">
+          <div class="step-number" style="color: var(--wf3);">21</div>
+          320 Prototype Dev
+        </div>
+        <span class="arrow">&rarr;</span>
+        <div class="node rule" data-id="321" data-type="rule">
+          <div class="step-number" style="color: var(--wf3);">22</div>
+          321 Visual Review
+        </div>
+        <span class="arrow">&rarr;</span>
+        <div class="node rule" data-id="330" data-type="rule">
+          <div class="step-number" style="color: var(--wf3);">24</div>
+          330 Figma
+        </div>
+      </div>
+    </div>
+
+    <!-- WF4: Backlog Refinement -->
+    <div class="workflow-lane wf4">
+      <div class="lane-header">
+        <span style="color: var(--wf4);">&#9679;</span>
+        <span>WF4: Backlog Refinement</span>
+        <span class="text-xs font-normal" style="color: var(--laptop);">(Steps 25-29)</span>
+      </div>
+      <div class="lane-desc">Break down requirements into an epic, story map, and Jira stories</div>
+      <div class="lane-steps">
+        <div class="node rule" data-id="410" data-type="rule">
+          <div class="step-number" style="color: var(--wf4);">25</div>
+          410 Epic Definition
+        </div>
+        <span class="arrow">&rarr;</span>
+        <div class="node rule" data-id="420" data-type="rule">
+          <div class="step-number" style="color: var(--wf4);">26</div>
+          420 Story Mapping
+        </div>
+        <span class="arrow">&rarr;</span>
+        <div class="node rule" data-id="430" data-type="rule">
+          <div class="step-number" style="color: var(--wf4);">29</div>
+          430 Jira Stories
+        </div>
+        <span class="arrow" style="opacity: 0.2;">&rarr;</span>
+        <div class="node rule" data-id="435" data-type="rule">
+          <div class="step-number" style="color: var(--laptop); border-color: var(--laptop);">opt</div>
+          435 Story Validator
+        </div>
+      </div>
+      <div class="text-xs mt-3" style="color: var(--laptop); padding-left: 12px;">
+        <strong>Orchestrator:</strong> 400 Backlog Refinement chains 410 &rarr; 420 &rarr; 430
+      </div>
+    </div>
+
+    <!-- Skills Row -->
+    <div class="skills-row">
+      <div class="section-title-header" style="width: 100%;">Skills (Reusable Methods)</div>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <div class="node skill" data-id="sk-write-prd" data-type="skill">/write-prd</div>
+        <div class="node skill" data-id="sk-slide-writer" data-type="skill">/slide-writer</div>
+        <div class="node skill" data-id="sk-editorial" data-type="skill">/editorial</div>
+        <div class="node skill" data-id="sk-jtbd" data-type="skill">/jtbd</div>
+        <div class="node skill" data-id="sk-metrics" data-type="skill">/value-metrics</div>
+        <div class="node skill" data-id="sk-audit" data-type="skill">/workspace-audit</div>
+      </div>
+    </div>
+
+    <!-- MCPs Column -->
+    <div class="mcps-column">
+      <div class="section-title-header" style="width: 100%;">MCPs (Integration Layer)</div>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <div class="node mcp" data-id="mcp-figma" data-type="mcp"><span>Figma</span></div>
+        <div class="node mcp" data-id="mcp-slack" data-type="mcp"><span>Slack</span></div>
+        <div class="node mcp" data-id="mcp-jira" data-type="mcp"><span>Jira/GHE</span></div>
+        <div class="node mcp" data-id="mcp-confluence" data-type="mcp"><span>Confluence</span></div>
+        <div class="node mcp" data-id="mcp-deploy" data-type="mcp"><span>Deploy<br>Agent</span></div>
+        <div class="node mcp" data-id="mcp-canvas" data-type="mcp"><span>Canvas<br>Kit</span></div>
+        <div class="node mcp" data-id="mcp-slides" data-type="mcp"><span>Slide<br>Deck</span></div>
+        <div class="node mcp" data-id="mcp-tableau" data-type="mcp"><span>Tableau</span></div>
+        <div class="node mcp" data-id="mcp-thinking" data-type="mcp"><span>Seq.<br>Thinking</span></div>
+        <div class="node mcp" data-id="mcp-hats" data-type="mcp"><span>Six<br>Hats</span></div>
+        <div class="node mcp" data-id="mcp-lightdash" data-type="mcp"><span>Lightdash</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Node View Container -->
+<div id="node-view-container">
+  <svg id="node-view-svg"></svg>
+</div>
+
+<!-- Tooltip -->
+<div id="tooltip" class="tooltip"></div>
+
+<script>
+const nodeData = {
+  '000': { label: '000 Master Orchestrator', type: 'orchestrator',
+    summary: 'Central routing hub for all PM workflows. Reads MISSION_LOG.md, detects user intent, routes to the correct specialist agent, and manages mission state across the full E2E pipeline.',
+    whenUsed: 'Every conversation turn. AlwaysApply rule - loaded on every interaction.',
+    inputs: ['User messages', 'MISSION_LOG.md state'],
+    outputs: ['MISSION_LOG.md updates', 'TodoWrite task lists', 'Agent invocations'],
+    downstream: ['All agents and subagents'],
+    mcps: [],
+    pattern: 'AlwaysApply orchestrator (427 lines)' },
+  '060': { label: '060 Legal Compliance', type: 'rule',
+    summary: 'GDPR, EU AI Act, and global data privacy advisor. Assesses compliance risks for recruiting AI features, reviews PRDs and prototypes for regulatory compliance, and validates consent flows.',
+    whenUsed: 'Invoked by 200 (PRD review), 319 (legal copy), 320 (prototype compliance), 330 (design compliance). Also standalone for compliance questions.',
+    inputs: ['PRD drafts', 'Prototype screens', 'UX copy', 'Feature descriptions'],
+    outputs: ['Compliance assessment', 'Risk flags', 'DPIA recommendations', 'Consent flow guidance'],
+    upstream: ['200 PRD Writer', '319 Copy Review', '320 Prototype Dev'],
+    downstream: ['PRD revision', 'Design revision'],
+    mcps: [],
+    pattern: 'Quality gate - auto-invoked by other agents (371 lines)' },
+  '080': { label: '080 Red Team', type: 'rule',
+    summary: 'Cross-functional risk analysis and stress testing. Challenges PRDs and story maps from engineering, security, compliance, UX, and business perspectives to find blind spots before implementation.',
+    whenUsed: 'Step 17 (PRD review), Step 28 (Story Map review). Also standalone for any document stress test.',
+    inputs: ['PRD documents', 'Story maps', 'Epic definitions'],
+    outputs: ['Red team review document with risk findings, severity ratings, and recommendations'],
+    upstream: ['200 PRD Writer', '420 Story Mapping'],
+    downstream: ['PRD revision', 'Story map revision'],
+    mcps: [],
+    pattern: 'Quality gate (461 lines)' },
+  '090': { label: '090 Improvement Advisor', type: 'rule',
+    summary: 'Strategic meta-agent that audits and optimises the workspace. Identifies gaps in agent rules, suggests workflow improvements, challenges architectural decisions, and generates the PM Agent Dashboard.',
+    whenUsed: 'On demand: "audit my agent system", "how can I improve", "review my setup". Also post-implementation for scorecard updates.',
+    inputs: ['All .cursor/rules/', 'MCP tool descriptors', 'MISSION_LOG.md', 'design/ folder'],
+    outputs: ['Improvement recommendations', 'Architecture scorecard', 'Workflow visualisation'],
+    downstream: ['Any agent rule or skill that gets improved'],
+    mcps: [],
+    pattern: 'Standalone advisor (366 lines). Invokes /workspace-audit skill for dashboard generation.' },
+  '100': { label: '100 Market Intelligence', type: 'rule',
+    summary: 'Research analysis and synthesis specialist. Processes market research files, competitive data, and analyst reports to produce structured intelligence summaries.',
+    whenUsed: 'When research files are dropped in /research/ or user asks for market analysis.',
+    inputs: ['Research files', 'Market reports', 'Analyst publications'],
+    outputs: ['Structured research summaries', 'Market intelligence reports'],
+    mcps: [],
+    pattern: 'Standalone advisor (233 lines)' },
+  '500': { label: '500 Slack Responder', type: 'rule',
+    summary: 'Communication triage and response drafting. Analyses Slack messages, determines appropriate response strategy, drafts professional replies with correct tone for the audience.',
+    whenUsed: 'When user shares a Slack message or asks for help drafting a response.',
+    inputs: ['Slack messages', 'Conversation context'],
+    outputs: ['Draft responses', 'Response strategy recommendations'],
+    mcps: ['Slack'],
+    pattern: 'Standalone advisor (357 lines)' },
+  'sa-strategy': { label: '@product-strategy', type: 'subagent',
+    summary: 'Principal Product Strategist performing comprehensive strategic analysis. Extracts strategy context from annual TA strategy documents, runs PESTEL across all 6 factors with deep web research, and performs SWOT analysis.',
+    whenUsed: 'E2E Steps 1-3 (sequential). Also standalone for strategy questions.',
+    inputs: ['strategy/pdfs/*.pdf', 'Web research', '@competitive-intel matrices'],
+    outputs: ['strategy-context.md', 'pestel-analysis.md', 'swot-analysis.md'],
+    downstream: ['@pmf-analyst', '130 PMF Slide Gen'],
+    mcps: [],
+    pattern: 'Heavy-logic subagent (452 lines). Uses PESTEL, SWOT, BMC skills.' },
+  'sa-ci': { label: '@competitive-intel', type: 'subagent',
+    summary: 'Deep research on global and regional ATS competitors. Produces gap analysis, battle cards, competitive matrices, and sales enablement materials. Covers 8 regions with dedicated matrices.',
+    whenUsed: 'E2E Step 4 (parallel). Also standalone: "scan [region] competitors", "battle card vs [competitor]".',
+    inputs: ['Web research', 'Deployment Agent (Workday capabilities)', 'Existing matrices'],
+    outputs: ['Competitive scan report', 'Updated matrix in research/competitive/matrices/', 'Battle cards'],
+    downstream: ['@pmf-analyst', '130 PMF Slide Gen'],
+    mcps: ['Deployment Agent'],
+    pattern: 'Heavy-logic subagent (331 lines). Exhaustive web research per region.' },
+  '105': { label: '105 User Research', type: 'rule',
+    summary: 'Teresa Torres Continuous Discovery framework. Path A: creates Research Briefs for planning interviews. Path B: analyses interview transcripts (SME and customer) with thematic coding, producing structured findings.',
+    whenUsed: 'E2E Steps 7-8 (parallel: SME then Customer). Also standalone for research planning or analysis.',
+    inputs: ['research/[Country]/internal-sme-transcripts/*.txt', 'research/[Country]/customer-transcripts/*.txt'],
+    outputs: ['105-sme-research-findings.md', '105-user-research-findings.md'],
+    upstream: ['Raw interview transcripts'],
+    downstream: ['106 Ideation Hub (sequential)', '@pmf-analyst'],
+    mcps: [],
+    pattern: 'Glob rule (709 lines). Fresh pass attestation required.' },
+  '106': { label: '106 Ideation Hub', type: 'rule',
+    summary: 'Customer Ideation Hub analyser. Two-pass protocol: (1) validates 105 research themes against P&T Idea Results Dashboard capabilities with volume/sentiment/effort scores, (2) discovers net-new region-specific ideas from verbatims.',
+    whenUsed: 'E2E Step 5 (sequential, AFTER Steps 7-8 complete). Needs 105 outputs as input.',
+    inputs: ['105-sme-research-findings.md', '105-user-research-findings.md', 'P&T Idea Results Dashboard (.xlsx)'],
+    outputs: ['brainstorm-analysis/[date]-brainstorm-analysis.md with Theme Validation Matrix, Capability Prioritisation, Customer Voice, Net-New Signals'],
+    upstream: ['105 User Research (must complete first)'],
+    downstream: ['@pmf-analyst'],
+    mcps: [],
+    pattern: 'Glob rule. Sequential dependency on 105. Uses openpyxl for Excel parsing.' },
+  '108': { label: '108 Gap Analyser', type: 'rule',
+    summary: 'Presales product gap analysis from Tableau exports. Scores gaps by severity, maps to product capabilities, and identifies competitive parity issues for PMF triangulation.',
+    whenUsed: 'E2E Step 6 (parallel, if gap-data/ has files). Also standalone for gap analysis.',
+    inputs: ['research/[Country]/gap-data/*.csv, *.xlsx'],
+    outputs: ['gap-analysis/[date]-gap-analysis.md'],
+    downstream: ['@pmf-analyst'],
+    mcps: ['Tableau'],
+    pattern: 'Glob rule (596 lines). Optional - only runs if gap data exists.' },
+  'sa-pmf': { label: '@pmf-analyst', type: 'subagent',
+    summary: 'Braun & Clarke 6-phase thematic analysis specialist. Synthesises all research inputs (105 SME/Customer, 106 Ideation, 108 Gaps, strategy, competitive) into a comprehensive PMF report with validated themes, triangulation matrix, and RICE-scored roadmap recommendations.',
+    whenUsed: 'E2E Step 9 (after all research steps complete). Also standalone for PMF analysis.',
+    inputs: ['105 findings', '106 brainstorm analysis', '108 gap analysis', 'Strategy context', 'Competitive scan', 'Raw transcripts'],
+    outputs: ['[date]-[Country]-PMF-Analysis.md with themes, triangulation, RICE recommendations'],
+    upstream: ['105', '106', '108', '@product-strategy', '@competitive-intel'],
+    downstream: ['130 PMF Slide Gen', 'HITL recommendation selection'],
+    mcps: [],
+    pattern: 'Heavy-logic subagent (341 lines). Multi-source triangulation.' },
+  '130': { label: '130 PMF Slide Gen', type: 'rule',
+    summary: 'Full PMF roadmap PowerPoint generator. Produces 36-49 slide decks with Executive Summary, PESTEL deep-dive, interview findings, validated themes, triangulation, SWOT, and roadmap recommendations. VP-facing language throughout.',
+    whenUsed: 'E2E Step 10. Also standalone to regenerate deck from existing PMF report.',
+    inputs: ['@pmf-analyst report', 'PESTEL/SWOT from @product-strategy', '105 findings', '106 analysis'],
+    outputs: ['[Country]_Recruiting_PMF_Roadmap_vN.pptx in ~/Downloads/'],
+    upstream: ['@pmf-analyst', '@product-strategy'],
+    mcps: ['Slide Deck'],
+    pattern: 'Glob rule (413 lines). Uses /slide-writer skill. v65 parity checklist.' },
+  '200': { label: '200 PRD Writer', type: 'rule',
+    summary: 'Product requirements document writer using Workday standards. Invokes /write-prd skill for structured execution. Produces comprehensive PRDs with user stories, acceptance criteria, compliance sections, and technical specifications.',
+    whenUsed: 'E2E Step 14. Also standalone: "Write PRD for [feature]".',
+    inputs: ['PMF recommendations', 'PM framing context', 'Functional knowledge'],
+    outputs: ['docs/prds/[feature]-prd.md'],
+    upstream: ['HITL recommendation selection', 'PM framing'],
+    downstream: ['060 Legal Review', '080 Red Team'],
+    mcps: [],
+    pattern: 'Glob rule (435 lines). Invokes /write-prd skill.' },
+  '060-wf2': { label: '060 Legal Review', type: 'rule',
+    summary: 'PRD compliance review (Step 15). Same agent as 060 above, invoked specifically to review the PRD for GDPR, EU AI Act, and country-specific compliance requirements.',
+    whenUsed: 'E2E Step 15, after PRD creation.',
+    inputs: ['PRD document'],
+    outputs: ['Compliance findings', 'Required PRD revisions'],
+    upstream: ['200 PRD Writer'],
+    downstream: ['PRD revision pass'],
+    mcps: [],
+    pattern: 'Same as 060 - quality gate invocation in WF2' },
+  '080-wf2': { label: '080 Red Team', type: 'rule',
+    summary: 'PRD stress testing (Step 17). Same agent as 080 above, invoked to challenge the PRD from multiple perspectives before design phase begins.',
+    whenUsed: 'E2E Step 17, after legal revision.',
+    inputs: ['Revised PRD'],
+    outputs: ['Red team review document'],
+    upstream: ['060 Legal Review'],
+    downstream: ['315 Design Brief (WF3)'],
+    mcps: [],
+    pattern: 'Same as 080 - quality gate invocation in WF2' },
+  '315': { label: '315 Design Brief', type: 'rule',
+    summary: 'Multi-pass Design Brief creation. Grounds features in Workday context using Deployment Agent and functional knowledge. Produces Canvas Kit component mapping, shell pattern selection, JTBD alignment, and copy inventory following Sana Style.',
+    whenUsed: 'E2E Step 18. Also standalone: "Design Brief for [feature]", "Ground in Workday".',
+    inputs: ['PRD', 'Functional knowledge', 'Workday tenant data', 'JTBD worksheet'],
+    outputs: ['design/[feature]-design-brief.md'],
+    upstream: ['080 Red Team (WF2)'],
+    downstream: ['319 Copy Review', '318 Peer Review'],
+    mcps: ['Deployment Agent', 'Canvas Kit', 'Six Hats'],
+    pattern: 'Glob rule (355 lines). PASS 1-4 multi-pass protocol.' },
+  '319': { label: '319 Copy Review', type: 'rule',
+    summary: 'UX copy review against Editorial Guidelines. Reviews button labels, error messages, consent text, and all user-facing strings. Invokes 060 for legal-sensitive copy (consent, AI disclosure).',
+    whenUsed: 'E2E Steps 19 and 23 (pre and post prototype). Also standalone for copy review.',
+    inputs: ['Design Brief copy inventory', 'Prototype UI strings'],
+    outputs: ['Approved copy revisions', 'Editorial compliance report'],
+    upstream: ['315 Design Brief', '320 Prototype Dev'],
+    downstream: ['318 Peer Review', '330 Figma'],
+    mcps: [],
+    pattern: 'Glob rule (327 lines). Uses /editorial skill.' },
+  '318': { label: '318 Peer Review', type: 'rule',
+    summary: 'Unbiased design peer review with fresh eyes. Evaluates Design Brief against Workday standards, Sana Style, Canvas Kit patterns, and accessibility. Provides Final Verdict: APPROVED or NEEDS REVISION.',
+    whenUsed: 'E2E Step 20. Blocks prototype development until APPROVED.',
+    inputs: ['Design Brief (with copy-approved revisions)'],
+    outputs: ['Peer review findings', 'Final Verdict: APPROVED or NEEDS REVISION'],
+    upstream: ['319 Copy Review'],
+    downstream: ['320 Prototype Dev (if APPROVED)', '315 Design Brief (if NEEDS REVISION)'],
+    mcps: [],
+    pattern: 'Glob rule (223 lines). Binary gate - blocks or passes.' },
+  '320': { label: '320 Prototype Dev', type: 'rule',
+    summary: 'Canvas Kit React prototype implementation from approved Design Brief. Builds working prototypes with Sana Style tokens, proper routing in main.tsx, and versioned filenames (vNN convention).',
+    whenUsed: 'E2E Step 21 (after 318 APPROVED). Also standalone: "Build prototype".',
+    inputs: ['Approved Design Brief', 'PRD', 'Canvas Kit MCP components'],
+    outputs: ['design/[feature]-vNN.tsx', 'Route in main.tsx', 'New components in design/components/'],
+    upstream: ['318 Peer Review (APPROVED)'],
+    downstream: ['321 Visual Review', '319 Copy Spot-Check'],
+    mcps: ['Canvas Kit'],
+    pattern: 'Glob rule (443 lines). Versioned files, Sana Style tokens.' },
+  '321': { label: '321 Visual Review', type: 'rule',
+    summary: 'Prototype visual quality review using the browser. Takes screenshots of the running prototype, compares against Design Brief specifications, and flags visual discrepancies.',
+    whenUsed: 'E2E Step 22, after prototype build.',
+    inputs: ['Running prototype (localhost:5173)', 'Design Brief specifications'],
+    outputs: ['Visual review findings', 'Screenshot evidence', 'Recommended fixes'],
+    upstream: ['320 Prototype Dev'],
+    downstream: ['Prototype fixes', '319 Copy Spot-Check'],
+    mcps: ['Browser'],
+    pattern: 'Glob rule (352 lines). Browser-based visual inspection.' },
+  '330': { label: '330 Figma', type: 'rule',
+    summary: 'Figma design extraction, analysis, and capture. Reads designs from Figma URLs, extracts component patterns and tokens. Captures running prototypes back to Figma for design handoff.',
+    whenUsed: 'E2E Step 24 (capture to Figma). Also standalone for Figma URL analysis.',
+    inputs: ['Running prototype URL', 'Figma file URLs', 'Design context'],
+    outputs: ['Figma capture', 'Extracted design patterns', 'Component analysis'],
+    upstream: ['321 Visual Review'],
+    mcps: ['Figma'],
+    pattern: 'Glob rule (683 lines). Bidirectional Figma integration.' },
+  '410': { label: '410 Epic Definition', type: 'rule',
+    summary: 'Writes epic drafts in user story format to docs/epics/. Defines scope, acceptance criteria, and value proposition for the epic based on PRD and design context.',
+    whenUsed: 'E2E Step 25. Also standalone: "Create epic for [feature]".',
+    inputs: ['PRD', 'Design Brief (if exists)', 'PMF recommendations'],
+    outputs: ['docs/epics/[feature]-epic-draft.md'],
+    upstream: ['200 PRD Writer', '315 Design Brief'],
+    downstream: ['420 Story Mapping'],
+    mcps: [],
+    pattern: 'Glob rule (318 lines). Jira epic created later in 430.' },
+  '420': { label: '420 Story Mapping', type: 'rule',
+    summary: 'Jeff Patton story mapping with value slices. Breaks epics into user activities, tasks, and stories organised in horizontal slices. Requires HITL approval before story creation.',
+    whenUsed: 'E2E Step 26. Also standalone: "Story map [feature]".',
+    inputs: ['Epic draft', 'PRD', 'Design Brief'],
+    outputs: ['Story map (activities, backbone, slices)', 'HITL approval gate'],
+    upstream: ['410 Epic Definition'],
+    downstream: ['430 Jira Stories (after HITL approval)'],
+    mcps: [],
+    pattern: 'Glob rule (536 lines). HITL gate - must be approved.' },
+  '430': { label: '430 Jira Stories', type: 'rule',
+    summary: 'Writes detailed user stories with BDD scenarios (Given/When/Then) and creates them in Jira. Links stories to the epic, applies 319 editorial checklist to user-visible copy in story descriptions.',
+    whenUsed: 'E2E Step 29. Also standalone: "Write stories for [feature]".',
+    inputs: ['Approved story map', 'Epic draft', 'PRD'],
+    outputs: ['Jira epic + linked stories with BDD acceptance criteria'],
+    upstream: ['420 Story Mapping (approved)'],
+    downstream: ['435 Story Validator (optional)'],
+    mcps: ['Jira/GHE'],
+    pattern: 'Glob rule (630 lines). Creates real Jira issues.' },
+  '435': { label: '435 Story Validator', type: 'rule',
+    summary: 'Optional post-creation quality gate. Validates stories against INVEST criteria, checks BDD scenario completeness, and verifies Workday standards compliance.',
+    whenUsed: 'Optional after Step 29. "Validate stories", "Check story quality".',
+    inputs: ['Created Jira stories'],
+    outputs: ['Validation report with pass/fail per story'],
+    upstream: ['430 Jira Stories'],
+    mcps: ['Jira/GHE'],
+    pattern: 'Glob rule (555 lines). Optional quality check.' },
+  'sa-ux-researcher': { label: '@ux-researcher', type: 'subagent',
+    summary: 'Thin wrapper for standalone UX research invocation. Delegates to 105 glob rule with cognitive framing as a User Researcher applying Teresa Torres methods.',
+    whenUsed: 'Standalone: "@ux-researcher". E2E pipeline invokes 105 directly for efficiency.',
+    inputs: ['Same as 105'],
+    outputs: ['Same as 105'],
+    delegatesTo: '105 User Research',
+    pattern: 'Thin wrapper subagent (75 lines)' },
+  'sa-ux-designer': { label: '@ux-designer', type: 'subagent',
+    summary: 'Thin wrapper for standalone design invocation. Delegates to 315 glob rule with cognitive framing as a Principal UX Designer for Workday Recruiting.',
+    whenUsed: 'Standalone: "@ux-designer". E2E pipeline invokes 315 directly for efficiency.',
+    inputs: ['Same as 315'],
+    outputs: ['Same as 315'],
+    delegatesTo: '315 Design Brief',
+    pattern: 'Thin wrapper subagent (75 lines)' },
+  'sa-doc-writer': { label: '@doc-writer', type: 'subagent',
+    summary: 'Thin wrapper for standalone copy review invocation. Delegates to 319 glob rule with cognitive framing for editorial review and UX writing standards.',
+    whenUsed: 'Standalone: "@doc-writer". E2E pipeline invokes 319 directly for efficiency.',
+    inputs: ['Same as 319'],
+    outputs: ['Same as 319'],
+    delegatesTo: '319 Copy Review',
+    pattern: 'Thin wrapper subagent (50 lines)' },
+  'sk-write-prd': { label: '/write-prd', type: 'skill',
+    summary: 'PRD writing execution skill. Structured template with sections for problem statement, user stories, acceptance criteria, compliance, and technical specifications.',
+    whenUsed: 'Invoked by 200 PRD Writer.',
+    usedBy: ['200 PRD Writer'],
+    pattern: 'Workspace skill' },
+  'sk-slide-writer': { label: '/slide-writer', type: 'skill',
+    summary: 'VP-facing language transformation for slide decks. Enforces prohibited patterns (no self-referential AI mentions, no technical jargon), applies Workday Slide Deck MCP formatting standards.',
+    whenUsed: 'Invoked by 110 (short decks) and 130 (PMF decks).',
+    usedBy: ['110 Slide Generator', '130 PMF Slide Gen'],
+    pattern: 'Workspace skill. Regex-enforced linguistic quality.' },
+  'sk-editorial': { label: '/editorial', type: 'skill',
+    summary: 'Editorial Guidelines for UX copy. Covers button labels, error messages, consent text, tone of voice, and Workday terminology standards.',
+    whenUsed: 'Invoked by 319 Copy Review.',
+    usedBy: ['319 Copy Review'],
+    pattern: 'Workspace skill' },
+  'sk-jtbd': { label: '/jtbd', type: 'skill',
+    summary: 'Jobs-to-Be-Done analysis framework. Produces structured JTBD statements (When / I want / So I can) aligned to recruiter and hiring manager personas.',
+    whenUsed: 'Invoked by 315 (Design Brief) and 200 (PRD).',
+    usedBy: ['315 Design Brief', '200 PRD Writer'],
+    pattern: 'Workspace skill' },
+  'sk-metrics': { label: '/value-metrics', type: 'skill',
+    summary: 'Business Value, Product Value, and Adoption metrics framework. Defines KPIs and success metrics for features.',
+    whenUsed: 'Invoked by 200 (PRD metrics), 410 (epic value), @pmf-analyst, 130 (deck metrics).',
+    usedBy: ['200 PRD Writer', '410 Epic Definition', '@pmf-analyst', '130 PMF Slide Gen'],
+    pattern: 'Workspace skill' },
+  'sk-audit': { label: '/workspace-audit', type: 'skill',
+    summary: 'Dashboard generation skill. Collects workspace metrics, runs slide validator, generates scorecard and architecture map HTML, serves on localhost:8765.',
+    whenUsed: 'Invoked by 090 after audits or improvements. Also standalone: "/workspace-audit".',
+    usedBy: ['090 Improvement Advisor'],
+    pattern: 'Workspace skill' },
+  'mcp-figma': { label: 'Figma', type: 'mcp', summary: 'Design integration. Read designs, capture prototypes, manage Code Connect.', usedBy: ['330 Figma'] },
+  'mcp-slack': { label: 'Slack', type: 'mcp', summary: 'Team communication.', usedBy: ['500 Slack Responder'] },
+  'mcp-jira': { label: 'Jira/GHE', type: 'mcp', summary: 'Issue tracking and GitHub Enterprise.', usedBy: ['430 Jira Stories', '435 Story Validator'] },
+  'mcp-confluence': { label: 'Confluence', type: 'mcp', summary: 'Documentation wiki.', usedBy: [] },
+  'mcp-deploy': { label: 'Deployment Agent', type: 'mcp', summary: 'Workday tenant validation and capability queries.', usedBy: ['315 Design Brief', '@competitive-intel'] },
+  'mcp-canvas': { label: 'Canvas Kit', type: 'mcp', summary: 'Workday UI component library queries.', usedBy: ['315 Design Brief', '320 Prototype Dev'] },
+  'mcp-slides': { label: 'Slide Deck', type: 'mcp', summary: 'Branded PowerPoint generation.', usedBy: ['110 Slide Generator', '130 PMF Slide Gen'] },
+  'mcp-tableau': { label: 'Tableau', type: 'mcp', summary: 'Data visualisation and gap data.', usedBy: ['108 Gap Analyser'] },
+  'mcp-thinking': { label: 'Sequential Thinking', type: 'mcp', summary: 'Structured multi-step analysis.', usedBy: ['315 Design Brief'] },
+  'mcp-hats': { label: 'Six Hats', type: 'mcp', summary: 'de Bono decision framework.', usedBy: ['315 Design Brief'] },
+  'mcp-lightdash': { label: 'Lightdash', type: 'mcp', summary: 'Metrics documentation.', usedBy: [] },
+};
+
+const tooltip = document.getElementById('tooltip');
+const nodes = document.querySelectorAll('.node');
+const sidebar = document.getElementById('sidebar');
+const sidebarDefault = document.getElementById('sidebar-default');
+const sidebarDetail = document.getElementById('sidebar-detail');
+
+nodes.forEach(node => {
+  node.addEventListener('mouseenter', () => {
+    const data = nodeData[node.dataset.id];
+    if (data) {
+      tooltip.innerHTML = '<strong>' + data.label + '</strong><br><span style="opacity:0.8">' + (data.summary || '') + '</span>';
+      tooltip.classList.add('visible');
+    }
+  });
+  node.addEventListener('mousemove', (e) => {
+    tooltip.style.left = (e.clientX + 14) + 'px';
+    tooltip.style.top = (e.clientY - 10) + 'px';
+  });
+  node.addEventListener('mouseleave', () => { tooltip.classList.remove('visible'); });
+  node.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const data = nodeData[node.dataset.id];
+    if (data) showDetail(data);
+  });
+});
+
+function showDetail(d) {
+  const typeLabel = { orchestrator:'Orchestrator', rule:'Rule (glob)', 'rule-always':'Rule (alwaysApply)', subagent:'Subagent', skill:'Skill', mcp:'MCP' };
+  const typeColor = { orchestrator:'#6366f1', rule:'#0ea5e9', 'rule-always':'#ef4444', subagent:'#f59e0b', skill:'#16a34a', mcp:'#a855f7' };
+  const c = typeColor[d.type] || '#6b7a8d';
+  let h = '<button onclick="hideDetail()" style="float:right;border:none;background:none;cursor:pointer;font-size:18px;color:var(--laptop);">&times;</button>';
+  h += '<div class="detail-section">';
+  h += '<div class="detail-badge" style="background:'+c+'20;color:'+c+';">'+(typeLabel[d.type]||d.type)+'</div>';
+  h += '<h2 style="font-size:16px;font-weight:700;margin-top:8px;">'+d.label+'</h2>';
+  if (d.pattern) h += '<div style="font-size:11px;color:var(--laptop);margin-top:4px;font-style:italic;">'+d.pattern+'</div>';
+  h += '</div>';
+  if (d.summary) { h += '<div class="detail-section"><h3>Summary</h3><div style="font-size:12px;line-height:1.5;">'+d.summary+'</div></div>'; }
+  if (d.whenUsed) { h += '<div class="detail-section"><h3>When It Runs</h3><div style="font-size:12px;line-height:1.5;">'+d.whenUsed+'</div></div>'; }
+  if (d.delegatesTo) { h += '<div class="detail-section"><h3>Delegates To</h3><div style="font-size:12px;">'+d.delegatesTo+'</div></div>'; }
+  if (d.inputs && d.inputs.length) {
+    h += '<div class="detail-section"><h3>Inputs</h3><ul class="detail-list">';
+    d.inputs.forEach(function(i){ h += '<li>'+i+'</li>'; });
+    h += '</ul></div>';
+  }
+  if (d.outputs && d.outputs.length) {
+    h += '<div class="detail-section"><h3>Outputs</h3><ul class="detail-list">';
+    d.outputs.forEach(function(o){ h += '<li>'+o+'</li>'; });
+    h += '</ul></div>';
+  }
+  if (d.upstream && d.upstream.length) {
+    h += '<div class="detail-section"><h3>Upstream (receives from)</h3><ul class="detail-list">';
+    d.upstream.forEach(function(u){ h += '<li>'+u+'</li>'; });
+    h += '</ul></div>';
+  }
+  if (d.downstream && d.downstream.length) {
+    h += '<div class="detail-section"><h3>Downstream (feeds into)</h3><ul class="detail-list">';
+    d.downstream.forEach(function(x){ h += '<li>'+x+'</li>'; });
+    h += '</ul></div>';
+  }
+  if (d.usedBy && d.usedBy.length) {
+    h += '<div class="detail-section"><h3>Used By</h3><ul class="detail-list">';
+    d.usedBy.forEach(function(u){ h += '<li>'+u+'</li>'; });
+    h += '</ul></div>';
+  }
+  if (d.mcps && d.mcps.length) {
+    h += '<div class="detail-section"><h3>MCPs Used</h3><ul class="detail-list">';
+    d.mcps.forEach(function(m){ h += '<li>'+m+'</li>'; });
+    h += '</ul></div>';
+  }
+  sidebarDefault.style.display = 'none';
+  sidebarDetail.style.display = 'block';
+  sidebarDetail.innerHTML = h;
+}
+
+function hideDetail() {
+  sidebarDefault.style.display = 'block';
+  sidebarDetail.style.display = 'none';
+}
+window.hideDetail = hideDetail;
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.node') && !e.target.closest('#sidebar')) hideDetail();
+});
+
+document.querySelectorAll('.filter-btn[data-filter]').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.filter-btn[data-filter]').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var f = btn.dataset.filter;
+    var wf = document.querySelectorAll('.workflow-lane');
+    var sup = document.querySelector('.support-row');
+    var sk = document.querySelector('.skills-row');
+    var mc = document.querySelector('.mcps-column');
+    if (f === 'all') { wf.forEach(function(w){w.classList.remove('hidden');}); sup.classList.remove('hidden'); sk.classList.remove('hidden'); mc.classList.remove('hidden'); }
+    else if (f === 'workflow') { wf.forEach(function(w){w.classList.remove('hidden');}); sup.classList.add('hidden'); sk.classList.add('hidden'); mc.classList.add('hidden'); }
+    else if (f === 'skills-mcps') { wf.forEach(function(w){w.classList.add('hidden');}); sup.classList.add('hidden'); sk.classList.remove('hidden'); mc.classList.remove('hidden'); }
+  });
+});
+
+document.getElementById('toggleSidebar').addEventListener('click', function() {
+  sidebar.classList.toggle('collapsed');
+  document.getElementById('graph-container').classList.toggle('full');
+  document.getElementById('node-view-container').classList.toggle('full');
+});
+
+// View toggle: Workflow vs Node View
+const graphContainer = document.getElementById('graph-container');
+const nodeViewContainer = document.getElementById('node-view-container');
+const filterBtns = document.querySelector('.flex.items-center.gap-2');
+const viewToggles = document.querySelectorAll('.view-toggle-btn');
+
+viewToggles.forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    viewToggles.forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    const view = btn.dataset.view;
+    
+    if (view === 'workflow') {
+      graphContainer.style.display = 'block';
+      nodeViewContainer.classList.remove('active');
+      // Show filter buttons
+      document.querySelectorAll('.filter-btn[data-filter]').forEach(function(f){ f.style.display = 'inline-block'; });
+      document.querySelector('[style*="width: 1px"]').style.display = 'block';
+    } else if (view === 'node') {
+      graphContainer.style.display = 'none';
+      nodeViewContainer.classList.add('active');
+      // Hide filter buttons
+      document.querySelectorAll('.filter-btn[data-filter]').forEach(function(f){ f.style.display = 'none'; });
+      document.querySelector('[style*="width: 1px"]').style.display = 'none';
+      // Initialize D3 graph if not already done
+      if (!window.d3GraphInitialized) {
+        initD3Graph();
+      }
+    }
+  });
+});
+
+// D3.js Force-Directed Graph Implementation
+function initD3Graph() {
+  window.d3GraphInitialized = true;
+  
+  const svg = d3.select('#node-view-svg');
+  const container = document.getElementById('node-view-container');
+  const width = container.clientWidth;
+  const height = container.clientHeight;
+  
+  svg.attr('viewBox', [0, 0, width, height]);
+  
+  // Build label-to-id lookup
+  const labelToId = {};
+  Object.keys(nodeData).forEach(id => {
+    const label = nodeData[id].label;
+    labelToId[label] = id;
+    // Also add short versions
+    if (label.includes(' ')) {
+      const short = label.split(' ')[0];
+      if (!labelToId[short]) labelToId[short] = id;
+    }
+  });
+  
+  // Helper function to find node ID from reference string
+  function findNodeId(ref) {
+    if (!ref) return null;
+    // Direct match
+    if (nodeData[ref]) return ref;
+    // Label match
+    if (labelToId[ref]) return labelToId[ref];
+    // Fuzzy match (e.g., "200 PRD Writer" -> "200")
+    const match = ref.match(/^(\d{3}|\w+-\w+)/);
+    if (match && nodeData[match[1]]) return match[1];
+    // Try removing @ prefix
+    if (ref.startsWith('@')) {
+      const key = 'sa-' + ref.substring(1).replace(/\s+/g, '-').toLowerCase();
+      if (nodeData[key]) return key;
+    }
+    return null;
+  }
+  
+  // Build nodes array
+  const nodes = Object.keys(nodeData).map(id => ({
+    id: id,
+    label: nodeData[id].label,
+    type: nodeData[id].type,
+    data: nodeData[id]
+  }));
+  
+  // Build links array from nodeData relationships
+  const linksSet = new Set();
+  const links = [];
+  
+  Object.keys(nodeData).forEach(sourceId => {
+    const data = nodeData[sourceId];
+    
+    // Downstream links
+    if (data.downstream) {
+      data.downstream.forEach(ref => {
+        const targetId = findNodeId(ref);
+        if (targetId) {
+          const linkKey = `${sourceId}->${targetId}`;
+          if (!linksSet.has(linkKey)) {
+            linksSet.add(linkKey);
+            links.push({ source: sourceId, target: targetId, type: 'flow' });
+          }
+        }
+      });
+    }
+    
+    // Upstream links (reversed)
+    if (data.upstream) {
+      data.upstream.forEach(ref => {
+        const targetId = findNodeId(ref);
+        if (targetId) {
+          const linkKey = `${targetId}->${sourceId}`;
+          if (!linksSet.has(linkKey)) {
+            linksSet.add(linkKey);
+            links.push({ source: targetId, target: sourceId, type: 'flow' });
+          }
+        }
+      });
+    }
+    
+    // UsedBy links (skill/MCP to user)
+    if (data.usedBy) {
+      data.usedBy.forEach(ref => {
+        const targetId = findNodeId(ref);
+        if (targetId) {
+          const linkKey = `${sourceId}->${targetId}`;
+          if (!linksSet.has(linkKey)) {
+            linksSet.add(linkKey);
+            links.push({ source: sourceId, target: targetId, type: 'use' });
+          }
+        }
+      });
+    }
+    
+    // DelegatesTo links
+    if (data.delegatesTo) {
+      const targetId = findNodeId(data.delegatesTo);
+      if (targetId) {
+        const linkKey = `${sourceId}->${targetId}-delegate`;
+        if (!linksSet.has(linkKey)) {
+          linksSet.add(linkKey);
+          links.push({ source: sourceId, target: targetId, type: 'delegate' });
+        }
+      }
+    }
+    
+    // MCP links
+    if (data.mcps && data.mcps.length) {
+      data.mcps.forEach(mcpName => {
+        // Find MCP node by name
+        const mcpId = Object.keys(nodeData).find(id => 
+          nodeData[id].type === 'mcp' && nodeData[id].label === mcpName
+        );
+        if (mcpId) {
+          const linkKey = `${sourceId}->${mcpId}-mcp`;
+          if (!linksSet.has(linkKey)) {
+            linksSet.add(linkKey);
+            links.push({ source: sourceId, target: mcpId, type: 'mcp' });
+          }
+        }
+      });
+    }
+  });
+  
+  // Node styling by type
+  const nodeRadius = {
+    orchestrator: 35,
+    rule: 20,
+    'rule-always': 20,
+    subagent: 28,
+    'subagent-thin': 25,
+    skill: 18,
+    mcp: 16
+  };
+  
+  const nodeColor = {
+    orchestrator: '#6366f1',
+    rule: '#0ea5e9',
+    'rule-always': '#ef4444',
+    subagent: '#f59e0b',
+    'subagent-thin': '#f59e0b',
+    skill: '#16a34a',
+    mcp: '#a855f7'
+  };
+  
+  // Create simulation
+  const simulation = d3.forceSimulation(nodes)
+    .force('link', d3.forceLink(links).id(d => d.id).distance(100))
+    .force('charge', d3.forceManyBody().strength(-400))
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('collision', d3.forceCollide().radius(d => nodeRadius[d.type] + 10));
+  
+  // Create links
+  const link = svg.append('g')
+    .selectAll('line')
+    .data(links)
+    .join('line')
+    .attr('class', d => `d3-link ${d.type}`)
+    .attr('stroke-width', 1.5);
+  
+  // Create node groups
+  const node = svg.append('g')
+    .selectAll('g')
+    .data(nodes)
+    .join('g')
+    .attr('class', 'd3-node')
+    .call(d3.drag()
+      .on('start', dragstarted)
+      .on('drag', dragged)
+      .on('end', dragended));
+  
+  // Add circles
+  node.append('circle')
+    .attr('class', d => `d3-node-circle ${d.type === 'subagent-thin' ? 'subagent-thin' : ''}`)
+    .attr('r', d => nodeRadius[d.type])
+    .attr('fill', d => nodeColor[d.type]);
+  
+  // Add labels
+  node.append('text')
+    .attr('class', 'd3-node-label')
+    .attr('dy', d => nodeRadius[d.type] + 14)
+    .attr('text-anchor', 'middle')
+    .text(d => {
+      // Abbreviate long labels
+      const label = d.label;
+      if (label.length > 20) {
+        return label.substring(0, 18) + '...';
+      }
+      return label;
+    })
+    .style('fill', 'var(--ink)');
+  
+  // Add hover and click interactions
+  node.on('mouseenter', function(event, d) {
+    const data = d.data;
+    tooltip.innerHTML = '<strong>' + data.label + '</strong><br><span style="opacity:0.8">' + (data.summary || '') + '</span>';
+    tooltip.classList.add('visible');
+  })
+  .on('mousemove', function(event) {
+    tooltip.style.left = (event.clientX + 14) + 'px';
+    tooltip.style.top = (event.clientY - 10) + 'px';
+  })
+  .on('mouseleave', function() {
+    tooltip.classList.remove('visible');
+  })
+  .on('click', function(event, d) {
+    event.stopPropagation();
+    showDetail(d.data);
+  });
+  
+  // Update positions on tick
+  simulation.on('tick', () => {
+    link
+      .attr('x1', d => d.source.x)
+      .attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x)
+      .attr('y2', d => d.target.y);
+    
+    node.attr('transform', d => `translate(${d.x},${d.y})`);
+  });
+  
+  // Drag functions
+  function dragstarted(event, d) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+  
+  function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+  }
+  
+  function dragended(event, d) {
+    if (!event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
+  
+  // Zoom behavior
+  const zoom = d3.zoom()
+    .scaleExtent([0.3, 3])
+    .on('zoom', (event) => {
+      svg.selectAll('g').attr('transform', event.transform);
+    });
+  
+  svg.call(zoom);
+}
+
+</script>
+<script src="dashboard-nav.js"></script>
+</body>
+</html>

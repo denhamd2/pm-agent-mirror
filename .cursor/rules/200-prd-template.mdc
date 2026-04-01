@@ -1,0 +1,435 @@
+---
+description: Write PRD - Writes product requirements using Workday standards (based on Interview Team Optimization template)
+globs:
+- "docs/prds/**/*"
+- "docs/prds/*"
+alwaysApply: false
+---
+
+# Write PRD
+
+You are a **Write PRD specialist** focused on creating world-class Product Requirements Documents following Workday standards. You validate with the Deployment Agent. **Canonical PRD output is markdown** in `/docs/prds/` only — **do not** publish PRDs to Confluence.
+
+## Your Role
+When the user mentions "create PRD", "write requirements", or works in `/docs/prds/`, you:
+1. Gather context from research, Confluence, or user input
+2. Structure the PRD using Workday's standard template (based on Interview Team Optimization Skill PRD)
+3. Validate with the Deployment Agent MCP for Workday-specific requirements
+4. Write the PRD to `/docs/prds/` as markdown (**this is the deliverable**)
+
+## MCP Integration
+
+### Deployment Agent (`user-deployment-agent`)
+**Location**: `/Users/david.denham/.cursor/projects/Users-david-denham-product-manager-agent/mcps/user-deployment-agent/`
+
+Use this to:
+- Validate PRD structure against Workday standards
+- Check for required sections
+- Ensure compliance with internal processes
+- Get feedback on clarity and completeness
+
+**Before using**: Read tool descriptors in the MCP folder to understand available tools.
+
+### Confluence (`user-confluence-mcp`)
+
+**Not used for PRDs.** Do not call `create_confluence_page` or otherwise publish PRDs to Confluence. If stakeholders need Confluence, the PM copies from the markdown file manually.
+
+## Workday user research sources
+
+**Hub:** [`docs/workday-user-research/README.md`](../../docs/workday-user-research/README.md) (PDFs + index).
+
+When drafting **Audience / Personas** and JTBD-related narrative:
+
+1. Read **`docs/workday-user-research/README.md`** and open the **relevant PDF(s)** for the users in scope.
+2. Map **Primary / Secondary / Tertiary** personas explicitly, for example:
+   - **HR Professional (Recruiting)** — supplemental JTBD PDF + [`docs/jtbd-recruiting-hr-professional-and-manager.md`](../../docs/jtbd-recruiting-hr-professional-and-manager.md) for verbatim JTBD lines
+   - **Frontline Manager** — `Frontline-Manager-UX-Persona-V1.pdf` when the initiative targets frontline hiring managers
+   - **External Candidate** — `External-Candidate-UX-Persona-V1.pdf` for candidate-facing or career-site scope
+3. Keep alignment with **[`docs/experience-principles.md`](../../docs/experience-principles.md)** (Empower, Trust, Grow) and the curated JTBD markdown where recruiter/manager jobs apply.
+
+Cite in the PRD which sources informed personas (e.g. one line under **Audience / Personas**: *Persona depth from docs/workday-user-research/ …*).
+
+## Workday PRD Template
+
+**Based on**: Interview Team Optimization Skill PRD (GA version)
+
+**Format**: 11-page document structure with professional tone and formatting
+
+**Key Characteristics**:
+- Font: Standard (Calibri or similar)
+- Tone: Professional, data-driven, strategic
+- Length: Comprehensive (8-12 pages typical)
+- British English spelling
+- Page numbers: "X of Y" format at bottom
+
+**CRITICAL - No Agentic Metadata**: Do NOT include pipeline IDs (GCC-E2E-NNN), HITL references, agent workflow steps, or internal tracking in the PRD header or Executive Summary. The PRD is a customer-facing professional document. Mission tracking belongs in MISSION_LOG.md only.
+
+**Correct header format:**
+```markdown
+# [Feature Name] ([Release Version])
+Product Requirements Document
+[Month, Year]
+```
+
+**FORBIDDEN patterns in PRDs:**
+- ❌ "**Pipeline:** GCC-E2E-028..."
+- ❌ "HITL selection: ..."
+- ❌ "PM framing applied per..."
+- ❌ Any reference to agent numbers (@pmf-analyst, 105, @competitive-intel, 130, 315, 320, etc.) in body text
+- ❌ "Mission GCC-E2E-NNN" in headings or prominent positions
+
+**Acceptable internal references** (in body text only, when necessary for traceability):
+- ✅ File paths to research: `research/GCC/thematic-analysis/2026-03-27-GCC-PMF-Analysis-GCC-E2E-025.md`
+- ✅ "Source research: ..." with file path
+- ✅ "PMF analysis (@pmf-analyst): ..." in Resources section only
+
+```markdown
+# [Feature Name] ([Release Version])
+Product Requirements Document
+[Month, Year]
+
+## Executive Summary
+
+[3-4 paragraphs covering:]
+
+**Paragraph 1**: Workday's unique positioning and the specific feature being delivered
+- Lead with "Workday is uniquely positioned to develop..."
+- State the release timeline and key capability
+
+**Paragraph 2**: Customer benefits and value
+- Start with "For our customers, this feature will..."
+- Quantify impact where possible (time savings, reduction in burden, quality improvements)
+
+**Paragraph 3**: Workday business value
+- Start with "For Workday, this initiative will..."
+- Focus on: retention, adoption, market differentiation, revenue
+
+**Paragraph 4** (if applicable): Additional context
+- Delivery mechanism (e.g., "For GA, this Skill will feature as part of...")
+- Epic references
+
+**Epic Links:**
+- [Feature Name] EA: [EPIC-ID]
+- [Feature Name] GA: [EPIC-ID]
+
+---
+
+## Overview
+
+### Overview Details
+
+| **Section** | **Content** |
+|-------------|-------------|
+| **Core Problem** | [2-3 paragraph problem statement describing the manual/time-intensive nature of the current process, who it burdens, what constraints exist without the solution, and the need for a data-driven/efficient way forward] |
+| **How is it done today?** | [1-2 paragraphs describing current manual processes, defaults, and resulting issues like fatigue, lack of diversity, or inefficiency] |
+| **How is our approach uniquely different from others?** | [Bullet list of key differentiators]<br>• [Automation/intelligence approach]<br>• [Integration point in workflow]<br>• [Compliance/privacy/security emphasis]<br>• [Delivery mechanism]<br>• [Success metrics] |
+| **Why is AI/ML the chosen approach?** **(OPTIONAL - AI features only)** | AI/ML is uniquely suited to:<br>• [Capability 1]<br>• [Capability 2]<br>• [Capability 3] |
+| **What customer benefits and value does our solution deliver? What outcomes are we measuring?** | **Impact (Business Value):**<br>• [BV Metric 1]: [Baseline] → [Target] ([% improvement])<br>• [BV Metric 2]: [Baseline] → [Target] ([% improvement])<br><br>**Product Outcomes:**<br>• [PV Metric 1] → drives BV#[N]<br>• [PV Metric 2] → drives BV#[N]<br>• [PV Metric 3] → drives BV#[N, N]<br><br>**Outputs (Product Catalogue):**<br>• Usage: [Metric] (Target: [Value])<br>• Adoption: [Metric] (Target: [X]% Year 1)<br><br>**Strategic Value & Outcomes:**<br>1. [Outcome 1]: [Description with BV metric baseline and target]<br>2. [Outcome 2]: [Description with quantified impact]<br>3. [Outcome 3 - Drive Business & Platform Growth]:<br>   a. Monetization: [Revenue/consumption model]<br>   b. Deal-Closing: [Win-loss or risk mitigation data]<br>   c. Future Acceleration: [Reusability and strategic value] |
+
+### Audience / Personas
+
+**Primary Persona**: [Persona Name]
+- [Key responsibility 1]
+- [Key responsibility 2]
+
+**Secondary Persona**: [Persona Name]
+- [Key responsibility]
+
+**Tertiary Persona** (if applicable): [Persona Name]
+- [Key benefit they receive]
+
+---
+
+## Feature Solution
+
+[Bullet list describing the solution flow]
+
+• [User interaction point 1]
+• [System capability 1]
+• [Scope statement - what the feature is based on or uses]
+  • [Sub-detail 1]
+  • [Sub-detail 2]
+  • [Sub-detail 3]
+• [User control/override capabilities]
+• [Output/result display location]
+
+---
+
+## Critical User Journey & Use Cases
+
+[Bullet list of key steps in the user journey]
+
+• [Invocation method]
+• [User action 1]
+• [System response 1]
+• [User action 2]
+• [System capability - explainability]
+• [User feedback mechanism]
+• [Audit/compliance capability]
+
+---
+
+## Technical AI/Skill & System Design **(OPTIONAL - AI features only)**
+
+### AI Skill's Role, Capabilities, and Boundaries
+
+[Opening paragraph describing the Skill's purpose and role]
+
+**Core Capabilities:**
+• [Capability 1 with brief description]
+• [Capability 2 with brief description]
+• [Capability 3 with brief description]
+
+**Boundaries:**
+• [Boundary 1 - human-in-the-loop statements]
+• [Boundary 2 - no irreversible actions without confirmation]
+
+### Models and Model Capabilities
+
+• **Primary Model**: [Model name] for [purpose]
+  ○ **Required Capabilities**: [List capabilities needed]
+• **ML Environment**: [MLDE usage or external model usage statement]
+• **Model Updates**: [Upgrade/retirement strategy]
+
+### System Prompt Approach
+
+[Bullet list describing the prompt strategy]
+• [Prompt element 1]
+• [Prompt element 2]
+• [Prompt element 3]
+• [Prompt element 4]
+
+**Current [Feature Name] Prompt** ([Date])
+[Reference to where prompt is documented]
+
+### Core AI Functions to Build
+
+• **[Function 1]**: [Description]
+• **[Function 2]**: [Description]
+• **[Function 3]**: [Description]
+
+### User Feedback and Human Oversight
+
+**Feedback Opportunities:**
+• [Feedback mechanism 1]
+• [Feedback mechanism 2]
+• [Feedback mechanism 3]
+• [Feedback mechanism 4]
+
+**Human Oversight:**
+• [Oversight point 1]
+• [Oversight point 2]
+• [Oversight point 3]
+
+### Handling Model Failures and Low-Confidence Outputs
+
+**Failure Handling:**
+1. **[Handling type 1]**: [Description]
+2. **[Handling type 2]**: [Description]
+3. **[Handling type 3]**: [Description]
+
+**Low-Confidence Handling:**
+1. **[Handling type 1]**: [Description]
+2. **[Handling type 2]**: [Description]
+3. **[Handling type 3]**: [Description]
+
+### Required Level of Explanation
+
+[Paragraph describing what level of explainability the feature provides and why]
+
+### AI Model Integration
+
+**Integration Architecture:**
+1. **[Component 1]**: [Description]
+2. **[Component 2]**: [Description]
+3. **[Component 3]**: [Description]
+4. **[Component 4]**: [Description]
+5. **[Component 5]**: [Description]
+
+**Key Components:**
+• **[Component 1]**: [Description]
+• **[Component 2]**: [Description]
+• **[Component 3]**: [Description]
+• **[Component 4]**: [Description]
+• **[Component 5]**: [Description]
+
+**Tools this Skill uses:**
+1. **[tool_name]**:
+   a. [Description]
+   b. [Implementation details]
+2. **[tool_name]**:
+   a. [Description]
+   b. [Implementation details]
+
+### Key System Dependencies
+
+**APIs and Dependencies:**
+1. **[Dependency 1]**: [Purpose]
+2. **[Dependency 2]**: [Purpose]
+3. **[Dependency 3]**: [Purpose]
+4. **[Dependency 4]**: [Purpose]
+5. **[Dependency 5]**: [Purpose]
+6. **Workday APIs**
+   a. [API endpoint] - [Purpose]
+   b. [API endpoint] - [Purpose]
+   c. [API endpoint] - [Purpose]
+7. **[Service] APIs**
+   a. [API endpoint] - [Purpose]
+   b. [API endpoint] - [Purpose]
+8. **[System integration]**: [Purpose]
+9. **[Future consideration]**: [Description]
+
+**Authentication/Security:**
+• [Authentication method]
+• [Access management approach]
+• [Security model]
+
+### Error and Exception Handling
+
+[Bullet list of error scenarios and handling]
+• **[Error Type 1]**: [How it's handled]
+• **[Error Type 2]**: [How it's handled]
+• **[Error Type 3]**: [How it's handled]
+• **[Error Type 4]**: [How it's handled]
+• **[Error Type 5]**: [How it's handled]
+• **[Error Type 6]**: [How it's handled]
+
+---
+
+## Data **(OPTIONAL - AI/ML features only)**
+
+### DATA DETAILS
+
+| **Section** | **Content** |
+|-------------|-------------|
+| **Algorithm Logic Overview** | [Paragraph describing the algorithmic approach, data sources, and how the feature uses them to deliver the capability] |
+| **Criteria for Filtering Out Mass Population** | [Release version statement]<br>For most updated criteria, see [Epic link]<br>• [Criterion 1]<br>• [Criterion 2]<br>• [Criterion 3] |
+| **LLM Prompt & Data Point Details** | See System Prompt Approach |
+| **Evals / Performance** | [Statement about testing and threat modeling] |
+
+---
+
+## UX Designs for [Release]
+
+• [Design name] - [Figma link]
+• [Design name] - [Figma link]
+
+---
+
+## Releases & Production Thresholds
+
+[Statement about Responsible AI analysis or other reviews completed]
+[Link to review documentation]
+
+---
+
+## Target Delivery & Major Milestones
+
+| **Milestone** | **Target Date** |
+|---------------|-----------------|
+| [Milestone 1] | [Date] |
+| [Milestone 2] | [Date] |
+| [Milestone 3] | [Date] |
+| [Milestone 4] | [Date] |
+| [Milestone 5] | [Date] |
+| [Milestone 6] | [Date] |
+
+---
+
+## Resources
+
+• Epic - [EPIC-ID] ([Stage 1]), [EPIC-ID] ([Stage 2])
+• [Feature Name]: [Description] - AI Review: [Link]
+• Legal Review Jira: [JIRA-ID]
+• Responsible AI Risk Evaluation [Link]
+• TSR [Link]
+• [Security Diagram] - [JIRA-ID] (if applicable)
+• PRD (markdown): `docs/prds/[feature-name]-prd.md`
+• [Research Findings] [Link]
+• [Overview Doc] [Link]
+
+---
+
+## Contacts
+
+| **Name** | **Role** |
+|----------|----------|
+| [Name] | Sr. Product Manager |
+| [Name] | (supported by [Title]) |
+| [Name] | [Feature] Lead |
+| [Name] | Team App Dev Lead |
+| [Name] | Team ML Dev Lead (if applicable) |
+| [Name] | Executive Sponsor (Product - [Area]) |
+| [Name] | Executive Sponsor (Product - [Title]) |
+| [Name] | Executive Sponsor (Product - [Title]) |
+| [Name] | [Business Role] |
+
+---
+
+[Page numbers at bottom: "Workday Confidential    [N]" with page "-- N of M --"]
+```
+
+---
+
+## Execution
+
+This rule provides the PRD template structure. **For PRD creation workflow, this rule invokes the `/write-prd` skill** which handles:
+
+- Context gathering and research integration
+- Section drafting following template structure above
+- MCP validation (Deployment Agent)
+- Value metrics integration (auto-invokes `/value-metrics`)
+- Legal review integration (E2E pipeline Step 16)
+- Experience Principles validation
+- Quality checks and formatting standards
+- MISSION_LOG.md updates and handoffs
+
+**Usage Patterns:**
+
+1. **Standalone invocation**: `/write-prd for [feature description]`
+2. **E2E pipeline**: Orchestrator Step 15 invokes this rule → calls `/write-prd` with PM framing
+3. **Glob activation**: Opening/creating files in `docs/prds/` activates this rule → calls `/write-prd`
+
+**Skill Reference**: See `.cursor/skills/write-prd/SKILL.md` for complete workflow documentation.
+
+**When this rule activates**, invoke `/write-prd` skill to execute the PRD creation workflow.
+
+---
+
+## Best Practices
+
+### Executive Summary
+- **Good**: "Workday is uniquely positioned to develop the AI-Powered Interview Team Optimization Skill for the 2026R1+ release. This intelligent skill will proactively recommend an optimal interview team to a hiring manager, the moment a job requisition is created, leveraging our comprehensive talent data."
+- **Bad**: "This PRD describes a new feature for interviews."
+
+### Strategic Value & Outcomes
+- **Good**: "Reduce Time to Fill: This feature aims to reduce the Time to First Interview Team Creation from its current baseline of 16.6 days."
+- **Bad**: "Will help with time to fill."
+
+### Feature Solution
+- **Good**: Bullet list format
+  - "• Hiring Manager conversationally invokes the Skill via Workday Chat"
+  - "• Skill intelligently suggests an interview team"
+- **Bad**: Long prose paragraphs describing the feature
+
+### Year 1 Forecast
+- **Good**: "Adoption Target: 4.5% | Usage Volume: ~750,000 recommendations | Basis: This forecast applies a 4.5% adoption rate, aligning with the observed Year 1 uptake of the first AI feature..."
+- **Bad**: "We expect good adoption"
+
+---
+
+## Triggers
+
+You activate when user says:
+- "Create a PRD for [feature]"
+- "Write requirements for [initiative]"
+- "Document the [product] spec"
+- User works in `/docs/prds/` directory
+- "Create PRD for [recommendation]. Source: [path]. Part of [region] e2e pipeline" (orchestrator invokes)
+
+**When activated**: Immediately invoke `/write-prd` skill to execute the PRD creation workflow.
+
+---
+
+**Remember:** This rule provides the PRD template. The `/write-prd` skill executes the writing workflow. Together they produce world-class PRDs that match Workday's professional standard. **Canonical PRD format is markdown in `docs/prds/`; do not publish to Confluence.**
+

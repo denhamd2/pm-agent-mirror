@@ -1,0 +1,140 @@
+Talent Acquisition Available Metrics,,INSTRUMENTATION EPIC - HRREC-86625,"Questions? - Contact Erin Overland, Chelsea Layton, and Ronan Walsh",,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+Category,Business Value Metric,Calculation Description,Status,Jira Link,Notes on Metric / Calculation,High Level Approach to Getting Data on Metric,PM Owner,Dev Owner of Data Gathering,Raw Data Analysis Results,Slideware,Additional Notes,Metric ID,Dashboard/Deeper Analysis Expected,Defined,Build,Data Ready in Prod tables,Dashboard ,Marketing,Baseline/Diagnosis Study,DS Next step
+Time to Hire,Time to Hire,"Start Date: the date that the Job Requisition/Evergreen is posted - if there's multiple postings we consider the date of the first posting.
+
+End Date: Latest Offer Accepted Date",Delivered,HRREC-81527,"- This metric excludes employment agreement (will exclude many of our non-US customers from having a result and therefor isn't reallllyyy representative of our customer base
+- This one looks at latest offer accepted, (new one looks at first offer accepted) - latest might skew results to be higher (maybe) due to evergreen and position management- 
+
+We will use this IUM for now. However, we would like to instrument Time to First Fill, below, to better capture out global customer base and more accurately account for evergreens and position mgmt.",IUM,Joanne Neilan Erin Overland,,"doc, and notebook code or the dataset in spreadsheet.",,,,Yes,Done,Done,Done,Done,Done,In Progress,Markos working on deep analysis
+Time to Hire,Time to (first) Fill,"Start Date: Date First Job Posting is live
+
+End Date: Job Offer Accepted (if position mgmt, first position offer accepted)",Deprioritized,NA,"Not JR submitted/approved, JR Close, Offer delivered, not butt in seat bc there can be a lag
+job mgmt has one and position management it's the first one
+need to consider no-shows for certain industries
+dont need to consider the post/unpost/post - just consider first post
+evergreens out of scope - should think of keeping JRs linked to Evergreen out of scope",,,Pierce Currid,,,,,No,Done,Not Started,Not Started,Not Started,Not Started,Not Started,Deprioritised
+Time to Hire,Time to Hire for Internal Candidates,,Not Started,HRREC-89120,,,,,,,,,,,,,,,,
+Time to Hire,Time to Hire for Agency Candidates,,Instrumentation in Progress,HRREC-89061,,,,,,,,,,,,,,,,
+Interview - Time,Time to First Interview Session,,Delivered,Hrrec-87961,see interview dashboard,,,,,,,,,,,,,,,Replaced with Interview Session metric
+Interview - Time,Time to First Interview Team Creation,Time from Job Requisition Initiation to FIRST MISST Submission,Delivered,,Metric available in Interview Management dashboard: https://nimbus.wdpharos.io/superset/dashboard/489134ab-4d99-4ab1-a9df-a524ea295c1c/?native_filters_key=QQoics9QOZtSLKVXBfPgQd3NnuzekIyrddnOBDm4ZCd24W-Jwxd83pR1jI5pnOCd,,,,,,,,,,,,,,,
+Interview - Time,Time from Interview Session to Interview Feedback,,,HRREC-88029,,,,,,,,,,,,,,,,
+Interview - Time,Time in Interview BP,,Delivered,,see interview dashboard,,,,,,,,,,,,,,,
+Interview - Volumes,Total number of interviewers,,Delivered,HRREC-87961,see interview dashboard,,,,,,,2687,Yes,Done,Done,Blocked,Not Started,Not Started,Not Started,"Nov 21: Data not yet ready to be picked up. 
+""(IUM) Time from Interview to Interview Feedback"" & ""(IUM) Time to Interview Session""??"
+Interview - Volumes,Total number of interview sessions,,Delivered,,see interview dashboard,,,,,,,,,,,,,,,
+Interview - Volumes,# of job applicants with at least one interview,,Delivered,,see interview dashboard,,,,,,,,,,,,,,,
+Productivity,Recruiter Capacity,Avg. # of JRs a recruiter is assigned to ,Delivered,HRREC-86870,,,,,,,,,,,,,,,,
+Productivity,Recruiting Coordinator Capacity,Avg. # of JRs a recruiting coordinator is assigned to ,Delivered,,see interview dashboard,,,,,,,,,,,,,,,
+Retention,New Hire Retention,,Delivered,,,,,,,,,,Yes,Done,Done,Blocked,Not Started,Not Started,Not Started,
+Retention,Total New Hires (external) from recruiting product,Count of total of new hires,Delivered,HRREC-86315,"This is denominator of ""New Hire Retention"" Rate
+
+Count of New Hires (Hire Employee Events where the hire employee event came from a job application event.) in the month 12 months ago .
+",IUM,Erin Overland,,,,,,No,Done,Done,Blocked,Not Started,Not Started,Not Started,Awaiting data to show up in tables (in test atm)
+Retention,Total New Hires retained (external) from recruiting product,"Count of new hires remaining after 12 months without a future termination date for the month 12 months ago (i.e. if we are in June, then June last year) 
+",Delivered,HRREC-86316,"This is numerator of ""New Hire Retention"" Rate
+
+Exclude Non-Workers (contingent workers and students). [Filtering on Hire Employee Event should take care of this]
+
+Length of Service. For additional jobs, if they are still at the company, regardless of if they have left one of multiple jobs, we still consider them retained [Filtering on Hire Employee Event should take care of this]
+
+Look at all Hire Employee Events (sub event of Staffing Event).
+Filter out those that didn't come from a Job Application Event. ",IUM,Erin Overland,,,,,,No,Done,Done,Blocked,Not Started,Not Started,Not Started,Awaiting data to show up in tables (in test atm)
+Candidate Experience,External Job Posting Reach,"# of unique IP addresses viewing job postings on external career site
+",Delivered,CXS-17297,"Helps calculate Conversion Funnel: View-to-Submision
+- We will not be able to differentiate between via logged in account and anonymous
+- Use view job posting end point
+- We wont be able to tie these users to a specific job posting, but we can do something like this: We say 10 unique users viewing at least one job posting (this metric) > and we saw 8 unique candidates starting an application > and we saw 5 unique candidates submitting an application
+
+examples of how this will work:
+- 1. Chelsea views JR1 3 times > we count this as 1 person reached because we care about converting this person to start an application and then submit, regardless of how many times they have viewed that JR 
+Erin views JR1 3 times, and JR2 1 time > we count this as 1 person",this does not need an IUM just needs a query on stats warehouse ,John Montgomery,,,,,,No,Done,In Progress,Not Started,Not Started,Not Started,Not Started,
+Candidate Experience,"# of External Career Site Applications Started
+",Count of External career site applications started in a month,Instrumentation in Progress,CXS-17298,"Helps calculate Conversion Funnel: View-to-Submision
+""Use Job App Event
+This is excluding web services, external applications created on someones behalf, contingent workers or students, and agency. it is ONLY looking at applications submitted from external career site.
+We wont be able to tie these users to a specific job posting, but we can do something like this:
+We say 10 unique users viewing at least one job posting (this metric) > and we saw 8 unique candidates starting an application > and we saw 5 unique candidates submitting an application
+ Candidate 1 submitted two applications, this should count as two",SWH and IUM,John Montgomery,,,,,,No,Done,In Progress,Not Started,Not Started,Not Started,Not Started,Nov 21: In progress by Engineering
+Applicant Volumes,# of External career site applications submitted,Count of External career site applications submitted in a month,Instrumentation in Progress,CXS-17299,"Helps calculate Conversion Funnel: View-to-Submision
+Use Job App Event
+This is excluding web services, external applications created on someones behalf, contingent workers or students, and agency. it is ONLY looking at applications submitted from external career site.
+We wont be able to tie these users to a specific job posting, but we can do something like this:
+We say 10 unique users viewing at least one job posting (this metric) > and we saw 8 unique candidates starting an application > and we saw 5 unique candidates submitting an application
+ Candidate 1 started two applications, this should count as two
+",SWH and IUM,John Montgomery,,,,,,No,Done,In Progress,Not Started,Not Started,Not Started,Not Started,Nov 21: In progress by Engineering
+Applicant Volumes,Total Applications Submitted ,,Delivered,,sum apps submitted in the two gender IUMs,,,,,,,,,,,,,,,
+Applicant Volumes,# of applications submitted per race, (multiple IUMS),Delivered,HRREC-82009,,,,,,,,,,,,,,,,
+Applicant Volumes,# of applicaitons submitted per gender, (multiple IUMS),Delivered,HRREC-81607,,,,,,,,,,,,,,,,
+Applicant Volumes,# of applications submited per age range, (multiple IUMS),Delivered,HRREC-81534,,,,,,,,,,,,,,,,
+Candidate Experience,Time from jost posting view > first page of application opened,Query - medium,Not Started,CXS-17793,,,,,,,,,No,Done,Not Started,Not Started,Not Started,Not Started,Not Started,
+Offers/EAs,# of Offers/EAs Issued,"total number of offers/eas delivered to a candidate
+Ex. a Job Application has 3 Offer Events, first two were renegotiated and 3rd was completed (either accepted or not). We consider this as 1 Offer/EA Issued",Calculations defined - waiting for dev resources,HRREC-90613,,,,,,,,,,,,,,,,
+Offers/EAs,# of Job Apps Renegotiationed,total number of job applications with at least one renegotiation,Calculations defined - waiting for dev resources,HRREC-90614,,,,,,,,,,,,,,,,
+Offers/EAs,Total # of Renegotiations,total number of renegotiations,Calculations defined - waiting for dev resources,HRREC-90615,,,,,,,,,,,,,,,,
+Offers/EAs,Time in Offer/EA,"Ex. Job App has 2 EA Events, 1st is renegotiated and 2nd is completed (either Accepted or Declined). Time in Offer/EA would be start time of the 1st EA Event until end time of the completed EA Event",Calculations defined - waiting for dev resources,HRREC-90616,,,,,,,,,,,,,,,,
+Referrals,Total Referrals,,,HRREC-89673,,,,,,,,,,,,,,,,
+Referrals,Total Referral Hires,,,HRREC-89674,,,,,,,,,,,,,,,,
+Referrals,Total referrals w a job app,,,HRREC-89749,,,,,,,,,,,,,,,,
+Offers/EAs,# of Offers Accepted,,Delivered,HRREC-81532,,,,,,,,,,,,,,,,
+Offers/EAs,# of Employment Agreements (EA) Accepted,,Delivered,HRREC-81533,,,,,,,,,,,,,,,,
+Candidate Experience,Time from app started > app submitted,"IUM 
+Dif btwn job app creation (""apply"" clicked on a job posting or first page of job app opened) >> 
+job app event creation",Not Started,CXS-17794,"if we go off of clicking ""next"" on first page of apply flow would be easier (that is when a job app is created). apply flow opening is more challenging.
+
+challenge is with user drops and returns to the page - can only track one session
+need to talk to elliot and donna on this one",,,,,,,,No,Done,Not Started,Not Started,Not Started,Not Started,Not Started,
+Internal Mobility,Internal Job Posting Unique Users Viewing ,Count of internal unique users or impressions viewing at least one job posting in a given month,Not Started,HRREC-89193,,Prob dont need an IUM,,,,,,,No,Done,Not Started,Not Started,Not Started,Not Started,Not Started,
+Internal Mobility,"# of Internal Applications Started
+",Count of internal applications started in a month,Not Started,HRREC-89194,,,,,,,,,No,Done,Not Started,Not Started,Not Started,Not Started,Not Started,
+Internal Mobility,# of Internal Applications Submitted,Count of internal applications submitted in a month,Delivered,HRREC-81528,,,,,,,,,No,Done,Not Started,Not Started,Not Started,Not Started,Not Started,
+Internal Mobility,Total New Hires (internal),,Instrumentation in Progress,TALPIP-9883,,,,,,,,,,,,,,,,
+,New Hire Engagement (Peakon),Comparing customers with and without TA products: Output is difference in Peakon scores for those two groups. We are looking at onl  low tenured employees (tenure less than 1 year),Delivered,,"Working with Data Scientists in the new Talent Science and Advisory team: Markos Kaklamanis and William Haarder
+We have been slicing and dicing engagement scores for new hires (tenure at or under 1 yr) 
+Calculation and Analysis is described here under ""Phase 2 Analysis Description"" 
+
+""There is a limited overlap of Workday / Peakon customers. 
+There are appr 200 Recruiting x Peakon customers.
+There are appr 100 Recruiting x TO x Peakon customers.""",Talent Science and Advisory team ,Erin Overland,,"Project Brief, Raw Results",,,,Yes,Done,Done,Done,Blocked,Not Started,Not Started,Awaiting SWH migration for Peakon data
+,"Count of ""quality"" new hires","Count of total new hires remaining after  3 yr NOT currently on a PIP OR Disciplinary Action
+",Blocked,,"discussion here - https://workday-dev.slack.com/archives/C07V5R98QGZ/p1749485576274819
+
+in discussing with HS, maybe there is an opp to use their grading? they do this today",,,,,,,,No,Blocked,Blocked,Not Started,Not Started,Not Started,Not Started,
+,Jobs Filled as a result of Workday-driven sourcing ,"Percent
+
+Count of total offers accepted from a ""sourcing"" feature
+OVER
+Count of number of new hires (above)
+",Blocked,,"WD Driven Sourcing means: 
+Campaigns
+Events
+Landing Pages
+Invite to Apply (via fetch or elsewhere like Find Candidates/Find Workers)
+Referrals
+Prospect Introduce Yourself
+Linkedin Export- yes, if possible but can exclude if it's too wonky
+
+Includes both external and internal applicants
+
+Don't need to consider sourcing through native HS for now. Exclude Paradox. Exclude Agencies (they apply on behalf of candidate but its not really invite-to-apply). 
+
+""Maybe look at where job app is created?
+Cannot use the source field because it's tenanted
+""",,,,,,,,No,Blocked,Blocked,Not Started,Not Started,Not Started,Not Started,
+,Time Spent Creating a Job Requisitions,"Time spent on administrative tasks 
+Job Requisition Creation via the Job Requisition Capability:
+1. # of job reqs submitted through the Agent
+2. Avg time it takes to submit a job req through the Agent",Delivered,,"JR Capability: Replace a worker for a previously filled position
+CJR: Replace a worker for a previously filled position
+Mixology - Certified Exploration: Create Job Req
+Mixology - Certified Exploration: Job Requisition Capability - To Do",,Vincent McCarthy,,JR Creation: JR Creation Mixpanel  ,,"After an ask from Bernie to think about value metrics for what an an all singing, all dancing JRS integrated with other Skills and all under one Agent in natural workspaces could bring to customers & Workday, I have added my thoughts to the Job Requisition Skill - Vision, Now, Value for consideration for future business value metrics. ",,No,Done,In Progress,Not Started,Not Started,Not Started,Not Started,
+,Screen,,,,,,Negin Falahati,,BP Dash - Screen,,,,No,Done,Not Started,Not Started,Not Started,Not Started,Not Started,
+,Volume of Hires - 3 YRs,Count of number of new hires,Deprioritized,,"Rolling 12 months - ie. if we are in June 2024, IUM should look back 12 months.
+Dev can support on what ""new hire"" means - 
+Job Offer Accepted (if position mgmt, first position offer accepted) OR 
+Hire events completed 
+OR hire date/effective date
+The above should basically use what is used in the existing IUM as the denominator - devs to document that. This was in relation to Offers alone so sohuld be separate from others going forward, such as the new hire retention below. That should really be what we determine as the true number of hires - and then that should be used as our definition of new hire going forward for new IUMs.",,,,,,,,No,Done,Not Started,Not Started,Not Started,Not Started,Not Started,Deprioritised
+,Time from Job App Submitted > Some BP Stage,"Could consider using BP even stats
+Start: Job App Event created 
+We do have this for INTERVIEW - see interview line",,,,,,,,,,,No,Done,Not Started,Not Started,Not Started,Not Started,Not Started,

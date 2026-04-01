@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PM Agent Dashboard — Scorecard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0b1f42;
+  --ballpoint: #1a3a6e;
+  --water-cooler: #0075b4;
+  --blue-sky: #4a9fd4;
+  --pencil: #f5a623;
+  --paper: #f7f5f2;
+  --laptop: #6b7a8d;
+  --staple: #e2ddd7;
+  --desk: #c4bdb3;
+  --pass: #22c55e;
+  --warn: #eab308;
+  --fail: #ef4444;
+  --surface: #fafaf9;
+}
+* { font-family: 'DM Sans', system-ui, sans-serif; }
+code, .mono { font-family: 'JetBrains Mono', monospace; }
+body { background: var(--paper); color: var(--ink); }
+.card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(11,31,66,0.08), 0 1px 2px rgba(11,31,66,0.06); }
+.grade-a { background: #dcfce7; color: #166534; }
+.grade-b { background: #fef9c3; color: #854d0e; }
+.grade-c { background: #fee2e2; color: #991b1b; }
+.grade-d { background: #fecaca; color: #7f1d1d; }
+.badge { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+.table-row:nth-child(even) { background: var(--surface); }
+canvas { max-height: 260px; }
+.section-title { letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; font-weight: 700; color: var(--laptop); }
+.delta { font-size: 10px; font-weight: 600; }
+.delta-up { color: #16a34a; }
+.delta-down { color: #dc2626; }
+.delta-flat { color: var(--laptop); }
+.dashboard-nav { position:sticky;top:0;z-index:100;background:rgba(247,245,242,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--staple);padding:10px 24px;display:flex;align-items:center;gap:16px; }
+.dashboard-brand { font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap; }
+.dashboard-tabs { display:flex;gap:4px; }
+.dashboard-tab { padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;text-decoration:none;color:var(--laptop);transition:all 0.2s; }
+.dashboard-tab:hover { background:var(--staple);color:var(--ink); }
+.dashboard-tab.active { background:var(--ink);color:white; }
+.dashboard-external { display:flex;gap:4px;margin-left:auto; }
+.dashboard-ext-link { padding:4px 10px;border-radius:16px;font-size:11px;font-weight:600;text-decoration:none;color:var(--water-cooler);border:1px solid var(--staple);transition:all 0.2s;white-space:nowrap; }
+.dashboard-ext-link:hover { border-color:var(--water-cooler);background:rgba(0,117,180,0.05); }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- Shared Dashboard Nav -->
+<nav class="dashboard-nav">
+  <span class="dashboard-brand">PM Agent Dashboard</span>
+  <div class="dashboard-tabs">
+    <a href="pm-agent-morning-roundup.html" class="dashboard-tab">Morning Roundup</a>
+    <a href="pm-agent-scorecard.html" class="dashboard-tab active">Scorecard</a>
+    <a href="pm-agent-architecture.html" class="dashboard-tab">Architecture Map</a>
+    <a href="pm-agent-design-system.html" class="dashboard-tab">Design System</a>
+  </div>
+  <div class="dashboard-external">
+    <a id="proto-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Prototype &#x2197;</a>
+    <a id="deck-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Deck &#x2197;</a>
+    <a id="prd-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">PRD &#x2197;</a>
+    <a id="brief-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Brief &#x2197;</a>
+    <a id="epic-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Epic &#x2197;</a>
+  </div>
+</nav>
+
+<div class="max-w-[1400px] mx-auto p-6">
+
+<!-- Header -->
+<div class="flex items-center justify-between mb-8">
+  <div>
+    <h1 class="text-3xl font-bold" style="color: var(--ink);">PM Agent Architecture Scorecard</h1>
+    <p class="text-sm mt-1" style="color: var(--laptop);">Post-improvement audit &middot; 1 April 2026 &middot; Workday Recruiting PM Workspace v1.4</p>
+  </div>
+  <div class="flex items-center gap-3">
+    <div class="card px-4 py-2 text-center">
+      <div class="text-sm font-medium" style="color: var(--laptop);">Previous</div>
+      <div class="text-2xl font-bold" style="color: var(--desk);">B+</div>
+    </div>
+    <div style="color: var(--pass); font-size: 24px; font-weight: 700;">&rarr;</div>
+    <div class="card px-5 py-3 text-center" style="border: 2px solid #22c55e;">
+      <div class="text-sm font-medium" style="color: var(--laptop);">Current</div>
+      <div class="text-3xl font-bold" style="color: var(--pass);">A-</div>
+    </div>
+  </div>
+</div>
+
+<!-- KPI Cards Row -->
+<div class="grid grid-cols-6 gap-4 mb-6">
+  <div class="card p-4 text-center">
+    <div class="text-2xl font-bold" style="color: var(--ink);">38</div>
+    <div class="text-xs" style="color: var(--laptop);">Rule Files</div>
+    <div class="delta delta-down">&minus;4 orphans removed</div>
+  </div>
+  <div class="card p-4 text-center">
+    <div class="text-2xl font-bold" style="color: var(--ink);">6</div>
+    <div class="text-xs" style="color: var(--laptop);">Subagents</div>
+    <div class="delta delta-flat">no change</div>
+  </div>
+  <div class="card p-4 text-center">
+    <div class="text-2xl font-bold" style="color: var(--ink);">5</div>
+    <div class="text-xs" style="color: var(--laptop);">Workspace Skills</div>
+    <div class="delta delta-flat">no change</div>
+  </div>
+  <div class="card p-4 text-center">
+    <div class="text-2xl font-bold" style="color: var(--ink);">11</div>
+    <div class="text-xs" style="color: var(--laptop);">MCPs (10 active)</div>
+    <div class="delta delta-down">jira-ghe still errored</div>
+  </div>
+  <div class="card p-4 text-center" style="border: 2px solid #22c55e;">
+    <div class="text-2xl font-bold" style="color: var(--pass);">662</div>
+    <div class="text-xs" style="color: var(--laptop);">AlwaysApply Lines</div>
+    <div class="delta delta-up">&darr; 33% from 982</div>
+  </div>
+  <div class="card p-4 text-center">
+    <div class="text-2xl font-bold" style="color: var(--ink);">13,106</div>
+    <div class="text-xs" style="color: var(--laptop);">Total Rule Lines</div>
+    <div class="delta delta-up">&darr; 7% from 14,152</div>
+  </div>
+</div>
+
+<!-- Main Grid: Left (charts) + Right (findings) -->
+<div class="grid grid-cols-3 gap-6 mb-6">
+
+  <!-- Column 1: Charts -->
+  <div class="space-y-6">
+    <!-- Architecture Health Radar -->
+    <div class="card p-5">
+      <div class="section-title mb-3">Architecture Health (Before &rarr; After)</div>
+      <canvas id="radarChart"></canvas>
+    </div>
+
+    <!-- AlwaysApply Budget -->
+    <div class="card p-5">
+      <div class="section-title mb-3">AlwaysApply Token Budget</div>
+      <canvas id="budgetChart"></canvas>
+      <div class="mt-3 text-xs" style="color: var(--laptop);">
+        <span class="dot" style="background: var(--warn);"></span>662 lines / 500 recommended (132%) <span class="delta delta-up">&darr; from 196%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Column 2: Charts -->
+  <div class="space-y-6">
+    <!-- Rule Size Distribution -->
+    <div class="card p-5">
+      <div class="section-title mb-3">Rule Size Distribution (lines)</div>
+      <canvas id="ruleSizeChart"></canvas>
+    </div>
+
+    <!-- Improvement Impact -->
+    <div class="card p-5">
+      <div class="section-title mb-3">Improvement Impact</div>
+      <canvas id="improvementChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Column 3: Category Grades -->
+  <div class="space-y-4">
+    <div class="card p-5">
+      <div class="section-title mb-4">Category Scores</div>
+
+      <div class="space-y-3">
+        <div class="flex items-center justify-between p-3 rounded-lg" style="background: var(--surface);">
+          <div>
+            <div class="font-semibold text-sm">Rule Architecture</div>
+            <div class="text-xs" style="color: var(--laptop);">Patterns, scoping, token budget</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs" style="color: var(--desk);">B &rarr;</span>
+            <div class="badge grade-a">B+</div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between p-3 rounded-lg" style="background: var(--surface);">
+          <div>
+            <div class="font-semibold text-sm">Subagent Design</div>
+            <div class="text-xs" style="color: var(--laptop);">Isolation, naming, E2E integration</div>
+          </div>
+          <div class="badge grade-a">A</div>
+        </div>
+
+        <div class="flex items-center justify-between p-3 rounded-lg" style="background: var(--surface);">
+          <div>
+            <div class="font-semibold text-sm">Skill Reusability</div>
+            <div class="text-xs" style="color: var(--laptop);">DRY methods, dual-mode support</div>
+          </div>
+          <div class="badge grade-a">A</div>
+        </div>
+
+        <div class="flex items-center justify-between p-3 rounded-lg" style="background: var(--surface);">
+          <div>
+            <div class="font-semibold text-sm">MCP Integration</div>
+            <div class="text-xs" style="color: var(--laptop);">Utilisation, coverage, health</div>
+          </div>
+          <div class="badge grade-b">B-</div>
+        </div>
+
+        <div class="flex items-center justify-between p-3 rounded-lg" style="background: var(--surface);">
+          <div>
+            <div class="font-semibold text-sm">Deck Generation Quality</div>
+            <div class="text-xs" style="color: var(--laptop);">Density, titles, language</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs" style="color: var(--desk);">C+ &rarr;</span>
+            <div class="badge grade-b">B</div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between p-3 rounded-lg" style="background: var(--surface);">
+          <div>
+            <div class="font-semibold text-sm">Naming Conventions</div>
+            <div class="text-xs" style="color: var(--laptop);">Consistency across types</div>
+          </div>
+          <div class="badge grade-a">A-</div>
+        </div>
+
+        <div class="flex items-center justify-between p-3 rounded-lg" style="background: var(--surface);">
+          <div>
+            <div class="font-semibold text-sm">E2E Pipeline</div>
+            <div class="text-xs" style="color: var(--laptop);">29-step orchestration</div>
+          </div>
+          <div class="badge grade-a">A</div>
+        </div>
+
+        <div class="flex items-center justify-between p-3 rounded-lg" style="background: var(--surface);">
+          <div>
+            <div class="font-semibold text-sm">Workspace Hygiene</div>
+            <div class="text-xs" style="color: var(--laptop);">Orphans, stale refs, mission log</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs" style="color: var(--desk);">B &rarr;</span>
+            <div class="badge grade-a">A-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Improvements Completed -->
+<div class="card p-5 mb-6">
+  <div class="section-title mb-4">Improvements Completed This Session</div>
+  <div class="grid grid-cols-3 gap-4">
+    <div class="p-4 rounded-lg border-l-4" style="background: #f0fdf4; border-color: var(--pass);">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="badge grade-a">P0</span>
+        <span class="font-semibold text-sm">Density validator created</span>
+      </div>
+      <div class="text-xs" style="color: var(--laptop);"><code class="mono text-xs">scripts/validate_slide_spec.py</code> - programmatic density, title, and language validation. BLOCKS generation on failure. Wired into both 130 (step 5) and 110 (step 3).</div>
+    </div>
+    <div class="p-4 rounded-lg border-l-4" style="background: #f0fdf4; border-color: var(--pass);">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="badge grade-a">P0</span>
+        <span class="font-semibold text-sm">Prohibited-term regex</span>
+      </div>
+      <div class="text-xs" style="color: var(--laptop);">7 regex patterns added to <code class="mono text-xs">/slide-writer</code> skill: rule numbers, Jira IDs, MCP tools, abbreviations, PMF acronym, real names. Common leakage sources documented.</div>
+    </div>
+    <div class="p-4 rounded-lg border-l-4" style="background: #f0fdf4; border-color: var(--pass);">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="badge grade-a">P1</span>
+        <span class="font-semibold text-sm">Orphan docs archived</span>
+      </div>
+      <div class="text-xs" style="color: var(--laptop);">4 non-rule files moved from <code class="mono text-xs">.cursor/rules/</code> to <code class="mono text-xs">docs/archive/rules-archive/</code>. Zero orphans remain in rules directory.</div>
+    </div>
+    <div class="p-4 rounded-lg border-l-4" style="background: #f0fdf4; border-color: var(--pass);">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="badge grade-a">P1</span>
+        <span class="font-semibold text-sm">050 glob-scoped</span>
+      </div>
+      <div class="text-xs" style="color: var(--laptop);"><code class="mono text-xs">050-functional-knowledge.mdc</code> changed from alwaysApply to glob-scoped. AlwaysApply budget reduced 33% (982 &rarr; 662 lines). Now only 2 alwaysApply rules remain.</div>
+    </div>
+    <div class="p-4 rounded-lg border-l-4" style="background: #f0fdf4; border-color: var(--pass);">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="badge grade-a">P2</span>
+        <span class="font-semibold text-sm">Mission log cleaned</span>
+      </div>
+      <div class="text-xs" style="color: var(--laptop);">30 stale missions archived to <code class="mono text-xs">docs/mission-archive/stale-missions-2026-03-31.md</code>. Active table reduced from 36 to 6 genuine in-progress missions.</div>
+    </div>
+    <div class="p-4 rounded-lg border-l-4" style="background: #fefce8; border-color: var(--warn);">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="badge grade-b">P2</span>
+        <span class="font-semibold text-sm">Jira MCP - manual action</span>
+      </div>
+      <div class="text-xs" style="color: var(--laptop);"><code class="mono text-xs">user-jira-ghe</code> still errored. Requires manual fix: Cursor Settings &gt; MCP Servers &gt; user-jira-ghe. Check auth credentials and restart.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Before/After Metrics -->
+<div class="grid grid-cols-2 gap-6 mb-6">
+
+  <!-- Before/After Comparison -->
+  <div class="card p-5">
+    <div class="section-title mb-3">Before / After Comparison</div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--staple);">
+            <th class="text-left py-2 px-3 font-semibold">Metric</th>
+            <th class="text-right py-2 px-3 font-semibold">Before</th>
+            <th class="text-right py-2 px-3 font-semibold">After</th>
+            <th class="text-right py-2 px-3 font-semibold">Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-row"><td class="py-2 px-3">AlwaysApply lines</td><td class="text-right py-2 px-3 mono text-xs">982</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">662</td><td class="text-right py-2 px-3 delta delta-up">&darr; 33%</td></tr>
+          <tr class="table-row"><td class="py-2 px-3">AlwaysApply rules</td><td class="text-right py-2 px-3 mono text-xs">3</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">2</td><td class="text-right py-2 px-3 delta delta-up">&darr; 1</td></tr>
+          <tr class="table-row"><td class="py-2 px-3">Orphan docs in rules/</td><td class="text-right py-2 px-3 mono text-xs">4</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">0</td><td class="text-right py-2 px-3 delta delta-up">&darr; 4</td></tr>
+          <tr class="table-row"><td class="py-2 px-3">Active missions</td><td class="text-right py-2 px-3 mono text-xs">36</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">6</td><td class="text-right py-2 px-3 delta delta-up">&darr; 30 archived</td></tr>
+          <tr class="table-row"><td class="py-2 px-3">Total rule lines</td><td class="text-right py-2 px-3 mono text-xs">14,152</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">13,106</td><td class="text-right py-2 px-3 delta delta-up">&darr; 7%</td></tr>
+          <tr class="table-row"><td class="py-2 px-3">Slide density validator</td><td class="text-right py-2 px-3 mono text-xs" style="color: var(--fail);">None</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">Active</td><td class="text-right py-2 px-3 delta delta-up">NEW</td></tr>
+          <tr class="table-row"><td class="py-2 px-3">Prohibited-term regex</td><td class="text-right py-2 px-3 mono text-xs" style="color: var(--fail);">Prose only</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">7 patterns</td><td class="text-right py-2 px-3 delta delta-up">NEW</td></tr>
+          <tr class="table-row"><td class="py-2 px-3">Jira MCP health</td><td class="text-right py-2 px-3 mono text-xs" style="color: var(--fail);">Errored</td><td class="text-right py-2 px-3 mono text-xs" style="color: var(--warn);">Errored</td><td class="text-right py-2 px-3 delta delta-flat">manual fix</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Remaining Issues -->
+  <div class="card p-5">
+    <div class="section-title mb-3">Remaining Issues</div>
+    <div class="space-y-2 text-sm">
+      <div class="table-row flex items-start gap-3 p-2 rounded">
+        <span class="badge grade-d mt-0.5" style="white-space: nowrap;">WARN</span>
+        <div>
+          <div class="font-semibold">Jira MCP (user-jira-ghe) still errored</div>
+          <div class="text-xs" style="color: var(--laptop);">Blocks 430 story writing, 435 validation, 500 Slack triage. Requires manual fix in Cursor Settings &gt; MCP Servers.</div>
+        </div>
+      </div>
+      <div class="table-row flex items-start gap-3 p-2 rounded">
+        <span class="badge grade-d mt-0.5" style="white-space: nowrap;">WARN</span>
+        <div>
+          <div class="font-semibold">AlwaysApply still 32% over target (662/500)</div>
+          <div class="text-xs" style="color: var(--laptop);">000-orchestrator (427) is the largest. Hard to reduce further without splitting routing logic. Acceptable for now.</div>
+        </div>
+      </div>
+      <div class="table-row flex items-start gap-3 p-2 rounded">
+        <span class="badge grade-d mt-0.5" style="white-space: nowrap;">INFO</span>
+        <div>
+          <div class="font-semibold">v84 deck was generated before validator existed</div>
+          <div class="text-xs" style="color: var(--laptop);">65 violations detected retroactively. Next deck generation (v85+) will be blocked by validator until all violations are fixed pre-flight.</div>
+        </div>
+      </div>
+      <div class="table-row flex items-start gap-3 p-2 rounded">
+        <span class="badge grade-d mt-0.5" style="white-space: nowrap;">INFO</span>
+        <div>
+          <div class="font-semibold">110 has 767 lines (largest glob rule)</div>
+          <div class="text-xs" style="color: var(--laptop);">Could extract layout examples to a reference doc similar to what was done with 130. Not critical but would improve maintainability.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Rule File Inventory -->
+<div class="card p-5 mb-6">
+  <div class="section-title mb-3">Rule File Inventory (Top 15 by Size)</div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr style="border-bottom: 2px solid var(--staple);">
+          <th class="text-left py-2 px-3 font-semibold">Rule File</th>
+          <th class="text-right py-2 px-3 font-semibold">Lines</th>
+          <th class="text-center py-2 px-3 font-semibold">Scope</th>
+          <th class="text-left py-2 px-3 font-semibold">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">110-slide-generator.mdc</td><td class="text-right py-1.5 px-3">767</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Largest glob rule; could extract layout ref</td></tr>
+        <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">105-research-planning-analysis.mdc</td><td class="text-right py-1.5 px-3">709</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Heavy; thin wrapper exists (@ux-researcher)</td></tr>
+        <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">330-figma-integration.mdc</td><td class="text-right py-1.5 px-3">683</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Multi-path Figma flows</td></tr>
+        <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">430-story-writing.mdc</td><td class="text-right py-1.5 px-3">630</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Jira integration + BDD + copy review</td></tr>
+        <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">094-cursor-architecture-guide.md</td><td class="text-right py-1.5 px-3">620</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Reference doc; correctly scoped</td></tr>
+        <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">108-tableau-gap-analyser.mdc</td><td class="text-right py-1.5 px-3">596</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Conditional (if gap data exists)</td></tr>
+        <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">435-story-validator.mdc</td><td class="text-right py-1.5 px-3">555</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Optional quality gate</td></tr>
+        <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">420-story-mapping.mdc</td><td class="text-right py-1.5 px-3">536</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Jeff Patton story mapping</td></tr>
+        <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">080-red-team.mdc</td><td class="text-right py-1.5 px-3">461</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Stress testing for PRDs/stories</td></tr>
+        <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">001-e2e-pipeline-reference.md</td><td class="text-right py-1.5 px-3">455</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Pipeline implementation reference</td></tr>
+        <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">320-prototype-developer.mdc</td><td class="text-right py-1.5 px-3">443</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Canvas Kit implementation</td></tr>
+        <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">200-prd-template.mdc</td><td class="text-right py-1.5 px-3">435</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Invokes /write-prd skill</td></tr>
+        <tr class="table-row" style="background: #fef2f2;"><td class="py-1.5 px-3 mono text-xs">000-master-orchestrator.mdc</td><td class="text-right py-1.5 px-3 font-bold">427</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #fecaca; color: #991b1b;">always</span></td><td class="py-1.5 px-3 text-xs" style="color: #991b1b;">Core routing; hard to reduce further</td></tr>
+        <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">130-pmf-slide-generator.mdc</td><td class="text-right py-1.5 px-3">413</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Now references validator (step 5)</td></tr>
+        <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">050-functional-knowledge.mdc</td><td class="text-right py-1.5 px-3">329</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #dcfce7; color: #166534;">glob &#x2713;</span></td><td class="py-1.5 px-3 text-xs" style="color: #166534;">Demoted from alwaysApply this session</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="text-center py-4 text-xs" style="color: var(--desk);">
+  Generated by 090-agent-improvement-advisor &middot; 1 April 2026 &middot; Workday Recruiting PM Workspace v1.4
+</div>
+
+</div>
+
+<script>
+const INK = '#0b1f42';
+const WATER = '#0075b4';
+const SKY = '#4a9fd4';
+const PENCIL = '#f5a623';
+const LAPTOP = '#6b7a8d';
+const PASS = '#22c55e';
+const WARN = '#eab308';
+const FAIL = '#ef4444';
+const DESK = '#c4bdb3';
+
+Chart.defaults.font.family = "'DM Sans', system-ui, sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = LAPTOP;
+
+// Radar Chart - Architecture Health (Before vs After)
+new Chart(document.getElementById('radarChart'), {
+  type: 'radar',
+  data: {
+    labels: ['Rule Architecture', 'Subagent Design', 'Skill Reuse', 'MCP Coverage', 'Deck Quality', 'Naming', 'E2E Pipeline', 'Hygiene'],
+    datasets: [{
+      label: 'After (current)',
+      data: [85, 95, 92, 70, 78, 88, 95, 90],
+      borderColor: PASS,
+      backgroundColor: 'rgba(34,197,94,0.12)',
+      borderWidth: 2.5,
+      pointBackgroundColor: PASS
+    }, {
+      label: 'Before',
+      data: [75, 95, 92, 70, 55, 88, 95, 78],
+      borderColor: DESK,
+      backgroundColor: 'rgba(196,189,179,0.08)',
+      borderWidth: 1.5,
+      borderDash: [4, 4],
+      pointBackgroundColor: DESK,
+      pointRadius: 3
+    }, {
+      label: 'Target',
+      data: [90, 95, 95, 90, 90, 95, 95, 90],
+      borderColor: LAPTOP,
+      backgroundColor: 'transparent',
+      borderWidth: 1,
+      borderDash: [2, 3],
+      pointRadius: 0
+    }]
+  },
+  options: {
+    scales: { r: { beginAtZero: true, max: 100, ticks: { stepSize: 25, font: { size: 9 } }, grid: { color: '#e2ddd7' }, pointLabels: { font: { size: 10, weight: 500 } } } },
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12, font: { size: 10 } } } }
+  }
+});
+
+// Budget Doughnut - Updated
+new Chart(document.getElementById('budgetChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['000-orchestrator (427)', '010-style-guide (235)', 'Remaining budget (0)'],
+    datasets: [{
+      data: [427, 235, 0],
+      backgroundColor: [WATER, PENCIL, '#e2ddd7'],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    cutout: '65%',
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 10, padding: 8, font: { size: 10 } } },
+      tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.raw} lines` } }
+    }
+  }
+});
+
+// Rule Size Bar Chart - Updated with 050 no longer highlighted
+new Chart(document.getElementById('ruleSizeChart'), {
+  type: 'bar',
+  data: {
+    labels: ['110', '105', '330', '430', '094', '108', '435', '420', '080', '001', '320', '200', '000', '130', '050'],
+    datasets: [{
+      data: [767, 709, 683, 630, 620, 596, 555, 536, 461, 455, 443, 435, 427, 413, 329],
+      backgroundColor: (ctx) => {
+        if (ctx.dataIndex === 12) return WATER; // 000 alwaysApply
+        if (ctx.dataIndex === 14) return PASS;   // 050 now glob (improved)
+        return SKY;
+      },
+      borderRadius: 4
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: { x: { grid: { color: '#f0ede9' } }, y: { grid: { display: false }, ticks: { font: { family: "'JetBrains Mono'", size: 9 } } } }
+  }
+});
+
+// Improvement Impact - Horizontal bar showing before/after
+new Chart(document.getElementById('improvementChart'), {
+  type: 'bar',
+  data: {
+    labels: ['AlwaysApply\nlines', 'Active\nmissions', 'Orphan\ndocs', 'Rule\nfiles', 'Total rule\nlines (K)'],
+    datasets: [{
+      label: 'Before',
+      data: [982, 36, 4, 42, 14.2],
+      backgroundColor: '#fecaca',
+      borderRadius: 3
+    }, {
+      label: 'After',
+      data: [662, 6, 0, 38, 13.1],
+      backgroundColor: PASS,
+      borderRadius: 3
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    scales: {
+      x: { grid: { color: '#f0ede9' } },
+      y: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 0 } }
+    },
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12, font: { size: 10 } } } }
+  }
+});
+</script>
+
+</div>
+<script src="dashboard-nav.js"></script>
+</body>
+</html>

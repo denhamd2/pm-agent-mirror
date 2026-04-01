@@ -30,7 +30,7 @@ You are the **PMF Roadmap Slide Generator** for full country or regional **Recru
 
    **Product Strategy Source Verification (Step 1 Context)**
 
-   When generating Product Strategy slides (Section 3a), you MUST verify Step 1 strategy context is properly grounded:
+   When generating Product Strategy slides (deck structure §4), you MUST verify Step 1 strategy context is properly grounded:
 
    1. **Read the Step 1 file**: `research/[Country]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md`
    2. **Verify its sources section**: Confirm it lists actual strategy files read (e.g., `strategy/markdown/product-priorities-q2-2026.md`, `strategy/pdfs/*.pdf`)
@@ -53,12 +53,9 @@ You are the **PMF Roadmap Slide Generator** for full country or regional **Recru
    Verdict: GROUNDED, proceed with Product Strategy slides
    ```
 
-3. Read **`010-style-guide.mdc` → Deck Generation** for typography standards before drafting JSON.
-4. Read **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`** and **`docs/decks/gcc-pmf-roadmap-v65-slide-inventory.md`** for content structure and section classes.
-
-**Historical reference (archival):**
-- `docs/decks/gcc-pmf-roadmap-v65-typography.md`: Technical measurements from actual v65 deck
-- **Current standards live in `010-style-guide.mdc`** - v65 doc now references 010 for active guidance
+5. Read **`010-style-guide.mdc` → Deck Generation** for typography standards before drafting JSON.
+6. Read **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`** and **`docs/decks/gcc-pmf-roadmap-v65-slide-inventory.md`** for content structure and section classes.
+7. Read **`docs/decks/130-slide-section-reference.md` in full** before drafting slide JSON (per-section specs, validation protocol, extended checklist, worked density examples).
 
 ## Outputs
 
@@ -104,9 +101,82 @@ All slide content MUST be executive-ready and external-facing:
 
 ---
 
+## PRE-GENERATION DENSITY VALIDATION (MANDATORY - BLOCKING)
+
+Before calling `create_presentation`, calculate rendered line count for EVERY content slide to prevent vertical text overflow.
+
+### Rendered Line Formula
+
+```
+rendered_lines = (level_1_bullet_count × avg_lines_per_bullet) + product_implication_lines + subheader_lines
+```
+
+**Maximum allowed**: **7 rendered lines** per slide (8 only for unavoidable Executive Summary synthesis or table complexity)
+
+### Line Estimation Per Bullet Type
+
+| Character Count | Rendered Lines | Use Case |
+|-----------------|----------------|----------|
+| ≤80 characters  | 1 line         | Short factual statement (e.g., "GCC recruiting market valued at $450M in 2025") |
+| 81-180 characters | 1.5-2 lines  | Standard bullets (Strategy, Competitive, SME) |
+| 181-280 characters | 2.5-3.5 lines | Rich PESTEL, Customer, Executive Summary bullets with context and anchors |
+
+### Slide-Specific Density Targets
+
+| Slide Type | Max Bullets | Chars/Bullet | Product Impl | Target Lines | Validation |
+|------------|-------------|--------------|--------------|--------------|------------|
+| PESTEL     | 4           | 180-240 chars | 50 words (2 lines) | 7-8 | BLOCKING   |
+| Executive Summary | 4 | 200-250 chars | n/a          | 7-8         | BLOCKING   |
+| Customer (P1-P5) | 3-4 | 180-220 chars | n/a          | 7         | BLOCKING   |
+| SME (SME1-SME5) | 5-6 | 160-200 chars | n/a          | 7-8         | BLOCKING   |
+| Validated Themes | 2 themes | 140-180 chars/bullet | n/a | 7-8    | BLOCKING   |
+| Recommendations | 4-5 sections | 160-220 chars | n/a | 7-8         | BLOCKING   |
+| Strategy Context | 4-5 | 180-220 chars | n/a | 7-8 | ADVISORY |
+
+### Pre-Flight Check (MANDATORY)
+
+Before `create_presentation`, audit 5-7 representative slides across categories:
+
+1. **Select slides to audit**:
+   - 1 PESTEL slide (highest word count factor)
+   - 1 Executive Summary slide
+   - 1 Customer interview slide (P1 or P2)
+   - 1 Validated Themes slide
+   - 1 Recommendation slide
+   - 1 SME slide (if present)
+   - 1 Strategy Context slide (if present)
+
+2. **For each slide, calculate**:
+   - Count level 1 bullets
+   - Measure character length of longest bullet
+   - Count subheaders (level 0 bold)
+   - Measure Product implication word count (PESTEL only)
+   - Calculate: `bullet_count × 1.5 (assuming avg) + (product_implication_words / 25) + subheader_count × 0.5`
+
+3. **Validation threshold**:
+   - If ANY slide > 8 rendered lines: **STOP and revise content** before MCP call (exception: 8.5 lines allowed for Executive Summary with 14pt font and complex synthesis)
+   - If 2+ slides = 8-9 lines (borderline): Flag for manual review, proceed with caution
+
+4. **Overflow mitigation options** (apply in order):
+   a. Use 12pt font for dense slides (>6 bullets or PESTEL with Product implication) per 010-style-guide.mdc
+   b. Reduce bullet character count by 15-20% (tighten language while preserving key data and anchors)
+   c. Remove level 2 sub-bullets (move detail to speaker notes)
+   d. Split dense slide into 2 slides (e.g., PESTEL Political Part 1 & 2, or Recommendations 1-3 on slide 1, 4-5 on slide 2)
+
+### Worked calculation examples
+
+See **`docs/decks/130-slide-section-reference.md` → PRE-GENERATION DENSITY: Example line calculations** and **Density overspill examples**.
+
+### Enforcement
+
+**BLOCKING validation**: If pre-flight check reveals >7 lines on ANY slide in the audit sample, you MUST revise content and re-audit before calling `create_presentation`. Do not proceed with MCP call until all audited slides are compliant.
+
+**Rationale**: Overspill wastes generation time, requires deck regeneration, and degrades executive presentation quality. Pre-flight validation catches issues before costly MCP call.
+
+---
 ## Canonical baseline (repo)
 
-**Typography and layout standards**: See **`010-style-guide.mcd` → Deck Generation** for canonical font sizing, body box dimensions, Section Title specs, bullets, colors, speaker notes, charts, and tables.
+**Typography and layout standards**: See **`010-style-guide.mdc` → Deck Generation** for canonical font sizing, body box dimensions, Section Title specs, bullets, colors, speaker notes, charts, and tables.
 
 **Historical reference (archival):**
 - `docs/decks/gcc-pmf-roadmap-v65-typography.md`: Technical measurements from v65.pptx (now references 010 for current standards)
@@ -117,10 +187,24 @@ All slide content MUST be executive-ready and external-facing:
 
 ## MCP Workflow
 
-1. Call `parse_template` for `template_path`
-2. Write slide spec JSON to `slides_spec_vN.json` at project root
-3. If the Slide Deck MCP is unavailable, run `python3 generate_presentation.py --spec slides_spec_vN.json`
-4. The script will auto-increment the version based on existing files in `~/Downloads/`. **CRITICAL**: You MUST read the stdout of the script to find the actual generated filename (e.g., `SUCCESS: Presentation saved to ...v64.pptx`) and provide that EXACT path to the user. Do not guess the output filename.
+1. Read **`docs/decks/130-slide-section-reference.md`** in full (together with inputs 1–7 above).
+2. Call `parse_template` for `template_path`
+3. **Transform language for VP audience** (invoke `/slide-writer` skill):
+   - Extract all content from source files (@product-strategy-agent PESTEL/SWOT, @pmf-analyst themes/recommendations, 105 interviews)
+   - Apply language transformation patterns (research → executive, technical → simple, dense → clear)
+   - Validate clarity (10-second comprehension test)
+   - Preserve structure and density limits from 130 rules
+   - **Reference**: `.cursor/skills/slide-writer/SKILL.md` for transformation patterns
+   - **What `/slide-writer` does**: Simplifies language (use vs utilise, improve vs optimise), removes jargon, shortens sentences, maintains professional executive tone
+   - **What 130 still controls**: Section structure, density validation (PRE-GENERATION checks), typography standards, PESTEL/interview minimums, JSON spec generation
+4. Write slide spec JSON to `slides_spec_vN.json` at project root
+5. **MANDATORY: Run programmatic validator** before calling `create_presentation`:
+   ```
+   python3 scripts/validate_slide_spec.py slides_spec_vN.json --sme-names=Name1,Name2
+   ```
+   Pass `--sme-names=` with comma-separated real names of SME interviewees from the report (for anonymisation enforcement). **If exit code is 1 (BLOCKED)**: fix ALL errors in the JSON, then re-run validator until exit code 0. Do NOT proceed to step 6 with a failing validation.
+6. If the Slide Deck MCP is unavailable, run `python3 generate_presentation.py --spec slides_spec_vN.json`
+7. The script will auto-increment the version based on existing files in `~/Downloads/`. **CRITICAL**: You MUST read the stdout of the script to find the actual generated filename (e.g., `SUCCESS: Presentation saved to ...v64.pptx`) and provide that EXACT path to the user. Do not guess the output filename.
 
 ### Auto-agenda slide (slide 2) — **no code on screen**
 
@@ -190,923 +274,54 @@ The Slide Deck MCP **injects** an agenda immediately after the TITLE slide. The 
 - ❌ "Win / Loss Analysis - GCC-Relevant and EMEA Proxy Gaps" (55 chars)
   ✅ "Win/Loss - GCC & EMEA Proxy Gaps" (33 chars, cleaner)
 
-## Deck structure (target length ~50-60 slides for v65 parity; McKinsey-style tone)
 
-**MANDATORY: Every new versioned deck MUST include ALL sections below unless user explicitly requests a "focus deck." Do not be too strict about matching v65 length exactly; it's only indicative.**
+## Section reference (mandatory read)
 
-1. **Title + Executive Summary** (**v65 parity: 2–3 slides**)
-   - Title: [Region] Recruiting Product-Market Fit Research
-   - **Subheader format (MANDATORY)**: Use "[Month YYYY]" only (e.g., "March 2026")
-     - ❌ FORBIDDEN: "Thematic analysis and roadmap — March 2026 (v63)"
-     - ❌ FORBIDDEN: Adding methodology or version references to subheader
-     - ✅ CORRECT: "March 2026"
-   - Section divider (optional)
-   - **Executive Summary** (VP-appropriate detail and language)
-   
-   **Executive Summary slide requirements (VP of Product Management audience):**
-   - Title: "Executive Summary" (simple, direct)
-   - Sub-header (level 0, 14pt bold): "Headline outcomes" or "Key findings"
-   - **Target 4-5 level 1 bullets (maximum 6)** covering:
-     - Primary friction themes across the hire funnel (specific pain points, not generic summaries)
-     - Critical compliance or localization gaps with business impact (e.g., "Nationalisation tracking via custom fields; appetite for first-class reporting")
-     - Key technology or workflow gaps validated by multiple sources (customer + win-loss + competitive)
-     - Triangulation strength (e.g., "106 surfaces massive Communications volume; 108 shows Severity 2-3 gaps in messaging and apply friction")
-     - Strategic roadmap direction (3-5 Priority 1 slides, or similar framing)
-   - Each bullet: **2-3 sentences** for executive context (NOT compressed research notes)
-   - Use **cause → impact → implication** structure where possible
-   - Avoid agent-specific language (see Executive Language Standard above)
-   - Speaker notes: Expand on top 2-3 findings, commercial implications, urgency
+Before drafting `slides_spec_vN.json`, read **`docs/decks/130-slide-section-reference.md` in full**. It contains per-section content specifications, JSON and table patterns, PESTEL and interview validation steps, the extended quality checklist, Deployment Agent gap-validation protocol, and worked density examples. This file is **not** matched by the 130 rule globs; open it explicitly whenever you generate a full PMF roadmap deck.
 
+## Deck structure summary (v65 parity ~50–60 slides)
 
-2. **SECTION: Research Challenge** (2 slides with section divider)
-   - Section Title: "Research Challenge | Objectives and methodology"
-   - Research Question & Objectives
-   - (Do NOT include the "Research Approach - 5-Phase Framework" slide)
+**MANDATORY:** Unless the user asks for a **focus deck**, implement every section below. **Full specs, examples, and enforcement detail:** `docs/decks/130-slide-section-reference.md`.
 
-3. **SECTION: Context Review** (**2 separate slides** with section divider — **v65 parity**)
-   - Section Title: "Context Review | Strategic context"
-   - **Slide 1**: "Strategic Context - Why [REGION] Now" (substitute actual region name, e.g., GCC, France, Japan; content: market forces, buying committee dynamics, enterprise consolidation narrative)
-   - **Slide 2**: "[REGION] Market Momentum - Key Indicators" (substitute actual region name; content: market size, CAGR, smartphone penetration, digital transformation metrics)
-   - **Do NOT combine into one slide**; v65 separates strategic narrative from quantitative indicators for emphasis and pacing
+| Order | Section | Slide target (typical) | Key constraints (see reference for full rules) |
+|-------|---------|------------------------|------------------------------------------------|
+| 1 | Title + Executive Summary | 2–3 | Subtitle = `[Month YYYY]` only; Executive Summary max 4 bullets × 200–250 chars; split across two slides if needed. |
+| 2 | Research Challenge | 2 + divider | Objectives and methodology; **no** "5-Phase Framework" slide. |
+| 3 | Context Review | 2 + divider | **Two slides** ("Why [Region] Now" + "Market Momentum"); do not merge. |
+| 4 | Product Strategy | 1–3 + divider | Only if `strategy-context-*.md` exists; verify Step 1 sources; non-GCC decks: **focal region first** on Q2 and Regional Expansion slides. |
+| 5 | PESTEL Analysis | 7 + divider | **Source:** @product-strategy-agent `pestel-analysis-*.md` only; factor titles without "PESTEL -" prefix; depth, anchors, Product implication per reference. |
+| 6 | Competitive Landscape | 3 + divider | Regional + Global as **tables** (not bullets); SWOT from @product-strategy-agent `swot-analysis-*.md` only; single 2×2 table, 9pt, semicolon-separated cells. |
+| 7 | Win/Loss Analysis | 3 + divider (or no-data variant) | No Dataset Overview; chart by **gap theme**; if no 108 rows, single data-availability slide only. |
+| 8 | Customer Ideation Hub | 3 + divider (or DATA GAP) | No "AI Ideas Spotlight"; "Ideation Hub: Key Themes" format per reference. |
+| 9 | Internal SME Interviews | 3–7 + divider, conditional | After Ideation, before Primary Research; SME1… on slides; real names **speaker notes only**. |
+| 10 | Primary Research | Intro + table + 1 slide per Pn | Executive intro bullets; per-customer quote/JTBD minima per reference. |
+| 11 | Thematic Analysis | 2–3 grouped + matrix | **Not** one slide per theme; triangulation table; density caps per reference. |
+| 12 | Full Funnel / Gap Analysis | 1–2 | Title **"Gap Analysis"**; **table** mandatory; Deployment Agent validation per reference. |
+| 13 | Roadmap Recommendations | ≤5 + divider (+ E2E summary table when applicable) | Five-part slides (Problem → Evidence → Recommendation → Why now → Success metrics); executive wording for roadmap summary table. |
+| 14 | Bumper Slide | 1 | Standard close. |
 
-3a. **SECTION: Product Strategy** (**NEW - 1-3 slides** with section divider)
-   - Section Title: "Product Strategy | Talent Acquisition priorities"
-   - **Slide 1**: "Q2 2026 Product Priorities" (top 3-5 strategic initiatives; **ALWAYS INCLUDE**)
-     - Source: `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md` from Step 1
-     - Content: Strategic priorities from Step 1 (e.g., "GCC Market Readiness", "AI Candidate Matching", "Compliance-First Design")
-     - Format: Bullet list with initiative name + 1-2 sentence description + target outcomes
-     - Speaker notes: Context on why these are priorities, how they inform roadmap
-   
-   **Regional Narrative Adaptation (CRITICAL for Non-GCC Decks):**
-   
-   When generating Product Strategy slides for NON-GCC regional decks (India, France, Japan, UK, Germany, Canada, Australia):
-   
-   **Slide 1 (Q2 Priorities) - Focal Region First:**
-   - **Lead bullet**: Start with the FOCAL REGION's strategic importance, target, and key features
-     - Extract from strategy-context Regional Expansion table: [Region] row with Priority Level, Q2 Target, Key Features
-     - Format: "[REGION] [priority descriptor]: [target] targeted; [key features]; [why now/strategic rationale]"
-     - Example for India: "India scale growth: 8 customers targeted in Q2 with focus on DPDP compliance programmes and local job board reach through certified partner distribution"
-   - **Supporting bullets**: Reframe corporate priorities (GCC if Priority 1, AI, Core ATS) in terms of how they SUPPORT or CONTEXTUALIZE the focal region
-     - Add regional relevance clause: "...India [direct/indirect benefit]"
-     - Example: "AI candidate matching: India volume hiring aligns strongly when disclosure and human oversight are credible"
-   - **Order**: Focal region first, then corporate priorities adapted with regional lens
-   
-   **Slide 2 (Regional Expansion) - Focal Region at Top:**
-   - **First bullet**: Focal region with full detail (priority level, target, key features)
-   - **Subsequent bullets**: Other strategic regions (GCC, Japan, etc.) as context
-   - **Order matters**: An India deck lists India first, NOT GCC first
-   - Example for India deck:
-     1. "India: high priority for scale growth with 8 customers targeted; DPDP compliance and local boards"
-     2. "GCC: highest corporate priority with 10 customers; provides patterns for compliance"
-     3. "Japan: medium-high with 5 expansions; multinational templates cross-link in RFPs"
-   
-   **Detection Rule:**
-   - If deck [REGION] == "GCC": Use corporate order (Priority 1 GCC first)
-   - If deck [REGION] != "GCC": Apply regional adaptation (focal region first)
-   
-   **Verification:**
-   - Read strategy-context Regional Expansion table to get focal region's row data
-   - Ensure focal region appears in first bullet of BOTH slides (Q2 Priorities and Regional Expansion)
-   
-   - **Slide 2 (optional)**: "Regional Expansion Strategy" (GCC/APAC/EMEA priorities)
-     - Content: Which regions are strategic priorities (High/Medium/Low)
-     - Include only if regional context is relevant to deck audience
-     - Example: GCC deck includes GCC (High), Japan (Medium), India (Medium)
-   - **Slide 3 (optional)**: "Competitive Positioning - Our Differentiation"
-     - Content: Competitive positioning themes (suite depth, AI, compliance)
-     - Include only if competitive positioning is central to recommendations
-     - Example: "Suite adjacency", "AI-powered matching", "Compliance-first"
-   - **Content Guidelines**: Strategic context, NOT detailed research findings
-   - **Tone**: Forward-looking, business-focused, executive-appropriate
-   - **Placement**: After "Strategic Context" section, before PESTEL
+**Inventory alignment:** Prefer `docs/decks/gcc-pmf-roadmap-v65-slide-inventory.md` as skeleton. Do not skip SWOT, Win/Loss block (or DATA GAP), Ideation block (or DATA GAP), or Full Funnel unless **focus deck**. Full decks claiming v65 parity: **≥36** slides minimum; **~50–60** target.
 
-4. **SECTION: PESTEL Analysis** (7 slides with section divider)
-   - **SOURCE**: Read from `research/[Country]/pestel-analysis-[Country]-[YYYY-MM-DD]-[MISSION-ID].md` (@product-strategy-agent Step 2 output), NOT from @pmf-analyst report PESTEL sections
-   - Section Title: "PESTEL Analysis | Political, Economic, Social, Technological, Environmental, Legal"
-   - **Political** (full slide with nationalization mandates, penalties) — title is factor name only, no "PESTEL -" prefix
-   - **Economic** (full slide with market data, CAGR, investment trends)
-   - **Social** (full slide with communication channel stats, smartphone penetration, cultural factors)
-   - **Technological** (full slide with AI, government portals, integrations)
-   - **Environmental** (full slide, DATA GAP if no recruiting signal)
-   - **Legal** (full slide with PDPL, interview regulations, compliance requirements)
+## Pre-generation validation (blocking)
 
-   **PESTEL MINIMUM DEPTH ENFORCEMENT (MANDATORY PRE-GENERATION)**
+**Detailed PESTEL checks, interview checks, example validation reports, and the full checklist:** `docs/decks/130-slide-section-reference.md` → **Pre-Generation Validation Protocol** and **Extended Quality Checklist**.
 
-   Before finalizing any PESTEL slide JSON, verify EACH factor slide meets ALL requirements:
+**Do not call `create_presentation` until:**
+- Pre-flight **density** audit (this rule, PRE-GENERATION DENSITY VALIDATION) passes on the sampled slides.
+- **Every** slide title ≤45 characters (hard limit).
+- **PESTEL** and **P1/P2/…** slides pass the counts in the reference protocol (bullets, sentences, anchors, quotes, JTBD, speaker notes).
+- **Gap Analysis** table: every row validated via Deployment Agent when that section is present (per reference).
+- **Executive Language Standard** (this rule): no prohibited terms in slide body or notes.
 
-   **For each PESTEL factor slide (Political, Economic, Social, Technological, Environmental, Legal):**
+After success, log a short validation outcome in **`MISSION_LOG.md`**.
 
-   1. **Bullet count**: **EXACTLY 5 level-1 bullets** (NOT 4-5 range; 5 is mandatory for VP depth)
-      - Environmental factor exception: minimum 4 bullets ONLY if DATA GAP exists
-      - NO EXCEPTIONS for other five factors (Political, Economic, Social, Technological, Legal)
-      - If @product-strategy-agent PESTEL file has <5 substantive points for a factor, add level-2 sub-bullets under 2-3 parents to reach visual density
+## Participant anonymization (slides)
 
-   2. **Sentence count per bullet (BLOCKING VALIDATION)**:
-      - EVERY level-1 bullet MUST contain **2-3 complete sentences**
-      - Count periods, exclamation marks, question marks as sentence terminators
-      - Single-sentence bullets are FORBIDDEN and BLOCK generation
-      - If source content is thin, expand with:
-        - Sub-points from @product-strategy-agent PESTEL markdown
-        - Context from @pmf-analyst Competitive Landscape section
-        - Customer quotes from @pmf-analyst themes mentioning the factor
+Use **P1, P2, P3…** with company (and role where useful) on all customer-visible content. Use **SME1, SME2…** for internal SMEs on slides. **Never** put customer or SME real names on slide bodies; SME name mapping may appear in **speaker notes** for internal use only. Match **`010-style-guide.mdc`** research participant standards.
 
-   3. **Anchor requirement per bullet**:
-      - Each bullet MUST contain ≥1 concrete anchor (named law/programme/portal, year, percentage, currency+amount, article citation, source name)
-      - Minimum 5 total anchors across all bullets per slide (3 minimum for Environmental)
-      - Named law/programme/portal (e.g., "Nitaqat", "MOHRE", "Mudad", "PDPL")
-      - Year or date (e.g., "2026-2028", "March 2026", "Royal Decree 2023")
-      - Percentage or statistic (e.g., "91% smartphone penetration", "40%+ mobile apply")
-      - Currency + magnitude (e.g., "USD 5,483.5 million", "AED 108,000")
-      - Article/decree citation (e.g., "Royal Decree M/19", "Art. 6 GDPR")
-      - Named authority/source (e.g., "Astute Analytica", "Statista", "DLA Piper", "BCG")
+## Speaker notes
 
-   4. **Bullet richness validation**:
-      - Each bullet must be 40-80 words (2-3 sentences of appropriate depth)
-      - Use cause → impact → implication structure where possible
-      - Include specific data points and context from @product-strategy-agent PESTEL analysis
-      - ❌ "Economic growth is strong in GCC" (generic, no anchor, 1 sentence)
-      - ✅ "GCC HCM software market growth narratives through 2030 appear across industry syntheses; Astute Analytica cites HR tech valuation toward USD 5,483.5 million by 2032 (definitions vary)." (2 sentences, currency anchor, source name, caveat)
-
-   5. **Product Implication**: ≥50 words with TWO clear clauses
-      - Clause 1: What Workday must build/support (specific capabilities)
-      - Clause 2: Why/compliance/business justification
-      - Use period or semicolon to separate clauses (not run-on)
-
-   6. **Speaker notes**: Minimum 5 bullets + References section
-
-   **BLOCKING VALIDATION (Execute BEFORE create_presentation)**:
-
-   For EACH PESTEL factor slide in draft JSON:
-
-   **Automated checks**:
-   1. **Count level-1 bullets**: Must equal 5 (4 for Environmental if DATA GAP)
-   2. **Count sentences per bullet**: Extract text (handle both string and array-of-runs format), count sentence terminators (`. ` or `! ` or `? `)
-      - If ANY bullet has <2 sentences: BLOCK and expand from @product-strategy-agent PESTEL file
-   3. **Count anchors**: Scan for digits+%, currency symbols, year patterns (20XX), named programs, article citations (Art. X)
-      - If total anchors <5 (or <3 for Environmental): BLOCK and enrich from @product-strategy-agent PESTEL research
-   4. **Count words per bullet**: Should be 40-80 words for 2-3 sentence bullets
-      - If ANY bullet <40 words: BLOCK and expand with context
-   5. **Verify Product Implication word count**: Must be ≥50 words
-      - If <50 words: BLOCK and expand to include both clauses (capability + justification)
-   6. **Verify speaker notes**: Must have ≥5 bullets + References section
-      - If missing: BLOCK and add presenter guidance
-
-   **If ANY validation fails**:
-   - DO NOT proceed to create_presentation
-   - Return to content expansion phase
-   - Pull additional detail from `research/[Country]/pestel-analysis-[Country]-[YYYY-MM-DD]-[MISSION-ID].md`
-   - If @product-strategy-agent PESTEL file is insufficient, flag to orchestrator for @product-strategy-agent revision
-
-   **Example validation output**:
-   ```
-   PESTEL Validation Results:
-   ✅ Political: 5 bullets, 11 sentences (2.2 avg), 7 anchors, 52-word implication
-   ❌ Economic: 4 bullets, 6 sentences (1.5 avg), 4 anchors, 35-word implication
-     → BLOCKING ISSUE: Only 4 bullets (need 5), avg 1.5 sentences/bullet (need 2-3)
-     → ACTION: Expand from @product-strategy-agent Economic factor section before generation
-   ```
-
-   **FORBIDDEN**: Padding with filler bullets or generic statements lacking anchors. Quality over count - but reach the anchor and richness standard for VP audience.
-
-   **v65 depth (PESTEL body — do not ship sparse slides):** Each of the **six** factor slides must match **golden v65 density**, not a 3-bullet stub. Before `create_presentation`, verify **every** PESTEL slide meets **all** of:
-   - **Bullet count:** **EXACTLY 5** substantive bullet paragraphs at **level 1** (4 for Environmental if DATA GAP) *before* the **Product implication:** paragraph to prevent overflow. If the **@product-strategy-agent PESTEL file** is thin on one factor, add **level 2** sub-bullets under 2–3 parents so the slide still reads as **full** (do not pad with filler; pull from PESTEL desk research in @product-strategy-agent's analysis or mark a controlled **DATA GAP** sub-bullet and expand detail in `speaker_notes`).
-   - **Anchors:** At least **five** total anchors across all bullets (three for Environmental) transcribed from **@product-strategy-agent PESTEL** (named law, programme, regulator, year, **%**, **currency + magnitude**, portal name, or article citation). **DENSITY ENHANCEMENT**: Pull additional specific facts, statistics, percentages, and monetary figures from @product-strategy-agent PESTEL research to enrich every bullet - VPs expect data-backed assertions, not generic statements. If @product-strategy-agent's markdown truly lacks anchors for that factor, one bullet must state the gap explicitly and speaker notes must carry the source hunt.
-   - **Bullet richness**: Each level 1 bullet MUST be 2-3 sentences (40-80 words) with specific data points. Example: NOT "Economic growth in GCC" BUT "GCC recruiting market valued at $XX million in 2025, projected CAGR of Y% through 2028 (Astute Analytica); Saudi Vision 2030 targets 10% employment nationalization by 2026 (MHRSD)."
-   - **Hierarchy:** Use **level 2** sub-bullets sparingly (max 1-2 per slide) for nuance, ensuring total slide lines do not exceed 7-8 (e.g. enforcement, tenant variance, product boundary).
-   - **Product implication:** One closing paragraph (**level 0**, run-formatted per typography doc) with **minimum 50 words**, **two clear clauses** (factor context → **specific** recruiting product action). Use period or semicolon to separate clauses. **No** one-line slogans or fragments; match the explanatory weight of **`GCC_Recruiting_PMF_Roadmap_v65.pptx`** PESTEL slides.
-   - **Speaker notes:** Minimum **five** presenter bullets (story, caveats, “if challenged”) plus **References:** with working URLs — PESTEL is exec-facing; notes carry overflow detail if the 2.8in box is at capacity.
-   - **DATA GAP constraint**: DATA GAP cannot replace more than **1 bullet** per factor slide; remaining bullets must cover general factor context with anchored facts. Environmental factor may lack recruiting-specific signals but must still discuss sustainability, climate policy, or resource trends relevant to business environment.
-
-5. **SECTION: Competitive Landscape** (**3** content slides + section divider — **v65 parity**)
-   - Section Title: "Competitive Landscape | Regional specialists vs global platforms"
-   - Regional specialists (1 slide) — **TABLE MANDATORY (NOT BULLETS)**
-   - Global platforms (1 slide) — **TABLE MANDATORY (NOT BULLETS)**
-   - **SWOT** — Workday Recruiting in region (1 slide) — **SOURCE**: Read from `research/[Country]/swot-analysis-[Country]-[YYYY-MM-DD]-[MISSION-ID].md` (@product-strategy-agent Step 3 output), NOT from @pmf-analyst report SWOT sections — two-table layout per `010-style-guide.mdc` (mandatory unless focus deck)
-
-   **Competitive Landscape Table Formatting (MANDATORY - WIN/LOSS PATTERN)**
-
-   Regional Specialists and Global Platforms slides MUST use this EXACT formatting pattern (matches working Win/Loss table structure):
-
-   **Table structure**:
-   ```json
-   {
-     "tables": [{
-       "rows": [
-         ["Vendor", "Key Strengths", "Key Weaknesses", "GCC Fit", "Notes"],
-         ["Bayzat", "GCC-first HRMS integrating payroll and hiring; Mudad payroll integration narrative; mobile apply and scheduling features; bundle TCO positioning vs global suites", "Mid-market scope vs enterprise security depth; narrower global footprint; integration depth varies", "Strong statutory adjacency", "Direct competitor to Workday platform"],
-         ...
-       ],
-       "left_inches": 0.35,
-       "top_inches": 1.0,
-       "width_inches": 9.3,
-       "font_size_pt": 8,
-       "header_row": true,
-       "header_bg_color": "ink",
-       "header_font_color": "paper",
-       "header_height_inches": 0.25
-     }]
-   }
-   ```
-
-   **CRITICAL FORMATTING RULES**:
-
-   1. **NO bullets within cells**: Use plain text with semicolons or commas as separators
-      - ❌ FORBIDDEN: `"• Point 1\n• Point 2\n• Point 3"` (causes font size inconsistency and rendering issues)
-      - ✅ CORRECT: `"Point 1; Point 2; Point 3"` (matches Win/Loss pattern for consistent 8pt rendering)
-
-   2. **Font size ONLY at table level**: Set `font_size_pt: 8` at table object level ONLY
-      - ❌ FORBIDDEN: Font sizing at cell level, run level, or text_box level
-      - ✅ CORRECT: Single `font_size_pt: 8` property on table object
-
-   3. **Header height**: MUST set `header_height_inches: 0.25` for compact professional headers
-
-   4. **NO height_inches on table**: Do NOT specify `height_inches` - omit entirely to allow PowerPoint auto-height
-
-   5. **Content density per cell**: 3-4 distinct points separated by semicolons (NOT line breaks with bullets)
-      - Each point: 1-2 sentences maximum
-      - Keep cells scannable - avoid paragraph blocks
-
-   6. **Consistent with Win/Loss**: Both Competitive tables and Win/Loss tables use identical formatting approach (plain text, semicolons, table-level font sizing only)
-
-   **Example transformations**:
-
-   **Before (bullet-formatted, PROBLEMATIC)**:
-   ```json
-   "• GCC-first HRMS, payroll, hiring\n• Mudad payroll and WPS narrative\n• Mobile apply and scheduling marketing\n• Bundle TCO story vs global suite"
-   ```
-
-   **After (plain text, semicolon-separated, CORRECT)**:
-   ```json
-   "GCC-first HRMS integrating payroll and hiring; Mudad payroll integration narrative; mobile apply and scheduling features; bundle TCO positioning vs global suites"
-   ```
-
-   **Rationale**: Matches the working Win/Loss table pattern where plain text renders consistently at 8pt without PowerPoint applying default paragraph formatting to bullet lists.
-
-  **SWOT slide requirements (VP audience):**
-  - Follow **`010-style-guide.mdc` → Table Styling → SWOT Analysis tables** for structure
-  - **Font size: 9pt ONLY** (set at table level for consistent rendering across all cells)
-  - **Header height: MUST set `header_height_inches: 0.25`** (CRITICAL - prevents tall navy bars)
-  - **CRITICAL: NEVER specify `height_inches` on table object** - omit entirely to allow PowerPoint auto-height based on content (creates compact, balanced layout)
-  - **CRITICAL: Consistent row styling** - ALL content rows (Strengths/Weaknesses AND Opportunities/Threats) must have identical styling - no special background colors or text colors for different quadrant rows
-  - **Structure: SINGLE 2x2 table** with all four quadrants - first row: Strengths|Weaknesses headers + content, second row: Opportunities|Threats headers + content
-  - **Content format**: Each SWOT quadrant cell uses **`paragraphs` array** with `level: 1` for native PowerPoint bullets (NOT Unicode `\n• ` text strings)
-    - Each bullet point is a separate paragraph object: `{"level": 1, "text": "Bullet content here"}`
-    - PowerPoint renders native bullets automatically
-    - NO Unicode bullet characters in text strings
-  - **Detail level**: **EXACTLY 3-5 bullets per quadrant** (target 4-5 for VP density) with specific capabilities, gaps, opportunities, and competitive threats
-  - Each bullet: Concise but detailed (1-2 sentences) - NOT single-word items or massive paragraphs
-  - Example cell structure: `{"paragraphs": [{"level": 1, "text": "Suite depth..."}, {"level": 1, "text": "Paradox narrative..."}, ...]}`
-   
-   **FORBIDDEN**: Using `paragraphs` with bullets for competitive landscape slides. These MUST be `tables` arrays.
-
-6. **SECTION: Win/Loss Analysis** (**EXACTLY 3** content slides + section divider — **v65 parity, NO Dataset Overview**)
-   - Section Title: "Win/Loss Analysis | [Region]-explicit gaps"
-   - **OMIT "Dataset Overview" slide** (PM preference: jump directly to gap themes)
-   
-   **Win-Loss Data Availability Check (MANDATORY):**
-   
-   Before generating Win-Loss slides, check 108 analysis output:
-   - Read the gap analysis file for the mission (from MISSION_LOG or latest in `research/[Country]/gap-analysis/`)
-   - Check Executive Summary for region-relevant row count
-   - **If row count = 0 OR analysis states "data gap"**: Generate NO-DATA slide (see spec below)
-   - **If row count > 0**: Proceed with standard 3-slide Win-Loss section
-   
-   **No-Data Slide Spec:**
-   - Section divider: "Win/Loss Analysis"
-   - EXACTLY 1 content slide (layout: Title Only_Alt)
-   - Title: "Win/Loss Analysis - Data Availability"
-   - Content: Centered text box (2.0, 2.3, 6.0, 1.5) with message:
-     - "No Win-Loss data is currently available for this market."
-     - (blank line)
-     - "Analysis relies on customer interviews (105), internal ideation signals (106), and competitive intelligence (@competitive-intel) for gap identification and roadmap prioritization."
-   - Speaker notes: Note data gap, emphasize triangulation strength, commit to enriching exports
-   - **DO NOT create**: Gap themes table, charts, or proxy gaps slides when data absent
-   
-   **Participant Anonymization in Win-Loss Slides (MANDATORY):**
-   
-   **Win-Loss slides MUST use P1, P2, P3 format** (consistent with rest of deck):
-   
-   **Apply in Win-Loss slides:**
-   - Evidence columns: Use "P1 (Accenture), P2 (Baker Hughes)" format
-   - Quote attributions: Use "P1 - Senior Recruiter, Accenture" or "P2 (Baker Hughes)" format
-   - Gap descriptions: When referencing customer evidence, use P1/P2/P3 with company in parentheses
-   
-   **Rationale**: Protects customer privacy while maintaining enterprise credibility through company names. Consistent anonymization throughout the entire deck.
-   
-   **Gap Description Requirements (VP-APPROPRIATE DEPTH):**
-   
-   **Each gap** in Win-Loss slides MUST include:
-   
-   **Gap Description** (3-4 sentences):
-   - Specific pain point with workflow context
-   - Scale indicators (candidate volumes, time costs, frequency)
-   - Business impact (deal risk, efficiency loss, compliance exposure)
-   
-   **Customer Evidence** (1-2 quotes with P1/P2/P3 attribution):
-   - Verbatim snippets (≤20 words per quote)
-   - P1/P2/P3 attribution: "P1 (Company)" or "P1 - Role, Company"
-   - Include job title if enhances credibility (e.g., "TA Director", "Senior Recruiter")
-   
-   **Product Implication** (2-3 sentences):
-   - Recommended roadmap action
-   - Workday competitive positioning context
-   - Deployment Agent workaround reference if validated
-   
-   **Example (full gap entry):**
-   ```
-   Nationalisation reporting - Emirates and Saudization workforce tracking. Customers managing 5,000+ employees need auditable dashboards showing nationality composition, hiring source analysis, and manager accountability for government compliance. Penalties range from AED 108,000 per missing Emirati (UAE) to Nitaqat sanctions (Saudi Arabia).
-   
-   Evidence: "We track via custom fields but want US/UK diversity parity for Middle East mandates. The penalties are real." — Mahboob Khan, TA Director, Baker Hughes
-   
-   Severity: 🟡 MEDIUM (reduced from HIGH after Deployment Agent confirmed strong workaround: Custom reports with Worker_Additional_Data + Prism Analytics)
-   
-   Product implication: Evaluate native compliance reporting module with pre-built nationalisation templates, MOHRE/Nitaqat export readiness, and government portal integration patterns to reduce configuration burden.
-   ```
-   
-   **Table cell constraints**:
-   - If using table format: Gap column width_inches: ~2.5-3.0 for wrapped text; font_size_pt: 7-8
-   - If text_boxes format: Use paragraphs with theme subheaders (14pt bold) + bullets (12pt) for better readability
-   
-   **Chart requirements**:
-   - Maintain Gap Theme Chart slide (horizontal bar chart showing frequency/severity)
-   - Add optional: Customer attribution in chart speaker notes or adjacent text box with key quotes
-   
-   **EXACTLY 3 CONTENT SLIDES** (per v65 structure, when data exists):
-     1. **Top N gap themes** (severity-weighted; **table format preferred** OR text_boxes with theme subheaders + detailed bullets with customer quotes)
-     2. **Gap analysis charts** (horizontal bar chart)
-     3. **GCC-relevant / proxy severity gaps** (table with RAG severity column)
-   - **FORBIDDEN**: Creating additional Win/Loss slides for data quality explanations, specific gap themes, or CRM/hygiene clarifications - handle data gaps in speaker notes of the 3 slides above, NOT as separate slides
-   - **FORBIDDEN**: Individual slides per gap theme - group into the "Top N gap themes" table slide
-   - **Gap analysis charts** (**CRITICAL: Chart Gap Theme, NOT status buckets**):
-     - X-axis: Gap Theme names (e.g., "Interview Scheduling", "WhatsApp Integration", "Nationalisation Reporting")
-     - Y-axis: Frequency or severity score
-     - Chart type: Horizontal bar chart showing Gap Theme distribution
-     - **FORBIDDEN**: Charting status buckets (Closed, Do Nothing, Open, Lost, Won) - provides no insight
-     - Follow **010-style-guide.mdc** chart font sizing: `category_axis_font_size_pt: 9`, `value_axis_font_size_pt: 9`
-
-7. **SECTION: Customer Ideation Hub** (section divider + **3 slides**)
-   - Section Title: "Customer Ideation Hub | Internal and market signals"
-   - **Customer Ideation Hub / CSV** — **3 slides** when idea or opportunity data exists:
-     1. Overview slide with idea counts and scope
-     2. Top capability areas by volume (horizontal bar chart)
-     3. Key themes from verbatims with quotes (see detailed format below)
-   - **REMOVED SLIDE**: "AI Ideas Spotlight" - do NOT create this slide moving forward
-   - If no CSV/ideas data exists, insert **DATA GAP** slide only
-   
-   **"Ideation Hub: Key Themes" slide format (MANDATORY):**
-   - **Slide title**: "Ideation Hub: Key Themes" (exactly this, NOT "Key Verbatim Themes")
-   - **Structure**: Theme subheader + 3 bullets per theme with customer quotes
-   - **Each theme section**:
-     - **Theme subheader** (level 0, 14pt bold): Theme name from ideation analysis (e.g., "Req-Questionnaire-Granularity", "Application-UX-Trust", "Comms-Volume-Pain")
-     - **3 bullets** (level 1) under each subheader:
-       1. Theme description with context (1-2 sentences)
-       2. **Customer quote** (if available): Use smart quotes, ≤30 words, followed by **(P[N], Company)** or **(Internal Ideation)** attribution
-       3. Product implication or business impact
-   - **Target 4-5 themes per slide** (12-15 bullets total) - balance detail vs overflow
-   - Keep quotes authentic and specific (not generic paraphrases)
-   - Attribute quotes properly: "(P1, Accenture)" or "(Internal Ideation Export)"
-   - **Speaker notes**: Context on ideation method, hypothesis validation needs, connection to customer themes, References section
-   
-   **Example format:**
-   ```
-   Slide: "Ideation Hub: Key Themes"
-   
-   [Subheader] Req-Questionnaire-Granularity
-   • Recruiters want to select individual questions per req instead of entire questionnaire packs.
-   • "Why can't I pick just 3 questions for this role instead of the full 25-question set?" (Internal Ideation)
-   • Product opportunity: Modular questionnaire builder could improve req setup efficiency.
-   
-   [Subheader] Application-UX-Trust
-   • Candidates report confusion with multi-step progress and legal name field requirements.
-   • "Progress bar shows 50% but I still have 8 screens to go" (Internal Ideation)
-   • Impact: Abandoned applications in jurisdictions with complex naming conventions.
-   ...
-   ```
-
-8. **SECTION: Internal SME Interviews** (section divider + **3-7 slides** when SME transcripts exist)
-   - Section Title: "Internal SME Interviews | Workday expert perspectives"
-   - **Intro slide**: "Internal SME Interviews - Workday Experts"
-     - 5-6 bullets: Population (N Workday SMEs), roles (VP Product, Field Readiness, Global Services, Enterprise Architects, etc.), multi-customer visibility, timing (date range), triangulation purpose ("Cross-validated with customer interviews for convergence analysis"), limitations ("Internal perspectives supplement but do not replace customer voices")
-     - Speaker notes: Overview of SME selection criteria, why internal experts matter for triangulation, how this section complements customer interviews
-   - **SME Participants table**: Columns: SME ID, Name, Role, Organisation/Context
-     - Rows: SME1-SMEN with actual names (NOT P1-P5 format - these are internal Workday experts with attributable expertise, not customer privacy protection case)
-     - Example: SME1 | Bernie | VP of Talent Product Management | Workday strategy and India FY27 focus
-     - Speaker notes: Context on each SME's customer portfolio, credibility, and relevance to this research
-   - **Individual slides per SME** (SME1, SME2, SME3, etc.):
-     - Title format: "SME[N] - [Name], [Role]"
-     - Content structure (**7-8 bullet lines total** to match customer slide density):
-       - **2-3 theme subheaders** (level 0, 14pt bold): Theme names from their notes (e.g., "Fraud at India Scale", "Offer Flexibility Patterns", "WhatsApp Ubiquity")
-       - **Key insights** (level 1 bullets): 2-3 bullets per theme with specific multi-customer patterns observed
-       - **Hypotheses** (level 1 bullets): 1-2 bullets on what this SME believes needs building/testing
-       - **Customer triangulation** (level 1 bullets): 1 bullet noting where customer evidence confirms or contradicts SME perspective
-     - Speaker notes: Context on SME's customer portfolio, role credibility, how their perspective complements customer evidence, limitations or biases to note
-   
-   **Placement**: After Ideation Hub (Section 7), before Customer Interviews (renumber to Section 9)
-   
-   **Content source**: Extract from @pmf-analyst report's structured SME section (when present) OR from `research/[REGION]/105-sme-research-findings.md` (Step 7 output)
-   
-   **SME Naming Convention**: Use actual SME names (Bernie, Fabiola Navarro, Santosh Gulia, etc.), NOT P1-P5 anonymization. Rationale: Internal Workday employees with attributable expertise, not customer privacy protection case.
-   
-   **Slide count**: 3-7 slides (section divider + intro + participants table + 1 slide per SME). For India (5 SMEs) = 8 slides total for this section.
-   
-   **Conditional**: Only generate this section if `research/[REGION]/internal-sme-transcripts/` contains ≥1 .txt file OR if `research/[REGION]/105-sme-research-findings.md` exists. If no SME transcripts, skip section entirely.
-
-9. **SECTION: Primary Research** (section divider + **interviews** — **v65 parity**)
-   - Section Title: "Primary Research | Customer interview participants"
-   - Strip intro (e.g. participant count, date range)
-   - Interview Participants (P1, P2, P3 with roles and companies)
-   - One slide per customer: P1, P2, P3… (quotes + themes)
-
-
-   **v65 depth (Primary research / customer interview slides — do not ship theme stubs):**
-   - **Strip intro slide title:** Use executive-friendly format: "1:1 Customer Interviews - [Region] Enterprise" (NOT technical format like "Customer Interviews | 3 GCC-market enterprise participants (semi-structured)"). Put methodology detail in bullets and speaker notes.
-   - **Strip intro slide content:** Minimum **six** **level 1** bullets in executive tone:
-     - Population: "Three senior recruiting leaders from GCC-focused enterprises" (NOT "n = 3 anonymised customer interviews")
-     - GCC relevance: "Organisations with substantial Middle East hiring operations"
-     - Date range: "Research conducted March 2026" (NOT "Timing: transcripts ingested...")
-     - Method: "In-depth semi-structured interviews exploring hiring workflows, compliance needs, and technology gaps" (NOT "...aligned to Braun & Clarke")
-     - Data sources: "Interview transcripts analyzed" (keep file paths in speaker notes ONLY)
-     - Triangulation: "Cross-validated with internal ideation data, presales gap analysis, and regulatory research" (NOT "cross-checked with 106, 108, PESTEL")
-     - Optional level 2 bullets for scope or limitations
-
-   - **Participants table slide:** Keep table; if the report adds **hiring volume**, **req scale**, or **tooling** context per participant, add a **small** **level 1** bullet list (2–4 bullets) *below* or in an adjacent `text_box` only if the MCP layout supports it without crushing the table — otherwise put overflow in **speaker notes** (minimum **five** bullets for this slide).
-   - **One slide per customer (P1, P2, P3…):**
-     - Title format: "P[N] - [Role], [Company]" (e.g., "P1 - Senior Recruiter, Accenture") — keep under 60 chars
-     - **EXACTLY 7-8 bullet lines total** (NOT 6-7; raise minimum for VP depth)
-       - Count: level-0 theme subheaders + level-1 bullets + level-2 sub-bullets
-       - 8 lines is target; 7 is acceptable; 6 is SPARSE and blocks generation
-     - **Theme references as SUB-HEADERS** (NOT bullets): Use **level 0** paragraphs with **14pt bold** run formatting for theme titles (e.g., "Candidate Review Efficiency", "Communication Channel Preferences"). **EXACTLY 2-3 themes** per slide.
-     - **Quote-led bullets (STRICT ENFORCEMENT)**: **EXACTLY 3-4 bullets** starting with quotes
-       - Format: "Quote text" - insight/context (P[N], Company)
-       - Quote length: ≤30 words
-       - Attribution: (P[N], Company)
-       - If report has <4 quotes for participant, use 3 minimum
-       - NEVER use fewer than 3 quotes
-     - **JTBD statements (STRICT ENFORCEMENT)**: **EXACTLY 2-3 full JTBD statements**
-       - Format: When [situation], I want [action], so I can [outcome]
-       - Each JTBD is one complete line (level-1 bullet)
-       - If report has <3 JTBD for participant, minimum 2 required
-       - NEVER use fewer than 2 JTBD
-     - **Remaining bullets**: Pain points, workarounds, volume context, compliance needs, product implications
-       - Each bullet: 1-2 sentences with specific detail
-       - Use **level 2** sub-bullets sparingly for nuance (max 2 per slide)
-     - **Expand detail**: Transform compressed research notes into full sentences
-       - NOT: "Scheduling friction"
-       - YES: "Interview scheduling requires phone confirmation and three-day notice per Saudi labor law; automation gaps force manual calendar coordination"
-   - **Speaker notes (per-customer slides):** Minimum **five** presenter bullets (which theme to stress, follow-up quotes, contradictions, commercial tone) plus **References:** transcript filename or path from the report.
-
-10. **SECTION: Thematic Analysis** (**2-3 grouped slides** + section divider + triangulation matrix)
-   - Section Title: "Thematic Analysis | Validated themes and triangulation"
-   - **GROUP THEMES ONTO 2-3 SLIDES**: Do NOT create one slide per theme. v65 groups multiple themes together for better pacing.
-   - **Pattern (v65 actual)**: 
-     - Slide 1: "Validated Themes 1-4 ([Category Label])" - 3-4 theme subheaders
-     - Slide 2: "Validated Themes 5-6 ([Category Label])" - 3-4 theme subheaders
-     - (Optional Slide 3 if 9+ themes exist)
-   - Cross-Source Validation Matrix (triangulation table: Theme | P1 | P2 | P3 | CSV | PMF Impact)
-   
-   **Grouped Thematic slide requirements (VP-FRIENDLY & DETAILED):**
-   - **Slide title format**: "Validated Themes [N-M] ([Category])" where Category describes the grouping (e.g., "GCC Convergence", "Regional Depth")
-   - **Each theme gets**:
-     - **Theme subheader** (level 0, 14pt bold): Theme name (e.g., "Candidate review efficiency", "Search and AI-assisted matching")
-     - **EXACTLY 3 bullets** (level 1) under each theme subheader:
-       1. **Key Insight & Evidence**: Specific finding with customer evidence (P1, P2, P3 quotes, data)
-       2. **Business Impact**: Effect on win rates, ARR, retention, or competitive position
-       3. **Product Implications**: Workday Recruiting roadmap implications
-   - **Target 3-4 themes per slide** (12 bullets total at level 1) - do not exceed to prevent overflow
-   - Transform raw research language into executive-ready narrative (no technical codes or jargon)
-   - Use **cause → impact → implication** structure in bullets
-   - **Speaker notes**: Minimum 5 bullets covering cross-theme patterns, triangulation strength, commercial implications, plus References section
-   
-   **Example structure:**
-   ```
-   Slide Title: "Validated Themes 1-4 (GCC Convergence)"
-   
-   [Subheader] Candidate review efficiency
-   • GCC recruiters managing 50-100 candidates face navigation friction...
-   • Business impact: Primary churn driver for high-volume customers...
-   • Product opportunity: Streamlined workflows could reduce time-to-fill 15-20%...
-   
-   [Subheader] Search and AI-assisted matching
-   • P2 cites 2M candidate database requiring semantic discovery...
-   • Competitive vulnerability: True gap without HiredScore entitlement...
-   • Roadmap priority: Consolidate review UI and clarify Skills Cloud SKU...
-   
-   [Subheader] Interview scheduling
-   • ...
-   
-   [Subheader] Offers, documents, RTL
-   • ...
-   ```
-   
-   **FORBIDDEN**: 
-   - Creating individual slides per theme (breaks v65 pacing)
-   - Using raw theme codes like "T1 Candidate review density: 3/3 customers"
-   - Fewer than 3 bullets per theme
-   - More than 4 themes on one slide (causes overflow)
-
-12. **SECTION: Full Funnel / Gap Diagnostic** (**1–2 slides** — **v65 parity**)
-   - Title: "Gap Analysis" (exactly this, do not use other titles)
-   - **TABLE FORMAT MANDATORY** (NOT bullets):
-     - Columns: Funnel Stage | Gap Description | Severity | Workaround | Evidence | Product Implication
-     - Severity column uses **RAG visual indicators**:
-       - 🔴 **HIGH** (Red) - No workaround, blocks hiring workflow
-       - 🟡 **MEDIUM** (Amber) - Workaround exists but painful/costly
-       - 🟢 **LOW** (Green) - Minor friction, acceptable workaround
-     - Minimum 6 funnel stages: Attract, Convert, Screen, Schedule, Offer, Comply, Measure
-     - Gap Description: 2-3 detailed sentences per row (NOT 1-line summaries)
-     - Evidence: Specific customer names + companies (NOT P1-P3); use Win-Loss attribution format
-     - Product Implication: Clear roadmap action item
-   - Table formatting: Font 7-8pt, `top_inches: 1.0`, `height_inches: 3.5-4.0`
-   - Speaker notes: Expand highest-severity gaps, commercial impact, urgency
-   
-   **Gap Analysis - Deployment Agent Validation (MANDATORY PRE-GENERATION):**
-   
-   Before finalizing the Gap Analysis table in slides_spec JSON, validate EVERY gap via Deployment Agent MCP to surface existing workarounds and adjust severity accordingly.
-   
-   **Validation Protocol (execute for EACH gap):**
-   
-   1. **Extract gap capability** from @pmf-analyst report Full Funnel section
-      - Example capabilities: "Nationalisation reporting", "WhatsApp messaging", "Interview scheduling", "Candidate grid configuration", "Arabic document rendering"
-   
-   2. **Query Deployment Agent** using `CallMcpTool`:
-      ```
-      Server: "user-deployment-agent"
-      Tool: "ask_deployment_agent"
-      Arguments: {
-        "question": "In Workday Recruiting, how can customers [achieve specific capability]? Please provide: (1) any native features available today, (2) configuration options or settings, (3) custom report approaches, (4) documented workaround patterns. Be specific about what's possible and what's not."
-      }
-      ```
-      - Use a NEW threadId per gap OR same thread for all gaps in one mission (for continuity)
-      - Parse response for workaround strength
-   
-   3. **Evaluate workaround strength**:
-      - **Strong workaround** (severity reduction justified):
-        - Native feature available with configuration
-        - Well-documented custom report pattern with minimal friction
-        - Standard security/process setup (not complex)
-        - Example: "Custom reports with Worker_Additional_Data + Prism Analytics" for nationalisation tracking
-      - **Weak workaround** (keep original severity):
-        - Requires extensive custom fields + manual exports
-        - Undocumented or high-effort approach
-        - Requires multiple 3rd-party tools
-        - Example: "Partner tool + offline Excel reconciliation"
-      - **No workaround** (keep original severity):
-        - Deployment Agent confirms true gap
-        - No native or configuration-based alternative
-        - Example: "First-party WhatsApp in core Recruiting UI - not available"
-   
-   4. **Adjust severity** (if strong workaround found):
-      - 🔴 HIGH → 🟡 MEDIUM
-      - 🟡 MEDIUM → 🟢 LOW
-      - Document reason: "(Strong workaround via [specific approach] - severity reduced)"
-   
-   5. **Update table row**:
-      - Gap column: Use @pmf-analyst report description (3-4 sentences with scale/impact)
-      - Severity column: Adjusted RAG indicator + validation note if changed
-      - Workaround column: Deployment Agent-validated specific approach (not guessed)
-      - Evidence column: Customer names + companies + quote snippets (not P1-P3)
-      - Product Implication column: 2-3 sentences with roadmap action
-   
-   **Speaker Notes Addition (MANDATORY):**
-   Add to Gap Analysis slide speaker_notes:
-   ```
-   "• Gap severities validated via Deployment Agent queries (March 2026)
-   • Strong workarounds identified: [list gaps where severity reduced]
-   • True gaps confirmed: [list gaps with no viable workaround]
-   • Workaround detail supports sales/PS objection handling
-   
-   References:
-   • Deployment Agent thread: [threadId]
-   • research/[Country]/thematic-analysis/[date]-[Country]-PMF-Analysis.md"
-   ```
-   
-   **Example Validation Cycle:**
-   
-   **Gap: "Nationalisation reporting"**
-   Initial severity (from @pmf-analyst): 🔴 HIGH
-   
-   **Query**: "In Workday Recruiting, how can customers track and report on nationalisation compliance for Saudi Arabia and UAE (Emiratization, Saudization)? Please provide: (1) any native features available today, (2) configuration options or settings, (3) custom report approaches, (4) documented workaround patterns. Be specific."
-   
-   **Response** (hypothetical based on DA29 thread patterns):
-   "Customers can configure custom Worker_Additional_Data fields for nationality attributes. Custom Reports support calculated fields for percentage by nationality, hiring source analysis, and manager drill-downs. Prism Analytics enables multi-tenant benchmarking for workforce composition. This requires initial configuration but provides robust, auditable reporting. Out-of-the-box nationalisation dashboards are not available (workaround approach)."
-   
-   **Evaluation**: STRONG workaround (configurable, well-supported, reporting-ready)
-   
-   **Adjusted severity**: 🟡 MEDIUM (reduced from 🔴 HIGH)
-   
-   **Table row** (updated):
-   ```json
-   ["Comply", "Nationalisation reporting - Emiratization and Saudization workforce tracking. Customers managing 5,000+ employees need auditable dashboards showing nationality composition, hiring source analysis, and manager accountability for government compliance. Penalties: AED 108,000 per missing Emirati (UAE); Nitaqat sanctions (KSA).", "🟡 MEDIUM", "Custom reports with Worker_Additional_Data; Prism Analytics for multi-tenant benchmarking (Strong workaround - Deployment Agent validated)", "Mahboob Khan (Baker Hughes): 'We want US/UK diversity parity for Middle East mandates'", "Native compliance module with pre-built nationalisation templates, MOHRE/Nitaqat export readiness"]
-   ```
-   
-   **Logging in MISSION_LOG:**
-   When 130 completes Gap Analysis validation:
-   ```
-   Gap Analysis: 7 gaps validated via Deployment Agent. Severities adjusted: Nationalisation reporting (HIGH → MEDIUM), Interview scheduling (HIGH → MEDIUM). True gaps confirmed: WhatsApp core UI, Qiwa/Mudad exchange.
-   ```
-
-
-12. **SECTION: Roadmap Recommendations** (**MAX 5 recommendations** + section divider)
-   - Section Title: "Roadmap Recommendations | Priority 1 and Priority 2"
-   - **MAXIMUM 5 recommendations** (select top Priority 1 items from the @pmf-analyst report). Do not exceed 5.
-   - Slide titles MUST be formatted as "Recommendation N: [Title]" (e.g., "Recommendation 1: Nationalisation Reporting"). Do NOT use "Rec N: [Title]".
-   
-   **Recommendation slide format (5-part structure for VP audience, MANDATORY):**
-   Each recommendation slide must include ALL five components with VP-appropriate detail:
-   
-   1. **Problem** (level 0, 14pt bold sub-header): Clear statement of customer pain or market gap
-      - Follow with level 1 bullet: 2-3 sentences explaining impact and frequency
-   
-   2. **Evidence** (level 0, 14pt bold sub-header): Research validation
-      - Level 1 bullets: Customer quotes (P1-P3), 108 gap severity, @competitive-intel competitive gaps, 106 ideation volume
-      - Maximum 1-2 evidence bullets for readability
-   
-   3. **Recommendation** (level 0, 14pt bold sub-header): Specific product action
-      - Level 1 bullet: What to build (2-3 sentences with feature specifics)
-      - Level 2 sub-bullets: Key capabilities or requirements (1-2 items max)
-   
-   4. **Why Now** (level 0, 14pt bold sub-header): Urgency and timing
-      - Level 1 bullet: Market forces, competitive pressure, regulatory deadlines
-   
-   5. **Success Metrics** (level 0, 14pt bold sub-header): How to measure impact
-      - Level 1 bullets: 1-2 specific metrics with baseline → target (e.g., "Time to fill: 45 days → 30 days", "Candidate response rate: 35% → 55%")
-   
-   **Target bullet count per recommendation slide**: 5-6 total bullets (across all 5 sections) to prevent vertical overflow
-   
-   - **Priority Recommendations Summary table**: Include when deck is for E2E pipeline (shows all recommendations in table for PM selection). Transform "E2E Handoff" terminology to executive language: use title "Priority Recommendations for Roadmap" (NOT "E2E Handoff - Research Recommendations (HITL selection)"). **Table columns (MANDATORY - 9 columns required)**: #, Title, Action, Reach, Impact, Confidence, Effort, RICE Score, Legal / compliance (060). Extract RICE component values from Priority 1 & 2 recommendation text in @pmf-analyst report E2E Handoff table (e.g., "Reach 2,000, Business 3.0, Customer 3.0, Confidence 70%, Effort 5 pm" → separate table cells). Format: Reach as "2,000", Impact as "3.0", Confidence as "70%", Effort as "5 pm", RICE Score as "840". The "Legal / compliance (060)" column contains compliance notes.
-   - **Override**: If PM explicitly requests "all recommendations" or "include all 10", generate individual slides for all recommendations and accept 52-56 slide count
-
-12. **Bumper Slide**
-
-**Canonical baseline enforcement:** `slides_spec.json` MUST implement the **content classes** above and match **`docs/decks/gcc-pmf-roadmap-v65-slide-inventory.md`** for GCC full PMF decks. When generating versioned decks, the agent MUST:
-1. Prefer **v65 inventory** as skeleton, not only the previous **`slides_spec_v*.json`**
-2. Populate with content from **@product-strategy-agent outputs** (PESTEL, SWOT) and the **@pmf-analyst** report (themes, customer evidence, recommendations)
-3. Add version-specific deep-dive slides **only** after standard sections (or with PM approval to trade depth vs length)
-4. Never skip or compress **SWOT, 4× Win/Loss, Ideation block (or DATA GAP), Full Funnel** unless user says **focus deck only**
-
-**Compressed decks are forbidden by default.** If a full PMF deck has **<50 slides** while claiming v65 parity, or is missing the **v65 content classes** above, it violates the standard (hard floor remains **≥36** slides minimum for any “full” deck).
-
-**Participant Anonymization (MANDATORY FOR ALL SLIDES):** Use **P1, P2, P3** consistently throughout the ENTIRE deck - participant slides, quote attribution, Win-Loss evidence, triangulation tables, Gap Analysis tables, all customer references. Format: "P1 (Company)" or "P1 - Role, Company". NEVER use interviewee real names in slide content. Rationale: Protects customer privacy while maintaining enterprise credibility through company names. This applies to ALL sections: Primary Research, Win-Loss, Gap Analysis, Thematic Analysis, Recommendations.
-
-**Recommendation slide structure (5-part):** Problem | Evidence | Recommendation | Why now | Success Metrics
-
-**Speaker Notes (MANDATORY for content slides):**
-- See **`010-style-guide.mdc` → Deck Generation → Speaker Notes** for format
-- **130-specific**: Include references for all sources used (Mondaq, Astute Analytica, Braun & Clarke, etc.)
-
-**Product Implication (PESTEL slides):**
-- See **`010-style-guide.mdc` → Deck Generation → Product Implication** for formatting (12pt bold, yellow highlight `FFFF00`)
-- **130-specific**: The implication text must meet the **~22-word / two-clause** minimum in the **PESTEL v65 depth** block above (more substantive than generic slides)
-
-**Chart requirements:**
-- See **`010-style-guide.mdc` → Deck Generation → Chart Styling** for font sizing and bar chart rules
-- **130-specific**: Apply to Win/Loss Top 10 charts, Ideation Hub stacked bars, Full Funnel diagnostics
-
-**Table requirements:**
-- See **`010-style-guide.mdc` → Deck Generation → Table Styling** for headers, font sizing, SWOT layout
-- **130-specific**: Competitive Landscape tables must include columns: Vendor | Key Strengths | Key Weaknesses | GCC Fit | Notes (4-6 vendors minimum)
-
-**Content positioning:**
-- See **`010-style-guide.mdc` → Deck Generation → Typography Standards** for body text box dimensions and positioning
-
----
-
-## PRE-GENERATION VALIDATION PROTOCOL (MANDATORY)
-
-Before calling `create_presentation`, execute this validation protocol and BLOCK generation if ANY check fails:
-
-### Step 1: PESTEL Validation
-
-For EACH of 6 PESTEL factor slides in draft JSON:
-
-**Automated checks**:
-1. Count `paragraphs` with `level: 1`: Must equal 5 (4 for Environmental if DATA GAP)
-2. For each level-1 paragraph:
-   - Extract text (handle both string and array-of-runs format)
-   - Count sentences: Count occurrences of `. ` or `! ` or `? ` (with space after)
-   - Verify ≥2 sentences per bullet
-   - Count words: Should be 40-80 words for 2-3 sentence bullets
-3. Count anchors across all bullets:
-   - Scan for: digits + % sign, currency symbols, year patterns (20XX), named programs (capitalize words), article citations (Art. X)
-   - Verify ≥5 total anchors (≥3 for Environmental)
-4. Verify Product Implication:
-   - Count words: Must be ≥50
-   - Verify two clauses (check for period, semicolon, or coordinating conjunction)
-
-**If ANY PESTEL slide fails**:
-- Output: "PESTEL [Factor] slide BLOCKS generation: [specific issue]"
-- Action: Expand content from `research/[Country]/pestel-analysis-[Country]-[YYYY-MM-DD]-[MISSION-ID].md`
-- Re-validate after expansion
-- Maximum 1 expansion attempt; if still failing, return to orchestrator with detailed failure report
-
-### Step 2: Interview Validation
-
-For EACH interview slide (P1, P2, P3…) in draft JSON:
-
-**Automated checks**:
-1. Count ALL paragraphs (level 0, 1, 2): Must be ≥7 (target 8)
-2. Count level-0 paragraphs with `"bold": true` in text runs: Must be 2-3 (theme subheaders)
-3. Count level-1 paragraphs where text starts with opening quotes (smart quote `"` or regular `"`): Must be 3-4
-4. Count level-1 paragraphs containing all three strings: "When", "I want", "so I can": Must be 2-3
-5. Verify speaker_notes field exists and contains ≥5 bullet points
-
-**If ANY interview slide fails**:
-- Output: "[Participant] slide BLOCKS generation: [specific issue]"
-- Action: Extract additional content from @pmf-analyst report participant section
-- Re-validate after expansion
-- Maximum 1 expansion attempt; if still failing, return to orchestrator with detailed failure report
-
-### Step 3: Generate Validation Report
-
-**Output format before create_presentation**:
-
-```markdown
-CONTENT DENSITY VALIDATION REPORT:
-
-PESTEL Slides:
-- Political: ✅ 5 bullets, 11 sentences (2.2 avg), 7 anchors, 52-word implication
-- Economic: ✅ 5 bullets, 12 sentences (2.4 avg), 6 anchors, 58-word implication
-- Social: ✅ 5 bullets, 13 sentences (2.6 avg), 8 anchors, 61-word implication
-- Technological: ✅ 5 bullets, 10 sentences (2.0 avg), 5 anchors, 55-word implication
-- Environmental: ✅ 4 bullets, 9 sentences (2.3 avg), 4 anchors, 48-word implication
-- Legal: ✅ 5 bullets, 14 sentences (2.8 avg), 9 anchors, 67-word implication
-
-Interview Slides:
-- P1 (Accenture): ✅ 8 lines, 3 themes, 4 quotes, 3 JTBD, 5 speaker notes
-- P2 (Baker Hughes): ✅ 7 lines, 2 themes, 3 quotes, 2 JTBD, 6 speaker notes
-- P3 (Shell): ✅ 8 lines, 3 themes, 4 quotes, 3 JTBD, 5 speaker notes
-
-VALIDATION: ✅ ALL CHECKS PASSED - Proceeding to create_presentation
-```
-
-**If validation fails**:
-```markdown
-VALIDATION: ❌ BLOCKING ISSUES FOUND
-
-PESTEL Issues:
-- Economic: Only 4 bullets (need 5); avg 1.5 sentences/bullet (need 2-3); only 4 anchors (need 5)
-
-Interview Issues:
-- P2: Only 6 lines (need 7-8); only 2 quotes (need 3-4); only 1 JTBD (need 2-3)
-
-ACTION: Expanding content from source files before generation...
-```
-
-**Validation failures return to orchestrator**:
-- Which slides failed (by title)
-- Specific metrics (bullet count, sentence count, anchor count, quote count, JTBD count)
-- What content is missing from source files (@product-strategy-agent PESTEL or @pmf-analyst participant sections)
-- Recommendation for orchestrator (expand @product-strategy-agent PESTEL, enrich @pmf-analyst participant analysis, or accept DATA GAP)
-
----
-
-## Deck quality checklist (MANDATORY before `create_presentation`)
-
-**Structure and length (v65 parity):**
-- [ ] **~50-60 total slides** (target v65 parity; hard minimum 36; 60+ requires PM approval for extended format)
-- [ ] **9-10 section dividers** with proper "Section Title" layout
-- [ ] **Section divider subtitles: SHORT** (2-4 words: "PESTEL", "Primary research", "Win / Loss"), plain string format, no verbose pipe descriptions
-- [ ] **Section dividers have `placeholders`** for agenda generation (see **`010-style-guide.mdc`** Agenda Fix)
-- [ ] **Product Strategy slides present** (1-3 slides after Strategic Context section, sourced from `research/[REGION]/strategy-context-*.md` from Step 1). If Step 1 file doesn't exist (standalone invocation), Product Strategy section can be omitted.
-- [ ] **Product Strategy regional adaptation**: If deck is non-GCC regional (India, France, Japan, UK, Germany, Canada, Australia), verify Q2 Priorities slide leads with focal region (not GCC) and Regional Expansion slide lists focal region first (not GCC first). Extract region row from strategy-context Regional Expansion table for bullet content.
-
-**Typography and formatting (see `010-style-guide.mdc` → Deck Generation):**
-- [ ] **Font sizing by density (STRICT ENFORCEMENT - 14PT DEFAULT)**: 
-  - 16pt: Sparse slides (≤3 bullets, emphasis slides, 1/2 Headline content)
-  - **14pt: Standard slides (4-6 bullets) - DEFAULT for most content** ← MOST COMMON, USE UNLESS SLIDE IS SPARSE OR DENSE
-  - 12pt: Dense slides ONLY (>6 bullets, comprehensive tables, PESTEL deep-dive with Product implication)
-  - **MANDATORY PRE-GENERATION VALIDATION**: 
-    1. Count bullets per slide BEFORE setting font_size_pt
-    2. Default ALL content slides to 14pt initially
-    3. Adjust to 16pt only if ≤3 bullets (sparse)
-    4. Adjust to 12pt only if >6 bullets (dense) OR comprehensive table content
-    5. NEVER use 12pt as a default or for standard 4-6 bullet slides
-- [ ] **Body box dimensions**: 0.7, 1.2, 8.6, 2.8 (standard Title Only layout)
-- [ ] **Section Title format**: Plain `"text"` with `"S E C T I O N  [NN]\n[Name]"` format (NOT paragraphs with "Workday Confidential")
-- [ ] **All slide titles ≤45 characters** (verify each title before finalizing spec; rewrite any ≥45 chars)
-- [ ] **Chart font sizes**: `category_axis_font_size_pt: 9`, `value_axis_font_size_pt: 9`, `title_font_size_pt: 10`
-- [ ] **Table auto-height (CRITICAL)**: Do NOT specify `height_inches` for any tables - omit entirely to allow auto-height based on content. Only specify `header_height_inches: 0.25` for compact headers.
-- [ ] **Speaker notes**: On all content slides (except Title, Section Title, Bumper) with References URLs
-
-**Content depth (130-specific, v65 parity):**
-- [ ] **Executive Summary: 4-5 bullets (max 6)** with VP-appropriate detail (2-3 sentences each), cause → impact → implication structure, strategic roadmap direction
-- [ ] **PESTEL titles: factor name only** (no "PESTEL -" prefix: use "Political", "Economic", etc.)
-- [ ] **PESTEL source: @product-strategy-agent output file** (`research/[Country]/pestel-analysis-[Country]-[YYYY-MM-DD]-[MISSION-ID].md`) — do NOT extract from @pmf-analyst report
-- [ ] PESTEL: 6 individual slides (one per factor), each with **EXACTLY 5** level-1 bullets (4 for Environmental if DATA GAP), **EVERY bullet has 2-3 sentences** (40-80 words), **≥5** total anchors per slide, **≥50-word** Product Implication with two clear clauses
-  - **SME Interviews section present** (when SME transcripts exist): Section divider + intro slide ("Internal SME Interviews - Workday Experts") + participants table + 1 slide per SME (7-8 lines each, 2-3 theme subheaders, key insights, hypotheses, triangulation). SME names used (Bernie, Fabiola Navarro, etc. - NOT P1-P5 anonymization). Placed after Ideation Hub section, before Customer Interviews section. Content sourced from `research/[REGION]/105-sme-research-findings.md` (Step 7) or @pmf-analyst SME structured section.
-- [ ] **Interview slides (P1, P2, P3…): MANDATORY DENSITY CHECK (BLOCKING VALIDATION)**
-  **For EACH per-participant slide, verify ALL requirements BEFORE finalizing JSON:**
-  - [ ] **7-8 bullet lines total** (7 minimum, 8 target; 6 BLOCKS generation; count all level-0/1/2 paragraphs)
-  - [ ] **2-3 theme sub-headers present**: Count level-0, 14pt bold paragraphs (NOT bullets)
-  - [ ] **EXACTLY 3-4 quote-led bullets**: Count bullets starting with smart quotes, ending with (P[N], Company)
-  - [ ] **EXACTLY 2-3 JTBD statements**: Count bullets matching *When …, I want …, so I can …* format
-  - [ ] **Each bullet is 1-2 sentences**: No single-word or phrase-only bullets
-  - [ ] **Level-2 sub-bullets used appropriately**: Present but not excessive (max 2 per slide)
-  - [ ] **Speaker notes**: Minimum 5 bullets + References section
-  
-  **BLOCKING VALIDATION (Execute for EACH interview slide)**:
-  
-  1. Count total lines (L0 + L1 + L2): Must be ≥7
-  2. Count L0 paragraphs with bold=true: Must be 2-3 (theme subheaders)
-  3. Count L1 bullets starting with opening quotes: Must be 3-4
-  4. Count L1 bullets containing "When" + "I want" + "so I can": Must be 2-3
-  5. Verify speaker notes: Must have ≥5 bullets
-  
-  **If ANY validation fails**:
-  - DO NOT proceed to create_presentation
-  - Return to content extraction from @pmf-analyst report
-  - Pull additional quotes, JTBD, pain points from participant section
-  - Expand bullets into full sentences with context
-  - If @pmf-analyst report lacks sufficient quotes/JTBD for participant, flag to orchestrator
-- [ ] **Thematic Analysis slides: MANDATORY DENSITY CHECK (PRE-GENERATION)**
-  **For EACH grouped thematic slide, verify ALL requirements BEFORE finalizing JSON:**
-  - [ ] **3-4 themes per slide** (not 1-2 sparse themes)
-  - [ ] **EXACTLY 3 bullets per theme** (total 9-12 level 1 bullets per slide):
-    1. **Key Insight & Evidence** (2-3 sentences with P1-P3 quotes, data, specific findings)
-    2. **Business Impact** (2-3 sentences on win rates, ARR, retention, competitive position)
-    3. **Product Implications** (2-3 sentences on Workday Recruiting roadmap actions)
-  - [ ] **Theme sub-headers**: Use **level 0, 14pt bold** (NOT level 1 bullets with bold)
-  - [ ] **Executive-ready language**: Transform raw research codes ("T1 Candidate review density: 3/3 customers") into polished narrative ("Candidate review efficiency")
-  - [ ] **Cause → impact → implication structure** in bullets
-  - [ ] **Speaker notes**: Minimum 5 bullets + References
-  
-  **FORBIDDEN on thematic slides:**
-  - ❌ Only 1-2 themes per slide (too sparse)
-  - ❌ Fewer than 3 bullets per theme
-  - ❌ Single-line bullets without business context
-  - ❌ Raw theme codes or technical terminology
-  - ❌ Generic summaries ("efficiency matters") without specific evidence
-  
-  **If ANY thematic slide fails this check**: Expand each theme's 3 bullets with detailed content from @pmf-analyst report until requirements met. Each bullet should be 2-3 sentences explaining the specific insight, business impact, or product action.
-- [ ] **Competitive: 3 slides** — Regional Specialists TABLE (NOT bullets), Global Platforms TABLE (NOT bullets), **SWOT source: @product-strategy-agent output file** (`research/[Country]/swot-analysis-[Country]-[YYYY-MM-DD]-[MISSION-ID].md`) — do NOT extract from @pmf-analyst report — **SINGLE 2x2 table** with all four quadrants, **10pt font**, **bullet-pointed content in cells**, `header_height_inches: 0.25`, **NO `height_inches` property on table object - must auto-calculate**). Each vendor row: 3-4 detail points per cell. **CRITICAL VALIDATION**: Regional + Global tables MUST have `font_size_pt: 8` ONLY at table level (not cell/run level, not 14pt anywhere).
-- [ ] **SWOT PRE-GENERATION CHECK**: For each of the 4 quadrants (Strengths, Weaknesses, Opportunities, Threats), count bullets in cell text - MUST have 3-5 bullets each, with 4-5 preferred for VP audience. Each bullet concise (1-2 sentences max).
-- [ ] **Win/Loss: EXACTLY 3 slides ONLY** (NO "Dataset Overview", NO "CRM Hygiene", NO data quality explanation slides — jump directly to: (1) Top Gap Themes table, (2) Gap Theme Chart, (3) GCC & Proxy Gaps table). Data quality notes belong in speaker_notes, NOT separate slides.
-- [ ] **Win-Loss data availability validated**: If 108 returns 0 region-relevant rows, Win-Loss section = 1 "No Win-Loss data" slide ONLY (no gap themes, charts, or proxy tables)
-- [ ] **Win-Loss customer attribution**: P1/P2/P3 format used consistently (NOT real names) in gap evidence, quotes, and attributions. Format: "P1 (Company)" or "P1 - Role, Company"
-- [ ] **Win-Loss gap detail**: Each gap description = 3-4 sentences with scale indicators (volumes, time costs, fines), workflow context, and business impact
-- [ ] **Win-Loss customer quotes**: Minimum 2-3 verbatim quotes (≤20 words each) with P1/P2/P3 attribution: "P1 (Company)" or "P1 - JobTitle, Company"
-- [ ] **Gap Analysis - Deployment Agent validation**: EVERY gap in Gap Analysis table queried via `ask_deployment_agent` to validate workarounds; severities adjusted when strong workaround found (HIGH → MEDIUM, MEDIUM → LOW); validation noted in speaker_notes with thread ID
-- [ ] **ALL TABLES VALIDATION**: Every table in spec MUST have `header_height_inches: 0.25` and MUST OMIT `height_inches` property entirely (auto-height prevents row cramping)
-- [ ] **Ideation: 4 slides** (or DATA GAP equivalents when CSV absent)
-- [ ] **Thematic Analysis: 1 slide per theme** — Each theme gets its own slide with EXACTLY 3 bullets: Key Insight & Evidence, Business Impact, and Product Implications
-- [ ] Triangulation: Cross-Source Validation Matrix table
-- [ ] **Full Funnel: 1 diagnostic slide titled "Gap Analysis" in TABLE format with RAG severity column** (Red/Amber/Green indicators, detailed gap descriptions)
-- [ ] **Recommendations: MAX 5 slides with ALL 5 parts** (Problem, Evidence, Recommendation, Why Now, **Success Metrics**) — each uses 14pt bold sub-headers for the 5 sections, 5-6 total bullets to prevent overflow. Titles must be "Recommendation N: [Title]".
-- [ ] **Recommendation slides: MANDATORY 5-PART DENSITY CHECK (PRE-GENERATION)**
-  **For EACH recommendation slide, verify ALL requirements BEFORE finalizing JSON:**
-  - [ ] **Problem section** (level 0, 14pt bold sub-header + level 1 bullet):
-    - 2-3 sentences explaining customer pain, impact, and frequency
-    - NOT single-line summary
-  - [ ] **Evidence section** (level 0, 14pt bold sub-header + 1-2 level 1 bullets):
-    - Customer quotes from P1-P3 with attribution
-    - 108 gap severity, @competitive-intel competitive gaps, or 106 ideation volume
-    - Specific data points or examples
-  - [ ] **Recommendation section** (level 0, 14pt bold sub-header + level 1 bullet + optional level 2 sub-bullets):
-    - What to build: 2-3 sentences with feature specifics
-    - Optional level 2 sub-bullets: Key capabilities (1-2 items max)
-  - [ ] **Why Now section** (level 0, 14pt bold sub-header + level 1 bullet):
-    - 2-3 sentences on market forces, competitive pressure, regulatory deadlines, strategic timing
-    - NOT vague urgency statements
-  - [ ] **Success Metrics section** (level 0, 14pt bold sub-header + 1-2 level 1 bullets):
-    - Specific metrics with baseline → target format
-    - Examples: "Time to fill: 45 days → 30 days", "Candidate response rate: 35% → 55%"
-  - [ ] **Target 5-6 total bullets** across all 5 sections (prevents overflow)
-  - [ ] **Speaker notes**: Minimum 5 bullets + References
-  
-  **FORBIDDEN on recommendation slides:**
-  - ❌ Single-line bullets under any section
-  - ❌ Missing any of the 5 sections (Problem, Evidence, Recommendation, Why Now, Success Metrics)
-  - ❌ Generic urgency ("calendar habits") without business context
-  - ❌ Vague success metrics without baseline → target
-  - ❌ Missing customer evidence in Evidence section
-  
-  **If ANY recommendation slide fails this check**: Expand each section with detailed content from @pmf-analyst report. Pull from Product Roadmap Impact Summary in report for Problem/Why Now. Pull from research themes for Evidence. Add specific metrics with quantified targets for Success Metrics.
-- [ ] **Priority Recommendations Summary table**: Include for E2E pipeline decks (use executive title: "Priority Recommendations for Roadmap" NOT "E2E Handoff"). **Table columns (MANDATORY - 9 columns)**: #, Title, Action, Reach, Impact, Confidence, Effort, RICE Score, Legal / compliance (060). Extract RICE component values from @pmf-analyst E2E Handoff table. Verify table in JSON spec has 9 header cells and 9 data cells per row before create_presentation.
-- [ ] Product implication formatting (PESTEL slides: 12pt bold, FFFF00 highlight)
-- [ ] **Agenda (slide 2):** no `[{` / `'text':` artefacts; Section Title **subtitles** are plain strings with SHORT 2-4 word section names
-- [ ] **Deployment Agent validation logged**: If Gap Analysis table present, speaker_notes include: "Gap severities validated via Deployment Agent queries ([Month YYYY])" + thread ID + list of gaps where severity reduced + References section
-
-**HARD ENFORCEMENT (MANDATORY):**
-
-1. **Execute PRE-GENERATION VALIDATION PROTOCOL** (see section above)
-2. **Generate Content Density Validation Report**
-3. **If ANY PESTEL or Interview slide fails validation**:
-   - DO NOT call create_presentation
-   - Expand content from source files (@product-strategy-agent PESTEL, @pmf-analyst participant sections)
-   - Re-run validation protocol
-   - Maximum 1 expansion attempt; if still failing, return control to orchestrator with detailed failure report
-4. **Only proceed to create_presentation when validation report shows ✅ ALL CHECKS PASSED**
-5. **Log validation report** in MISSION_LOG after successful generation
-6. **Verify Executive Language Standard compliance** (no prohibited terms)
-7. **Verify slide density standards met** across all sections
-
-**Validation failures return to orchestrator**:
-- Which slides failed (by title)
-- Specific metrics (bullet count, sentence count, anchor count, quote count, JTBD count)
-- What content is missing from source files (@product-strategy-agent PESTEL or @pmf-analyst participant sections)
-- Recommendation for orchestrator (expand @product-strategy-agent PESTEL, enrich @pmf-analyst participant analysis, or accept DATA GAP)
-
----
+Required on every content slide except TITLE, Section Title, and Bumper. Format and **References:** URLs: **`010-style-guide.mdc` → Deck Generation → Speaker Notes**. Add source-specific citations per slide (analyst reports, statutes, internal file paths in notes where appropriate).
 
 ## SLIDE DENSITY STANDARD (Cross-Section Minimum)
 
@@ -1115,7 +330,7 @@ Every content slide MUST meet minimum density:
 **Bullet slides:** 4-5 substantive bullet paragraphs (maximum 6-7 total lines per slide to prevent overflow)
 **Table slides:** ≥4 data rows (excluding header)
 **Chart slides:** Chart + ≥3 interpretation bullets
-**Exception:** PESTEL and interview slides follow their specific higher minimums (see sections 4 and 7 above)
+**Exception:** PESTEL and interview slides follow their specific higher minimums (`docs/decks/130-slide-section-reference.md`, Sections 5 and 10)
 
 **Bullet length constraint:** Keep individual bullets to 1-2 lines maximum. If a bullet wraps to a 3rd line, it is too long and must be edited for conciseness.
 
