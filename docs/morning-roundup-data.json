@@ -1,0 +1,104 @@
+{
+  "generated": "2026-04-02T10:57:22Z",
+  "jiraResponses": [
+    {
+      "key": "TRANMGMT-2385",
+      "summary": "Conversions to Update Names and Descriptions of Obsolete Purgeable Data Types",
+      "url": "https://jira2.workday.com/browse/TRANMGMT-2385",
+      "latestComment": {
+        "author": "Sarah Grandhomme",
+        "date": "2026-04-01",
+        "body": "The base value does not reflect the instance name for the updated Purgeable Data Types. But this is not something we can solve at translation level?",
+        "tldr": "Translation team found base values do not match updated instance names; Shiho is now assigned and coordinating the review"
+      },
+      "tldrSummary": "Shiho Yamagishi apologised for delayed triage and is coordinating the translation team to review (Do Not Use) label changes for obsolete Purgeable Data Types created by David's purge conversion",
+      "priority": "Major"
+    },
+    {
+      "key": "HRREC-89453",
+      "summary": "Purged Job Application intermittently gets an unassigned task with Disposition Job Applications Before Purge tenant parameter enabled",
+      "url": "https://jira2.workday.com/browse/HRREC-89453",
+      "latestComment": {
+        "author": "David Denham",
+        "date": "2026-04-01",
+        "body": "Updated targeted dates for Preview and Prod on HRREC-88145. Current target is May 22nd for Preview.",
+        "tldr": "David responded with updated target dates - May 22nd Preview, then 3 weeks before Prod"
+      },
+      "tldrSummary": "Samsung (160K candidates), Hitachi, and ReSource Pro added to Airbus/NatWest/Stora Enso. Rainie Chou raised priority and asked about delivery dates. David responded with May 22nd Preview target.",
+      "priority": "Critical"
+    }
+  ],
+  "customerIssues": [],
+  "competitorNews": [
+    {
+      "competitor": "iCIMS",
+      "title": "iCIMS Launches Frontline AI and Spring 2026 Platform Expansion",
+      "url": "https://www.prnewswire.com/news-releases/icims-expands-its-enterprise-talent-acquisition-platform-with-icims-frontline-ai-and-new-automation-configurability-and-sourcing-insights-302714426.html",
+      "date": "2026-03-16",
+      "bullets": [
+        "iCIMS Frontline AI is a purpose-built hiring solution for high-volume frontline talent, featuring 24/7 AI-led conversational experiences across SMS, WhatsApp, and web",
+        "Mobile-first application and interview scheduling flow targets the 91% of frontline hiring managers who report urgent role-filling needs",
+        "Spring 2026 release adds greater automation, enhanced configurability, and measurable sourcing insights across the platform",
+        "Addresses the challenge that more than half of candidates abandon applications before completion in frontline scenarios"
+      ],
+      "type": "feature-release",
+      "workdayImplication": "iCIMS Frontline AI with WhatsApp/SMS mirrors our India messaging play; watch for enterprise overlap in high-volume verticals"
+    },
+    {
+      "competitor": "Greenhouse",
+      "title": "Greenhouse Launches New Tools to Tame Chaotic Hiring Funnels",
+      "url": "https://www.greenhouse.com/newsroom/greenhouse-launches-new-tools-to-tame-chaotic-hiring-funnels",
+      "date": "2026-03-20",
+      "bullets": [
+        "New tools designed to reduce chaos in hiring funnels with better pipeline visibility and control",
+        "Targets mid-market and enterprise segments with structured hiring workflows",
+        "Continues Greenhouse push into enterprise segment, historically Workday's stronghold",
+        "Positions Greenhouse as the structured hiring alternative to legacy ATS platforms"
+      ],
+      "type": "feature-release",
+      "workdayImplication": "Greenhouse enterprise push continues; our native HCM integration and unified platform story remains key differentiator"
+    },
+    {
+      "competitor": "SmartRecruiters",
+      "title": "SmartRecruiters March 2026 Release: Winston Match Updates and SmartSandbox",
+      "url": "https://www.smartrecruiters.com/recruiting-software/whats-new/march-2026-product-release/",
+      "date": "2026-03-01",
+      "bullets": [
+        "Winston Match updates give recruiters better control over AI-powered candidate matching with configurable weightings",
+        "Skills, Experience, and Education subscores now available for more granular AI matching decisions",
+        "SmartSandbox enhancements allow testing of workflows and offer approvals in isolated environments",
+        "Claims 300+ hours saved per recruiter annually and 2x higher candidate conversion with Winston Chat"
+      ],
+      "type": "feature-release",
+      "workdayImplication": "SmartRecruiters AI matching subscores raise the bar; our HiredScore integration needs visible parity in skills matching UX"
+    },
+    {
+      "competitor": "SAP SuccessFactors",
+      "title": "SAP SuccessFactors 1H 2026 Release Previews AI Copilot Joule for Recruiting",
+      "url": "https://zalaris.com/insights/blog/sap-successfactors-release-schedule-2025-everything-you-need-to-know/",
+      "date": "2026-04-13",
+      "bullets": [
+        "1H 2026 release previews 13 April with production rollout 15-16 May, featuring role-aware AI copilot Joule",
+        "Joule agents cover performance, career development, people intelligence, HR service, and payroll with conversational interaction",
+        "Talent Intelligence Hub provides AI-powered skills analysis, capability gap identification, and internal talent recommendations",
+        "Embedded AI capabilities include skills matching, compensation analysis, and performance insights with mandatory human review"
+      ],
+      "type": "feature-release",
+      "workdayImplication": "SAP Joule copilot expansion mirrors Workday Illuminate trajectory; talent intelligence hub is a direct competitive threat"
+    },
+    {
+      "competitor": "Oracle",
+      "title": "Oracle Fusion Cloud Recruiting 26B: Activity Centres and Career Coach",
+      "url": "https://docs.oracle.com/en/cloud/saas/readiness/hcm/26b/recr-26b/26B-recruiting-wn-t72236.htm",
+      "date": "2026-03-15",
+      "bullets": [
+        "Sourcing Activity Centre and Candidate Follow-Up Tasks provide recruiters with centralised action-oriented dashboards",
+        "Career Coach and Smart Search for Jobs improve candidate self-service experience on career sites",
+        "Redwood Experience updates continue Oracle's modern UI push for interview management",
+        "Skill Suggestions on job requisitions leverage AI to recommend relevant skills from job descriptions"
+      ],
+      "type": "feature-release",
+      "workdayImplication": "Oracle recruiter dashboards and AI skill suggestions close UX gap; our Sana shell modernisation must accelerate"
+    }
+  ]
+}
