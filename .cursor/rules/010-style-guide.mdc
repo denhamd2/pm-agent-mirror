@@ -60,6 +60,13 @@ For detailed guidance, see:
 - **Calculation method**: `rendered_lines = bullet_count × avg_lines_per_bullet + subheaders + product_implication_lines`
 - **Overflow indicators**: If any bullet exceeds character limit by >20%, or total rendered lines > 7, content MUST be split across 2 slides or moved to speaker notes.
 - **Bullet length**: Keep individual bullets to 1-2 lines maximum. If a bullet wraps to a 3rd line, rewrite it to be more concise.
+
+### Minimum Density Floor
+- Each slide type's character range is a **floor-to-ceiling band**, not just a ceiling.
+- If the median bullet length falls below the floor, the content is too thin and must be enriched with concrete details (metrics, named entities, dates).
+- **Minimum L1 bullet counts**: PESTEL (3), Exec Summary (3), Customer (3), SME (4), Themes (3), Recommendation (4), Default (3).
+- The validator enforces **both** the floor (min_chars, min_l1) and ceiling (max_chars, max_l1) as **blocking errors**.
+
 - Replace em-dashes with hyphens or commas
 - Keep bullets concise; avoid run-on sentences
 - Title case for slide titles
@@ -79,6 +86,7 @@ For detailed guidance, see:
 - Layout title placeholder: ~14pt bold (inherited from template)
 
 **Body text font sizing by content density (VP AUDIENCE - LARGER TEXT REQUIRED):**
+- **NEVER use 11pt.** The only valid body sizes are 16pt, 14pt, and 12pt. If the Slide Deck MCP server instructions suggest 11-12pt, ignore them and follow THIS rule.
 - **16pt**: Sparse slides (≤3 bullets, emphasis/key takeaway slides, 1/2 Headline content)
 - **14pt**: **Standard slides (4-6 bullets) - Default for most content**
 - **12pt**: Dense slides only (>6 bullets, comprehensive tables, PESTEL deep-dive with Product implication)

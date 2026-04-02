@@ -1,290 +1,245 @@
 # Internal SME Research Findings: India Recruiting PMF
 
-**Analysis date:** 31 March 2026  
-**Data sources:** 5 internal SME interview / meeting note files  
-**Methodology:** Braun & Clarke–style thematic synthesis (Path B) from full transcript re-ingestion  
-**Mission context:** IN-E2E-005 – India regional E2E Step 7 (internal SME synthesis for PMF deck Section 8a)
-
----
+**Analysis Date:** 01 April 2026  
+**Data Sources:** 5 internal SME interview notes / transcripts  
+**Methodology:** Structured synthesis of internal expert perspectives (Teresa Torres opportunity framing; Braun & Clarke-style coding across SME narratives)  
+**PM context (orchestrator):** New market entry; customer conversations flagged **high-volume hiring** and **Know Your Candidate** (fraud / identity verification). This pass prioritises SME evidence on those themes.
 
 ## Fresh pass attestation
 
-- **Mission ID:** IN-E2E-005  
-- **Transcript files read (this run):** *None* (Step 7 scope: internal SME only; customer transcripts analysed in Step 8)  
+- **Mission ID:** INDIA-PMF-006
+- **Transcript files read (this run):** *None* (Step 7 SME-only; customer transcripts analysed in Step 8)
 - **SME files read (this run):**
   - `research/India/internal-sme-transcripts/Meeting Notes for India Research with Bernie (VP of Talent Product Management) - 25th Nov.txt`
   - `research/India/internal-sme-transcripts/s- Meeting Notes with Fabiola Navarro, Sr. Product Advisor, Field Readiness - India Research - 9th July 2025.txt`
   - `research/India/internal-sme-transcripts/s- Meeting Notes with Santosh Gulia, Sr. Functional Consultant, Global Services - India Research - 9th July 2025.txt`
   - `research/India/internal-sme-transcripts/s- Meeting Notes with David Lodola, Workday Services Enterprise Architect in India - India Research - 13th June 2025.txt`
   - `research/India/internal-sme-transcripts/Meeting Notes with David Phillips_ Director for Strategic Customer Engagement (Accenture), Workday - India PMF research (9 Jan 2025).txt`
-- **Completed (UTC):** 31 March 2026  
+- **Completed (UTC):** 01 April 2026
 
 ---
 
-## Internal SME participants
+## Internal SME Participants
 
 | SME ID | Name | Role | Organisation / context |
 |--------|------|------|-------------------------|
-| SME1 | Bernie | VP, Talent Product Management | Workday product leadership; India FY27 focus, strategic product gaps |
-| SME2 | Fabiola Navarro | Sr. Product Advisor, Field Readiness | Workday; Lowe’s India/high-volume implementation experience |
-| SME3 | Santosh Gulia | Sr. Functional Consultant, Global Services | Workday; NA + India deployments, BGC and document workflows |
-| SME4 | David Lodola | Enterprise Architect (India), Workday Services | Genpact implementation; talent supply chain, internal mobility |
-| SME5 | David Phillips | Director, Strategic Customer Engagement (Accenture), Workday | Accenture as anchor customer lens for India gaps |
-
-*Note: Source file header for David Phillips uses “Philips” in one place; table uses the name as specified in the mission brief.*
+| SME1 | Bernie | VP of Talent Product Management | Workday product leadership; India PMF / fraud / partnerships |
+| SME2 | Fabiola Navarro | Sr. Product Advisor, Field Readiness | Deployment and field patterns; India-scoped customer examples (e.g. Lowe's) |
+| SME3 | Santosh Gulia | Sr. Functional Consultant, Global Services | Multi-customer India implementations; recruiting business process design |
+| SME4 | David Lodola | Enterprise Architect (India), Workday Services | Genpact implementation; high-volume professional services / talent supply chain |
+| SME5 | David Phillips | Director, Strategic Customer Engagement (Accenture), Workday | Accenture as anchor customer lens for India scale |
 
 ---
 
 ## Key findings per SME
 
-### SME1 – Bernie, VP, Talent Product Management
+### SME1 – Bernie, VP of Talent Product Management
 
-**Role context:** Executive product view on India as a strategic market (FY27 target opportunity), product gaps, and cross-functional follow-ups.
+**Role context:** Executive product view on India opportunity, fraud scale, and ecosystem levers (partners, FY27 focus).
 
-**Key insights**
+**Key insights:**
 
-- **Know Your Candidate (KYC) and fraud:** Framed as a major theme, analogous to banking KYC; large-scale resume and candidate-information fraud called out, including order-of-magnitude example (~100,000 resumes per month) and Accenture as a heavily affected segment.
-- **Partnerships:** BrightHire discussed as an upcoming partner whose interview recording / skills-matching capability could support validation and consistency (complements fraud-trust narrative).
-- **India product:** Explicit “India product gaps”; address localisation rollout for India addresses noted; regulations discussed in connection with KYC and fraud prevention.
-- **Follow-through:** Action items reference consulting specific individuals (e.g. Andre, Alexis in Solution Enablement), internal brainstorms, and documents shared by Bernie.
+- **Know Your Candidate (KYC) and resume fraud** are called out as a major theme, framed analogously to banking KYC; scale illustration includes order-of-magnitude handling of very large monthly resume volumes and Accenture called out again as acutely affected.
+- **High-volume recruiting** sits alongside fraud as a core India narrative in the notes.
+- **Partnerships:** BrightHire noted as an upcoming partner; narrative links interview recording / skills alignment to validating candidates and consistency (supporting trust in the funnel).
+- **India market focus:** FY27 India TO (target opportunity) and explicit **India product gaps** called out; **address localisations** for India mentioned as a concrete rollout area.
+- **Regulations** raised in connection with KYC / fraud prevention and Indian market complexity.
+- **Follow-ups** in notes: loop in named stakeholders (e.g. Andre, Alexis in Solution Enablement), review brainstorm materials and docs Bernie shared.
 
-**Hypotheses (from notes)**
+**Hypotheses:**
 
-- India readiness requires a coherent fraud/KYC story alongside localisation and roadmap clarity for FY27.
-- Partner ecosystem (e.g. interview intelligence) may be part of the mitigation path, not product-only fixes.
+- Product and GTM need a **single India narrative** that ties KYC / fraud, volume, and localisation to FY27 targets.
+- **Partner-led verification** may need explicit positioning next to native Workday capabilities to close trust gaps at scale.
 
-**JTBD linkage (recruiter):** *Determine if candidate meets requirements* and *maintain data integrity* under extreme volume; *progress candidates efficiently* when trust in identity and credentials is uncertain.
+**Themes emphasised:** High-volume hiring; Know Your Candidate / fraud; India localisation and roadmap; partnerships; regulatory framing.
+
+**Customer triangulation (Step 8 placeholder):** Await `105-user-research-findings.md`; expect reinforcement on volume + identity if customer P1–P5 match Accenture / Genpact-style scale.
 
 ---
 
 ### SME2 – Fabiola Navarro, Sr. Product Advisor, Field Readiness
 
-**Role context:** Deep field implementation experience; primary example **Lowe’s** – **extremely high volume**, India-specific routing and automation.
+**Role context:** Field Readiness; repeated exposure to **India in scope** on implementations; illustrated with Lowe's India-related configuration (offer / compliance complexity).
 
-**Key insights**
+**Key insights:**
 
-- **Offer and compensation (India):** Offer/compensation disclosure for India is repeatedly complex across projects: detailed tables, many calculated fields, frequent change requests, often **two documents** to the candidate (offer letter plus separate compensation breakdown). Fabiola characterises **compensation detail in offers** as the India theme she hears on **every** project where India is in scope.
-- **High volume + speed vs. controls:** Heavy use of automation (auto-complete hire, automatic stage routing). **Start date** changes are common before hire completes; tension with auto-complete hire led to **Workday Extend** patterns to recreate start-date correction flows. Philosophy summarised as “get people in the seat,” then resolve changes – including **revising offers after hire** and **background checks continuing post-hire** – called out as **distinct to India** vs. typical US rigidity.
-- **Background checks (India vs US):** More **flexibility** for India population: candidates could move toward hire **before** all background results returned (unlike US conditional rules). Friction was often **process**, not the integration vendor: customers want an **easy way to reinitiate** checks and to move candidates back/forward; parallel stages (e.g. drug + BGC in US) drove very complex business process and condition rules; **ASR** limitations when results return asynchronously required integration-driven forwarding.
-- **Document collection:** Multiple candidate documents (e.g. past pay stubs, ID variants, **upload photo / passport photo**); tension with guidance that some data should not live in Workday – customer still required storage; patterns included **review document** / questionnaire with attachments.
+- **Offer and compensation in India** is repeatedly painful: complex offer letters, change requests, and need to keep updating compensation and offer details beyond standard flows.
+- **High-volume operational reality:** Mass updates / extend forms discussed in context of moving many candidates; start-date and hiring-volume dynamics influence decisions such as **auto-complete hire**.
+- **Background check timing and automation:** India-specific pattern discussed where **background check kicks off only after** certain milestones; **ASR** limitations noted when BGC completes at variable times, driving **custom integrations** to move candidates to ready-for-hire.
+- **India-distinct lifecycle:** Interviewer and interviewee align that **updating the offer after hire** and **background check continuing post-hire** appears **especially characteristic of India** (not commonly heard elsewhere).
+- **Genpact / David Lodola** cross-reference: Fabiola notes overlap with prior Genpact-heavy SME input (professional services, project-based, **high-volume internal mobility**).
 
-**Hypotheses**
+**Hypotheses:**
 
-- First-party product value is in **configurable India offer templates**, **safer bulk/mass post-offer corrections**, and **first-class “reinitiate / loop back” BGC UX** without bespoke Extend for every large India program.
-- **Trust and compliance** intersect with document volume: candidate home or structured attachment flows (as Santosh also raises) reduce review-step sprawl.
+- India needs **stronger BGC orchestration** (triggers, stage flexibility, post-hire continuation) without forcing brittle custom integrations for every large employer.
+- **Offer management** (versioning, mass updates, hire-date churn) should be treated as a first-class India scale requirement, not only a localisation string problem.
 
-**JTBD linkage:** *Make a successful offer* with legally sufficient disclosure; *progress candidates* at scale without breaking when dates and BGC outcomes shift.
+**Themes emphasised:** High-volume hiring and mass change; offer/compensation complexity; BGC stage logic and integrations; India-specific post-hire / BGC patterns.
+
+**Customer triangulation (Step 8 placeholder):** Map customer quotes on offer delays and BGC to Fabiola’s Lowe’s / ASR narrative; divergence would signal industry-specific vs pan-India patterns.
 
 ---
 
 ### SME3 – Santosh Gulia, Sr. Functional Consultant, Global Services
 
-**Role context:** Functional deployment perspective across regions; India-specific BGC, candidate communication, and channel behaviour.
+**Role context:** Hands-on India deployments; North American customers with India presence also in background; deep business process configuration.
 
-**Key insights**
+**Key insights:**
 
-- **Background checks in India:** Described as **extensive** and **highly variable** by customer – hard to standardise in a single business process.
-- **Candidate document capture:** Advocates for a flexible **candidate-facing “box” / attachment capability** (aligned to roadmap discussions he had seen) so recruiters can request **non-standard** documents beyond fixed templates – important when needs differ from “standard” government ID patterns and when **design sessions** otherwise go wrong.
-- **Stage flexibility:** Customers want documents **at different stages** – sometimes **before interview** (ID proof for verification during interview), not only at BGC; standard BP design often forces **review document** steps that are **awkward** when combined with offer BP and separate BGC BP – **multiple review rounds** are poor candidate experience. **Offer “add document”** flows are recruiter-centric; gap for **candidate-initiated** attach where recruiter says “attach here.” Unsolved cases often fall back to **email**.
-- **Marketing communications / opt-in:** **GDPR-style opt-in** for marketing emails means the first touch is an opt-in request; **no response = no send**. At India volumes recruiters cannot chase every candidate; clients ask whether **opt-out** (with unsubscribe on each mail) fits India better and whether behaviour can be **region-configurable** (Europe strict, other regions flexible). **Magic-wand** answer: fix **opt-in** reach (e.g. blast 2,000 → only ~100 opt-ins vs far higher reachable with opt-out). Competitors often use **unsubscribe**-first patterns.
-- **WhatsApp:** Describes as **preferred** channel in India over SMS; used for **back-and-forth** and **sharing links** (not usually full apply-in-WhatsApp); very high penetration. Confirms **Workday WhatsApp** on roadmap (timing discussed as possibly delayed).
-- **Identity and fraud:** On direct question: yes – worked with a **major partner** with **~7 lakh people in India**; **fake candidates at interview**, sometimes leading to **legal** consequences; drives the ask for **confirmation / identity proof before interview** so interviewers can validate who joined the session. **BGC vendor** flows stay in vendor portals; **recruiter verification** docs sit in Workday.
-- **Chatbot / AI:** Candidate **status** (“where is my application?”) and **interview scheduling** (availability, notify recruiter); **Workday messaging on WhatsApp** could power scheduling prompts; **Paradox** known; interest in native Workday direction.
+- **High-volume hiring:** India clients process **very high candidate volumes**; firms want **ID and multiple proofs early** (sometimes **before interview**) to ensure they are engaging the **right person**; where Workday could not support, clients fall back to **email** (undesired).
+- **Document collection:** India BGC is **extensive and varies by customer**; need **flexible candidate attachment** (conceptually a **candidate-home “box”**) for **non-standard** documents (education, certifications), not only standard government ID via fixed steps. **Review-document steps** that push docs to candidates and back are a **poor fit** for high-touch India flows.
+- **Stage flexibility:** Need **attach points at multiple pipeline stages** (pre-interview, interview, BGC, offer); current BP constraints limit **recruiter asks for upload** without awkward review steps; offer-BP document features skew **recruiter-to-candidate review**, not **candidate self-attach** on demand.
+- **Identity / fraud:** At **7 lakh** (~700,000) people scale with a major partner, **fake candidates** and **impersonation** at interview led to **legal** exposure; driving **pre-interview identity proofs** and **interviewer confirmation** prompts (ID shown vs person interviewed).
+- **BGC vendors:** Custom integrations often work; vendor portals handle some uploads **outside Workday**; **pre-BGC document capture in Workday** is recruiter-centric for the patterns described.
+- **Marketing communication opt-in:** GDPR-driven **opt-in** for marketing emails **blocks reach** when candidates do not act; India recruiters **cannot call everyone** to opt in; **opt-out** plus unsubscribe on each email suggested; **region-configurable** treatment requested (strict in Europe, different elsewhere). **Magic wand** ask: fix **opt-in / reach** for volume sourcing.
+- **WhatsApp:** Ubiquitous for candidate comms; **links** shared via WhatsApp; roadmap awareness; **Paradox** mentioned in ecosystem; native **Workday messaging on WhatsApp** could tie to **scheduling** and **status** use cases.
+- **Chatbot / AI:** Candidates chasing status when recruiters juggle many reqs; **scheduling** and **availability** via conversational flow; integration vision with WhatsApp.
 
-**Hypotheses**
+**Hypotheses:**
 
-- India needs **multi-stage, configurable document requests** without multiplying “review document” nodes in the core BP graph.
-- **Pre-interview identity capture** is a recurring services pattern driven by fraud risk, not edge case.
-- **Configurable consent (opt-in vs opt-out) by region/tenant** is a measurable **reach** lever for sourcing campaigns in India.
+- A **governed, flexible candidate document capture** model (profile vs job-application scoped) is a **primary India enabler** for KYC-lite and BGC prep at scale.
+- **Configurable consent model** (marketing comms) by region is a **volume lever** as important as feature gaps in screening.
 
-**JTBD linkage:** *Determine if candidate meets requirements* (identity truth) and *maintain data integrity*; candidate-side *upload the right evidence at the right time*; *stay informed* on application status via channels candidates actually use.
+**Themes emphasised:** High-volume hiring; Know Your Candidate / impersonation; document capture flexibility; marketing comms consent; WhatsApp and messaging; AI / chatbot for status and scheduling.
+
+**Customer triangulation (Step 8 placeholder):** Strong predicted **convergence** with customer themes on volume and identity; any **divergence** on email consent may appear if customers prioritise DPDP strictness over reach.
 
 ---
 
-### SME4 – David Lodola, Enterprise Architect, Workday Services (Genpact)
+### SME4 – David Lodola, Enterprise Architect (India), Workday Services (Genpact)
 
-**Role context:** Rescue / enterprise architecture for **Genpact** – **~140k employees**, **~60% internal fills**, “talent supply chain” linking Recruiting, PSA, and Extend.
+**Role context:** Led architecture for **Genpact**; **~140k** employees; **~60%** internal fills; **Talent Supply Chain** bridging Recruiting, PSA/projects, and Workday Extend.
 
-**Key insights**
+**Key insights:**
 
-- **Industrial scale:** Recruiting **“en masse”** (e.g. **100–200** openings at once); **too many individual clicks**; need **mass** processing for offers, employment agreements, approvals, sign-offs; large cohorts with same start date; **worksheets not used** for these flows (gap to understand or productise).
-- **Know Your Candidate / fraud:** **Impersonation** – applicant **not the same person** as interview attendee; calls for **identity verification** (e.g. **facial recognition** raised as example).
-- **BGC and data completeness:** BGC is **contractual** with clients on sensitive work; native Workday BGC seen as **too basic**; **Tydy** (middleware, Eightfold) used – needs **rich dataset**; desire to **collect all BGC data upfront in Workday** to avoid **double entry** and poor experience.
-- **Auditability / fraud enabler:** **Career site** changes to **name, address, phone** with **little tracking** – **security risk**, can **bypass BGC** or support impersonation (connects to Phillips and fraud themes).
-- **Engagement / no-show:** High **offer accept → no first-day**; third-party **messaging** for high-touch post-offer engagement.
-- **Strategic ask (“magic wand”):** Recruiters **proactive**, **mass** actions, **full visibility** across **demand (PSA/projects)** and **supply** (internal + external); **Resource Manager as recruiter persona**; **HireScore** should better support **sourcing internal workers** nearing **project end** for rotation (per notes).
+- **Industrial-scale recruiting:** **100–200+** openings in batch; **mass actions** needed for offers, agreements, approvals, sign-offs; **worksheets** not adopted for these processes; friction is **click-load**, not single-hire UX.
+- **Know Your Candidate:** **Impersonation** (applicant ≠ interview attendee) called out as a **significant India** issue; need for **identity verification** (e.g. facial recognition) to protect interview integrity.
+- **BGC:** **Contractual** with clients on sensitive programmes; native Workday BGC seen as **too basic**; **Tydy** (middleware, **Eightfold** context in notes) used; gap is **rich upfront data capture in Workday** to avoid **duplicate candidate entry** in vendor portals.
+- **Auditability / fraud enabler:** **Career site** changes to **PII** (name, address, phone) with **weak audit trail** flagged as **security and compliance** risk and enabler of **BGC bypass / impersonation**.
+- **Engagement:** High **no-show after offer accept**; Genpact buys **messaging** solutions for **high-touch** candidate engagement between offer and day one.
+- **Magic wand:** **Proactive, en masse** recruiter and **Resource Manager** experience with **full talent supply chain visibility** (demand from PSA + supply of internal/external candidates).
+- **Ecosystem:** Custom **Workday Extend** bridge app; **HireScore** internal sourcing gaps for workers **nearing project end** noted; need **PSA + Recruiting** cohesion and **internal rotation** support.
 
-**Hypotheses**
+**Hypotheses:**
 
-- India high-volume services firms are a segment where **trust chain** (identity → auditable profile → BGC → hire) is as important as **throughput**.
-- **PSA + Recruiting** unification is a differentiator for this ICP; fraud controls fail if candidate master data can change untracked.
+- **KYC + audit-grade PII change tracking** should be treated as one system story (identity + data integrity).
+- **Bulk lifecycle actions** are a **table-stakes** requirement for India professional services and captives at scale.
 
-**JTBD linkage:** *Manage requisitions and candidates at scale*; *collaborate with hiring teams* when demand is project-driven; integrity jobs under *maintain data integrity throughout the recruiting process*.
+**Themes emphasised:** High-volume and mass processing; Know Your Candidate / impersonation; BGC depth and middleware reality; auditability on career site; post-offer engagement; talent supply chain / internal mobility.
+
+**Customer triangulation (Step 8 placeholder):** Expect overlap with **Accenture-scale** customer narratives; Lodola adds **PSA / internal mobility** lens beyond external funnel fraud.
 
 ---
 
 ### SME5 – David Phillips, Director, Strategic Customer Engagement (Accenture), Workday
 
-**Role context:** Accenture-centric view of **India scale** (e.g. **~200k** applications, duplicate volume) and market dynamics.
+**Role context:** Accenture as **primary** customer lens for **Indian market** gaps.
 
-**Key insights**
+**Key insights:**
 
-- **Volume and compliance split:** Roughly **half** of India applications **not processed in Workday** (attributed to **internal compliance** – to clarify vs. regulatory).
-- **Do Not Hire / blacklist:** Need to **auto-disposition** against a **Do Not Hire** list (ex-employees and others); noted as also relevant for **Singapore government** and **US federal** use cases.
-- **Duplicates at scale:** **~200,000** duplicate applications; **auto-merge limited to two records** – need **merge of more than two records** for Accenture-scale churn and volume.
-- **Fraud and “trickery” en masse:** India **high competition** drives **application fraud**; **AI** suggested to help **detect patterns** at volume; goal to return **time to hiring managers**.
-- **ID validation:** Need to confirm **interviewee is the actual candidate** (direct alignment with Lodola impersonation theme).
-- **Aspirational:** “Workday professional network” with **validated credentials** and **HireScore**-style ranking – illustrates demand for **pre-verified identity and skills** (strategic, not near-term requirement).
+- **Scale:** ~200,000 applications; **duplicate** volume; **auto-merge** limited to **two** records at a time; need **multi-way** merge at scale.
+- **Volume processing:** **Mass** job application **purge** and broader **mass operations** gaps.
+- **Fraud / trickery:** India **intense competition** drives applicant **trickery**; **AI** suggested to **detect patterns** at volume; goal to return **hiring manager time**.
+- **Know Your Candidate:** Need **ID validation** so **interviewee = actual candidate**; capability to combat **application fraud en masse**.
+- **Governance:** **Do Not Hire / blacklist** automation to **disposition** against a list (ex-employees and others); noted **broader** applicability (e.g. Singapore government, US federal).
+- **Strategic concept:** **Workday-powered validated professional network** (LinkedIn-like) with **HireScore**-style ranking and **pre-verified** credentials (monetisation ideas in notes; product implications need refinement).
+- **Process split:** **~Half** of India applications **not** flowing through Workday today due to **internal compliance** (clarify policy vs regulatory drivers).
 
-**Hypotheses**
+**Hypotheses:**
 
-- **DNH automation**, **multi-way merge**, and **interview-stage identity assurance** are Accenture-scale **table stakes** for India win-room.
-- **Application fraud detection** (AI-assisted triage) is positioned as volume play, not only compliance.
+- **Identity + dedupe + DNH** form a **single trust triangle** for India at extreme scale.
+- **AI-assisted fraud signal** should be framed with **human oversight** and local law (EU AI Act / DPDP) in downstream PRD work, not as fully automated rejection.
 
-**JTBD linkage:** *Efficiency metrics*; *data integrity*; *fair assessment* when fraud floods the funnel.
+**Themes emphasised:** Extreme high-volume hiring; duplicates and merge limits; fraud and trickery; ID validation at interview; blacklist / DNH; AI as assistive lever.
 
----
-
-## Synthesized themes (SME-only)
-
-Themes below are grounded in the five SME sources; **customer triangulation** awaits Step 8 (`105-user-research-findings.md`).
-
-### Theme 1: Know Your Candidate, impersonation, and interview trust
-
-**Description:** Multiple SMEs converge on **identity risk**: fake or mismatched interview attendees, need for **ID validation at interview**, and **pre-interview document** capture. Career site **editability without audit** amplifies risk (Lodola).
-
-**Evidence:** Strong convergence – Bernie (KYC framing), Lodola (impersonation, facial recognition example), Phillips (ID validation, trickery), Santosh (fake candidates, legal cases, pre-interview proof).
-
-**Implication:** Product should treat **identity assurance** and **audit trail on PII changes** as core India/high-volume investments, not optional hardening.
+**Customer triangulation (Step 8 placeholder):** Phillips and Lodola **converge** on impersonation / ID and volume; Step 8 should test whether **non-Workday compliance funnel** (50% bypass) still holds.
 
 ---
 
-### Theme 2: Resume and application fraud at extreme scale
+## Cross-SME thematic synthesis (for @pmf-analyst)
 
-**Description:** **Volume of fraudulent or gaming behaviour** (Bernie: resume fraud at huge monthly scale; Phillips: “trickery,” AI to manage volume; Accenture stats).
+| Theme | SME coverage | Implication for product / roadmap storytelling |
+|--------|----------------|-----------------------------------------------|
+| **Know Your Candidate / impersonation / ID** | Bernie, Santosh, Lodola, Phillips (Fabiola indirect via BGC integrity) | Position **identity confidence** across **apply → interview → BGC**; avoid treating BGC vendors as sole fix. |
+| **High-volume hiring and mass operations** | All five | **Bulk actions**, merge >2, purge, offer mass processing, Resource Manager workflows. |
+| **Document capture and BGC orchestration** | Santosh, Fabiola, Lodola | Flexible **candidate-upload** surfaces; **stage-based** triggers; **India post-hire BGC** pattern. |
+| **Data integrity / auditability** | Lodola, Phillips | **Career site PII change** audit; ties to fraud and compliance narratives. |
+| **Consent / marketing reach** | Santosh | **Region-configurable** marketing comms model; **opt-out** framing for India volume. |
+| **Channels (WhatsApp / messaging / AI)** | Santosh, Bernie (partners) | WhatsApp and conversational **status / scheduling** as **volume** and **experience** enablers. |
+| **Ecosystem** | Bernie, Lodola, Phillips | Partners (BrightHire, Paradox, Tydy/Eightfold); native vs partner boundaries must be explicit in recommendations. |
 
-**Evidence:** Bernie + Phillips (+ services scale context from Santosh’s 7-lakh partner).
-
-**Implication:** Roadmap narrative: **detection, disposition, and recruiter efficiency** under fraudulent throughput; link to **HiredScore** / AI positioning with **human oversight** (EU AI Act / Art. 22 considerations for PMF/legal later).
-
----
-
-### Theme 3: Industrial-scale operations (mass actions, merges, purge, DNH)
-
-**Description:** **Clicks do not scale** for offers, approvals, and cohort starts; **duplicate explosion**; need **stronger blacklisting** and **application purge** at mass (Phillips); Genpact **mass processing** and **worksheet gap** (Lodola).
-
-**Evidence:** Phillips (DNH, purge, multi-record merge, 200k apps), Lodola (mass offers/approvals, 100–200 reqs), Fabiola (automation-first, cohort behaviour).
-
-**Implication:** PMF should bundle **bulk recruiter operations**, **UDMF/merge policy**, and **DNH** into one “**India scale operations**” epic family.
+**Related JTBD (indicative):** Recruiters and hiring teams **hire trustworthy candidates at scale** with **defensible process**; **minimise rework** on offers and BGC; **sustain candidate reach** in high-competition markets (`docs/jtbd-recruiting-hr-professional-and-manager.md`).
 
 ---
 
-### Theme 4: India-specific offer, compensation, and post-hire change reality
+## Recommendations for SME Research Slides
 
-**Description:** **Rich compensation disclosure** (tables, calcs, second document) is **pervasive** on India projects (Fabiola). **Start dates** and **offers** change **after** milestones US customers treat as final; **BGC** may **continue after hire**; India path **more permissive** on forward movement than US (Fabiola).
+**For @pmf-analyst / 130 when building the PMF report and deck:**
 
-**Evidence:** Fabiola (Lowe’s); David Denham reflection in transcript that pattern is **unique to India**.
-
-**Implication:** **Offer document generation**, **versioning**, and **controlled post-hire amendment** workflows are India differentiators; avoid forcing US-style rigidity without configurability.
-
----
-
-### Theme 5: Background checks – integration depth, reinitiation, and stage placement
-
-**Description:** BGC **varies by customer** (Santosh); **Tydy**-class richness vs. “basic” native (Lodola); **reinitiate** and **move backward** in process are recurring asks (Fabiola); **pre-BGC document** at interview (Santosh, Fabiola).
-
-**Evidence:** All three implementation SMEs + fraud linkage.
-
-**Implication:** Invest in **flexible BGC orchestration**, **candidate data once** into vendor, and **operator UX** for re-run / parallel outcomes – fewer Extend snowflakes.
-
----
-
-### Theme 6: Document volume, storage tension, and candidate experience
-
-**Description:** Many **non-standard attachments**; tension with **what should not be stored in Workday**; **review document** proliferation hurts CX (Fabiola, Santosh); candidate home **attachment hub** seen as desirable (Santosh, roadmap mention).
-
-**Evidence:** Fabiola (Lowe’s documents, passport photo); Santosh (attachment “box”, stage flexibility).
-
-**Implication:** Structured **document taxonomy**, **optional external vault** integration, and **fewer sequential review steps** – align with DPDP / retention thinking in later legal pass.
-
----
-
-### Theme 7: Ecosystem and partners
-
-**Description:** **BrightHire** (Bernie) for interview evidence; **Tydy** (Lodola) for BGC middleware; **messaging** tools for no-show (Lodola); Phillips’ **validated network** idea.
-
-**Implication:** India PMF deck should show **native + partner** lanes; avoid implying Workday builds every verification modality alone.
-
----
-
-### Theme 8: Candidate communications – marketing reach, consent model, and WhatsApp
-
-**Description:** **Marketing communication opt-in** (GDPR-driven default) **starves reach** at India volumes; SMEs and customers need **region-configurable** **opt-out + unsubscribe** patterns where legally viable. **WhatsApp** is the **default** channel for candidate engagement and link-sharing in India; ties to **scheduling** and **status** chatbot concepts.
-
-**Evidence:** Santosh (primary); aligns with Lodola’s post-offer **high-touch messaging** and Fabiola’s **speed-first** candidate progression.
-
-**Implication:** PMF should pair **channel strategy** (WhatsApp roadmap) with **consent configuration** and **legal review** (DPDP, GDPR, market-specific marketing law); position **messaging + light automation** as throughput, not only compliance overhead.
-
----
-
-## Strategic notes (for @pmf-analyst)
-
-- **Convergence:** KYC/fraud, mass ops, and India offer/BGC flexibility are **multi-SME** themes – strong internal triangulation before customer readout.
-- **Open items:** Phillips’ “internal compliance” split for Workday vs non-Workday application processing; Bernie’s **FY27 TO** acronym (clarify in strategy context).
-- **Customer names in SME transcripts:** Lowe’s, Genpact, Accenture appear as **illustrative**; Step 8 customer quotes remain anonymised per P1–Pn rules.
-
----
-
-## Recommendations for SME research slides (130 deck consumption)
-
-**Section 8a: Internal SME interviews**
+**SECTION 8a: Internal SME Interviews**
 
 **Slide 1 – Internal SME interviews – Workday experts**
 
-- Title: *Internal SME interviews – India recruiting*  
-- Bullets (keep ≤7–8 lines total per 010):  
-  - Five Workday SMEs (product VP, field readiness, global services, India enterprise architect, Accenture SCE)  
-  - Multi-customer visibility: Lowe’s, Genpact, Accenture-scale patterns, major consultancy partner (Santosh)  
-  - Dates: Jan 2025 – Jul 2025 + Nov 2024 (Bernie notes)  
-  - Purpose: triangulate **high volume** and **Know Your Candidate** before customer primary research  
-  - Limitation: internal lens; **not** a substitute for customer voices (Step 8)  
+- Content: **Five** Workday SMEs with **India recruiting** exposure (VP Product, Field Readiness, Global Services, Services EA, Strategic Customer Engagement); date span **Jan 2025–Nov 2024** (Bernie notes dated Nov 2024) through **July 2025**; purpose: **triangulate** internal delivery reality ahead of customer Step 8; limitation: **internal views supplement, do not replace** customer evidence.
 
 **Slide 2 – SME participants**
 
-- Table: columns **SME | Name | Role | Context** (same as table above).
+- Content: Table as in **Internal SME Participants** above (SME ID, Name, Role, Context).
 
-**Slide 3 – Bernie – VP, Talent Product Management**
+**Slide 3 – SME1 – Bernie, VP Talent Product Management**
 
-- KYC / resume fraud at scale; India gaps + address localisation; FY27 India focus; BrightHire as interview validation angle; regulations + follow-ups (brainstorms, shared docs).
+- **KYC / fraud:** Know Your Candidate, resume fraud at scale, Accenture severity.
+- **Volume:** High-volume India recruiting as strategic theme.
+- **Partnerships:** BrightHire-style validation; ecosystem lever.
+- **India roadmap:** FY27 India focus, gaps, address localisation.
+- **Hypothesis:** Unified India story: fraud + volume + localisation.
+- **Triangulation:** Pending Step 8 customer themes.
 
-**Slide 4 – Fabiola Navarro – Field Readiness**
+**Slide 4 – SME2 – Fabiola Navarro, Sr. Product Advisor, Field Readiness**
 
-- Lowe’s: extreme volume; India offer/compensation complexity (tables, calcs, two documents); automation vs start-date / post-hire offer changes; India BGC flexibility vs US; reinitiate BGC; document collection and storage tension.
+- **Offer / compensation:** India offer-letter and comp complexity (Lowe's example).
+- **Volume:** Mass changes, auto-complete hire considerations.
+- **BGC / ASR:** Variable BGC completion drives custom automation; India kick-off timing.
+- **India-specific:** Offer updates after hire; BGC continues post-hire.
+- **Hypothesis:** BGC orchestration + offer lifecycle for India scale.
+- **Triangulation:** Pending Step 8.
 
-**Slide 5 – Santosh Gulia – Global Services**
+**Slide 5 – SME3 – Santosh Gulia, Sr. Functional Consultant, Global Services**
 
-- India BGC variability; candidate attachment “box” and roadmap alignment; documents before interview for ID; fake interview candidates and legal exposure; BP limitations with review-document steps across offer/BGC; **marketing opt-in vs opt-out** and India reach; **WhatsApp** as primary channel; chatbot for **status** and **scheduling** (incl. link to WhatsApp messaging).
+- **Volume + KYC:** Pre-interview proofs; email workarounds when Workday cannot attach flexibly.
+- **Documents:** Candidate-home style attachment; avoid review-step overload.
+- **Fraud:** Impersonation and legal exposure at very large population scale.
+- **Comms:** Marketing opt-in vs volume; opt-out / regional config.
+- **Channels:** WhatsApp; chatbot for status and scheduling.
+- **Triangulation:** Pending Step 8.
 
-**Slide 6 – David Lodola – Enterprise Architect, Genpact**
+**Slide 6 – SME4 – David Lodola, Enterprise Architect (Genpact)**
 
-- Talent supply chain; mass hiring friction; impersonation + identity verification; Tydy BGC; career site audit gap; no-shows; resource manager persona; HireScore + internal rotation; PSA integration.
+- **Mass processing:** Batches of reqs and starts; mass offers/approvals.
+- **KYC:** Impersonation; facial recognition class solutions.
+- **BGC:** Tydy middleware; upfront data in Workday.
+- **Integrity:** Career site PII change audit gap.
+- **Supply chain:** PSA, Extend, internal rotation, HireScore gaps.
+- **Triangulation:** Pending Step 8.
 
-**Slide 7 – David Phillips – Accenture SCE**
+**Slide 7 – SME5 – David Phillips, Director (Accenture engagement)**
 
-- Application volume and Workday/compliance split; DNH; merge of more than two duplicate records; fraud/trickery + AI; ID validation at interview; validated credential network concept (vision).
+- **Scale:** ~200k applications; duplicate volume; merge >2 records.
+- **Trust:** DNH/blacklist; fraud/trickery; ID validation at interview.
+- **AI:** Assistive detection at volume.
+- **Funnel:** Partial Workday bypass for compliance; validate in customer research.
+- **Triangulation:** Pending Step 8.
 
-**Slide 8 – SME synthesis – themes for India PMF**
+**Slide 8 – SME synthesis – India recruiting trust and scale**
 
-- Bullets: **(1)** KYC / impersonation / interview ID **(2)** Mass ops – bulk, merge, DNH, purge **(3)** India offer + post-hire change **(4)** BGC depth + reinitiate **(5)** Documents + candidate home **(6)** Partner ecosystem **(7)** Comms – consent reach, WhatsApp, chatbot status/scheduling  
-
-**Speaker notes cue for 130:** Each SME slide should carry **References:** file paths to the five `internal-sme-transcripts/*.txt` sources for auditability.
+- Content: **Three bullets** – (1) **Know Your Candidate** spans documents, interview identity, auditability, dedupe; (2) **High-volume** requires mass ops, BGC flexibility, comms reach; (3) **Ecosystem** (partners + native) must be intentional. Speaker notes: cite SME file paths from Fresh pass attestation.
 
 ---
 
-## Full thematic analysis
+### Full thematic analysis (optional deep dive)
 
-This file is the **canonical Step 7 artefact** for **IN-E2E-005**. A separate dated file under `research/India/thematic-analysis/` may be added if the pipeline requires a long-form Braun & Clarke appendix; the synthesised themes above are complete for **@pmf-analyst** and **130** Section 8a.
+No separate `research/India/thematic-analysis/…-SME-only.md` was generated in this pass; this file is the **canonical Step 7 artefact** for @pmf-analyst. Optionally run `/thematic` on the same five files to produce a formal Braun & Clarke appendix.
 
 ---
 
-*End of SME findings (Step 7). Customer transcripts: Step 8 only.*
+**Handoff:** Proceed to **Step 8** (`105-user-research-findings.md`, customer-only), then **@pmf-analyst** to triangulate SME + customer themes and feed **130** Section 8a and primary research sections.

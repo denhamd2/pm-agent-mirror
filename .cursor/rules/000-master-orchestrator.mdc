@@ -98,9 +98,9 @@ Your 11 active MCPs:
 - "[region] strategy and research"
 - "[region] research only" (stops after deck)
 
-**Executes:** Steps 1-12 of Regional E2E Pipeline
-**Stops at:** PMF roadmap deck generation and cleanup
-**Handoff:** E2E Handoff table with recommendations for Workflow 2
+**Executes:** Steps 1-10 of Regional E2E Pipeline
+**Stops at:** PMF roadmap deck generation (Step 10). The HITL recommendation chooser (Step 11) is **E2E-only** - skipped for standalone PMF research.
+**Handoff:** E2E Handoff table is written into the @pmf-analyst report as a reference artifact, but the orchestrator does not present the AskQuestion chooser unless continuing to Workflow 2.
 
 ### Workflow 2: PRD Writing
 **Triggers:**
@@ -110,10 +110,10 @@ Your 11 active MCPs:
 - "Requirements document"
 
 **Entry modes:**
-- From Workflow 1: Uses E2E Handoff table, includes HITL steps 13-14
-- Standalone: User provides feature description, skips to Step 15
+- From Workflow 1: Uses E2E Handoff table, includes HITL steps 12-13
+- Standalone: User provides feature description, skips to Step 14
 
-**Executes:** Steps 13-18 (or 15-18 if standalone)
+**Executes:** Steps 12-17 (or 14-17 if standalone)
 **Stops at:** Red Team reviewed PRD
 **Handoff:** PRD path for Workflow 3 or Workflow 4
 
@@ -125,11 +125,11 @@ Your 11 active MCPs:
 - "Design Brief for [PRD path]"
 
 **Entry modes:**
-- From Workflow 2: Uses PRD path from Step 15
+- From Workflow 2: Uses PRD path from Step 14
 - Standalone: User provides feature description or Figma URL
 - Exploration: Design concept before PRD
 
-**Executes:** Steps 19-25
+**Executes:** Steps 18-24
 **Stops at:** Figma capture complete
 **Handoff:** PRD + Design Brief + Prototype paths for Workflow 4
 
@@ -145,20 +145,21 @@ Your 11 active MCPs:
 - From Workflow 3: Uses PRD + Design Brief paths
 - Ad hoc: User provides feature description
 
-**Executes:** Steps 26-30
+**Executes:** Steps 25-29
 **Stops at:** Jira stories created
 
 ### E2E Express Lane (unchanged)
 **Triggers:** "Run [region] e2e", "[region] pipeline", "Full [region] workflow"
-**Executes:** All Steps 1-30 in sequence
+**Executes:** All Steps 1-29 in sequence
 **TodoWrite:** Initialize with merge: false showing all 30 steps at start. See 001-e2e-pipeline-reference.md lines 230-267 for full template.
 
 ## Decision Framework
 When routing work:
-- "Run [region] e2e" or "e2e [region] research" or "[region] e2e to 430" or "[region] research all the way to 430" or "[region] pipeline" or "Full [region] workflow" or "[region] research e2e" (where [region] = GCC, UK, France, Germany, Japan, India, Canada, Australia) → Execute FULL Regional E2E Pipeline (all 4 workflows chained: PMF Research & Deck → PRD Writing → Design & Prototype → Backlog Refinement) from Step 1. Do NOT resume from MISSION_LOG. See Modular Workflow Routing above for standalone workflow invocation. Sequential: **@product-strategy-agent** (Steps 1-3) → **@competitive-intel** (Step 4) → **optional 106** (Step 5, if `brainstorm-sessions/` has any `.txt`, `.csv`, `.xlsx`, or `.xls`) → **optional 108** (Step 6, if `gap-data/` has any `.csv`, `.xlsx`, or `.xls`) → **105 SME** (Step 7) → **105 Customer** (Step 8) → **@pmf-analyst** (Step 9) → **130** (Step 10) → HITL (Step 12) → PM Framing (Step 13) → 200 (Step 14) → 060 (Step 15) → 080 (Step 17) → 315 (Step 18) → 319 (Step 19) → 318 (Step 20) → 320 (Step 21) → 321 (Step 22) → 319 (Step 23) → 330 (Step 24) → 400 (Steps 25-29) (see Regional E2E Pipeline below for step numbers)
+- "Run [region] e2e" or "e2e [region] research" or "[region] e2e to 430" or "[region] research all the way to 430" or "[region] pipeline" or "Full [region] workflow" or "[region] research e2e" (where [region] = GCC, UK, France, Germany, Japan, India, Canada, Australia) → Execute FULL Regional E2E Pipeline (all 4 workflows chained: PMF Research & Deck → PRD Writing → Design & Prototype → Backlog Refinement) from Step 1. Do NOT resume from MISSION_LOG. See Modular Workflow Routing above for standalone workflow invocation. Sequential: **@product-strategy-agent** (Steps 1-3) → **@competitive-intel** (Step 4) → **optional 106** (Step 5, if `brainstorm-sessions/` has any `.txt`, `.csv`, `.xlsx`, or `.xls`) → **optional 108** (Step 6, if `research/gap-data/` (global) or `research/[REGION]/gap-data/` has any `.csv`, `.xlsx`, or `.xls`) → **105 SME** (Step 7) → **105 Customer** (Step 8) → **@pmf-analyst** (Step 9) → **130** (Step 10) → HITL (Step 12) → PM Framing (Step 12) → 200 (Step 14) → 060 (Step 15) → 080 (Step 17) → 315 (Step 18) → 319 (Step 19) → 318 (Step 20) → 320 (Step 21) → 321 (Step 22) → 319 (Step 23) → 330 (Step 24) → 400 (Steps 25-29) (see Regional E2E Pipeline below for step numbers)
 - "Legal", "compliance", "GDPR", "AI Act", "data privacy", "DPIA", "legal requirements", "legal risks" → Legal Advisor (060)
 - "Red Team review" or "stress test [PRD/epic/deck]" → Red Team (080)
 - "How can I improve" or "review my setup" or "what workflows am I missing" or "brainstorm improvements" or "audit my agent system" → Agent Improvement Advisor (090)
+- "/cleanup" or "clean up old artifacts" → Cleanup Old Artifacts skill directly
 - "/workspace-audit" (standalone) → Workspace Audit skill directly (generates scorecard + architecture map dashboards)
 - Research files → Market Intelligence (100)
 - "Competitive scan" or "check competitors" or "what is [competitor] doing" → Competitive Intelligence (@competitive-intel subagent)
@@ -243,11 +244,11 @@ When routing work:
    - Q2: "Anything else I need to be aware of?" (optional free text)
 4. Log PM context in MISSION_LOG under "PM Context" section
 5. Create mission: `[REGION-CODE]-PMF-0NN`
-6. **MANDATORY: Initialize TodoWrite (merge: false)** with Steps 1-12 visible (Strategy → PESTEL → SWOT → CI/108/105 SME/105 Customer in parallel → 106 sequential → PMF → Legal → Deck → Cleanup). See 001-e2e-pipeline-reference.md lines 262-276 for template.
-7. Execute Steps 1-12 from Regional E2E Pipeline reference, passing PM context to Step 1 (@product-strategy-agent)
+6. **MANDATORY: Initialize TodoWrite (merge: false)** with Steps 1-10 visible (Strategy → PESTEL → SWOT → CI/108/105 SME/105 Customer in parallel → 106 sequential → PMF → Deck). **Do NOT include Step 11 (HITL Select)** - that is E2E-only. See 001-e2e-pipeline-reference.md for template.
+7. Execute Steps 1-10 from Regional E2E Pipeline reference, passing PM context to Step 1 (@product-strategy-agent)
 8. Update todos as each step completes (merge: true)
-9. Stop after Step 12 (cleanup)
-10. Log PMF analysis path with E2E Handoff table in MISSION_LOG
+9. Stop after Step 10 (deck generation). Do NOT present HITL recommendation chooser.
+10. Log PMF analysis path in MISSION_LOG. The E2E Handoff table in the @pmf-analyst report remains as a reference artifact.
 
 **Workflow 2: PRD Writing**
 **Triggers:** "Write PRD for [feature]", "Create requirements for [feature]", "PRD from [PMF analysis path]", "Requirements document"
@@ -257,17 +258,17 @@ When routing work:
 2. Check if invoked as part of E2E or continuing from Workflow 1
 3. **If continuing from Workflow 1 (PMF context exists):**
    - Continue parent mission ID
-   - **MANDATORY: Initialize TodoWrite (merge: false)** with Steps 13-18 visible (HITL Select → PM Framing → PRD → Legal → Revision → Red Team)
-   - Execute Steps 13-18 (includes existing HITL Steps 13-14)
+   - **MANDATORY: Initialize TodoWrite (merge: false)** with Steps 12-17 visible (HITL Select → PM Framing → PRD → Legal → Revision → Red Team)
+   - Execute Steps 12-17 (includes existing HITL Steps 12-13)
 4. **If standalone (no PMF context, NOT part of E2E):**
    - Ask upfront HITL questions via AskQuestion:
      - Q1: "What's the primary driver for this PRD?" with 6 options (Customer escalation / Competitive parity / Strategic initiative / Compliance requirement / Technical debt reduction / Innovation opportunity)
      - Q2: "Anything else I need to be aware of?" (optional free text)
    - Log PM context in MISSION_LOG
    - Create PRD-0NN mission
-   - **MANDATORY: Initialize TodoWrite (merge: false)** with Steps 15-18 visible (PRD → Legal → Revision → Red Team)
-   - Skip Steps 13-14 (framing questions replaced by upfront HITL)
-   - Execute Steps 15-18 (PRD + Legal + Red Team) using HITL responses for framing
+   - **MANDATORY: Initialize TodoWrite (merge: false)** with Steps 14-17 visible (PRD → Legal → Revision → Red Team)
+   - Skip Steps 12-13 (framing questions replaced by upfront HITL)
+   - Execute Steps 14-17 (PRD + Legal + Red Team) using HITL responses for framing
 5. Update todos as each step completes (merge: true)
 6. Log PRD path in MISSION_LOG for Workflow 3/4 handoff
 
@@ -279,8 +280,8 @@ When routing work:
 2. Check if invoked as part of E2E or continuing from Workflow 2
 3. **If continuing from prior workflow (PRD or PMF context exists):**
    - Continue parent mission ID
-   - **MANDATORY: Initialize TodoWrite (merge: false)** with Steps 19-25 visible (Design Brief → Copy Review → Peer Review → Prototype → Visual Review → Copy Spot-Check → Figma)
-   - Execute Steps 19-25 with existing context
+   - **MANDATORY: Initialize TodoWrite (merge: false)** with Steps 18-24 visible (Design Brief → Copy Review → Peer Review → Prototype → Visual Review → Copy Spot-Check → Figma)
+   - Execute Steps 18-24 with existing context
 4. **If standalone (no PRD, NOT part of E2E):**
    - Ask upfront HITL questions via AskQuestion:
      - Q1: "What's the goal for this design work?" with 6 options (Exploration / Implementation / Redesign / Compliance fix / Proof of concept / Customer demo)
@@ -288,8 +289,8 @@ When routing work:
    - Log PM context in MISSION_LOG
    - If PRD path provided in Q2: Use it for 315 context, continue relevant mission
    - If no PRD: Create DESIGN-0NN mission, run 315 in exploration mode (Six Hats for discovery)
-   - **MANDATORY: Initialize TodoWrite (merge: false)** with Steps 19-25 visible
-   - Execute Steps 19-25
+   - **MANDATORY: Initialize TodoWrite (merge: false)** with Steps 18-24 visible
+   - Execute Steps 18-24
 5. Update todos as each step completes (merge: true)
 6. Log Design Brief path + Prototype path in MISSION_LOG for Workflow 4 handoff
 
@@ -301,8 +302,8 @@ When routing work:
 2. Check if invoked as part of E2E or continuing from prior workflows
 3. **If continuing from prior workflow (PRD or Design context exists):**
    - Continue parent mission ID
-   - **MANDATORY: Initialize TodoWrite (merge: false)** with Steps 26-30 visible (Epic → Story Map → Review → Red Team → Jira)
-   - Execute Steps 26-30 with existing context
+   - **MANDATORY: Initialize TodoWrite (merge: false)** with Steps 25-29 visible (Epic → Story Map → Review → Red Team → Jira)
+   - Execute Steps 25-29 with existing context
 4. **If standalone (ad hoc, NOT part of E2E):**
    - Ask upfront HITL questions via AskQuestion:
      - Q1: "What's the delivery timeline for this work?" with 5 options (This sprint / Next sprint / This quarter / Backlog / TBD)
@@ -310,10 +311,10 @@ When routing work:
    - Log PM context in MISSION_LOG
    - If PRD/Design paths provided in Q2: Use them, continue relevant mission
    - If description only: Create BACKLOG-0NN mission, 410/420 work with minimal context
-   - **MANDATORY: Initialize TodoWrite (merge: false)** with Steps 26-30 visible
-   - Execute Steps 26-30
+   - **MANDATORY: Initialize TodoWrite (merge: false)** with Steps 25-29 visible
+   - Execute Steps 25-29
 5. Update todos as each step completes (merge: true)
-6. Mark mission complete after Step 30
+6. Mark mission complete after Step 29
 
 ### Regional E2E Pipeline (@product-strategy-agent → @competitive-intel → 105 → @pmf-analyst → 130 → HITL → 200 → … → 400)
 
@@ -321,7 +322,7 @@ When routing work:
 
 **Supported Regions**: GCC, UK, France, Germany, Japan, India, Canada, Australia
 
-**29-Step Flow**: @product-strategy-agent (Strategy/PESTEL/SWOT Steps 1-3) → **Steps 4, 6-8 run in parallel:** @competitive-intel (CI Step 4) + optional 108 Win-Loss Gap (Step 6) + 105 SME (Step 7) + 105 Customer (Step 8). **Then Step 5 runs sequentially:** optional 106 (Step 5, after 105 completes) → @pmf-analyst (Step 9) → 130 Deck (Step 10) → Cleanup (Step 11) → HITL Select (Step 12) → PM Framing (Step 13) → 200 PRD (Step 14: invokes `/write-prd` skill) → 060 Legal (Step 15) → PRD Revision (Step 16) → 080 Red Team (Step 17) → 315 Design (Step 18) → 319 Copy (Step 19) → 318 Peer (Step 20) → 320 Prototype (Step 21) → 321 Visual (Step 22) → 319 Copy (Step 23) → 330 Figma (Step 24) → 410 Epic (Step 25) → 420 Story Map (Step 26) → HITL Approve (Step 27) → 080 Red Team (Step 28) → 430 Jira (Step 29)
+**28-Step Flow**: @product-strategy-agent (Strategy/PESTEL/SWOT Steps 1-3) → **Steps 4, 6-8 run in parallel:** @competitive-intel (CI Step 4) + optional 108 Win-Loss Gap (Step 6) + 105 SME (Step 7) + 105 Customer (Step 8). **Then Step 5 runs sequentially:** optional 106 (Step 5, after 105 completes) → @pmf-analyst (Step 9) → 130 Deck (Step 10)  → HITL Select (Step 11) → PM Framing (Step 12) → 200 PRD (Step 13: invokes `/write-prd` skill) → 060 Legal (Step 14) → PRD Revision (Step 15) → 080 Red Team (Step 16) → 315 Design (Step 17) → 319 Copy (Step 18) → 318 Peer (Step 19) → 320 Prototype (Step 20) → 321 Visual (Step 21) → 319 Copy (Step 22) → 330 Figma (Step 23) → 410 Epic (Step 24) → 420 Story Map (Step 25) → HITL Approve (Step 27) → 080 Red Team (Step 27) → 430 Jira (Step 28)
 
 **Detailed implementation steps, region code mapping, invariants, Task descriptions, TodoWrite patterns, and MISSION_LOG format**: See `001-e2e-pipeline-reference.md`
 
@@ -365,7 +366,7 @@ When routing work:
 - **Context**: Provide full context when handing off
 - **State**: Keep mission state current; never leave stale entries
 - **Simplicity**: Use clear, scannable formats
-- **E2E Pipeline Autonomy**: When the user triggers the E2E pipeline, ALWAYS run **@product-strategy-agent Steps 1-3** (Strategy/PESTEL/SWOT) sequentially first, then run **Steps 4, 6-8 in parallel,** then run **Step 5 (106) sequentially after Steps 7-8 complete:** **@competitive-intel** Step 4 + **108 Win-Loss Gap** Step 6 (if gap data exists) + **105 SME** Step 7 + **105 Customer** Step 8 in one parallel batch where sources exist; then **106** Step 5 (if P&T ideation sources exist under `research/brainstorm-sessions/` and both **105** outputs exist). Then continue with fresh **@pmf-analyst** research and **130** deck generation. Do not check for existing analyses or ask for confirmation.
+- **E2E Pipeline Autonomy**: When the user triggers the E2E pipeline, ALWAYS run **@product-strategy-agent Steps 1-3** (Strategy/PESTEL/SWOT) sequentially first, then run **Steps 4, 6-8 in parallel,** then run **Step 5 (106) sequentially after Steps 7-8 complete:** **@competitive-intel** Step 4 + **108 Win-Loss Gap** Step 6 (if `research/gap-data/` (global) or `research/[REGION]/gap-data/` has any `.csv`, `.xlsx`, or `.xls`) + **105 SME** Step 7 + **105 Customer** Step 8 in one parallel batch where sources exist; then **106** Step 5 (if P&T ideation sources exist under `research/brainstorm-sessions/` and both **105** outputs exist). Then continue with fresh **@pmf-analyst** research and **130** deck generation. Do not check for existing analyses or ask for confirmation.
 - **HITL Autonomy**: When the user makes an explicit HITL selection, ALWAYS honor it exactly. Never check if it was "done before" or override with a different recommendation. Execute the pipeline fresh for whatever they select. The user's selection is final.
 
 ## Example Interactions
@@ -408,7 +409,7 @@ When routing work:
 1. Read MISSION_LOG.md
 2. Detect region from prompt (e.g., "France" → REGION=France, REGION_CODE=fr)
 3. Create mission "[REGION-CODE]-E2E-001 - [REGION] Research to Design Pipeline"
-4. Execute Regional E2E Pipeline: invoke **@product-strategy-agent** (Steps 1-3, strategy context + PESTEL + SWOT) → **@competitive-intel** (Step 4, Pattern 1a baseline scan + matrix + report) → **105** (Step 5, Path B + attestation) → **106** (Step 7, if brainstorm folder has `.txt`/`.csv`/`.xlsx`/`.xls`) → **108** (Step 8, if gap-data folder has `.csv`/`.xlsx`/`.xls`) → **@pmf-analyst** (Step 9, PMF analysis with @product-strategy-agent strategic inputs + @competitive-intel competitive inputs + optional 106/108 triangulation) → **130** (Step 10, PMF roadmap `.pptx` from @product-strategy-agent PESTEL/SWOT + @pmf-analyst themes) → HUMAN-IN-THE-LOOP (Step 12, AskQuestion: PM selects recommendation) → **PM Framing** (Step 13) → 200 (Step 14, PRD using Step 4 CI outputs) → **060** (Step 15, Legal PRD review) → 080 (Step 17, Red Team PRD) → 315 (Step 18) → 319 (Step 19) → 318 (Step 20) → 320 (Step 21) → 321 (Step 22) → 319 (Step 23) → 330 (Step 24) → 410 (Step 25, Epic Definition) → 420 (Step 26, Story Map) → Story Map Review HITL (Step 27) → 080 (Step 28, Red Team Story Map) → 430 (Step 29, Jira Epic + Stories)
+4. Execute Regional E2E Pipeline: invoke **@product-strategy-agent** (Steps 1-3, strategy context + PESTEL + SWOT) → **@competitive-intel** (Step 4, Pattern 1a baseline scan + matrix + report) → **105** (Step 5, Path B + attestation) → **106** (Step 7, if brainstorm folder has `.txt`/`.csv`/`.xlsx`/`.xls`) → **108** (Step 8, if `research/gap-data/` (global) or `research/[REGION]/gap-data/` has `.csv`/`.xlsx`/`.xls`) → **@pmf-analyst** (Step 9, PMF analysis with @product-strategy-agent strategic inputs + @competitive-intel competitive inputs + optional 106/108 triangulation) → **130** (Step 10, PMF roadmap `.pptx` from @product-strategy-agent PESTEL/SWOT + @pmf-analyst themes) → HUMAN-IN-THE-LOOP (Step 12, AskQuestion: PM selects recommendation) → **PM Framing** (Step 13) → 200 (Step 14, PRD using Step 4 CI outputs) → **060** (Step 15, Legal PRD review) → 080 (Step 17, Red Team PRD) → 315 (Step 18) → 319 (Step 19) → 318 (Step 20) → 320 (Step 21) → 321 (Step 22) → 319 (Step 23) → 330 (Step 24) → 410 (Step 25, Epic Definition) → 420 (Step 26, Story Map) → Story Map Review HITL (Step 26) → 080 (Step 28, Red Team Story Map) → 430 (Step 29, Jira Epic + Stories)
 5. Update MISSION_LOG at each step with pipeline progress
 6. Mark complete; provide summary with links to report, PRD, Figma
 

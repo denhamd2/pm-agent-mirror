@@ -266,27 +266,27 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
       <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
         <div class="node subagent" data-id="sa-strategy" data-type="subagent">
           <div class="node-icon">&#127919;</div>
-          @product<br>strategy
+          Product<br>Strategy
         </div>
         <div class="node subagent" data-id="sa-ci" data-type="subagent">
           <div class="node-icon">&#128301;</div>
-          @competitive<br>intel
+          Competitive<br>Intelligence
         </div>
         <div class="node subagent" data-id="sa-pmf" data-type="subagent">
           <div class="node-icon">&#128300;</div>
-          @pmf<br>analyst
+          PMF<br>Analyst
         </div>
         <div class="node subagent-thin" data-id="sa-ux-researcher" data-type="subagent">
           <div class="node-icon">&#128270;</div>
-          @ux<br>researcher
+          UX<br>Researcher
         </div>
         <div class="node subagent-thin" data-id="sa-ux-designer" data-type="subagent">
           <div class="node-icon">&#127912;</div>
-          @ux<br>designer
+          UX<br>Designer
         </div>
         <div class="node subagent-thin" data-id="sa-doc-writer" data-type="subagent">
           <div class="node-icon">&#9998;</div>
-          @doc<br>writer
+          Doc<br>Writer
         </div>
       </div>
     </div>
@@ -308,13 +308,13 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
         <div class="node subagent" data-id="sa-strategy" data-type="subagent">
           <div class="step-number" style="color: var(--wf1);">1-3</div>
           <div class="node-icon">&#127919;</div>
-          @product<br>strategy
+          Product<br>Strategy
         </div>
         <span class="arrow">&rarr;</span>
         <div class="node subagent" data-id="sa-ci" data-type="subagent">
           <div class="step-number" style="color: var(--wf1);">4</div>
           <div class="node-icon">&#128301;</div>
-          @competitive<br>intel
+          Competitive<br>Intelligence
         </div>
         <span class="arrow">&rarr;</span>
         <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
@@ -325,7 +325,7 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
             </div>
             <div class="node subagent-thin" data-id="sa-ux-researcher" data-type="subagent">
               <div class="node-icon">&#128270;</div>
-              @ux<br>researcher
+              UX<br>Researcher
             </div>
           </div>
           <div class="node rule" data-id="108" data-type="rule">
@@ -342,7 +342,7 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
         <div class="node subagent" data-id="sa-pmf" data-type="subagent">
           <div class="step-number" style="color: var(--wf1);">9</div>
           <div class="node-icon">&#128300;</div>
-          @pmf<br>analyst
+          PMF<br>Analyst
         </div>
         <span class="arrow">&rarr;</span>
         <div class="node rule" data-id="130" data-type="rule">
@@ -397,7 +397,7 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
           </div>
           <div class="node subagent-thin" data-id="sa-ux-designer" data-type="subagent">
             <div class="node-icon">&#127912;</div>
-            @ux<br>designer
+            UX<br>Designer
           </div>
         </div>
         <span class="arrow">&rarr;</span>
@@ -408,7 +408,7 @@ body { background: var(--paper); color: var(--ink); overflow: hidden; height: 10
           </div>
           <div class="node subagent-thin" data-id="sa-doc-writer" data-type="subagent">
             <div class="node-icon">&#9998;</div>
-            @doc<br>writer
+            Doc<br>Writer
           </div>
         </div>
         <span class="arrow">&rarr;</span>
@@ -581,20 +581,20 @@ const nodeData = {
     outputs: ['Draft responses', 'Response strategy recommendations'],
     mcps: ['Slack'],
     pattern: 'Standalone advisor (357 lines)' },
-  'sa-strategy': { label: '@product-strategy', type: 'subagent',
+  'sa-strategy': { label: 'Product Strategy', type: 'subagent',
     summary: 'Principal Product Strategist performing comprehensive strategic analysis. Extracts strategy context from annual TA strategy documents, runs PESTEL across all 6 factors with deep web research, and performs SWOT analysis.',
     whenUsed: 'E2E Steps 1-3 (sequential). Also standalone for strategy questions.',
-    inputs: ['strategy/pdfs/*.pdf', 'Web research', '@competitive-intel matrices'],
+    inputs: ['strategy/pdfs/*.pdf', 'Web research', 'Competitive Intelligence matrices'],
     outputs: ['strategy-context.md', 'pestel-analysis.md', 'swot-analysis.md'],
-    downstream: ['@pmf-analyst', '130 PMF Slide Gen'],
+    downstream: ['PMF Analyst', '130 PMF Slide Gen'],
     mcps: [],
     pattern: 'Heavy-logic subagent (452 lines). Uses PESTEL, SWOT, BMC skills.' },
-  'sa-ci': { label: '@competitive-intel', type: 'subagent',
+  'sa-ci': { label: 'Competitive Intelligence', type: 'subagent',
     summary: 'Deep research on global and regional ATS competitors. Produces gap analysis, battle cards, competitive matrices, and sales enablement materials. Covers 8 regions with dedicated matrices.',
     whenUsed: 'E2E Step 4 (parallel). Also standalone: "scan [region] competitors", "battle card vs [competitor]".',
     inputs: ['Web research', 'Deployment Agent (Workday capabilities)', 'Existing matrices'],
     outputs: ['Competitive scan report', 'Updated matrix in research/competitive/matrices/', 'Battle cards'],
-    downstream: ['@pmf-analyst', '130 PMF Slide Gen'],
+    downstream: ['PMF Analyst', '130 PMF Slide Gen'],
     mcps: ['Deployment Agent'],
     pattern: 'Heavy-logic subagent (331 lines). Exhaustive web research per region.' },
   '105': { label: '105 User Research', type: 'rule',
@@ -603,7 +603,7 @@ const nodeData = {
     inputs: ['research/[Country]/internal-sme-transcripts/*.txt', 'research/[Country]/customer-transcripts/*.txt'],
     outputs: ['105-sme-research-findings.md', '105-user-research-findings.md'],
     upstream: ['Raw interview transcripts'],
-    downstream: ['106 Ideation Hub (sequential)', '@pmf-analyst'],
+    downstream: ['106 Ideation Hub (sequential)', 'PMF Analyst'],
     mcps: [],
     pattern: 'Glob rule (709 lines). Fresh pass attestation required.' },
   '106': { label: '106 Ideation Hub', type: 'rule',
@@ -612,7 +612,7 @@ const nodeData = {
     inputs: ['105-sme-research-findings.md', '105-user-research-findings.md', 'P&T Idea Results Dashboard (.xlsx)'],
     outputs: ['brainstorm-analysis/[date]-brainstorm-analysis.md with Theme Validation Matrix, Capability Prioritisation, Customer Voice, Net-New Signals'],
     upstream: ['105 User Research (must complete first)'],
-    downstream: ['@pmf-analyst'],
+    downstream: ['PMF Analyst'],
     mcps: [],
     pattern: 'Glob rule. Sequential dependency on 105. Uses openpyxl for Excel parsing.' },
   '108': { label: '108 Gap Analyser', type: 'rule',
@@ -620,24 +620,24 @@ const nodeData = {
     whenUsed: 'E2E Step 6 (parallel, if gap-data/ has files). Also standalone for gap analysis.',
     inputs: ['research/[Country]/gap-data/*.csv, *.xlsx'],
     outputs: ['gap-analysis/[date]-gap-analysis.md'],
-    downstream: ['@pmf-analyst'],
+    downstream: ['PMF Analyst'],
     mcps: ['Tableau'],
     pattern: 'Glob rule (596 lines). Optional - only runs if gap data exists.' },
-  'sa-pmf': { label: '@pmf-analyst', type: 'subagent',
+  'sa-pmf': { label: 'PMF Analyst', type: 'subagent',
     summary: 'Braun & Clarke 6-phase thematic analysis specialist. Synthesises all research inputs (105 SME/Customer, 106 Ideation, 108 Gaps, strategy, competitive) into a comprehensive PMF report with validated themes, triangulation matrix, and RICE-scored roadmap recommendations.',
     whenUsed: 'E2E Step 9 (after all research steps complete). Also standalone for PMF analysis.',
     inputs: ['105 findings', '106 brainstorm analysis', '108 gap analysis', 'Strategy context', 'Competitive scan', 'Raw transcripts'],
     outputs: ['[date]-[Country]-PMF-Analysis.md with themes, triangulation, RICE recommendations'],
-    upstream: ['105', '106', '108', '@product-strategy', '@competitive-intel'],
+    upstream: ['105', '106', '108', 'Product Strategy', 'Competitive Intelligence'],
     downstream: ['130 PMF Slide Gen', 'HITL recommendation selection'],
     mcps: [],
     pattern: 'Heavy-logic subagent (341 lines). Multi-source triangulation.' },
   '130': { label: '130 PMF Slide Gen', type: 'rule',
     summary: 'Full PMF roadmap PowerPoint generator. Produces 36-49 slide decks with Executive Summary, PESTEL deep-dive, interview findings, validated themes, triangulation, SWOT, and roadmap recommendations. VP-facing language throughout.',
     whenUsed: 'E2E Step 10. Also standalone to regenerate deck from existing PMF report.',
-    inputs: ['@pmf-analyst report', 'PESTEL/SWOT from @product-strategy', '105 findings', '106 analysis'],
+    inputs: ['PMF Analyst report', 'PESTEL/SWOT from Product Strategy', '105 findings', '106 analysis'],
     outputs: ['[Country]_Recruiting_PMF_Roadmap_vN.pptx in ~/Downloads/'],
-    upstream: ['@pmf-analyst', '@product-strategy'],
+    upstream: ['PMF Analyst', 'Product Strategy'],
     mcps: ['Slide Deck'],
     pattern: 'Glob rule (413 lines). Uses /slide-writer skill. v65 parity checklist.' },
   '200': { label: '200 PRD Writer', type: 'rule',
@@ -764,23 +764,23 @@ const nodeData = {
     upstream: ['430 Jira Stories'],
     mcps: ['Jira/GHE'],
     pattern: 'Glob rule (555 lines). Optional quality check.' },
-  'sa-ux-researcher': { label: '@ux-researcher', type: 'subagent',
+  'sa-ux-researcher': { label: 'UX Researcher', type: 'subagent',
     summary: 'Thin wrapper for standalone UX research invocation. Delegates to 105 glob rule with cognitive framing as a User Researcher applying Teresa Torres methods.',
-    whenUsed: 'Standalone: "@ux-researcher". E2E pipeline invokes 105 directly for efficiency.',
+    whenUsed: 'Standalone: "UX Researcher". E2E pipeline invokes 105 directly for efficiency.',
     inputs: ['Same as 105'],
     outputs: ['Same as 105'],
     delegatesTo: '105 User Research',
     pattern: 'Thin wrapper subagent (75 lines)' },
-  'sa-ux-designer': { label: '@ux-designer', type: 'subagent',
+  'sa-ux-designer': { label: 'UX Designer', type: 'subagent',
     summary: 'Thin wrapper for standalone design invocation. Delegates to 315 glob rule with cognitive framing as a Principal UX Designer for Workday Recruiting.',
-    whenUsed: 'Standalone: "@ux-designer". E2E pipeline invokes 315 directly for efficiency.',
+    whenUsed: 'Standalone: "UX Designer". E2E pipeline invokes 315 directly for efficiency.',
     inputs: ['Same as 315'],
     outputs: ['Same as 315'],
     delegatesTo: '315 Design Brief',
     pattern: 'Thin wrapper subagent (75 lines)' },
-  'sa-doc-writer': { label: '@doc-writer', type: 'subagent',
+  'sa-doc-writer': { label: 'Doc Writer', type: 'subagent',
     summary: 'Thin wrapper for standalone copy review invocation. Delegates to 319 glob rule with cognitive framing for editorial review and UX writing standards.',
-    whenUsed: 'Standalone: "@doc-writer". E2E pipeline invokes 319 directly for efficiency.',
+    whenUsed: 'Standalone: "Doc Writer". E2E pipeline invokes 319 directly for efficiency.',
     inputs: ['Same as 319'],
     outputs: ['Same as 319'],
     delegatesTo: '319 Copy Review',
@@ -807,8 +807,8 @@ const nodeData = {
     pattern: 'Workspace skill' },
   'sk-metrics': { label: '/value-metrics', type: 'skill',
     summary: 'Business Value, Product Value, and Adoption metrics framework. Defines KPIs and success metrics for features.',
-    whenUsed: 'Invoked by 200 (PRD metrics), 410 (epic value), @pmf-analyst, 130 (deck metrics).',
-    usedBy: ['200 PRD Writer', '410 Epic Definition', '@pmf-analyst', '130 PMF Slide Gen'],
+    whenUsed: 'Invoked by 200 (PRD metrics), 410 (epic value), PMF Analyst, 130 (deck metrics).',
+    usedBy: ['200 PRD Writer', '410 Epic Definition', 'PMF Analyst', '130 PMF Slide Gen'],
     pattern: 'Workspace skill' },
   'sk-audit': { label: '/workspace-audit', type: 'skill',
     summary: 'Dashboard generation skill. Collects workspace metrics, runs slide validator, generates scorecard and architecture map HTML, serves on localhost:8765.',
@@ -819,7 +819,7 @@ const nodeData = {
   'mcp-slack': { label: 'Slack', type: 'mcp', summary: 'Team communication.', usedBy: ['500 Slack Responder'] },
   'mcp-jira': { label: 'Jira/GHE', type: 'mcp', summary: 'Issue tracking and GitHub Enterprise.', usedBy: ['430 Jira Stories', '435 Story Validator'] },
   'mcp-confluence': { label: 'Confluence', type: 'mcp', summary: 'Documentation wiki.', usedBy: [] },
-  'mcp-deploy': { label: 'Deployment Agent', type: 'mcp', summary: 'Workday tenant validation and capability queries.', usedBy: ['315 Design Brief', '@competitive-intel'] },
+  'mcp-deploy': { label: 'Deployment Agent', type: 'mcp', summary: 'Workday tenant validation and capability queries.', usedBy: ['315 Design Brief', 'Competitive Intelligence'] },
   'mcp-canvas': { label: 'Canvas Kit', type: 'mcp', summary: 'Workday UI component library queries.', usedBy: ['315 Design Brief', '320 Prototype Dev'] },
   'mcp-slides': { label: 'Slide Deck', type: 'mcp', summary: 'Branded PowerPoint generation.', usedBy: ['110 Slide Generator', '130 PMF Slide Gen'] },
   'mcp-tableau': { label: 'Tableau', type: 'mcp', summary: 'Data visualisation and gap data.', usedBy: ['108 Gap Analyser'] },
@@ -1242,7 +1242,7 @@ function initD3Graph() {
 }
 
 </script>
-<script id="nav-links" type="application/json">{"prototype": {"href": "../design/dist/index.html#/candidate-smart-view-v86", "title": "candidate-smart-view-v86"}, "deck": {"href": "docs/downloads/India_Recruiting_PMF_Roadmap_v84.pptx", "title": "India_Recruiting_PMF_Roadmap_v84.pptx"}, "prd": {"href": "pm-agent-viewer.html?file=docs/prds/india-aadhaar-adobe-sign-offer-prd.md", "title": "india-aadhaar-adobe-sign-offer-prd.md"}, "brief": {"href": "pm-agent-viewer.html?file=design/candidate-smart-view-v86-design-brief.md", "title": "candidate-smart-view-v86-design-brief.md"}, "epic": {"href": "pm-agent-viewer.html?file=docs/epics/gcc-nationalisation-local-compliance-reporting-epic-draft.md", "title": "gcc-nationalisation-local-compliance-reporting-epic-draft.md"}}</script>
-<script src="dashboard-nav.js?v=4"></script>
+<script id="nav-links" type="application/json">{"prototype": {"href": "../design/dist/index.html#/candidate-smart-view-v86", "title": "candidate-smart-view-v86"}, "deck": {"href": "docs/downloads/India_Recruiting_PMF_Roadmap_v84 (4).pptx", "title": "India_Recruiting_PMF_Roadmap_v84 (4).pptx"}, "prd": {"href": "pm-agent-viewer.html?file=docs/prds/india-aadhaar-adobe-sign-offer-prd.md", "title": "india-aadhaar-adobe-sign-offer-prd.md"}, "brief": {"href": "pm-agent-viewer.html?file=design/candidate-smart-view-v86-design-brief.md", "title": "candidate-smart-view-v86-design-brief.md"}, "epic": {"href": "pm-agent-viewer.html?file=docs/epics/gcc-nationalisation-local-compliance-reporting-epic-draft.md", "title": "gcc-nationalisation-local-compliance-reporting-epic-draft.md"}}</script>
+<script src="dashboard-nav.js?v=5"></script>
 </body>
 </html>

@@ -68,6 +68,10 @@ Full content (Noah session, PRD/slide skills, async delegation, gaps): [Archive]
 | GCC-E2E-002 | In Progress | 400→420→430 backlog for Recruiter Dashboard |
 | DESIGN-CANON-001 | In Progress | Figma deep-dive when rate limit resets; HiredScore grid canonicalisation |
 | GCC-E2E-008 | Blocked | HITL — PM select recommendation |
+| INDIA-PMF-003 | Complete | PMF Research done; Selected: **#4 Mandatory Government ID UX** (RICE 1,575); Deck: `~/Downloads/India_Recruiting_PMF_Roadmap_v85.pptx` (59 slides); PMF: `research/India/thematic-analysis/2026-04-01-India-PMF-Analysis-INDIA-PMF-003.md`; CI: `research/competitive/in/in-competitive-scan-2026-04-01-INDIA-PMF-003.md` |
+| INDIA-PMF-004 | In Progress | **Step 10 (130) deck** — `slides_spec_v86.json`; `~/Downloads/India_Recruiting_PMF_Roadmap_v86.pptx` (68 slides, v65-parity structure). Thematic: `research/India/thematic-analysis/2026-04-01-India-PMF-Analysis-INDIA-PMF-004.md`. **Step 4 CI** — `research/competitive/in/in-competitive-scan-2026-04-01-INDIA-PMF-004.md`; matrix **v1.10**. **106** — `research/India/brainstorm-analysis/2026-04-01-brainstorm-analysis.md`. Next: India E2E HITL / PRD if continuing. Driver: New market entry; Focus: high volume + Know Your Candidate. |
+| INDIA-PMF-005 | In Progress | Step 1 - Strategy Context; Driver: New market entry; Focus: high-volume recruiting + Know Your Candidate / identity verification |
+| INDIA-PMF-006 | Complete | PMF Research + PRD + Design + Prototype + Backlog for Rec #4 (WhatsApp). **Deck:** `~/Downloads/India_Recruiting_PMF_Roadmap_v87.pptx` (66 slides). **PMF:** `research/India/thematic-analysis/2026-04-01-India-PMF-Analysis-INDIA-PMF-006.md`. **PRD:** `docs/prds/india-whatsapp-sms-candidate-messaging-prd.md`. **Design Brief:** `design/india-whatsapp-candidate-messaging-design-brief.md` (318 APPROVED). **Prototype:** `design/india-whatsapp-candidate-messaging-v88.tsx`. **Figma:** https://www.figma.com/design/xfiN99c4hzqu9GeWZGREpy. **CI:** matrix v1.11. **Epic:** [HRREC-91286](https://jira2.workday.com/browse/HRREC-91286) (29 stories: VS1=13, VS2=10, VS3=6; SMS descoped). |
 
 ### Stale Missions (archived 31 March 2026)
 

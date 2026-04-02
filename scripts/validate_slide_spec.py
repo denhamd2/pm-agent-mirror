@@ -38,13 +38,13 @@ PROHIBITED_PATTERNS = [
 PROHIBITED_NAMES = []
 
 SLIDE_TYPE_LIMITS = {
-    "pestel": {"max_l1": 4, "max_chars": 240, "max_lines": 7.5},
-    "exec_summary": {"max_l1": 4, "max_chars": 250, "max_lines": 8},
-    "customer": {"max_l1": 4, "max_chars": 220, "max_lines": 7},
-    "sme": {"max_l1": 6, "max_chars": 200, "max_lines": 8},
-    "themes": {"max_l1": 6, "max_chars": 180, "max_lines": 8},
-    "recommendation": {"max_l1": 5, "max_chars": 220, "max_lines": 8},
-    "default": {"max_l1": 6, "max_chars": 250, "max_lines": 7.5},
+    "pestel":         {"min_l1": 5, "max_l1": 6, "min_chars": 180, "max_chars": 240, "max_lines": 13.5},
+    "exec_summary":   {"min_l1": 3, "max_l1": 4, "min_chars": 180, "max_chars": 250, "max_lines": 10.5},
+    "customer":       {"min_l1": 4, "max_l1": 5, "min_chars": 200, "max_chars": 240, "max_lines": 11.5},
+    "sme":            {"min_l1": 5, "max_l1": 8, "min_chars": 180, "max_chars": 220, "max_lines": 14.5},
+    "themes":         {"min_l1": 5, "max_l1": 6, "min_chars": 140, "max_chars": 180, "max_lines": 14.5},
+    "recommendation": {"min_l1": 4, "max_l1": 5, "min_chars": 160, "max_chars": 220, "max_lines": 10.5},
+    "default":        {"min_l1": 3, "max_l1": 6, "min_chars": 100, "max_chars": 250, "max_lines": 8.5},
 }
 
 
@@ -58,7 +58,7 @@ def classify_slide(title: str) -> str:
         return "customer"
     if re.match(r"^sme\d+ ", t) or "internal sme" in t:
         return "sme"
-    if "validated theme" in t:
+    if "theme" in t:
         return "themes"
     if "recommendation" in t:
         return "recommendation"
@@ -139,6 +139,28 @@ def check_prohibited_language(slide: dict, slide_num: int) -> list[str]:
     return errors
 
 
+def check_font_sizes(slide: dict, slide_num: int) -> list[str]:
+    errors = []
+    
+    for tb in slide.get("text_boxes", []):
+        fs = tb.get("font_size_pt")
+        if fs is not None and fs not in (7, 8, 9, 10, 12, 14, 16):
+            errors.append(f"Slide {slide_num}: Invalid text_box font_size_pt {fs}. Must be 12, 14, 16 (or 7-10 for tables/charts).")
+            
+        for para in tb.get("paragraphs", []):
+            pfs = para.get("font_size_pt")
+            if pfs is not None and pfs not in (7, 8, 9, 10, 12, 14, 16):
+                errors.append(f"Slide {slide_num}: Invalid paragraph font_size_pt {pfs}. Must be 12, 14, 16.")
+            
+            txt = para.get("text", "")
+            if isinstance(txt, list):
+                for r in txt:
+                    rfs = r.get("font_size_pt")
+                    if rfs is not None and rfs not in (7, 8, 9, 10, 12, 14, 16):
+                        errors.append(f"Slide {slide_num}: Invalid run font_size_pt {rfs}. Must be 12, 14, 16.")
+    return errors
+
+
 def validate(spec_path: str, sme_names: list[str] | None = None) -> tuple[bool, list[str]]:
     global PROHIBITED_NAMES
     if sme_names:
@@ -188,7 +210,9 @@ def validate(spec_path: str, sme_names: list[str] | None = None) -> tuple[bool, 
         limits = SLIDE_TYPE_LIMITS.get(slide_type, SLIDE_TYPE_LIMITS["default"])
 
         l1_count = sum(1 for p in paragraphs if p["level"] >= 1)
-        max_chars = max((p["chars"] for p in paragraphs if p["level"] >= 1), default=0)
+        l1_chars = [p["chars"] for p in paragraphs if p["level"] >= 1]
+        max_chars = max(l1_chars, default=0)
+        median_chars = sorted(l1_chars)[len(l1_chars)//2] if l1_chars else 0
         rendered = estimate_rendered_lines(paragraphs)
 
         max_lines = limits["max_lines"]
@@ -207,17 +231,37 @@ def validate(spec_path: str, sme_names: list[str] | None = None) -> tuple[bool, 
                 f"Slide {slide_num} ({slide_type}): Too many L1 bullets - "
                 f"{l1_count} (max {limits['max_l1']}). Title: \"{title[:50]}\""
             )
+            density_violations += 1
+            
+        if l1_count > 0 and l1_count < limits["min_l1"]:
+            errors.append(
+                f"Slide {slide_num} ({slide_type}): Too few L1 bullets - "
+                f"{l1_count} (min {limits['min_l1']}). Title: \"{title[:50]}\""
+            )
+            density_violations += 1
 
         if max_chars > limits["max_chars"]:
-            warnings.append(
+            errors.append(
                 f"Slide {slide_num} ({slide_type}): Longest bullet {max_chars} chars "
-                f"(target {limits['max_chars']}). Title: \"{title[:50]}\""
+                f"(max {limits['max_chars']}). Title: \"{title[:50]}\""
             )
+            density_violations += 1
+            
+        if l1_count > 0 and median_chars < limits["min_chars"]:
+            errors.append(
+                f"Slide {slide_num} ({slide_type}): Bullets too thin - median {median_chars} chars "
+                f"(min {limits['min_chars']}). Title: \"{title[:50]}\""
+            )
+            density_violations += 1
 
         lang_errs = check_prohibited_language(slide, slide_num)
         if lang_errs:
             errors.extend(lang_errs)
             language_violations += len(lang_errs)
+            
+        font_errs = check_font_sizes(slide, slide_num)
+        if font_errs:
+            errors.extend(font_errs)
 
     print("=" * 70)
     print("SLIDE SPEC VALIDATION REPORT")

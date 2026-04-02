@@ -172,7 +172,7 @@ _Target ~50-60 slides for v65 parity; McKinsey-style tone._
    For EACH PESTEL factor slide in draft JSON:
 
    **Automated checks**:
-   1. **Count level-1 bullets**: Must equal 4 (3 for Environmental if DATA GAP)
+   1. **Count level-1 bullets**: Must equal 5-6 (3 for Environmental if DATA GAP)
    2. **Count sentences per bullet**: Extract text (handle both string and array-of-runs format), count sentence terminators (`. ` or `! ` or `? `)
       - If ANY bullet has <1 complete sentence: BLOCK and expand from @product-strategy-agent PESTEL file
    3. **Count characters per bullet**: Measure longest bullet's character count
@@ -203,7 +203,7 @@ _Target ~50-60 slides for v65 parity; McKinsey-style tone._
    **FORBIDDEN**: Padding with filler bullets or generic statements lacking anchors. Quality over count - but reach the anchor and richness standard for VP audience.
 
   **v65 depth (PESTEL body — do not ship sparse slides):** Each of the **six** factor slides must match **golden v65 density**, not a 3-bullet stub. Before `create_presentation`, verify **every** PESTEL slide meets **all** of:
-  - **Bullet count:** **EXACTLY 4** substantive bullet paragraphs at **level 1** (3 for Environmental if DATA GAP) to allow Product implication within 7-line budget. If the **@product-strategy-agent PESTEL file** has rich content (6+ insights), prioritize the 4 most impactful insights with anchors rather than all points. If thin, add **level 2** sub-bullets under 2–3 parents so the slide still reads as **full** (do not pad with filler; pull from PESTEL desk research in @product-strategy-agent's analysis or mark a controlled **DATA GAP** sub-bullet and expand detail in `speaker_notes`).
+  - **Bullet count:** **MINIMUM 5** substantive bullet paragraphs at **level 1** (3 for Environmental if DATA GAP) to allow Product implication within 7-line budget. If the **@product-strategy-agent PESTEL file** has rich content (6+ insights), prioritize the 5 most impactful insights with anchors rather than all points. If thin, add **level 2** sub-bullets under 2–3 parents so the slide still reads as **full** (do not pad with filler; pull from PESTEL desk research in @product-strategy-agent's analysis or mark a controlled **DATA GAP** sub-bullet and expand detail in `speaker_notes`).
   - **Anchors:** At least **five** total anchors across all bullets (three for Environmental) transcribed from **@product-strategy-agent PESTEL** (named law, programme, regulator, year, **%**, **currency + magnitude**, portal name, or article citation). **DENSITY ENHANCEMENT**: Pull additional specific facts, statistics, percentages, and monetary figures from @product-strategy-agent PESTEL research to enrich every bullet - VPs expect data-backed assertions, not generic statements. If @product-strategy-agent's markdown truly lacks anchors for that factor, one bullet must state the gap explicitly and speaker notes must carry the source hunt.
   - **Bullet richness**: Each level 1 bullet MUST be **2-3 sentences** (target 180-240 characters, hard limit 280 characters) with specific data points and context from @product-strategy-agent research. Example: NOT "GCC recruiting market is growing with strong government initiatives supporting localization and workforce nationalization goals" (too generic, too vague) BUT "India's consolidated labour codes, including the Industrial Relations Code, were widely reported as notified with implementation discussion into 2026 (Bar and Bench, Economic Times, labour.gov.in). Fixed-term employment parity rules raise the need for contract tracking, tenure visibility, and compliant offer and separation workflows inside the same stack as recruiting." (404 chars, 3 anchors, 2 clauses, rich context).
    - **Hierarchy:** Use **level 2** sub-bullets sparingly (max 1-2 per slide) for nuance, ensuring total slide lines do not exceed 7-8 (e.g. enforcement, tenant variance, product boundary).
@@ -435,11 +435,19 @@ _Target ~50-60 slides for v65 parity; McKinsey-style tone._
   - **Individual slides per SME** (SME1, SME2, SME3, etc.):
     - Title format: "SME[N] - [Anonymized Role]" (e.g., "SME1 - VP Talent Product Management", NOT "SME1 - Bernie, VP Talent PM")
     - **Font size: 12pt** (MANDATORY - these slides have 7-8 bullets, exceeding the >6 threshold for dense slides per 010-style-guide.mdc)
-    - Content structure (**7-8 bullet lines total** to match v65/v81 density):
-      - **2-3 theme subheaders** (level 0, 12pt bold): Theme names from their notes (e.g., "Fraud at India Scale", "Offer Flexibility Patterns", "WhatsApp Ubiquity")
-      - **Key insights** (level 1 bullets, 12pt): **3-4 bullets per theme, 160-200 characters each** with specific multi-customer patterns observed, quotes, and data
-      - **Hypotheses** (level 1 bullets, 12pt): **1-2 bullets, 160-180 characters each** on what this SME believes needs building/testing
-      - **Customer triangulation** (level 1 bullets, 12pt): **1 bullet, 140-180 characters** noting where customer evidence confirms or contradicts SME perspective
+    - Content structure (**6-8 bullet lines total** to match v65/v81 density):
+      - **Theme references as SUB-HEADERS** (NOT bullets): Use **2-3 theme sub-headers** (level 0, 12pt bold) to organize bullets (e.g., "Fraud at India Scale", "Offer Flexibility Patterns").
+      - **Quote-led bullets (STRICT ENFORCEMENT)**: **4-5 content bullets total** (level 1, 12pt) starting with quotes or strong paraphrases. **MANDATORY: At least 2 direct quotes per SME slide.**
+        - Structure:
+          ```
+          Theme 1: [Sub-header]
+          • Quote-led bullet or insight (180-220 chars). **MANDATORY: Explicitly name reference customers (e.g., Genpact, Accenture, Lowe's) the SME is working with.**
+          • Supporting insight or hypothesis
+          
+          Theme 2: [Sub-header]  
+          • Quote-led bullet or insight (180-220 chars).
+          • Supporting insight or hypothesis
+          ```
     - Speaker notes: Include actual SME name mapping (SME1 = Bernie, etc.), context on SME's customer portfolio, role credibility, how their perspective complements customer evidence, limitations or biases to note
   
   **Placement**: After Ideation Hub (Section 7), before Customer Interviews (renumber to Section 9)
@@ -480,8 +488,18 @@ _Target ~50-60 slides for v65 parity; McKinsey-style tone._
      - **Character limits**: 180-220 characters per level-1 bullet (2-2.5 lines), 120-160 characters per level-2 sub-bullet
      - 7 lines is target; 6 is acceptable; 8+ triggers overspill and blocks generation
     - **Font size: 12pt** (MANDATORY - these slides have 6-7 bullets, exceeding >6 threshold per 010-style-guide.mdc)
-    - **Theme references as SUB-HEADERS** (NOT bullets): Use **level 0** paragraphs with **12pt bold** run formatting for theme titles (e.g., "Candidate Review Efficiency", "Communication Channel Preferences"). **EXACTLY 2-3 themes** per slide.
-    - **Quote-led bullets (STRICT ENFORCEMENT)**: **EXACTLY 3-4 bullets** (level 1, 12pt) starting with quotes
+    - **Theme references as SUB-HEADERS** (NOT bullets): Use **2-3 theme sub-headers** (level 0, 12pt bold) to organize bullets (e.g., "Candidate Review Efficiency", "Communication Channel Preferences").
+    - **Quote-led bullets (STRICT ENFORCEMENT)**: **4-5 content bullets total** (level 1, 12pt) starting with quotes. **MANDATORY: At least 1 direct quote per participant slide.**
+      - Structure:
+        ```
+        Theme 1: [Sub-header]
+        • Quote-led bullet (180-220 chars)
+        • Supporting insight
+        
+        Theme 2: [Sub-header]  
+        • Quote-led bullet (180-220 chars)
+        • Supporting insight
+        ```
       - Format: "Quote text" - insight/context (P[N], Company)
       - Quote length: ≤30 words
       - Attribution: (P[N], Company)
@@ -503,31 +521,33 @@ _Target ~50-60 slides for v65 parity; McKinsey-style tone._
 ## Section 11: Thematic Analysis
 
 10. **SECTION: Thematic Analysis** (**2-3 grouped slides** + section divider + triangulation matrix)
-   - Section Title: "Thematic Analysis | Validated themes and triangulation"
+   - Section Title: "Thematic Analysis | Themes and triangulation"
    - **GROUP THEMES ONTO 2-3 SLIDES**: Do NOT create one slide per theme. v65 groups multiple themes together for better pacing.
    - **Pattern (v65 actual)**: 
-     - Slide 1: "Validated Themes 1-4 ([Category Label])" - 3-4 theme subheaders
-     - Slide 2: "Validated Themes 5-6 ([Category Label])" - 3-4 theme subheaders
+     - Slide 1: "Themes 1-4 ([Category Label])" - 3-4 theme subheaders
+     - Slide 2: "Themes 5-6 ([Category Label])" - 3-4 theme subheaders
      - (Optional Slide 3 if 9+ themes exist)
    - Cross-Source Validation Matrix (triangulation table: Theme | P1 | P2 | P3 | CSV | PMF Impact)
    
    **Grouped Thematic slide requirements (VP-FRIENDLY & DETAILED):**
-   - **Slide title format**: "Validated Themes [N-M] ([Category])" where Category describes the grouping (e.g., "GCC Convergence", "Regional Depth")
+   - **Slide title format**: "Themes [N-M] ([Category])" where Category describes the grouping (e.g., "GCC Convergence", "Regional Depth")
    - **Font size: 12pt** (MANDATORY - these slides have 9-12 bullets, exceeding the >6 threshold for dense slides per 010-style-guide.mdc)
   - **Each theme gets**:
     - **Theme subheader** (level 0, 12pt bold): Theme name (e.g., "Candidate review efficiency", "Search and AI-assisted matching")
-    - **EXACTLY 3 bullets** (level 1, 12pt) under each theme subheader:
-      1. **Key Insight & Evidence**: Specific finding with customer evidence (P1, P2, P3 quotes, data), **140-180 characters** (2 lines)
-      2. **Business Impact**: Effect on win rates, ARR, retention, or competitive position, **140-180 characters** (2 lines)
-      3. **Product Implications**: Workday Recruiting roadmap implications, **160-200 characters** (2 lines)
-   - **MANDATORY DENSITY CAP: 2 themes per slide** (reduced from 3-4 to prevent overflow). With 3 bullets per theme = 6 total bullets + 2 subheaders = **7-8 rendered lines** (within limit). If report has 3+ themes for one validated group, split across 2 slides.
+    - **MINIMUM 5 bullets** (level 1, 12pt) under each theme subheader. MUST include:
+      1. **Key Insight**: Specific finding with customer evidence.
+      2. **Direct Quote**: A key quote from a participant or SME.
+      3. **Customer Names / Data Points**: Explicitly name customers (e.g., Genpact) or specific data points (e.g., 700K volume).
+      4. **Business Impact**: Effect on win rates, ARR, retention, or competitive position.
+      5. **Product Implications**: Workday Recruiting roadmap implications.
+   - **MANDATORY DENSITY CAP: 1 theme per slide** (reduced from 2 to prevent overflow, as 5 bullets = 10 lines if 2 themes). With 5 bullets per theme = 5 total bullets + 1 subheader = **6-8 rendered lines** (within limit).
    - Transform raw research language into executive-ready narrative (no technical codes or jargon)
    - Use **cause → impact → implication** structure in bullets
    - **Speaker notes**: Minimum 5 bullets covering cross-theme patterns, triangulation strength, commercial implications, plus References section
    
    **Example structure:**
    ```
-   Slide Title: "Validated Themes 1-4 (GCC Convergence)"
+   Slide Title: "Themes 1-4 (GCC Convergence)"
    
    [Subheader] Candidate review efficiency
    • GCC recruiters managing 50-100 candidates face navigation friction...
@@ -670,7 +690,7 @@ _Target ~50-60 slides for v65 parity; McKinsey-style tone._
       - Follow with level 1 bullet: 2-3 sentences explaining impact and frequency
    
    2. **Evidence** (level 0, 14pt bold sub-header): Research validation
-      - Level 1 bullets: Customer quotes (P1-P3), 108 gap severity, @competitive-intel competitive gaps, 106 ideation volume
+      - Level 1 bullets: Customer quotes (P1-P3), 108 gap severity, @competitive-intel competitive gaps, 106 ideation volume. **MANDATORY: Must cite reference customers from SME interviews alongside participant references (e.g., "SME5 cites Accenture-scale 200K duplicates").**
       - Maximum 1-2 evidence bullets for readability
    
    3. **Recommendation** (level 0, 14pt bold sub-header): Specific product action
@@ -717,7 +737,7 @@ _Target ~50-60 slides for v65 parity; McKinsey-style tone._
    ]
    ```
    
-   - **Priority Recommendations Summary table**: Include when deck is for E2E pipeline (shows all recommendations in table for PM selection). Transform "E2E Handoff" terminology to executive language: use title "Priority Recommendations for Roadmap" (NOT "E2E Handoff - Research Recommendations (HITL selection)"). **Table columns (MANDATORY - 9 columns required)**: #, Title, Action, Reach, Impact, Confidence, Effort, RICE Score, Legal / compliance (060). Extract RICE component values from Priority 1 & 2 recommendation text in @pmf-analyst report E2E Handoff table (e.g., "Reach 2,000, Business 3.0, Customer 3.0, Confidence 70%, Effort 5 pm" → separate table cells). Format: Reach as "2,000", Impact as "3.0", Confidence as "70%", Effort as "5 pm", RICE Score as "840". The "Legal / compliance (060)" column contains compliance notes.
+   - **Priority Recommendations Summary table**: Include when deck is for E2E pipeline (shows all recommendations in table for PM selection). Transform "E2E Handoff" terminology to executive language: use title "Priority Recommendations for Roadmap" (NOT "E2E Handoff - Research Recommendations (HITL selection)"). **Table columns (MANDATORY - 9 columns required)**: #, Title, Action, Reach, Impact, Confidence, Effort, RICE Score, Legal / compliance (060). Extract RICE component values from Priority 1 & 2 recommendation text in @pmf-analyst report E2E Handoff table (e.g., "Reach 2,000, Business 3.0, Customer 3.0, Confidence 70%, Effort 5 pm" → separate table cells). **Core RICE columns (Reach, Impact, Confidence, Effort, RICE Score) must be clearly visible and formatted**: Reach as "2,000" (with comma separator), Impact as "3.0" (decimal), Confidence as "70%" (percentage), Effort as "5 pm" (person-months), RICE Score as "840" (calculated value). The "Legal / compliance (060)" column contains compliance notes.
    - **Override**: If PM explicitly requests "all recommendations" or "include all 10", generate individual slides for all recommendations and accept 52-56 slide count
 
 ## Section 14: Bumper Slide
@@ -1029,7 +1049,7 @@ _Moved from the main 130 rule; formula and tables remain in `130-pmf-slide-gener
 - 4 bullets × 220 chars each = 4 × 2.7 lines = **10.8 lines** → **BORDERLINE**
 - **Revision**: Keep 4 bullets but tighten to 200 chars = 4 × 2.5 lines = **10 lines** OR reduce to 3 bullets × 230 chars = 3 × 2.8 = **8.4 lines** ✅
 
-**Validated Themes - Identity & Duplicates (Target: 7-8 lines)**
+**Themes - Identity & Duplicates (Target: 7-8 lines)**
 - 2 theme subheaders (level 0 bold) = **1 line**
 - 6 bullets × 160 chars = 6 × 2 lines = **12 lines**
 - **Total**: 13 lines → **TOO DENSE**
@@ -1178,7 +1198,7 @@ These examples demonstrate how to prevent vertical text overflow by applying cha
       },
       {
         "level": 1,
-        "text": "India PMF research triangulated five validated themes (Identity & Duplicates, Know Your Candidate at Scale, Document Flexibility & eKYC, Communication Channel Ubiquity, HiredScore Volume Optimisation) across seven customer interviews, five internal SME sessions, thirteen competitive intelligence signals, and seventeen win-loss gap exports from Tableau presales data spanning Q4 2025 through Q1 2026."
+        "text": "India PMF research triangulated five themes (Identity & Duplicates, Know Your Candidate at Scale, Document Flexibility & eKYC, Communication Channel Ubiquity, HiredScore Volume Optimisation) across seven customer interviews, five internal SME sessions, thirteen competitive intelligence signals, and seventeen win-loss gap exports from Tableau presales data spanning Q4 2025 through Q1 2026."
       },
       {
         "level": 1,
@@ -1198,7 +1218,7 @@ These examples demonstrate how to prevent vertical text overflow by applying cha
       }
     ]
   }],
-  "speaker_notes": "• Five validated themes across seven customer interviews, five SME sessions, thirteen competitive signals, seventeen presales gaps.\n• Strong triangulation on identity/duplicates/documents; P2, P3, P4 align with Bernie, Fabiola, presales data.\n• Priority: government-ID dedupe, DPDP BGV, KYC gating, BGC reinitiate, HiredScore activation for fraud prevention and compliance.\n• WhatsApp and offer flexibility validated by P1-P5 but lower RICE due to 18-24mo effort and Paradox dependency.\n• Q2-Q3 2026 delivery for P1/P2 given India Services commitments and P2/P4 escalations (10-15 hrs/week manual workarounds).\n\nReferences:\n• PMF analysis: research/India/thematic-analysis/2026-03-30-India-PMF-Analysis-IN-PMF-002.md"
+  "speaker_notes": "• Five themes across seven customer interviews, five SME sessions, thirteen competitive signals, seventeen presales gaps.\n• Strong triangulation on identity/duplicates/documents; P2, P3, P4 align with Bernie, Fabiola, presales data.\n• Priority: government-ID dedupe, DPDP BGV, KYC gating, BGC reinitiate, HiredScore activation for fraud prevention and compliance.\n• WhatsApp and offer flexibility validated by P1-P5 but lower RICE due to 18-24mo effort and Paradox dependency.\n• Q2-Q3 2026 delivery for P1/P2 given India Services commitments and P2/P4 escalations (10-15 hrs/week manual workarounds).\n\nReferences:\n• PMF analysis: research/India/thematic-analysis/2026-03-30-India-PMF-Analysis-IN-PMF-002.md"
 }
 ```
 
@@ -1228,7 +1248,7 @@ These examples demonstrate how to prevent vertical text overflow by applying cha
       },
       {
         "level": 1,
-        "text": "Five validated themes (Identity & Duplicates, KYC at Scale, Document eKYC, WhatsApp Communication, HiredScore Volume) triangulated across seven customers, five SMEs, thirteen CI signals, seventeen presales gaps (Q4 2025-Q1 2026)."
+        "text": "Five themes (Identity & Duplicates, KYC at Scale, Document eKYC, WhatsApp Communication, HiredScore Volume) triangulated across seven customers, five SMEs, thirteen CI signals, seventeen presales gaps (Q4 2025-Q1 2026)."
       },
       {
         "level": 1,
@@ -1244,7 +1264,7 @@ These examples demonstrate how to prevent vertical text overflow by applying cha
       }
     ]
   }],
-  "speaker_notes": "• Five validated themes across seven customer interviews, five SME sessions, thirteen competitive signals, seventeen presales gaps.\n• Strong triangulation on identity/duplicates/documents; P2, P3, P4 align with Bernie, Fabiola, presales data.\n• Priority: government-ID dedupe, DPDP BGV, KYC gating, BGC reinitiate, HiredScore activation for fraud prevention and compliance.\n• WhatsApp and offer flexibility validated by P1-P5 but lower RICE due to 18-24mo effort and Paradox dependency.\n• Q2-Q3 2026 delivery for P1/P2 given India Services commitments and P2/P4 escalations (10-15 hrs/week manual workarounds).\n\nReferences:\n• PMF analysis: research/India/thematic-analysis/2026-03-30-India-PMF-Analysis-IN-PMF-002.md"
+  "speaker_notes": "• Five themes across seven customer interviews, five SME sessions, thirteen competitive signals, seventeen presales gaps.\n• Strong triangulation on identity/duplicates/documents; P2, P3, P4 align with Bernie, Fabiola, presales data.\n• Priority: government-ID dedupe, DPDP BGV, KYC gating, BGC reinitiate, HiredScore activation for fraud prevention and compliance.\n• WhatsApp and offer flexibility validated by P1-P5 but lower RICE due to 18-24mo effort and Paradox dependency.\n• Q2-Q3 2026 delivery for P1/P2 given India Services commitments and P2/P4 escalations (10-15 hrs/week manual workarounds).\n\nReferences:\n• PMF analysis: research/India/thematic-analysis/2026-03-30-India-PMF-Analysis-IN-PMF-002.md"
 }
 ```
 
@@ -1256,7 +1276,7 @@ These examples demonstrate how to prevent vertical text overflow by applying cha
 
 ---
 
-### Example 3: Validated Themes - Identity & Duplicates
+### Example 3: Themes - Identity & Duplicates
 
 ❌ **BEFORE (Overspill - 13 rendered lines on 1 slide)**
 
@@ -1264,7 +1284,7 @@ These examples demonstrate how to prevent vertical text overflow by applying cha
 {
   "layout": "Title Only",
   "master_index": 1,
-  "title": "Validated Themes 1-3",
+  "title": "Themes 1-3",
   "text_boxes": [{
     "left_inches": 0.7,
     "top_inches": 1.2,
@@ -1338,13 +1358,13 @@ These examples demonstrate how to prevent vertical text overflow by applying cha
 
 ✅ **AFTER (Compliant - Split into 2 slides, 7-8 lines each)**
 
-**Slide 1: Validated Themes 1-2**
+**Slide 1: Themes 1-2**
 
 ```json
 {
   "layout": "Title Only",
   "master_index": 1,
-  "title": "Validated Themes 1-2",
+  "title": "Themes 1-2",
   "text_boxes": [{
     "left_inches": 0.7,
     "top_inches": 1.2,
@@ -1394,13 +1414,13 @@ These examples demonstrate how to prevent vertical text overflow by applying cha
 }
 ```
 
-**Slide 2: Validated Theme 3**
+**Slide 2: Theme 3**
 
 ```json
 {
   "layout": "Title Only",
   "master_index": 1,
-  "title": "Validated Theme 3",
+  "title": "Theme 3",
   "text_boxes": [{
     "left_inches": 0.7,
     "top_inches": 1.2,

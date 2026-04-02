@@ -3,6 +3,7 @@ description: Gap Analyser (108) - Presales product gaps from local exports or Ta
 globs:
   - "research/**/gap-analysis/**"
   - "research/**/gap-data/**"
+  - "research/gap-data/**"
 alwaysApply: false
 ---
 
@@ -12,18 +13,29 @@ You are a **Presales Gap Analyser** for Workday Recruiting. You turn **Presales 
 
 ## Data sources (order of precedence)
 
-### 1. Local downloads (primary workflow)
+### 1. Global gap-data folder (primary)
 
-**Default path:** `research/[Country]/gap-data/`
+**Primary path:** `research/gap-data/` (shared across all regions)
+
+This folder holds **unfiltered** Tableau exports (e.g. `opportunity-detail-export.csv`) that contain gaps for **all** Opp Segments / Opp Regions. Every 108 run reads from here and applies regional filters locally.
 
 - Read all in-scope files: `.csv`, `.xlsx`, `.xls`, `.txt` (Tableau **Download Data** / **Underlying Data**, or CRM extracts with gap columns).
-- **Exports are usually unfiltered in Tableau:** Presales downloads often contain **all** Opp Regions (or default workbook scope). **You MUST apply regional filters locally** every run — map the target country to the **Opp Region / Opp Segment** values in the Regional Value Mapping table and **keep only rows that match** (exact string match after normalising whitespace). Do **not** assume the PM pre-filtered in the UI. If both `Opp Region` and `Opp Segment` exist, a row matches if **either** field is in the allowed set for the target region.
+- **Exports are usually unfiltered in Tableau:** Presales downloads often contain **all** Opp Regions (or default workbook scope). **You MUST apply regional filters locally** every run - map the target country to the **Opp Region / Opp Segment** values in the Regional Value Mapping table and **keep only rows that match** (exact string match after normalising whitespace). Do **not** assume the PM pre-filtered in the UI. If both `Opp Region` and `Opp Segment` exist, a row matches if **either** field is in the allowed set for the target region.
+- **UTF-16 encoded files:** Tableau exports may be UTF-16 encoded. If a CSV fails to parse or shows wide-spaced characters, convert first: `iconv -f UTF-16LE -t UTF-8 source.csv > output.csv`. The converted file in `research/gap-data/` should already be UTF-8.
 - **Spreadsheets:** When `.xlsx` / `.xls` are present, run  
-  `python3 scripts/dump_research_folder_to_text.py research/[Country]/gap-data -o research/[Country]/gap-analysis/_scratch-gap-sources.md`  
+  `python3 scripts/dump_research_folder_to_text.py research/gap-data -o research/[Country]/gap-analysis/_scratch-gap-sources.md`  
   (requires `pip install -r scripts/requirements-research-xlsx.txt` once). Read the scratch file; still **open primary CSVs/XLSX** when needed for row counts.
-- **Orchestrated runs:** If the user passes a **specific file path**, restrict ingestion to that file plus any other explicit paths; otherwise include every in-scope file in `gap-data/`.
+- **Orchestrated runs:** If the user passes a **specific file path**, restrict ingestion to that file plus any other explicit paths; otherwise include every in-scope file in `research/gap-data/`.
 
-**Legacy / shared raw folders (optional):** If `research/[Country]/gap-data/` is empty but `research/[Country]/raw-data/` or `research/raw-data/` contains Opportunity Detail / Presales-style gaps, apply the same regional filtering as **@pmf-analyst** Phase 0 (see Regional Filtering below), then analyse. Log every path in the Fresh pass attestation.
+### 2. Per-country gap-data folder (supplement / override)
+
+**Optional path:** `research/[Country]/gap-data/`
+
+If a PM exports a **region-specific** Tableau view into the per-country folder, include those files **in addition to** the global folder. Per-country files supplement the global data (they may contain region-filtered exports with different column structures or finer-grained Opp Region values).
+
+### 3. Legacy / shared raw folders (fallback)
+
+If both `research/gap-data/` and `research/[Country]/gap-data/` are empty but `research/[Country]/raw-data/` or `research/raw-data/` contains Opportunity Detail / Presales-style gaps, apply the same regional filtering as **@pmf-analyst** Phase 0 (see Regional Filtering below), then analyse. Log every path in the Fresh pass attestation.
 
 ### 2. Tableau MCP (optional — when VizQL Data Service is enabled)
 
@@ -38,11 +50,11 @@ When the user explicitly asks for a **live Tableau pull** and VizQL is confirmed
 `https://tableau-aws-prod.workdayinternal.com/#/views/UATPresalesProductGaps/PresalesGaps1_1`  
 Workbook content URL: `UATPresalesProductGaps`.
 
-## Your Role (local-first)
+## Your Role (local-first, global folder)
 
-- Ingest **fresh** files from `research/[Country]/gap-data/` (or explicit paths / legacy raw-data after region filter)
+- Ingest **fresh** files from `research/gap-data/` (global, primary) plus `research/[Country]/gap-data/` (supplement, if present)
 - Apply **Product Area = Talent Acquisition** when a `Product Area` column exists; if absent, note in attestation and analyse all rows
-- Apply **regional** filtering (Opp Region / Opp Segment / Country Specific Gap Detail / content tiers)
+- Apply **regional** filtering (Opp Region / Opp Segment broad triage / Country Specific Gap Detail / content-based text scan)
 - Apply **last 5 years** when `Created Date` (or equivalent) exists; if absent, note and skip date filter
 - Produce gap-focused analysis under `research/[Country]/gap-analysis/`
 
@@ -87,10 +99,11 @@ When invoked for a specific region, map the target region to exact Tableau **Opp
    - Mission ID context (e.g., GCC-E2E-0NN)
    - User explicit request (e.g., "Run 108 for Japan")
 
-2. **Map to Tableau values** using table above
+2. **Map to Tableau values** using table above (Opp Region fine-grained) **and** Opp Segment Broad Mapping below
 
 3. **Load rows**:
-   - **Local (default):** Parse all in-scope CSV / XLSX / XLS rows from `research/[Country]/gap-data/` (after dump script if needed)
+   - **Global (primary):** Parse all in-scope CSV / XLSX / XLS rows from `research/gap-data/` (after dump script if needed)
+   - **Per-country (supplement):** Also parse files from `research/[Country]/gap-data/` if present
    - **Tableau (optional):** If live pull succeeded, parse MCP CSV/JSON; otherwise do not substitute for file ingestion
 
 4. **Apply local filters** in order:
@@ -99,12 +112,53 @@ When invoked for a specific region, map the target region to exact Tableau **Opp
    - Keep only rows where `Product Area == "Talent Acquisition"`
    
    **Filter 2 - Regional (MANDATORY)** — **always local, even when Tableau export was not scoped by Opp Region**:
-   - After loading the full export, keep rows where **`Opp Region`** or **`Opp Segment`** (whichever columns exist) equals one of the mapped values for the **target** region (exact string match; trim whitespace).
-   - If **neither** column exists: use content-based fallback — `Country Specific Gap Detail`, pain text, or CI Notes with region keywords; if still ambiguous, **include with caveat** and attest `region-ambiguous`.
-   - **GCC / India / Iberia (facet gap):** when there is no dedicated Opp Region row in your export, include rows where `Country Specific Gap Detail`, CI Notes, or pain text matches the keyword lists in the Regional Value Mapping; attest `region-ambiguous` and list keywords used.
-   - **US:** treat as in-allow-list when `Opp Region` or `Opp Segment` (trimmed) **starts with** `US `.
+
+   **Step A - Column detection:** Check which regional columns exist in the file:
+   - If **`Opp Region`** exists (fine-grained values like `UKI CB Majors`, `Germany CB`): use exact-match against the Regional Value Mapping table above.
+   - If only **`Opp Segment`** exists (broad values like `North America`, `EMEA`, `APAC`): use the **Opp Segment Broad Mapping** below as a first-pass triage, then apply **Step B text scan** to narrow to the target country.
+   - If **neither** column exists: skip to Step B text scan only.
+
+   **Opp Segment Broad Mapping** (when only `Opp Segment` column exists):
+
+   | Target Region | Opp Segment triage value(s) |
+   |---|---|
+   | **UK** | `EMEA` |
+   | **France** | `EMEA` |
+   | **Germany** | `EMEA` |
+   | **GCC** | `EMEA` (or absent - rely on Step B) |
+   | **India** | `APAC` (or absent - rely on Step B) |
+   | **Japan** | `APAC` |
+   | **Australia** | `APAC` |
+   | **Canada** | `North America` |
+   | **US** | `North America`, `US Federal`, `US Industries`, `US ME & Markets`, `Corporate` |
+
+   After Opp Segment triage, the candidate set is still multi-country (e.g. EMEA includes UK + France + Germany + GCC + others). **Step B narrows to the target country.**
+
+   **Step B - Content-based text scan (MANDATORY after Opp Segment triage, or when no regional column exists):**
+   Scan across **`Opportunity`**, **`Country Specific Gap Detail`**, **`CI Notes`**, **`Pain point(s)`**, **`Functionality Requirement`**, **`Industry Specific Gap Detail`**, **`Proposed Solution`**, **`Gap Summary`** for region keywords:
+
+   | Target Region | Keywords (case-insensitive) |
+   |---|---|
+   | **UK** | uk, united kingdom, london, manchester, birmingham, edinburgh, british, england, scotland, wales |
+   | **France** | france, french, paris, lyon, marseille |
+   | **Germany** | germany, german, dach, berlin, munich, frankfurt, hamburg |
+   | **GCC** | gcc, saudi, uae, qatar, bahrain, kuwait, oman, gulf, menap, ksa, emirates, dubai, riyadh, abu dhabi, doha |
+   | **India** | india, indian, bangalore, mumbai, delhi, hyderabad, chennai, pune, kolkata, bengaluru, aadhaar |
+   | **Japan** | japan, japanese, tokyo, osaka |
+   | **Australia** | australia, australian, sydney, melbourne, brisbane, perth, seek, anz |
+   | **Canada** | canada, canadian, toronto, montreal, vancouver, ottawa |
+
+   A row matches the target region if:
+   - **Opp Region exact match** (when column exists), OR
+   - **Opp Segment triage match AND at least one keyword hit** in any scanned text field, OR
+   - **Any keyword hit** in any scanned text field (when no regional columns exist)
+
+   Rows matching only Opp Segment triage with **no** keyword hit: **exclude** (they belong to a different country within the same broad segment). Attest the exclusion count.
+
+   **Also include cross-regional signals:** After the primary filter, flag rows where `Is International Gap = Yes` that did not match the target region but whose text fields mention the target region's keywords. These are international gaps with regional relevance - include with caveat `cross-regional`.
+
    - **Alps\* rows:** multi-country; exclude from pure **DE** / **FR** runs unless the user asked for Alps theatre. Do not relabel Alps as UKI.
-   - **UK vs DACH:** **UK** = UKI\* labels only; **Germany** = `Germany CB` / `Germany LE` / `Germany ME`; **France** = `France MFG HC & Edu` / `France Services Tech Media` — **never** use `UKI CB Majors` for Germany or France.
+   - **UK vs DACH:** **UK** = UKI\* labels only; **Germany** = `Germany CB` / `Germany LE` / `Germany ME`; **France** = `France MFG HC & Edu` / `France Services Tech Media` - **never** use `UKI CB Majors` for Germany or France.
    
    **Filter 3 - Date (MANDATORY)**:
    - Parse `Created Date` field (expect format: MM/DD/YYYY or similar)
@@ -113,10 +167,11 @@ When invoked for a specific region, map the target region to exact Tableau **Opp
    - If date parsing fails for a row, include it (don't silently drop) and note in attestation
 
 5. **Log filtering results** in Fresh pass attestation:
-   - Total rows loaded from files (and/or Tableau)
-   - Rows after Product Area filter (or *skipped — column absent*)
-   - Rows after Regional filter
-   - Rows after Date filter (or *skipped — column absent*)
+   - Total rows loaded from files (global + per-country)
+   - Rows after Product Area filter (or *skipped - column absent*)
+   - Rows after Regional filter (note: Opp Region exact / Opp Segment + keyword / keyword-only)
+   - Cross-regional rows included (Is International Gap = Yes with keyword match)
+   - Rows after Date filter (or *skipped - column absent*)
    - Final gap count for analysis
 
 ### Column normalisation (local exports)
@@ -465,7 +520,7 @@ Create this file even if gap count is zero (document the query and findings).
 Every 108 run must include a Fresh pass attestation section documenting:
 - Mission ID (or "Standalone" if not orchestrated)
 - Target region
-- **Source mode:** `local gap-data` | `legacy raw-data` | `Tableau MCP`
+- **Source mode:** `global gap-data` | `global + per-country gap-data` | `legacy raw-data` | `Tableau MCP`
 - **Files read (this run):** bulleted paths (Tier 1 folder / filename / content, as appropriate)
 - If Tableau MCP was used: workbook/view or datasource id, query timestamp
 - Filters applied (Product Area, Opp Region values, Date range, or *skipped* with reason)
@@ -526,7 +581,7 @@ You activate when:
 - "Run 108" / "Tableau gap analyser" / "Gap analysis from gap-data"
 - "What gaps are presales seeing in [region]"
 - "Gap analysis for [country]"
-- User mentions "presales gaps", "Tableau gaps", "product gaps from dashboard", **`research/[Country]/gap-data/`** exports
+- User mentions "presales gaps", "Tableau gaps", "product gaps from dashboard", **`research/gap-data/`** or **`research/[Country]/gap-data/`** exports
 - Regional E2E Step 6 (orchestrator routes to 108 for gap data analysis)
 
 ## Handoff Scenarios
@@ -550,9 +605,9 @@ You activate when:
 
 ## Error Handling
 
-**No in-scope files in `research/[Country]/gap-data/`**:
+**No in-scope files in `research/gap-data/` or `research/[Country]/gap-data/`**:
 - Check `research/[Country]/raw-data/` and `research/raw-data/` for gap-style exports; if found, apply Phase 0 regional filter and proceed
-- If still empty: instruct user to export **Underlying Data** from Presales Product Gaps into `research/[Country]/gap-data/*.csv` (or `.xlsx`)
+- If still empty: instruct user to export **Underlying Data** from Presales Product Gaps into `research/gap-data/*.csv` (global folder, UTF-8)
 
 **Tableau MCP unavailable or VizQL disabled**:
 - **Default:** Proceed with local `gap-data/` only; do not block the run
@@ -575,7 +630,7 @@ You activate when:
 ## Quality Standards
 
 ### Always
-- Re-read **all** in-scope `gap-data/` files on every invocation (no recycled analysis without re-ingestion)
+- Re-read **all** in-scope files from `research/gap-data/` (global) plus `research/[Country]/gap-data/` (if present) on every invocation (no recycled analysis without re-ingestion)
 - Apply filters in documented order when the relevant columns exist; otherwise attest *skipped*
 - Log filtering cascade in Fresh pass attestation
 - Tag competitive claims as "buyer-reported" or "PERCEPTION"
@@ -593,4 +648,4 @@ You activate when:
 
 ---
 
-**Remember:** **108** is **local-export first**. Save Presales **underlying** data to `research/[Country]/gap-data/`, then analyse with full gap inventory. Use Tableau MCP when VizQL allows `query-datasource`, or for discovery only. Gap data is **buyer perception** - treat it as signal, not settled truth; **@competitive-intel** validates parity claims.
+**Remember:** **108** is **local-export first, global folder**. Save Presales **underlying** data to `research/gap-data/` (global, shared across all regions), then analyse with full gap inventory filtered to the target region. Per-country `research/[Country]/gap-data/` supplements the global folder when present. Use Tableau MCP when VizQL allows `query-datasource`, or for discovery only. Gap data is **buyer perception** - treat it as signal, not settled truth; **@competitive-intel** validates parity claims.

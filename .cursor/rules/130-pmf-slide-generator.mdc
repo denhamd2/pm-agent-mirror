@@ -98,6 +98,13 @@ All slide content MUST be executive-ready and external-facing:
 - ❌ "E2E Handoff - Research Recommendations (HITL selection)" → ✅ "Priority Recommendations for Roadmap"
 - ❌ "Dataset Overview" → ✅ "Win/Loss Analysis Scope" (or omit if PM preference)
 - ❌ "Customer Interviews | 3 GCC-market enterprise participants (semi-structured)" → ✅ "1:1 Customer Interviews - GCC Enterprise"
+- ❌ "matrix true gaps" → ✅ "competitive gaps" or "market gaps"
+- ❌ "UDMF" → ✅ "duplicate detection" or "identity matching"
+- ❌ "JTBD anchors" → ✅ "core user needs" or "primary goals"
+- ❌ "triangulation" → ✅ "cross-validation" or "corroboration"
+- ❌ "business process" → ✅ "workflow" or "approval chain"
+
+**MANDATORY AUDIENCE CHECK**: Every slide bullet should be understandable by a VP who has never used Workday Recruiting internally. If a term requires internal domain knowledge to understand, simplify it.
 
 ---
 
@@ -125,11 +132,11 @@ rendered_lines = (level_1_bullet_count × avg_lines_per_bullet) + product_implic
 
 | Slide Type | Max Bullets | Chars/Bullet | Product Impl | Target Lines | Validation |
 |------------|-------------|--------------|--------------|--------------|------------|
-| PESTEL     | 4           | 180-240 chars | 50 words (2 lines) | 7-8 | BLOCKING   |
+| PESTEL     | 5-6         | 180-240 chars | 50 words (2 lines) | 7-8 | BLOCKING   |
 | Executive Summary | 4 | 200-250 chars | n/a          | 7-8         | BLOCKING   |
-| Customer (P1-P5) | 3-4 | 180-220 chars | n/a          | 7         | BLOCKING   |
-| SME (SME1-SME5) | 5-6 | 160-200 chars | n/a          | 7-8         | BLOCKING   |
-| Validated Themes | 2 themes | 140-180 chars/bullet | n/a | 7-8    | BLOCKING   |
+| Customer (P1-P5) | 4-5 | 180-220 chars | n/a          | 7         | BLOCKING   |
+| SME (SME1-SME5) | 4-5 | 180-220 chars | n/a          | 7-8         | BLOCKING   |
+| Themes | 1 theme | 140-180 chars/bullet | n/a | 7-8    | BLOCKING   |
 | Recommendations | 4-5 sections | 160-220 chars | n/a | 7-8         | BLOCKING   |
 | Strategy Context | 4-5 | 180-220 chars | n/a | 7-8 | ADVISORY |
 
@@ -154,7 +161,8 @@ Before `create_presentation`, audit 5-7 representative slides across categories:
    - Calculate: `bullet_count × 1.5 (assuming avg) + (product_implication_words / 25) + subheader_count × 0.5`
 
 3. **Validation threshold**:
-   - If ANY slide > 8 rendered lines: **STOP and revise content** before MCP call (exception: 8.5 lines allowed for Executive Summary with 14pt font and complex synthesis)
+   - **Maximum Density Check**: If ANY slide > 8 rendered lines: **STOP and revise content** before MCP call (exception: 8.5 lines allowed for Executive Summary with 14pt font and complex synthesis)
+   - **Minimum Density Check**: If ANY audited slide has median bullet length below `Min Chars/Bullet`: **STOP and enrich content** before MCP call
    - If 2+ slides = 8-9 lines (borderline): Flag for manual review, proceed with caution
 
 4. **Overflow mitigation options** (apply in order):
@@ -342,8 +350,8 @@ Every content slide MUST meet minimum density:
 - Cause → impact → implication relationship
 
 **Sparse slide detection:**
-If a slide has ≤3 bullets with no quotes, metrics, or named entities:
-→ Expand using synthesis and context from the report
+If a slide has ≤3 bullets with no quotes, metrics, or named entities, OR if the median bullet length falls below the validator's `min_chars` hard floor:
+→ Expand using synthesis and context from the report (add concrete details, metrics, named entities)
 → OR explicitly label DATA GAP with detailed speaker notes explaining the limitation
 
 **Quality over padding**: Do not add filler bullets to meet count. Instead, expand existing bullets with level 2 sub-points, add concrete examples from report, or move to table format for better density.

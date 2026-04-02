@@ -78,7 +78,14 @@ They do NOT need:
 - Enterprise scale (thousands of reqs, high-volume hiring)
 - Competitive positioning (vs SAP, Oracle, regional specialists)
 
-### 4. Clarity Check (Pre-Finalisation Validation)
+### 4. Density Preservation (Minimum Floors)
+
+While simplifying language, you must maintain substantive executive density:
+- **Never** reduce a bullet below its slide-type minimum character floor (e.g., 160 chars for PESTEL, 140 for SME).
+- If simplification drops a bullet below the floor, you MUST enrich it by combining with adjacent context or adding concrete details from the research.
+- **Mandate:** Every bullet MUST contain at least one concrete anchor: a number, a date, a named entity, a participant reference, or a clear cause-impact relationship. Do not leave vague, abstract statements.
+
+### 5. Clarity Check (Pre-Finalisation Validation)
 
 Before producing final slide content, ensure:
 - Content can be understood in under 10 seconds
@@ -428,6 +435,8 @@ Before finalising any slide content:
 
 ## Examples by Slide Type
 
+> **⚠️ DENSITY PRESERVATION WARNING**: The examples below demonstrate language simplification, but you MUST ensure the final character counts meet the minimum floors defined in 130 (e.g., 180 chars for PESTEL, 200 for Exec Summary). If simplification makes a bullet too short, you must enrich it with concrete data, dates, or named entities from the research to meet the floor.
+
 ### PESTEL Factor Bullet
 
 **Research input (167 chars):**
@@ -441,7 +450,7 @@ Before finalising any slide content:
 - ✅ Simple words (create, need, drive)
 - ✅ Short sentences (two clauses, semicolon separator)
 - ✅ Clear impact (what employers need)
-- ✅ Under 140 char limit for PESTEL bullets
+- ✅ Meets 180-240 char density floor for PESTEL bullets per 130
 
 ---
 
@@ -457,7 +466,7 @@ Before finalising any slide content:
 - ✅ Simple words (align, needs, better vs converge, signalling, flexibility)
 - ✅ Removed jargon (BGC → background checks)
 - ✅ Clear structure (what they said; what's needed)
-- ✅ Under 180 char limit for Exec Summary
+- ✅ Meets 200-250 char density floor for exec summary per 130
 - ✅ 10-second comprehension: "Interviews found fraud and process gaps"
 
 ---
@@ -476,7 +485,7 @@ Before finalising any slide content:
 - ✅ Clear problem (candidates change details)
 - ✅ Clear solution (government ID matching)
 - ✅ Attribution preserved
-- ✅ Under 140 char limit for customer bullets
+- ✅ Meets 180-220 char density floor for customer bullets per 130
 
 ---
 
@@ -493,7 +502,7 @@ Before finalising any slide content:
 - ✅ No jargon (removed "fee integrity", "attribution")
 - ✅ Clear business impact (full-time role needed)
 - ✅ Short sentences
-- ✅ Well under 140 char limit
+- ✅ Meets 160-220 char density floor for recommendation bullets per 130
 
 ---
 

@@ -6,25 +6,26 @@ import { fonts } from '@workday/canvas-kit-react-fonts';
 import '@workday/canvas-tokens-web/css/base/_variables.css';
 import '@workday/canvas-tokens-web/css/system/_variables.css';
 import '@workday/canvas-tokens-web/css/brand/_variables.css';
-import FranceWhatsappOmnichannelEngagementV75 from './france-whatsapp-omnichannel-engagement-v75';
 import { GccRecruiterDashboard } from './gcc-recruiter-dashboard';
 import AadhaarAdobeSignV01 from './aadhaar-adobe-sign-v01';
-import GccNationalisationLocalComplianceReportingV62 from './gcc-nationalisation-local-compliance-reporting-v62';
 import { GccCandidateGridSearch } from './gcc-candidate-grid-search';
 import { RecruiterHomeV85 } from './recruiter-home-v85';
 import { CandidateSmartViewV86 } from './candidate-smart-view-v86';
+import { IndiaWhatsappCandidateMessagingV88 } from './india-whatsapp-candidate-messaging-v88';
 import { SANA_PAGE_CANVAS } from './components';
 
 /** Prototype slugs backed by `design/*.tsx` modules in this branch (see `vite.config.ts` `slugs` Set). */
 function prototypeFromLocation():
-  | 'france-whatsapp-omnichannel-engagement-v75'
   | 'gcc-recruiter-dashboard'
   | 'aadhaar-adobe-sign-v01'
-  | 'gcc-nationalisation-local-compliance-reporting-v62'
   | 'candidate-grid-v84'
   | 'recruiter-home-v85'
-  | 'candidate-smart-view-v86' {
+  | 'candidate-smart-view-v86'
+  | 'india-whatsapp-candidate-messaging-v88' {
   const path = window.location.pathname.replace(/\/+$/, '') || '/';
+  if (path.endsWith('india-whatsapp-candidate-messaging-v88')) {
+    return 'india-whatsapp-candidate-messaging-v88';
+  }
   if (path.endsWith('candidate-smart-view-v86')) {
     return 'candidate-smart-view-v86';
   }
@@ -34,27 +35,9 @@ function prototypeFromLocation():
   if (path.endsWith('candidate-grid-v84')) {
     return 'candidate-grid-v84';
   }
-  if (path.endsWith('france-whatsapp-omnichannel-engagement-v75')) {
-    return 'france-whatsapp-omnichannel-engagement-v75';
-  }
-  if (path.endsWith('gcc-nationalisation-local-compliance-reporting-v62')) {
-    return 'gcc-nationalisation-local-compliance-reporting-v62';
-  }
   if (path.endsWith('aadhaar-adobe-sign-v01')) return 'aadhaar-adobe-sign-v01';
   if (path.endsWith('gcc-recruiter-dashboard')) return 'gcc-recruiter-dashboard';
   const h = window.location.hash.replace(/^#\/?/, '');
-  if (
-    h === 'france-whatsapp-omnichannel-engagement-v75' ||
-    h.startsWith('france-whatsapp-omnichannel-engagement-v75')
-  ) {
-    return 'france-whatsapp-omnichannel-engagement-v75';
-  }
-  if (
-    h === 'gcc-nationalisation-local-compliance-reporting-v62' ||
-    h.startsWith('gcc-nationalisation-local-compliance-reporting-v62')
-  ) {
-    return 'gcc-nationalisation-local-compliance-reporting-v62';
-  }
   if (h === 'aadhaar-adobe-sign-v01' || h.startsWith('aadhaar-adobe-sign-v01')) {
     return 'aadhaar-adobe-sign-v01';
   }
@@ -70,6 +53,9 @@ function prototypeFromLocation():
   if (h === 'candidate-smart-view-v86' || h.startsWith('candidate-smart-view-v86')) {
     return 'candidate-smart-view-v86';
   }
+  if (h === 'india-whatsapp-candidate-messaging-v88' || h.startsWith('india-whatsapp-candidate-messaging-v88')) {
+    return 'india-whatsapp-candidate-messaging-v88';
+  }
   return 'recruiter-home-v85';
 }
 
@@ -84,6 +70,9 @@ function AppRoot() {
       window.removeEventListener('hashchange', sync);
     };
   }, []);
+  if (route === 'india-whatsapp-candidate-messaging-v88') {
+    return <IndiaWhatsappCandidateMessagingV88 />;
+  }
   if (route === 'candidate-smart-view-v86') {
     return <CandidateSmartViewV86 />;
   }
@@ -93,15 +82,9 @@ function AppRoot() {
   if (route === 'candidate-grid-v84') {
     return <GccCandidateGridSearch />;
   }
-  if (route === 'france-whatsapp-omnichannel-engagement-v75') {
-    return <FranceWhatsappOmnichannelEngagementV75 />;
-  }
-  if (route === 'gcc-nationalisation-local-compliance-reporting-v62') {
-    return <GccNationalisationLocalComplianceReportingV62 />;
-  }
   if (route === 'aadhaar-adobe-sign-v01') return <AadhaarAdobeSignV01 />;
   if (route === 'gcc-recruiter-dashboard') return <GccRecruiterDashboard />;
-  return <FranceWhatsappOmnichannelEngagementV75 />;
+  return <RecruiterHomeV85 />;
 }
 
 const FIGMA_CAPTURE_SCRIPT_SRC =
