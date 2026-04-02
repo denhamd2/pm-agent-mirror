@@ -258,5 +258,5 @@ User sees:
 - Jira queries use David's display name "David Denham" (not email)
 - Competitor news searches prioritize announcements from past 7 days
 - TLDRs should be actionable and concise (1-2 sentences max)
-- Page enforces a 30-minute freshness gate: if data is older than 30 minutes, a full-screen gate prompts the user to run `/morning-roundup` and hides all content
+- Page always shows the last fetched data regardless of age; the timestamp indicates when data was last refreshed
 - Nav links across all dashboard pages are refreshed every time this skill runs (Step 7a)

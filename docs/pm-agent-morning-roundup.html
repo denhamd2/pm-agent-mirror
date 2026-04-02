@@ -330,12 +330,8 @@ body { background: var(--paper); color: var(--ink); }
     }
     document.getElementById('timestamp').textContent = `Last updated: ${timeStr} (${generated.toLocaleString()})`;
     
-    if (minutesAgo > 30) {
-      document.getElementById('gate-screen').style.display = 'flex';
-      document.getElementById('main-content').style.display = 'none';
-      document.getElementById('gate-timestamp').textContent = 'Last fetched: ' + generated.toLocaleString();
-      return;
-    }
+    document.getElementById('gate-screen').style.display = 'none';
+    document.getElementById('main-content').style.display = 'block';
     
     // Render Jira responses
     const jiraList = document.getElementById('jira-list');
