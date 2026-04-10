@@ -29,6 +29,7 @@ function prototypeSpaSlugFallback(): Plugin {
     'candidate-smart-view-v86',
     'recruiter-home-v85',
     'india-whatsapp-candidate-messaging-v88',
+    'view-dashboard',
   ]);
   return {
     name: 'prototype-spa-slug-fallback',
