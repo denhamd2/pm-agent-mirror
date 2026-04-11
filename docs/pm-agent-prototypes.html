@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PM Agent Dashboard — Prototypes and Dashboards</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0b1f42;
+  --water: #0075b4;
+  --sky: #4a9fd4;
+  --pencil: #f5a623;
+  --paper: #f7f5f2;
+  --laptop: #6b7a8d;
+  --staple: #e2ddd7;
+  --desk: #c4bdb3;
+  --green: #22c55e;
+  --red: #ef4444;
+}
+* { font-family: 'DM Sans', system-ui, sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+.dashboard-nav { position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(247,245,242,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--staple);padding:10px 24px;display:flex;align-items:center;gap:16px; }
+.dashboard-brand { font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap; }
+.dashboard-tabs { display:flex;gap:4px; }
+.dashboard-tab { padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;text-decoration:none;color:var(--laptop);transition:all 0.2s; }
+.dashboard-tab:hover { background:var(--staple);color:var(--ink); }
+.dashboard-tab.active { background:var(--ink);color:white; }
+
+.container { max-width: 1400px; margin: 80px auto 40px; padding: 0 24px; }
+.page-header { margin-bottom: 32px; }
+.page-title { font-size: 28px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.page-sub { font-size: 14px; font-weight: 400; color: var(--laptop); margin-top: 4px; }
+
+.proto-table { width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(11,31,66,0.08); }
+.proto-table thead th { padding: 14px 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--laptop); background: rgba(247,245,242,0.6); text-align: left; border-bottom: 2px solid var(--staple); }
+.proto-table thead th:last-child { text-align: center; width: 60px; }
+.proto-table tbody td { padding: 16px 20px; font-size: 14px; color: var(--ink); border-bottom: 1px solid var(--staple); vertical-align: middle; }
+.proto-table tbody tr:last-child td { border-bottom: none; }
+.proto-table tbody tr:hover { background: rgba(0,117,180,0.02); }
+.proto-table tbody tr.saved-row { border-left: 3px solid var(--pencil); }
+
+.proto-name { font-weight: 700; font-size: 15px; color: var(--ink); white-space: nowrap; }
+.proto-meta { color: var(--laptop); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 4px; }
+.proto-desc { color: var(--laptop); line-height: 1.5; }
+
+.btn-pill { display: inline-block; padding: 5px 14px; border-radius: 16px; font-size: 11px; font-weight: 600; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+.btn-pill-primary { background: var(--ink); color: white; }
+.btn-pill-primary:hover { background: var(--water); }
+.btn-pill-outline { color: var(--water); border: 1px solid var(--staple); background: white; }
+.btn-pill-outline:hover { border-color: var(--water); background: rgba(0,117,180,0.05); }
+
+.actions-cell { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.btn-save { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--staple); background: white; cursor: pointer; transition: all 0.2s; font-size: 16px; line-height: 1; padding: 0; }
+.btn-save:hover { border-color: var(--pencil); background: rgba(245,166,35,0.08); }
+.btn-save.saved { background: var(--pencil); border-color: var(--pencil); color: white; }
+.save-cell { text-align: center; }
+</style>
+</head>
+<body>
+
+<nav class="dashboard-nav">
+  <div class="dashboard-brand">PM Agent Dashboard</div>
+  <div class="dashboard-tabs">
+    <a href="pm-agent-scorecard.html" class="dashboard-tab">Scorecard</a>
+    <a href="pm-agent-architecture.html" class="dashboard-tab">Architecture</a>
+    <a href="pm-agent-design-system.html" class="dashboard-tab">Design System</a>
+    <a href="pm-agent-morning-roundup.html" class="dashboard-tab">Roundup</a>
+    <a href="pm-agent-prototypes.html" class="dashboard-tab active">Prototypes</a>
+    <a href="pm-agent-football.html" class="dashboard-tab">Football</a>
+    <a href="pm-agent-adoption.html" class="dashboard-tab">Adoption</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <div class="page-title">Prototypes and Dashboards</div>
+    <div class="page-sub">Canvas Kit prototypes and metrics dashboards. Saved entries are excluded from <code style="font-size:12px;background:var(--staple);padding:2px 6px;border-radius:4px;">/cleanup</code> when the local dashboard server is running.</div>
+  </div>
+
+  <table class="proto-table">
+    <thead>
+      <tr>
+        <th>Prototype</th>
+        <th>Description</th>
+        <th>Links</th>
+        <th>Save</th>
+      </tr>
+    </thead>
+    <tbody id="proto-body"></tbody>
+  </table>
+</div>
+
+<script id="prototypes-data" type="application/json">{
+  "prototypes": [
+    {
+      "slug": "ai-system-of-record-v97",
+      "name": "AI System of Record",
+      "description": "Central hub for managing an organization's AI ecosystem",
+      "category": "Prototype"
+    },
+    {
+      "slug": "interview-intelligence-agent-v96",
+      "name": "Interview Intelligence Agent",
+      "description": "AI-powered interview transcription and scoring agent",
+      "category": "Prototype",
+      "prd": "docs/prds/interview-intelligence-agent-prd.md",
+      "brief": "design/interview-intelligence-agent-design-brief.md"
+    },
+    {
+      "slug": "recruiter-hub-genui-v95",
+      "name": "Recruiter Hub GenUI",
+      "description": "Generative UI dashboard for recruiters",
+      "category": "Prototype"
+    },
+    {
+      "slug": "avg-time-to-hire",
+      "name": "Average Time to Hire",
+      "description": "IUM-backed recruiting KPI dashboard for average time to hire trends and cuts.",
+      "category": "Metrics dashboard",
+      "route": "avg-time-to-hire",
+      "files": [
+        "design/avg-time-to-hire-dashboard.tsx"
+      ]
+    },
+    {
+      "slug": "avg-time-to-fill",
+      "name": "Average Time to Fill",
+      "description": "IUM-backed recruiting KPI dashboard for average time to fill trends and cuts.",
+      "category": "Metrics dashboard",
+      "route": "avg-time-to-fill",
+      "files": [
+        "design/avg-time-to-fill-dashboard.tsx"
+      ]
+    },
+    {
+      "slug": "positions-open-vs-filled",
+      "name": "Positions Open vs Filled",
+      "description": "IUM dashboard comparing open requisitions with positions filled across recruiting tenants.",
+      "category": "Metrics dashboard",
+      "route": "positions-open-vs-filled",
+      "files": [
+        "design/positions-open-vs-filled-dashboard.tsx"
+      ]
+    },
+    {
+      "slug": "value-realization-metrics",
+      "name": "Value Realisation Metrics",
+      "description": "Executive summary dashboard linking recruiting outcomes and core value metrics.",
+      "category": "Metrics dashboard",
+      "route": "value-realization-metrics",
+      "files": [
+        "design/value-realization-metrics.tsx"
+      ]
+    },
+    {
+      "slug": "recruiting-adoption",
+      "name": "Recruiting Adoption",
+      "description": "Feature adoption dashboard for recruiting usage and breadth across tenants.",
+      "category": "Metrics dashboard",
+      "route": "recruiting-adoption",
+      "files": [
+        "design/recruiting-adoption-dashboard.tsx",
+        "design/data-recruiting-adoption.ts"
+      ]
+    },
+    {
+      "slug": "interview-metrics",
+      "name": "Interview Metrics",
+      "description": "Operational dashboard for interview rounds, scheduling, MISST, and interviewer activity.",
+      "category": "Metrics dashboard",
+      "route": "interview-metrics",
+      "files": [
+        "design/interview-metrics-dashboard.tsx",
+        "design/data-interview-metrics.ts",
+        "design/data-interview-filters.ts"
+      ]
+    },
+    {
+      "slug": "bp-durations",
+      "name": "Job App Sub-BPs",
+      "description": "Business-process dashboard for recruiting sub-BP duration, completion, quality, and status metrics.",
+      "category": "Metrics dashboard",
+      "route": "bp-durations",
+      "files": [
+        "design/bp-duration-dashboard.tsx",
+        "design/data-bp-durations.ts"
+      ]
+    },
+    {
+      "slug": "offer-dashboard",
+      "name": "Offer Dashboard",
+      "description": "Offer detail view with validated Offer BP metrics plus the real-data Add Documents section.",
+      "category": "Metrics dashboard",
+      "route": "bp-durations?view=detail&bp=offer",
+      "files": [
+        "design/bp-duration-dashboard.tsx",
+        "design/data-bp-durations.ts",
+        "design/data-add-documents.ts",
+        "docs/offer-step-metrics-plan.md"
+      ]
+    }
+  ]
+}</script>
+
+<script>
+(function() {
+  var el = document.getElementById('prototypes-data');
+  if (!el) return;
+
+  var data = JSON.parse(el.textContent);
+  var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
+  var tbody = document.getElementById('proto-body');
+  var savedSlugs = {};
+
+  function fixPath(path) {
+    if (!path) return '#';
+    if (path.startsWith('http')) return path;
+    if (path.startsWith('../')) return path;
+    if (path.startsWith('pm-agent-')) return path;
+    return '../' + path;
+  }
+
+  function routeForProto(p) {
+    return p.route || p.slug;
+  }
+
+  function filesForProto(p) {
+    if (Array.isArray(p.files) && p.files.length) return p.files.slice();
+    var list = ['design/' + p.slug + '.tsx'];
+    if (p.prd) list.push(p.prd);
+    if (p.brief) list.push(p.brief);
+    if (p.deck) list.push(p.deck);
+    return list;
+  }
+
+  function applySavedState() {
+    data.prototypes.forEach(function(p) {
+      var tr = document.querySelector('tr[data-slug="' + p.slug + '"]');
+      var btn = tr && tr.querySelector('.btn-save');
+      if (!tr || !btn) return;
+      if (savedSlugs[p.slug]) {
+        tr.classList.add('saved-row');
+        btn.classList.add('saved');
+        btn.innerHTML = '&#9733;';
+        btn.title = 'Saved — protected from /cleanup. Click to unsave.';
+      } else {
+        tr.classList.remove('saved-row');
+        btn.classList.remove('saved');
+        btn.innerHTML = '&#9734;';
+        btn.title = 'Click to save — protects this prototype from /cleanup';
+      }
+    });
+  }
+
+  function toggleSave(slug) {
+    var nowSaved = !savedSlugs[slug];
+    var proto = data.prototypes.find(function(p) { return p.slug === slug; });
+    if (!proto) return;
+
+    savedSlugs[slug] = nowSaved;
+    applySavedState();
+
+    fetch('/api/save-prototype', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug: slug, files: filesForProto(proto), saved: nowSaved })
+    }).catch(function(err) {
+      console.error('Save failed:', err);
+      savedSlugs[slug] = !nowSaved;
+      applySavedState();
+    });
+  }
+
+  data.prototypes.forEach(function(p) {
+    var route = routeForProto(p);
+    var protoHref = isLocal
+      ? 'http://localhost:5199/' + route
+      : '../preview/latest/#/' + route;
+
+    var btns = '<a href="' + protoHref + '" target="_blank" class="btn-pill btn-pill-primary">Open</a>';
+    if (p.prd) {
+      btns += ' <a href="pm-agent-viewer.html?file=' + p.prd + '" target="_blank" class="btn-pill btn-pill-outline">PRD</a>';
+    }
+    if (p.brief) {
+      btns += ' <a href="pm-agent-viewer.html?file=' + p.brief + '" target="_blank" class="btn-pill btn-pill-outline">Brief</a>';
+    }
+    if (p.deck) {
+      btns += ' <a href="' + fixPath(p.deck) + '" target="_blank" class="btn-pill btn-pill-outline">Deck</a>';
+    }
+
+    var tr = document.createElement('tr');
+    tr.setAttribute('data-slug', p.slug);
+    tr.innerHTML =
+      '<td><div class="proto-name">' + p.name + '</div>' + (p.category ? '<div class="proto-meta">' + p.category + '</div>' : '') + '</td>' +
+      '<td class="proto-desc">' + p.description + '</td>' +
+      '<td><div class="actions-cell">' + btns + '</div></td>' +
+      '<td class="save-cell"><button class="btn-save" title="Loading...">&#9734;</button></td>';
+    tbody.appendChild(tr);
+
+    tr.querySelector('.btn-save').addEventListener('click', function() { toggleSave(p.slug); });
+  });
+
+  fetch('/api/saved-prototypes')
+    .then(function(r) { return r.json(); })
+    .then(function(resp) {
+      (resp.saved || []).forEach(function(e) { savedSlugs[e.slug] = true; });
+      applySavedState();
+    })
+    .catch(function() { applySavedState(); });
+})();
+</script>
+</body>
+</html>

@@ -6,9 +6,6 @@ name: Deploy design prototype preview
 on:
   push:
     branches: [main]
-    paths:
-      - 'design/**'
-      - '.github/workflows/deploy-design-preview.yml'
   workflow_dispatch:
 
 concurrency:

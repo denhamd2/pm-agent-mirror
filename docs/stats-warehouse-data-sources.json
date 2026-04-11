@@ -1,0 +1,235 @@
+{
+  "lastReviewed": "11 April 2026",
+  "owner": "Data Scientist",
+  "sources": [
+    {
+      "id": "internal-usage-metrics",
+      "name": "Internal Usage Metrics (IUM)",
+      "table": "dw.swh_raw.internal_usage_metrics_report_kafka",
+      "status": "validated",
+      "plainEnglish": "Monthly tenant-level product usage and outcome metrics. This is the cleanest source for adoption and headline KPI trends when an IUM already exists.",
+      "freshness": "Live monthly feed. Current recruiting dashboards generally filter to SANDBOX.",
+      "usefulDataPoints": [
+        "Average Time to Hire (2358)",
+        "Average Time to Fill (2359)",
+        "Positions with open requisitions (2360)",
+        "Positions filled (2361)",
+        "Add Documents configured / used / created (1757-1760 in current verified mapping)"
+      ],
+      "usedInDashboards": [
+        "Avg Time to Hire",
+        "Avg Time to Fill",
+        "Positions Open vs Filled",
+        "Offer dashboard Add Documents section",
+        "Value Realisation Metrics"
+      ],
+      "pmNotes": [
+        "Best when you need adoption or outcome trends by month, tenant, region proxy, or infrastructure.",
+        "Always cast `value` to numeric and note whether the dashboard uses SANDBOX or PROD.",
+        "Metric meanings can drift by ID over time, so verify the metric name before reusing an old query."
+      ]
+    },
+    {
+      "id": "bp-event-stats",
+      "name": "Business Process Event Stats",
+      "table": "dw.swh.bp_event_stats",
+      "status": "validated",
+      "plainEnglish": "One row per business process event with pre-computed duration and status. This is the primary source for sub-BP cycle time, completion, cancellation, and quality metrics.",
+      "freshness": "Live through today. Use PROD for real customer behaviour unless there is a clear reason not to.",
+      "usefulDataPoints": [
+        "Completed average and median cycle time",
+        "Completion and cancellation rates",
+        "Step counts and auto-skip patterns",
+        "Sent back / corrected / reassigned quality indicators",
+        "Tenant coverage by sub-BP"
+      ],
+      "usedInDashboards": [
+        "Job App Sub-BPs / BP Durations dashboard",
+        "Offer dashboard core charts"
+      ],
+      "pmNotes": [
+        "Use this before `bp_event_record_stats` if the question is about whole-process performance.",
+        "Filter by status when analysing duration, or cancelled and in-progress work will distort the result."
+      ]
+    },
+    {
+      "id": "bp-event-record-stats",
+      "name": "Business Process Step Records",
+      "table": "dw.swh.bp_event_record_stats",
+      "status": "validated-with-cautions",
+      "plainEnglish": "Very large step-level event data across Workday business processes. Use it when you need task names, task durations, or step-level volumes that do not exist in the event-level table.",
+      "freshness": "Live through today, but expensive to query. Narrow the date range and task filters.",
+      "usefulDataPoints": [
+        "Offer step counts by task",
+        "Average duration per task",
+        "Unique tenant coverage for a task",
+        "Step-level monthly trends"
+      ],
+      "usedInDashboards": [
+        "Interview metrics dashboard",
+        "Offer step discovery for future dashboard additions"
+      ],
+      "pmNotes": [
+        "Confirmed Offer step names include `Generate Document`, `Review Documents`, `Review Writer Generated Document`, `Add Documents`, and `Manage Attachments`.",
+        "We have not yet validated a clean `Initiate Offer` task in this table, so do not chart it yet.",
+        "Because the table is huge, exploratory regex searches can take minutes and should be followed by narrower exact-name queries."
+      ]
+    },
+    {
+      "id": "oms-requests",
+      "name": "OMS Request Logs",
+      "table": "swh_raw.oms_requests",
+      "status": "exploratory",
+      "plainEnglish": "Detailed request logs for OMS tasks, including display names, durations, and request payload snippets. Useful for understanding what the application actually called when a user clicked through a workflow.",
+      "freshness": "Live log stream. Best for targeted discovery rather than broad trend dashboards.",
+      "usefulDataPoints": [
+        "Task display names",
+        "Request latency",
+        "Read versus update behaviour",
+        "Processed request payload snippets",
+        "Potential attachment or document payload fields"
+      ],
+      "usedInDashboards": [
+        "No production dashboard yet - currently used for Offer step and attachment discovery"
+      ],
+      "pmNotes": [
+        "Good for proving task semantics before you put a metric on a dashboard.",
+        "Potential source for candidate attachment analysis via `processed_element_json` and `oms_request_json`, but we have not validated a stable attachment-type field yet."
+      ]
+    },
+    {
+      "id": "document-repository-events",
+      "name": "Document Repository Events",
+      "table": "swh_raw.cloudmaster_document_repository_event",
+      "status": "exploratory",
+      "plainEnglish": "Repository-level document events with a document kind, reference id, and latency. Helpful when the question is about document storage or repository activity rather than the business process itself.",
+      "freshness": "Live log stream.",
+      "usefulDataPoints": [
+        "Document repository event volume",
+        "Latency by document kind",
+        "Reference ids for possible correlation work"
+      ],
+      "usedInDashboards": [
+        "No production dashboard yet - reviewed for Offer attachment research"
+      ],
+      "pmNotes": [
+        "Current top `document_kind` values are operational document-system categories rather than clean candidate attachment types.",
+        "Treat this as a supporting source until we can prove a reliable join back to Offer tasks or attachment categories."
+      ]
+    },
+    {
+      "id": "interview-initiation-events",
+      "name": "Interview Initiation and Decision Events",
+      "table": "dw.user_data.talent_ml_interview_initiation_make_decision_events",
+      "status": "validated",
+      "plainEnglish": "Live interview-related event data for job applications and interview rounds. This is the main source for interview volume and time-in-process analysis.",
+      "freshness": "Live through yesterday.",
+      "usefulDataPoints": [
+        "Job application counts",
+        "Interview round counts",
+        "Average time in Interview BP"
+      ],
+      "usedInDashboards": [
+        "Interview metrics dashboard"
+      ],
+      "pmNotes": [
+        "Prefer this over older snapshot tables for active interview analysis."
+      ]
+    },
+    {
+      "id": "interview-schedule-events",
+      "name": "Interview Scheduling Events",
+      "table": "dw.user_data.talent_ml_interview_schedule_interview_team_events",
+      "status": "validated",
+      "plainEnglish": "Live scheduling task events for interview flows, including Schedule Interview and Schedule Interview Team.",
+      "freshness": "Live through yesterday.",
+      "usefulDataPoints": [
+        "Scheduling task durations",
+        "Tenant coverage",
+        "Segmentation by company size, region, and industry"
+      ],
+      "usedInDashboards": [
+        "Interview metrics dashboard"
+      ],
+      "pmNotes": [
+        "Useful when the PM question is specifically about scheduling friction rather than the whole Interview BP."
+      ]
+    },
+    {
+      "id": "interviewer-engagement",
+      "name": "Interviewer Engagement",
+      "table": "dw.user_data.talent_ml_interviewer_engagement",
+      "status": "validated",
+      "plainEnglish": "Rater and interviewer activity data, including ratings submitted and non-rating tasks.",
+      "freshness": "Live through yesterday.",
+      "usefulDataPoints": [
+        "Unique raters",
+        "Total ratings submitted",
+        "Average ratings per rater"
+      ],
+      "usedInDashboards": [
+        "Interview metrics dashboard"
+      ],
+      "pmNotes": [
+        "Best for diagnosing interviewer participation rather than recruiter workflow speed."
+      ]
+    },
+    {
+      "id": "interview-misst",
+      "name": "MISST Interaction Events",
+      "table": "dw.user_data.talent_ml_interview_misst_events",
+      "status": "validated",
+      "plainEnglish": "Page interaction events for Manage Interview Scheduling Settings. Useful for measuring how much effort recruiters spend inside MISST.",
+      "freshness": "Live through yesterday.",
+      "usefulDataPoints": [
+        "Average total MISST time per requisition",
+        "Average sessions per requisition"
+      ],
+      "usedInDashboards": [
+        "Interview metrics dashboard"
+      ],
+      "pmNotes": [
+        "Useful for productivity questions and aligns closely with the equivalent Superset view."
+      ]
+    },
+    {
+      "id": "interview-tenant-filters",
+      "name": "Interview Dashboard Tenant Filters",
+      "table": "dw.user_test.interview_dashboard_tenant_filters",
+      "status": "validated-supporting",
+      "plainEnglish": "Tenant-level segmentation and feature-adoption lookup table used to enrich metrics with company size, region, industry, and feature flags.",
+      "freshness": "Static lookup / slower-moving support table.",
+      "usefulDataPoints": [
+        "Company size band",
+        "Segment and geography",
+        "Industry and super-industry",
+        "Interview feature-adoption flags"
+      ],
+      "usedInDashboards": [
+        "Interview metrics dashboard"
+      ],
+      "pmNotes": [
+        "Use this as an enrichment join, not as a standalone trend source."
+      ]
+    },
+    {
+      "id": "interview-session-enrichment",
+      "name": "Interview Session Enrichment Stats",
+      "table": "dw.user_test.class_relationship_interview_stats",
+      "status": "validated",
+      "plainEnglish": "Pre-aggregated interview session counts, including whether sessions used competencies or questionnaires.",
+      "freshness": "Continuously updated.",
+      "usefulDataPoints": [
+        "Total interview sessions",
+        "Sessions with competencies",
+        "Sessions with questionnaires"
+      ],
+      "usedInDashboards": [
+        "Interview metrics dashboard"
+      ],
+      "pmNotes": [
+        "Helpful when the PM wants a clean count metric without re-deriving enrichment joins."
+      ]
+    }
+  ]
+}
