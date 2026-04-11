@@ -351,12 +351,12 @@ function MessagingPanel({
           {channel === 'whatsapp' ? (
             <Box>
               <FormSelect
-                id="whatsapp-template-select"
                 label="Template"
+                helpText="Select a template or type a free-text reply."
                 value={selectedTemplate}
-                onChange={(val) => {
-                  setSelectedTemplate(val);
-                  const tpl = WHATSAPP_TEMPLATES.find((t) => t.id === val);
+                onChange={(e) => {
+                  setSelectedTemplate(e.target.value);
+                  const tpl = WHATSAPP_TEMPLATES.find((t) => t.id === e.target.value);
                   if (tpl) setWhatsappBody(mergeTemplate(tpl.body, CANDIDATE));
                 }}
                 options={[

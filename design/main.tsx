@@ -12,7 +12,6 @@ import { GccCandidateGridSearch } from './gcc-candidate-grid-search';
 import { RecruiterHomeV85 } from './recruiter-home-v85';
 import { CandidateSmartViewV86 } from './candidate-smart-view-v86';
 import { IndiaWhatsappCandidateMessagingV88 } from './india-whatsapp-candidate-messaging-v88';
-import { ViewDashboard } from './view-dashboard';
 import { SANA_PAGE_CANVAS } from './components';
 
 /** Prototype slugs backed by `design/*.tsx` modules in this branch (see `vite.config.ts` `slugs` Set). */
@@ -22,12 +21,8 @@ function prototypeFromLocation():
   | 'candidate-grid-v84'
   | 'recruiter-home-v85'
   | 'candidate-smart-view-v86'
-  | 'india-whatsapp-candidate-messaging-v88'
-  | 'view-dashboard' {
+  | 'india-whatsapp-candidate-messaging-v88' {
   const path = window.location.pathname.replace(/\/+$/, '') || '/';
-  if (path.endsWith('view-dashboard')) {
-    return 'view-dashboard';
-  }
   if (path.endsWith('india-whatsapp-candidate-messaging-v88')) {
     return 'india-whatsapp-candidate-messaging-v88';
   }
@@ -61,9 +56,6 @@ function prototypeFromLocation():
   if (h === 'india-whatsapp-candidate-messaging-v88' || h.startsWith('india-whatsapp-candidate-messaging-v88')) {
     return 'india-whatsapp-candidate-messaging-v88';
   }
-  if (h === 'view-dashboard' || h.startsWith('view-dashboard')) {
-    return 'view-dashboard';
-  }
   return 'recruiter-home-v85';
 }
 
@@ -78,9 +70,6 @@ function AppRoot() {
       window.removeEventListener('hashchange', sync);
     };
   }, []);
-  if (route === 'view-dashboard') {
-    return <ViewDashboard />;
-  }
   if (route === 'india-whatsapp-candidate-messaging-v88') {
     return <IndiaWhatsappCandidateMessagingV88 />;
   }
