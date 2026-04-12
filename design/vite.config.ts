@@ -105,8 +105,18 @@ export default defineConfig({
   plugins: [prototypeSpaSlugFallback(), react(), openChromeAndCursorBrowser()],
   root: '.',
   server: {
-    // Fixed port for Figma MCP capture URLs (hash links must match actual dev server).
     port: 5199,
     strictPort: true,
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('data-bp-durations.ts') && !id.includes('by-segment')) return 'data-bp-durations';
+          if (id.includes('data-employment-agreement-durations.ts')) return 'data-ea-durations';
+          if (id.includes('data-customer-scorecard.ts')) return 'data-customer-scorecard';
+        },
+      },
+    },
   },
 });
