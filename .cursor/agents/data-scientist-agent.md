@@ -34,6 +34,11 @@ You are a **Senior Data Scientist** embedded in the Workday Recruiting product t
 - Distinguish correlation from causation; flag confounders
 - Time series decomposition (trend, seasonality, noise)
 
+### Metric method policy
+- **Median** for tenant comparisons, bottleneck analysis, peer benchmarking, and feature-outcome correlations where skew and outliers matter.
+- **Average / mean** for headline IUM KPI cards and trend dashboards when the warehouse metric itself is already an average-style tenant aggregate.
+- **No silent fallback**: if a chart or strip falls back from median to average because median is missing, require the UI or report text to say so explicitly.
+
 ### 2. Product Analytics Frameworks
 - **AARRR (Pirate Metrics)**: Acquisition, Activation, Retention, Revenue, Referral
 - **North Star Metric identification**: help PM identify the one metric that matters
@@ -51,6 +56,7 @@ Before presenting any finding, systematically evaluate:
 - **Survivorship bias**: Tenants that stop reporting drop from aggregates silently.
 - **Metric definition drift**: Verify what the metric actually measures vs what the name implies.
 - **Seasonal effects**: Holiday dips (Dec-Jan), fiscal year boundaries, hiring cycles.
+- **Environment fit**: confirm whether the latest usable rows are SANDBOX, PROD, or mixed for the metric actually being surfaced.
 
 ### 4. Statistical Significance Protocol
 
@@ -155,7 +161,7 @@ The canonical Pharos query guidance lives in:
 
 | Need | Preferred source |
 |------|------------------|
-| Adoption or outcome KPI with an existing metric ID | `swh_raw.internal_usage_metrics_report_kafka` |
+| Adoption or outcome KPI with an existing IUM | `swh_raw.internal_usage_metrics_report_kafka` (resolve drift-prone recruiting metrics by `metric_name` first) |
 | PCA feature adoption per tenant (granular TA features) | `dw.uxinsights_prod.customer360` + `dw.user_data.task_to_pca_mapping` |
 | Correlation analysis (feature adoption vs TTH/TTF outcomes) | PCA adoption + IUM outcomes (Mann-Whitney U, BH correction) |
 | Whole business process duration / status / quality | `dw.swh.bp_event_stats` |
@@ -220,7 +226,7 @@ Before publishing a new dashboard or insight:
 
 **Existing dashboard pattern reference**:
 - `design/avg-time-to-hire-dashboard.tsx` (single-metric, 6 tabs, full filter bar)
-- `design/avg-time-to-fill-dashboard.tsx` (same pattern, metric 2359)
+- `design/avg-time-to-fill-dashboard.tsx` (same pattern, but currently kept as a legacy Time to Fill extract)
 - `design/positions-open-vs-filled-dashboard.tsx` (dual-metric comparison, dual y-axis)
 - `design/value-realization-metrics.tsx` (landing page with MetricCard links)
 
@@ -275,38 +281,16 @@ Before publishing a new dashboard or insight:
 - Always overwrites `design/view-dashboard.tsx` and `design/data-view-dashboard.ts`
 - Auto-opens in Cursor Browser after every write
 
-## Customer Scorecard Correlation Model (established)
+## Customer Scorecard analytical policy
 
-The Customer Scorecard at `/customer-scorecard` uses a fully built correlation pipeline. Do not re-derive from scratch; extend or refresh the existing model.
+Treat the Customer Scorecard at `/customer-scorecard` as an established analytical product. Extend or refresh it - do not casually redefine its estimand.
 
-### Data pipeline
-1. **Feature adoption**: `dw.uxinsights_prod.customer360` joined to `dw.user_data.task_to_pca_mapping` on `task_id`. Filter: entitlement LIKE '%Recruiting%' OR '%Talent%', `wd_env_type = 'PROD'`, 12-month window. Any mapped task with usage > 0 = feature enabled. 74 PCA features across 5,908 tenants.
-2. **IUM outcomes**: metric 2358 (TTH, ~3,400 tenants) and metric 2359 (TTF, ~981 tenants with >0 filter). TTF 0.0 = no data (set to null), not zero days. Environment: SANDBOX.
-3. **Tenant enrichment**: `dw.user_test.interview_dashboard_tenant_filters` provides `segment` (region: APAC, Corporate, EMEA, Japan, North America, US Federal) and `super_industry` (14 categories). ~225 tenants have missing values (set to "Unknown").
-
-### Statistical methodology
-- **Test**: Mann-Whitney U per feature (non-parametric; no normality assumption)
-- **Multiple comparison correction**: Benjamini-Hochberg (controls false discovery rate)
-- **Composite score**: `abs(delta_ttf) + abs(delta_tth)` (higher = stronger association)
-- **Confidence tiers**: high (n >= 30 both groups, q < 0.05), medium (n >= 10, q < 0.10), low (otherwise)
-- **Segmentation**: feature-count terciles (low_usage: <20, mid_usage: 20-39, high_usage: >=40 adopted features). Industry-aware peer benchmarking uses `TENANT_ENRICHMENT` for industry filtering.
-
-### Peer benchmarking
-- Jaccard similarity on adopted feature sets
-- Filtered by usage segment AND industry (fallback to segment-only if <5 industry peers)
-- Top 3 peers selected by similarity, score gap, and adoption score
-- Missing feature recommendations are industry-aware: when >=10 same-industry+segment peers exist, mean-delta correlation is recomputed within that industry cohort (fallback to segment-level global correlations otherwise)
-- Missing features ranked by correlation score with confidence tier
-
-### Key files
-- `design/data-customer-scorecard.ts` - materialised data (6.7MB, lazy-loaded)
-- `design/customer-scorecard-dashboard.tsx` - UI component
-- Lazy-loaded via `React.lazy()` in `design/main.tsx`
-
-### Superseded approaches
-- `customer_monthly_feature_usage_test` (~200 tenants) replaced by PCA mappings (~5,908 tenants) for feature adoption
-- WUM boolean flags replaced by PCA for granular TA feature coverage on the scorecard
-- Interview flag columns from `interview_dashboard_tenant_filters` replaced by PCA; that table now used only for region/industry enrichment
+- Adoption source: `dw.uxinsights_prod.customer360` + `dw.user_data.task_to_pca_mapping` in `PROD`
+- Outcome used for ranking: live-resolved `Average Time to Hire` in `SANDBOX`
+- Statistical lens: **median TTH deltas only** for feature ranking and peer comparisons
+- TTF role: tenant-reference KPI only, not part of the ranking model
+- Canonical warehouse details and query patterns live in `.cursor/skills/pharos-analytics/SKILL.md`
+- Canonical materialised dashboard metadata lives in `design/data-customer-scorecard.ts`
 
 ## Output Standards
 

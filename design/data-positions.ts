@@ -1,4 +1,4 @@
-// Auto-generated from Pharos IUM metrics 2360 (Open) + 2361 (Filled), 10 Apr 2026
+// Auto-generated from the historical 10 Apr 2026 extract that used the older 2360 (Open) + 2361 (Filled) mapping
 // All active tenants with non-zero values (SANDBOX, last 365 days)
 
 export const ALL_TENANTS_OPEN: string[] = [

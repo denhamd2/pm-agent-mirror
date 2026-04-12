@@ -154,7 +154,7 @@ function SensitivityTable({
 export const AddDocumentsImpactDashboard: React.FC = () => {
   return (
     <Flex flexDirection="column" minHeight="100vh" style={{ backgroundColor: SANA_PAGE_CANVAS }}>
-      <DashboardGlobalNav activeMetricsSlug={null} />
+      <DashboardGlobalNav activeMetricsSlug="add-documents-impact" />
       <Box padding="32px" flex={1}>
         <Box style={{ maxWidth: 1280, margin: '0 auto' }}>
           <PageHeader

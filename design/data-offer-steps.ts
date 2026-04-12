@@ -5,7 +5,7 @@
  * Window: wd_event_date >= current_date - 450 days AND creation_time in 2025-04 .. 2026-03 (aligned to dashboard LABELS)
  */
 
-import { LABELS } from './data-bp-durations';
+import { LABELS } from './data-bp-shared';
 
 export interface OfferStepMonthlyPoint {
   ym: string;

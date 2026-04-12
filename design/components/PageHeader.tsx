@@ -60,7 +60,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           {title}
         </Heading>
         {subtitle && (
-          <BodyText size="small" color={colors.blackPepper500} marginTop="xxs">
+          <BodyText size="small" color={colors.blackPepper500} marginTop="xxs" style={{ whiteSpace: 'pre-line' }}>
             {subtitle}
           </BodyText>
         )}

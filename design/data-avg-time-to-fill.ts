@@ -1,4 +1,4 @@
-// Auto-generated from Pharos IUM metric 2359, 10 Apr 2026
+// Auto-generated from the historical 10 Apr 2026 extract that used the older 2359 Time to Fill mapping
 // All active tenants with non-zero Time to Fill (SANDBOX, last 365 days)
 
 export const ALL_TENANTS: string[] = [

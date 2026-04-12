@@ -206,6 +206,78 @@ Archived: MISSION-009, MISSION-010, MISSION-011, MISSION-014, MISSION-015, MISSI
 
 **Production Status:** ✅ Ready for next epic creation and PMF workflow
 
+### DECISION-009: Live Pharos tracker metric classification
+**Date:** 12 April 2026  
+**Context:** Jamie Moore's tracker still listed several Recruiting value metrics as blocked or waiting for Engineering, but live Pharos verification was needed to separate genuinely missing instrumentation from already-exposed data that had simply not been wired into the workspace guidance.  
+**Choice:** Classify tracker metrics into three buckets: available now, proxy-only, or blocked. Treat newly discovered Recruiting IUMs as real candidates for Offers accepted, Employment Agreement acceptance, internal job applications, and applicant demographic volumes, but resolve them by `metric_name` first because live warehouse discovery showed metric-ID drift versus older dashboard assumptions. Record the findings in `docs/pharos-metric-discovery-2026-04-12.md`, update `docs/stats-warehouse-data-sources.json`, and extend `.cursor/skills/pharos-analytics/SKILL.md` with the new live-discovery cautions.  
+**Rationale:** 
+- Avoids unnecessary new IUM requests where Pharos already exposes usable metrics
+- Prevents accidental misuse of stale metric IDs in future dashboard work
+- Keeps proxy-only sources clearly separated from tracker-grade metrics
+- Preserves the evidence path for later wiring and PM review  
+**Owner:** David Denham + Data Scientist workflow  
+**Status:** Implemented
+
+### DECISION-010: Value Realisation uses live metric-name resolution
+**Date:** 12 April 2026  
+**Context:** The Value Realisation and Data Sources surfaces still embedded older hard-coded IUM assumptions, including the stale belief that `2361` meant Positions Filled. Live Pharos verification showed the current warehouse meaning is `Recruiter Productivity`, while the previous Time to Fill mapping is no longer cleanly discoverable by metric name.  
+**Choice:** Add a generated metric snapshot (`design/data-value-realization-iums.ts`) built by `scripts/build_value_realization_ium_snapshot.py`, and use it to drive Value Realisation + Data Sources copy by metric name first. Replace the third top card with Recruiter Capacity powered by live `Recruiter Productivity`, remove the old Positions Filled headline card, wire newly available metrics (offers accepted, employment agreement acceptance, internal job applications, applicant volumes), and keep Time to Fill as an explicitly labelled legacy snapshot until a clean live replacement is found.  
+**Rationale:** 
+- Stops the UI from repeating stale `2360` / `2361` mappings
+- Creates a reproducible refresh path for future Pharos drift
+- Surfaces the metrics that are genuinely available now without waiting for new IUM work
+- Makes unresolved metrics explicit instead of silently attaching the wrong ID  
+**Owner:** David Denham + Data Scientist workflow  
+**Status:** Implemented
+
+### DECISION-011: Metric audit alignment policy and legacy source labelling
+**Date:** 12 April 2026  
+**Context:** Dashboard copy, warehouse guidance, and materialised extracts had drifted apart. The main issues were silent median-to-average fallback in the bottleneck strip, stale live-ID labelling on the positions and Time to Fill dashboards, and duplicated Data Scientist guidance that still described older scorecard and IUM assumptions.  
+**Choice:** Standardise on median Time to Hire for bottleneck, peer-comparison, and scorecard-correlation work; keep average Time to Hire for headline IUM KPI trends; explicitly label any average fallback in the UI; treat the Time to Fill and open-vs-filled positions dashboards as legacy historical extracts until fresh live metric-name validation exists; update dashboard headers, the IUM snapshot generator, the source inventory, and the Data Scientist guidance to reflect current environment and metric-name-first rules.  
+**Rationale:** 
+- Makes the PM-facing dashboards honest about what is live, legacy, and mixed-environment
+- Preserves useful historical context without letting stale metric IDs masquerade as live truth
+- Keeps the statistical policy simple and repeatable across future dashboard work
+- Restores separation of concerns: subagent for judgement, skill for warehouse truth, inventory for catalogue  
+**Owner:** David Denham + Data Scientist workflow  
+**Status:** Implemented
+
+### DECISION-012: Recruiter Capacity gets its own dashboard and the Recruiting suite gets a metric tree
+**Date:** 12 April 2026  
+**Context:** The Value Realisation landing page surfaced Recruiter Capacity using the live `Recruiter Productivity` IUM, but it incorrectly routed to the broader Interview Metrics dashboard. At the same time, PM work needed a single visual model connecting lagging Recruiting outcomes to process metrics, throughput drivers, and leading product levers without overstating causal certainty.  
+**Choice:** Add a dedicated `recruiter-capacity` dashboard powered by the live Recruiter Productivity IUM plus adjacent interview and adoption context, repoint the Value Realisation card to that route, and add a new data-backed `recruiting-metric-tree` page with an infinite-canvas layout. Classify metric-tree links as `Measured`, `Directional`, or `Future`, and keep tracker gaps such as live Time to Fill replacement and job-app-chain Offer/EA timing explicitly labelled rather than inferred.  
+**Rationale:** 
+- Gives Recruiter Capacity a PM-focused surface instead of burying it inside interview-only analytics
+- Makes the tracker-to-live-metric mapping explicit: tracker term `Recruiter Capacity`, live IUM name `Recruiter Productivity`
+- Creates a reusable lagging-to-leading decision tool that combines outcome metrics, BP timing, adoption signals, and tracker gaps
+- Preserves data honesty by separating measured relationships from directional logic and future instrumentation  
+**Owner:** David Denham + Data Scientist workflow  
+**Status:** Implemented
+
+### DECISION-014: Scorecard benchmarks and KPI tree move to clearer PM framing
+**Date:** 13 April 2026  
+**Context:** The refined metrics shell still left ambiguity between outcomes, impact, and operational dashboards. At the same time, the customer scorecard hero cards were not using the two customer KPIs PMs actually need first, and the KPI tree needed more screen real estate plus a cleaner level model.  
+**Choice:** Reframe the metrics IA around `Portfolio Overview`, `Hiring Outcomes`, `Recruiting Operations`, and `Feature Adoption`; open the Recruiting KPI Tree in a dedicated standalone window with no shared chrome; restructure the tree into three levels (`Business Value Outcomes`, `Product Value Outcomes`, `Adoption & Usage`); replace the customer scorecard hero cards with customer-specific `Avg. Time to Hire` and `Recruiter Capacity`, benchmarked against the tenant's region segment and industry medians; show the full global feature-correlation table by default; and append an explicit `Ready for Hire` placeholder in bottleneck views until duration data is materialised.  
+**Rationale:** 
+- Makes the metrics suite easier to scan because business outcomes, operational diagnostics, and adoption levers are no longer mixed together
+- Gives the KPI tree the full-screen space it needs to behave like a true exploratory canvas rather than another dashboard tile
+- Puts the most decision-relevant customer KPIs first and adds contextual peer benchmarks without pretending they are causal scores
+- Restores the expected recruiting flow sequence by showing `Ready for Hire` transparently even while the duration extract remains incomplete  
+**Owner:** David Denham + PM dashboard workflow  
+**Status:** Implemented
+
+### DECISION-013: Unified app shell and grouped metrics navigation
+**Date:** 13 April 2026  
+**Context:** The dashboard suite had grown into two visually inconsistent navigation rows. The PM Agent title disappeared once users entered a metric page, and all dashboards were flattened into one long button list with weak information hierarchy.  
+**Choice:** Replace the old dual-row button treatment with a persistent top app shell that always shows the `PM Agent Dashboard` title, promotes `Metrics` to a first-class primary section, and groups metric dashboards into clearer IA buckets (`Overview & Benchmarks`, `Outcomes`, `Pipeline & Operations`, `Adoption & Impact`). Keep a compact dashboard quick-jump selector on metric pages and remove the duplicate local tab row from the PM dashboard body.  
+**Rationale:** 
+- Restores orientation by keeping the workspace title visible across every dashboard
+- Reduces button overload and makes the metric suite easier to scan
+- Establishes a clearer hierarchy: workspace sections first, then metric groups, then specific dashboards
+- Creates a reusable shell pattern for future metrics pages without repeating custom nav per screen  
+**Owner:** David Denham + PM dashboard workflow  
+**Status:** Implemented
+
 ### DECISION-008: Defensible Add Documents Offer/EA impact methodology
 **Date:** 11 April 2026  
 **Context:** The existing Add Documents impact table was useful for exploration but not defensible for PM decision-making due to sparse cohort coverage, percentage deltas on near-zero baselines, and Offer/EA environment mismatch (SANDBOX vs PROD).  

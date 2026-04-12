@@ -4,7 +4,7 @@
 
 export const QUERY_META = {
   title: 'Recruiting Feature Adoption (PROD)',
-  subtitle: 'Monthly feature enablement across ~6,200 production tenants',
+  subtitle: 'Shows what share of production tenants have key Recruiting capabilities enabled and how average tenant activity changes over time.\nSource: dw.swh_raw.wkdy_usage_metrics_report_kafka · PROD monthly usage metrics across ~6,200 tenants.',
   source: 'Pharos wkdy_usage_metrics_report_kafka',
   environment: 'PROD',
   dateRange: 'Apr 2025 - Mar 2026',

@@ -528,8 +528,8 @@ export const PositionsOpenVsFilledDashboard: React.FC = () => {
       <Box padding="32px" flex={1}>
         <Box style={{ maxWidth: 1200, margin: '0 auto' }}>
         <PageHeader
-          title="Positions: Open Requisitions vs Filled"
-          subtitle="IUM metrics 2360 (Open) + 2361 (Filled) · Pharos · SANDBOX environment"
+          title="Legacy Positions: Open Requisitions vs Filled"
+          subtitle={"Historical comparison of average open requisitions versus filled positions per reporting tenant.\nSource: materialised 10 Apr 2026 SANDBOX extract using older 2360/2361 mappings; current live warehouse names have drifted, so treat this page as legacy reference only."}
         />
 
         <Flex gap="m" marginBottom="l" style={{ flexWrap: 'wrap' }}>
@@ -541,7 +541,7 @@ export const PositionsOpenVsFilledDashboard: React.FC = () => {
               text: `${openDelta > 0 ? '+' : ''}${openDelta.toFixed(1)} vs prev month`,
               sentiment: openDelta > 0 ? 'negative' : 'positive',
             }}
-            tooltip="IUM 2360: mean open requisitions per tenant for the month (SANDBOX)."
+            tooltip="Historical extract of mean open requisitions per tenant for the month using the older 2360 mapping. Kept for legacy comparison only."
           />
           <MetricCard
             label="Avg filled"
@@ -551,7 +551,7 @@ export const PositionsOpenVsFilledDashboard: React.FC = () => {
               text: `${filledDelta > 0 ? '+' : ''}${filledDelta.toFixed(1)} vs prev month`,
               sentiment: filledDelta > 0 ? 'positive' : 'negative',
             }}
-            tooltip="IUM 2361: mean filled positions per tenant for the month (SANDBOX)."
+            tooltip="Historical extract of mean filled positions per tenant for the month using the older 2361 mapping. Kept for legacy comparison only."
           />
           <MetricCard
             label="Fill ratio"
@@ -565,7 +565,7 @@ export const PositionsOpenVsFilledDashboard: React.FC = () => {
             value={filledLatest.tenants.toLocaleString()}
             helperText="5x more than open req tracking"
             changeIndicator={{ text: `${openLatest.tenants} track open`, sentiment: 'neutral' }}
-            tooltip="Tenant counts reporting non-zero filled (2361) vs open (2360) in the latest month."
+            tooltip="Tenant counts reporting non-zero filled versus open values in the historical extract used for this page."
           />
         </Flex>
 
@@ -733,7 +733,7 @@ export const PositionsOpenVsFilledDashboard: React.FC = () => {
         )}
 
         <BodyText size="small" color={colors.blackPepper400} marginTop="l" style={{ lineHeight: 1.6, fontSize: 12 }}>
-          <strong>Data notes:</strong> Source: Pharos <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>internal_usage_metrics_report_kafka</code> · metric_id 2360 (Open) + 2361 (Filled) · SANDBOX environment · Non-zero values only · Open reqs data available from Mar 2025, Filled from Jun 2025 · Filled positions tracks ~5x more tenants than open requisitions.
+          <strong>Data notes:</strong> Source: historical Pharos extract from <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>internal_usage_metrics_report_kafka</code> using the older 2360/2361 open-versus-filled mapping · SANDBOX environment · Non-zero values only · Open reqs data available from Mar 2025, Filled from Jun 2025 · Current live warehouse discovery now maps 2360/2361 to Employment Agreement Acceptance and Recruiter Productivity, so do not reuse these IDs for new work without metric-name revalidation.
         </BodyText>
         </Box>
       </Box>

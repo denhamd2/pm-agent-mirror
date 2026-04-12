@@ -24,17 +24,25 @@ const SEGMENT_COLORS = [
   '#00838F',
 ];
 
-export type BottleneckStage = { key: string; label: string; days: number };
+export type BottleneckStage = {
+  key: string;
+  label: string;
+  days: number;
+  method: 'median' | 'average';
+  isPlaceholder?: boolean;
+  note?: string;
+};
 
 export function stagesFromSubBpsLatestMonth(subBps: SubBpConfig[]): BottleneckStage[] {
   const ym = LABELS[LABELS.length - 1];
   const out: BottleneckStage[] = [];
   for (const bp of subBps) {
     const month = bp.data.find((d) => d.ym === ym) ?? bp.data[bp.data.length - 1];
-    const raw = month?.completed?.medianDays ?? month?.completed?.avgDays;
+    const method = month?.completed?.medianDays != null ? 'median' : 'average';
+    const raw = method === 'median' ? month?.completed?.medianDays : month?.completed?.avgDays;
     const days = typeof raw === 'number' && !Number.isNaN(raw) ? Math.max(0, raw) : 0;
     if (days > 0) {
-      out.push({ key: bp.key, label: bp.label, days });
+      out.push({ key: bp.key, label: bp.label, days, method });
     }
   }
   return out;
@@ -57,9 +65,11 @@ export const BottleneckFlowStrip: React.FC<BottleneckFlowStripProps> = ({
   stages,
   footnote,
 }) => {
-  const total = stages.reduce((s, x) => s + x.days, 0);
+  const measuredStages = stages.filter((stage) => !stage.isPlaceholder && stage.days > 0);
+  const placeholderStages = stages.filter((stage) => stage.isPlaceholder || stage.days <= 0);
+  const total = measuredStages.reduce((s, x) => s + x.days, 0);
 
-  if (stages.length === 0 || total <= 0) {
+  if (measuredStages.length === 0 || total <= 0) {
     return (
       <Box style={{ marginTop: 16 }}>
         <Flex alignItems="center" gap="xxs" marginBottom="xs">
@@ -80,6 +90,17 @@ export const BottleneckFlowStrip: React.FC<BottleneckFlowStripProps> = ({
         <BodyText size="small" style={{ color: colors.blackPepper500 }}>
           No completed-stage timing available for this view (check tenant has sub-BP data in Pharos).
         </BodyText>
+        {placeholderStages.length > 0 ? (
+          <ul style={{ margin: '12px 0 0', paddingLeft: 18, fontSize: 13, color: colors.blackPepper600, lineHeight: 1.6 }}>
+            {placeholderStages.map((stage) => (
+              <li key={stage.key}>
+                <span style={{ fontWeight: 600 }}>{stage.label}</span>
+                {' · '}
+                {stage.note ?? 'Stage exists in flow, but no duration snapshot is currently materialised.'}
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </Box>
     );
   }
@@ -104,7 +125,7 @@ export const BottleneckFlowStrip: React.FC<BottleneckFlowStripProps> = ({
 
       <div
         role="img"
-        aria-label={`Job application flow stages by relative duration, total ${total.toFixed(1)} median days`}
+        aria-label={`Job application flow stages by relative duration, total ${total.toFixed(1)} days across median-first stage timings`}
         style={{
           display: 'flex',
           flexDirection: 'row',
@@ -116,13 +137,13 @@ export const BottleneckFlowStrip: React.FC<BottleneckFlowStripProps> = ({
           boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
         }}
       >
-        {stages.map((st, i) => {
+        {measuredStages.map((st, i) => {
           const pct = (st.days / total) * 100;
           const bg = SEGMENT_COLORS[i % SEGMENT_COLORS.length];
           return (
             <div
               key={st.key}
-              title={`${st.label}: ${st.days.toFixed(1)} days (${pct.toFixed(1)}% of pipeline)`}
+              title={`${st.label}: ${st.days.toFixed(1)} ${st.method} days (${pct.toFixed(1)}% of pipeline)`}
               style={{
                 flex: `${st.days} 1 0`,
                 minWidth: Math.max(8, pct),
@@ -139,18 +160,25 @@ export const BottleneckFlowStrip: React.FC<BottleneckFlowStripProps> = ({
                 wordBreak: 'break-word',
               }}
             >
-              {pct >= 8 ? `${st.label} · ${st.days.toFixed(1)}d` : `${st.days.toFixed(0)}d`}
+              {pct >= 8 ? `${st.label} · ${st.days.toFixed(1)}d ${st.method === 'average' ? 'avg' : 'med'}` : `${st.days.toFixed(0)}d`}
             </div>
           );
         })}
       </div>
 
       <ul style={{ margin: '12px 0 0', paddingLeft: 18, fontSize: 13, color: colors.blackPepper600, lineHeight: 1.6 }}>
-        {stages.map((st, i) => (
+        {measuredStages.map((st, i) => (
           <li key={st.key}>
             <span style={{ fontWeight: 600, color: SEGMENT_COLORS[i % SEGMENT_COLORS.length] }}>{st.label}</span>
             {' · '}
-            {st.days.toFixed(1)} median days completed ({((st.days / total) * 100).toFixed(1)}% of total)
+            {st.days.toFixed(1)} {st.method} days completed ({((st.days / total) * 100).toFixed(1)}% of total)
+          </li>
+        ))}
+        {placeholderStages.map((st) => (
+          <li key={st.key}>
+            <span style={{ fontWeight: 600, color: colors.blackPepper400 }}>{st.label}</span>
+            {' · '}
+            {st.note ?? 'Stage exists in the recruiting flow, but no duration snapshot is currently materialised.'}
           </li>
         ))}
       </ul>

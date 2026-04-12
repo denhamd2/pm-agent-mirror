@@ -544,7 +544,7 @@ export const AvgTimeToHireDashboard: React.FC = () => {
         <Box style={{ maxWidth: 1200, margin: '0 auto' }}>
         <PageHeader
           title="Average Time to Hire"
-          subtitle="IUM metric 2358 · Pharos internal_usage_metrics_report_kafka · SANDBOX environment"
+          subtitle={"Average tenant-level time to hire from first job posting to latest accepted offer, shown here as the monthly mean across reporting tenants.\nSource: dw.swh_raw.internal_usage_metrics_report_kafka · live metric-name resolution to Average Time to Hire (2358) · SANDBOX only in the current accessible warehouse."}
         />
 
         {/* ─── KPI row ─── */}

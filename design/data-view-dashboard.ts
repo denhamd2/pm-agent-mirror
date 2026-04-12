@@ -1,5 +1,5 @@
 // Add Documents adoption correlation: Offer duration, EA duration, Time to Hire, Time to Fill
-// Source: PCA feature adoption + dw.swh.bp_event_stats (PROD) + IUM 2358/2359 (SANDBOX)
+// Source: PCA feature adoption + dw.swh.bp_event_stats (PROD) + live TTH IUM 2358 (SANDBOX) + legacy TTF extract
 // Generated 12 April 2026
 
 export interface QueryMeta {
@@ -15,13 +15,13 @@ export interface QueryMeta {
 export const QUERY_META: QueryMeta = {
   title: 'Add Documents Adoption: Impact on Offer, EA, TTH & TTF',
   subtitle:
-    'Cross-sectional Mann-Whitney U across four recruiting outcome metrics',
+    'Compares Add Documents adopters vs non-adopters using median deltas and Mann-Whitney U tests across Offer, EA, TTH, and legacy TTF outcomes.\nSources: PROD bp_event_stats for Offer and EA, SANDBOX IUM 2358 for TTH, and a historical SANDBOX TTF extract retained for reference.',
   queryDate: '12 April 2026',
   source:
-    'PCA feature adoption (customer scorecard) + bp_event_stats PROD (Offer/EA) + IUM metrics 2358/2359 SANDBOX (TTH/TTF)',
+    'PCA feature adoption (customer scorecard) + bp_event_stats PROD (Offer/EA) + live Average Time to Hire 2358 SANDBOX + legacy Time to Fill extract',
   filters:
-    '534 Add Documents adopters vs 5,374 non-adopters from PCA. Offer: PROD, duration > 0, events >= 10. EA: PROD materialised. TTH/TTF: SANDBOX IUM, value > 0.',
-  environment: 'PROD (Offer, EA) / SANDBOX (TTH, TTF)',
+    '534 Add Documents adopters vs 5,374 non-adopters from PCA. Offer: PROD, duration > 0, events >= 10. EA: PROD materialised. TTH: live SANDBOX IUM with value > 0. TTF: historical SANDBOX extract retained for reference.',
+  environment: 'PROD (Offer, EA) / SANDBOX (TTH) / legacy SANDBOX extract (TTF)',
   dateRange: 'Rolling 12 months to April 2026',
 };
 
@@ -55,7 +55,7 @@ export const KPIS: KPI[] = [
     label: 'TTF delta',
     value: '+0.15 d',
     detail: 'p = 0.96, no effect',
-    tooltip: 'Median time to fill: adopted 2.75 d vs not-adopted 2.60 d. Not significant. SANDBOX IUM 2359.',
+    tooltip: 'Median time to fill: adopted 2.75 d vs not-adopted 2.60 d. Not significant. Uses the historical SANDBOX TTF extract based on the older 2359 mapping.',
   },
 ];
 
@@ -81,7 +81,7 @@ export const INSIGHTS: Insight[] = [
       'Add Documents does not slow recruiting outcomes. The feature adds a document step which may marginally extend event-level Offer duration (+0.67 d), but this does not translate into longer time to hire or time to fill. Safe to promote Add Documents adoption without efficiency concerns.',
     caveats: [
       'Cross-sectional design: cannot prove causation, only association',
-      'Offer/EA use PROD bp_event_stats; TTH/TTF use SANDBOX IUM metrics (different environments)',
+      'Offer/EA use PROD bp_event_stats; TTH uses a live SANDBOX IUM while TTF uses a historical SANDBOX extract (different environments and confidence levels)',
       'Confounders not controlled: company size, industry, region, process complexity, number of hiring steps',
       'Add Documents adopters may be systematically different from non-adopters (selection bias)',
       'TTF has extreme outliers (mean 50-97 d vs median 2.6-2.8 d) - heavily right-skewed; median is the reliable measure',
@@ -213,7 +213,7 @@ export const TTF_BOXES: PercentileBox[] = [
 
 /* ── Delta bar chart data ── */
 export const DELTA_CHART = {
-  labels: ['Offer (PROD)', 'EA (PROD)', 'TTH (SANDBOX)', 'TTF (SANDBOX)'],
+  labels: ['Offer (PROD)', 'EA (PROD)', 'TTH (SANDBOX)', 'TTF (legacy SANDBOX)'],
   deltaMedians: [0.67, 0.10, 1.66, 0.15],
   pValues: [0.000038, 0.866389, 0.080947, 0.955293],
   significant: [true, false, false, false],

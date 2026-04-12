@@ -40,6 +40,8 @@ function prototypeSpaSlugFallback(): Plugin {
       'avg-time-to-fill',
       'positions-open-vs-filled',
       'value-realization-metrics',
+      'recruiter-capacity',
+      'recruiting-metric-tree',
       'add-documents-impact',
       'recruiting-adoption',
       'interview-metrics',

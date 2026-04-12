@@ -1,5 +1,5 @@
 {
-  "lastReviewed": "11 April 2026",
+  "lastReviewed": "12 April 2026",
   "owner": "Data Scientist",
   "sources": [
     {
@@ -8,18 +8,21 @@
       "table": "dw.swh_raw.internal_usage_metrics_report_kafka",
       "status": "validated",
       "plainEnglish": "Monthly tenant-level product usage and outcome metrics. This is the cleanest source for adoption and headline KPI trends when an IUM already exists.",
-      "freshness": "Live monthly feed. Current recruiting dashboards generally filter to SANDBOX.",
+      "freshness": "Live monthly feed. Current recruiting dashboards generally resolve to SANDBOX for the latest visible month in the accessible warehouse path.",
       "usefulDataPoints": [
-        "Average Time to Hire (2358)",
-        "Average Time to Fill (2359)",
-        "Positions with open requisitions (2360)",
-        "Positions filled (2361)",
+        "Average Time to Hire (2358, latest visible month currently SANDBOX)",
+        "Recruiter Productivity (2361, live-resolved by name)",
+        "Number of Offers accepted. (2346, live-resolved by name)",
+        "Employment Agreement Acceptance (2360, live-resolved by name)",
+        "Count of Internal Job Applications last month (2349, live-resolved by name)",
+        "Applicant gender, race/ethnicity, and age-band counts (multiple live-resolved metrics)",
+        "Legacy Time to Fill snapshot from the older 2359 mapping (keep as historical reference until a fresh live name match is proven)",
         "Add Documents configured / used / created (1757-1760 in current verified mapping)"
       ],
       "usedInDashboards": [
         "Avg Time to Hire",
-        "Avg Time to Fill",
-        "Positions Open vs Filled",
+        "Avg Time to Fill (legacy snapshot)",
+        "Legacy positions dashboard",
         "Offer dashboard Add Documents section",
         "Value Realisation Metrics",
         "Customer Scorecard"
@@ -27,7 +30,11 @@
       "pmNotes": [
         "Best when you need adoption or outcome trends by month, tenant, region proxy, or infrastructure.",
         "Always cast `value` to numeric and note whether the dashboard uses SANDBOX or PROD.",
-        "Metric meanings can drift by ID over time, so verify the metric name before reusing an old query."
+        "Metric meanings can drift by ID over time, so verify the metric name before reusing an old query.",
+        "Live discovery on 12 April 2026 found recruiting-oriented IUM rows for offers accepted, employment agreement acceptance, internal job applications, applicant demographic counts, and recruiter productivity. Resolve these by metric_name first before assuming older ID mappings are still valid.",
+        "Older workspace assumptions that 2360 meant positions with open requisitions and 2361 meant positions filled are stale in the current live warehouse.",
+        "Fresh query checks on 12 April 2026 found the latest visible month for the live-resolved recruiting metrics used here under SANDBOX only; no parallel PROD rows surfaced for that same current slice in the accessible table.",
+        "The older Time to Fill dashboard still relies on a historical 2359 extract, but current live discovery also surfaces 2359 on applicant age-band metrics, so do not reuse 2359 for new work without metric-name revalidation."
       ]
     },
     {
@@ -326,6 +333,101 @@
       ],
       "pmNotes": [
         "Helpful when the PM wants a clean count metric without re-deriving enrichment joins."
+      ]
+    },
+    {
+      "id": "career-hub-job-events",
+      "name": "Career Hub Job Events",
+      "table": "dw.user_data.talent_ml_career_hub_jobs_all_events + dw.user_data.talent_ml_career_hub_jobs_apply_transformed",
+      "status": "validated-with-cautions",
+      "plainEnglish": "Career Hub interaction events for job browsing and apply-click behaviour. Useful for directional reach and application-start proxies when packaged career-site funnel metrics are unavailable.",
+      "freshness": "Live event data; partition filter on wd_event_date is required.",
+      "usefulDataPoints": [
+        "Job impressions and clicks",
+        "Apply-click / application-start proxy events",
+        "Distinct tenants and users interacting with job cards"
+      ],
+      "usedInDashboards": [],
+      "pmNotes": [
+        "Live discovery on 12 April 2026 confirmed high-volume impression and apply events.",
+        "Good candidate for directional funnel work, especially reach and apply-start proxies.",
+        "Not yet validated as the tracker definition for external career site reach, starts, or submitted applications."
+      ]
+    },
+    {
+      "id": "employee-retention-study",
+      "name": "Employee Retention Study",
+      "table": "dw.user_test.talent_ml_employee_retention_study",
+      "status": "validated-with-cautions",
+      "plainEnglish": "Tenant-level employee retention study table with retention rates plus recruiting and product-usage flags.",
+      "freshness": "Queryable now; likely a study or analytic output rather than a canonical warehouse fact table.",
+      "usefulDataPoints": [
+        "two_year_retention_rate",
+        "tenant segment, industry, and enterprise size",
+        "recruiting_usage and other product-usage flags"
+      ],
+      "usedInDashboards": [],
+      "pmNotes": [
+        "Live discovery on 12 April 2026 confirmed the table is accessible in Pharos.",
+        "This is adjacent to retention analysis, but it does not match the tracker definition of recruiting-sourced new hires retained after 12 months.",
+        "Treat as a research input or proxy, not a drop-in replacement for the blocked new-hire retention metric."
+      ]
+    },
+    {
+      "id": "bp-job-application-event-records",
+      "name": "BP Job Application Event Records",
+      "table": "dw.user_test.bp_job_appl_event_records",
+      "status": "exploratory",
+      "plainEnglish": "Step-level business-process event records tied to job applications, including top_event_id, bp_type_id, task_name, and timing fields.",
+      "freshness": "Queryable now; expensive enough to need tight filters.",
+      "usefulDataPoints": [
+        "action_event_id and top_event_id for chain reconstruction",
+        "task_name, bp_type_id, and action",
+        "creation_time, completion_time, and duration"
+      ],
+      "usedInDashboards": [],
+      "pmNotes": [
+        "Promising for future event-chain work on job-application semantics.",
+        "Live discovery on 12 April 2026 did not surface clean offer / employment rows under obvious filters, so it is not yet a reliable source for issued or renegotiated Offer/EA counts.",
+        "Use only for targeted exploration until a reproducible semantic mapping is proven."
+      ]
+    },
+    {
+      "id": "mixology-task-telemetry",
+      "name": "Mixology Task Telemetry",
+      "table": "dw.mixology.initiate_offer + dw.mixology.request_compensation_change + dw.mixology.hire_employee",
+      "status": "exploratory",
+      "plainEnglish": "UX telemetry for specific workflows and tasks, including initiate-offer, compensation-change, and hire-employee flows.",
+      "freshness": "Live UX telemetry; requires partition filter on wd_event_date.",
+      "usefulDataPoints": [
+        "page and interaction telemetry",
+        "event_timestamp and tenant",
+        "task-specific UX events"
+      ],
+      "usedInDashboards": [],
+      "pmNotes": [
+        "Live discovery on 12 April 2026 confirmed these tables are accessible.",
+        "Sample rows looked like generic page telemetry rather than PM-ready business-event facts.",
+        "Do not use these as a substitute for Offer issued, renegotiation, or JR Agent time metrics without additional semantic validation."
+      ]
+    },
+    {
+      "id": "peakon-adjacent-aggregate",
+      "name": "Peakon-Adjacent Aggregate Table",
+      "table": "dw.uxresearch_test.sms_peakon_master",
+      "status": "exploratory",
+      "plainEnglish": "Aggregate monthly table with total usage and country / segment distribution fields. The name suggests a Peakon link, but the exposed fields look like adoption aggregates rather than employee engagement scores.",
+      "freshness": "Queryable now in Pharos.",
+      "usefulDataPoints": [
+        "total_cust_usage",
+        "country mix percentages",
+        "segment-size mix percentages"
+      ],
+      "usedInDashboards": [],
+      "pmNotes": [
+        "Live discovery on 12 April 2026 confirmed the table exists and is queryable.",
+        "Schema does not expose new-hire score, sentiment, or respondent-level Peakon outcomes.",
+        "Not a validated source for the tracker metric 'Peakon new-hire scores'."
       ]
     }
   ]

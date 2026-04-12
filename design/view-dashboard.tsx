@@ -237,7 +237,7 @@ export const ViewDashboard = () => {
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 32px' }}>
         <Flex gap="s" flexWrap="wrap" style={{ marginBottom: 24 }}>
           {KPIS.map((kpi, i) => (
-            <MetricCard key={i} label={kpi.label} value={kpi.value} detail={kpi.detail} tooltip={kpi.tooltip} />
+            <MetricCard key={i} label={kpi.label} value={kpi.value} helperText={kpi.detail} tooltip={kpi.tooltip} />
           ))}
         </Flex>
 
@@ -248,8 +248,8 @@ export const ViewDashboard = () => {
             <strong>{ac.nonAdopters.toLocaleString()}</strong> did not.
             Offer: {ac.offerTenants.toLocaleString()} tenants (PROD).
             EA: {ac.eaTenants} tenants (PROD).
-            TTH: {ac.tthTenants.toLocaleString()} tenants (SANDBOX IUM 2358).
-            TTF: {ac.ttfTenants} tenants (SANDBOX IUM 2359).
+            TTH: {ac.tthTenants.toLocaleString()} tenants (SANDBOX Average Time to Hire / 2358).
+            TTF: {ac.ttfTenants} tenants (legacy SANDBOX Time to Fill extract using the older 2359 mapping).
           </BodyText>
         </Card>
 
@@ -271,7 +271,7 @@ export const ViewDashboard = () => {
             <PercentileChart title="Time to Hire (SANDBOX)" boxes={TTH_BOXES} />
           </Box>
           <Box style={{ flex: '1 1 280px', minWidth: 0 }}>
-            <PercentileChart title="Time to Fill (SANDBOX)" boxes={TTF_BOXES} />
+            <PercentileChart title="Time to Fill (Legacy SANDBOX)" boxes={TTF_BOXES} />
           </Box>
         </Flex>
 

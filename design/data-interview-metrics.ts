@@ -11,7 +11,7 @@
 
 export const QUERY_META = {
   title: 'Interview Metrics Dashboard',
-  subtitle: 'Interview management volumes, timing, and capacity across ~3,900 production tenants',
+  subtitle: 'Shows interview volumes, timing, and recruiter or coordinator capacity using production recruiting analytics tables.\nCalculated from rolling monthly totals plus mean cycle times across reporting tenants; most sources are live PROD, while JR to first MISST remains a limited snapshot.',
   source: 'Pharos (user_data.talent_ml_interview_*, user_test.class_relationship_interview_stats, swh.bp_event_record_stats, user_test.job_req_status_daily)',
   dateRange: 'Apr 2025 - Mar 2026',
   queryDate: '10 Apr 2026',

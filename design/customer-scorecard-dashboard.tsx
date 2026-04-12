@@ -6,7 +6,11 @@ import { PageHeader, MetricCard, FormSelect, DashboardGlobalNav } from './compon
 import { BottleneckFlowStrip, stagesFromSubBpsLatestMonth } from './components';
 import { SANA_PAGE_CANVAS, SANA_CARD_RADIUS_LG, SANA_CARD_SHADOW } from './components/sanaShellTheme';
 import { getSliceSubBpsAndHeadline } from './data-bp-durations-by-segment';
-import { LABELS } from './data-bp-durations';
+import { LABELS } from './data-bp-shared';
+import {
+  SCORECARD_RECRUITER_CAPACITY_BY_TENANT,
+  SCORECARD_RECRUITER_CAPACITY_YYYY_MM,
+} from './data-scorecard-recruiter-capacity';
 import {
   SCORECARD_SOURCE,
   ALL_RECRUITING_FEATURES,
@@ -238,6 +242,68 @@ function medianOfArr(arr: number[]): number {
   const sorted = [...arr].sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);
   return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
+function validMetricValue(value: number | null | undefined): value is number {
+  return value != null && Number.isFinite(value) && value > 0;
+}
+
+function formatBenchmarkDelta(value: number, unit: 'days' | 'reqs'): string {
+  const rounded = Math.round(Math.abs(value) * 10) / 10;
+  const display = Number.isInteger(rounded) ? String(Math.round(rounded)) : rounded.toFixed(1);
+  return unit === 'days' ? `${display} days` : `${display} reqs`;
+}
+
+function benchmarkMedian(values: Array<number | null | undefined>): number | null {
+  const filtered = values.filter(validMetricValue);
+  if (filtered.length === 0) return null;
+  return medianOfArr(filtered);
+}
+
+function comparisonSentence(
+  current: number | null | undefined,
+  benchmark: number | null,
+  label: string,
+  unit: 'days' | 'reqs'
+): string {
+  if (!validMetricValue(current) || benchmark == null) return `${label}: no benchmark`;
+  const delta = current - benchmark;
+  if (Math.abs(delta) < 0.05) return `${label}: in line with median`;
+  return `${label}: ${formatBenchmarkDelta(delta, unit)} ${delta > 0 ? 'above' : 'below'} median`;
+}
+
+function tthBenchmarkIndicator(
+  current: number | null | undefined,
+  regionBenchmark: number | null,
+  industryBenchmark: number | null
+): { text: string; sentiment: 'positive' | 'negative' | 'neutral' } | undefined {
+  if (!validMetricValue(current)) return undefined;
+  const deltas = [regionBenchmark, industryBenchmark]
+    .filter((value): value is number => value != null)
+    .map((benchmark) => current - benchmark);
+  if (deltas.length === 0) return undefined;
+  if (deltas.every((delta) => delta < -0.05)) {
+    return { text: 'Below both benchmarks', sentiment: 'positive' };
+  }
+  if (deltas.every((delta) => delta > 0.05)) {
+    return { text: 'Above both benchmarks', sentiment: 'negative' };
+  }
+  return { text: 'Mixed benchmark picture', sentiment: 'neutral' };
+}
+
+function withReadyForHirePlaceholder(stages: ReturnType<typeof stagesFromSubBpsLatestMonth>) {
+  if (stages.some((stage) => /ready for hire/i.test(stage.label))) return stages;
+  return [
+    ...stages,
+    {
+      key: 'ready_for_hire',
+      label: 'Ready for Hire',
+      days: 0,
+      method: 'median' as const,
+      isPlaceholder: true,
+      note: 'Stage is part of the recruiting flow, but Ready for Hire duration is not present in the current sub-BP duration extract.',
+    },
+  ];
 }
 
 function computeFilteredCorrelations(
@@ -497,13 +563,13 @@ export const CustomerScorecardDashboard = () => {
 
   const globalBottleneckStages = useMemo(() => {
     const { subBps } = getSliceSubBpsAndHeadline({ tenant: '', region: '', industry: '' });
-    return stagesFromSubBpsLatestMonth(subBps);
+    return withReadyForHirePlaceholder(stagesFromSubBpsLatestMonth(subBps));
   }, []);
 
   const tenantBottleneckStages = useMemo(() => {
     if (!tenant) return [];
     const { subBps } = getSliceSubBpsAndHeadline({ tenant, region: '', industry: '' });
-    return stagesFromSubBpsLatestMonth(subBps);
+    return withReadyForHirePlaceholder(stagesFromSubBpsLatestMonth(subBps));
   }, [tenant]);
 
   const latestYm = LABELS[LABELS.length - 1];
@@ -515,7 +581,7 @@ export const CustomerScorecardDashboard = () => {
         <Flex flexDirection="column" gap="l" maxWidth={1200} marginX="auto">
           <PageHeader
             title="Customer Scorecard"
-            subtitle={`PCA Recruiting/TA feature adoption · ${SCORECARD_SOURCE.tenantCount} tenants · ${SCORECARD_SOURCE.featureCount} features · Median-based correlation scoring · ${SCORECARD_SOURCE.usageDateRange}`}
+            subtitle={`Compares tenant feature adoption with median time-to-hire differences across peer groups, then shows the selected tenant's recruiting KPI snapshot.\nSources: PROD customer360 + task_to_pca_mapping for adoption, SANDBOX Average Time to Hire for the outcome metric, and a legacy SANDBOX Time to Fill extract kept for tenant reference only. ${SCORECARD_SOURCE.tenantCount} tenants · ${SCORECARD_SOURCE.featureCount} features · ${SCORECARD_SOURCE.usageDateRange}`}
           />
           <Box style={listCard}>
             <FormSelect
@@ -538,7 +604,7 @@ export const CustomerScorecardDashboard = () => {
                 <BottleneckFlowStrip
                   title="Bottleneck analyser · job application flow"
                   titleHelp={BOTTLENECK_STRIP_HELP}
-                  subtitle="Recruiting sub-business-process stages (global aggregate). Segment width is proportional to median completed duration for each stage. Employment Agreement follows Offer."
+                  subtitle="Recruiting sub-business-process stages (global aggregate). Segment width is proportional to completed duration for each stage, using median first and labelling average whenever median is missing. Employment Agreement follows Offer."
                   stages={globalBottleneckStages}
                   footnote={`Source: dw.swh.bp_event_stats aggregates · completed events · latest month ${latestYm}`}
                 />
@@ -580,7 +646,7 @@ export const CustomerScorecardDashboard = () => {
                   </BodyText>
                 </Box>
               ) : (
-                <Box style={{ ...listCard, maxHeight: 600, overflowY: 'auto' }}>
+                <Box style={listCard}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                     <thead>
                       <tr style={{ borderBottom: `1px solid ${colors.soap300}` }}>
@@ -737,38 +803,51 @@ export const CustomerScorecardDashboard = () => {
             <BodyText size="small">No scorecard data for this tenant.</BodyText>
           ) : (
             <>
+              {(() => {
+                const recruiterCapacity = SCORECARD_RECRUITER_CAPACITY_BY_TENANT[tenant];
+                const regionPeers = tenantEnrichment
+                  ? SCORECARD_TENANT_NAMES.filter((name) => name !== tenant && TENANT_ENRICHMENT[name]?.region === tenantEnrichment.region)
+                  : [];
+                const industryPeers = tenantEnrichment
+                  ? SCORECARD_TENANT_NAMES.filter((name) => name !== tenant && TENANT_ENRICHMENT[name]?.industry === tenantEnrichment.industry)
+                  : [];
+                const regionTthBenchmark = benchmarkMedian(regionPeers.map((name) => SCORECARD_BY_TENANT[name]?.avgTimeToHireDays));
+                const industryTthBenchmark = benchmarkMedian(industryPeers.map((name) => SCORECARD_BY_TENANT[name]?.avgTimeToHireDays));
+                const regionCapacityBenchmark = benchmarkMedian(regionPeers.map((name) => SCORECARD_RECRUITER_CAPACITY_BY_TENANT[name]));
+                const industryCapacityBenchmark = benchmarkMedian(industryPeers.map((name) => SCORECARD_RECRUITER_CAPACITY_BY_TENANT[name]));
+                return (
               <Flex flexDirection="row" flexWrap="wrap" gap="m">
                 <Box flex="1 1 240px" minWidth={200} style={{ minWidth: 0 }}>
                   <MetricCard
                     label="Avg. time to hire"
                     value={fmtDays(datum.avgTimeToHireDays)}
-                    helperText={`IUM ${SCORECARD_SOURCE.metrics.avgTimeToHire} · days · ${SCORECARD_SOURCE.iumYearMonth}`}
+                    helperText={`${comparisonSentence(datum.avgTimeToHireDays, regionTthBenchmark, 'Segment', 'days')} · ${comparisonSentence(datum.avgTimeToHireDays, industryTthBenchmark, 'Industry', 'days')}`}
+                    changeIndicator={tthBenchmarkIndicator(datum.avgTimeToHireDays, regionTthBenchmark, industryTthBenchmark)}
                     tooltip="Mean tenant-level time to hire in days from the scorecard IUM snapshot for this tenant month."
                   />
                 </Box>
                 <Box flex="1 1 240px" minWidth={200} style={{ minWidth: 0 }}>
                   <MetricCard
-                    label="Avg. time to fill"
-                    value={fmtDays(datum.avgTimeToFillDays)}
-                    helperText={`IUM ${SCORECARD_SOURCE.metrics.avgTimeToFill} · days · ${SCORECARD_SOURCE.iumYearMonth}${datum.avgTimeToFillDays == null ? ' · no data' : ''}`}
-                    tooltip="Mean tenant-level time to fill in days from the scorecard IUM snapshot for this tenant month."
+                    label="Recruiter Capacity"
+                    value={fmtDays(recruiterCapacity)}
+                    helperText={`${comparisonSentence(recruiterCapacity, regionCapacityBenchmark, 'Segment', 'reqs')} · ${comparisonSentence(recruiterCapacity, industryCapacityBenchmark, 'Industry', 'reqs')}`}
+                    changeIndicator={{ text: 'Context from region and industry', sentiment: 'neutral' }}
+                    tooltip="Live SANDBOX Recruiter Productivity IUM for this tenant, used here as Recruiter Capacity. Measures average open requisitions and evergreens per primary recruiter."
                   />
                 </Box>
-                {tenantEnrichment && (
-                  <>
-                    <Box flex="1 1 240px" minWidth={200} style={{ minWidth: 0 }}>
-                      <MetricCard label="Industry" value={tenantEnrichment.industry} helperText="Tenant enrichment" tooltip="Industry segment from tenant enrichment join (not an IUM)." />
-                    </Box>
-                    <Box flex="1 1 240px" minWidth={200} style={{ minWidth: 0 }}>
-                      <MetricCard label="Region" value={tenantEnrichment.region} helperText="Tenant enrichment" tooltip="Geographic region from tenant enrichment join (not an IUM)." />
-                    </Box>
-                  </>
-                )}
               </Flex>
+                );
+              })()}
 
-              {(datum.avgTimeToHireDays == null || datum.avgTimeToFillDays == null) && (
+              {tenantEnrichment && (
                 <BodyText size="small" style={{ fontSize: 13, color: colors.blackPepper500 }}>
-                  One or both IUM values are missing for this tenant in {SCORECARD_SOURCE.iumYearMonth} ({SCORECARD_SOURCE.iumEnvironment}).
+                  Benchmark context: segment = <strong>{tenantEnrichment.region}</strong> and industry = <strong>{tenantEnrichment.industry}</strong>.
+                </BodyText>
+              )}
+
+              {(datum.avgTimeToHireDays == null || SCORECARD_RECRUITER_CAPACITY_BY_TENANT[tenant] == null) && (
+                <BodyText size="small" style={{ fontSize: 13, color: colors.blackPepper500 }}>
+                  One or both customer KPI values are missing for this tenant in the latest scorecard month. TTH uses {SCORECARD_SOURCE.iumYearMonth}; Recruiter Capacity uses {SCORECARD_RECRUITER_CAPACITY_YYYY_MM}.
                 </BodyText>
               )}
 
@@ -776,7 +855,7 @@ export const CustomerScorecardDashboard = () => {
                 <BottleneckFlowStrip
                   title={`Bottleneck analyser · ${getTenantDisplayName(tenant)}`}
                   titleHelp={BOTTLENECK_STRIP_HELP}
-                  subtitle="Job application sub-process stages for this tenant (when present in bp_event_stats). Width reflects median completed days per stage. Employment Agreement follows Offer."
+                  subtitle="Job application sub-process stages for this tenant (when present in bp_event_stats). Width reflects completed days per stage, using median first and labelling average whenever median is missing. Employment Agreement follows Offer."
                   stages={tenantBottleneckStages}
                   footnote={`Source: dw.swh.bp_event_stats · tenant slice · latest month ${latestYm}`}
                 />
@@ -972,7 +1051,7 @@ export const CustomerScorecardDashboard = () => {
             Snapshot: {SCORECARD_SOURCE.queriedOn} · {SCORECARD_SOURCE.tenantCount} tenants · {SCORECARD_SOURCE.featureCount} PCA features · Correlation window: {SCORECARD_SOURCE.correlationWindow}
           </BodyText>
           <BodyText size="small" style={{ color: colors.blackPepper400, fontStyle: 'italic' }}>
-            Environment note: TTH/TTF IUMs sourced from <strong>SANDBOX</strong> (metrics {SCORECARD_SOURCE.metrics.avgTimeToHire}/{SCORECARD_SOURCE.metrics.avgTimeToFill}); feature adoption from <strong>PROD</strong> ({SCORECARD_SOURCE.customer360Table}).
+            Environment note: feature adoption comes from <strong>PROD</strong> ({SCORECARD_SOURCE.customer360Table}); the live recruiting IUM outcome currently used for scoring is <strong>SANDBOX Average Time to Hire</strong> (2358), and the Time to Fill card is a <strong>legacy SANDBOX extract</strong> retained for reference while live replacement work remains open.
           </BodyText>
         </Flex>
       </Box>

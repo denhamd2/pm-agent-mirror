@@ -23,12 +23,16 @@ import { AvgTimeToHireDashboard } from './avg-time-to-hire-dashboard';
 import { AvgTimeToFillDashboard } from './avg-time-to-fill-dashboard';
 import { PositionsOpenVsFilledDashboard } from './positions-open-vs-filled-dashboard';
 import { ValueRealizationMetrics } from './value-realization-metrics';
+import { RecruiterCapacityDashboard } from './recruiter-capacity-dashboard';
 import { AddDocumentsImpactDashboard } from './add-documents-impact-dashboard';
 import { ViewDashboard } from './view-dashboard';
 import { RecruitingAdoptionDashboard } from './recruiting-adoption-dashboard';
 import { InterviewMetricsDashboard } from './interview-metrics-dashboard';
-import { BpDurationDashboard } from './bp-duration-dashboard';
+const BpDurationDashboard = React.lazy(() => import('./bp-duration-dashboard').then((m) => ({ default: m.BpDurationDashboard })));
 const CustomerScorecardDashboard = React.lazy(() => import('./customer-scorecard-dashboard').then((m) => ({ default: m.CustomerScorecardDashboard })));
+const RecruitingMetricTreePage = React.lazy(() =>
+  import('./recruiting-metric-tree').then((m) => ({ default: m.RecruitingMetricTreePage }))
+);
 import { SANA_PAGE_CANVAS } from './components';
 
 /** Prototype slugs backed by `design/*.tsx` modules in this branch (see `vite.config.ts` `slugs` Set). */
@@ -51,6 +55,8 @@ function prototypeFromLocation():
   | 'add-documents-impact'
   | 'positions-open-vs-filled'
   | 'value-realization-metrics'
+  | 'recruiter-capacity'
+  | 'recruiting-metric-tree'
   | 'recruiting-adoption'
   | 'interview-metrics'
   | 'bp-durations'
@@ -74,6 +80,12 @@ function prototypeFromLocation():
   }
   if (path.endsWith('value-realization-metrics')) {
     return 'value-realization-metrics';
+  }
+  if (path.endsWith('recruiter-capacity')) {
+    return 'recruiter-capacity';
+  }
+  if (path.endsWith('recruiting-metric-tree')) {
+    return 'recruiting-metric-tree';
   }
   if (path.endsWith('add-documents-impact')) {
     return 'add-documents-impact';
@@ -174,6 +186,12 @@ function prototypeFromLocation():
   if (h === 'value-realization-metrics' || h.startsWith('value-realization-metrics')) {
     return 'value-realization-metrics';
   }
+  if (h === 'recruiter-capacity' || h.startsWith('recruiter-capacity')) {
+    return 'recruiter-capacity';
+  }
+  if (h === 'recruiting-metric-tree' || h.startsWith('recruiting-metric-tree')) {
+    return 'recruiting-metric-tree';
+  }
   if (h === 'add-documents-impact' || h.startsWith('add-documents-impact')) {
     return 'add-documents-impact';
   }
@@ -220,7 +238,11 @@ function AppRoot() {
     return <RecruitingAdoptionDashboard />;
   }
   if (route === 'bp-durations') {
-    return <BpDurationDashboard />;
+    return (
+      <React.Suspense fallback={<div style={{ padding: 40, textAlign: 'center', color: '#666' }}>Loading BP durations...</div>}>
+        <BpDurationDashboard />
+      </React.Suspense>
+    );
   }
   if (route === 'interview-metrics') {
     return <InterviewMetricsDashboard />;
@@ -230,6 +252,16 @@ function AppRoot() {
   }
   if (route === 'value-realization-metrics') {
     return <ValueRealizationMetrics />;
+  }
+  if (route === 'recruiter-capacity') {
+    return <RecruiterCapacityDashboard />;
+  }
+  if (route === 'recruiting-metric-tree') {
+    return (
+      <React.Suspense fallback={<div style={{ padding: 40, textAlign: 'center', color: '#666' }}>Loading metric tree...</div>}>
+        <RecruitingMetricTreePage />
+      </React.Suspense>
+    );
   }
   if (route === 'add-documents-impact') {
     return <AddDocumentsImpactDashboard />;

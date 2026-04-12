@@ -4,13 +4,13 @@
  * `dw.swh.bp_event_stats` + `dw.user_test.interview_dashboard_tenant_filters` on tenant.
  */
 
-import type { AggTuple, BpMonthly, StatusMetrics, SubBpConfig } from './data-bp-durations';
+import type { AggTuple, BpMonthly, StatusMetrics, SubBpConfig } from './data-bp-shared';
+import { LABELS } from './data-bp-shared';
 import {
   GLOBAL_ROWS,
   REGION_ROWS,
   INDUSTRY_ROWS,
   TENANT_ROWS,
-  LABELS,
   SUB_BPS,
 } from './data-bp-durations';
 import {

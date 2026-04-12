@@ -50,26 +50,50 @@ CONCAT(CAST(year AS varchar), '-', LPAD(CAST(month AS varchar), 2, '0')) as ym
 AND try_cast(value AS double) > 0
 ```
 
+5. **For drift-prone recruiting IUMs, resolve by `metric_name` first** before trusting an older `metric_id`. Only reintroduce ID-based filters after you prove the live name and current meaning still match.
+
 ## IUM Metric Reference
 
 **Table**: `swh_raw.internal_usage_metrics_report_kafka`
 
 ### Recruiting Metrics (confirmed available)
 
-| metric_id | Name | Unit | Tenants (approx) | Notes |
-|-----------|------|------|-------------------|-------|
-| 2358 | Average Time to Hire | Days | ~3,400 | Most widely tracked; stable 68-77d range |
-| 2359 | Average Time to Fill | Days | ~981 (with >0 filter) | Re-queried 11 Apr 2026. 0.0 = no data, not zero days. Always filter `try_cast(value AS double) > 0`. Extreme outliers common (>10,000d). |
-| 2360 | Count of Positions with Open Job Requisitions | Count | ~800-870 | Seasonal: Dec-Jan dip to ~600 |
-| 2361 | Count of Positions Filled | Count | ~3,900-4,300 | 5x more tenants than open reqs |
-| 1757 | Add Documents configured BP definitions | Count | ~600 latest month | Verified 11 April 2026 |
-| 1758 | Add Document references with no documents | Count | ~400 latest month | Verified 11 April 2026 |
-| 1759 | Add Document references with documents | Count | ~400 latest month | Verified 11 April 2026 |
-| 1760 | Add Documents created | Count | ~420 latest month | Verified 11 April 2026 |
-| 2053 | Interview Sessions Scheduled | Count | TBD | |
-| 2054 | Interview Feedback Submitted | Count | TBD | |
+| metric_id | Name | Unit | Latest visible env | Notes |
+|-----------|------|------|--------------------|-------|
+| 2358 | Average Time to Hire | Days | SANDBOX | Confirmed live by `metric_name`. Use mean for KPI trends; use median only after tenant-level regrouping in downstream analyses. |
+| 2346 | Number of Offers accepted. | Count | SANDBOX | Confirmed live by `metric_name`; good candidate for tracker coverage. |
+| 2360 | Employment Agreement Acceptance | Count | SANDBOX | Confirmed live by `metric_name`; do not confuse with older open-req mapping. |
+| 2361 | Recruiter Productivity | Count | SANDBOX | Confirmed live by `metric_name`; tracker wording is Recruiter Capacity. |
+| 2349 | Count of Internal Job Applications last month | Count | SANDBOX | Confirmed live by `metric_name`; monthly internal-mobility volume proxy. |
+| legacy 2359 | Historical Time to Fill extract | Days | SANDBOX | Workspace keeps a historical TTF extract, but current live 2359 discovery conflicts with applicant age-band metrics. Do not reuse 2359 for new live work without metric-name revalidation. |
+| 1757 | Add Documents configured BP definitions | Count | SANDBOX | Verified 11 April 2026; latest month coverage ~600 tenants. |
+| 1758 | Add Document references with no documents | Count | SANDBOX | Verified 11 April 2026; latest month coverage ~400 tenants. |
+| 1759 | Add Document references with documents | Count | SANDBOX | Verified 11 April 2026; latest month coverage ~400 tenants. |
+| 1760 | Add Documents created | Count | SANDBOX | Verified 11 April 2026; latest month coverage ~420 tenants. |
+| 2053 | Interview Sessions Scheduled | Count | UNKNOWN | Placeholder reference only. |
+| 2054 | Interview Feedback Submitted | Count | UNKNOWN | Placeholder reference only. |
 
 **Important:** do not reuse older informal mappings for `1757`-`1760`. In this workspace, the currently verified meaning is the Add Documents set above, sourced from the Offer dashboard work completed on 11 April 2026.
+
+### Live discovery additions - 12 April 2026
+
+These were confirmed live in `dw.swh_raw.internal_usage_metrics_report_kafka` during tracker-metric discovery:
+
+| metric_id | Name | Notes |
+|-----------|------|-------|
+| 2346 | Number of Offers accepted. | Good candidate to replace "needs implementation" assumptions for offer acceptance counts. |
+| 2360 | Employment Agreement Acceptance | Good candidate for EA acceptance counts. |
+| 2361 | Recruiter Productivity | Tracker wording is Recruiter Capacity; live warehouse metric name is Recruiter Productivity. |
+| 2349 | Count of Internal Job Applications last month | Good candidate for internal application volume. |
+| 2336-2339 | Job application gender counts | Male, female, no gender assigned, non male/female gender. |
+| 2375-2379, 2438-2445 | Job application race / ethnicity counts | Multiple ethnicity buckets surfaced live. |
+| 2359, 2427-2433 | Job application age counts | Multiple age buckets surfaced live. |
+
+**Critical caution:** live discovery showed that historical assumptions about stable metric IDs can be unsafe. Before wiring a recruiting metric, resolve it by `metric_name` first, then reconcile the ID against any older materialised dashboard logic. In particular:
+
+- the older workspace assumption that `2360` / `2361` still mean open / filled position metrics is stale in the current live warehouse
+- the older workspace assumption that `2359` is still safe to treat as live Time to Fill is also stale until a fresh metric-name match proves it
+- the latest visible month for the live-resolved recruiting IUMs above surfaced under `SANDBOX` only in the currently accessible warehouse path, so do not imply a current-month PROD replacement unless you re-prove it
 
 ### Segmentation Dimensions
 
@@ -132,6 +156,25 @@ END as region
 ### Current caution
 
 - `Initiate Offer` has not yet been validated as a clean, chart-ready task in the accessible Pharos tables. Do not add an `Initiate Offer` chart until an exact-name proof query confirms it.
+- `dw.user_test.bp_job_appl_event_records` is promising for future job-application event-chain work, but recent live discovery did not surface clean offer / employment rows under obvious filters.
+- `dw.mixology.initiate_offer` and `dw.mixology.request_compensation_change` are accessible, but sampled rows looked like generic UX telemetry rather than PM-ready business-event facts.
+- Treat Offer / EA issued and renegotiation metrics as unresolved until a clean job-application semantic mapping is proven.
+
+## Career Hub Funnel Discovery
+
+**Tables**: `dw.user_data.talent_ml_career_hub_jobs_all_events`, `dw.user_data.talent_ml_career_hub_jobs_apply_transformed`
+
+### What live discovery proved
+
+- `talent_ml_career_hub_jobs_all_events` contains high-volume `impression`, `click`, and `apply` interactions.
+- `talent_ml_career_hub_jobs_apply_transformed` cleanly exposes apply-click behaviour across 200+ tenants in recent windows.
+- No packaged IUM for career-site reach / started / submitted surfaced under obvious recruiting metric names.
+
+### How to treat these tables
+
+- Use them as proxy candidates for reach and application starts.
+- Do not claim parity with the tracker's external career-site funnel without validating that the events represent the same channel and stage semantics.
+- Submitted applications still look blocked unless a clean downstream submit event is found.
 
 ## PCA Feature Adoption Queries
 
@@ -159,7 +202,7 @@ HAVING SUM(c.total_oms_transactions) > 0 OR SUM(c.total_users) > 0
 ### Known caveats
 - Superset may alias `total_oms_transactions` as `total_ons_transactions`; the physical column is `total_oms_transactions`.
 - `task_to_pca_mapping` uses `task_xo_product` and `entitlement` for product filtering; there is no simple `product` column.
-- Coverage: 74 PCA features, ~5,908 tenants (as of 11 Apr 2026).
+- Coverage: 75 PCA features, ~5,908 tenants (as of 11 Apr 2026).
 - "Enabled" = any mapped task had usage > 0 in the 12-month window.
 
 ## Tenant Enrichment (Region + Industry)
@@ -191,20 +234,20 @@ Established methodology used by the Customer Scorecard (`design/data-customer-sc
 
 ### Pipeline
 1. Compute per-tenant feature adoption from PCA (see above)
-2. Join IUM outcome metrics (e.g., 2358 TTH, 2359 TTF) per tenant
+2. Join per-tenant `Average Time to Hire` outcomes from IUM, resolved by `metric_name` first
 3. For each feature: split tenants into "adopted" vs "not adopted"
 4. Run Mann-Whitney U test (non-parametric; no normality assumption)
 5. Apply Benjamini-Hochberg correction across all features (controls false discovery rate)
-6. Compute composite score: `abs(mean_delta_ttf) + abs(mean_delta_tth)`
-7. Assign confidence tiers: high (n >= 30 both groups, q < 0.05), medium (n >= 10, q < 0.10), low (otherwise)
+6. Rank by `delta_tth_days = median(TTH_off) - median(TTH_on)` so positive values mean adopters are faster
+7. Assign confidence tiers: high (n >= 30 both groups, q < 0.05), medium (n >= 10 both groups), low (otherwise)
 
 ### Segmentation
 - Feature-count terciles: low_usage (<20 features), mid_usage (20-39), high_usage (>=40)
 - Industry-aware peer benchmarking: filter peers by usage segment AND industry; fall back to segment-only if <5 industry peers
-- Industry-aware recommendations: when >=10 same-industry+segment peers exist, mean-delta correlation is recomputed within the industry cohort for "missing features likely to improve TTF/TTH"; falls back to segment-level global correlations otherwise
+- Industry-aware recommendations: when >=10 same-industry+segment peers exist, median TTH deltas are recomputed within that industry cohort for missing-feature recommendations; otherwise fall back to the segment-level global ranking
 
 ### On-the-fly filtered re-ranking (UI)
-When region/industry filters are applied on the landing page, a lightweight mean-delta computation runs client-side. q-values are not recomputed (require full Mann-Whitney U); confidence tiers serve as guidance. Minimum 10 tenants required per filtered group.
+When region or industry filters are applied on the landing page, a lightweight median-delta computation runs client-side. q-values are not recomputed (require full Mann-Whitney U); confidence tiers are descriptive only. Minimum 10 tenants required per filtered group for medium confidence.
 
 ## Standard Query Templates
 
@@ -387,23 +430,19 @@ Key patterns:
 - Strong seasonal dip in Dec-Jan (holiday hiring freeze)
 
 ### Time to Fill (2359)
-- Re-queried 11 Apr 2026 with `>0` filter: ~981 tenants with positive values (up from ~540 in earlier queries using narrower date windows)
-- 0.0 values are "no data", not zero days. Always filter `try_cast(value AS double) > 0` and set null in materialised files where no data exists.
+- Historical workspace extract only; do not assume current live `2359` still means Time to Fill.
+- If you must use the legacy extract, treat 0.0 values as "no data", not zero days, and filter `try_cast(value AS double) > 0`.
 - Higher variance; extreme outliers common (>10,000 days)
-- Outliers like Texas Roadhouse (18,854d) are data quality issues, not real fill times
-- Americas-West shows suspicious data pattern (215→30 drop) - investigate before relying on
+- Use median rather than mean for comparative or inferential work on this metric.
+- Any fresh Time to Fill work must start with metric-name discovery, not ID reuse.
 
-### Positions Open (2360)
-- ~800-870 tenants; seasonal Dec-Jan dip to ~600
-- Large outlier range (max 26,145); averages skewed by heavy-hiring tenants
-
-### Positions Filled (2361)
-- Most broadly tracked position metric (~4,300 tenants)
-- Remarkably stable at 19-22 avg per tenant per month
-- 5x more tenants track filled vs open requisitions
+### Legacy positions extract
+- Older workspace materials mapped `2360` to open requisitions and `2361` to filled positions.
+- Current live warehouse discovery instead maps `2360` to Employment Agreement Acceptance and `2361` to Recruiter Productivity.
+- Keep the positions dashboard as historical reference only until a clean live replacement is proven.
 
 ### PCA Feature Adoption
-- 74 Recruiting/TA features across 5,908 tenants (as of 11 Apr 2026)
+- 75 Recruiting/TA features across 5,908 tenants (as of 11 Apr 2026)
 - "Enabled" = any mapped task had usage > 0 (users or transactions) in the 12-month window
 - Supersedes WUM boolean flags and `customer_monthly_feature_usage_test` for Customer Scorecard feature adoption
 

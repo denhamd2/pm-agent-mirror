@@ -20,13 +20,8 @@ import {
   ArcElement,
 } from 'chart.js';
 import { Bar, Line, Doughnut } from 'react-chartjs-2';
-import {
-  LABELS,
-  REGION_OPTIONS,
-  INDUSTRY_OPTIONS,
-  TENANT_OPTIONS,
-  type SubBpConfig,
-} from './data-bp-durations';
+import { LABELS, REGION_OPTIONS, INDUSTRY_OPTIONS, type SubBpConfig } from './data-bp-shared';
+import { TENANT_OPTIONS } from './data-bp-durations';
 import {
   getSliceSubBpsAndHeadline,
   EMPTY_TENANT_FILTER,
@@ -1853,7 +1848,7 @@ export const BpDurationDashboard = () => {
       <Box padding="l" flex={1}>
       <PageHeader
         title="Job Application Sub-BP Duration & Quality"
-        subtitle="Avg. time, completion rates, and process quality for sub-BPs in the Job Application flow (12 months, PROD)"
+        subtitle={"Shows how long each recruiting sub-process takes, how often it completes, and where quality signals like sent back or correction rates are concentrated.\nSource: dw.swh.bp_event_stats · PROD completed-event aggregates over the last 12 months, with mean and median cycle times shown separately."}
       />
 
       <TenantRegionIndustryFilterCard filters={sliceFilter} onChange={setSliceFilter} />

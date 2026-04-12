@@ -50,7 +50,7 @@ const INFRA_PALETTE: Record<string, string> = {
   WDAY: colors.blackPepper600,
 };
 
-// ─── Raw data (Pharos IUM metric 2359, SANDBOX env, queried 10 Apr 2026) ───
+// ─── Historical raw data extract (older 2359 Time to Fill mapping, SANDBOX, queried 10 Apr 2026) ───
 
 interface TrendRow { ym: string; avg: number; tenants: number; min: number; max: number }
 
@@ -481,7 +481,7 @@ export const AvgTimeToFillDashboard: React.FC = () => {
         <Box style={{ maxWidth: 1200, margin: '0 auto' }}>
         <PageHeader
           title="Average Time to Fill"
-          subtitle="IUM metric 2359 · Pharos internal_usage_metrics_report_kafka · SANDBOX environment"
+          subtitle={"Historical tenant-level average time to fill from requisition open to filled position, shown here as the monthly mean across reporting tenants.\nSource: materialised 10 Apr 2026 SANDBOX extract originally keyed to IUM 2359 · keep as a legacy reference until a fresh live metric-name replacement is revalidated."}
         />
 
         <Flex gap="m" marginBottom="l" style={{ flexWrap: 'wrap' }}>
@@ -493,7 +493,7 @@ export const AvgTimeToFillDashboard: React.FC = () => {
               text: `${avgDelta > 0 ? '+' : ''}${avgDelta.toFixed(1)} vs prev month`,
               sentiment: avgDelta > 0 ? 'negative' : 'positive',
             }}
-            tooltip="IUM 2359: mean of tenant-level average time-to-fill values for the month (SANDBOX tenants with non-zero data)."
+            tooltip="Historical 10 Apr 2026 extract of tenant-level average time-to-fill values for the month. Retained as a legacy SANDBOX snapshot while the live metric-name mapping is revalidated."
           />
           <MetricCard
             label="Active tenants"
@@ -688,7 +688,7 @@ export const AvgTimeToFillDashboard: React.FC = () => {
         )}
 
         <BodyText size="small" color={colors.blackPepper400} marginTop="l" style={{ lineHeight: 1.6, fontSize: 12 }}>
-          <strong>Data notes:</strong> Source: Pharos <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>internal_usage_metrics_report_kafka</code> · metric_id 2359 · SANDBOX environment · Non-zero values only · Geographic regions mapped from <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>wd_dc_physical</code> data centre codes · Values represent average calendar days from requisition open to position filled · Extreme outlier values (&gt;10,000 days) likely indicate data quality issues.
+          <strong>Data notes:</strong> Source: historical Pharos extract from <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>internal_usage_metrics_report_kafka</code> using the older 2359 Time to Fill assumption · SANDBOX environment · Non-zero values only · Geographic regions mapped from <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>wd_dc_physical</code> data centre codes · Values represent average calendar days from requisition open to position filled · Current live warehouse discovery now shows 2359 on applicant age-band metrics, so do not reuse this ID without metric-name revalidation.
         </BodyText>
         </Box>
       </Box>
