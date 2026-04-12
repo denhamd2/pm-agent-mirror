@@ -40,6 +40,7 @@ export const WORKDAY_LEFT_TAB_BAR_SECONDARY_PX = SANA_SECONDARY_NAV_WIDTH_PX;
 export interface WorkdayLeftTabItem {
   id: string;
   label: string;
+  isCategory?: boolean;
 }
 
 type CanvasIcon = NonNullable<React.ComponentProps<typeof SystemIcon>['icon']>;
@@ -221,6 +222,9 @@ export const WorkdayLeftTabBar: React.FC<WorkdayLeftTabBarProps> = ({
                     lineHeight: 1.3,
                     letterSpacing: '-0.02em',
                     color: SANA_SECONDARY_TAB_ACTIVE_FG,
+                    maxWidth: '100%',
+                    overflowWrap: 'break-word',
+                    wordBreak: 'break-word',
                   }}
                 >
                   {secondaryTitle}
@@ -260,6 +264,15 @@ export const WorkdayLeftTabBar: React.FC<WorkdayLeftTabBarProps> = ({
           style={{ flex: 1, overflowY: 'auto', minHeight: 0 }}
         >
           {tabs.map((tab) => {
+            if (tab.isCategory) {
+              return (
+                <Box key={tab.id} padding="s" marginTop="s">
+                  <BodyText size="small" style={{ fontWeight: 700, color: SANA_SECONDARY_TAB_INACTIVE_FG, textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: 11 }}>
+                    {tab.label}
+                  </BodyText>
+                </Box>
+              );
+            }
             const active = tab.id === activeTabId;
             return (
               <Box

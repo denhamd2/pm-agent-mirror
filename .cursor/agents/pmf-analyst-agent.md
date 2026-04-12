@@ -1,8 +1,9 @@
 ---
 name: PMF Analyst
 description: Applies Braun & Clarke 6-phase thematic analysis to qualitative PMF data across countries with multi-source triangulation and strategic RICE scoring
-model: default
+model: inherit
 readonly: false
+is_background: false
 ---
 
 # Braun & Clarke PMF Analysis Protocol

@@ -520,57 +520,43 @@ _Target ~50-60 slides for v65 parity; McKinsey-style tone._
 
 ## Section 11: Thematic Analysis
 
-10. **SECTION: Thematic Analysis** (**2-3 grouped slides** + section divider + triangulation matrix)
+10. **SECTION: Thematic Analysis** (**Grouped or Individual slides** + section divider + triangulation matrix)
    - Section Title: "Thematic Analysis | Themes and triangulation"
-   - **GROUP THEMES ONTO 2-3 SLIDES**: Do NOT create one slide per theme. v65 groups multiple themes together for better pacing.
-   - **Pattern (v65 actual)**: 
-     - Slide 1: "Themes 1-4 ([Category Label])" - 3-4 theme subheaders
-     - Slide 2: "Themes 5-6 ([Category Label])" - 3-4 theme subheaders
-     - (Optional Slide 3 if 9+ themes exist)
+   - **Two valid formats**:
+     - **(a) Grouped pattern (v65)**: 2-3 slides with 3-4 themes per slide, 3 bullets per theme. Use when themes exceed 5 or evidence is thinner.
+       - Slide 1: "Themes 1-4 ([Category Label])" - 3-4 theme subheaders
+       - Slide 2: "Themes 5-6 ([Category Label])" - 3-4 theme subheaders
+     - **(b) Individual pattern (v90)**: One slide per theme with quote-led evidence, operational context, business impact, and product implications. Use when report has 3-5 well-evidenced themes.
    - Cross-Source Validation Matrix (triangulation table: Theme | P1 | P2 | P3 | CSV | PMF Impact)
    
-   **Grouped Thematic slide requirements (VP-FRIENDLY & DETAILED):**
-   - **Slide title format**: "Themes [N-M] ([Category])" where Category describes the grouping (e.g., "GCC Convergence", "Regional Depth")
-   - **Font size: 12pt** (MANDATORY - these slides have 9-12 bullets, exceeding the >6 threshold for dense slides per 010-style-guide.mdc)
-  - **Each theme gets**:
-    - **Theme subheader** (level 0, 12pt bold): Theme name (e.g., "Candidate review efficiency", "Search and AI-assisted matching")
-    - **MINIMUM 5 bullets** (level 1, 12pt) under each theme subheader. MUST include:
-      1. **Key Insight**: Specific finding with customer evidence.
-      2. **Direct Quote**: A key quote from a participant or SME.
-      3. **Customer Names / Data Points**: Explicitly name customers (e.g., Genpact) or specific data points (e.g., 700K volume).
-      4. **Business Impact**: Effect on win rates, ARR, retention, or competitive position.
-      5. **Product Implications**: Workday Recruiting roadmap implications.
-   - **MANDATORY DENSITY CAP: 1 theme per slide** (reduced from 2 to prevent overflow, as 5 bullets = 10 lines if 2 themes). With 5 bullets per theme = 5 total bullets + 1 subheader = **6-8 rendered lines** (within limit).
+   **Thematic slide requirements (VP-FRIENDLY & DETAILED):**
+   - **Font size: 12pt** for grouped pattern, **14pt** for individual pattern.
+   - **Each theme gets**:
+     - **Theme subheader** (level 0, bold): Theme name (e.g., "Candidate review efficiency", "Search and AI-assisted matching")
+     - **Bullets** (level 1) under each theme subheader. MUST include:
+       1. **Key Insight**: Specific finding with customer evidence.
+       2. **Direct Quote**: A key quote from a participant or SME.
+       3. **Customer Names / Data Points**: Explicitly name customers or specific data points (e.g., 700K volume).
+       4. **Business Impact**: Effect on win rates, ARR, retention, or competitive position.
+       5. **Product Implications**: Workday Recruiting roadmap implications.
    - Transform raw research language into executive-ready narrative (no technical codes or jargon)
    - Use **cause → impact → implication** structure in bullets
    - **Speaker notes**: Minimum 5 bullets covering cross-theme patterns, triangulation strength, commercial implications, plus References section
    
-   **Example structure:**
+   **Example structure (Individual pattern - v90):**
    ```
-   Slide Title: "Themes 1-4 (GCC Convergence)"
+   Slide Title: "Theme 1: Candidate review efficiency"
    
-   [Subheader] Candidate review efficiency
    • GCC recruiters managing 50-100 candidates face navigation friction...
+   • "Quote from P1 about the pain point" (P1, Company)
    • Business impact: Primary churn driver for high-volume customers...
    • Product opportunity: Streamlined workflows could reduce time-to-fill 15-20%...
-   
-   [Subheader] Search and AI-assisted matching
-   • P2 cites 2M candidate database requiring semantic discovery...
-   • Competitive vulnerability: True gap without HiredScore entitlement...
-   • Roadmap priority: Consolidate review UI and clarify Skills Cloud SKU...
-   
-   [Subheader] Interview scheduling
-   • ...
-   
-   [Subheader] Offers, documents, RTL
-   • ...
    ```
    
    **FORBIDDEN**: 
-   - Creating individual slides per theme (breaks v65 pacing)
    - Using raw theme codes like "T1 Candidate review density: 3/3 customers"
    - Fewer than 3 bullets per theme
-   - More than 4 themes on one slide (causes overflow)
+   - More than 4 themes on one slide (causes overflow in grouped pattern)
 
 ## Section 12: Full Funnel / Gap Diagnostic
 
@@ -899,6 +885,7 @@ ACTION: Expanding content from source files before generation...
 - [ ] **Speaker notes**: On all content slides (except Title, Section Title, Bumper) with References URLs
 
 **Content depth (130-specific, v65 parity):**
+- [ ] **Concrete Anchor Requirement**: Every level 1 bullet on a content slide MUST contain at least one concrete anchor: a specific number/metric, a named entity (company, regulation, product), a participant reference (P1-P5, SME1-SME5), or a dated fact. Bullets without any concrete anchor are FORBIDDEN - they indicate the content is too abstract for executive consumption.
 - [ ] **Executive Summary: 4 bullets (hard cap, reduced from 4-5)**, 200-250 chars per bullet (target 220 chars for rich 2.5-line rendering), VP-appropriate detail with cause → impact → implication structure, strategic roadmap direction synthesized from Priority Recommendations
 - [ ] **PESTEL titles: factor name only** (no "PESTEL -" prefix: use "Political", "Economic", etc.)
 - [ ] **PESTEL source: @product-strategy-agent output file** (`research/[Country]/pestel-analysis-[Country]-[YYYY-MM-DD]-[MISSION-ID].md`) — do NOT extract from @pmf-analyst report

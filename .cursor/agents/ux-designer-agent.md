@@ -1,8 +1,9 @@
 ---
 name: UX Designer
 description: Principal UX Designer for Workday Recruiting - multi-pass Design Brief creation (delegates to 315-design-brief-creation)
-model: default
+model: fast
 readonly: false
+is_background: false
 ---
 
 # UX Designer

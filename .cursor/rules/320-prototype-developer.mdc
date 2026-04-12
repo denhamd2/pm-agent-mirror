@@ -39,6 +39,20 @@ When the user mentions "implement", "prototype", "Canvas Kit", or provides desig
    - `FormDateInput` - Date selectors
 4. **Sana Styling**: Use `SANA_PAGE_CANVAS`, `SANA_CARD_RADIUS_LG`, `SANA_LINK_ACCENT` from `design/components/sanaShellTheme.ts`
 5. **No Breadcrumbs** (hard rule): Never use Canvas Kit `Breadcrumbs` or custom hierarchy path strips. Use `Heading` + tab navigation + metadata instead.
+6. **Conversational / agentic assistant**: If the brief or PRD implies chat UX (e.g. scheduling assistant, screening bot), you **MUST** follow the agentic section in `015-sana-style-ui.md` and `communication-patterns.md`.
+   - **Checklist**:
+     - [ ] Use `SanaCommMessageBubble` for all bubbles.
+     - [ ] Use `SanaCommComposer` (pill, focus ring, circular send).
+     - [ ] Use `SANA_COMM_*` tokens for ancillary thread chrome.
+     - [ ] Use Canvas Kit `Avatar` for the assistant.
+     - [ ] Include `Banner` or approved disclosure for automated assistant.
+     - [ ] Use Canvas Kit `PrimaryButton` / `SecondaryButton` for quick replies (no raw `<button>`).
+7. **Generative UI (GenUI) / A2UI**: If the brief calls for dynamic, agent-generated interfaces (e.g. Recruiter Hub), you **MUST** use the `A2UIRenderer` and `GenUIPatterns`.
+   - **Checklist**:
+     - [ ] Use `A2UIRenderer` to map JSON to Canvas Kit.
+     - [ ] Use `GenUIPatterns.tsx` components (`CandidateActionCard`, `CandidateGrid`, `ChartCard`, etc.) for rich payloads.
+     - [ ] Ensure `SanaCommMessageBubble` uses `maxWidth="100%"` or `width="100%"` to allow embedded grids/charts to expand.
+8. **Candidate Experience**: If building external career sites or candidate homes, use `CandidateExperiencePatterns.tsx` (`CareerSiteHero`, `JobCard`, `JobDetailsStickyFooter`).
 
 **For detailed component patterns**, see:
 - **Communication patterns**: `design/docs/canvas-kit-patterns/communication-patterns.md`

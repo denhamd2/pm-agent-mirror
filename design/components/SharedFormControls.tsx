@@ -1,6 +1,9 @@
 import React from 'react';
 import { FormField } from '@workday/canvas-kit-react/form-field';
 import { TextInput } from '@workday/canvas-kit-react/text-input';
+import { Radio, RadioGroup } from '@workday/canvas-kit-react/radio';
+import { Checkbox } from '@workday/canvas-kit-react/checkbox';
+import { Flex } from '@workday/canvas-kit-react/layout';
 
 /**
  * Shared Form Controls - Reusable Canvas Kit form components
@@ -208,3 +211,165 @@ export const FormDateInput: React.FC<FormDateInputProps> = ({
     />
   </FormField>
 );
+
+// ============================================================================
+// FormRadioGroup - Reusable Radio Group
+// ============================================================================
+
+export interface FormRadioGroupProps {
+  id: string;
+  label: string;
+  name: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: Array<{ value: string; label: string; disabled?: boolean }>;
+  disabled?: boolean;
+  required?: boolean;
+  error?: string;
+  layout?: 'horizontal' | 'vertical';
+}
+
+/**
+ * Canvas Kit RadioGroup with proper FormField composition
+ * 
+ * Usage:
+ * ```tsx
+ * <FormRadioGroup
+ *   id="contact-method"
+ *   name="contactMethod"
+ *   label="Preferred Contact Method"
+ *   value={contactMethod}
+ *   onChange={setContactMethod}
+ *   options={[
+ *     { value: 'email', label: 'Email' },
+ *     { value: 'phone', label: 'Phone' }
+ *   ]}
+ *   required
+ * />
+ * ```
+ */
+export const FormRadioGroup: React.FC<FormRadioGroupProps> = ({
+  id,
+  label,
+  name,
+  value,
+  onChange,
+  options,
+  disabled = false,
+  required = false,
+  error,
+  layout = 'vertical',
+}) => (
+  <FormField error={error ? 'error' : undefined}>
+    <FormField.Label as="legend" id={`${id}-label`}>
+      {label}
+      {required && <span style={{ color: 'var(--ck-color-fg-critical)' }}> *</span>}
+    </FormField.Label>
+    <Flex 
+      gap="m" 
+      flexDirection={layout === 'vertical' ? 'column' : 'row'} 
+      role="radiogroup" 
+      aria-labelledby={`${id}-label`} 
+      aria-required={required}
+    >
+      {options.map((opt, index) => (
+        <Radio
+          key={opt.value}
+          id={`${id}-${index}`}
+          name={name}
+          value={opt.value}
+          label={opt.label}
+          checked={value === opt.value}
+          onChange={(e) => onChange(e.target.value)}
+          disabled={disabled || opt.disabled}
+        />
+      ))}
+    </Flex>
+    {error && (
+      <FormField.Hint>
+        {error}
+      </FormField.Hint>
+    )}
+  </FormField>
+);
+
+// ============================================================================
+// FormCheckboxGroup - Reusable Checkbox Group
+// ============================================================================
+
+export interface FormCheckboxGroupProps {
+  id: string;
+  label: string;
+  values: string[];
+  onChange: (values: string[]) => void;
+  options: Array<{ value: string; label: string; disabled?: boolean }>;
+  disabled?: boolean;
+  required?: boolean;
+  error?: string;
+  layout?: 'horizontal' | 'vertical';
+}
+
+/**
+ * Canvas Kit Checkbox group with proper FormField composition
+ * 
+ * Usage:
+ * ```tsx
+ * <FormCheckboxGroup
+ *   id="job-types"
+ *   label="Job Types"
+ *   values={selectedTypes}
+ *   onChange={setSelectedTypes}
+ *   options={[
+ *     { value: 'full-time', label: 'Full Time' },
+ *     { value: 'part-time', label: 'Part Time' }
+ *   ]}
+ * />
+ * ```
+ */
+export const FormCheckboxGroup: React.FC<FormCheckboxGroupProps> = ({
+  id,
+  label,
+  values,
+  onChange,
+  options,
+  disabled = false,
+  required = false,
+  error,
+  layout = 'vertical',
+}) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      onChange([...values, value]);
+    } else {
+      onChange(values.filter((v) => v !== value));
+    }
+  };
+
+  return (
+    <FormField error={error ? 'error' : undefined}>
+      <FormField.Label as="legend" id={`${id}-label`}>
+        {label}
+        {required && <span style={{ color: 'var(--ck-color-fg-critical)' }}> *</span>}
+      </FormField.Label>
+      <Flex gap="m" flexDirection={layout === 'vertical' ? 'column' : 'row'} role="group" aria-labelledby={`${id}-label`} aria-required={required}>
+        {options.map((opt, index) => (
+          <Checkbox
+            key={opt.value}
+            id={`${id}-${index}`}
+            value={opt.value}
+            label={opt.label}
+            checked={values.includes(opt.value)}
+            onChange={handleChange}
+            disabled={disabled || opt.disabled}
+          />
+        ))}
+      </Flex>
+      {error && (
+        <FormField.Hint>
+          {error}
+        </FormField.Hint>
+      )}
+    </FormField>
+  );
+};

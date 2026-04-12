@@ -42,6 +42,8 @@ export interface SanaCommMessageBubbleProps {
   /** 'start' = incoming (left), 'end' = outgoing (right) */
   align: 'start' | 'end';
   timestamp?: string;
+  maxWidth?: string | number;
+  width?: string | number;
   children: ReactNode;
 }
 
@@ -49,17 +51,20 @@ export interface SanaCommMessageBubbleProps {
 export const SanaCommMessageBubble: React.FC<SanaCommMessageBubbleProps> = ({
   align,
   timestamp,
+  maxWidth = 'min(100%, 320px)',
+  width,
   children,
 }) => (
   <Flex
     flexDirection="column"
     alignItems={align === 'end' ? 'flex-end' : 'flex-start'}
     marginBottom="s"
-    style={{ maxWidth: '100%' }}
+    style={{ maxWidth: '100%', width: width || 'auto' }}
   >
     <Box
       style={{
-        maxWidth: 'min(100%, 320px)',
+        maxWidth,
+        width: width || 'auto',
         padding: `${space.s} ${space.m}`,
         backgroundColor: SANA_COMM_BUBBLE_BG,
         border: `1px solid ${colors.soap300}`,
@@ -67,7 +72,7 @@ export const SanaCommMessageBubble: React.FC<SanaCommMessageBubbleProps> = ({
         boxShadow: '0 1px 2px rgba(15, 46, 102, 0.04)',
       }}
     >
-      <BodyText size="small" color={colors.blackPepper600} style={{ lineHeight: 1.45, margin: 0 }}>
+      <BodyText as="div" size="small" color={colors.blackPepper600} style={{ lineHeight: 1.45, margin: 0 }}>
         {children}
       </BodyText>
     </Box>

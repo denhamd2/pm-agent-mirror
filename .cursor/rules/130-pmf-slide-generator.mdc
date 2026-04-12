@@ -108,6 +108,20 @@ All slide content MUST be executive-ready and external-facing:
 
 ---
 
+## GOLDEN STANDARD REFERENCE (v90)
+
+**`slides_spec_v90.json`** (India PMF, April 2026) is the canonical quality benchmark for all PMF roadmap decks. When generating a new PMF roadmap deck, read v90 as a reference for target content density, strategic anchoring, and executive language. Do not copy content; match the quality bar.
+
+**6 Quality Markers to Match:**
+1. **Quantified success metrics**: Every recommendation has a specific, measurable target (e.g., "30% reduction", "15% to 70% increase") rather than vague aspirations.
+2. **"Why Now" strategic anchoring**: Each recommendation explicitly ties to Q2 priorities, OKRs, or competitive positioning rather than generic urgency.
+3. **Concrete anchors per bullet**: Every PESTEL/theme/customer bullet contains at least one specific data point (market size, growth rate, user count, company name, participant quote, regulatory citation).
+4. **Theme slide depth**: Individual slides per theme with quote-led evidence, business impact, and product implications (vs. the v65 baseline "2-3 grouped slides").
+5. **PESTEL Product implication specificity**: Implications tie directly to product actions ("queue-safe bulk actions", "identity-aware duplicate detection") not generic statements.
+6. **Interview synthesis quality**: Customer slides weave quotes, operational metrics, and pain attribution into a coherent narrative per participant.
+
+---
+
 ## PRE-GENERATION DENSITY VALIDATION (MANDATORY - BLOCKING)
 
 Before calling `create_presentation`, calculate rendered line count for EVERY content slide to prevent vertical text overflow.
@@ -305,7 +319,7 @@ Before drafting `slides_spec_vN.json`, read **`docs/decks/130-slide-section-refe
 | 10 | Primary Research | Intro + table + 1 slide per Pn | Executive intro bullets; per-customer quote/JTBD minima per reference. |
 | 11 | Thematic Analysis | 2–3 grouped + matrix | **Not** one slide per theme; triangulation table; density caps per reference. |
 | 12 | Full Funnel / Gap Analysis | 1–2 | Title **"Gap Analysis"**; **table** mandatory; Deployment Agent validation per reference. |
-| 13 | Roadmap Recommendations | ≤5 + divider (+ E2E summary table when applicable) | Five-part slides (Problem → Evidence → Recommendation → Why now → Success metrics); executive wording for roadmap summary table. |
+| 13 | Roadmap Recommendations | ≤5 + divider (+ E2E summary table when applicable) | Five-part slides (Problem → Evidence → Recommendation → Why now → Success metrics); executive wording for roadmap summary table. **Success Metrics MUST include a specific, quantified target with baseline and improvement (e.g., '30% reduction on pilot requisitions versus control groups'). Vague metrics like 'improve efficiency' or 'increase adoption' are FORBIDDEN.** **Why Now MUST reference at least one of: Q2 strategic priority, OKR target, competitive pressure with named competitor, or regulatory deadline. Generic urgency ('customers are asking') is insufficient.** |
 | 14 | Bumper Slide | 1 | Standard close. |
 
 **Inventory alignment:** Prefer `docs/decks/gcc-pmf-roadmap-v65-slide-inventory.md` as skeleton. Do not skip SWOT, Win/Loss block (or DATA GAP), Ideation block (or DATA GAP), or Full Funnel unless **focus deck**. Full decks claiming v65 parity: **≥36** slides minimum; **~50–60** target.
@@ -407,7 +421,7 @@ The v65 baseline represents the default PMF deck format. Deviations are acceptab
 - **@pmf-analyst** (`.cursor/agents/pmf-analyst-agent.md`): Primary upstream for themes, customer evidence, and roadmap recommendations; supplies the markdown report. **Does NOT perform PESTEL or SWOT** (consumed from @product-strategy-agent).
 - **060-legal-advisor.mdc:** Legal validation of **recommendations** occurs in **@pmf-analyst** before the report is treated as final; **130** does not re-run that logic.
 - **110-slide-generator.mdc:** Short decks only; **130** owns this PMF roadmap pattern.
-- **000-master-orchestrator.mdc:** Regional E2E chains **@product-strategy-agent (Steps 1-3)** → **@competitive-intel (Step 4)** → **optional 106 (Step 5)** → **optional 108 (Step 6)** → **105 SME (Step 7)** → **105 Customer (Step 8)** → **@pmf-analyst (Step 9)** → **130 (Step 11)** before HITL.
+- **000-master-orchestrator.mdc:** Regional E2E chains **@product-strategy-agent (Steps 1-3)** → **@competitive-intel (Step 4)** → **optional 106 (Step 5)** → **optional 108 (Step 6)** → **105 SME (Step 7)** → **105 Customer (Step 8)** → **@pmf-analyst (Step 9)** → **130 (Step 10)** → HITL (Step 11).
 
 ## Triggers
 

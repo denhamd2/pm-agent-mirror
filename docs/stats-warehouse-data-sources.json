@@ -21,12 +21,100 @@
         "Avg Time to Fill",
         "Positions Open vs Filled",
         "Offer dashboard Add Documents section",
-        "Value Realisation Metrics"
+        "Value Realisation Metrics",
+        "Customer Scorecard"
       ],
       "pmNotes": [
         "Best when you need adoption or outcome trends by month, tenant, region proxy, or infrastructure.",
         "Always cast `value` to numeric and note whether the dashboard uses SANDBOX or PROD.",
         "Metric meanings can drift by ID over time, so verify the metric name before reusing an old query."
+      ]
+    },
+    {
+      "id": "wkdy-usage-metrics",
+      "name": "Workday Usage Metrics (WUM)",
+      "table": "dw.swh_raw.wkdy_usage_metrics_report_kafka",
+      "status": "validated-with-cautions",
+      "plainEnglish": "Tenant-level Workday usage metrics with metric_id, metric_name, return_type (including Boolean), and monthly buckets. Used for organisation-level feature adoption (for example Uses Recruiting, Uses Onboarding) alongside IUM.",
+      "freshness": "Live monthly feed; filter wd_event_date and wd_env_type (PROD for production adoption).",
+      "usefulDataPoints": [
+        "Boolean feature adoption per tenant (return_type = Boolean)",
+        "metric_id + metric_name pairs for Recruiting / HCM areas",
+        "opt_in_status for WUM access"
+      ],
+      "usedInDashboards": [
+        "Recruiting adoption trend (aggregate series in design/data-recruiting-adoption.ts)"
+      ],
+      "pmNotes": [
+        "Large table: always include wd_event_date partition predicate and narrow year/month when joining at tenant grain.",
+        "Boolean values arrive as varchar; cast carefully and treat missing rows as unknown, not false.",
+        "Superseded by PCA task-to-feature mapping + customer360 usage for Customer Scorecard feature adoption (April 2026)."
+      ]
+    },
+    {
+      "id": "customer-monthly-feature-usage",
+      "name": "Customer Monthly Feature Usage",
+      "table": "dw.user_data.customer_monthly_feature_usage_test",
+      "status": "validated",
+      "plainEnglish": "Per-tenant monthly feature adoption flags across all Workday product areas. 200 tenants, 198 features, 16 months (2024-01 to 2025-04). Each row is a tenant + feature + month with adopted = 0 or 1.",
+      "freshness": "Monthly grain; latest available month is 2025-04 (approximately one year old). The _test suffix suggests this may be an experimental table.",
+      "usefulDataPoints": [
+        "Per-tenant feature adoption (adopted = 0/1) for 198 distinct features",
+        "Feature names spanning Recruiting, HCM, Financials, Payroll, Student, and more",
+        "Recruiting-specific features: Find Candidates, Recruiting Hub, Recruiting Landing Pages, Source Requisition, Hire BP Consolidation, etc."
+      ],
+      "usedInDashboards": [],
+      "pmNotes": [
+        "Directly queryable from Pharos CLI (confirmed working).",
+        "Superseded on Customer Scorecard by PCA mappings (customer360 + task_to_pca_mapping) as of April 2026 for better Recruiting/TA feature coverage (~5,908 tenants vs ~200).",
+        "Retains validated status as fallback when PCA mappings are unavailable or for broad cross-product feature flags.",
+        "Only ~200 tenants vs ~5,908 in PCA approach."
+      ]
+    },
+    {
+      "id": "customer360-worklet-adoption",
+      "name": "Customer360 Worklet Adoption",
+      "table": "dw.uxinsights_prod.customer360",
+      "status": "validated",
+      "plainEnglish": "Tenant-task-month usage table for worklets and UI tasks, with product and product_area taxonomies plus usage counts. Core source for Worklet Adoption Analytics.",
+      "freshness": "Historical through 2026-03 in this workspace; PROD-only rows observed.",
+      "usefulDataPoints": [
+        "task_id, tenant_n, month, wd_event_date, wd_env_type",
+        "total_users, total_sessions, total_oms_transactions",
+        "product_area and product (including Talent/Recruiting slices)"
+      ],
+      "usedInDashboards": [
+        "Customer Scorecard (PCA-enabled feature adoption signal)"
+      ],
+      "pmNotes": [
+        "Partition filters are required on wd_event_date and wd_env_type.",
+        "Superset semantic layer may alias measure names (for example total_ons_transactions) while physical table uses total_oms_transactions.",
+        "Join to task_to_pca_mapping on task_id to convert task usage into PCA feature adoption.",
+        "For correlation scoring, align this usage window with IUM outcome windows and remove aggregate pseudo-tenants (for example '- All Tenants').",
+        "Used in Customer Scorecard for feature adoption correlation with TTH/TTF. Segment filters (region, industry) sourced from interview_dashboard_tenant_filters.",
+        "TTF metric (2359) requeried with >0 filter on 11 Apr 2026; only ~981 tenants report positive TTF values."
+      ]
+    },
+    {
+      "id": "task-to-pca-mapping",
+      "name": "Task to PCA Feature Mapping",
+      "table": "dw.user_data.task_to_pca_mapping",
+      "status": "validated",
+      "plainEnglish": "Mapping bridge from task_id to PCA metadata (feature, capability, entitlement, XO product area/product, module), used to define Product Catalog-aligned adoption.",
+      "freshness": "Current snapshot table; not time-series on its own.",
+      "usefulDataPoints": [
+        "task_id to feature mapping",
+        "entitlement labels including Recruiting and Recruiting - LDP",
+        "task_xo_product_area/task_xo_product and task_module taxonomy"
+      ],
+      "usedInDashboards": [
+        "Customer Scorecard (PCA source of truth for TA feature list)"
+      ],
+      "pmNotes": [
+        "Treat this as the canonical feature dictionary for Recruiting/Talent Acquisition.",
+        "Use with customer360 usage to compute enabled vs not enabled by tenant.",
+        "Feature coverage improves materially vs coarse WUM booleans or small curated flags.",
+        "Correlation guidance is non-causal: score by effect size + support + adjusted significance and always show caveats."
       ]
     },
     {
@@ -45,11 +133,13 @@
       ],
       "usedInDashboards": [
         "Job App Sub-BPs / BP Durations dashboard",
-        "Offer dashboard core charts"
+        "Offer dashboard core charts",
+        "BP Durations dashboard segmented views (region / industry / tenant) \u2014 same rows joined to interview_dashboard_tenant_filters at generation time"
       ],
       "pmNotes": [
         "Use this before `bp_event_record_stats` if the question is about whole-process performance.",
-        "Filter by status when analysing duration, or cancelled and in-progress work will distort the result."
+        "Filter by status when analysing duration, or cancelled and in-progress work will distort the result.",
+        "Segmented slices in the UI are pre-materialised: tenant_n matches tenant_name in dw.user_test.interview_dashboard_tenant_filters for region and super_industry."
       ]
     },
     {
@@ -67,12 +157,15 @@
       ],
       "usedInDashboards": [
         "Interview metrics dashboard",
-        "Offer step discovery for future dashboard additions"
+        "Offer step discovery for future dashboard additions",
+        "BP Durations Offer tab \u2014 Offer steps, approvals, bottleneck analyser (design/data-offer-steps.ts)"
       ],
       "pmNotes": [
         "Confirmed Offer step names include `Generate Document`, `Review Documents`, `Review Writer Generated Document`, `Add Documents`, and `Manage Attachments`.",
+        "Approval tasks charted after exact-name lock (PROD, high volume): `Bulk Approve` and `Approve Business Process (Web Service)` \u2014 Web Service path has very low distinct-tenant coverage; interpret with care.",
         "We have not yet validated a clean `Initiate Offer` task in this table, so do not chart it yet.",
-        "Because the table is huge, exploratory regex searches can take minutes and should be followed by narrower exact-name queries."
+        "Because the table is huge, exploratory regex searches can take minutes and should be followed by narrower exact-name queries.",
+        "Trino requires a partition predicate on `wd_event_date`; combine with `CAST(creation_time AS date)` bounds when you need to align months to dashboard LABELS and avoid grouping long-backdated rows into recent months."
       ]
     },
     {
@@ -209,7 +302,11 @@
         "Interview metrics dashboard"
       ],
       "pmNotes": [
-        "Use this as an enrichment join, not as a standalone trend source."
+        "Use as enrichment join for region (segment) and industry (super_industry) per tenant.",
+        "Used by Customer Scorecard for industry/region segment filters, peer benchmarking, and top-10 enrichment.",
+        "Used by BP Duration dashboard for segment breakdown filters.",
+        "Original interview flag columns are no longer used on the Customer Scorecard (replaced by PCA-based adoption from customer360 + task_to_pca_mapping).",
+        "6 regions (APAC, Corporate, EMEA, Japan, North America, US Federal), 14 industries. ~225 tenants have missing values."
       ]
     },
     {

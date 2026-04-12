@@ -12,6 +12,23 @@ import { GccCandidateGridSearch } from './gcc-candidate-grid-search';
 import { RecruiterHomeV85 } from './recruiter-home-v85';
 import { CandidateSmartViewV86 } from './candidate-smart-view-v86';
 import { IndiaWhatsappCandidateMessagingV88 } from './india-whatsapp-candidate-messaging-v88';
+import { GccInterviewSchedulingComplianceNudgesV90 } from './gcc-interview-scheduling-compliance-nudges-v90';
+import { RecruiterHubGenUIV95 } from './recruiter-hub-genui-v95';
+import { IndiaNativeWhatsappV91 } from './india-native-whatsapp-v91';
+import { InterviewIntelligenceAgentV96 } from './interview-intelligence-agent-v96';
+import AISystemOfRecordV97 from './ai-system-of-record-v97';
+import { CanvasKitTest } from './components/CanvasKitTest';
+import PMAgentDashboard from './pm-agent-dashboard';
+import { AvgTimeToHireDashboard } from './avg-time-to-hire-dashboard';
+import { AvgTimeToFillDashboard } from './avg-time-to-fill-dashboard';
+import { PositionsOpenVsFilledDashboard } from './positions-open-vs-filled-dashboard';
+import { ValueRealizationMetrics } from './value-realization-metrics';
+import { AddDocumentsImpactDashboard } from './add-documents-impact-dashboard';
+import { ViewDashboard } from './view-dashboard';
+import { RecruitingAdoptionDashboard } from './recruiting-adoption-dashboard';
+import { InterviewMetricsDashboard } from './interview-metrics-dashboard';
+import { BpDurationDashboard } from './bp-duration-dashboard';
+const CustomerScorecardDashboard = React.lazy(() => import('./customer-scorecard-dashboard').then((m) => ({ default: m.CustomerScorecardDashboard })));
 import { SANA_PAGE_CANVAS } from './components';
 
 /** Prototype slugs backed by `design/*.tsx` modules in this branch (see `vite.config.ts` `slugs` Set). */
@@ -21,8 +38,76 @@ function prototypeFromLocation():
   | 'candidate-grid-v84'
   | 'recruiter-home-v85'
   | 'candidate-smart-view-v86'
-  | 'india-whatsapp-candidate-messaging-v88' {
+  | 'india-whatsapp-candidate-messaging-v88'
+  | 'gcc-interview-scheduling-v90'
+  | 'recruiter-hub-genui-v95'
+  | 'india-native-whatsapp-v91'
+  | 'interview-intelligence-agent-v96'
+  | 'ai-system-of-record-v97'
+  | 'canvas-kit-test'
+  | 'pm-agent-dashboard'
+  | 'avg-time-to-hire'
+  | 'avg-time-to-fill'
+  | 'add-documents-impact'
+  | 'positions-open-vs-filled'
+  | 'value-realization-metrics'
+  | 'recruiting-adoption'
+  | 'interview-metrics'
+  | 'bp-durations'
+  | 'view-dashboard'
+  | 'customer-scorecard' {
   const path = window.location.pathname.replace(/\/+$/, '') || '/';
+  if (path.endsWith('customer-scorecard')) {
+    return 'customer-scorecard';
+  }
+  if (path.endsWith('bp-durations')) {
+    return 'bp-durations';
+  }
+  if (path.endsWith('interview-metrics')) {
+    return 'interview-metrics';
+  }
+  if (path.endsWith('recruiting-adoption')) {
+    return 'recruiting-adoption';
+  }
+  if (path.endsWith('view-dashboard')) {
+    return 'view-dashboard';
+  }
+  if (path.endsWith('value-realization-metrics')) {
+    return 'value-realization-metrics';
+  }
+  if (path.endsWith('add-documents-impact')) {
+    return 'add-documents-impact';
+  }
+  if (path.endsWith('positions-open-vs-filled')) {
+    return 'positions-open-vs-filled';
+  }
+  if (path.endsWith('avg-time-to-fill')) {
+    return 'avg-time-to-fill';
+  }
+  if (path.endsWith('avg-time-to-hire')) {
+    return 'avg-time-to-hire';
+  }
+  if (path.endsWith('pm-agent-dashboard')) {
+    return 'pm-agent-dashboard';
+  }
+  if (path.endsWith('canvas-kit-test')) {
+    return 'canvas-kit-test';
+  }
+  if (path.endsWith('ai-system-of-record-v97')) {
+    return 'ai-system-of-record-v97';
+  }
+  if (path.endsWith('interview-intelligence-agent-v96')) {
+    return 'interview-intelligence-agent-v96';
+  }
+  if (path.endsWith('india-native-whatsapp-v91')) {
+    return 'india-native-whatsapp-v91';
+  }
+  if (path.endsWith('recruiter-hub-genui-v95')) {
+    return 'recruiter-hub-genui-v95';
+  }
+  if (path.endsWith('gcc-interview-scheduling-v90')) {
+    return 'gcc-interview-scheduling-v90';
+  }
   if (path.endsWith('india-whatsapp-candidate-messaging-v88')) {
     return 'india-whatsapp-candidate-messaging-v88';
   }
@@ -56,6 +141,57 @@ function prototypeFromLocation():
   if (h === 'india-whatsapp-candidate-messaging-v88' || h.startsWith('india-whatsapp-candidate-messaging-v88')) {
     return 'india-whatsapp-candidate-messaging-v88';
   }
+  if (h === 'gcc-interview-scheduling-v90' || h.startsWith('gcc-interview-scheduling-v90')) {
+    return 'gcc-interview-scheduling-v90';
+  }
+  if (h === 'recruiter-hub-genui-v95' || h.startsWith('recruiter-hub-genui-v95')) {
+    return 'recruiter-hub-genui-v95';
+  }
+  if (h === 'india-native-whatsapp-v91' || h.startsWith('india-native-whatsapp-v91')) {
+    return 'india-native-whatsapp-v91';
+  }
+  if (h === 'interview-intelligence-agent-v96' || h.startsWith('interview-intelligence-agent-v96')) {
+    return 'interview-intelligence-agent-v96';
+  }
+  if (h === 'ai-system-of-record-v97' || h.startsWith('ai-system-of-record-v97')) {
+    return 'ai-system-of-record-v97';
+  }
+  if (h === 'canvas-kit-test' || h.startsWith('canvas-kit-test')) {
+    return 'canvas-kit-test';
+  }
+  if (h === 'pm-agent-dashboard' || h.startsWith('pm-agent-dashboard')) {
+    return 'pm-agent-dashboard';
+  }
+  if (h === 'avg-time-to-hire' || h.startsWith('avg-time-to-hire')) {
+    return 'avg-time-to-hire';
+  }
+  if (h === 'avg-time-to-fill' || h.startsWith('avg-time-to-fill')) {
+    return 'avg-time-to-fill';
+  }
+  if (h === 'positions-open-vs-filled' || h.startsWith('positions-open-vs-filled')) {
+    return 'positions-open-vs-filled';
+  }
+  if (h === 'value-realization-metrics' || h.startsWith('value-realization-metrics')) {
+    return 'value-realization-metrics';
+  }
+  if (h === 'add-documents-impact' || h.startsWith('add-documents-impact')) {
+    return 'add-documents-impact';
+  }
+  if (h === 'recruiting-adoption' || h.startsWith('recruiting-adoption')) {
+    return 'recruiting-adoption';
+  }
+  if (h === 'bp-durations' || h.startsWith('bp-durations')) {
+    return 'bp-durations';
+  }
+  if (h === 'interview-metrics' || h.startsWith('interview-metrics')) {
+    return 'interview-metrics';
+  }
+  if (h === 'view-dashboard' || h.startsWith('view-dashboard')) {
+    return 'view-dashboard';
+  }
+  if (h === 'customer-scorecard' || h.startsWith('customer-scorecard')) {
+    return 'customer-scorecard';
+  }
   return 'recruiter-home-v85';
 }
 
@@ -70,6 +206,61 @@ function AppRoot() {
       window.removeEventListener('hashchange', sync);
     };
   }, []);
+  if (route === 'canvas-kit-test') {
+    return <CanvasKitTest />;
+  }
+  if (route === 'customer-scorecard') {
+    return (
+      <React.Suspense fallback={<div style={{ padding: 40, textAlign: 'center', color: '#666' }}>Loading scorecard...</div>}>
+        <CustomerScorecardDashboard />
+      </React.Suspense>
+    );
+  }
+  if (route === 'recruiting-adoption') {
+    return <RecruitingAdoptionDashboard />;
+  }
+  if (route === 'bp-durations') {
+    return <BpDurationDashboard />;
+  }
+  if (route === 'interview-metrics') {
+    return <InterviewMetricsDashboard />;
+  }
+  if (route === 'view-dashboard') {
+    return <ViewDashboard />;
+  }
+  if (route === 'value-realization-metrics') {
+    return <ValueRealizationMetrics />;
+  }
+  if (route === 'add-documents-impact') {
+    return <AddDocumentsImpactDashboard />;
+  }
+  if (route === 'positions-open-vs-filled') {
+    return <PositionsOpenVsFilledDashboard />;
+  }
+  if (route === 'avg-time-to-fill') {
+    return <AvgTimeToFillDashboard />;
+  }
+  if (route === 'avg-time-to-hire') {
+    return <AvgTimeToHireDashboard />;
+  }
+  if (route === 'pm-agent-dashboard') {
+    return <PMAgentDashboard />;
+  }
+  if (route === 'ai-system-of-record-v97') {
+    return <AISystemOfRecordV97 />;
+  }
+  if (route === 'interview-intelligence-agent-v96') {
+    return <InterviewIntelligenceAgentV96 />;
+  }
+  if (route === 'gcc-interview-scheduling-v90') {
+    return <GccInterviewSchedulingComplianceNudgesV90 />;
+  }
+  if (route === 'recruiter-hub-genui-v95') {
+    return <RecruiterHubGenUIV95 />;
+  }
+  if (route === 'india-native-whatsapp-v91') {
+    return <IndiaNativeWhatsappV91 />;
+  }
   if (route === 'india-whatsapp-candidate-messaging-v88') {
     return <IndiaWhatsappCandidateMessagingV88 />;
   }

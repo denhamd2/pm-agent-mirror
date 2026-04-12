@@ -59,7 +59,7 @@ AND try_cast(value AS double) > 0
 | metric_id | Name | Unit | Tenants (approx) | Notes |
 |-----------|------|------|-------------------|-------|
 | 2358 | Average Time to Hire | Days | ~3,400 | Most widely tracked; stable 68-77d range |
-| 2359 | Average Time to Fill | Days | ~540-600 | Higher variance; extreme outliers common (>10,000d) |
+| 2359 | Average Time to Fill | Days | ~981 (with >0 filter) | Re-queried 11 Apr 2026. 0.0 = no data, not zero days. Always filter `try_cast(value AS double) > 0`. Extreme outliers common (>10,000d). |
 | 2360 | Count of Positions with Open Job Requisitions | Count | ~800-870 | Seasonal: Dec-Jan dip to ~600 |
 | 2361 | Count of Positions Filled | Count | ~3,900-4,300 | 5x more tenants than open reqs |
 | 1757 | Add Documents configured BP definitions | Count | ~600 latest month | Verified 11 April 2026 |
@@ -94,8 +94,9 @@ CASE
 END as region
 ```
 
-### NOT Available Natively
-- Industry vertical (no column in IUM data)
+### NOT Available Natively in IUM
+- Industry vertical: not in IUM, but available via `dw.user_test.interview_dashboard_tenant_filters.super_industry` (14 categories). Join on `tenant_name`.
+- Region (business): not in IUM, but available via `interview_dashboard_tenant_filters.segment` (6 values: APAC, Corporate, EMEA, Japan, North America, US Federal). `wd_dc_physical` is a data centre proxy only.
 - Company size / employee count
 - Workday product edition / SKU
 - Customer tenure / go-live date
@@ -116,6 +117,8 @@ END as region
      - `Review Writer Generated Document`
      - `Add Documents`
      - `Manage Attachments`
+   - Locked **approval** task names with material PROD volume (exact strings only): `Bulk Approve`, `Approve Business Process (Web Service)`.
+   - Always filter `wd_event_date` (partition). When bucketing by `year(creation_time), month(creation_time)`, also bound `creation_time` or you will pull historical creation months into recent partitions.
    - Use narrow date windows and exact task-name filters after exploration.
 
 3. `swh_raw.oms_requests`
@@ -129,6 +132,79 @@ END as region
 ### Current caution
 
 - `Initiate Offer` has not yet been validated as a clean, chart-ready task in the accessible Pharos tables. Do not add an `Initiate Offer` chart until an exact-name proof query confirms it.
+
+## PCA Feature Adoption Queries
+
+**Tables**: `dw.uxinsights_prod.customer360` + `dw.user_data.task_to_pca_mapping`
+
+Used by the Customer Scorecard to determine which Recruiting/TA features each tenant has enabled. Supersedes WUM boolean flags and `customer_monthly_feature_usage_test` for granular feature adoption.
+
+### Canonical join pattern
+```sql
+SELECT c.tenant_n AS tenant_name,
+       p.feature   AS feature_name,
+       SUM(c.total_oms_transactions) AS total_txns,
+       SUM(c.total_users) AS total_users
+FROM   dw.uxinsights_prod.customer360 c
+JOIN   dw.user_data.task_to_pca_mapping p
+  ON   c.task_id = p.task_id
+WHERE  c.wd_env_type = 'PROD'
+  AND  c.wd_event_date >= to_iso8601(current_date - interval '365' day)
+  AND  (p.entitlement LIKE '%Recruiting%' OR p.entitlement LIKE '%Talent%')
+  AND  c.tenant_n <> '- All Tenants'
+GROUP BY 1, 2
+HAVING SUM(c.total_oms_transactions) > 0 OR SUM(c.total_users) > 0
+```
+
+### Known caveats
+- Superset may alias `total_oms_transactions` as `total_ons_transactions`; the physical column is `total_oms_transactions`.
+- `task_to_pca_mapping` uses `task_xo_product` and `entitlement` for product filtering; there is no simple `product` column.
+- Coverage: 74 PCA features, ~5,908 tenants (as of 11 Apr 2026).
+- "Enabled" = any mapped task had usage > 0 in the 12-month window.
+
+## Tenant Enrichment (Region + Industry)
+
+**Table**: `dw.user_test.interview_dashboard_tenant_filters`
+
+Provides region and industry per tenant. Used by the Customer Scorecard for segment filters and peer benchmarking, and by the BP Duration dashboard for segment breakdowns.
+
+```sql
+SELECT tenant_name,
+       segment       AS region,
+       super_industry AS industry
+FROM   dw.user_test.interview_dashboard_tenant_filters
+```
+
+### Regions (6)
+APAC, Corporate, EMEA, Japan, North America, US Federal
+
+### Industries (14)
+Education, Energy & Utilities, Federal / National Government, Financial Services, Healthcare, Hospitality, Manufacturing, Non-Profit, Other, Professional & Business Services, Public Sector, Retail, Technology & Media, Transportation
+
+### Coverage
+- ~5,971 tenants; ~225 have missing region/industry (set to "Unknown" in materialised data files).
+- This table's original interview flag columns are no longer used on the Customer Scorecard (replaced by PCA-based adoption). Current role is enrichment only.
+
+## Correlation Analysis Pattern
+
+Established methodology used by the Customer Scorecard (`design/data-customer-scorecard.ts`). Reuse for any feature-vs-outcome correlation work.
+
+### Pipeline
+1. Compute per-tenant feature adoption from PCA (see above)
+2. Join IUM outcome metrics (e.g., 2358 TTH, 2359 TTF) per tenant
+3. For each feature: split tenants into "adopted" vs "not adopted"
+4. Run Mann-Whitney U test (non-parametric; no normality assumption)
+5. Apply Benjamini-Hochberg correction across all features (controls false discovery rate)
+6. Compute composite score: `abs(mean_delta_ttf) + abs(mean_delta_tth)`
+7. Assign confidence tiers: high (n >= 30 both groups, q < 0.05), medium (n >= 10, q < 0.10), low (otherwise)
+
+### Segmentation
+- Feature-count terciles: low_usage (<20 features), mid_usage (20-39), high_usage (>=40)
+- Industry-aware peer benchmarking: filter peers by usage segment AND industry; fall back to segment-only if <5 industry peers
+- Industry-aware recommendations: when >=10 same-industry+segment peers exist, mean-delta correlation is recomputed within the industry cohort for "missing features likely to improve TTF/TTH"; falls back to segment-level global correlations otherwise
+
+### On-the-fly filtered re-ranking (UI)
+When region/industry filters are applied on the landing page, a lightweight mean-delta computation runs client-side. q-values are not recomputed (require full Mann-Whitney U); confidence tiers serve as guidance. Minimum 10 tenants required per filtered group.
 
 ## Standard Query Templates
 
@@ -311,8 +387,9 @@ Key patterns:
 - Strong seasonal dip in Dec-Jan (holiday hiring freeze)
 
 ### Time to Fill (2359)
+- Re-queried 11 Apr 2026 with `>0` filter: ~981 tenants with positive values (up from ~540 in earlier queries using narrower date windows)
+- 0.0 values are "no data", not zero days. Always filter `try_cast(value AS double) > 0` and set null in materialised files where no data exists.
 - Higher variance; extreme outliers common (>10,000 days)
-- Only ~540-600 tenants track this (far fewer than TTH)
 - Outliers like Texas Roadhouse (18,854d) are data quality issues, not real fill times
 - Americas-West shows suspicious data pattern (215→30 drop) - investigate before relying on
 
@@ -325,8 +402,17 @@ Key patterns:
 - Remarkably stable at 19-22 avg per tenant per month
 - 5x more tenants track filled vs open requisitions
 
+### PCA Feature Adoption
+- 74 Recruiting/TA features across 5,908 tenants (as of 11 Apr 2026)
+- "Enabled" = any mapped task had usage > 0 (users or transactions) in the 12-month window
+- Supersedes WUM boolean flags and `customer_monthly_feature_usage_test` for Customer Scorecard feature adoption
+
+### Tenant Enrichment
+- 5,971 tenants in `interview_dashboard_tenant_filters`; ~225 have missing region/industry (set to "Unknown")
+- Industry and region data are enrichment joins, not native IUM columns
+
 ### General
 - SANDBOX environment may not reflect PROD behaviour; note this in all reports
-- `wd_dc_physical` is a proxy for geography, not actual customer location
-- Industry segmentation is NOT available in IUM data; do not claim industry-level insights
+- `wd_dc_physical` is a data centre proxy for geography, not actual customer location. For business region, use `interview_dashboard_tenant_filters.segment`.
+- Industry segmentation is available via `interview_dashboard_tenant_filters.super_industry` (14 categories); it is NOT natively in IUM data. Always specify the source when claiming industry-level insights.
 - Dec-Jan data always dips due to holiday inactivity; seasonal adjustment recommended for YoY comparisons

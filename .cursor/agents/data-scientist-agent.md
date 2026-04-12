@@ -156,12 +156,15 @@ The canonical Pharos query guidance lives in:
 | Need | Preferred source |
 |------|------------------|
 | Adoption or outcome KPI with an existing metric ID | `swh_raw.internal_usage_metrics_report_kafka` |
+| PCA feature adoption per tenant (granular TA features) | `dw.uxinsights_prod.customer360` + `dw.user_data.task_to_pca_mapping` |
+| Correlation analysis (feature adoption vs TTH/TTF outcomes) | PCA adoption + IUM outcomes (Mann-Whitney U, BH correction) |
 | Whole business process duration / status / quality | `dw.swh.bp_event_stats` |
 | Step-level task volume or duration | `dw.swh.bp_event_record_stats` |
 | Request semantics, payload inspection, task discovery | `swh_raw.oms_requests` |
 | Repository-side document activity | `swh_raw.cloudmaster_document_repository_event` |
 | Live interview operational metrics | `dw.user_data.talent_ml_*` tables |
-| Tenant segmentation lookup | `dw.user_test.interview_dashboard_tenant_filters` |
+| Tenant region + industry enrichment | `dw.user_test.interview_dashboard_tenant_filters` (`segment` = region, `super_industry` = industry) |
+| Monthly feature adoption rates (boolean flags, PROD) | `dw.swh_raw.wkdy_usage_metrics_report_kafka` (WUM) |
 
 ### Operating rule
 
@@ -272,6 +275,39 @@ Before publishing a new dashboard or insight:
 - Always overwrites `design/view-dashboard.tsx` and `design/data-view-dashboard.ts`
 - Auto-opens in Cursor Browser after every write
 
+## Customer Scorecard Correlation Model (established)
+
+The Customer Scorecard at `/customer-scorecard` uses a fully built correlation pipeline. Do not re-derive from scratch; extend or refresh the existing model.
+
+### Data pipeline
+1. **Feature adoption**: `dw.uxinsights_prod.customer360` joined to `dw.user_data.task_to_pca_mapping` on `task_id`. Filter: entitlement LIKE '%Recruiting%' OR '%Talent%', `wd_env_type = 'PROD'`, 12-month window. Any mapped task with usage > 0 = feature enabled. 74 PCA features across 5,908 tenants.
+2. **IUM outcomes**: metric 2358 (TTH, ~3,400 tenants) and metric 2359 (TTF, ~981 tenants with >0 filter). TTF 0.0 = no data (set to null), not zero days. Environment: SANDBOX.
+3. **Tenant enrichment**: `dw.user_test.interview_dashboard_tenant_filters` provides `segment` (region: APAC, Corporate, EMEA, Japan, North America, US Federal) and `super_industry` (14 categories). ~225 tenants have missing values (set to "Unknown").
+
+### Statistical methodology
+- **Test**: Mann-Whitney U per feature (non-parametric; no normality assumption)
+- **Multiple comparison correction**: Benjamini-Hochberg (controls false discovery rate)
+- **Composite score**: `abs(delta_ttf) + abs(delta_tth)` (higher = stronger association)
+- **Confidence tiers**: high (n >= 30 both groups, q < 0.05), medium (n >= 10, q < 0.10), low (otherwise)
+- **Segmentation**: feature-count terciles (low_usage: <20, mid_usage: 20-39, high_usage: >=40 adopted features). Industry-aware peer benchmarking uses `TENANT_ENRICHMENT` for industry filtering.
+
+### Peer benchmarking
+- Jaccard similarity on adopted feature sets
+- Filtered by usage segment AND industry (fallback to segment-only if <5 industry peers)
+- Top 3 peers selected by similarity, score gap, and adoption score
+- Missing feature recommendations are industry-aware: when >=10 same-industry+segment peers exist, mean-delta correlation is recomputed within that industry cohort (fallback to segment-level global correlations otherwise)
+- Missing features ranked by correlation score with confidence tier
+
+### Key files
+- `design/data-customer-scorecard.ts` - materialised data (6.7MB, lazy-loaded)
+- `design/customer-scorecard-dashboard.tsx` - UI component
+- Lazy-loaded via `React.lazy()` in `design/main.tsx`
+
+### Superseded approaches
+- `customer_monthly_feature_usage_test` (~200 tenants) replaced by PCA mappings (~5,908 tenants) for feature adoption
+- WUM boolean flags replaced by PCA for granular TA feature coverage on the scorecard
+- Interview flag columns from `interview_dashboard_tenant_filters` replaced by PCA; that table now used only for region/industry enrichment
+
 ## Output Standards
 
 ### Data Reports
@@ -296,6 +332,16 @@ Before publishing a new dashboard or insight:
 **Caveat**: [Any limitations or alternative explanations]
 ```
 
+### Offer approvals discovery checklist (Pharos)
+
+When extending Offer approval analytics beyond the two locked dashboard names:
+
+1. Start from `dw.swh.bp_event_record_stats` with `bp_type_id = 'Offer'`, `wd_env_type = 'PROD'`, and a **narrow** `wd_event_date` window (partition requirement).
+2. Profile candidate `task_name` values with `COUNT(*)`, `APPROX_DISTINCT(tenant_n)`, and optional regex filters (e.g. `%Approve%`) — expect slow scans; follow with **exact-name** filters only.
+3. Lock names only after two consecutive months show stable spelling and non-trivial volume; if tenant coverage is tiny, document and **omit charts**.
+4. Prefer monthly aggregates: volume, tenants, `AVG(duration)/3600`, `approx_percentile(duration, 0.9)/3600`.
+5. If semantics are ambiguous, check `swh_raw.oms_requests` for supporting context before PM-facing claims.
+
 ## Quality Standards
 
 ### Always
@@ -312,7 +358,7 @@ Before publishing a new dashboard or insight:
 - Claim statistical significance without running a formal test
 - Ignore the difference between "no data" and "zero value"
 - Mix SANDBOX and PROD data in the same analysis without noting it
-- Assume tenant_name is a proxy for company size, industry, or geography
+- Assume tenant_name alone is a proxy for company size, industry, or geography (industry and region ARE available via `interview_dashboard_tenant_filters` join; company size is not)
 - Extrapolate trends from fewer than 3 data points
 - Use `value` column without casting (it is varchar)
 

@@ -161,9 +161,17 @@ export const WorkdayTopNav: React.FC<WorkdayTopNavProps> = ({
         backgroundColor: SANA_TOP_NAV_BG,
         borderBottom: `1px solid ${colors.soap300}`,
         minHeight: `${WORKDAY_TOP_NAV_HEIGHT_PX}px`,
+        maxWidth: '100%',
+        overflowX: 'hidden',
       }}
     >
-      <Flex justifyContent="space-between" alignItems="center" gap="l" width="100%">
+      <Flex
+        justifyContent="space-between"
+        alignItems="center"
+        gap="l"
+        width="100%"
+        style={{ minWidth: 0, maxWidth: '100%' }}
+      >
         <Flex alignItems="center" gap="s" flex="0 0 auto">
           {showWMark ? (
             <Box style={{ display: 'flex', alignItems: 'center' }} aria-hidden>
@@ -185,7 +193,7 @@ export const WorkdayTopNav: React.FC<WorkdayTopNavProps> = ({
           ) : null}
         </Flex>
 
-        <Box flex="1 1 auto" maxWidth={searchMaxWidthPx} marginX="l" width="100%">
+        <Box flex="1 1 auto" maxWidth={searchMaxWidthPx} marginX="l" width="100%" style={{ minWidth: 0 }}>
           <InputGroup
             width="100%"
             style={{

@@ -34,6 +34,9 @@ Thumbs.db
 # Local development
 design/dist/
 
+# Large data files (exceed GitHub 100 MB limit; keep local only)
+design/data-bp-durations.ts
+
 # 106/107 scratch dumps (regenerated each run; optional to track)
 research/**/brainstorm-analysis/_scratch*.md
 research/**/win-loss-analysis/_scratch*.md

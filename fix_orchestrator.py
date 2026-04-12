@@ -1,0 +1,56 @@
+with open('/Users/david.denham/product-manager-agent/.cursor/rules/000-master-orchestrator.mdc', 'r') as f:
+    content = f.read()
+
+content = content.replace('Steps 1-12 of Regional E2E Pipeline', 'Steps 1-11 of Regional E2E Pipeline')
+content = content.replace('Stops at:** PMF roadmap deck generation and cleanup', 'Stops at:** PMF roadmap deck generation')
+content = content.replace('includes HITL steps 13-14', 'includes HITL steps 12-13')
+content = content.replace('skips to Step 15', 'skips to Step 14')
+content = content.replace('Steps 13-18 (or 15-18 if standalone)', 'Steps 12-17 (or 14-17 if standalone)')
+content = content.replace('Uses PRD path from Step 15', 'Uses PRD path from Step 14')
+content = content.replace('Steps 19-25', 'Steps 18-24')
+content = content.replace('Steps 26-30', 'Steps 25-29')
+content = content.replace('All Steps 1-30 in sequence', 'All Steps 1-29 in sequence')
+content = content.replace('Steps 1-12 visible (Strategy → PESTEL → SWOT → CI/108/105 SME/105 Customer in parallel → 106 sequential → PMF → Legal → Deck → Cleanup)', 'Steps 1-11 visible (Strategy → PESTEL → SWOT → CI/108/105 SME/105 Customer in parallel → 106 sequential → PMF → Legal → Deck)')
+content = content.replace('Execute Steps 1-12 from Regional E2E Pipeline', 'Execute Steps 1-11 from Regional E2E Pipeline')
+content = content.replace('Stop after Step 12 (cleanup)', 'Stop after Step 11 (deck generation)')
+content = content.replace('Steps 13-18 visible (HITL Select → PM Framing → PRD → Legal → Revision → Red Team)', 'Steps 12-17 visible (HITL Select → PM Framing → PRD → Legal → Revision → Red Team)')
+content = content.replace('Execute Steps 13-18 (includes existing HITL Steps 13-14)', 'Execute Steps 12-17 (includes existing HITL Steps 12-13)')
+content = content.replace('Steps 15-18 visible (PRD → Legal → Revision → Red Team)', 'Steps 14-17 visible (PRD → Legal → Revision → Red Team)')
+content = content.replace('Skip Steps 13-14 (framing questions replaced by upfront HITL)', 'Skip Steps 12-13 (framing questions replaced by upfront HITL)')
+content = content.replace('Execute Steps 15-18 (PRD + Legal + Red Team)', 'Execute Steps 14-17 (PRD + Legal + Red Team)')
+content = content.replace('Steps 19-25 visible', 'Steps 18-24 visible')
+content = content.replace('Execute Steps 19-25', 'Execute Steps 18-24')
+content = content.replace('Steps 26-30 visible', 'Steps 25-29 visible')
+content = content.replace('Execute Steps 26-30', 'Execute Steps 25-29')
+content = content.replace('Mark mission complete after Step 30', 'Mark mission complete after Step 29')
+content = content.replace('29-Step Flow', '28-Step Flow')
+content = content.replace('→ Cleanup (Step 11)', '')
+
+# Fix the step numbers in the e2e flow text
+content = content.replace('HITL Select (Step 12)', 'HITL Select (Step 11)')
+content = content.replace('PM Framing (Step 13)', 'PM Framing (Step 12)')
+content = content.replace('200 PRD (Step 14', '200 PRD (Step 13')
+content = content.replace('060 Legal (Step 15)', '060 Legal (Step 14)')
+content = content.replace('PRD Revision (Step 16)', 'PRD Revision (Step 15)')
+content = content.replace('080 Red Team (Step 17)', '080 Red Team (Step 16)')
+content = content.replace('315 Design (Step 18)', '315 Design (Step 17)')
+content = content.replace('319 Copy (Step 19)', '319 Copy (Step 18)')
+content = content.replace('318 Peer (Step 20)', '318 Peer (Step 19)')
+content = content.replace('320 Prototype (Step 21)', '320 Prototype (Step 20)')
+content = content.replace('321 Visual (Step 22)', '321 Visual (Step 21)')
+content = content.replace('319 Copy (Step 23)', '319 Copy (Step 22)')
+content = content.replace('330 Figma (Step 24)', '330 Figma (Step 23)')
+content = content.replace('410 Epic (Step 25', '410 Epic (Step 24')
+content = content.replace('420 Story Map (Step 26)', '420 Story Map (Step 25)')
+content = content.replace('Story Map Review HITL (Step 27)', 'Story Map Review HITL (Step 26)')
+content = content.replace('080 Red Team (Step 28)', '080 Red Team (Step 27)')
+content = content.replace('430 Jira (Step 29)', '430 Jira (Step 28)')
+
+content = content.replace('→ HITL (Step 12) → PM Framing (Step 13) → 200 (Step 14) → 060 (Step 15) → 080 (Step 17) → 315 (Step 18) → 319 (Step 19) → 318 (Step 20) → 320 (Step 21) → 321 (Step 22) → 319 (Step 23) → 330 (Step 24) → 400 (Steps 25-29)', '→ HITL (Step 11) → PM Framing (Step 12) → 200 (Step 13) → 060 (Step 14) → 080 (Step 16) → 315 (Step 17) → 319 (Step 18) → 318 (Step 19) → 320 (Step 20) → 321 (Step 21) → 319 (Step 22) → 330 (Step 23) → 400 (Steps 24-28)')
+
+# Add /cleanup to routing
+routing_addition = '- "/cleanup" or "clean up old artifacts" → Cleanup Old Artifacts skill directly\n'
+content = content.replace('- "/workspace-audit" (standalone)', routing_addition + '- "/workspace-audit" (standalone)')
+
+with open('/Users/david.denham/product-manager-agent/.cursor/rules/000-master-orchestrator.mdc', 'w') as f:
+    f.write(content)

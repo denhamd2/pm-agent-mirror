@@ -14,6 +14,13 @@ With **`npm run dev`** (port **5199**):
 - **`http://localhost:5199/gcc-candidate-grid-v46?mode=anonymised`** — same prototype in **anonymised review** mode (Works Council–style masking).
 - Optional query flags (v46): **`empty=1`** (empty grid copy), **`gridError=1`** (grid error banner), **`cvError=1`** (CV error banner in modal). Combine with `&` as needed.
 - Hash fallback: **`http://localhost:5199/#/gcc-candidate-grid-v46`**.
+- **`http://localhost:5199/bp-durations?view=detail&bp=offer`** — Sub-BP duration dashboard (segment filters: `tenant`, `region`, `industry` query params; Offer detail adds task-level charts from [`data-offer-steps.ts`](data-offer-steps.ts) plus [`data-bp-durations.ts`](data-bp-durations.ts)). The **Add documents** footer is shown only when [`data-add-documents.ts`](data-add-documents.ts) is populated from Pharos or an approved export (never placeholder numbers).
+- **`http://localhost:5199/customer-scorecard`** — Customer scorecard: IUM time to hire / time to fill + PCA-based Talent Acquisition feature adoption from `dw.uxinsights_prod.customer360` joined to `dw.user_data.task_to_pca_mapping` (enabled = any mapped task usage > 0 in the selected period). Includes:
+  - Landing view: **all** PCA features correlated with lower TTF/TTH (correlation only, non-causal) with **Industry** and **Region** segment filters for on-the-fly re-ranking, plus **Top 10 tenants** by adoption score with industry/region columns.
+  - Tenant view: Data Scientist adoption score + segment-aware missing feature recommendations for lower TTF/TTH + peer benchmarking (top 3 segment peers by Jaccard similarity).
+  - TTF metric uses >0 filter from IUM 2359 (null where no data reported). Industry/region enriched from `dw.user_test.interview_dashboard_tenant_filters`.
+  - Lazy-loaded via `React.lazy()` + `Suspense` for performance (6.7MB data file loaded on demand).
+  - Optional **`?tenant=`** deep link.
 
 ## Published previews (timestamped URLs)
 
@@ -75,6 +82,17 @@ This message comes from **Figma’s html-to-design service**, not from a broken 
 - **`CandidateTaskModal`** - Generic modal overlay for candidate tasks (dark overlay + centered card with close handling)
 - **`AdobeSignAadhaarFlow`** - 4-step Adobe Sign simulation with NSDL e-Gov Aadhaar authentication (NSDL consent → Aadhaar entry → OTP → Success)
 - **`DocumentReviewTask`** - Offer document review with consent and Adobe Sign integration (pre-Adobe consent state, post-Adobe confirmation state)
+- **`CareerSiteHero`** - Large search prompt area for external career sites (from `CandidateExperiencePatterns.tsx`)
+- **`JobCard`** - Clean job listing card (from `CandidateExperiencePatterns.tsx`)
+- **`JobDetailsStickyFooter`** - Bottom-docked "Apply with Assistant" CTA (from `CandidateExperiencePatterns.tsx`)
+
+### Generative UI (GenUI) / A2UI Components
+- **`A2UIRenderer`** - Rendering engine that maps JSON payloads to Canvas Kit components (`A2UIRenderer.tsx`)
+- **`CandidateActionCard`** - Quick review card with name, metadata, Reject/Advance buttons (`GenUIPatterns.tsx`)
+- **`DraftMessage`** - Agent-drafted communication card with recipient, body, Edit/Send buttons (`GenUIPatterns.tsx`)
+- **`CandidateGrid`** / **`JobReqGrid`** - Tabular data displays using Canvas Kit `Table` (`GenUIPatterns.tsx`)
+- **`CandidateCarousel`** - Side-by-side comparison of `StructuredResume` profiles (`GenUIPatterns.tsx`)
+- **`ChartCard`** - Data visualization wrapper using `react-chartjs-2` and Canvas Kit `Card` (`GenUIPatterns.tsx`)
 
 ### Usage Patterns
 
@@ -92,6 +110,9 @@ This message comes from **Figma’s html-to-design service**, not from a broken 
   </SanaCommMessageBubble>
 ))}
 ```
+
+**Full-page agentic chat (scheduling, screening, Q&A, Recruiter Hub):**
+Uses the same `SanaCommComposer` and `SanaCommMessageBubble` components as simple messaging, but laid out in a main column instead of a sliding dock. Pair assistant bubbles with Canvas Kit `Avatar`. For GenUI, pass `A2UINode` payloads into the `A2UIRenderer` inside the bubble. See `015-sana-style-ui.md` and `communication-patterns.md` for full requirements.
 
 **Full email (with threading):**
 ```tsx

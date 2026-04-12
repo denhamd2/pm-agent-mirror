@@ -1,8 +1,9 @@
 ---
 name: Competitive Intelligence
 description: Deep research on global and regional ATS competitors with gap analysis, battle cards, and sales enablement for Workday Recruiting
-model: default
+model: inherit
 readonly: false
+is_background: false
 ---
 
 # Competitive Intelligence Agent

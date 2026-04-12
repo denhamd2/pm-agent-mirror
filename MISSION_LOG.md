@@ -62,6 +62,8 @@ Full content (Noah session, PRD/slide skills, async delegation, gaps): [Archive]
 
 | Mission | Status | Next gate / notes |
 |---------|--------|-------------------|
+| INTERVIEW-INTEL-001 | Complete | **All artefacts delivered:** PRD `docs/prds/interview-intelligence-agent-prd.md` (Legal 060 + Red Team 080 reviewed, revised); Design Brief `design/interview-intelligence-agent-design-brief.md` (318 peer reviewed, 319 copy reviewed); Prototype `http://localhost:5199/interview-intelligence-agent-v96` (3 views: Prep Card, Panel Feedback, Debrief). Innovation opportunity from GM April 2026 all-hands (interviewing and selection). |
+| GCC-E2E-034 | In Progress | **Step 24 (410) complete:** Epic draft `docs/epics/gcc-interview-scheduling-compliance-nudges-epic-draft.md` (no Jira yet). **Step 23 (330):** Figma **https://www.figma.com/design/ErDsbk1VrnqI8hgknCu8O3** (*GCC Interview Scheduling Compliance Nudges v90*). Prototype at `http://localhost:5199/gcc-interview-scheduling-v90`. Selected: **#3 Interview Scheduling + Compliance Nudges** (RICE 1.80); PRD: `docs/prds/gcc-interview-scheduling-compliance-nudges-prd.md`; CI: matrix v1.25. Next: **420** story mapping (then 430 Jira epic + stories). |
 | FRANCE-E2E-001 | In Progress | Step 2.75 done; **105** → **@pmf-analyst** → deck → downstream E2E |
 | FRANCE-E2E-002 | In Progress | Story map step 27; story map review → Jira |
 | INDIA-E2E-004 | In Progress | Step 410 epic next after 330 |
@@ -71,6 +73,7 @@ Full content (Noah session, PRD/slide skills, async delegation, gaps): [Archive]
 | INDIA-PMF-003 | Complete | PMF Research done; Selected: **#4 Mandatory Government ID UX** (RICE 1,575); Deck: `~/Downloads/India_Recruiting_PMF_Roadmap_v85.pptx` (59 slides); PMF: `research/India/thematic-analysis/2026-04-01-India-PMF-Analysis-INDIA-PMF-003.md`; CI: `research/competitive/in/in-competitive-scan-2026-04-01-INDIA-PMF-003.md` |
 | INDIA-PMF-004 | In Progress | **Step 10 (130) deck** — `slides_spec_v86.json`; `~/Downloads/India_Recruiting_PMF_Roadmap_v86.pptx` (68 slides, v65-parity structure). Thematic: `research/India/thematic-analysis/2026-04-01-India-PMF-Analysis-INDIA-PMF-004.md`. **Step 4 CI** — `research/competitive/in/in-competitive-scan-2026-04-01-INDIA-PMF-004.md`; matrix **v1.10**. **106** — `research/India/brainstorm-analysis/2026-04-01-brainstorm-analysis.md`. Next: India E2E HITL / PRD if continuing. Driver: New market entry; Focus: high volume + Know Your Candidate. |
 | INDIA-PMF-005 | In Progress | Step 1 - Strategy Context; Driver: New market entry; Focus: high-volume recruiting + Know Your Candidate / identity verification |
+| INDIA-E2E-005 | In Progress | **PRD (Step 14):** `docs/prds/india-native-whatsapp-recruiting-prd.md` — **Native WhatsApp Messaging in Core Recruiting UI** (PM-selected). **06 Apr 2026:** PRD **revision 1** after **060**. **07 Apr 2026:** PRD **Red Team revision (1 pass)**. **315 PASS 1–2:** `design/india-native-whatsapp-recruiting-design-brief.md`. **07 Apr 2026:** **319** copy review + **318** peer review complete; **Final Verdict: APPROVED**; Copy Inventory updated in brief; consent/free-text strings **flagged for 060** before GA. Next: **320** prototype. PMF: `research/India/thematic-analysis/2026-04-06-India-PMF-Analysis-INDIA-E2E-005.md`. **130 deck:** `slides_spec_v91.json`; `~/Downloads/India_Recruiting_PMF_Roadmap_v91.pptx`. CI: matrix v1.12. Driver: New market entry; WhatsApp + DPDP. |
 | INDIA-PMF-006 | Complete | PMF Research + PRD + Design + Prototype + Backlog for Rec #4 (WhatsApp). **Deck:** `~/Downloads/India_Recruiting_PMF_Roadmap_v87.pptx` (66 slides). **PMF:** `research/India/thematic-analysis/2026-04-01-India-PMF-Analysis-INDIA-PMF-006.md`. **PRD:** `docs/prds/india-whatsapp-sms-candidate-messaging-prd.md`. **Design Brief:** `design/india-whatsapp-candidate-messaging-design-brief.md` (318 APPROVED). **Prototype:** `design/india-whatsapp-candidate-messaging-v88.tsx`. **Figma:** https://www.figma.com/design/xfiN99c4hzqu9GeWZGREpy. **CI:** matrix v1.11. **Epic:** [HRREC-91286](https://jira2.workday.com/browse/HRREC-91286) (29 stories: VS1=13, VS2=10, VS3=6; SMS descoped). |
 
 ### Stale Missions (archived 31 March 2026)
@@ -202,6 +205,38 @@ Archived: MISSION-009, MISSION-010, MISSION-011, MISSION-014, MISSION-015, MISSI
 - Remaining: Backlog (400/420/430) - carries forward from epic/PRD (no additional changes needed)
 
 **Production Status:** ✅ Ready for next epic creation and PMF workflow
+
+### DECISION-008: Defensible Add Documents Offer/EA impact methodology
+**Date:** 11 April 2026  
+**Context:** The existing Add Documents impact table was useful for exploration but not defensible for PM decision-making due to sparse cohort coverage, percentage deltas on near-zero baselines, and Offer/EA environment mismatch (SANDBOX vs PROD).  
+**Choice:** Add a reproducible impact script (`scripts/build_add_documents_offer_ea_impact.py`) that publishes `docs/add-documents-adoption-impact-defensible.md` using level effects (post-pre days), winsorised means, bootstrap confidence intervals, threshold sensitivity checks, and segment consistency checks. Lock output language to operational event-duration estimands and explicitly separate from tracker chain metric `Time in Offer/EA`.  
+**Rationale:** 
+- Replaces fragile `% delta` interpretation with robust day-level effects
+- Makes underpowered strict gates explicit via threshold fallback logic
+- Provides reproducible methodology and caveats for PM/DS reviews
+- Keeps next-step path clear for single-environment panel re-run with explicit event volumes  
+**Owner:** David Denham + Data Scientist workflow  
+**Status:** Implemented
+
+### DECISION-007: Employment Agreement sub-BP dashboard + Add Documents EA cohort columns
+**Date:** 11 April 2026  
+**Context:** Extend the BP duration dashboard with an Employment Agreement sub-BP (tile, Offer-style operational charts, task-level analytics, Add Documents footer) and align the Add Documents adoption impact artefact with EA median time pre/post plus per-customer correlations.  
+**Choice:** Materialise EA aggregates in `design/data-employment-agreement-durations.ts` / `data-employment-agreement-steps.ts`; wire `data-bp-durations-by-segment.ts` and `bp-duration-dashboard.tsx`; add `scripts/merge_ea_into_add_documents_adoption_md.py` to merge EA columns into `docs/add-documents-adoption-impact.md` from Completed-event medians (`bp_type_id` = `Propose Compensation Offer/Employment Agreement`). Use `[1:-1].split('|')` for markdown table parsing (never `strip('|')`, which drops trailing empty cells).  
+**Rationale:** Keeps SANDBOX IUM/Offer columns intact while documenting PROD EA provenance until a SANDBOX EA export exists; reproducible regen via script.  
+**Owner:** David Denham + design prototype  
+**Status:** Implemented (run `npm run typecheck` in `design/` with raised Node heap if needed)
+
+### DECISION-006: Canonical Stats Warehouse Inventory
+**Date:** 11 April 2026  
+**Context:** Recent dashboard work exposed duplicated and partially stale warehouse guidance across the Data Scientist agent and the Pharos analytics skill. The Add Documents work also confirmed that metric IDs `1757`-`1760` currently map to verified Add Documents metrics in this workspace, not the older placeholder labels.  
+**Choice:** Create a canonical stats warehouse inventory at `docs/stats-warehouse-data-sources.json`, use the Pharos skill as the authoritative query-pattern guide, and slim the Data Scientist agent so it references the inventory rather than duplicating table catalogues. Also add a PM-facing Data Sources view inside `design/pm-agent-dashboard.tsx`.  
+**Rationale:** 
+- Reduces drift between agent instructions, skills, and dashboards
+- Gives the PM a single plain-English source inventory for dashboard provenance
+- Keeps separation of concerns clear: agent = workflow and analysis framing; skill = query protocol; inventory = source catalogue
+- Preserves caution on exploratory Offer step and attachment sources until they are fully validated  
+**Owner:** David Denham + Data Scientist workflow  
+**Status:** Implemented
 
 ### DECISION-003: HITL Autonomy - Always Honor User Selections
 **Date:** Tuesday Mar 18, 2026  

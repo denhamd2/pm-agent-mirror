@@ -191,6 +191,51 @@ import { colors } from '@workday/canvas-kit-react/tokens';
 
 **Implementation**: Same as WhatsApp, just change channel branding/labels.
 
+## Full-page agentic assistant (scheduling, screening, Q&A)
+
+For full-page conversational AI experiences (like candidate self-scheduling or Paradox-style bots), use the same `SanaComm*` components as the WhatsApp panel, but laid out in a main column rather than a sliding dock. Ensure the chat container has a fixed height (e.g., `height: calc(100vh - 64px)`) with an inner scrolling message area (`overflowY: 'auto'`) so the composer remains docked at the bottom of the viewport.
+
+**Candidate Navigation**: For external candidates, replace the internal `WorkdayTopNav` with a simplified career site header (e.g., Brand Logo + "Candidate Home" link).
+
+**Scroll Behavior**: Implement auto-scrolling that focuses on the *start* of the latest assistant response (e.g., using `scrollIntoView({ block: 'start' })`), rather than just scrolling to the absolute bottom, to ensure long messages are readable from the top.
+
+**Components**:
+- `SanaCommComposer` - Pill composer with send button
+- `SanaCommMessageBubble` - Message bubbles
+- Canvas Kit `Avatar` - For the assistant identity
+
+**Usage**:
+```tsx
+import { SanaCommComposer, SanaCommMessageBubble } from './components';
+import { Avatar } from '@workday/canvas-kit-react/avatar';
+import { Flex, Box } from '@workday/canvas-kit-react/layout';
+
+{/* Assistant Message Row */}
+<Flex alignItems="flex-start" gap="xs" style={{ width: '100%' }}>
+  <Avatar as="div" size="small" altText="Assistant" style={{ flexShrink: 0 }} />
+  <Box style={{ flex: 1, minWidth: 0 }}>
+    <SanaCommMessageBubble align="start">
+      Hi there! I'm the scheduling assistant.
+    </SanaCommMessageBubble>
+  </Box>
+</Flex>
+
+{/* User Message Row */}
+<SanaCommMessageBubble align="end">
+  Show me available times
+</SanaCommMessageBubble>
+
+{/* Composer at bottom */}
+<Box padding="m" style={{ borderTop: `1px solid ${colors.soap300}` }}>
+  <SanaCommComposer
+    value={message}
+    onChange={setMessage}
+    onSend={sendMessage}
+    placeholder="Type a message..."
+  />
+</Box>
+```
+
 ## Communication Dock Integration
 
 ### CommunicationDock Component
@@ -246,6 +291,58 @@ import { CommunicationDock } from './components';
   onChannelChange={setActiveChannel}
   defaultExpanded={false}
 />
+```
+
+## Full-Page Agentic Assistant
+
+For full-page conversational AI interfaces (like scheduling assistants, screening bots, or Recruiter Hub GenUI):
+
+**Components**: 
+- `SanaCommMessageBubble` (from `SanaCommPanelPatterns.tsx`)
+- `SanaCommComposer` (from `SanaCommPanelPatterns.tsx`)
+- `A2UIRenderer` and `GenUIPatterns.tsx` (for rich, agent-generated UI)
+
+**Features**:
+- Fixed-height chat container with inner scrolling (`overflowY: 'auto'`)
+- Bottom-docked composer
+- Auto-scrolling to the *start* of new assistant messages
+- Support for rich embedded UI (GenUI) via A2UI JSON payloads
+
+**Usage**:
+```tsx
+import { SanaCommMessageBubble, SanaCommComposer, A2UIRenderer } from './components';
+
+// Container
+<Flex style={{ height: 'calc(100vh - 64px)', flexDirection: 'column' }}>
+  
+  // Scrollable message area
+  <Flex flex={1} style={{ overflowY: 'auto', padding: '24px' }}>
+    <Box style={{ maxWidth: '100%', width: '100%' }}>
+      {messages.map(msg => (
+        <Flex key={msg.id} alignItems="flex-start" gap="xs">
+          <Avatar as="div" size="small" altText="Assistant" />
+          <Box style={{ flex: 1, minWidth: 0 }}>
+            {/* Use maxWidth="100%" to allow GenUI grids/charts to expand */}
+            <SanaCommMessageBubble align="start" maxWidth={msg.a2uiNode ? '100%' : 'min(100%, 600px)'}>
+              {msg.text && <Box marginBottom={msg.a2uiNode ? 'm' : 'zero'}>{msg.text}</Box>}
+              {msg.a2uiNode && <A2UIRenderer node={msg.a2uiNode} onAction={handleAction} />}
+            </SanaCommMessageBubble>
+          </Box>
+        </Flex>
+      ))}
+    </Box>
+  </Flex>
+
+  // Docked composer
+  <Box style={{ padding: '16px', borderTop: `1px solid ${colors.soap300}` }}>
+    <SanaCommComposer
+      value={input}
+      onChange={setInput}
+      onSend={handleSend}
+      placeholder="Ask me anything..."
+    />
+  </Box>
+</Flex>
 ```
 
 ## Communication Channel Selectors
@@ -361,6 +458,8 @@ import { sanaCommFormControlStyle } from './components/SanaCommPanelPatterns';
 - ✅ Use `EmailComposer` for simple email-only
 - ✅ Use `RichTextEditor` with templates + GenAI
 - ✅ Reuse Sana comm components (composer, bubbles, form controls)
+- ✅ Use `SanaCommComposer` and `SanaCommMessageBubble` for full-page agentic chat
+- ✅ Use `A2UIRenderer` and `GenUIPatterns` for rich, agent-generated UI payloads
 - ✅ Default `CommunicationDock` to collapsed
 - ✅ Use channel-specific widths (email: 950px, chat: 450px)
 - ✅ Follow Sana reference PNGs for styling validation
@@ -368,6 +467,9 @@ import { sanaCommFormControlStyle } from './components/SanaCommPanelPatterns';
 ### DON'T
 - ❌ Build custom email threading UI (use EmailPanel)
 - ❌ Create ad-hoc message bubble components (use SanaCommMessageBubble)
+- ❌ Build fake pill composers with `Box` + `SecondaryButton` for chat (use SanaCommComposer)
+- ❌ Let the chat container scroll the whole page (use fixed height with inner scrolling so composer stays docked)
+- ❌ Constrain agentic chat bubbles to narrow widths when they contain rich UI (grids, charts, carousels)
 - ❌ Hardcode 4px radii for comm controls (use sanaCommFormControlStyle)
 - ❌ Default CommunicationDock to expanded (user should expand)
 - ❌ Use same width for all channels (email needs more space)

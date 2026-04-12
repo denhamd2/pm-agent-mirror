@@ -89,6 +89,21 @@ These metrics are defensible if we validate exact task-name queries and monthly 
   - tie `Manage Attachments` task activity to document repository events
   - prove whether attachment-type metrics are business-meaningful or only technical repository events
 
+## Approvals (validated for dashboard)
+
+Exact `task_name` strings locked after PROD volume checks (monthly series materialised in `design/data-offer-steps.ts`):
+
+- `Bulk Approve` — high volume; multi-tenant coverage.
+- `Approve Business Process (Web Service)` — lower volume and **very few** distinct tenants in the observed window; useful as a volume or duration indicator but not as a broad adoption KPI.
+
+Other approval-like strings (for example long `businessProcess/eventSteps/approve/...` API labels) were not promoted to dashboard charts; re-profile before any expansion.
+
+## Customer BP configuration (Excel) → hypotheses
+
+When `research/Offer/bp-config-samples/*.xlsx` files are present, run `python3 scripts/parse_offer_bp_config_xlsx.py` to list worksheets and step labels.
+
+Map patterns to Pharos only after a targeted query proves measurability (extra approval chains, parallel branches, writer-generated paths). Until then, keep findings as text hypotheses in PR readouts, not charted metrics.
+
 ## Dashboard Recommendation
 
 If Phase 1 validates cleanly, add a new `Offer Steps` section above the Add Documents section with:

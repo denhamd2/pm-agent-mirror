@@ -26,7 +26,7 @@ Match **font sizes, body box height (2.8in), native bullets, and Product implica
 | **PESTEL** | **Six** factor slides; titles are **factor name only** (no "PESTEL -" prefix); each ends with **Product implication:** (per **`010-style-guide.mdc`**). **Body depth** must meet **130** v65 minimums (bullet count, anchors, sub-bullets, ~22-word implication) — see **`.cursor/rules/130-pmf-slide-generator.mdc`**. |
 | **Primary research** | Interview strip + table + **one slide per customer**; **130** v65 minimums for intro and per-P slides (quote-led bullets, theme/JTBD, line counts). |
 | **Strategic Context** | **Two separate slides** per v65: "Strategic Context - Why [REGION] Now" + "[REGION] Market Momentum - Key Indicators" (substitute actual region name, e.g., GCC, France, Japan). Do NOT combine unless PM requests compressed format. |
-| **Recommendations** | **MAXIMUM 5 recommendation slides** (select highest-impact from report). Slide titles must be "Recommendation N: [Title]". |
+| **Recommendations** | **MAXIMUM 5 recommendation slides** (select highest-impact from report). Slide titles must be "Recommendation N: [Title]". Each recommendation MUST include quantified Success Metrics and strategy-anchored 'Why Now' per 130 rule. See slides_spec_v90.json for the target quality bar. |
 | **Title slide subheader** | **"[Month YYYY]"** only (e.g., "March 2026"). Do NOT include "Thematic analysis and roadmap" prefix or version numbers. |
 
 ---
@@ -60,7 +60,7 @@ Cross-check against **`gcc-pmf-roadmap-v65-slide-inventory.md`** (legacy referen
 23. **Section divider**
 24. **Primary research** — interview strip intro; participants table; **one slide per customer** (P1, P2, P3…)
 25. **Section divider**
-26. **Thematic** — **2-3 grouped slides** with 3-4 theme subheaders per slide (EXACTLY 3 bullets per theme: Key Insight & Evidence, Business Impact, Product Implications) + **triangulation matrix**
+26. **Thematic** — **Grouped (v65) or Individual (v90) slides** (see 130-slide-section-reference.md). Grouped: 2-3 slides with 3-4 themes per slide. Individual: 1 slide per theme. + **triangulation matrix**
 27. **Section divider**
 28. **Full funnel / gap diagnostic** — **at least one** slide titled "Gap Analysis"
 29. **Section divider**
@@ -85,7 +85,7 @@ Alternate **`Title Only`** and **`Title Only_Alt`** every 2–3 slides. Use **`S
 - [ ] Confirm **MAX 5 recommendations** + optional **E2E handoff table** (for Regional E2E pipeline only)
 - [ ] Confirm **PESTEL titles** use factor name only (no "PESTEL -" prefix)  
 - [ ] Confirm **section divider subtitles** are SHORT (2-4 words), not verbose pipe descriptions  
-- [ ] Confirm **Thematic Analysis** uses grouped pattern (2-3 slides with 3-4 themes per slide; EXACTLY 3 bullets per theme)  
+- [ ] Confirm **Thematic Analysis** uses appropriate pattern (Grouped v65 for >5 themes, Individual v90 for 3-5 themes) with required evidence depth
 - [ ] Confirm **Gap Analysis** slide is titled exactly "Gap Analysis"  
 - [ ] Confirm **Recommendation** slide titles are "Recommendation N: [Title]"  
 

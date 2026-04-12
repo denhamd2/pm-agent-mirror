@@ -22,14 +22,31 @@ function normaliseBase(raw: string | undefined): string {
  * an entry here or deep links show a blank page.
  */
 function prototypeSpaSlugFallback(): Plugin {
-  const slugs = new Set([
-    'gcc-recruiter-dashboard',
-    'aadhaar-adobe-sign-v01',
-    'candidate-grid-v84',
-    'candidate-smart-view-v86',
-    'recruiter-home-v85',
-    'india-whatsapp-candidate-messaging-v88',
-  ]);
+    const slugs = new Set([
+      'gcc-recruiter-dashboard',
+      'aadhaar-adobe-sign-v01',
+      'candidate-grid-v84',
+      'candidate-smart-view-v86',
+      'recruiter-home-v85',
+      'india-whatsapp-candidate-messaging-v88',
+      'gcc-interview-scheduling-v90',
+      'recruiter-hub-genui-v95',
+      'india-native-whatsapp-v91',
+      'interview-intelligence-agent-v96',
+      'ai-system-of-record-v97',
+      'canvas-kit-test',
+      'pm-agent-dashboard',
+      'avg-time-to-hire',
+      'avg-time-to-fill',
+      'positions-open-vs-filled',
+      'value-realization-metrics',
+      'add-documents-impact',
+      'recruiting-adoption',
+      'interview-metrics',
+      'bp-durations',
+      'view-dashboard',
+      'customer-scorecard',
+    ]);
   return {
     name: 'prototype-spa-slug-fallback',
     enforce: 'pre',

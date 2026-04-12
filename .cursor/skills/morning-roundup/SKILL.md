@@ -204,35 +204,36 @@ Write results to `docs/morning-roundup-data.json`:
 }
 ```
 
-### Step 7a: Generate Manifest and Embed Nav Links
+### Step 7a: Refresh Prototypes Catalogue and Morning Data
 
-After writing `docs/morning-roundup-data.json`, generate navigation links for all dashboard pages:
+After writing `docs/morning-roundup-data.json`, refresh the prototypes page and morning data:
 
-1. **Scan for latest artefacts** using the same logic as `/workspace-audit` Step 5:
-   - Latest deck: scan `~/Downloads/*_Roadmap_v*.pptx`, copy newest to `docs/downloads/`
-   - Latest PRD: scan `docs/prds/*.md` (exclude `*-red-team*.md`)
-   - Latest Design Brief: scan `design/*-design-brief*.md`
-   - Latest Epic: scan `docs/epics/*.md` (exclude `README.md`)
-2. **Read `design/main.tsx`** and extract all versioned route strings (regex for `'([\w-]+-v\d+)'`), pick the one with the highest version number
-3. **Build nav-links JSON** with fully resolved URLs:
+1. **Read `design/main.tsx`** and extract all versioned route slugs (regex for `'([\w-]+-v\d+)'`). Sort by version number descending; keep the top 3 as the most recent prototypes.
+2. **For each of the 3 prototypes**, scan for matching artefacts:
+   - PRD: scan `docs/prds/*.md` (exclude `*-red-team*.md`) for a filename containing the feature name
+   - Design Brief: scan `design/*-design-brief*.md` for a filename containing the feature name
+   - Deck: scan `docs/downloads/*_Roadmap_v*.pptx` or `~/Downloads/*_Roadmap_v*.pptx` for a matching deck (copy newest to `docs/downloads/` if found in ~/Downloads)
+3. **Build prototypes-data JSON**:
    ```json
    {
-     "prototype": {"href": "http://localhost:5199/#/<latest-route>", "title": "<latest-route>"},
-     "deck": {"href": "docs/downloads/<deck-filename>", "title": "<deck-filename>"},
-     "prd": {"href": "docs/pm-agent-viewer.html?file=docs/prds/<prd-filename>", "title": "<prd-filename>"},
-     "brief": {"href": "docs/pm-agent-viewer.html?file=design/<brief-filename>", "title": "<brief-filename>"},
-     "epic": {"href": "docs/pm-agent-viewer.html?file=docs/epics/<epic-filename>", "title": "<epic-filename>"}
+     "prototypes": [
+       {
+         "slug": "feature-name-vNN",
+         "name": "Short Display Name",
+         "description": "1-line description of the prototype",
+         "prd": "docs/prds/feature-prd.md",
+         "brief": "design/feature-design-brief.md",
+         "deck": "docs/downloads/Feature_Roadmap_vNN.pptx"
+       }
+     ]
    }
    ```
-4. **Embed into ALL dashboard HTML pages** by replacing the content of `<script id="nav-links" type="application/json">` tag in:
-   - `docs/pm-agent-morning-roundup.html`
-   - `docs/pm-agent-scorecard.html`
-   - `docs/pm-agent-architecture.html`
-   - `docs/pm-agent-design-system.html`
-   - `docs/pm-agent-viewer.html`
-5. **Also embed morning data** into `docs/pm-agent-morning-roundup.html` by replacing the content of `<script id="morning-data" type="application/json">` tag with the JSON from `docs/morning-roundup-data.json`
+   Omit `prd`, `brief`, or `deck` keys entirely if no matching artefact is found.
+   **Note**: Prototype URLs are constructed client-side in the HTML page. Locally they resolve to `http://localhost:5199/<slug>` (Vite dev server), NOT to the static build at `design/dist/`. The JSON only stores the slug.
+4. **Embed into `docs/pm-agent-prototypes.html`** by replacing the content of `<script id="prototypes-data" type="application/json">` tag with the JSON built in step 3.
+5. **Embed morning data** into `docs/pm-agent-morning-roundup.html` by replacing the content of `<script id="morning-data" type="application/json">` tag with the JSON from `docs/morning-roundup-data.json`.
 
-This ensures nav links stay current every time `/morning-roundup` runs, without any runtime `fetch()` calls.
+This ensures the prototypes catalogue stays current every time `/morning-roundup` runs.
 
 ### Step 8: Open in Browser
 
@@ -259,4 +260,4 @@ User sees:
 - Competitor news searches prioritize announcements from past 7 days
 - TLDRs should be actionable and concise (1-2 sentences max)
 - Page always shows the last fetched data regardless of age; the timestamp indicates when data was last refreshed
-- Nav links across all dashboard pages are refreshed every time this skill runs (Step 7a)
+- Prototypes catalogue (`docs/pm-agent-prototypes.html`) is refreshed every time this skill runs (Step 7a)

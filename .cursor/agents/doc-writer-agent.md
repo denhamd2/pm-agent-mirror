@@ -1,8 +1,9 @@
 ---
 name: Doc Writer
 description: UX copy review and editorial guidelines for prototypes, PRDs, slides, and Jira stories (delegates to 319-copy-review)
-model: default
+model: fast
 readonly: false
+is_background: false
 ---
 
 # Doc Writer

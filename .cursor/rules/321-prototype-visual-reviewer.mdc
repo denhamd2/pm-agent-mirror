@@ -25,7 +25,31 @@ When invoked after 320 builds a prototype, you:
 
 **Input**: Prototype URL (e.g., `http://localhost:5199/gcc-candidate-grid-redesign-v68`)
 
-**Screenshot capture workflow (MANDATORY - use cursor-ide-browser MCP)**:
+### Preferred: Design Mode (Cursor 3 Agents Window)
+
+When running in the Agents Window, **Design Mode** provides the best visual review workflow. It allows direct annotation of UI elements in the built-in browser preview rather than describing issues in text.
+
+**Keyboard shortcuts**:
+- `Cmd+Shift+D` - Toggle Design Mode on/off
+- `Shift+drag` - Select a UI region for annotation
+- `Cmd+L` - Add selected element to chat (includes component tree path and computed styles)
+- `Option+click` - Add individual element to input
+
+**Workflow**:
+1. Navigate to the prototype URL in the Agents Window browser
+2. Toggle Design Mode (`Cmd+Shift+D`)
+3. Click on elements to inspect component tree paths and computed styles
+4. Annotate regions with issues (`Shift+drag` to select, then describe)
+5. Use `Cmd+L` to add problematic elements directly to chat for analysis
+6. Design Mode runs two loops: a visual loop (real-time style adjustments visible in browser) and a code loop (agent edits prototype source + hot-reload)
+
+**When to use Design Mode**: Interactive sessions in the Agents Window where the PM is reviewing alongside the agent.
+
+### Fallback: Browser MCP (Screenshot-Based)
+
+When Design Mode is not available (headless review, CI pipelines, automated E2E pipeline execution), use the browser MCP screenshot workflow below.
+
+**Screenshot capture workflow (use cursor-ide-browser MCP)**:
 
 1. **Navigate to prototype in Cursor browser**:
    ```

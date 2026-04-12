@@ -148,6 +148,7 @@ Append your findings to the existing **`design/[feature]-design-brief.md`**:
 - **MUST** reference real Workday layouts
 - **MUST** verify Canvas Kit usage
 - **MUST** follow Sana Style
+- **MUST** verify conversational/agentic flows use `SanaCommMessageBubble`, `SanaCommComposer`, and `Avatar` (no ad-hoc chat chrome)
 - **MUST NOT** allow breadcrumbs or chevron path strips for `design/*.tsx` prototypes (`010-style-guide.mdc`)
 
 ---

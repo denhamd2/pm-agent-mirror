@@ -1,0 +1,105 @@
+{
+  "saved": [
+    {
+      "slug": "customer-scorecard",
+      "files": [
+        "design/customer-scorecard-dashboard.tsx",
+        "design/data-customer-scorecard.ts",
+        "design/components/BottleneckFlowStrip.tsx",
+        "design/components/DashboardGlobalNav.tsx"
+      ]
+    },
+    {
+      "slug": "india-native-whatsapp-v91",
+      "files": [
+        "design/india-native-whatsapp-v91.tsx",
+        "docs/prds/india-native-whatsapp-recruiting-prd.md",
+        "design/india-native-whatsapp-recruiting-design-brief.md",
+        "docs/downloads/India_Recruiting_PMF_Roadmap_v91.pptx"
+      ]
+    },
+    {
+      "slug": "gcc-interview-scheduling-v90",
+      "files": [
+        "design/gcc-interview-scheduling-v90.tsx",
+        "docs/prds/gcc-interview-scheduling-compliance-nudges-prd.md",
+        "design/gcc-interview-scheduling-compliance-nudges-design-brief.md"
+      ]
+    },
+    {
+      "slug": "recruiter-hub-genui-v95",
+      "files": [
+        "design/recruiter-hub-genui-v95.tsx"
+      ]
+    },
+    {
+      "slug": "ai-system-of-record-v97",
+      "files": [
+        "design/ai-system-of-record-v97.tsx"
+      ]
+    },
+    {
+      "slug": "interview-intelligence-agent-v96",
+      "files": [
+        "design/interview-intelligence-agent-v96.tsx",
+        "docs/prds/interview-intelligence-agent-prd.md",
+        "design/interview-intelligence-agent-design-brief.md"
+      ]
+    },
+    {
+      "slug": "avg-time-to-fill",
+      "files": [
+        "design/avg-time-to-fill-dashboard.tsx"
+      ]
+    },
+    {
+      "slug": "avg-time-to-hire",
+      "files": [
+        "design/avg-time-to-hire-dashboard.tsx"
+      ]
+    },
+    {
+      "slug": "interview-metrics",
+      "files": [
+        "design/interview-metrics-dashboard.tsx",
+        "design/data-interview-metrics.ts",
+        "design/data-interview-filters.ts"
+      ]
+    },
+    {
+      "slug": "bp-durations",
+      "files": [
+        "design/bp-duration-dashboard.tsx",
+        "design/data-bp-durations.ts"
+      ]
+    },
+    {
+      "slug": "offer-dashboard",
+      "files": [
+        "design/bp-duration-dashboard.tsx",
+        "design/data-bp-durations.ts",
+        "design/data-add-documents.ts",
+        "docs/offer-step-metrics-plan.md"
+      ]
+    },
+    {
+      "slug": "positions-open-vs-filled",
+      "files": [
+        "design/positions-open-vs-filled-dashboard.tsx"
+      ]
+    },
+    {
+      "slug": "recruiting-adoption",
+      "files": [
+        "design/recruiting-adoption-dashboard.tsx",
+        "design/data-recruiting-adoption.ts"
+      ]
+    },
+    {
+      "slug": "value-realization-metrics",
+      "files": [
+        "design/value-realization-metrics.tsx"
+      ]
+    }
+  ]
+}

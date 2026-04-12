@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Flex, Box } from '@workday/canvas-kit-react/layout';
 import { colors, space } from '@workday/canvas-kit-react/tokens';
 import { Card } from '@workday/canvas-kit-react/card';
 import { Heading, BodyText } from '@workday/canvas-kit-react/text';
 import { PrimaryButton, SecondaryButton } from '@workday/canvas-kit-react/button';
-import { PageHeader, MetricCard, AlertBanner } from './components';
+import { PageHeader, MetricCard, AlertBanner, DashboardGlobalNav } from './components';
 import { ChartCard } from './components/GenUIPatterns';
 import { SANA_PAGE_CANVAS, SANA_CARD_RADIUS_LG } from './components/sanaShellTheme';
 import { DesignSystemTab } from './components/DesignSystemTab';
@@ -84,10 +84,18 @@ export const PMAgentDashboard: React.FC = () => {
   const customerIssues = morningData.customerIssues || [];
   const competitorNews = morningData.competitorNews || [];
   
-  // Parse prototypes data
   const [savedPrototypes, setSavedPrototypes] = useState<string[]>(
     (savedPrototypesData.saved || []).map((p: any) => p.slug)
   );
+
+  useEffect(() => {
+    fetch('http://localhost:8765/api/saved-prototypes')
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(resp => {
+        setSavedPrototypes((resp.saved || []).map((p: any) => p.slug));
+      })
+      .catch(() => { /* server unavailable; keep bundled fallback */ });
+  }, []);
 
   const allPrototypes = React.useMemo<PrototypeEntry[]>(() => {
     const match = rawPrototypesHtml.match(/<script id="prototypes-data" type="application\/json">([\s\S]*?)<\/script>/);
@@ -122,7 +130,7 @@ export const PMAgentDashboard: React.FC = () => {
   }, [activeTab]);
 
   const toggleSave = async (slug: string, proto: PrototypeEntry) => {
-    const previousSaved = savedPrototypes;
+    const previousSaved = [...savedPrototypes];
     const isSaved = previousSaved.includes(slug);
     const newSaved = !isSaved;
 
@@ -133,11 +141,12 @@ export const PMAgentDashboard: React.FC = () => {
     }
 
     try {
-      await fetch('http://localhost:8765/api/save-prototype', {
+      const res = await fetch('http://localhost:8765/api/save-prototype', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slug, files: getPrototypeFiles(proto), saved: newSaved })
+        body: JSON.stringify({ slug, files: getPrototypeFiles(proto), saved: newSaved }),
       });
+      if (!res.ok) throw new Error(`Server returned ${res.status}`);
     } catch (err) {
       console.error('Save failed:', err);
       setSavedPrototypes(previousSaved);
@@ -206,20 +215,9 @@ export const PMAgentDashboard: React.FC = () => {
           >
             Agent Flow
           </SecondaryButton>
-          <Box style={{ marginLeft: 'auto' }}>
-            <SecondaryButton
-              as="a"
-              href="/value-realization-metrics"
-              style={{
-                borderColor: colors.blueberry400,
-                color: colors.blueberry500,
-                fontWeight: 600,
-              }}
-            >
-              Value Realisation Metrics →
-            </SecondaryButton>
-          </Box>
         </Flex>
+
+        <DashboardGlobalNav showMainTabs={false} activeMetricsSlug={null} />
 
         <Box>
           {activeTab === 'morning-roundup' && (
@@ -332,24 +330,28 @@ export const PMAgentDashboard: React.FC = () => {
                   value="6"
                   helperText="Currently in progress"
                   changeIndicator={{ text: "-30 archived", sentiment: "positive" }}
+                  tooltip="Count of missions marked in progress in MISSION_LOG (agent workspace health, not Pharos)."
                 />
                 <MetricCard
                   label="AlwaysApply Budget"
                   value="662 / 500"
                   helperText="Lines of code in alwaysApply rules"
                   changeIndicator={{ text: "-33% from 982", sentiment: "positive" }}
+                  tooltip="Estimated token/line budget for always-applied Cursor rules vs target."
                 />
                 <MetricCard
                   label="Total Rule Lines"
                   value="13,106"
                   helperText="Across 28 .mdc and .md rules"
                   changeIndicator={{ text: "-7% from 14,152", sentiment: "positive" }}
+                  tooltip="Sum of lines across orchestrator and specialist rule files in .cursor/rules."
                 />
                 <MetricCard
                   label="Overall Grade"
                   value="A-"
                   helperText="Based on architecture health"
                   changeIndicator={{ text: "Up from B+", sentiment: "positive" }}
+                  tooltip="Qualitative workspace audit score from the agent health scorecard narrative."
                 />
               </Flex>
 
@@ -484,21 +486,25 @@ export const PMAgentDashboard: React.FC = () => {
                   label="Known sources"
                   value={String(sourceSummary.total)}
                   helperText={`Inventory reviewed ${statsWarehouseData.lastReviewed}`}
+                  tooltip="Rows in stats-warehouse-data-sources.json catalogue."
                 />
                 <MetricCard
                   label="Validated sources"
                   value={String(sourceSummary.validated)}
                   helperText="Safe for production dashboards"
+                  tooltip="Sources with validated status in the inventory (approved for PM-facing use)."
                 />
                 <MetricCard
                   label="Exploratory sources"
                   value={String(sourceSummary.exploratory)}
                   helperText="Discovery only until validated"
+                  tooltip="Sources still in exploratory status; do not use for exec metrics without review."
                 />
                 <MetricCard
                   label="Dashboards covered"
                   value={String(sourceSummary.dashboards)}
                   helperText="Distinct dashboard uses recorded"
+                  tooltip="Unique dashboard slugs referenced from the usedInDashboards field across sources."
                 />
               </Flex>
 

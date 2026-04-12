@@ -249,23 +249,34 @@ const [errors, setErrors] = useState<Record<string, string>>({});
 
 For channel selectors, preference toggles:
 
-```tsx
-import { Radio, RadioGroup } from '@workday/canvas-kit-react/radio';
-
-<RadioGroup name="channel" value={channel} onChange={setChannel}>
-  <Radio label="Email" value="email" />
-  <Radio label="SMS" value="sms" />
-  <Radio label="WhatsApp" value="whatsapp" />
-</RadioGroup>
-```
+**Component**: `design/components/SharedFormControls.tsx`
 
 ```tsx
-import { Checkbox } from '@workday/canvas-kit-react/checkbox';
+import { FormRadioGroup, FormCheckboxGroup } from './components';
 
-<Checkbox
-  label="WhatsApp consent only"
-  checked={consentFilter}
-  onChange={(e) => setConsentFilter(e.target.checked)}
+<FormRadioGroup
+  id="channel-selector"
+  name="channel"
+  label="Preferred Channel"
+  value={channel}
+  onChange={setChannel}
+  options={[
+    { value: 'email', label: 'Email' },
+    { value: 'sms', label: 'SMS' },
+    { value: 'whatsapp', label: 'WhatsApp' }
+  ]}
+  layout="horizontal"
+/>
+
+<FormCheckboxGroup
+  id="consent-filters"
+  label="Consent Filters"
+  values={consentFilters}
+  onChange={setConsentFilters}
+  options={[
+    { value: 'whatsapp', label: 'WhatsApp consent only' },
+    { value: 'marketing', label: 'Marketing consent' }
+  ]}
 />
 ```
 

@@ -48,6 +48,38 @@ Apply to **all** in-repo Canvas Kit prototypes under `design/`, Figma capture ta
   - **Rich text** (any context): Use `RichTextEditor` component - functional formatting toolbar (Bold/Italic/Underline/Link/List)
   - **Thread expansion** (any channel): Use `ThreadExpansion` for Gmail-style inline collapsible history
 
+- **Full-page conversational / agentic assistant**:
+  - **Triggers**: "conversational AI", "agentic assistant", "scheduling assistant chat", "Paradox-style messaging surface", "candidate self-serve chat".
+  - **Mandatory Component Stack**:
+    - **Bubbles**: Use `SanaCommMessageBubble` from `design/components/SanaCommPanelPatterns.tsx`. Assistant rows pair with Canvas Kit `Avatar` (`as="div"`).
+    - **Composer**: Use `SanaCommComposer` (pill, focus ring, circular send). Do not use a styled `Box` + `SecondaryButton`.
+    - **Tokens**: Use `SANA_COMM_BUBBLE_BG`, `SANA_COMM_MESSAGE_RADIUS_PX`, `SANA_COMM_PANEL_SURFACE`, `SANA_COMM_COMPOSER_RADIUS_PX` from `design/components/sanaShellTheme.ts` for ancillary thread chrome.
+    - **Trust / legal**: Use Canvas Kit `Banner` (or brief-approved copy) for automated assistant disclosure. Include a footer line for privacy / "powered by".
+    - **Quick replies**: Use Canvas Kit `PrimaryButton` / `SecondaryButton` (or tertiary), not raw HTML buttons.
+  - **Layout**: A narrow centred column (`maxWidth: 520`–`560px`) is acceptable for simple chat, but for **GenUI / rich agentic interfaces** (like Recruiter Hub), use a wider container (`maxWidth: '100%'`) so that embedded components (grids, charts, carousels) have room to breathe. Ensure the chat container has a fixed height (e.g., `height: calc(100vh - 64px)`) with an inner scrolling message area (`overflowY: 'auto'`) so the composer remains docked at the bottom of the viewport.
+  - **Candidate Navigation**: For external candidates, do NOT use the internal `WorkdayTopNav`. Use a simpler external career site navigation (e.g., company logo, "Candidate Home" link).
+  - **Scroll Behavior**: Implement auto-scrolling that focuses on the *start* of the latest assistant response (e.g., using `scrollIntoView({ block: 'start' })`), rather than just scrolling to the absolute bottom, to ensure long messages are readable from the top.
+  - **Forbid**: Ad-hoc bubble/composer/gradient avatar treatments are strictly forbidden.
+  - **Reference**: See `design/docs/canvas-kit-patterns/communication-patterns.md` and the GCC prototype file (`design/gcc-interview-scheduling-compliance-nudges-v90.tsx`) as the canonical example.
+
+- **Generative UI (GenUI) / A2UI Patterns**:
+  - **Triggers**: "GenUI", "A2UI", "dynamic pages", "agent-generated UI".
+  - **Rendering Engine**: Use `A2UIRenderer` (`design/components/A2UIRenderer.tsx`) to map JSON payloads to Canvas Kit components.
+  - **Component Library**: Use `GenUIPatterns.tsx` for rich, agent-generated cards.
+    - `CandidateActionCard`: For quick review (name, metadata, Reject/Advance).
+    - `DraftMessage`: For agent-drafted communications (recipient, message body, Edit/Send).
+    - `CandidateGrid` / `JobReqGrid`: For tabular data (uses Canvas Kit `Table`).
+    - `CandidateCarousel`: For side-by-side comparison of `StructuredResume` components.
+    - `ChartCard`: For data visualization (uses `react-chartjs-2` with Canvas Kit `Card` wrapper).
+  - **Integration**: Pass the `A2UINode` to `A2UIRenderer` inside a `SanaCommMessageBubble` (ensure the bubble has `maxWidth="100%"` or `width="100%"` to accommodate wide grids/charts).
+
+- **Candidate Experience Patterns**:
+  - **Triggers**: "Career site", "Candidate home", "Paradox style apply".
+  - **Components**: Use `CandidateExperiencePatterns.tsx`.
+    - `CareerSiteHero`: Large search prompt area.
+    - `JobCard`: Clean job listing card.
+    - `JobDetailsStickyFooter`: Bottom-docked "Apply with Assistant" CTA.
+
 ## Depth and Shadows
 
 **Card shadows (in-flow content):**
@@ -68,6 +100,14 @@ Apply to **all** in-repo Canvas Kit prototypes under `design/`, Figma capture ta
   - **Skills/tags**: Use `StatusIndicator` with `type={StatusIndicator.Type.Gray}` and `emphasis={StatusIndicator.Emphasis.Low}` - NEVER custom Box with inline styling
   - **Status badges**: Use `StatusIndicator` with appropriate type (Blue for active, Green for success, Gray for inactive, Orange for caution) and Low emphasis
   - **Why**: Ensures Canvas Kit design tokens, WCAG contrast compliance, consistent shape (borderRadius.s), and accessibility
+  - **Inside `Table.Cell`**: Canvas Kit `Table.Cell` uses CSS Grid (`gridTemplateColumns: '1fr'`), which stretches direct children to full cell width. Always wrap `StatusIndicator` in `<span style={{ display: 'inline-flex' }}>` when placed inside a `Table.Cell` to prevent the badge background from stretching:
+    ```tsx
+    <Table.Cell>
+      <span style={{ display: 'inline-flex' }}>
+        <StatusIndicator type={StatusIndicatorType.Green} emphasis={StatusIndicatorEmphasis.Low} label="Active" />
+      </span>
+    </Table.Cell>
+    ```
   - **See**: `design/README.md` Content Patterns section and `320-prototype-developer.mdc` for detailed examples
 - **Candidate profile (full page)**: Follow **`design/references/sana/Sana_Style_UI-candidate-profile-whatsapp-panel.png`** together with existing shell references: **large header card** on **light grey** with **avatar**, name line, job meta; **vertical sub-nav** in the secondary column with **pill** active state (**`WorkdayLeftTabBar`**); **white** rounded **content cards** on **`SANA_PAGE_CANVAS`** with **thin soap borders**; **two-column grid** for overview + job/history where appropriate. **Do not** add **breadcrumb / chevron path** strips (see hard rule above). Reserve **`DEFAULT_COMM_RAIL_PX`** on the right when the **CommunicationDock** is present.
 - **Theme exports**: Import **`SANA_PAGE_CANVAS`**, **`SANA_CARD_SHADOW`**, **`SANA_SHELL_RADIUS`**, etc. from `design/components/sanaShellTheme.ts` (re-exported in `design/components/index.ts`) instead of scattering one-off hexes.

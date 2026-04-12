@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PM Agent Dashboard — Average Time to Hire</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0b1f42;
+  --ballpoint: #1a3a6e;
+  --water-cooler: #0075b4;
+  --blue-sky: #4a9fd4;
+  --pencil: #f5a623;
+  --paper: #f7f5f2;
+  --laptop: #6b7a8d;
+  --staple: #e2ddd7;
+  --desk: #c4bdb3;
+  --surface: #fafaf9;
+}
+* { font-family: 'DM Sans', system-ui, sans-serif; box-sizing: border-box; }
+code, .mono { font-family: 'JetBrains Mono', monospace; }
+body { background: var(--paper); color: var(--ink); margin: 0; }
+.card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(11,31,66,0.08), 0 1px 2px rgba(11,31,66,0.06); }
+.section-title { letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; font-weight: 700; color: var(--laptop); }
+.dashboard-nav { position:sticky;top:0;z-index:100;background:rgba(247,245,242,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--staple);padding:10px 24px;display:flex;align-items:center;gap:16px; }
+.dashboard-brand { font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap; }
+.dashboard-tabs { display:flex;gap:4px;flex-wrap:wrap; }
+.dashboard-tab { padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;text-decoration:none;color:var(--laptop);transition:all 0.2s; }
+.dashboard-tab:hover { background:var(--staple);color:var(--ink); }
+.dashboard-tab.active { background:var(--ink);color:white; }
+
+.view-tab { padding:7px 18px;border-radius:20px;font-size:13px;font-weight:600;color:var(--laptop);cursor:pointer;border:1px solid transparent;transition:all 0.2s;background:none; }
+.view-tab:hover { background:var(--staple);color:var(--ink); }
+.view-tab.active { background:var(--water-cooler);color:white;border-color:var(--water-cooler); }
+
+.big-number { font-size: 3rem; font-weight: 700; line-height: 1; letter-spacing: -0.02em; color: var(--ink); }
+.big-label { font-size: 0.8rem; font-weight: 600; color: var(--laptop); margin-top: 4px; }
+.chart-wrap { position: relative; }
+.chart-wrap canvas { max-height: 340px; }
+.insight-box { background: var(--surface); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: var(--ballpoint); line-height: 1.5; border-left: 3px solid var(--water-cooler); margin-top: 16px; }
+.insight-box strong { color: var(--ink); }
+
+.tenant-bar { display:flex;align-items:center;gap:8px;padding:4px 0; }
+.tenant-bar .bar { height:22px;border-radius:4px;min-width:2px;transition:width 0.4s; }
+.tenant-bar .label { font-size:12px;font-weight:500;white-space:nowrap;min-width:140px; }
+.tenant-bar .val { font-size:12px;font-weight:600;font-family:'JetBrains Mono',monospace;min-width:60px;text-align:right; }
+
+.heatmap-grid { display:grid;gap:2px;font-size:11px; }
+.heatmap-cell { border-radius:4px;padding:6px 4px;text-align:center;font-weight:500;font-family:'JetBrains Mono',monospace; }
+.heatmap-header { font-weight:700;color:var(--laptop);padding:6px 4px;text-align:center;font-size:10px;text-transform:uppercase; }
+</style>
+</head>
+<body>
+
+<nav class="dashboard-nav">
+  <div class="dashboard-brand">PM Agent Dashboard</div>
+  <div class="dashboard-tabs">
+    <a href="pm-agent-scorecard.html" class="dashboard-tab">Scorecard</a>
+    <a href="pm-agent-architecture.html" class="dashboard-tab">Architecture</a>
+    <a href="pm-agent-design-system.html" class="dashboard-tab">Design System</a>
+    <a href="pm-agent-morning-roundup.html" class="dashboard-tab">Roundup</a>
+    <a href="pm-agent-prototypes.html" class="dashboard-tab">Prototypes</a>
+    <a href="pm-agent-adoption.html" class="dashboard-tab">Adoption</a>
+    <a href="pharos-avg-time-to-hire-dashboard.html" class="dashboard-tab active">Time to Hire</a>
+  </div>
+</nav>
+
+<div style="max-width:1200px;margin:0 auto;padding:24px;">
+
+  <div style="margin-bottom:24px;">
+    <h1 style="font-size:1.5rem;font-weight:700;margin:0 0 4px;">Average Time to Hire</h1>
+    <p style="font-size:0.85rem;color:var(--laptop);margin:0;">
+      IUM metric 2358 &middot; Pharos <code style="font-size:0.75rem;background:var(--surface);padding:2px 6px;border-radius:4px;">internal_usage_metrics_report_kafka</code> &middot; SANDBOX environment &middot; Queried <span id="queryDate"></span>
+    </p>
+  </div>
+
+  <!-- KPI row -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px;">
+    <div class="card" style="padding:20px;text-align:center;">
+      <div class="big-number" id="kpiAvg">--</div>
+      <div class="big-label">Avg days (Feb 2026)</div>
+    </div>
+    <div class="card" style="padding:20px;text-align:center;">
+      <div class="big-number" id="kpiTenants">--</div>
+      <div class="big-label">Active tenants</div>
+    </div>
+    <div class="card" style="padding:20px;text-align:center;">
+      <div class="big-number" id="kpiMin">--</div>
+      <div class="big-label">Fastest tenant (days)</div>
+    </div>
+    <div class="card" style="padding:20px;text-align:center;">
+      <div class="big-number" id="kpiMax">--</div>
+      <div class="big-label">Slowest (capped 500d)</div>
+    </div>
+  </div>
+
+  <!-- Chart view tabs -->
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">
+    <button class="view-tab active" data-view="trend" onclick="showView('trend')">Overall Trend</button>
+    <button class="view-tab" data-view="regional" onclick="showView('regional')">By Region</button>
+    <button class="view-tab" data-view="distribution" onclick="showView('distribution')">Distribution</button>
+    <button class="view-tab" data-view="infra" onclick="showView('infra')">By Infrastructure</button>
+    <button class="view-tab" data-view="tenants" onclick="showView('tenants')">Top / Bottom Tenants</button>
+    <button class="view-tab" data-view="adoption" onclick="showView('adoption')">Adoption Growth</button>
+    <button class="view-tab" data-view="heatmap" onclick="showView('heatmap')">Regional Heatmap</button>
+  </div>
+
+  <!-- Chart panels -->
+  <div id="view-trend" class="card" style="padding:24px;">
+    <div class="section-title" style="margin-bottom:4px;">Overall Monthly Trend</div>
+    <p style="font-size:13px;color:var(--laptop);margin:0 0 16px;">Average days to hire across all active tenants (non-zero values only)</p>
+    <div class="chart-wrap"><canvas id="chartTrend"></canvas></div>
+    <div class="insight-box">
+      <strong>Insight:</strong> Time to hire has been relatively stable at <strong>68-77 days</strong> over the past 14 months, with seasonal upticks in <strong>December-January</strong> (holiday slowdowns) and a slight downward trend through mid-2025 before rebounding.
+    </div>
+  </div>
+
+  <div id="view-regional" class="card" style="padding:24px;display:none;">
+    <div class="section-title" style="margin-bottom:4px;">By Geographic Region</div>
+    <p style="font-size:13px;color:var(--laptop);margin:0 0 16px;">Segmented by data centre location (ATL=Americas-East, PDX/ORE=Americas-West, DUB=EMEA, MTL=Canada, SIN=APAC)</p>
+    <div class="chart-wrap"><canvas id="chartRegional"></canvas></div>
+    <div class="insight-box">
+      <strong>Insight:</strong> <strong>EMEA</strong> consistently has the highest time to hire (73-88 days), peaking at <strong>87.7 days in Jan 2026</strong>. <strong>Canada</strong> is the fastest major region (~55-61 days). <strong>APAC</strong> data is sparse (drops off after May 2025) but trended lower when available. Americas-East and West track closely at 65-80 days.
+    </div>
+  </div>
+
+  <div id="view-distribution" class="card" style="padding:24px;display:none;">
+    <div class="section-title" style="margin-bottom:4px;">Tenant Distribution</div>
+    <p style="font-size:13px;color:var(--laptop);margin:0 0 16px;">How tenants cluster by average time to hire (last 90 days, distinct tenants per bucket)</p>
+    <div class="chart-wrap"><canvas id="chartDistribution"></canvas></div>
+    <div class="insight-box">
+      <strong>Insight:</strong> The largest active cohort is <strong>31-60 days</strong> (2,380 tenants), followed by <strong>61-90 days</strong> (1,817). A significant 3,154 tenants report zero (no completed hires in reporting period). 569 tenants exceed 120 days - potential candidates for intervention or data quality review.
+    </div>
+  </div>
+
+  <div id="view-infra" class="card" style="padding:24px;display:none;">
+    <div class="section-title" style="margin-bottom:4px;">By Cloud Infrastructure</div>
+    <p style="font-size:13px;color:var(--laptop);margin:0 0 16px;">Monthly trend segmented by hosting type (AWS, GCP, Workday DC)</p>
+    <div class="chart-wrap"><canvas id="chartInfra"></canvas></div>
+    <div class="insight-box">
+      <strong>Insight:</strong> <strong>AWS-hosted</strong> tenants consistently hire ~15-20 days faster than <strong>Workday DC</strong> tenants (53-61 vs 70-81 days). This likely reflects that AWS tenants tend to be newer, cloud-native customers with more modern hiring processes rather than an infrastructure performance difference. <strong>GCP</strong> tenants sit in between (64-77 days). AWS tenant count is growing rapidly (797 to 1,278).
+    </div>
+  </div>
+
+  <div id="view-tenants" class="card" style="padding:24px;display:none;">
+    <div class="section-title" style="margin-bottom:12px;">Top 10 Fastest &amp; Slowest Tenants</div>
+    <p style="font-size:13px;color:var(--laptop);margin:0 0 20px;">Based on 6-month average, minimum 3 months of data, capped at 500 days</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#16a34a;margin-bottom:12px;">Fastest Tenants</div>
+        <div id="fastestBars"></div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#dc2626;margin-bottom:12px;">Slowest Tenants</div>
+        <div id="slowestBars"></div>
+      </div>
+    </div>
+    <div class="insight-box">
+      <strong>Insight:</strong> The fastest tenants average <strong>5-9 days</strong> (WTO, Resolve Tech, Seafrigo - likely small/specialist firms with streamlined processes). The slowest reach <strong>350-450 days</strong> (Salad and Go, Peet's, Revature) - these may reflect high-volume seasonal hiring with long pipeline cycles, or data quality issues worth investigating.
+    </div>
+  </div>
+
+  <div id="view-adoption" class="card" style="padding:24px;display:none;">
+    <div class="section-title" style="margin-bottom:4px;">Adoption Growth</div>
+    <p style="font-size:13px;color:var(--laptop);margin:0 0 16px;">Monthly count of tenants with non-zero Average Time to Hire (active recruiting)</p>
+    <div class="chart-wrap"><canvas id="chartAdoption"></canvas></div>
+    <div class="insight-box">
+      <strong>Insight:</strong> Active recruiting tenants grew from <strong>3,012 (Jan 2025)</strong> to <strong>3,403 (Feb 2026)</strong> - a <strong>13% increase</strong> in adoption. The December dip to 2,536 reflects holiday-period inactivity. The Feb 2026 figure of 3,403 is the highest on record, suggesting accelerating platform adoption.
+    </div>
+  </div>
+
+  <div id="view-heatmap" class="card" style="padding:24px;display:none;">
+    <div class="section-title" style="margin-bottom:4px;">Regional Heatmap</div>
+    <p style="font-size:13px;color:var(--laptop);margin:0 0 16px;">Average days to hire by region and month (darker = longer)</p>
+    <div id="heatmapGrid"></div>
+    <div class="insight-box">
+      <strong>Insight:</strong> The heatmap highlights <strong>EMEA Dec 2025 - Jan 2026</strong> as the hottest zone (87-88 days). Canada consistently stays cooler (55-62 days). The seasonal pattern is visible across all regions - Q4/Q1 runs hotter than Q2/Q3.
+    </div>
+  </div>
+
+  <div style="margin-top:24px;font-size:12px;color:var(--laptop);line-height:1.6;">
+    <strong>Data notes:</strong> Source: Pharos <code style="font-size:11px;">internal_usage_metrics_report_kafka</code> &middot; metric_id 2358 &middot; SANDBOX environment &middot; Non-zero values only (tenants with completed hires) &middot; Geographic regions mapped from <code style="font-size:11px;">wd_dc_physical</code> data centre codes &middot; Values represent average calendar days from job requisition open to hire completion &middot; Outliers above 500 days capped in trend charts.
+  </div>
+</div>
+
+<script>
+const WD = {
+  ink: '#0b1f42',
+  ballpoint: '#1a3a6e',
+  waterCooler: '#0075b4',
+  blueSky: '#4a9fd4',
+  pencil: '#f5a623',
+  laptop: '#6b7a8d',
+  staple: '#e2ddd7',
+  desk: '#c4bdb3',
+  teal: '#0d9488',
+  green: '#16a34a',
+  red: '#dc2626',
+};
+
+const REGION_COLORS = {
+  'Americas-East': '#0075b4',
+  'Americas-West': '#4a9fd4',
+  'EMEA': '#f5a623',
+  'Canada': '#0d9488',
+  'APAC': '#e05690',
+  'Other': '#c4bdb3',
+};
+
+const INFRA_COLORS = {
+  'AWS': '#ff9900',
+  'GCP': '#4285f4',
+  'WDAY': '#0b1f42',
+};
+
+// ─── DATA ───
+const trendData = [
+  {ym:'2025-01',avg:74.5,tenants:3012,min:1.0,max:494.0},
+  {ym:'2025-02',avg:72.0,tenants:3041,min:1.0,max:482.9},
+  {ym:'2025-03',avg:70.0,tenants:3080,min:0.1,max:415.2},
+  {ym:'2025-04',avg:71.3,tenants:3116,min:0.9,max:451.3},
+  {ym:'2025-05',avg:72.1,tenants:6195,min:0.5,max:478.7},
+  {ym:'2025-06',avg:71.8,tenants:3118,min:0.5,max:481.2},
+  {ym:'2025-07',avg:71.0,tenants:3153,min:0.3,max:499.3},
+  {ym:'2025-08',avg:68.8,tenants:3196,min:0.7,max:478.4},
+  {ym:'2025-09',avg:68.0,tenants:3259,min:1.0,max:479.5},
+  {ym:'2025-10',avg:67.2,tenants:3259,min:0.5,max:499.0},
+  {ym:'2025-11',avg:69.6,tenants:3228,min:0.9,max:470.4},
+  {ym:'2025-12',avg:74.1,tenants:2546,min:0.5,max:494.1},
+  {ym:'2026-01',avg:76.8,tenants:2597,min:0.2,max:497.7},
+  {ym:'2026-02',avg:71.7,tenants:3404,min:0.8,max:490.4},
+];
+
+const regionalData = {
+  'Americas-East': [{ym:'2025-01',v:79.2},{ym:'2025-02',v:75.8},{ym:'2025-03',v:74.2},{ym:'2025-04',v:75.1},{ym:'2025-05',v:75.6},{ym:'2025-06',v:73.3},{ym:'2025-07',v:74.4},{ym:'2025-08',v:71.2},{ym:'2025-09',v:70.4},{ym:'2025-10',v:70.5},{ym:'2025-11',v:73.8},{ym:'2025-12',v:77.0},{ym:'2026-01',v:79.3},{ym:'2026-02',v:77.3}],
+  'Americas-West': [{ym:'2025-01',v:68.0},{ym:'2025-02',v:68.5},{ym:'2025-03',v:66.2},{ym:'2025-04',v:68.9},{ym:'2025-05',v:69.4},{ym:'2025-06',v:68.9},{ym:'2025-07',v:68.6},{ym:'2025-08',v:65.7},{ym:'2025-09',v:66.3},{ym:'2025-10',v:66.2},{ym:'2025-11',v:70.1},{ym:'2025-12',v:75.0},{ym:'2026-01',v:80.4},{ym:'2026-02',v:71.5}],
+  'EMEA': [{ym:'2025-01',v:78.3},{ym:'2025-02',v:73.3},{ym:'2025-03',v:71.0},{ym:'2025-04',v:70.3},{ym:'2025-05',v:73.6},{ym:'2025-06',v:77.8},{ym:'2025-07',v:73.4},{ym:'2025-08',v:73.4},{ym:'2025-09',v:77.9},{ym:'2025-10',v:71.6},{ym:'2025-11',v:72.3},{ym:'2025-12',v:87.0},{ym:'2026-01',v:87.7},{ym:'2026-02',v:76.7}],
+  'Canada': [{ym:'2025-01',v:61.7},{ym:'2025-02',v:58.2},{ym:'2025-03',v:55.8},{ym:'2025-04',v:56.6},{ym:'2025-05',v:54.3},{ym:'2025-06',v:58.8},{ym:'2025-07',v:58.4},{ym:'2025-08',v:55.3},{ym:'2025-09',v:59.1},{ym:'2025-10',v:null},{ym:'2025-11',v:null},{ym:'2025-12',v:null},{ym:'2026-01',v:null},{ym:'2026-02',v:null}],
+  'APAC': [{ym:'2025-01',v:49.5},{ym:'2025-02',v:66.9},{ym:'2025-03',v:52.6},{ym:'2025-04',v:64.1},{ym:'2025-05',v:72.2},{ym:'2025-06',v:null},{ym:'2025-07',v:null},{ym:'2025-08',v:null},{ym:'2025-09',v:null},{ym:'2025-10',v:null},{ym:'2025-11',v:null},{ym:'2025-12',v:null},{ym:'2026-01',v:null},{ym:'2026-02',v:null}],
+};
+
+const distributionData = [
+  {bucket:'No hires (0)',count:3154,color:WD.staple},
+  {bucket:'1-30 days',count:906,color:'#22c55e'},
+  {bucket:'31-60 days',count:2380,color:WD.waterCooler},
+  {bucket:'61-90 days',count:1817,color:WD.blueSky},
+  {bucket:'91-120 days',count:802,color:WD.pencil},
+  {bucket:'120+ days',count:569,color:WD.red},
+];
+
+const infraData = {
+  'AWS':  [{ym:'2025-01',v:57.3},{ym:'2025-02',v:53.3},{ym:'2025-03',v:51.3},{ym:'2025-04',v:51.6},{ym:'2025-05',v:53.9},{ym:'2025-06',v:53.0},{ym:'2025-07',v:54.4},{ym:'2025-08',v:53.5},{ym:'2025-09',v:53.4},{ym:'2025-10',v:56.1},{ym:'2025-11',v:56.2},{ym:'2025-12',v:60.0},{ym:'2026-01',v:61.0},{ym:'2026-02',v:58.7}],
+  'GCP':  [{ym:'2025-01',v:69.9},{ym:'2025-02',v:74.1},{ym:'2025-03',v:74.8},{ym:'2025-04',v:75.7},{ym:'2025-05',v:70.7},{ym:'2025-06',v:75.0},{ym:'2025-07',v:68.3},{ym:'2025-08',v:76.9},{ym:'2025-09',v:69.1},{ym:'2025-10',v:68.0},{ym:'2025-11',v:67.5},{ym:'2025-12',v:66.0},{ym:'2026-01',v:64.0},{ym:'2026-02',v:67.0}],
+  'WDAY': [{ym:'2025-01',v:76.2},{ym:'2025-02',v:73.9},{ym:'2025-03',v:71.9},{ym:'2025-04',v:73.5},{ym:'2025-05',v:74.3},{ym:'2025-06',v:74.1},{ym:'2025-07',v:73.5},{ym:'2025-08',v:70.8},{ym:'2025-09',v:70.4},{ym:'2025-10',v:69.2},{ym:'2025-11',v:72.3},{ym:'2025-12',v:78.3},{ym:'2026-01',v:81.2},{ym:'2026-02',v:75.2}],
+};
+
+const fastest = [
+  {name:'WTO',days:5.3},
+  {name:'Resolve Tech',days:6.4},
+  {name:'El Paraguas',days:6.5},
+  {name:'Seafrigo',days:7.3},
+  {name:'Tegria',days:7.6},
+  {name:'WeAreEverise',days:7.8},
+  {name:'GFR',days:7.9},
+  {name:'Wegmans',days:7.9},
+  {name:'APA',days:8.4},
+  {name:'CFX Way',days:8.7},
+];
+const slowest = [
+  {name:'Salad and Go',days:452.4},
+  {name:"Peet's Coffee",days:450.9},
+  {name:'Revature',days:414.3},
+  {name:"Dave & Buster's",days:379.4},
+  {name:'Arriva',days:378.1},
+  {name:'RJET',days:361.9},
+  {name:'GoBeacon',days:353.2},
+  {name:'Priority One',days:351.8},
+  {name:'Napa Anesthesia',days:343.7},
+  {name:'NASCAR',days:324.3},
+];
+
+const adoptionData = [
+  {ym:'2025-01',v:3012},{ym:'2025-02',v:3041},{ym:'2025-03',v:3080},
+  {ym:'2025-04',v:3115},{ym:'2025-05',v:3136},{ym:'2025-06',v:3114},
+  {ym:'2025-07',v:3152},{ym:'2025-08',v:3143},{ym:'2025-09',v:3233},
+  {ym:'2025-10',v:3257},{ym:'2025-11',v:3228},{ym:'2025-12',v:2536},
+  {ym:'2026-01',v:2597},{ym:'2026-02',v:3403},
+];
+
+// ─── INIT ───
+document.getElementById('queryDate').textContent = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+
+const latest = trendData[trendData.length - 1];
+document.getElementById('kpiAvg').textContent = latest.avg.toFixed(1);
+document.getElementById('kpiTenants').textContent = latest.tenants.toLocaleString();
+document.getElementById('kpiMin').textContent = latest.min.toFixed(1);
+document.getElementById('kpiMax').textContent = latest.max.toFixed(0);
+
+const defaultOpts = {
+  responsive: true,
+  maintainAspectRatio: false,
+  interaction: { mode: 'index', intersect: false },
+  plugins: {
+    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 16, font: { family: 'DM Sans', size: 12 } } },
+    tooltip: { backgroundColor: WD.ink, titleFont: { family: 'DM Sans' }, bodyFont: { family: 'DM Sans' }, cornerRadius: 8, padding: 10 },
+  },
+  scales: {
+    x: { grid: { display: false }, ticks: { font: { family: 'DM Sans', size: 11 }, color: WD.laptop } },
+    y: { grid: { color: '#f0ede8' }, ticks: { font: { family: 'JetBrains Mono', size: 11 }, color: WD.laptop }, beginAtZero: false },
+  },
+};
+
+const labels = trendData.map(d => d.ym);
+
+// Chart 1: Overall Trend
+const ctxTrend = document.getElementById('chartTrend').getContext('2d');
+new Chart(ctxTrend, {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [{
+      label: 'Avg Days to Hire',
+      data: trendData.map(d => d.avg),
+      borderColor: WD.waterCooler,
+      backgroundColor: 'rgba(0,117,180,0.08)',
+      fill: true,
+      tension: 0.3,
+      pointRadius: 5,
+      pointBackgroundColor: WD.waterCooler,
+      pointBorderColor: '#fff',
+      pointBorderWidth: 2,
+      borderWidth: 2.5,
+    }]
+  },
+  options: { ...defaultOpts, scales: { ...defaultOpts.scales, y: { ...defaultOpts.scales.y, min: 60, max: 85 } }, plugins: { ...defaultOpts.plugins, legend: { display: false } } }
+});
+
+// Chart 2: Regional
+const ctxRegional = document.getElementById('chartRegional').getContext('2d');
+new Chart(ctxRegional, {
+  type: 'line',
+  data: {
+    labels,
+    datasets: Object.entries(regionalData).map(([name, pts]) => ({
+      label: name,
+      data: pts.map(p => p.v),
+      borderColor: REGION_COLORS[name],
+      backgroundColor: REGION_COLORS[name],
+      tension: 0.3,
+      pointRadius: 3,
+      pointBorderColor: '#fff',
+      pointBorderWidth: 1.5,
+      borderWidth: 2.5,
+      spanGaps: false,
+    }))
+  },
+  options: { ...defaultOpts, scales: { ...defaultOpts.scales, y: { ...defaultOpts.scales.y, min: 40, max: 95 } } }
+});
+
+// Chart 3: Distribution
+const ctxDist = document.getElementById('chartDistribution').getContext('2d');
+new Chart(ctxDist, {
+  type: 'bar',
+  data: {
+    labels: distributionData.map(d => d.bucket),
+    datasets: [{
+      label: 'Tenants',
+      data: distributionData.map(d => d.count),
+      backgroundColor: distributionData.map(d => d.color),
+      borderRadius: 6,
+      borderSkipped: false,
+      barPercentage: 0.7,
+    }]
+  },
+  options: {
+    ...defaultOpts,
+    plugins: {
+      ...defaultOpts.plugins,
+      legend: { display: false },
+      tooltip: {
+        ...defaultOpts.plugins.tooltip,
+        callbacks: { label: ctx => `${ctx.parsed.y.toLocaleString()} tenants` }
+      }
+    },
+    scales: { ...defaultOpts.scales, y: { ...defaultOpts.scales.y, beginAtZero: true, title: { display: true, text: 'Distinct tenants', font: { family: 'DM Sans', size: 12 }, color: WD.laptop } } }
+  }
+});
+
+// Chart 4: Infrastructure
+const ctxInfra = document.getElementById('chartInfra').getContext('2d');
+new Chart(ctxInfra, {
+  type: 'line',
+  data: {
+    labels,
+    datasets: Object.entries(infraData).map(([name, pts]) => ({
+      label: name,
+      data: pts.map(p => p.v),
+      borderColor: INFRA_COLORS[name],
+      backgroundColor: INFRA_COLORS[name],
+      tension: 0.3,
+      pointRadius: 3,
+      pointBorderColor: '#fff',
+      pointBorderWidth: 1.5,
+      borderWidth: 2.5,
+    }))
+  },
+  options: { ...defaultOpts, scales: { ...defaultOpts.scales, y: { ...defaultOpts.scales.y, min: 45, max: 85 } } }
+});
+
+// Chart 5: Tenant bars
+function renderBars(containerId, data, maxVal, colorFn) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = data.map(d => {
+    const pct = (d.days / maxVal) * 100;
+    return `<div class="tenant-bar">
+      <div class="label">${d.name}</div>
+      <div class="bar" style="width:${pct}%;background:${colorFn(d.days)};"></div>
+      <div class="val">${d.days}d</div>
+    </div>`;
+  }).join('');
+}
+renderBars('fastestBars', fastest, 10, () => WD.green);
+renderBars('slowestBars', slowest, 460, () => WD.red);
+
+// Chart 6: Adoption
+const ctxAdopt = document.getElementById('chartAdoption').getContext('2d');
+new Chart(ctxAdopt, {
+  type: 'bar',
+  data: {
+    labels: adoptionData.map(d => d.ym),
+    datasets: [{
+      label: 'Active Tenants',
+      data: adoptionData.map(d => d.v),
+      backgroundColor: adoptionData.map(d => d.ym.startsWith('2026') ? WD.waterCooler : 'rgba(0,117,180,0.5)'),
+      borderRadius: 4,
+      borderSkipped: false,
+      barPercentage: 0.65,
+    }]
+  },
+  options: {
+    ...defaultOpts,
+    plugins: { ...defaultOpts.plugins, legend: { display: false } },
+    scales: {
+      ...defaultOpts.scales,
+      y: { ...defaultOpts.scales.y, beginAtZero: false, min: 2200,
+        title: { display: true, text: 'Active tenants (non-zero Time to Hire)', font: { family: 'DM Sans', size: 12 }, color: WD.laptop }
+      }
+    }
+  }
+});
+
+// Chart 7: Heatmap
+function buildHeatmap() {
+  const regions = ['Americas-East','Americas-West','EMEA','Canada','APAC','Other'];
+  const months = labels;
+  const grid = document.getElementById('heatmapGrid');
+  const cols = months.length + 1;
+  grid.style.gridTemplateColumns = `120px repeat(${months.length}, 1fr)`;
+
+  let html = '<div class="heatmap-header"></div>';
+  months.forEach(m => { html += `<div class="heatmap-header">${m.replace('20','')}</div>`; });
+
+  const allRegionalFlat = {};
+  Object.entries(regionalData).forEach(([r, pts]) => {
+    pts.forEach(p => { allRegionalFlat[r + '|' + p.ym] = p.v; });
+  });
+
+  regions.forEach(r => {
+    html += `<div style="font-size:12px;font-weight:600;padding:6px 4px;color:${REGION_COLORS[r] || WD.laptop};">${r}</div>`;
+    months.forEach(m => {
+      const val = allRegionalFlat[r + '|' + m];
+      if (val == null) {
+        html += `<div class="heatmap-cell" style="background:#f5f5f5;color:#ccc;">-</div>`;
+      } else {
+        const intensity = Math.min(1, Math.max(0, (val - 45) / 45));
+        const r_ = Math.round(255 - intensity * 60);
+        const g_ = Math.round(255 - intensity * 130);
+        const b_ = Math.round(255 - intensity * 180);
+        const textColor = intensity > 0.6 ? '#fff' : WD.ink;
+        html += `<div class="heatmap-cell" style="background:rgb(${r_},${g_},${b_});color:${textColor};">${val.toFixed(0)}</div>`;
+      }
+    });
+  });
+
+  grid.innerHTML = html;
+}
+buildHeatmap();
+
+// ─── VIEW SWITCHING ───
+function showView(id) {
+  document.querySelectorAll('[id^="view-"]').forEach(el => el.style.display = 'none');
+  document.getElementById('view-' + id).style.display = 'block';
+  document.querySelectorAll('.view-tab').forEach(el => el.classList.toggle('active', el.dataset.view === id));
+}
+</script>
+</body>
+</html>

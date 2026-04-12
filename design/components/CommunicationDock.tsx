@@ -46,24 +46,34 @@ export const CommunicationDock: React.FC<CommunicationDockProps> = ({
       style={{
         position: 'fixed',
         top: headerOffsetPx,
+        left: 0,
         right: 0,
         bottom: 0,
         zIndex,
         flexDirection: 'row',
         alignItems: 'stretch',
+        justifyContent: 'flex-end',
+        maxWidth: '100%',
+        overflow: 'hidden',
+        // Shell is non-interactive so the main column receives clicks; panel + rail opt in below.
+        pointerEvents: 'none',
       }}
     >
       <Box
         aria-hidden={!expanded}
         style={{
-          width: expanded ? `min(${expandedWidthPx}px, calc(100vw - ${w}px))` : 0,
-          maxWidth: `calc(100vw - ${w}px)`,
+          // Use 100% not 100vw: 100vw ignores the vertical scrollbar gutter and forces page-level horizontal overflow.
+          width: expanded ? `min(${expandedWidthPx}px, calc(100% - ${w}px))` : 0,
+          minWidth: 0,
+          maxWidth: `calc(100% - ${w}px)`,
           overflow: 'hidden',
           transition: 'width 0.32s cubic-bezier(0.2, 0.8, 0.2, 1)',
           display: 'flex',
           flexDirection: 'column',
           flexShrink: 0,
+          flexGrow: 0,
           boxShadow: expanded ? SANA_PANEL_SHADOW : 'none',
+          pointerEvents: expanded ? 'auto' : 'none',
         }}
       >
         <Card
@@ -74,13 +84,14 @@ export const CommunicationDock: React.FC<CommunicationDockProps> = ({
             flexDirection: 'column',
             flex: 1,
             minHeight: 0,
+            minWidth: 0,
             overflow: 'hidden',
             borderRadius: 0,
             border: 'none',
-            borderLeft: `1px solid ${colors.soap300}`,
+            borderLeft: expanded ? `1px solid ${colors.soap300}` : 'none',
           }}
         >
-          {panel}
+          {expanded ? panel : null}
         </Card>
       </Box>
       <Flex
@@ -96,6 +107,7 @@ export const CommunicationDock: React.FC<CommunicationDockProps> = ({
           paddingBottom: space.s,
           gap: space.xxs,
           position: 'relative',
+          pointerEvents: 'auto',
         }}
       >
         {rail}

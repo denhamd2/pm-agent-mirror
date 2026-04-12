@@ -198,10 +198,26 @@ export const ProfilePageLayout: React.FC<ProfilePageLayoutProps> = ({
   const messagingOpen = communicationDock ? communicationDock.activeChannel !== null : false;
 
   return (
-    <Box style={{ position: 'relative', minHeight: '100vh', backgroundColor: SANA_PAGE_CANVAS }}>
+    <Box
+      style={{
+        position: 'relative',
+        minHeight: '100vh',
+        backgroundColor: SANA_PAGE_CANVAS,
+        overflowX: 'hidden',
+        maxWidth: '100%',
+      }}
+    >
       <WorkdayTopNav searchValue={searchValue} onSearchChange={onSearchChange} />
 
-      <Flex style={{ minHeight: `calc(100vh - ${WORKDAY_TOP_NAV_HEIGHT_PX}px)` }}>
+      <Flex
+        style={{
+          minHeight: `calc(100vh - ${WORKDAY_TOP_NAV_HEIGHT_PX}px)`,
+          width: '100%',
+          maxWidth: '100%',
+          minWidth: 0,
+          overflowX: 'hidden',
+        }}
+      >
         <WorkdayLeftTabBar
           fillHeight
           showSecondaryTitleIcon={showSecondaryTitleIcon}
@@ -219,10 +235,12 @@ export const ProfilePageLayout: React.FC<ProfilePageLayoutProps> = ({
           padding="l"
           style={{
             paddingRight: `calc(${space.l} + ${railReserve}px)`,
-            overflow: 'auto',
+            overflowY: 'auto',
+            overflowX: 'hidden',
             borderTopLeftRadius: SANA_SHELL_RADIUS,
             marginTop: 0,
             backgroundColor: SANA_PAGE_CANVAS,
+            maxWidth: '100%',
           }}
         >
           {/* Header Card */}

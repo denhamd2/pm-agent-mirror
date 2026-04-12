@@ -6,10 +6,13 @@ Canvas Kit patterns for modals, popups, dialogs, and page layouts in Workday Rec
 
 Canvas Kit `Modal` for dialog interactions, confirmations, forms.
 
+**Component**: `design/components/WorkdayModal.tsx`
+
+**Use for**: Standardized dialogs that enforce Sana Style radii and layout.
+
 **Import**:
 ```tsx
-import { Modal } from '@workday/canvas-kit-react/modal';
-import { PrimaryButton, SecondaryButton } from '@workday/canvas-kit-react/button';
+import { WorkdayModal } from './components';
 ```
 
 **Basic Pattern**:
@@ -21,20 +24,16 @@ const [isOpen, setIsOpen] = useState(false);
     Open dialog
   </PrimaryButton>
   
-  <Modal open={isOpen} onClose={() => setIsOpen(false)}>
-    <Modal.Heading>Modal title</Modal.Heading>
-    <Modal.Body>
-      <BodyText>Modal content goes here.</BodyText>
-    </Modal.Body>
-    <Flex gap="s" justifyContent="flex-end" padding="s">
-      <SecondaryButton onClick={() => setIsOpen(false)}>
-        Cancel
-      </SecondaryButton>
-      <PrimaryButton onClick={handleConfirm}>
-        Confirm
-      </PrimaryButton>
-    </Flex>
-  </Modal>
+  <WorkdayModal 
+    title="Modal title"
+    isOpen={isOpen} 
+    onClose={() => setIsOpen(false)}
+    primaryActionText="Confirm"
+    onPrimaryAction={handleConfirm}
+    secondaryActionText="Cancel"
+  >
+    <BodyText>Modal content goes here.</BodyText>
+  </WorkdayModal>
 </>
 ```
 
@@ -438,9 +437,18 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 **CRITICAL**: Every page MUST have a primary page title (`<Heading size="large">`) at the top of the main content area, establishing clear hierarchy before any tabs, cards, or other content.
 
+**Component**: `design/components/PageHeader.tsx`
+
 ```tsx
+import { PageHeader } from './components';
+
 <Box padding="xl">
-  <Heading size="large" marginBottom="m">Candidates</Heading>
+  <PageHeader 
+    title="Candidates" 
+    subtitle="Manage active candidates"
+    primaryActionText="Add Candidate"
+    onPrimaryAction={handleAdd}
+  />
   
   {/* Tabs, filters, content below */}
   <Tabs initialTab="active">
@@ -487,36 +495,30 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 ## Banner States
 
-Use `Banner` for system messages, not mock data disclaimers.
+Use `AlertBanner` for system messages, not mock data disclaimers.
+
+**Component**: `design/components/AlertBanner.tsx`
 
 ### Error State
 
 ```tsx
-import { Banner } from '@workday/canvas-kit-react/banner';
+import { AlertBanner } from './components';
 
 {error && (
-  <Banner variant="error" onClose={() => setError(null)}>
-    {error}
-  </Banner>
-)}
-```
-
-### Success State
-
-```tsx
-{isSuccess && (
-  <Banner variant="success" onClose={() => setIsSuccess(false)}>
-    Application submitted successfully
-  </Banner>
+  <AlertBanner 
+    type="error" 
+    message={error} 
+  />
 )}
 ```
 
 ### Warning State (In-Flow Only)
 
 ```tsx
-<Banner variant="caution">
-  This requisition is missing required approvals
-</Banner>
+<AlertBanner 
+  type="warning" 
+  message="This requisition is missing required approvals" 
+/>
 ```
 
 **NO YELLOW BANNERS FOR MOCK DATA**:
@@ -524,14 +526,21 @@ Do NOT use warning-styled `Banner` only to say data is mocked, illustrative, or 
 
 ### Empty State
 
+**Component**: `design/components/EmptyState.tsx`
+
 ```tsx
+import { EmptyState } from './components';
+import { userIcon } from '@workday/canvas-system-icons-web';
+
 {data.length === 0 && (
-  <Card padding="xl" style={{ textAlign: 'center' }}>
-    <Heading size="small" marginBottom="m">No active requisitions</Heading>
-    <BodyText marginBottom="m">Post your first job to start recruiting.</BodyText>
-    <PrimaryButton onClick={() => navigate('/post-job')}>
-      Post job
-    </PrimaryButton>
+  <Card padding="xl">
+    <EmptyState 
+      icon={userIcon}
+      title="No active requisitions"
+      description="Post your first job to start recruiting."
+      actionText="Post job"
+      onAction={() => navigate('/post-job')}
+    />
   </Card>
 )}
 ```

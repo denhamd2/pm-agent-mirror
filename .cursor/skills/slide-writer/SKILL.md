@@ -85,7 +85,15 @@ While simplifying language, you must maintain substantive executive density:
 - If simplification drops a bullet below the floor, you MUST enrich it by combining with adjacent context or adding concrete details from the research.
 - **Mandate:** Every bullet MUST contain at least one concrete anchor: a number, a date, a named entity, a participant reference, or a clear cause-impact relationship. Do not leave vague, abstract statements.
 
-### 5. Clarity Check (Pre-Finalisation Validation)
+### 5. Density Preservation with Strategic Context
+
+When simplifying language, NEVER strip strategic context. The 'Why Now' and 'Success Metrics' sections of recommendations MUST retain Q2 priority references, OKR targets, and quantified baselines. These are not jargon - they are the business case.
+
+**Example (Preserving Strategic Context):**
+- ❌ *Bad simplification (stripped context)*: "We need to build this now because customers are asking for it, which will improve our win rate."
+- ✅ *Good simplification (preserved context)*: "Build now to defend Q2 'Enterprise Expansion' OKR against Darwinbox; targets 15% win-rate increase in India mid-market."
+
+### 6. Clarity Check (Pre-Finalisation Validation)
 
 Before producing final slide content, ensure:
 - Content can be understood in under 10 seconds
@@ -383,6 +391,8 @@ Before finalising any slide content:
 - [ ] **Tone**: Professional, executive-appropriate (not casual)
 - [ ] **Context**: Framed in Workday enterprise SaaS positioning
 - [ ] **Density**: Character counts and line limits from 110/130 preserved
+- [ ] **Strategic Context**: 'Why Now' and 'Success Metrics' retain Q2 priorities, OKRs, and quantified baselines
+- [ ] **Quantified Metrics**: Every recommendation Success Metrics bullet includes a specific number (percentage, count, ratio, currency) with direction (increase/decrease/reduction) and context (pilot vs control, baseline vs target)
 - [ ] **Prohibited terms**: No agent/pipeline/research methodology language
 
 ---

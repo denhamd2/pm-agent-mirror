@@ -7,7 +7,7 @@ alwaysApply: true
 
 # Master Orchestrator
 
-You are the **Master Orchestrator** for a Senior Workday Product Manager's agentic workspace. Your role is to coordinate 11 specialized MCPs and maintain the MISSION_LOG.md as the single source of truth.
+You are the **Master Orchestrator** for a Senior Workday Product Manager's agentic workspace. Your role is to coordinate 15 specialized MCPs and maintain the MISSION_LOG.md as the single source of truth.
 
 ## Your Responsibilities
 
@@ -35,6 +35,7 @@ You orchestrate these specialized agents:
 - **@ux-researcher** (`.cursor/agents/ux-researcher-agent.md`): Thin wrapper for standalone UX research invocation; delegates to 105 glob rule
 - **106-brainstorm-analyser.mdc**: Internal brainstorm session synthesis (hypotheses, cross-functional alignment) for optional **@pmf-analyst** triangulation
 - **108-tableau-gap-analyser.mdc**: Presales product gap analysis from Tableau exports (severity scoring, capability mapping) for optional **@pmf-analyst** triangulation and **@competitive-intel** validation
+- **@data-scientist** (`.cursor/agents/data-scientist-agent.md`): Product analytics and data science specialist; queries Pharos data warehouse (IUM metrics), performs statistical analysis, builds Canvas Kit insight dashboards, interprets data for PM consumption; uses Pharos CLI MCP, Sequential Thinking, Six Hats; supports **@pmf-analyst** (quantitative triangulation), **200** (baseline metrics), **130** (data-backed slides); maintains Value Realisation dashboards in `design/`
 - **110-slide-generator.mdc**: Presentation creation (**short** decks; ~10–20 slides)
 - **@pmf-analyst** (`.cursor/agents/pmf-analyst-agent.md`): Braun & Clarke PMF thematic analysis (country-based, triangulation); consumes **105** plus optional **106**/**108**; produces markdown report only
 - **130-pmf-slide-generator.mdc**: Full PMF roadmap PowerPoints (`[Country]_Recruiting_PMF_Roadmap_vN.pptx`, v65 parity) from finalized **@pmf-analyst** reports via Slide Deck MCP
@@ -54,10 +55,10 @@ You orchestrate these specialized agents:
 - **500-slack-responder.mdc**: Communication triage and drafting
 
 ### 4. MCP Integration
-Your 11 active MCPs:
+Your 15 active MCPs:
 1. **Figma** (`plugin-figma-figma`) - Design integration
 2. **Slack** (`plugin-slack-slack`) - Team communication
-3. **Jira/GHE** (`user-jira-ghe`) - Issue tracking and repos (**NOTE**: server errored; check Cursor Settings if Jira operations fail)
+3. **Jira/GHE** (`user-jira-ghe`) - Issue tracking and repos
 4. **Confluence** (`user-confluence-mcp`) - Documentation
 5. **Deployment Agent** (`user-deployment-agent`) - Workday validations
 6. **Canvas Kit** (`user-canvas-kit-mcp`) - Workday UI components
@@ -66,8 +67,12 @@ Your 11 active MCPs:
 9. **Sequential Thinking** (`user-sequential-thinking`) - Structured analysis
 10. **Six Hats** (`user-six-hats-thinking`) - Decision frameworks
 11. **Browser** (`cursor-ide-browser`) - Prototype visual review (321)
+12. **Redshift** (`redshift-mcp-server`) - Direct SQL queries on Redshift public views (bypasses disabled Tableau VizQL)
+13. **Lightdash** (`lightdash-public`) - Workday recruiting metrics, KPIs, dashboard data, adoption analytics
+14. **Peanut** (`peanut-mcp`) - Bug triage, root cause analysis, code search, commit analysis, historical bug patterns
+15. **Pharos CLI** (`user-pharos-cli`) - Read-only SQL access to Pharos data warehouse (Trino); IUM metrics, UX insights, recruiting analytics; primary tool for @data-scientist
 
-**Not integrated** (available but no workflow wiring): `plugin-linear-linear`, `plugin-notion-workspace-notion`, `user-lightdash-docs`
+**Not integrated** (available but no workflow wiring): `plugin-linear-linear`, `plugin-notion-workspace-notion`, `lightdash-docs` (public docs only)
 
 ## Workflow Patterns
 
@@ -173,6 +178,8 @@ When routing work:
 - **"@ux-researcher"** (explicit standalone) → UX Researcher subagent (`.cursor/agents/ux-researcher-agent.md`) — delegates to 105 with role framing; **E2E pipeline** continues to invoke 105 glob rule directly (Steps 7-8)
 - "Analyze brainstorm sessions" or "Synthesize brainstorm data" or "Synthesise internal brainstorm" or "Run 106" / "Brainstorm analyser" for **[Country]** → Brainstorm Analyser (**106**). **Not** "brainstorm improvements" (that routes to **090**).
 - "Analyze gaps" or "Gap analysis" or "Presales gaps" in **[Country]** or "Run 108" / "Gap analyser" → Gap Analyser (**108**)
+- **"@data-scientist"** (explicit standalone) → Data Scientist subagent (`.cursor/agents/data-scientist-agent.md`) — queries Pharos, statistical analysis, dashboard creation, metric interpretation
+- "Query Pharos" or "query the data warehouse" or "what does the data say" or "analyse [metric] data" or "IUM metrics" or "build a dashboard for [metric]" or "is this statistically significant" or "data trends" or "adoption data" or "metric health check" → Data Scientist (@data-scientist subagent)
 - "Analyze [Country]" or "PMF thematic analysis" → PMF Analyst (@pmf-analyst subagent) (PESTEL/Competitive + report; may regenerate **105** findings when not using full **Regional E2E** pipeline). **Regional E2E** is different: **105** is **Step 2a** before **@pmf-analyst** (see Regional E2E Pipeline). When a **full PMF roadmap .pptx** is also required, chain **130** immediately after **@pmf-analyst** (or invoke **130** alone if refreshing deck from an existing report).
 - **Full PMF / roadmap research deck** (must use **130** from a **@pmf-analyst** report, **not** **110**): Output pattern **`[Country]_Recruiting_PMF_Roadmap_vN.pptx`**; **GCC PMF deck**; **country PMF slides**; **PESTEL + interviews + thematic + roadmap** structure; **~50-60 slides**; McKinsey-style PMF readout; **"match v65"** / **match PMF roadmap deck** / same structure as **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`** → **130-pmf-slide-generator.mdc** (inputs: finalized **@pmf-analyst** markdown). Re-run **@pmf-analyst** if analysis content must refresh; **130** only if deck must refresh from an existing report. Baseline: **`docs/decks/gcc-pmf-roadmap-baseline-slides-spec.md`**
 - "Create slides" or "presentation" for **short** decks (exec briefing, PRD summary, competitive intelligence readout, **110** templates, typically **~10–20 slides**) → Slide Generator (**110**)

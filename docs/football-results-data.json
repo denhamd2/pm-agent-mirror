@@ -1,0 +1,22 @@
+{
+  "generated": "2026-04-02T15:00:00Z",
+  "matchday": "Matchday 31",
+  "results": [
+    {
+      "date": "2026-03-22",
+      "home": "Arsenal",
+      "away": "Man City",
+      "homeScore": 0,
+      "awayScore": 2,
+      "matchday": 31
+    }
+  ],
+  "table": [
+    {"pos": 1, "team": "Arsenal", "played": 31, "won": 21, "drawn": 4, "lost": 6, "gd": 42, "pts": 67},
+    {"pos": 2, "team": "Man City", "played": 31, "won": 18, "drawn": 6, "lost": 7, "gd": 35, "pts": 60},
+    {"pos": 3, "team": "Man United", "played": 31, "won": 16, "drawn": 7, "lost": 8, "gd": 22, "pts": 55},
+    {"pos": 4, "team": "Aston Villa", "played": 31, "won": 15, "drawn": 8, "lost": 8, "gd": 18, "pts": 53},
+    {"pos": 5, "team": "Liverpool", "played": 31, "won": 15, "drawn": 7, "lost": 9, "gd": 25, "pts": 52},
+    {"pos": 6, "team": "Newcastle", "played": 31, "won": 14, "drawn": 8, "lost": 9, "gd": 15, "pts": 50}
+  ]
+}

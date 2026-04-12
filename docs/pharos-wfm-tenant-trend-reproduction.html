@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tenant count by week (reproduction)</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --ink: #1a2744;
+      --teal: #0d9488;
+      --teal-soft: rgba(13, 148, 136, 0.25);
+      --muted: #64748b;
+      --bg: #f8fafc;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    .card {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.75rem 2rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    }
+    h1 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 0.25rem;
+      color: var(--muted);
+    }
+    .subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .big-wrap {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .stamp {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    .big {
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .chart-box {
+      height: 220px;
+      margin-top: 1rem;
+    }
+    .footnote {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 1.25rem;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>tenant</h1>
+    <p class="subtitle">Big number with trendline · Weekly grain · count(distinct tenant_n)</p>
+    <div class="big-wrap">
+      <div class="stamp" id="stamp">—</div>
+      <div class="big" id="bigNum">—</div>
+    </div>
+    <div class="chart-box">
+      <canvas id="chart"></canvas>
+    </div>
+    <p class="footnote">
+      Source: <code>user_test.wfm_massaction_changejob_funnel_summary</code> ·
+      Same logic as Superset: <code>date_trunc('week', cast(wd_event_date as timestamp))</code>,
+      <code>count(distinct tenant_n)</code>. Data refreshed from Pharos SQL.
+    </p>
+  </div>
+  <script>
+    const rows = [
+      { d: '2025-10-20', v: 4 },
+      { d: '2025-10-27', v: 8 },
+      { d: '2025-11-03', v: 17 },
+      { d: '2025-11-10', v: 14 },
+      { d: '2025-11-17', v: 18 },
+      { d: '2025-11-24', v: 14 },
+      { d: '2025-12-01', v: 16 },
+      { d: '2025-12-08', v: 10 },
+      { d: '2025-12-15', v: 17 },
+      { d: '2025-12-22', v: 9 },
+      { d: '2025-12-29', v: 5 },
+      { d: '2026-01-05', v: 13 },
+      { d: '2026-01-12', v: 9 },
+      { d: '2026-01-19', v: 5 },
+      { d: '2026-01-26', v: 2 },
+      { d: '2026-02-02', v: 5 },
+      { d: '2026-02-09', v: 3 },
+      { d: '2026-02-16', v: 3 },
+      { d: '2026-02-23', v: 4 },
+      { d: '2026-03-02', v: 6 },
+      { d: '2026-03-09', v: 5 },
+      { d: '2026-03-16', v: 1 },
+      { d: '2026-03-23', v: 3 },
+      { d: '2026-04-06', v: 3 },
+    ];
+    const last = rows[rows.length - 1];
+    document.getElementById('stamp').textContent = last.d;
+    document.getElementById('bigNum').textContent = String(last.v);
+
+    const labels = rows.map((r) => r.d);
+    const values = rows.map((r) => r.v);
+
+    new Chart(document.getElementById('chart'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Distinct tenants',
+          data: values,
+          borderColor: '#0d9488',
+          backgroundColor: 'rgba(13, 148, 136, 0.2)',
+          fill: true,
+          tension: 0.25,
+          pointRadius: 2,
+          pointHoverRadius: 4,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+        },
+        scales: {
+          x: {
+            ticks: { maxRotation: 45, minRotation: 45, font: { size: 10 } },
+            grid: { display: false },
+          },
+          y: {
+            beginAtZero: true,
+            ticks: { stepSize: 1 },
+          },
+        },
+      },
+    });
+  </script>
+</body>
+</html>

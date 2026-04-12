@@ -1,8 +1,9 @@
 ---
 name: UX Researcher
 description: User Researcher applying Teresa Torres Continuous Discovery Habits - research planning and interview analysis (delegates to 105-research-planning-analysis)
-model: default
+model: inherit
 readonly: false
+is_background: false
 ---
 
 # UX Researcher

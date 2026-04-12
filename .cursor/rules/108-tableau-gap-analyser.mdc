@@ -27,17 +27,25 @@ This folder holds **unfiltered** Tableau exports (e.g. `opportunity-detail-expor
   (requires `pip install -r scripts/requirements-research-xlsx.txt` once). Read the scratch file; still **open primary CSVs/XLSX** when needed for row counts.
 - **Orchestrated runs:** If the user passes a **specific file path**, restrict ingestion to that file plus any other explicit paths; otherwise include every in-scope file in `research/gap-data/`.
 
-### 2. Per-country gap-data folder (supplement / override)
+### 2. Redshift MCP (recommended when VizQL is disabled)
+
+When VizQL Data Service is disabled on the Tableau Server, the Tableau MCP cannot execute `query-datasource` or `get-datasource-metadata`. In this case, use the **Redshift MCP Server** (`redshift-mcp-server`) to query the underlying public views directly.
+
+- Use the `execute_query` tool to run SQL against the Presales Product Gaps views.
+- Requires Redshift cluster identifier and database name (confirm with Akash / data team).
+- This provides a live-pull alternative that bypasses the disabled VizQL path.
+
+### 3. Per-country gap-data folder (supplement / override)
 
 **Optional path:** `research/[Country]/gap-data/`
 
 If a PM exports a **region-specific** Tableau view into the per-country folder, include those files **in addition to** the global folder. Per-country files supplement the global data (they may contain region-filtered exports with different column structures or finer-grained Opp Region values).
 
-### 3. Legacy / shared raw folders (fallback)
+### 4. Legacy / shared raw folders (fallback)
 
 If both `research/gap-data/` and `research/[Country]/gap-data/` are empty but `research/[Country]/raw-data/` or `research/raw-data/` contains Opportunity Detail / Presales-style gaps, apply the same regional filtering as **@pmf-analyst** Phase 0 (see Regional Filtering below), then analyse. Log every path in the Fresh pass attestation.
 
-### 2. Tableau MCP (optional — when VizQL Data Service is enabled)
+### 5. Tableau MCP (optional — when VizQL Data Service is enabled)
 
 Without **VizQL Data Service** on the server, `query-datasource` and `get-datasource-metadata` are unavailable; `get-view-data` usually returns **aggregated crosstab** rows only, not row-level gaps. **Do not promise** full gap inventory from MCP alone when only view-summary CSV is returned.
 
@@ -59,6 +67,15 @@ Workbook content URL: `UATPresalesProductGaps`.
 - Produce gap-focused analysis under `research/[Country]/gap-analysis/`
 
 ## MCP reference (optional live pull)
+
+### Redshift MCP (`redshift-mcp-server`)
+**Location**: `@workday/redshift-mcp-server` (via npx)
+
+Use this as the primary live-pull method when Tableau VizQL is disabled. It allows direct SQL queries against the underlying Redshift public views.
+
+- Use `list_clusters` to discover the analytics cluster.
+- Use `list_databases`, `list_schemas`, and `list_tables` to locate the Presales Product Gaps views.
+- Use `execute_query` to run SQL queries.
 
 ### Tableau MCP (`user-tableau-mcp`)
 **Location**: `/Users/david.denham/.cursor/projects/Users-david-denham-product-manager-agent/mcps/user-tableau-mcp/`
@@ -354,7 +371,7 @@ Create this file even if gap count is zero (document the query and findings).
 **Analysis date:** [DD Month YYYY]
 **Mission:** [MISSION-ID or Standalone]
 **Source:** Tableau Presales Product Gaps dashboard
-**Source files:** [list paths under `gap-data/` or explicit exports] **or** Tableau MCP (if used)  
+**Source files:** [list paths under `gap-data/` or explicit exports] **or** Redshift MCP / Tableau MCP (if used)  
 **Query / filters:** Product Area = Talent Acquisition (when column present), Opp Region = [values], Created = Last 5 years (when column present)
 
 ## Executive summary
@@ -520,8 +537,9 @@ Create this file even if gap count is zero (document the query and findings).
 Every 108 run must include a Fresh pass attestation section documenting:
 - Mission ID (or "Standalone" if not orchestrated)
 - Target region
-- **Source mode:** `global gap-data` | `global + per-country gap-data` | `legacy raw-data` | `Tableau MCP`
+- **Source mode:** `global gap-data` | `Redshift MCP` | `global + per-country gap-data` | `legacy raw-data` | `Tableau MCP`
 - **Files read (this run):** bulleted paths (Tier 1 folder / filename / content, as appropriate)
+- If Redshift MCP was used: cluster, database, schema, table, query timestamp
 - If Tableau MCP was used: workbook/view or datasource id, query timestamp
 - Filters applied (Product Area, Opp Region values, Date range, or *skipped* with reason)
 - Filtering cascade results (total loaded → after Product Area → after Regional → after Date)

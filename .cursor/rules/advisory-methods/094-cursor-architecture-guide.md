@@ -1,5 +1,5 @@
 ---
-description: Cursor 2.6 architectural best practices - rules vs skills vs subagents vs orchestrators (expert reference for agent design)
+description: Cursor 3 architectural best practices - rules vs skills vs subagents vs orchestrators (expert reference for agent design)
 globs:
   - ".cursor/rules/090-agent-improvement-advisor.mdc"
   - ".cursor/agents/**/*.md"
@@ -9,11 +9,11 @@ alwaysApply: false
 
 # Cursor Architecture Best Practices (Expert Knowledge)
 
-You are an **expert advisor on agentic architecture** in Cursor 2.6. You understand the technical trade-offs of rules, skills, subagents, and orchestrators. When reviewing or designing workflows, apply these principles rigorously.
+You are an **expert advisor on agentic architecture** in Cursor 3. You understand the technical trade-offs of rules, skills, subagents, and orchestrators. When reviewing or designing workflows, apply these principles rigorously.
 
-## Canonical Definitions (Cursor 2.6)
+## Canonical Definitions (Cursor 3)
 
-In Cursor 2.6, **Rules**, **Skills**, and **Sub-agents** are three distinct, hierarchical ways to customize AI behavior. They differ in scope, persistence, and how they interact with the main AI agent.
+In Cursor 3, **Rules**, **Skills**, and **Sub-agents** are three distinct, hierarchical ways to customize AI behavior. They differ in scope, persistence, and how they interact with the main AI agent.
 
 ### Quick Reference Table
 
@@ -60,7 +60,7 @@ In Cursor 2.6, **Rules**, **Skills**, and **Sub-agents** are three distinct, hie
 
 **What they do**: Handle complex, multi-step tasks that would otherwise clutter or confuse the main agent, such as large refactors, fixing a failing suite of tests, or writing full features.
 
-**How they work**: The main agent can delegate a task to a sub-agent. In Cursor 2.5+, **they can run asynchronously**, allowing the main agent to keep working while the sub-agent works in the background.
+**How they work**: The main agent can delegate a task to a sub-agent. **They can run asynchronously** (via `is_background: true` in frontmatter or parallel Task invocations), allowing the main agent to keep working while the sub-agent works in the background.
 
 **Best for**: Deep, focused work requiring massive context or independent problem solving (e.g., "Research and fix all authentication bugs," "Refactor database layer").
 
@@ -68,7 +68,7 @@ In Cursor 2.6, **Rules**, **Skills**, and **Sub-agents** are three distinct, hie
 
 **Token impact**: Zero cost until invoked. Isolated context prevents contamination of main agent.
 
-**Async execution**: Multiple Task invocations in a single response block run in parallel automatically (Cursor 2.5+).
+**Async execution**: Multiple Task invocations in a single response block run in parallel automatically. Cloud Agents (`&` prefix) offload long-running work to cloud VMs.
 
 ### When to Use Which
 
@@ -78,9 +78,9 @@ In Cursor 2.6, **Rules**, **Skills**, and **Sub-agents** are three distinct, hie
 | **Skills** | Reusable actions that are complex but don't need separate "conversation" | "Generate a changelog," "Create an SVG component from a file," "Run RICE scoring" |
 | **Sub-agents** | Tasks requiring massive context or independent, multi-step problem solving | "Implement a new OAuth flow with 5 files," "Analyze 50 customer interviews," "Run competitive scan across 8 regions" |
 
-### Cursor 2.6 Upgrade Note
+### Cursor 3 Upgrade Note
 
-Skills are increasingly acting as a "smarter" alternative to "Apply Intelligently" rules, as they allow for better modularity and reusability across projects.
+Skills are increasingly acting as a "smarter" alternative to "Apply Intelligently" rules, as they allow for better modularity and reusability across projects. The Cursor Marketplace now bundles rules, skills, agents, commands, and MCPs into distributable plugins for one-click team installation.
 
 ## The Four Patterns: When to Use Each
 
@@ -94,7 +94,7 @@ Skills are increasingly acting as a "smarter" alternative to "Apply Intelligentl
 - Lightweight routing (Slack responder, inbox triage)
 
 **HARD CONSTRAINTS:**
-- **Total alwaysApply budget: <500 lines** across ALL rules (Cursor 2.6 recommendation)
+- **Total alwaysApply budget: <500 lines** across ALL rules (Cursor 3 recommendation)
 - **Per-rule maximum: ~350-400 lines** (any larger needs extraction)
 - **Token cost: ~10 tokens per 100 lines** (3,000 lines = 30K tokens = $0.03/conversation at Claude 3.5 Sonnet pricing)
 
@@ -246,8 +246,8 @@ Authority: This glob rule is authoritative. Update wrapper to match, never rever
 **Drift prevention**: Contract sections prevent invocation paths from diverging over time.
 
 **Examples**:
-- `.cursor/agents/ux-designer-agent.md` (60 lines) → delegates to `315-ux-designer.mdc` (314 lines)
-- `.cursor/agents/ux-researcher-agent.md` (64 lines) → delegates to `105-user-researcher.mdc` (688 lines)
+- `.cursor/agents/ux-designer-agent.md` (60 lines) → delegates to `315-design-brief-creation.mdc` (314 lines)
+- `.cursor/agents/ux-researcher-agent.md` (64 lines) → delegates to `105-research-planning-analysis.mdc` (688 lines)
 
 **When NOT to use**:
 - ❌ No underlying glob rule exists (use full subagent or glob rule instead)
@@ -294,10 +294,7 @@ Authority: This glob rule is authoritative. Update wrapper to match, never rever
 
 ## Async Sub-agent Execution (Performance Optimization)
 
-**Cursor 2.5+ Capability**: Sub-agents can run asynchronously in parallel when tasks are independent.
-
-**Definition from Gemini:**
-> "In 2.5+, they can run asynchronously, allowing the main agent to keep working while the sub-agent works in the background."
+**Cursor 3 Capability**: Sub-agents can run asynchronously in parallel when tasks are independent. The Agents Window supports up to 8 parallel agents across local, worktree, cloud, and SSH environments.
 
 **How It Works:**
 - Invoke multiple `Task` calls in a **single response block**
@@ -618,3 +615,102 @@ Output: Design Brief
 **Documentation:**
 - Documented in `docs/architecture-decisions/thin-wrapper-subagents.md` (Architectural Audit section)
 - This section added to 094-cursor-architecture-guide.md
+
+## Cursor 3 Primitives (April 2026)
+
+Cursor 3 (released 2 April 2026) introduced several new primitives that extend the agent architecture. Existing patterns (rules, skills, subagents, orchestrators) remain valid; these primitives add new capabilities on top.
+
+### Agents Window
+
+A unified workspace that replaces the Composer pane. Run up to 8 agents in parallel across local repos, Git worktrees, remote SSH, and cloud environments. Agents appear in a sidebar and can be viewed side-by-side or in a grid layout.
+
+**Architecture impact**: The parallel Task invocation pattern already used in E2E pipelines maps directly to the Agents Window paradigm. No structural changes needed - the existing pattern is Cursor 3-native.
+
+**Access**: `Cmd+Shift+P` → `Agents Window`. Can run simultaneously with the IDE.
+
+### Design Mode
+
+Visual annotation of UI elements in a built-in browser preview. Click directly on components to select them; the agent receives the component tree path, computed styles, and surrounding context.
+
+**Keyboard shortcuts**:
+- `Cmd+Shift+D` - Toggle Design Mode
+- `Shift+drag` - Select a UI region
+- `Cmd+L` - Add element to chat
+- `Option+click` - Add element to input
+
+**Architecture impact**: Enhances the 321-prototype-visual-reviewer workflow. Design Mode provides a superior alternative to screenshot-based browser MCP review when running in the Agents Window - users annotate specific elements for the agent rather than describing issues in text.
+
+**Best for**: 315 → 320 → 321 design iteration loops, visual QA before Figma capture (330).
+
+### Cloud Agents
+
+Long-running tasks offloaded to cloud VMs by prefixing a message with `&`. Cloud agents produce demos, screenshots, and logs for verification. Sessions can be moved between local and cloud environments.
+
+**Architecture impact**: Prime candidates for cloud offloading:
+- PESTEL analysis (35-55 web operations, 30-60 min) - Step 2
+- Competitive scans (20-30+ searches, 10-20 min) - Step 4
+- 105 SME/Customer interview analysis (Steps 7-8)
+
+**When to use**: Any research step where the user wants to continue working while the agent completes deep research autonomously.
+
+### `/worktree` Command
+
+Creates a separate Git worktree so changes happen in isolation. Useful for experimental work that might be discarded.
+
+**Architecture impact**: Useful for:
+- Experimental prototype iterations (320) before committing to main
+- Risky refactors to rules or agent files
+- Testing alternative slide spec approaches (110/130)
+
+### `/best-of-n` Command
+
+Runs the same task in parallel across multiple models, each in its own isolated worktree. Cursor suggests the strongest solution.
+
+**Architecture impact**: Useful for:
+- Comparing competing prototype approaches (320)
+- Comparing PRD drafts (200)
+- Testing different slide spec formatting approaches (110/130)
+- Algorithm or layout comparisons where model choice affects output quality
+
+### Agent Frontmatter Fields
+
+Custom subagents in `.cursor/agents/*.md` support these YAML frontmatter fields:
+
+| Field | Values | Purpose |
+|-------|--------|---------|
+| `name` | string | Internal identifier |
+| `description` | string | When to delegate (critical for agent routing) |
+| `model` | `inherit`, `fast`, or model ID | Model selection. `inherit` = parent model, `fast` = cheaper/faster |
+| `readonly` | `true` / `false` | Restrict to read-only analysis |
+| `is_background` | `true` / `false` | Async execution. `true` = returns immediately, runs in background |
+
+**Model selection guidance**:
+- **Heavy research agents** (product-strategy, competitive-intel, pmf-analyst): `model: inherit` - need full capability
+- **Thin wrappers used only standalone** (ux-designer, doc-writer): `model: fast` - simple delegation, minimal reasoning
+- **Thin wrappers invoked in E2E pipeline** (ux-researcher): `model: inherit` - delegates to 105 but invoked as subagent in E2E Steps 7-8 for heavy interview analysis
+- **Review agents** (read-only analysis): `model: fast` + `readonly: true`
+
+**`is_background` guidance**:
+- `false` (default): Use when the orchestrator or user needs the result before continuing (most E2E pipeline steps)
+- `true`: Use for fire-and-forget tasks (monitoring, logging, non-blocking analysis)
+
+### Cursor Marketplace and Plugin Packaging
+
+The Cursor Marketplace bundles rules, skills, agents, commands, MCPs, and hooks into distributable plugins. Installed via `/add-plugin` or the web marketplace at `cursor.com/marketplace`.
+
+**Team Marketplaces** (Teams/Enterprise plans) allow private plugin distribution with central governance:
+- Plugins can be assigned as required (auto-installed) or optional
+- Distribution groups controlled via SCIM-synced directories (Enterprise)
+
+**Strategic opportunity**: This workspace's `.cursor/` directory structure (rules, skills, agents, commands) already aligns with the plugin packaging format. A future packaging step could distribute the PM Agent as an internal Workday plugin:
+- Bundle: 26 rules + 9 skills + 6 agents + 5 commands + MCP configurations
+- Distribute via Team Marketplace for other Workday PMs
+- Central governance ensures consistent PM methodology across teams
+
+**No immediate action required** - documenting the path for future consideration.
+
+### Await Tool
+
+Agents can wait for background shell commands and subagents to complete, or wait for specific output patterns (e.g., "Ready" or "Error"). This replaces manual polling of long-running processes.
+
+**Architecture impact**: Already available in the tool set. Useful for monitoring dev server startup (320 prototype builds), waiting for MCP responses, and polling subagent completion in complex orchestration flows.

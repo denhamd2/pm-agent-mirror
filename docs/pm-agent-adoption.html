@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PM Agent Dashboard &mdash; Adoption Insights</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0b1f42;
+  --ballpoint: #1a3a6e;
+  --water-cooler: #0075b4;
+  --blue-sky: #4a9fd4;
+  --pencil: #f5a623;
+  --paper: #f7f5f2;
+  --laptop: #6b7a8d;
+  --staple: #e2ddd7;
+  --desk: #c4bdb3;
+  --pass: #22c55e;
+  --warn: #eab308;
+  --fail: #ef4444;
+  --surface: #fafaf9;
+  --offer: #0075b4;
+  --ea: #8b5cf6;
+}
+* { font-family: 'DM Sans', system-ui, sans-serif; }
+code, .mono { font-family: 'JetBrains Mono', monospace; }
+body { background: var(--paper); color: var(--ink); }
+.card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(11,31,66,0.08), 0 1px 2px rgba(11,31,66,0.06); }
+.section-label { letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; font-weight: 700; color: var(--laptop); }
+.delta { font-size: 11px; font-weight: 600; }
+.delta-up { color: #16a34a; }
+.delta-down { color: #dc2626; }
+canvas { max-height: 280px; }
+.dashboard-nav { position:sticky;top:0;z-index:100;background:rgba(247,245,242,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--staple);padding:10px 24px;display:flex;align-items:center;gap:16px; }
+.dashboard-brand { font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap; }
+.dashboard-tabs { display:flex;gap:4px;flex-wrap:wrap; }
+.dashboard-tab { padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;text-decoration:none;color:var(--laptop);transition:all 0.2s; }
+.dashboard-tab:hover { background:var(--staple);color:var(--ink); }
+.dashboard-tab.active { background:var(--ink);color:white; }
+.legend-dot { width:10px;height:10px;border-radius:50%;display:inline-block; }
+</style>
+</head>
+<body class="min-h-screen">
+
+<nav class="dashboard-nav">
+  <div class="dashboard-brand">PM Agent Dashboard</div>
+  <div class="dashboard-tabs">
+    <a href="pm-agent-scorecard.html" class="dashboard-tab">Scorecard</a>
+    <a href="pm-agent-architecture.html" class="dashboard-tab">Architecture</a>
+    <a href="pm-agent-design-system.html" class="dashboard-tab">Design System</a>
+    <a href="pm-agent-morning-roundup.html" class="dashboard-tab">Roundup</a>
+    <a href="pm-agent-prototypes.html" class="dashboard-tab">Prototypes</a>
+    <a href="pm-agent-football.html" class="dashboard-tab">Football</a>
+    <a href="pm-agent-adoption.html" class="dashboard-tab active">Adoption</a>
+  </div>
+</nav>
+
+<div class="max-w-[1400px] mx-auto p-6">
+
+<!-- Header -->
+<div class="mb-8">
+  <h1 class="text-3xl font-bold" style="color:var(--ink);">Adoption Insights</h1>
+  <p class="text-sm mt-1" style="color:var(--laptop);">Offer BP vs Employment Agreement BP &middot; 24-Month Feature Usage Dashboard &middot; Apr 2024 &ndash; Mar 2025</p>
+  <div class="flex items-center gap-4 mt-3">
+    <span class="flex items-center gap-2 text-xs font-semibold"><span class="legend-dot" style="background:var(--offer);"></span> Offer BP</span>
+    <span class="flex items-center gap-2 text-xs font-semibold"><span class="legend-dot" style="background:var(--ea);"></span> Employment Agreement BP</span>
+    <span class="flex items-center gap-2 text-xs font-semibold"><span class="legend-dot" style="background:var(--desk);"></span> Peer Features</span>
+  </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="grid grid-cols-5 gap-4 mb-8" id="kpi-cards"></div>
+
+<!-- Section 1: Head to Head -->
+<div class="mb-2"><span class="section-label">Head to Head</span></div>
+<div class="grid grid-cols-2 gap-4 mb-8">
+  <div class="card p-5">
+    <h3 class="text-sm font-bold mb-3" style="color:var(--ink);">Adoption Rate Over Time</h3>
+    <canvas id="chart-adoption-rate"></canvas>
+  </div>
+  <div class="card p-5">
+    <h3 class="text-sm font-bold mb-3" style="color:var(--ink);">Monthly Transaction Volume</h3>
+    <canvas id="chart-txn-volume"></canvas>
+  </div>
+  <div class="card p-5">
+    <h3 class="text-sm font-bold mb-3" style="color:var(--ink);">Avg Transactions Per Tenant</h3>
+    <canvas id="chart-txn-per-tenant"></canvas>
+  </div>
+  <div class="card p-5">
+    <h3 class="text-sm font-bold mb-3" style="color:var(--ink);">Net New Adopters Per Month</h3>
+    <canvas id="chart-net-new"></canvas>
+  </div>
+</div>
+
+<!-- Section 2: Recruiting Landscape -->
+<div class="mb-2"><span class="section-label">Recruiting Feature Landscape</span></div>
+<div class="grid grid-cols-2 gap-4 mb-8">
+  <div class="card p-5">
+    <h3 class="text-sm font-bold mb-3" style="color:var(--ink);">Feature Adoption Comparison (Mar 2025)</h3>
+    <canvas id="chart-landscape" style="max-height:320px;"></canvas>
+  </div>
+  <div class="card p-5">
+    <h3 class="text-sm font-bold mb-3" style="color:var(--ink);">Growth Race &ndash; Adoption % Over Time</h3>
+    <canvas id="chart-growth-race"></canvas>
+  </div>
+</div>
+
+<!-- Section 3: Opportunity -->
+<div class="mb-2"><span class="section-label">Activation Opportunity</span></div>
+<div class="grid grid-cols-2 gap-4 mb-8">
+  <div class="card p-5 text-center">
+    <h3 class="text-sm font-bold mb-3" style="color:var(--ink);">Offer BP Runway</h3>
+    <canvas id="chart-donut-offer" style="max-height:240px;"></canvas>
+  </div>
+  <div class="card p-5 text-center">
+    <h3 class="text-sm font-bold mb-3" style="color:var(--ink);">Employment Agreement BP Runway</h3>
+    <canvas id="chart-donut-ea" style="max-height:240px;"></canvas>
+  </div>
+</div>
+
+<div class="text-center text-xs py-4" style="color:var(--desk);">
+  Source: Tableau &mdash; 24-Month Feature Usage Dashboard (Product Intelligence) &middot; Data as of <span id="gen-date"></span>
+</div>
+
+</div><!-- /container -->
+
+<script id="adoption-data" type="application/json">
+{
+  "generated": "2026-04-09",
+  "months": ["2024-04","2024-05","2024-06","2024-07","2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03"],
+  "offerBP": {
+    "name": "Offer Business Process",
+    "entitled": 3312,
+    "tenantsProcessed": [2759,2777,2821,2861,2882,2906,2964,2960,3039,3086,3109,3155],
+    "totalUsage": [6467881,6754986,6130646,6631644,8143440,8425221,9730959,7750057,6230119,7027694,6730950,6674545]
+  },
+  "eaBP": {
+    "name": "Employment Agreement Business Process",
+    "entitled": 983,
+    "tenantsProcessed": [709,719,723,742,732,758,767,777,777,794,780,793],
+    "totalUsage": [4195018,4254033,4060881,4676823,4238052,4300538,4993236,4830153,3747887,3826728,3968432,4421261]
+  },
+  "peerFeatures": {
+    "Hire BP": {"entitled":5305,"adopted":[4544,4591,4687,4719,4740,4819,4865,4859,4994,5040,5050,5110],"latestAdopted":5110},
+    "Job Requisition BP": {"entitled":4343,"adopted":[3695,3719,3800,3823,3841,3896,3937,3957,4038,4082,4113,4148],"latestAdopted":4148},
+    "Interview BP": {"entitled":3662,"adopted":[3032,3079,3110,3167,3176,3220,3267,3287,3346,3403,3435,3472],"latestAdopted":3472},
+    "Create Job Application": {"entitled":3422,"adopted":[2511,2516,2521,2593,2600,2606,2597,2529,2571,2651,2655,2700],"latestAdopted":2700},
+    "Find Candidates": {"entitled":3314,"adopted":[2285,2347,2305,2389,2365,2406,2470,2387,2379,2527,2572,2613],"latestAdopted":2613},
+    "Recruiting Dashboard": {"entitled":3974,"adopted":[2985,3053,3105,3124,3126,3180,3231,3207,3277,3379,3385,3436],"latestAdopted":3436},
+    "Refer a Candidate BP": {"entitled":3268,"adopted":[2468,2478,2514,2554,2587,2596,2656,2634,2627,2780,2794,2836],"latestAdopted":2836}
+  }
+}
+</script>
+
+<script>
+(function() {
+  const D = JSON.parse(document.getElementById('adoption-data').textContent);
+  const months = D.months;
+  const labels = months.map(m => { const [y,mo] = m.split('-'); return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+mo-1] + ' ' + y.slice(2); });
+
+  const OFFER = 'rgba(0,117,180,1)';
+  const OFFER_BG = 'rgba(0,117,180,0.15)';
+  const EA = 'rgba(139,92,246,1)';
+  const EA_BG = 'rgba(139,92,246,0.15)';
+  const PEER = 'rgba(196,189,179,0.9)';
+  const INK = '#0b1f42';
+  const LAPTOP = '#6b7a8d';
+
+  document.getElementById('gen-date').textContent = D.generated;
+
+  // --- helpers ---
+  function pct(val, total) { return total ? +(val / total * 100).toFixed(1) : 0; }
+  function fmtM(n) { return (n / 1e6).toFixed(1) + 'M'; }
+  function fmtK(n) { return n >= 1000 ? (n / 1e3).toFixed(1) + 'K' : n.toString(); }
+  function delta(arr) { return arr.map((v, i) => i === 0 ? 0 : v - arr[i-1]); }
+  function avg(arr) { return arr.reduce((a,b) => a+b, 0) / arr.length; }
+
+  const offerRates = D.offerBP.tenantsProcessed.map(v => pct(v, D.offerBP.entitled));
+  const eaRates = D.eaBP.tenantsProcessed.map(v => pct(v, D.eaBP.entitled));
+  const offerTxnPerTenant = D.offerBP.totalUsage.map((v,i) => D.offerBP.tenantsProcessed[i] ? Math.round(v / D.offerBP.tenantsProcessed[i]) : 0);
+  const eaTxnPerTenant = D.eaBP.totalUsage.map((v,i) => D.eaBP.tenantsProcessed[i] ? Math.round(v / D.eaBP.tenantsProcessed[i]) : 0);
+  const offerDelta = delta(D.offerBP.tenantsProcessed);
+  const eaDelta = delta(D.eaBP.tenantsProcessed);
+
+  const latestOffer = D.offerBP.tenantsProcessed.at(-1);
+  const firstOffer = D.offerBP.tenantsProcessed[0];
+  const latestEA = D.eaBP.tenantsProcessed.at(-1);
+  const firstEA = D.eaBP.tenantsProcessed[0];
+
+  // --- KPI Cards ---
+  const kpiData = [
+    { label: 'Offer BP Adoption', value: pct(latestOffer, D.offerBP.entitled) + '%', sub: latestOffer.toLocaleString() + ' / ' + D.offerBP.entitled.toLocaleString(), delta: '+' + pct(latestOffer - firstOffer, firstOffer) + '%', up: true, color: OFFER },
+    { label: 'EA BP Adoption', value: pct(latestEA, D.eaBP.entitled) + '%', sub: latestEA.toLocaleString() + ' / ' + D.eaBP.entitled.toLocaleString(), delta: '+' + pct(latestEA - firstEA, firstEA) + '%', up: true, color: EA },
+    { label: 'Offer Avg Monthly Txns', value: fmtM(avg(D.offerBP.totalUsage)), sub: 'Peak: ' + fmtM(Math.max(...D.offerBP.totalUsage)), delta: '', up: true, color: OFFER },
+    { label: 'EA Avg Monthly Txns', value: fmtM(avg(D.eaBP.totalUsage)), sub: 'Peak: ' + fmtM(Math.max(...D.eaBP.totalUsage)), delta: '', up: true, color: EA },
+    { label: 'Combined Non-Adopters', value: ((D.offerBP.entitled - latestOffer) + (D.eaBP.entitled - latestEA)).toLocaleString(), sub: (D.offerBP.entitled - latestOffer) + ' Offer + ' + (D.eaBP.entitled - latestEA) + ' EA', delta: 'opportunity', up: false, color: '#f5a623' }
+  ];
+
+  const kpiContainer = document.getElementById('kpi-cards');
+  kpiData.forEach(k => {
+    const deltaClass = k.delta ? (k.up ? 'delta-up' : 'delta-down') : '';
+    kpiContainer.innerHTML += `
+      <div class="card p-4 text-center" style="border-top:3px solid ${k.color};">
+        <div class="text-2xl font-bold" style="color:var(--ink);">${k.value}</div>
+        <div class="text-xs mt-1" style="color:var(--laptop);">${k.label}</div>
+        <div class="text-xs mt-1" style="color:var(--desk);">${k.sub}</div>
+        ${k.delta ? `<div class="delta ${deltaClass} mt-1">${k.delta} 12-mo</div>` : ''}
+      </div>`;
+  });
+
+  // --- Shared chart defaults ---
+  const gridOpts = { color: 'rgba(226,221,215,0.5)' };
+  const tickOpts = { color: LAPTOP, font: { size: 10, family: 'DM Sans' } };
+
+  // --- Chart 1: Adoption Rate ---
+  new Chart(document.getElementById('chart-adoption-rate'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        { label: 'Offer BP', data: offerRates, borderColor: OFFER, backgroundColor: OFFER_BG, fill: true, tension: 0.3, pointRadius: 3, borderWidth: 2 },
+        { label: 'EA BP', data: eaRates, borderColor: EA, backgroundColor: EA_BG, fill: true, tension: 0.3, pointRadius: 3, borderWidth: 2 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: true, position: 'top', labels: { font: { size: 11, family: 'DM Sans' }, boxWidth: 12 } } },
+      scales: {
+        y: { min: 60, max: 100, ticks: { ...tickOpts, callback: v => v + '%' }, grid: gridOpts },
+        x: { ticks: tickOpts, grid: { display: false } }
+      }
+    }
+  });
+
+  // --- Chart 2: Monthly Transaction Volume ---
+  new Chart(document.getElementById('chart-txn-volume'), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        { label: 'Offer BP', data: D.offerBP.totalUsage, backgroundColor: OFFER, borderRadius: 4, barPercentage: 0.7, categoryPercentage: 0.8 },
+        { label: 'EA BP', data: D.eaBP.totalUsage, backgroundColor: EA, borderRadius: 4, barPercentage: 0.7, categoryPercentage: 0.8 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: true, position: 'top', labels: { font: { size: 11, family: 'DM Sans' }, boxWidth: 12 } } },
+      scales: {
+        y: { ticks: { ...tickOpts, callback: v => fmtM(v) }, grid: gridOpts },
+        x: { ticks: tickOpts, grid: { display: false } }
+      }
+    }
+  });
+
+  // --- Chart 3: Avg Transactions Per Tenant ---
+  new Chart(document.getElementById('chart-txn-per-tenant'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        { label: 'Offer BP', data: offerTxnPerTenant, borderColor: OFFER, backgroundColor: OFFER_BG, fill: false, tension: 0.3, pointRadius: 3, borderWidth: 2 },
+        { label: 'EA BP', data: eaTxnPerTenant, borderColor: EA, backgroundColor: EA_BG, fill: false, tension: 0.3, pointRadius: 3, borderWidth: 2 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: true, position: 'top', labels: { font: { size: 11, family: 'DM Sans' }, boxWidth: 12 } } },
+      scales: {
+        y: { ticks: { ...tickOpts, callback: v => fmtK(v) }, grid: gridOpts },
+        x: { ticks: tickOpts, grid: { display: false } }
+      }
+    }
+  });
+
+  // --- Chart 4: Net New Adopters ---
+  new Chart(document.getElementById('chart-net-new'), {
+    type: 'bar',
+    data: {
+      labels: labels.slice(1),
+      datasets: [
+        { label: 'Offer BP', data: offerDelta.slice(1), backgroundColor: offerDelta.slice(1).map(v => v >= 0 ? OFFER : '#ef4444'), borderRadius: 3, barPercentage: 0.7, categoryPercentage: 0.8 },
+        { label: 'EA BP', data: eaDelta.slice(1), backgroundColor: eaDelta.slice(1).map(v => v >= 0 ? EA : '#ef4444'), borderRadius: 3, barPercentage: 0.7, categoryPercentage: 0.8 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: true, position: 'top', labels: { font: { size: 11, family: 'DM Sans' }, boxWidth: 12 } } },
+      scales: {
+        y: { ticks: tickOpts, grid: gridOpts },
+        x: { ticks: tickOpts, grid: { display: false } }
+      }
+    }
+  });
+
+  // --- Chart 5: Recruiting Feature Landscape (Horizontal Bar) ---
+  const allFeatures = [
+    { name: 'Offer BP', rate: pct(latestOffer, D.offerBP.entitled), color: OFFER },
+    { name: 'EA BP', rate: pct(latestEA, D.eaBP.entitled), color: EA },
+    ...Object.entries(D.peerFeatures).map(([name, d]) => ({
+      name: name,
+      rate: pct(d.latestAdopted, d.entitled),
+      color: PEER
+    }))
+  ].sort((a,b) => b.rate - a.rate);
+
+  new Chart(document.getElementById('chart-landscape'), {
+    type: 'bar',
+    data: {
+      labels: allFeatures.map(f => f.name),
+      datasets: [{
+        data: allFeatures.map(f => f.rate),
+        backgroundColor: allFeatures.map(f => f.color),
+        borderRadius: 4,
+        barThickness: 22
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ctx.raw + '%' } }
+      },
+      scales: {
+        x: { min: 0, max: 100, ticks: { ...tickOpts, callback: v => v + '%' }, grid: gridOpts },
+        y: { ticks: { ...tickOpts, font: { size: 11, family: 'DM Sans', weight: '600' } }, grid: { display: false } }
+      }
+    }
+  });
+
+  // --- Chart 6: Growth Race ---
+  const peerColors = ['#22c55e','#eab308','#f97316','#06b6d4','#ec4899','#64748b','#a3a3a3'];
+  const growthDatasets = [
+    { label: 'Offer BP', data: offerRates, borderColor: OFFER, borderWidth: 3, tension: 0.3, pointRadius: 0 },
+    { label: 'EA BP', data: eaRates, borderColor: EA, borderWidth: 3, tension: 0.3, pointRadius: 0 },
+    ...Object.entries(D.peerFeatures).slice(0, 5).map(([name, d], i) => ({
+      label: name,
+      data: d.adopted.map(v => pct(v, d.entitled)),
+      borderColor: peerColors[i],
+      borderWidth: 1.5,
+      borderDash: [4, 3],
+      tension: 0.3,
+      pointRadius: 0
+    }))
+  ];
+
+  new Chart(document.getElementById('chart-growth-race'), {
+    type: 'line',
+    data: { labels: labels, datasets: growthDatasets },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: true, position: 'right', labels: { font: { size: 10, family: 'DM Sans' }, boxWidth: 10, padding: 8 } } },
+      scales: {
+        y: { min: 60, max: 100, ticks: { ...tickOpts, callback: v => v + '%' }, grid: gridOpts },
+        x: { ticks: tickOpts, grid: { display: false } }
+      }
+    }
+  });
+
+  // --- Chart 7: Offer BP Doughnut ---
+  const offerNonAdopt = D.offerBP.entitled - latestOffer;
+  new Chart(document.getElementById('chart-donut-offer'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Adopted (' + latestOffer.toLocaleString() + ')', 'Non-Adopted (' + offerNonAdopt + ')'],
+      datasets: [{ data: [latestOffer, offerNonAdopt], backgroundColor: [OFFER, '#e2ddd7'], borderWidth: 0, hoverOffset: 6 }]
+    },
+    options: {
+      responsive: true,
+      cutout: '65%',
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11, family: 'DM Sans' }, padding: 16 } },
+        tooltip: { callbacks: { label: ctx => ctx.label + ' (' + pct(ctx.raw, D.offerBP.entitled) + '%)' } }
+      }
+    }
+  });
+
+  // --- Chart 8: EA BP Doughnut ---
+  const eaNonAdopt = D.eaBP.entitled - latestEA;
+  new Chart(document.getElementById('chart-donut-ea'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Adopted (' + latestEA.toLocaleString() + ')', 'Non-Adopted (' + eaNonAdopt + ')'],
+      datasets: [{ data: [latestEA, eaNonAdopt], backgroundColor: [EA, '#e2ddd7'], borderWidth: 0, hoverOffset: 6 }]
+    },
+    options: {
+      responsive: true,
+      cutout: '65%',
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11, family: 'DM Sans' }, padding: 16 } },
+        tooltip: { callbacks: { label: ctx => ctx.label + ' (' + pct(ctx.raw, D.eaBP.entitled) + '%)' } }
+      }
+    }
+  });
+
+})();
+</script>
+</body>
+</html>

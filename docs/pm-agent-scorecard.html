@@ -46,28 +46,20 @@ canvas { max-height: 260px; }
 .dashboard-tab { padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;text-decoration:none;color:var(--laptop);transition:all 0.2s; }
 .dashboard-tab:hover { background:var(--staple);color:var(--ink); }
 .dashboard-tab.active { background:var(--ink);color:white; }
-.dashboard-external { display:flex;gap:4px;margin-left:auto; }
-.dashboard-ext-link { padding:4px 10px;border-radius:16px;font-size:11px;font-weight:600;text-decoration:none;color:var(--water-cooler);border:1px solid var(--staple);transition:all 0.2s;white-space:nowrap; }
-.dashboard-ext-link:hover { border-color:var(--water-cooler);background:rgba(0,117,180,0.05); }
 </style>
 </head>
 <body class="min-h-screen">
 
-<!-- Shared Dashboard Nav -->
 <nav class="dashboard-nav">
-  <span class="dashboard-brand">PM Agent Dashboard</span>
+  <div class="dashboard-brand">PM Agent Dashboard</div>
   <div class="dashboard-tabs">
-    <a href="pm-agent-morning-roundup.html" class="dashboard-tab">Morning Roundup</a>
-    <a href="pm-agent-scorecard.html" class="dashboard-tab active">Agent Health Dashboard</a>
-    <a href="pm-agent-architecture.html" class="dashboard-tab">Agent Flow</a>
-    <a href="pm-agent-design-system.html" class="dashboard-tab">Design System Components</a>
-  </div>
-  <div class="dashboard-external">
-    <a id="proto-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Prototype &#x2197;</a>
-    <a id="deck-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Deck &#x2197;</a>
-    <a id="prd-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">PRD &#x2197;</a>
-    <a id="brief-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Brief &#x2197;</a>
-    <a id="epic-link" href="#" target="_blank" class="dashboard-ext-link" title="Detecting...">Epic &#x2197;</a>
+    <a href="pm-agent-scorecard.html" class="dashboard-tab active">Scorecard</a>
+    <a href="pm-agent-architecture.html" class="dashboard-tab">Architecture</a>
+    <a href="pm-agent-design-system.html" class="dashboard-tab">Design System</a>
+    <a href="pm-agent-morning-roundup.html" class="dashboard-tab">Roundup</a>
+    <a href="pm-agent-prototypes.html" class="dashboard-tab">Prototypes</a>
+    <a href="pm-agent-football.html" class="dashboard-tab">Football</a>
+    <a href="pm-agent-adoption.html" class="dashboard-tab">Adoption</a>
   </div>
 </nav>
 
@@ -524,7 +516,5 @@ new Chart(document.getElementById('improvementChart'), {
 </script>
 
 </div>
-<script id="nav-links" type="application/json">{"prototype": {"href": "http://localhost:5199/#/india-whatsapp-candidate-messaging-v88", "title": "india-whatsapp-candidate-messaging-v88"}, "deck": {"href": "docs/downloads/India_Recruiting_PMF_Roadmap_v90.pptx", "title": "India_Recruiting_PMF_Roadmap_v90.pptx"}, "prd": {"href": "pm-agent-viewer.html?file=docs/prds/india-whatsapp-sms-candidate-messaging-prd.md", "title": "india-whatsapp-sms-candidate-messaging-prd.md"}, "brief": {"href": "pm-agent-viewer.html?file=design/india-whatsapp-candidate-messaging-design-brief.md", "title": "india-whatsapp-candidate-messaging-design-brief.md"}, "epic": {"href": "pm-agent-viewer.html?file=docs/epics/india-whatsapp-sms-candidate-messaging-epic-draft.md", "title": "india-whatsapp-sms-candidate-messaging-epic-draft.md"}}</script>
-<script src="dashboard-nav.js?v=5"></script>
 </body>
 </html>

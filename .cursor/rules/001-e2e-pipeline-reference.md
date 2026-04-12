@@ -99,6 +99,45 @@ This document describes the **Regional E2E Pipeline** and its **4 modular workfl
 
 ---
 
+## Cursor 3 Workflow Accelerators
+
+### Cloud Agent Offloading
+
+Long-running research steps can be offloaded to Cloud Agents (cloud VMs) by prefixing a message with `&`. The agent runs autonomously in the cloud and produces demos, screenshots, and logs for verification. Sessions can be moved between local and cloud environments.
+
+**Prime candidates for cloud offloading:**
+
+| Step | Agent | Typical Duration | Cloud Benefit |
+|------|-------|-----------------|---------------|
+| 2 | @product-strategy-agent (PESTEL) | 30-60 min | Continue working locally while PESTEL research runs |
+| 4 | @competitive-intel | 10-20 min | Run competitive scan in background |
+| 7 | @ux-researcher (SME) | 15-30 min | Parallel cloud + local work |
+| 8 | @ux-researcher (Customer) | 15-30 min | Parallel cloud + local work |
+
+**When to use:** Any step where the PM wants to continue working (e.g., reviewing prior outputs, preparing for HITL decisions) while deep research completes in the cloud.
+
+**Note:** The E2E pipeline's parallel Task invocation pattern (Steps 4, 6, 7, 8 in one response block) already maximises concurrency within a single session. Cloud Agents provide an additional layer: offloading entire research sessions to free up the local environment.
+
+### `/worktree` and `/best-of-n` Commands
+
+**`/worktree`** creates an isolated Git worktree for experimental work. Changes happen in isolation and can be merged or discarded.
+
+**Useful for:**
+- Experimental prototype iterations (320) before committing to the main branch
+- Testing risky refactors to rules or agent files
+- Trying alternative slide spec approaches (110/130)
+- Isolated design explorations that may be discarded
+
+**`/best-of-n`** runs the same task in parallel across multiple models, each in its own worktree. Cursor suggests the strongest solution.
+
+**Useful for:**
+- Comparing competing prototype layouts (320)
+- Comparing PRD draft approaches (200)
+- Testing different slide spec formatting strategies (110/130)
+- Any task where model choice significantly affects output quality
+
+---
+
 ## Mission ID Patterns
 
 | Workflow | Mission ID Format | Example |
@@ -198,7 +237,7 @@ The pipeline invokes these **subagents** at specific steps (subagents delegate t
 - Do NOT skip HITL 1 (recommendation selection) - you MUST present AskQuestion and wait
 - Do NOT collapse **105** into an implied sub-step of **@pmf-analyst** only: **105 SME** MUST be invoked as **Step 7** and **105 Customer** MUST be invoked as **Step 8** (both with own handoff + MISSION_LOG lines) **before** **@pmf-analyst** starts; **`research/[REGION]/105-sme-research-findings.md`** and **`research/[REGION]/105-user-research-findings.md`** must be **regenerated** from raw SME and customer `transcripts/` respectively with **Fresh pass attestations** per **105-research-planning-analysis.mdc**, not copy-forward without re-reading sources
 - Do NOT skip HITL 2 (story map approval) - 400 invokes 410→420→430; 420 MUST present for approval
-- **106 (Step 5) MUST run after 105 (Steps 7-8) complete** (sequential); **Steps 4 (@competitive-intel), 6 (108), 7 (105 SME), and 8 (105 Customer)** may run in **parallel** in one response block when each has sources; do **not** run **106** in that parallel block (Cursor 2.5+ async execution)
+- **106 (Step 5) MUST run after 105 (Steps 7-8) complete** (sequential); **Steps 4 (@competitive-intel), 6 (108), 7 (105 SME), and 8 (105 Customer)** may run in **parallel** in one response block when each has sources; do **not** run **106** in that parallel block (Cursor 3 async execution)
 - "e2e [region] research", "[region] pipeline", "full [region] workflow", "e2e to 430" = FULL pipeline from Step 1
 
 **E2E Pipeline Invariants:**

@@ -44,7 +44,7 @@ When the user asks to implement something, evaluate:
 - "Is this the right pattern for this task?"
 - "Will this create technical debt or token bloat?"
 - "Could this be done better with a different architectural pattern?"
-- "Does this align with Cursor 2.6 best practices?"
+- "Does this align with Cursor 3 best practices?"
 
 **If you disagree with an approach, say so and explain why.** The user values honesty over agreement.
 
@@ -58,7 +58,7 @@ For detailed architectural guidance on rules vs. skills vs. subagents vs. orches
 - **Skills**: Reusable methods (`/rice`, `/jtbd`), standalone + E2E
 - **Subagents**: Heavy research, isolated contexts, parallel execution
 - **Thin wrapper subagents**: Lightweight wrappers (50-80 lines) that delegate to glob rules for explicit role invocation (@ux-designer → 315, @ux-researcher → 105)
-- **Async execution (Cursor 2.5+)**: Invoke multiple independent Task calls in same response block for parallel execution (~50% time savings on independent steps)
+- **Async execution (Cursor 3)**: Invoke multiple independent Task calls in same response block for parallel execution (~50% time savings on independent steps); Cloud Agents (`&` prefix) for long-running research offloaded to cloud VMs
 
 **When auditing architecture, check:**
 1. Architectural patterns: Heavy research → subagent? Reusable method → skill?
@@ -370,7 +370,7 @@ For detailed examples of advisory responses, see `.cursor/rules/advisory-methods
 - **Allow heavy research in alwaysApply rules without challenging** (PESTEL, competitive scans belong in subagents)
 - **Accept duplicated logic across rules without recommending skill extraction** (RICE, JTBD should be skills)
 - **Approve new agents without asking "Should this be a subagent?"** (default to subagent for heavy work)
-- **Agree with requests that violate Cursor 2.6 best practices** (your job is to challenge bad decisions)
+- **Agree with requests that violate Cursor 3 best practices** (your job is to challenge bad decisions)
 
 ---
 
@@ -378,7 +378,7 @@ For detailed examples of advisory responses, see `.cursor/rules/advisory-methods
 
 1. **Critical thinking**: Challenge bad decisions, flag architectural anti-patterns early, disagree when necessary
 2. **Deep system understanding**: Discover current state thoroughly before suggesting changes
-3. **Cursor 2.6 expertise**: Know when to use rules vs. skills vs. subagents vs. orchestrators
+3. **Cursor 3 expertise**: Know when to use rules vs. skills vs. subagents vs. orchestrators; leverage Agents Window, Design Mode, Cloud Agents, `/worktree`, `/best-of-n`
 4. **Proactive auditing**: Catch architectural problems early through pattern recognition
 5. **PM best practices**: Apply frameworks thoughtfully (JTBD, RICE, Continuous Discovery) with Workday Recruiting context
 6. **Dual-mode design**: Ensure every skill and subagent works standalone AND in E2E pipelines

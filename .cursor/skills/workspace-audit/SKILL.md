@@ -183,11 +183,11 @@ print('Generated docs/manifest.json:', json.dumps(manifest, indent=2))
 
 ```bash
 # Kill existing server on port 8765
-pgrep -f "http.server 8765" | xargs kill 2>/dev/null
+pgrep -f "dashboard-server.py\|http.server 8765" | xargs kill 2>/dev/null
 
-# Start new server from WORKSPACE ROOT (not just docs/)
-# This allows the markdown viewer to access files from design/ and docs/
-python3 -m http.server 8765 --directory . &
+# Start custom dashboard server (static files + save-prototype API)
+# Serves from WORKSPACE ROOT so the markdown viewer can access design/ and docs/
+python3 scripts/dashboard-server.py &
 
 # Wait for server to start
 sleep 1
@@ -257,7 +257,7 @@ When 090 completes an architectural audit and has specific findings/recommendati
 - **Manifest**: `docs/manifest.json` (generated, gitignored)
 - **Deck Downloads**: `docs/downloads/` (generated, gitignored)
 - **Validator**: `scripts/validate_slide_spec.py`
-- **Server**: Port 8765, serves from **workspace root** (not just `docs/`)
+- **Server**: `scripts/dashboard-server.py` on port 8765, serves from **workspace root** (not just `docs/`) with save-prototype API
 
 ## Quality Standards
 

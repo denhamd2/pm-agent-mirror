@@ -1,8 +1,14 @@
 # India Competitive Matrix
-**Last Updated**: 01 April 2026 | **Version**: v1.11 | **Maintainer**: Agent 101  
+**Last Updated**: 06 April 2026 | **Version**: v1.12 | **Maintainer**: Agent 101  
 **Region**: India
 
 ## Changelog (latest first)
+
+### 2026-04-06 — INDIA-E2E-005 — India E2E Step 4 baseline scan (Pattern 1a fresh pass)
+
+**Pattern 1a for Regional E2E:** New **Deployment Agent** thread **`e5a18de8-821e-491f-92c5-8bad5fa062c3`** (**DA-INDIA-E2E-005**): **True Gap** native **+91 SMS**, **True Gap** native **WhatsApp** core Recruiting UI, **True Gap** native **UIDAI Aadhaar eKYC**. **Naukri-class:** DA classifies aggregate posting (**Broadbean-class** / **Studio** / **RaaS** / **scrape**) as **Workaround**; **matrix** retains **True Gap** for **OOTB native direct** multipost **without** multipartner/**Studio** (**same** **convention** as **INDIA-PMF-006**). **Native:** **BGV** **Job Application BP** + **Background Check Core Connector** / **Studio**; **UDMF** / **Match and Merge**; **bulk** **Find Candidates** actions; **DPDP-style** configurable **consent** / **retention** / **purge**. **Web pass (INDIA-E2E-005):** **Freshteam**/**Naukri** **discontinued** **1** **Mar** **2023** (**API** **deprecation**); **Shine** **ATS** **integration** **marketing**; **Monster** **India**/**foundit** **via** **Ceipal**/**Oorwin**/**eQuest** **partner** **docs**; **Talview** **deepfake**/**proctoring** **watchlist**; **SAP** **SmartRecruiters** **Mar** **2026**; **Oracle** **WhatsApp**/**SMS**/**Career** **Coach** **26B** **notes**; **iCIMS** **Text** **Engagement** **WhatsApp** **templates**; **Darwinbox** **PDP** **LP**; **Keka** **DPA** **DPDP**; **reconfirm** **SpringVerify**/**Zoho**/**PeopleStrong** **hooks**. **Broadbean** public pages **still** **no** **explicit** **Naukri** **hit** **this** **pass** — **validate** **per** **deal**. Point-in-time scan: `research/competitive/in/in-competitive-scan-2026-04-06-INDIA-E2E-005.md`. Matrix **v1.12**.
+
+---
 
 ### 2026-04-01 — INDIA-PMF-006 — India E2E Step 4 baseline scan (Pattern 1a fresh pass)
 
@@ -42,7 +48,9 @@
 
 ## Executive Summary
 
-This matrix tracks **Darwinbox**, **Keka HR**, and **Zoho Recruit** as the default **top three** India-regional competitors for Workday Recruiting; **greytHR** is a **first-class** **mid-market** **comparator** for **payroll + recruit** adjacency and **documented** **Naukri-class** **multipost** (**Zwayam** **Amplify**). The market mixes **modern mid-market HR suites** and **value ATS** bundles with strong **SMS / WhatsApp** narratives and **AI screening** demos. **DPDP** and **local job boards** (e.g. **Naukri**) are **first-class** in **Q2 2026** India strategy; align active missions to the latest `research/India/strategy-context-*.md` for the run (e.g. **INDIA-PMF-006**, **INDIA-PMF-004**, **INDIA-PMF-003**, **IN-E2E-005**, **IN-PMF-002**, **IN-PMF-001**, **INDIA-E2E-004** artefacts where present).
+This matrix tracks **Darwinbox**, **Keka HR**, and **Zoho Recruit** as the default **top three** India-regional competitors for Workday Recruiting; **greytHR** is a **first-class** **mid-market** **comparator** for **payroll + recruit** adjacency and **documented** **Naukri-class** **multipost** (**Zwayam** **Amplify**). The market mixes **modern mid-market HR suites** and **value ATS** bundles with strong **SMS / WhatsApp** narratives and **AI screening** demos. **DPDP** and **local job boards** (e.g. **Naukri**) are **first-class** in **Q2 2026** India strategy; align active missions to the latest `research/India/strategy-context-*.md` for the run (e.g. **INDIA-E2E-005**, **INDIA-PMF-006**, **INDIA-PMF-004**, **INDIA-PMF-003**, **IN-E2E-005**, **IN-PMF-002**, **IN-PMF-001**, **INDIA-E2E-004** artefacts where present).
+
+**06 April 2026 Pattern 1a scan (INDIA-E2E-005, Know Your Candidate + high volume + DPDP + channels + boards):** Fresh **DA-INDIA-E2E-005** (**thread** `e5a18de8-821e-491f-92c5-8bad5fa062c3`) **reconfirms** **True Gaps** on **+91** **SMS**, **WhatsApp**, **Aadhaar** **gov** **eKYC**; **Native** **BGV** **framework**, **UDMF**, **bulk**, **privacy** **config**. **DA** labels **Naukri** **aggregate** paths (**multipartner**/**Studio**/**RaaS**/**scrape**) **Workaround**; **matrix** **retains** **True Gap** for **pure** **OOTB** **native** **direct** **multipost**. **Web** **delta:** **Freshteam**/**Naukri** **sunset** **Mar** **2023**; **Shine**/**Monster**/**foundit** **ecosystem** **notes**; **Talview** **fraud**/**deepfake** **adjacency**; **SAP**/**Oracle**/**iCIMS** **omnichannel** **URLs** **refreshed**. Scan: `research/competitive/in/in-competitive-scan-2026-04-06-INDIA-E2E-005.md`.
 
 **01 April 2026 Pattern 1a scan (INDIA-PMF-006, new market entry + high volume + Know Your Candidate + boards):** Fresh **DA-INDIA-PMF-006** (**thread** `a78f9671-0fc8-4618-9211-bfca17448d52`) **reconfirms** **True Gaps** on **+91** **SMS**, **WhatsApp**, **Aadhaar** **gov** **eKYC**; **Naukri** **OOTB** **native** **direct** remains **True Gap** (**DA** also labels **multipartner/custom** as **Workaround**). **UDMF:** **first** **reply** **wrong**; **follow-up** **confirms** **Native** **duplicate** **management** (**Match** **and** **Merge** **or** **UDMF**). **Web** **pass** **expands** **PeopleStrong** (**bulk**, **boards**, **WhatsApp**, **campus**), **greytHR** **campus** + **boards**, **SpringVerify**/**Zoho**/**Darwinbox** **identity** **narratives**, **SAP** **Naukri** **KB** + **mass** **hiring** **signals**, **iCIMS** **high-volume** + **Text** **Engagement**, **Greenhouse** **Naukri**; **Broadbean** **explicit** **Naukri** **not** **surfaced** **in** **public** **search** (**deal** **validate**). Scan: `research/competitive/in/in-competitive-scan-2026-04-01-INDIA-PMF-006.md`.
 
@@ -97,6 +105,10 @@ This matrix tracks **Darwinbox**, **Keka HR**, and **Zoho Recruit** as the defau
 - **Oracle Fusion Recruiting** (**Taleo** legacy in some accounts): Partner **BGV** packages and provisioning; **Mar 2026** **Fusion Agentic** India announcements; **Recruiting Booster** / **Career Coach** content.  
 - **iCIMS** (**global** **ATS**, **India** **deal**-dependent): **Prime** **Connector** **BGV** (**First** **Advantage**, **Checkr** ecosystem); **Spring** **2026** **Frontline** **AI** release (**SMS**/**WhatsApp**/web); **useful** **best-of-breed** **benchmark** in **MNC** **RFPs**.  
 - **Greenhouse** (**global** **ATS**, **India** **board** **product**): **Naukri** **partner** integration (**express** **apply**, **AI** **recommendations**, **automated** **posting** per **Greenhouse** **support** **and** **partner** **pages**); **RFP** **benchmark** for **in-ATS** **Naukri** **workflows** vs Workday **multiposter**/**Studio** **honesty**.  
+- **Freshteam** (**Freshworks**): **Naukri** **integration** **discontinued** **1** **Mar** **2023** per **support** (**Naukri** **API** **deprecation**) — **legacy** **buyer** **expectations** **may** **lag** **docs** (**INDIA-E2E-005**).  
+- **Shine.com** (**boards**): **ATS** **integration** and **single-click** **job** **push** **marketing** on **recruiter** **properties**; **validate** **technical** **scope** **per** **deal**.  
+- **Monster India** / **foundit** (**boards**): **Ceipal**, **Oorwin**, **Manatal**, **eQuest**-class **partner** **documentation** for **posting**/**multipost** (**INDIA-E2E-005**).  
+- **Talview** (**India**-based, **adjacent**): **Deepfake**/**impersonation** **detection**, **proctoring**, **agentic** **AI** **interview** — **benchmark** when **fraud** **=** **interview** **integrity** not **only** **BGV** (**INDIA-E2E-005**).  
 - **CIEL HR / HireCiel** (**staffing** + **ATS**): **HireCiel** **ATS** with **WhatsApp** **integration** on **public** **feature** **pages**; **CIEL** **AI** **resume** **screening** **editorial**; **different** **competitive** **shape** (**services** **plus** **software**) in **some** **India** **deals**.  
 - **AuthBridge** (**India** **BGV**): **AI** **BGV**; **API** **and** **ATS**/HRMS **integration** **marketing**; **court**/database **coverage** **claims**.  
 - **First** **Advantage** (**global** **BGV**): **100+** **ATS** **integrations**; **SmartRecruiters** **marketplace**; **India** **portal** (**fadv.in**) **in** **partner** **materials**.  
@@ -152,6 +164,19 @@ This matrix tracks **Darwinbox**, **Keka HR**, and **Zoho Recruit** as the defau
 ---
 
 ## Deployment Agent query log
+
+**INDIA-E2E-005 (06 April 2026) — DA-INDIA-E2E-005** — thread `e5a18de8-821e-491f-92c5-8bad5fa062c3`
+
+| Topic | Classification | Notes |
+|--------|----------------|--------|
+| Native SMS to **+91** | **True Gap** | India not in supported Workday Messaging SMS geographies per response |
+| Native **WhatsApp** in core Recruiting | **True Gap** | Per response |
+| **Naukri-class** boards (aggregate paths) | **Workaround** | Multipartner (**Broadbean-class**), **Studio**/**RaaS**, or **career site** **scrape** per response; **matrix** **True Gap** = **OOTB** **native** **direct** **only** |
+| **Aadhaar** / UIDAI **eKYC** | **True Gap** | Third-party / custom per response |
+| **BGV** Job Application BP + Core Connector / Studio | **Native** | Framework per response |
+| **UDMF** / **Match and Merge** | **Native** | Per response |
+| Bulk mass actions (**Find Candidates**) | **Native** | Per response |
+| Consent / retention / purge (DPDP-style) | **Native** | Configurable privacy tools per response |
 
 **INDIA-PMF-006 (01 April 2026) — DA-INDIA-PMF-006** — thread `a78f9671-0fc8-4618-9211-bfca17448d52`
 
@@ -271,12 +296,16 @@ This matrix tracks **Darwinbox**, **Keka HR**, and **Zoho Recruit** as the defau
 
 ## Sources and citations
 
-**Point-in-time scans (latest):** `research/competitive/in/in-competitive-scan-2026-04-01-INDIA-PMF-006.md` (**INDIA-PMF-006**, **01** **Apr** **2026**), `research/competitive/in/in-competitive-scan-2026-04-01-INDIA-PMF-004.md` (**INDIA-PMF-004**, **01** **Apr** **2026**), `research/competitive/in/in-competitive-scan-2026-04-01-INDIA-PMF-003.md` (**INDIA-PMF-003**, **01** **Apr** **2026**), `research/competitive/in/in-competitive-scan-2026-03-31-IN-E2E-005.md` (**IN-E2E-005** **India** **E2E** **Step** **4**, **31** **Mar** **2026**), `research/competitive/in/in-competitive-scan-2026-03-31-IN-PMF-002.md` (**IN-PMF-002** **31** **Mar** **2026** **Step** **4**), `research/competitive/in/in-competitive-report-2026-03-30-IN-PMF-001.md` (**IN-PMF-001** comprehensive report), `research/competitive/in/in-competitive-scan-2026-03-30-IN-PMF-001.md` (**IN-PMF-001** scan), `research/competitive/in/in-competitive-scan-2026-03-30-IN-PMF-002.md` (**IN-PMF-002** **30** **Mar**), `research/competitive/in/in-competitive-scan-2026-03-30-INDIA-E2E-004.md` (**INDIA-E2E-004**)  
+**Point-in-time scans (latest):** `research/competitive/in/in-competitive-scan-2026-04-06-INDIA-E2E-005.md` (**INDIA-E2E-005**, **06** **Apr** **2026**), `research/competitive/in/in-competitive-scan-2026-04-01-INDIA-PMF-006.md` (**INDIA-PMF-006**, **01** **Apr** **2026**), `research/competitive/in/in-competitive-scan-2026-04-01-INDIA-PMF-004.md` (**INDIA-PMF-004**, **01** **Apr** **2026**), `research/competitive/in/in-competitive-scan-2026-04-01-INDIA-PMF-003.md` (**INDIA-PMF-003**, **01** **Apr** **2026**), `research/competitive/in/in-competitive-scan-2026-03-31-IN-E2E-005.md` (**IN-E2E-005** **India** **E2E** **Step** **4**, **31** **Mar** **2026**), `research/competitive/in/in-competitive-scan-2026-03-31-IN-PMF-002.md` (**IN-PMF-002** **31** **Mar** **2026** **Step** **4**), `research/competitive/in/in-competitive-report-2026-03-30-IN-PMF-001.md` (**IN-PMF-001** comprehensive report), `research/competitive/in/in-competitive-scan-2026-03-30-IN-PMF-001.md` (**IN-PMF-001** scan), `research/competitive/in/in-competitive-scan-2026-03-30-IN-PMF-002.md` (**IN-PMF-002** **30** **Mar**), `research/competitive/in/in-competitive-scan-2026-03-30-INDIA-E2E-004.md` (**INDIA-E2E-004**)  
 **Prior scans:** `research/competitive/in/in-competitive-scan-2026-03-28-IN-E2E-003.md`, `research/competitive/in/in-competitive-scan-2026-03-28-INDIA-E2E-001.md`  
-**Web:** Darwinbox, Keka, Zoho, SAP India, Oracle India, PeopleStrong, greytHR, Workable, Greenhouse, CIEL HR / HireCiel, BambooHR, sumHR, factoHR, SpringVerify, AuthBridge, First Advantage, iCIMS, Shine, Naukri, Broadbean, CADP/TCSA DPDP commentary, fraud/deepfake press (see scan **Sources**).  
-**Deployment Agent:** **`a78f9671`** (**DA-INDIA-PMF-006**, **01** **Apr** **2026**; **UDMF** **follow-up** **after** **first** **reply**), **`07cc5979`** (**DA-INDIA-PMF-004**, **01** **Apr** **2026**; **BGV** **follow-up** **after** **first** **reply**), **`3ca8bc69`** (**DA-INDIA-PMF-003**, **01** **Apr** **2026**; **UDMF** **acronym** **follow-up**), **`1c73cec5`** (**DA-IN-E2E-005**, **IN-E2E-005** **31** **Mar** **2026**; **CPaaS** **SMS** **workaround** **logged**), **`9ef83319`** (**DA-IN-PMF-002-31Mar** **31** **Mar** **2026**), **`d7ae197d`** (**IN-PMF-001** Step 4 refresh; **SMS** **conflict** **note**), **DA-IN-PMF-002** (thread `edebb91f-3501-40b6-a7ce-61e8aa2f495a`), **DA-IN-PMF-001**, **DA-IN004** (**+91** **SMS** **True** **Gap** **aligned** **with** **E2E-005** **pass**), **DA-IN003**, **DA-IN001**; `citations: []` on responses.
+**Web:** Darwinbox, Keka, Zoho, SAP India, Oracle India, PeopleStrong, greytHR, Workable, Greenhouse, Freshteam, Shine, Monster/foundit, Talview, CIEL HR / HireCiel, BambooHR, sumHR, factoHR, SpringVerify, AuthBridge, First Advantage, iCIMS, Naukri, Broadbean, CADP/TCSA DPDP commentary, fraud/deepfake press (see scan **Sources**).  
+**Deployment Agent:** **`e5a18de8`** (**DA-INDIA-E2E-005**, **06** **Apr** **2026**; **Naukri** **row** **=** **Workaround** **aggregate** **vs** **matrix** **OOTB** **True** **Gap**), **`a78f9671`** (**DA-INDIA-PMF-006**, **01** **Apr** **2026**; **UDMF** **follow-up** **after** **first** **reply**), **`07cc5979`** (**DA-INDIA-PMF-004**, **01** **Apr** **2026**; **BGV** **follow-up** **after** **first** **reply**), **`3ca8bc69`** (**DA-INDIA-PMF-003**, **01** **Apr** **2026**; **UDMF** **acronym** **follow-up**), **`1c73cec5`** (**DA-IN-E2E-005**, **IN-E2E-005** **31** **Mar** **2026**; **CPaaS** **SMS** **workaround** **logged**), **`9ef83319`** (**DA-IN-PMF-002-31Mar** **31** **Mar** **2026**), **`d7ae197d`** (**IN-PMF-001** Step 4 refresh; **SMS** **conflict** **note**), **DA-IN-PMF-002** (thread `edebb91f-3501-40b6-a7ce-61e8aa2f495a`), **DA-IN-PMF-001**, **DA-IN004** (**+91** **SMS** **True** **Gap** **aligned** **with** **E2E-005** **pass**), **DA-IN003**, **DA-IN001**; `citations: []` on responses.
 
 ---
+
+## Changelog: 2026-04-06 - INDIA-E2E-005 - India E2E Baseline Scan (Fresh DA + Web)
+
+**Pattern 1a:** New **Deployment Agent** **DA-INDIA-E2E-005** (**thread** `e5a18de8-821e-491f-92c5-8bad5fa062c3`); **True Gaps** **+91**/**WhatsApp**/**Aadhaar**; **Naukri** **DA** **=** **Workaround** **aggregate** **paths** **vs** **matrix** **OOTB** **True** **Gap**; **web** **delta** **Freshteam**/**Naukri** **sunset**, **Shine**/**Monster**, **Talview** **fraud**/**deepfake**, **SAP**/**Oracle**/**iCIMS** **omnichannel** **refresh**, **Darwinbox** **PDP**/**Keka** **DPA**. Scan `research/competitive/in/in-competitive-scan-2026-04-06-INDIA-E2E-005.md`. Matrix **v1.12**.
 
 ## Changelog: 2026-04-01 - INDIA-PMF-006 - India E2E Step 4 Baseline Scan (Fresh DA + Web)
 
@@ -315,6 +344,8 @@ This matrix tracks **Darwinbox**, **Keka HR**, and **Zoho Recruit** as the defau
 **Pattern 1a:** Exhaustive web research (India roster + SAP/Oracle + DPDP/market), **DA-IN004** fresh Deployment Agent parity pass. **Delta vs v1.2:** **mobile recruiter** reclassified **Native → Workaround** (partial desktop parity); **native direct** India **board** multipost **True Gap** (multiposter remains **Workaround**); **baseline skills matching** called out **Native**; **advanced semantic AI** tied to **SKU**. Matrix **v1.3**, scan `research/competitive/in/in-competitive-scan-2026-03-30-INDIA-E2E-004.md`.
 
 ## Change log
+
+**v1.12** – 06 April 2026 – **INDIA-E2E-005** India E2E Step 4 Pattern 1a scan (**DA-INDIA-E2E-005**, **Naukri** **DA**/**matrix** **reconciliation**, **Freshteam**/**Shine**/**Monster**/**Talview** **web** **delta**): see **Changelog** section above.
 
 **v1.11** – 01 April 2026 – **INDIA-PMF-006** India E2E Step 4 Pattern 1a scan (**DA-INDIA-PMF-006**, **UDMF** **DA** **follow-up**, **PeopleStrong**/**greytHR**/**SAP** **Naukri**/**iCIMS**/**Greenhouse**/**Broadbean** **note**): see **Changelog** section above.
 

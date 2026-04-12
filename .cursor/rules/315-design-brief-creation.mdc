@@ -137,6 +137,7 @@ Translate layout into UI.
    - **Filters**: Use `FormSelect` (shared component) for simple dropdowns, NOT Canvas Kit Select compound component
    - **Profile layouts**: `ProfilePageLayout` from `design/components/ProfilePageLayout.tsx` for hub-style profile pages (candidate/worker profiles)
    - **Communication panels**: `EmailPanel`, `EmailComposer`, `RichTextEditor`, `ThreadExpansion` for email features; `SanaCommMessageBubble`, `SanaCommComposer` for WhatsApp/SMS
+   - **Full-page conversational assistant**: Use the same `SanaComm*` + Canvas Kit `Avatar` + disclosure surfaces.
 
 5. **Validate against Experience Principles** (MANDATORY):
    - **READ** `docs/experience-principles.md` before finalizing PASS 2
@@ -188,6 +189,11 @@ After defining all UI components, extract ALL user-facing text:
 
 **Loading States:**
 - [Action]: [text]
+
+**Conversational Assistant (if applicable):**
+- Assistant identity: [text]
+- Automation disclosure: [text]
+- Privacy / footer: [text]
 
 **Legal/Consent (if applicable):**
 - Consent text: [text]

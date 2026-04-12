@@ -5,9 +5,22 @@ import { TextInput } from '@workday/canvas-kit-react/text-input';
 import { PrimaryButton, SecondaryButton } from '@workday/canvas-kit-react/button';
 import { Card } from '@workday/canvas-kit-react/card';
 import { Heading, BodyText } from '@workday/canvas-kit-react/text';
-import { Flex } from '@workday/canvas-kit-react/layout';
+import { Flex, Box } from '@workday/canvas-kit-react/layout';
 import { checkSmallIcon } from '@workday/canvas-system-icons-web';
 import { SystemIcon } from '@workday/canvas-kit-react/icon';
+import { Avatar } from '@workday/canvas-kit-react/avatar';
+import {
+  SanaCommMessageBubble,
+  SanaCommComposer,
+  SANA_COMM_PANEL_SURFACE,
+  SANA_COMM_BUBBLE_BG,
+  SANA_COMM_MESSAGE_RADIUS_PX,
+  CareerSiteHero,
+  JobCard,
+  JobDetailsStickyFooter,
+  CandidateActionCard,
+  DraftMessage,
+} from './index';
 
 /**
  * Canvas Kit Component Test Page
@@ -128,6 +141,112 @@ export const CanvasKitTest = () => {
         
         <BodyText size="small" marginTop="s" color="licorice300">
           ✓ Should have proper colors and hover states
+        </BodyText>
+      </Card>
+
+      {/* Test 5: SanaComm Patterns (Conversational UI) */}
+      <Card padding="l" marginBottom="l">
+        <Heading size="small" marginBottom="m">
+          <Flex alignItems="center" gap="xs">
+            <SystemIcon icon={checkSmallIcon} accent="positive" />
+            Test 5: SanaComm Patterns (Conversational UI)
+          </Flex>
+        </Heading>
+        
+        <Box style={{ backgroundColor: SANA_COMM_PANEL_SURFACE, padding: '24px', borderRadius: '12px', border: '1px solid #E8EBEF' }}>
+          <Flex flexDirection="column" gap="m">
+            {/* Assistant Bubble */}
+            <Flex alignItems="flex-start" gap="xs" style={{ width: '100%' }}>
+              <Avatar as="div" size="small" altText="Assistant" style={{ flexShrink: 0 }} />
+              <Box style={{ flex: 1, minWidth: 0 }}>
+                <SanaCommMessageBubble align="start">
+                  Hi Layla! I see you're interested in the <strong>Senior Recruiter</strong> role in Dubai.
+                  <br /><br />
+                  Great! Let's get started. Could you please upload your resume?
+                </SanaCommMessageBubble>
+              </Box>
+            </Flex>
+
+            {/* Candidate Bubble */}
+            <Flex justifyContent="flex-end" style={{ width: '100%' }}>
+              <SanaCommMessageBubble align="end">
+                Yes, that's correct
+              </SanaCommMessageBubble>
+            </Flex>
+          </Flex>
+
+          {/* Composer */}
+          <Box marginTop="l">
+            <SanaCommComposer
+              value=""
+              onChange={() => {}}
+              placeholder="Type a message..."
+              onSend={() => {}}
+              sendDisabled={true}
+            />
+          </Box>
+        </Box>
+        
+        <BodyText size="small" marginTop="s" color="licorice300">
+          ✓ Should render conversational bubbles with correct radii and a docked composer
+        </BodyText>
+      </Card>
+
+      {/* Test 6: Candidate Experience Patterns */}
+      <Card padding="l" marginBottom="l">
+        <Heading size="small" marginBottom="m">
+          <Flex alignItems="center" gap="xs">
+            <SystemIcon icon={checkSmallIcon} accent="positive" />
+            Test 6: Candidate Experience Patterns
+          </Flex>
+        </Heading>
+        
+        <Flex flexDirection="column" gap="m">
+          <CareerSiteHero greeting="Hi Layla, what kind of role are you looking for today?" />
+          
+          <JobCard 
+            title="Senior Recruiter" 
+            metadata="Dubai, UAE · Full-time · Hybrid" 
+            onViewJob={() => {}} 
+          />
+          
+          <Box style={{ border: '1px solid #E8EBEF', borderRadius: '12px', padding: '24px' }}>
+            <JobDetailsStickyFooter />
+          </Box>
+        </Flex>
+        
+        <BodyText size="small" marginTop="s" color="licorice300">
+          ✓ Should render Candidate Experience components (Hero, Job Card, Sticky Footer)
+        </BodyText>
+      </Card>
+
+      {/* Test 7: GenUI Patterns */}
+      <Card padding="l" marginBottom="l">
+        <Heading size="small" marginBottom="m">
+          <Flex alignItems="center" gap="xs">
+            <SystemIcon icon={checkSmallIcon} accent="positive" />
+            Test 7: GenUI Patterns
+          </Flex>
+        </Heading>
+        
+        <Flex flexDirection="column" gap="m">
+          <CandidateActionCard 
+            name="Layla Osman" 
+            metadata="Applied 2 hours ago · 89% match · Referral" 
+            onReject={() => {}} 
+            onAdvance={() => {}} 
+          />
+          
+          <DraftMessage 
+            recipient="Alex Chen" 
+            message="Hi Alex, Just following up on REQ-2026-001 (Senior Software Engineer). We have a few candidates waiting for your feedback. Could you please review them when you have a moment?" 
+            onEdit={() => {}} 
+            onSend={() => {}} 
+          />
+        </Flex>
+        
+        <BodyText size="small" marginTop="s" color="licorice300">
+          ✓ Should render GenUI components (CandidateActionCard, DraftMessage)
         </BodyText>
       </Card>
 
