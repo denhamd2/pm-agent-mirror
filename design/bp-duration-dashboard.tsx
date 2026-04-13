@@ -135,10 +135,10 @@ function bpColorIndex(subBps: SubBpConfig[], key: string): number {
   return i >= 0 ? i % BP_COLORS.length : 0;
 }
 
-export type BpTypeFilter = 'all' | 'offer' | 'ea';
+export type BpTypeFilter = 'offer-ea' | 'offer' | 'ea';
 
 const BP_TYPE_OPTIONS: { value: BpTypeFilter; label: string }[] = [
-  { value: 'all', label: 'All sub-BPs' },
+  { value: 'offer-ea', label: 'Offer + EA' },
   { value: 'offer', label: 'Offer only' },
   { value: 'ea', label: 'EA only' },
 ];
@@ -146,7 +146,7 @@ const BP_TYPE_OPTIONS: { value: BpTypeFilter; label: string }[] = [
 export function filterSubBpsByType(subBps: SubBpConfig[], bpType: BpTypeFilter): SubBpConfig[] {
   if (bpType === 'offer') return subBps.filter(bp => bp.key === 'offer');
   if (bpType === 'ea') return subBps.filter(bp => bp.key === 'employment_agreement');
-  return subBps;
+  return subBps.filter(bp => bp.key === 'offer' || bp.key === 'employment_agreement');
 }
 
 /** Global tenant / region / industry slice (precedence: tenant > region > industry > all). */
@@ -172,14 +172,14 @@ function TenantRegionIndustryFilterCard({
     maxWidth: 280,
     color: colors.blackPepper500,
   };
-  const active = Boolean(filters.tenant || filters.region || filters.industry || bpType !== 'all');
+  const active = Boolean(filters.tenant || filters.region || filters.industry || bpType !== 'offer-ea');
   return (
     <Card style={{ ...chartCard, marginTop: 16, padding: 16, border: active ? `2px solid ${colors.blueberry400}` : undefined }}>
       <Flex justifyContent="flex-end" alignItems="center" style={{ marginBottom: 12 }}>
         {active && (
           <SecondaryButton
             size="small"
-            onClick={() => { onChange({ ...EMPTY_TENANT_FILTER }); onBpTypeChange('all'); }}
+            onClick={() => { onChange({ ...EMPTY_TENANT_FILTER }); onBpTypeChange('offer-ea'); }}
             style={{ fontSize: 12, borderRadius: 16, padding: '2px 12px' }}
           >
             Clear filters
@@ -1820,8 +1820,8 @@ function initialSliceFromUrl(): TenantRegionIndustryFilter {
 
 function initialBpTypeFromUrl(): BpTypeFilter {
   const v = getBpDurationsParams().get('bpType');
-  if (v === 'offer' || v === 'ea') return v;
-  return 'all';
+  if (v === 'offer' || v === 'ea' || v === 'offer-ea') return v;
+  return 'offer-ea';
 }
 
 function getBpDurationsParams(): URLSearchParams {
@@ -1840,7 +1840,7 @@ function syncBpDurationsUrl(view: ViewMode, bp: string, slice: TenantRegionIndus
   const q = new URLSearchParams();
   q.set('view', view);
   q.set('bp', bp);
-  if (bpType !== 'all') q.set('bpType', bpType);
+  if (bpType !== 'offer-ea') q.set('bpType', bpType);
   if (slice.tenant) q.set('tenant', slice.tenant);
   if (slice.region) q.set('region', slice.region);
   if (slice.industry) q.set('industry', slice.industry);
@@ -1905,8 +1905,8 @@ export const BpDurationDashboard = () => {
       <Box padding="l" flex={1}>
         <Box style={{ maxWidth: 1280, margin: '0 auto' }}>
           <PageHeader
-            title="Job App Stage Metrics"
-            subtitle="Shows how long each recruiting sub-process takes, how often it completes, and where quality signals like sent back or correction rates are concentrated."
+            title="Offer / EA Durations"
+            subtitle="Duration, completion rate, and process quality for Offer and Employment Agreement business processes."
           />
 
           <Flex gap="s" style={{ marginBottom: 14, flexWrap: 'wrap' }} alignItems="center">
