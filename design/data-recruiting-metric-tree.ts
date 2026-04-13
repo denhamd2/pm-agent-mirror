@@ -477,6 +477,14 @@ export function buildFilteredNode(
   const fmt = NODE_FORMAT_MAP[nodeId];
   if (!fmt) return base;
 
+  const hasNoTenantData = fmt.metricKeys.every((k) => {
+    const src = TREE_TENANT_SERIES[k];
+    return !src || Object.keys(src).length === 0;
+  });
+  if (hasNoTenantData) {
+    return { ...base, valueContext: `${base.valueContext} · aggregate (per-tenant data not available)` };
+  }
+
   const seriesPerKey = fmt.metricKeys.map((k) => aggregateFilteredSeries(k, filteredTenants));
   if (seriesPerKey.every((s) => s.length === 0)) {
     return { ...base, value: 'Unavailable', valueContext: 'No matching tenants', trend: [], momPct: null, yoyPct: null };
