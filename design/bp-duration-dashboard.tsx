@@ -1887,9 +1887,9 @@ export const BpDurationDashboard = () => {
 
           <Flex gap="s" style={{ marginBottom: 14, flexWrap: 'wrap' }} alignItems="center">
             <span style={{ fontSize: 12, color: colors.blackPepper400, fontWeight: 600 }}>Related:</span>
-            <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/interview-metrics`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>Interview Process</a>
+            <a href="#interview-metrics" style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>Interview Process</a>
             <span style={{ color: colors.soap400 }}>|</span>
-            <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/view-dashboard`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>Offer Duration Benchmark</a>
+            <a href="#view-dashboard" style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>Offer Duration Benchmark</a>
           </Flex>
 
           <TenantRegionIndustryFilterCard filters={sliceFilter} onChange={setSliceFilter} bpType={bpType} onBpTypeChange={setBpType} />

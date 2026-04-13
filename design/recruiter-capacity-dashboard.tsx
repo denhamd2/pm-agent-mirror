@@ -823,7 +823,7 @@ export const RecruiterCapacityDashboard: React.FC = () => {
       <Box padding="32px" flex={1}>
         <Box style={{ maxWidth: 1280, margin: '0 auto' }}>
           <div style={{ marginBottom: 8 }}>
-            <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/value-realization-metrics`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>&larr; Value Realisation</a>
+            <a href="#value-realization-metrics" style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>&larr; Value Realisation</a>
           </div>
           <PageHeader title={QUERY_META.title} subtitle={QUERY_META.subtitle} />
 

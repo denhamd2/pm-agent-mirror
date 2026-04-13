@@ -237,7 +237,7 @@ export const RecruitingAdoptionDashboard = () => {
       <DashboardGlobalNav activeMetricsSlug="recruiting-adoption" />
       <Box padding="l" flex={1}>
       <div style={{ marginBottom: 8 }}>
-        <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/value-realization-metrics`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>&larr; Value Realisation</a>
+        <a href="#value-realization-metrics" style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>&larr; Value Realisation</a>
       </div>
       <PageHeader title={QUERY_META.title} subtitle={QUERY_META.subtitle} />
 

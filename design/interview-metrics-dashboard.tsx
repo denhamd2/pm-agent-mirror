@@ -880,7 +880,7 @@ export const InterviewMetricsDashboard = () => {
       <DashboardGlobalNav activeMetricsSlug="interview-metrics" />
       <Box padding="l" flex={1}>
       <div style={{ marginBottom: 8 }}>
-        <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/bp-durations`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>&larr; Job App Stage Durations</a>
+        <a href="#bp-durations" style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>&larr; Job App Stage Durations</a>
       </div>
       <PageHeader title={QUERY_META.title} subtitle={QUERY_META.subtitle} />
 

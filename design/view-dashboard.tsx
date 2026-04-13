@@ -235,7 +235,7 @@ export const ViewDashboard = () => {
     <div style={{ background: SANA_PAGE_CANVAS, minHeight: '100vh' }}>
       <DashboardGlobalNav activeMetricsSlug="view-dashboard" />
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '8px 32px 0' }}>
-        <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/bp-durations`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>&larr; Job App Stage Durations</a>
+        <a href="#bp-durations" style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>&larr; Job App Stage Durations</a>
       </div>
       <PageHeader title={QUERY_META.title} subtitle={QUERY_META.subtitle} />
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 32px' }}>

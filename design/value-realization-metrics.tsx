@@ -201,7 +201,7 @@ export const ValueRealizationMetrics: React.FC = () => {
         <Heading size="small" marginBottom="s">Business Value Outcomes</Heading>
         <Flex gap="l" marginBottom="l" style={{ flexWrap: 'wrap', alignItems: 'stretch' }}>
           <DashboardLink
-            href="/avg-time-to-hire"
+            href="#avg-time-to-hire"
             title="Average Time to Hire"
             description={timeToHire.description}
             metricCard={
@@ -215,7 +215,7 @@ export const ValueRealizationMetrics: React.FC = () => {
             }
           />
           <DashboardLink
-            href="/recruiter-capacity"
+            href="#recruiter-capacity"
             title="Recruiter Capacity"
             description={recruiterProductivity.description}
             metricCard={
@@ -241,7 +241,7 @@ export const ValueRealizationMetrics: React.FC = () => {
             <Heading size="small" marginBottom="s">Product Value Outcomes</Heading>
             <Flex gap="l" marginBottom="l" style={{ flexWrap: 'wrap', alignItems: 'stretch' }}>
               <DashboardLink
-                href="/interview-metrics"
+                href="#interview-metrics"
                 title="Interview metrics"
                 description="Volumes, time in Interview BP, MISST, scheduling, feedback latency, recruiter capacity."
                 metricCard={
@@ -255,7 +255,7 @@ export const ValueRealizationMetrics: React.FC = () => {
                 }
               />
               <DashboardLink
-                href="/bp-durations"
+                href="#bp-durations"
                 title="Offer / EA durations and bottlenecks"
                 description="Combined Offer and Employment Agreement sub-BP durations. Filter by Offer or EA on the dashboard."
                 metricCard={
@@ -273,7 +273,7 @@ export const ValueRealizationMetrics: React.FC = () => {
             <Heading size="small" marginBottom="s">Adoption &amp; Usage Metrics</Heading>
             <Flex gap="l" marginBottom="l" style={{ flexWrap: 'wrap', alignItems: 'stretch' }}>
               <DashboardLink
-                href="/recruiting-adoption"
+                href="#recruiting-adoption"
                 title="Recruiting adoption"
                 description="Core Recruiting module adoption, onboarding attach rate, utilisation composite."
                 metricCard={
@@ -380,7 +380,7 @@ export const ValueRealizationMetrics: React.FC = () => {
                 </BodyText>
               </Box>
               <BodyText size="small" style={{ marginTop: 10, fontWeight: 600 }}>
-                Open dashboard: <a href="/add-documents-impact" style={{ color: colors.blueberry500 }}>Add Documents Impact</a>
+                Open dashboard: <a href="#add-documents-impact" style={{ color: colors.blueberry500 }}>Add Documents Impact</a>
               </BodyText>
             </Card>
 

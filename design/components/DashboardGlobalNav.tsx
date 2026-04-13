@@ -44,16 +44,12 @@ export interface DashboardGlobalNavProps {
   showMetricsNav?: boolean;
 }
 
-function basePath(): string {
-  return (import.meta.env.BASE_URL || '/').replace(/\/$/, '') || '';
-}
-
 function pmDashboardHref(tab: string): string {
-  return `${basePath()}/pm-agent-dashboard?tab=${encodeURIComponent(tab)}`;
+  return `#pm-agent-dashboard?tab=${encodeURIComponent(tab)}`;
 }
 
 function metricsHref(slug: string): string {
-  return `${basePath()}/${slug}`;
+  return `#${slug}`;
 }
 
 function metricDestination(
