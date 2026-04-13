@@ -39,6 +39,7 @@ jobs:
         run: |
           mkdir -p dashboard-dist
           cp -r design/dist/* dashboard-dist/
+          cp dashboard-dist/index.html dashboard-dist/404.html
           echo "Files to deploy:"
           ls -la dashboard-dist/
 
