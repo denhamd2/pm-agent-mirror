@@ -24,7 +24,6 @@ const CHILD_TO_PARENT: Record<string, string> = {
   'avg-time-to-hire': 'value-realization-metrics',
   'recruiter-capacity': 'value-realization-metrics',
   'positions-open-vs-filled': 'value-realization-metrics',
-  'recruiting-adoption': 'value-realization-metrics',
   'add-documents-impact': 'value-realization-metrics',
   'interview-metrics': 'bp-durations',
   'view-dashboard': 'bp-durations',

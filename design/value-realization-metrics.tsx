@@ -8,7 +8,6 @@ import { PageHeader, MetricCard, DashboardGlobalNav } from './components';
 import { SANA_PAGE_CANVAS, SANA_CARD_RADIUS_LG, SANA_CARD_SHADOW } from './components/sanaShellTheme';
 import { LABELS } from './data-bp-shared';
 import { HEADLINE_KPIS } from './data-interview-metrics';
-import { FEATURE_ADOPTION } from './data-recruiting-adoption';
 import { getSliceSubBpsAndHeadline, EMPTY_TENANT_FILTER } from './data-bp-durations-by-segment';
 import { APPLICANT_VOLUME_BREAKDOWNS, QUERY_META as VALUE_IUM_QUERY_META, VALUE_REALIZATION_IUMS, type MetricSnapshot } from './data-value-realization-iums';
 
@@ -48,8 +47,6 @@ const TOOLTIPS = {
     'Average of Offer and Employment Agreement completed-event durations from dw.swh.bp_event_stats. Dashboard filters allow Offer-only or EA-only views.',
   scorecard:
     'Per-tenant scorecard: IUM time to hire/fill plus PCA feature adoption and bottleneck strip from sub-BP medians.',
-  recruiting:
-    'Module adoption and utilisation IUMs on PROD tenants (metrics 428, 314, 508) from internal usage feed.',
   offerBench:
     'Accenture vs Walmart Offer BP comparison from bp_event_stats: mean completed duration and monthly medians.',
   metricTree:
@@ -188,8 +185,6 @@ export const ValueRealizationMetrics: React.FC = () => {
   const offerH = headline.offer;
   const eaH = headline.employment_agreement;
   const interviewBp = HEADLINE_KPIS.avgTimeInBP;
-  const latestRecruiting = FEATURE_ADOPTION['Recruiting (core)']?.slice(-1)[0];
-  const recruitingPct = ((latestRecruiting?.adoption ?? 0) * 100).toFixed(1);
   const timeToHire = VALUE_REALIZATION_IUMS.timeToHire;
   const recruiterProductivity = VALUE_REALIZATION_IUMS.recruiterProductivity;
   const offersAccepted = VALUE_REALIZATION_IUMS.offersAccepted;
@@ -273,24 +268,6 @@ export const ValueRealizationMetrics: React.FC = () => {
                     helperText={`Offer ${fmtDays(offerH?.avgDaysCompleted ?? 0)} · EA ${fmtDays(eaH?.avgDaysCompleted ?? 0)} · ${latestYm}`}
                     changeIndicator={{ text: 'Filter by Offer or EA on dashboard', sentiment: 'neutral' }}
                     tooltip={TOOLTIPS.subBp}
-                  />
-                }
-              />
-            </Flex>
-
-            <Heading size="small" marginBottom="s">Adoption &amp; Usage Metrics</Heading>
-            <Flex gap="l" marginBottom="l" style={{ flexWrap: 'wrap', alignItems: 'stretch' }}>
-              <DashboardLink
-                href="#recruiting-adoption"
-                title="Recruiting adoption"
-                description="Core Recruiting module adoption, onboarding attach rate, utilisation composite."
-                metricCard={
-                  <MetricCard
-                    label="Recruiting adoption (core)"
-                    value={`${recruitingPct}%`}
-                    helperText={`${(latestRecruiting?.tenants ?? 0).toLocaleString()} PROD tenants · metric 428`}
-                    changeIndicator={{ text: 'Latest month in series', sentiment: 'neutral' }}
-                    tooltip={TOOLTIPS.recruiting}
                   />
                 }
               />
