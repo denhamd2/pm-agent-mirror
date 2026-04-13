@@ -68,14 +68,14 @@ const CONFIDENCE_STYLE: Record<
     bg: colors.blueberry100,
     fg: colors.blueberry600,
     stroke: colors.blueberry400,
-    dash: '1.5 5',
+    dash: '6 5',
     badge: 'Measured',
   },
   Directional: {
     bg: colors.blueberry100,
     fg: colors.blueberry600,
     stroke: colors.blueberry400,
-    dash: '1.5 5',
+    dash: '6 5',
     badge: 'Directional',
   },
 };
@@ -101,7 +101,7 @@ function edgePath(from: MetricTreeNode, to: MetricTreeNode): string {
   return `M ${startX} ${startY} C ${startX} ${midY}, ${endX} ${midY}, ${endX} ${endY}`;
 }
 
-const MIN_CORRELATION_OVERLAP = 6;
+const MIN_CORRELATION_OVERLAP = 5;
 
 function alignSeriesByMonth(a: MetricTreeNode, b: MetricTreeNode): [number[], number[]] {
   if (!a.trendYm || !b.trendYm || a.trend.length !== a.trendYm.length || b.trend.length !== b.trendYm.length) {
