@@ -136,6 +136,13 @@ function tthImpactTextColor(deltaTthDays: number | undefined): string {
   return '#e65100';
 }
 
+function formatQValue(q: number): string {
+  if (!Number.isFinite(q)) return '—';
+  if (q <= 0) return '<0.001';
+  if (q < 0.001) return `<${q.toExponential(1)}`;
+  return q.toFixed(3);
+}
+
 interface FeatureWithCorrelation {
   feature: string;
   stat: FeatureCorrelationStat | undefined;
@@ -689,7 +696,7 @@ export const CustomerScorecardDashboard = () => {
                               <td style={{ ...tdRight, color: tthImpactTextColor(row.deltaTthDays), fontWeight: 500 }}>
                                 {row.deltaTthDays > 0 ? '\u2212' : '+'}{Math.abs(row.deltaTthDays).toFixed(1)} days {row.deltaTthDays > 0 ? '(lower)' : row.deltaTthDays < 0 ? '(higher)' : ''}
                               </td>
-                              {!isFiltered && <td style={tdRight}>{row.qTth.toFixed(3)}</td>}
+                              {!isFiltered && <td style={tdRight}>{formatQValue(row.qTth)}</td>}
                               <td style={tdRight} title={row.nOnTth < 10 ? 'Small cohort - interpret with caution' : undefined}>
                                 <span style={{ color: sampleSizeColor(row.nOnTth), fontWeight: row.nOnTth < 10 ? 600 : 'normal' }}>{row.nOnTth}{row.nOnTth < 10 ? ' !' : ''}</span>
                               </td>

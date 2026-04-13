@@ -408,9 +408,9 @@ export const RecruitingMetricTreePage: React.FC = () => {
 
             {TREE_LEVELS.map((level) => (
               <g key={level}>
-                <rect x={32} y={LEVEL_Y[level]} width={310} height={38} rx={19} fill="rgba(15,23,42,0.06)" stroke="rgba(15,23,42,0.05)" />
-                <text x={50} y={LEVEL_Y[level] + 16} fill={colors.blackPepper600} fontSize="12" fontWeight="700">{level}</text>
-                <text x={50} y={LEVEL_Y[level] + 29} fill={colors.blackPepper400} fontSize="10">{formatLevelSummary(level)}</text>
+                <rect x={8} y={LEVEL_Y[level]} width={220} height={38} rx={19} fill="rgba(15,23,42,0.06)" stroke="rgba(15,23,42,0.05)" />
+                <text x={24} y={LEVEL_Y[level] + 16} fill={colors.blackPepper600} fontSize="12" fontWeight="700">{level}</text>
+                <text x={24} y={LEVEL_Y[level] + 29} fill={colors.blackPepper400} fontSize="10">{formatLevelSummary(level)}</text>
               </g>
             ))}
 
