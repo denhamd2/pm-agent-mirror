@@ -84,6 +84,30 @@ Archived: MISSION-009, MISSION-010, MISSION-011, MISSION-014, MISSION-015, MISSI
 
 ## Decision Log
 
+### DECISION-017: Dashboard filters standardise on tenant enrichment dimensions
+**Date:** 13 April 2026  
+**Context:** The Average Time to Hire and Recruiter Capacity dashboards had drifted into different filter models. Time to Hire still used region and cloud-platform controls that did not consistently scope every chart, while Recruiter Capacity only exposed a time-range filter. The Value Realisation landing page also repeated too many secondary links in its dashboard section.  
+**Choice:** Materialise shared tenant enrichment from `dw.user_test.interview_dashboard_tenant_filters` plus recruiter-capacity tenant series, standardise both dashboards on four top-level filters (`Segment`, `Region`, `Industry`, `Tenant`), and make the Time to Hire cards and charts recompute from the selected tenant scope instead of relying on partial overlays. Keep Recruiter Capacity honest by applying the new filters to the primary load metric and using scoped context only where single-dimension aggregates exist. Simplify Value Realisation so the dashboard panel emphasises `Product Value Outcomes` and a separate `Adoption & Usage Metrics` section.  
+**Rationale:** 
+- Aligns the two flagship outcome dashboards to one consistent information architecture
+- Stops Time to Hire from showing filter controls that only partly affect the underlying visuals
+- Uses real tenant enrichment rather than inventing synthetic scope dimensions
+- Reduces clutter on Value Realisation by removing links already surfaced elsewhere  
+**Owner:** David Denham + PM dashboard workflow  
+**Status:** Implemented
+
+### DECISION-016: Value driver tree goes live-only and Value Realisation separates navigation from evidence
+**Date:** 13 April 2026  
+**Context:** The value driver tree still mixed live metrics with a visible future placeholder for Offer / EA chain timing, and the Value Realisation landing page had become crowded because dashboard navigation, tracker coverage, live IUM inventory, and method notes all competed in one scroll. The BP durations page also drifted visually from the shared navigation shell because its body was wider than the centred nav column.  
+**Choice:** Remove future-only nodes from the value driver tree, replace the Offer / EA branch with measured live metrics already materialised in the repo, standardise connectors to a single dashed treatment, and surface semantic edge labels alongside correlation strength. Reorganise Value Realisation into tabs (`Dashboards`, `Coverage & Live Metrics`, `Methods & Notes`) while keeping the two core business outcome cards at the top. Align BP durations content to the same centred width as the global nav shell.  
+**Rationale:** 
+- Keeps the tree analytically honest by showing only live working metrics
+- Prevents the UX from overstating blocked instrumentation as if it were part of the current product story
+- Restores scanability on the Value Realisation page by separating dashboard choice from evidence and caveats
+- Makes BP durations feel like part of the same dashboard system instead of a wider standalone page  
+**Owner:** David Denham + PM dashboard workflow  
+**Status:** Implemented
+
 ### DECISION-004: PMF roadmap decks — **130** after **@pmf-analyst**
 **Date:** 22 March 2026  
 **Context:** Full PMF PowerPoints were previously **@pmf-analyst** Phase 6b; separation improves handoff clarity.  

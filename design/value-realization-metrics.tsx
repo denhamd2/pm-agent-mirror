@@ -3,6 +3,7 @@ import { Flex, Box } from '@workday/canvas-kit-react/layout';
 import { Card } from '@workday/canvas-kit-react/card';
 import { Heading, BodyText } from '@workday/canvas-kit-react/text';
 import { colors } from '@workday/canvas-kit-react/tokens';
+import { Tabs } from '@workday/canvas-kit-react/tabs';
 import { PageHeader, MetricCard, DashboardGlobalNav } from './components';
 import { SANA_PAGE_CANVAS, SANA_CARD_RADIUS_LG, SANA_CARD_SHADOW } from './components/sanaShellTheme';
 import { LABELS } from './data-bp-shared';
@@ -52,7 +53,7 @@ const TOOLTIPS = {
   offerBench:
     'Accenture vs Walmart Offer BP comparison from bp_event_stats: mean completed duration and monthly medians.',
   metricTree:
-    'Lagging-to-leading Recruiting metric tree. Measured nodes are repo-backed, directional nodes are modelled relationships, and future nodes highlight tracker gaps or pending instrumentation.',
+    'Live-only value-driver canvas linking Recruiting business outcomes to measured product and operational drivers. Directional edges indicate credible driver logic without implying a direct causal join.',
 };
 
 const DashboardLink: React.FC<{
@@ -197,6 +198,7 @@ export const ValueRealizationMetrics: React.FC = () => {
           subtitle={"Landing page for all Workday Recruiting outcome and adoption dashboards, showing which metrics are live, legacy, or blocked.\nSources: IUMs from Pharos · bp_event_stats for sub-BP timing · PROD adoption metrics."}
         />
 
+        <Heading size="small" marginBottom="s">Core business outcome dashboards</Heading>
         <Flex gap="l" marginBottom="l" style={{ flexWrap: 'wrap', alignItems: 'stretch' }}>
           <DashboardLink
             href="/avg-time-to-hire"
@@ -228,208 +230,181 @@ export const ValueRealizationMetrics: React.FC = () => {
           />
         </Flex>
 
-        <Heading size="small" marginBottom="s">Related TA value dashboards</Heading>
-        <Flex gap="l" marginBottom="l" style={{ flexWrap: 'wrap', alignItems: 'stretch' }}>
-          <DashboardLink
-            href="/interview-metrics"
-            title="Interview metrics"
-            description="Volumes, time in Interview BP, MISST, scheduling, feedback latency, recruiter capacity."
-            metricCard={
-              <MetricCard
-                label="Avg time in Interview BP"
-                value={`${interviewBp.avg.toFixed(1)} days`}
-                helperText={`${interviewBp.tenants.toLocaleString()} tenants · latest series`}
-                changeIndicator={{ text: 'See Time tab', sentiment: 'neutral' }}
-                tooltip={TOOLTIPS.interview}
-              />
-            }
-          />
-          <DashboardLink
-            href="/bp-durations"
-            title="Sub-BP durations and bottlenecks"
-            description="Offer, Employment Agreement (after Offer in flow), and other recruiting sub-BPs: averages, medians, task bottlenecks."
-            metricCard={
-              <MetricCard
-                label="Offer vs Employment Agreement (avg completed)"
-                value={`${fmtDays(offerH?.avgDaysCompleted ?? 0)} · ${fmtDays(eaH?.avgDaysCompleted ?? 0)}`}
-                helperText={`Global PROD slice · ${latestYm} headline`}
-                changeIndicator={{ text: 'Detail tab per sub-BP', sentiment: 'neutral' }}
-                tooltip={TOOLTIPS.subBp}
-              />
-            }
-          />
-          <DashboardLink
-            href="/customer-scorecard"
-            title="Customer scorecard"
-            description="Per-tenant TTH/TTF, PCA adoption, and bottleneck flow strip (sub-BP medians including EA after Offer)."
-            metricCard={
-              <MetricCard
-                label="Scorecard + bottlenecks"
-                value="Tenant pickers"
-                helperText="IUM + bp_event_stats + PCA"
-                changeIndicator={{ text: 'Live', sentiment: 'positive' }}
-                tooltip={TOOLTIPS.scorecard}
-              />
-            }
-          />
-        </Flex>
+        <Tabs initialTab="dashboards">
+          <Tabs.List marginBottom="l">
+            <Tabs.Item data-id="dashboards">Dashboards</Tabs.Item>
+            <Tabs.Item data-id="coverage">Coverage & Live Metrics</Tabs.Item>
+            <Tabs.Item data-id="methods">Methods & Notes</Tabs.Item>
+          </Tabs.List>
 
-        <Flex gap="l" marginBottom="l" style={{ flexWrap: 'wrap', alignItems: 'stretch' }}>
-          <DashboardLink
-            href="/recruiting-adoption"
-            title="Recruiting adoption"
-            description="Core Recruiting module adoption, onboarding attach rate, utilisation composite."
-            metricCard={
-              <MetricCard
-                label="Recruiting adoption (core)"
-                value={`${recruitingPct}%`}
-                helperText={`${(latestRecruiting?.tenants ?? 0).toLocaleString()} PROD tenants · metric 428`}
-                changeIndicator={{ text: 'Latest month in series', sentiment: 'neutral' }}
-                tooltip={TOOLTIPS.recruiting}
+          <Tabs.Panel data-id="dashboards">
+            <Heading size="small" marginBottom="s">Product Value Outcomes</Heading>
+            <Flex gap="l" marginBottom="l" style={{ flexWrap: 'wrap', alignItems: 'stretch' }}>
+              <DashboardLink
+                href="/interview-metrics"
+                title="Interview metrics"
+                description="Volumes, time in Interview BP, MISST, scheduling, feedback latency, recruiter capacity."
+                metricCard={
+                  <MetricCard
+                    label="Avg time in Interview BP"
+                    value={`${interviewBp.avg.toFixed(1)} days`}
+                    helperText={`${interviewBp.tenants.toLocaleString()} tenants · latest series`}
+                    changeIndicator={{ text: 'See Time tab', sentiment: 'neutral' }}
+                    tooltip={TOOLTIPS.interview}
+                  />
+                }
               />
-            }
-          />
-          <DashboardLink
-            href="/view-dashboard"
-            title="Offer BP benchmark"
-            description="Accenture vs Walmart: average and median completed Offer duration from bp_event_stats."
-            metricCard={
-              <MetricCard
-                label="Offer duration benchmark"
-                value="11.6 d vs 1.6 d"
-                helperText="12-mo means (example tenants)"
-                changeIndicator={{ text: 'PROD', sentiment: 'neutral' }}
-                tooltip={TOOLTIPS.offerBench}
+              <DashboardLink
+                href="/bp-durations"
+                title="Sub-BP durations and bottlenecks"
+                description="Offer, Employment Agreement (after Offer in flow), and other recruiting sub-BPs: averages, medians, task bottlenecks."
+                metricCard={
+                  <MetricCard
+                    label="Offer vs Employment Agreement (avg completed)"
+                    value={`${fmtDays(offerH?.avgDaysCompleted ?? 0)} · ${fmtDays(eaH?.avgDaysCompleted ?? 0)}`}
+                    helperText={`Global PROD slice · ${latestYm} headline`}
+                    changeIndicator={{ text: 'Detail tab per sub-BP', sentiment: 'neutral' }}
+                    tooltip={TOOLTIPS.subBp}
+                  />
+                }
               />
-            }
-          />
-          <DashboardLink
-            href="/recruiting-metric-tree"
-            title="Recruiting metric tree"
-            description="Lagging-to-leading map of Recruiting outcomes, process metrics, throughput drivers, and product levers."
-            metricCard={
-              <MetricCard
-                label="Metric tree"
-                value="Interactive canvas"
-                helperText="Measured + directional + future links"
-                changeIndicator={{ text: 'Data-backed v1', sentiment: 'positive' }}
-                tooltip={TOOLTIPS.metricTree}
+            </Flex>
+
+            <Heading size="small" marginBottom="s">Adoption &amp; Usage Metrics</Heading>
+            <Flex gap="l" marginBottom="l" style={{ flexWrap: 'wrap', alignItems: 'stretch' }}>
+              <DashboardLink
+                href="/recruiting-adoption"
+                title="Recruiting adoption"
+                description="Core Recruiting module adoption, onboarding attach rate, utilisation composite."
+                metricCard={
+                  <MetricCard
+                    label="Recruiting adoption (core)"
+                    value={`${recruitingPct}%`}
+                    helperText={`${(latestRecruiting?.tenants ?? 0).toLocaleString()} PROD tenants · metric 428`}
+                    changeIndicator={{ text: 'Latest month in series', sentiment: 'neutral' }}
+                    tooltip={TOOLTIPS.recruiting}
+                  />
+                }
               />
-            }
-          />
-        </Flex>
+            </Flex>
+          </Tabs.Panel>
 
-        <Card padding="l" marginBottom="l" style={{ borderRadius: SANA_CARD_RADIUS_LG, border: `1px solid ${colors.soap300}` }}>
-          <Heading size="small" marginBottom="m">Tracker coverage (this workspace)</Heading>
-          <Box style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-              <thead>
-                <tr style={{ borderBottom: `2px solid ${colors.soap300}`, textAlign: 'left' }}>
-                  <th style={{ padding: '8px 10px', fontWeight: 700 }}>Category</th>
-                  <th style={{ padding: '8px 10px', fontWeight: 700 }}>Metric</th>
-                  <th style={{ padding: '8px 10px', fontWeight: 700 }}>Data in workspace</th>
-                  <th style={{ padding: '8px 10px', fontWeight: 700 }}>Dashboard</th>
-                  <th style={{ padding: '8px 10px', fontWeight: 700 }}>Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {TRACKER_COVERAGE.map(row => (
-                  <tr key={`${row.category}-${row.metric}`} style={{ borderBottom: `1px solid ${colors.soap200}` }}>
-                    <td style={{ padding: '8px 10px', color: colors.blackPepper600 }}>{row.category}</td>
-                    <td style={{ padding: '8px 10px', color: colors.blackPepper600 }}>{row.metric}</td>
-                    <td style={{ padding: '8px 10px', color: colors.blackPepper500 }}>{row.status}</td>
-                    <td style={{ padding: '8px 10px', color: colors.blackPepper500 }}>{row.dashboard}</td>
-                    <td style={{ padding: '8px 10px', color: colors.blackPepper400, fontSize: 12 }}>{row.notes}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </Box>
-        </Card>
+          <Tabs.Panel data-id="coverage">
+            <Card padding="l" marginBottom="l" style={{ borderRadius: SANA_CARD_RADIUS_LG, border: `1px solid ${colors.soap300}` }}>
+              <Heading size="small" marginBottom="m">Tracker coverage (this workspace)</Heading>
+              <Box style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                  <thead>
+                    <tr style={{ borderBottom: `2px solid ${colors.soap300}`, textAlign: 'left' }}>
+                      <th style={{ padding: '8px 10px', fontWeight: 700 }}>Category</th>
+                      <th style={{ padding: '8px 10px', fontWeight: 700 }}>Metric</th>
+                      <th style={{ padding: '8px 10px', fontWeight: 700 }}>Data in workspace</th>
+                      <th style={{ padding: '8px 10px', fontWeight: 700 }}>Dashboard</th>
+                      <th style={{ padding: '8px 10px', fontWeight: 700 }}>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {TRACKER_COVERAGE.map(row => (
+                      <tr key={`${row.category}-${row.metric}`} style={{ borderBottom: `1px solid ${colors.soap200}` }}>
+                        <td style={{ padding: '8px 10px', color: colors.blackPepper600 }}>{row.category}</td>
+                        <td style={{ padding: '8px 10px', color: colors.blackPepper600 }}>{row.metric}</td>
+                        <td style={{ padding: '8px 10px', color: colors.blackPepper500 }}>{row.status}</td>
+                        <td style={{ padding: '8px 10px', color: colors.blackPepper500 }}>{row.dashboard}</td>
+                        <td style={{ padding: '8px 10px', color: colors.blackPepper400, fontSize: 12 }}>{row.notes}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </Box>
+            </Card>
 
-        <Card padding="l" marginBottom="l" style={{ borderRadius: SANA_CARD_RADIUS_LG, border: `1px solid ${colors.soap300}` }}>
-          <Heading size="small" marginBottom="xs">Newly Wired Live IUM Metrics</Heading>
-          <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.7, marginBottom: 12 }}>
-            These tracker metrics now resolve live from <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>dw.swh_raw.internal_usage_metrics_report_kafka</code> using metric-name resolution.
-          </BodyText>
-          <Box style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-              <thead>
-                <tr style={{ borderBottom: `2px solid ${colors.soap300}`, textAlign: 'left' }}>
-                  <th style={{ padding: '8px 10px', fontWeight: 700 }}>Metric</th>
-                  <th style={{ padding: '8px 10px', fontWeight: 700 }}>Current live metric</th>
-                  <th style={{ padding: '8px 10px', fontWeight: 700 }}>Latest snapshot</th>
-                  <th style={{ padding: '8px 10px', fontWeight: 700 }}>Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  offersAccepted,
-                  employmentAgreementAcceptance,
-                  internalJobApplications,
-                ].map(metric => (
-                  <tr key={metric.key} style={{ borderBottom: `1px solid ${colors.soap200}` }}>
-                    <td style={{ padding: '8px 10px', color: colors.blackPepper600, fontWeight: 600 }}>{metric.label}</td>
-                    <td style={{ padding: '8px 10px', color: colors.blackPepper500 }}>{metric.metricName} ({metric.metricId})</td>
-                    <td style={{ padding: '8px 10px', color: colors.blackPepper500 }}>{formatMonthLabel(metric.latestYm)} · {formatCountMetric(metric.latestValue)} · {metric.latestTenants.toLocaleString()} tenants</td>
-                    <td style={{ padding: '8px 10px', color: colors.blackPepper400, fontSize: 12 }}>{metric.notes.join(' ')}</td>
-                  </tr>
-                ))}
-                <tr style={{ borderBottom: `1px solid ${colors.soap200}` }}>
-                  <td style={{ padding: '8px 10px', color: colors.blackPepper600, fontWeight: 600 }}>Applicant volumes</td>
-                  <td style={{ padding: '8px 10px', color: colors.blackPepper500 }}>Gender ({APPLICANT_VOLUME_BREAKDOWNS.gender.length}) · Race/Ethnicity ({APPLICANT_VOLUME_BREAKDOWNS.raceEthnicity.length}) · Age ({APPLICANT_VOLUME_BREAKDOWNS.age.length})</td>
-                  <td style={{ padding: '8px 10px', color: colors.blackPepper500 }}>
-                    {formatMonthLabel(APPLICANT_VOLUME_BREAKDOWNS.gender[0]?.latestYm ?? null)} · live breakdowns available
-                  </td>
-                  <td style={{ padding: '8px 10px', color: colors.blackPepper400, fontSize: 12 }}>
-                    Wired as live metric-name-resolved IUM groups in Data Sources and tracker coverage. Current surface exposes the grouped availability rather than charting every demographic series.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </Box>
-        </Card>
+            <Card padding="l" marginBottom="l" style={{ borderRadius: SANA_CARD_RADIUS_LG, border: `1px solid ${colors.soap300}` }}>
+              <Heading size="small" marginBottom="xs">Newly Wired Live IUM Metrics</Heading>
+              <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.7, marginBottom: 12 }}>
+                These tracker metrics now resolve live from <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>dw.swh_raw.internal_usage_metrics_report_kafka</code> using metric-name resolution.
+              </BodyText>
+              <Box style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                  <thead>
+                    <tr style={{ borderBottom: `2px solid ${colors.soap300}`, textAlign: 'left' }}>
+                      <th style={{ padding: '8px 10px', fontWeight: 700 }}>Metric</th>
+                      <th style={{ padding: '8px 10px', fontWeight: 700 }}>Current live metric</th>
+                      <th style={{ padding: '8px 10px', fontWeight: 700 }}>Latest snapshot</th>
+                      <th style={{ padding: '8px 10px', fontWeight: 700 }}>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      offersAccepted,
+                      employmentAgreementAcceptance,
+                      internalJobApplications,
+                    ].map(metric => (
+                      <tr key={metric.key} style={{ borderBottom: `1px solid ${colors.soap200}` }}>
+                        <td style={{ padding: '8px 10px', color: colors.blackPepper600, fontWeight: 600 }}>{metric.label}</td>
+                        <td style={{ padding: '8px 10px', color: colors.blackPepper500 }}>{metric.metricName} ({metric.metricId})</td>
+                        <td style={{ padding: '8px 10px', color: colors.blackPepper500 }}>{formatMonthLabel(metric.latestYm)} · {formatCountMetric(metric.latestValue)} · {metric.latestTenants.toLocaleString()} tenants</td>
+                        <td style={{ padding: '8px 10px', color: colors.blackPepper400, fontSize: 12 }}>{metric.notes.join(' ')}</td>
+                      </tr>
+                    ))}
+                    <tr style={{ borderBottom: `1px solid ${colors.soap200}` }}>
+                      <td style={{ padding: '8px 10px', color: colors.blackPepper600, fontWeight: 600 }}>Applicant volumes</td>
+                      <td style={{ padding: '8px 10px', color: colors.blackPepper500 }}>Gender ({APPLICANT_VOLUME_BREAKDOWNS.gender.length}) · Race/Ethnicity ({APPLICANT_VOLUME_BREAKDOWNS.raceEthnicity.length}) · Age ({APPLICANT_VOLUME_BREAKDOWNS.age.length})</td>
+                      <td style={{ padding: '8px 10px', color: colors.blackPepper500 }}>
+                        {formatMonthLabel(APPLICANT_VOLUME_BREAKDOWNS.gender[0]?.latestYm ?? null)} · live breakdowns available
+                      </td>
+                      <td style={{ padding: '8px 10px', color: colors.blackPepper400, fontSize: 12 }}>
+                        Wired as live metric-name-resolved IUM groups in Data Sources and tracker coverage. Current surface exposes the grouped availability rather than charting every demographic series.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </Box>
+            </Card>
+          </Tabs.Panel>
 
-        <Card padding="l" marginBottom="l" style={{ borderRadius: SANA_CARD_RADIUS_LG, border: `1px solid ${colors.soap300}` }}>
-          <Heading size="small" marginBottom="xs">Defensible Add Documents impact snapshot</Heading>
-          <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.7 }}>
-            Latest robust readout is published in{' '}
-            <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>
-              docs/add-documents-adoption-impact-defensible.md
-            </code>.
-            It uses level effects (days), winsorised means, bootstrap confidence intervals, cohort month-coverage gates,
-            threshold sensitivity checks, and segment consistency checks.
-          </BodyText>
-          <Box style={{ marginTop: 10, padding: '10px 12px', backgroundColor: colors.soap100, borderRadius: 8 }}>
-            <BodyText size="small" color={colors.blackPepper500} style={{ fontSize: 12, lineHeight: 1.6 }}>
-              <strong>Current constraints:</strong> Offer in this artefact is SANDBOX while EA is currently PROD-derived.
-              Treat results as directional operational evidence until we re-run on a single environment with explicit event-volume weighting.
-            </BodyText>
-          </Box>
-          <BodyText size="small" style={{ marginTop: 10, fontWeight: 600 }}>
-            Open dashboard: <a href="/add-documents-impact" style={{ color: colors.blueberry500 }}>Add Documents Impact</a>
-          </BodyText>
-        </Card>
+          <Tabs.Panel data-id="methods">
+            <Card padding="l" marginBottom="l" style={{ borderRadius: SANA_CARD_RADIUS_LG, border: `1px solid ${colors.soap300}` }}>
+              <Heading size="small" marginBottom="xs">Defensible Add Documents impact snapshot</Heading>
+              <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.7 }}>
+                Latest robust readout is published in{' '}
+                <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>
+                  docs/add-documents-adoption-impact-defensible.md
+                </code>.
+                It uses level effects (days), winsorised means, bootstrap confidence intervals, cohort month-coverage gates,
+                threshold sensitivity checks, and segment consistency checks.
+              </BodyText>
+              <Box style={{ marginTop: 10, padding: '10px 12px', backgroundColor: colors.soap100, borderRadius: 8 }}>
+                <BodyText size="small" color={colors.blackPepper500} style={{ fontSize: 12, lineHeight: 1.6 }}>
+                  <strong>Current constraints:</strong> Offer in this artefact is SANDBOX while EA is currently PROD-derived.
+                  Treat results as directional operational evidence until we re-run on a single environment with explicit event-volume weighting.
+                </BodyText>
+              </Box>
+              <BodyText size="small" style={{ marginTop: 10, fontWeight: 600 }}>
+                Open dashboard: <a href="/add-documents-impact" style={{ color: colors.blueberry500 }}>Add Documents Impact</a>
+              </BodyText>
+            </Card>
 
-        <Card padding="l" style={{ borderRadius: SANA_CARD_RADIUS_LG, border: `1px solid ${colors.soap300}` }}>
-          <Heading size="small" marginBottom="xs">About These Metrics</Heading>
-          <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.7 }}>
-            Core IUM views query{' '}
-            <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>internal_usage_metrics_report_kafka</code>.
-            Sub-BP timing uses{' '}
-            <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>dw.swh.bp_event_stats</code>{' '}
-            (tenant/month aggregates; PROD in bundled exports unless noted). Geography uses{' '}
-            <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>wd_dc_physical</code>; infrastructure{' '}
-            <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>wd_dc_type</code>.
-          </BodyText>
-          <Box style={{ marginTop: '16px', padding: '12px', backgroundColor: colors.soap100, borderRadius: '8px' }}>
-            <BodyText size="small" color={colors.blackPepper400} style={{ fontSize: 12 }}>
-              <strong>Live resolved metrics:</strong> {timeToHire.metricName} ({timeToHire.metricId}) · {recruiterProductivity.metricName} ({recruiterProductivity.metricId}) · {offersAccepted.metricName} ({offersAccepted.metricId}) · {employmentAgreementAcceptance.metricName} ({employmentAgreementAcceptance.metricId}) · {internalJobApplications.metricName} ({internalJobApplications.metricId})
-              <br />
-              <strong>Last refreshed:</strong> {VALUE_IUM_QUERY_META.queryDate}
-            </BodyText>
-          </Box>
-        </Card>
+            <Card padding="l" style={{ borderRadius: SANA_CARD_RADIUS_LG, border: `1px solid ${colors.soap300}` }}>
+              <Heading size="small" marginBottom="xs">About These Metrics</Heading>
+              <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.7 }}>
+                Core IUM views query{' '}
+                <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>internal_usage_metrics_report_kafka</code>.
+                Sub-BP timing uses{' '}
+                <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>dw.swh.bp_event_stats</code>{' '}
+                (tenant/month aggregates; PROD in bundled exports unless noted). Geography uses{' '}
+                <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>wd_dc_physical</code>; infrastructure{' '}
+                <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>wd_dc_type</code>.
+              </BodyText>
+              <Box style={{ marginTop: '16px', padding: '12px', backgroundColor: colors.soap100, borderRadius: '8px' }}>
+                <BodyText size="small" color={colors.blackPepper400} style={{ fontSize: 12 }}>
+                  <strong>Live resolved metrics:</strong> {timeToHire.metricName} ({timeToHire.metricId}) · {recruiterProductivity.metricName} ({recruiterProductivity.metricId}) · {offersAccepted.metricName} ({offersAccepted.metricId}) · {employmentAgreementAcceptance.metricName} ({employmentAgreementAcceptance.metricId}) · {internalJobApplications.metricName} ({internalJobApplications.metricId})
+                  <br />
+                  <strong>Last refreshed:</strong> {VALUE_IUM_QUERY_META.queryDate}
+                </BodyText>
+              </Box>
+            </Card>
+          </Tabs.Panel>
+        </Tabs>
       </Box>
       </Box>
     </Flex>

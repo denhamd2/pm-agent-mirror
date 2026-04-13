@@ -45,9 +45,9 @@ const DEFAULT_NODE_WIDTH = 228;
 const RAIL_WIDTH = 360;
 
 const LEVEL_Y: Record<(typeof TREE_LEVELS)[number], number> = {
-  'Business Value Outcome': 28,
-  'Product Value Drivers': 300,
-  'Operational Drivers': 650,
+  'Business Value Outcome': 44,
+  'Product Value Drivers': 312,
+  'Operational Drivers': 662,
 };
 
 const CONFIDENCE_STYLE: Record<
@@ -58,6 +58,7 @@ const CONFIDENCE_STYLE: Record<
     bg: colors.greenApple100,
     fg: colors.greenApple700,
     stroke: colors.greenApple500,
+    dash: '6 5',
     badge: 'Measured',
   },
   Directional: {
@@ -66,13 +67,6 @@ const CONFIDENCE_STYLE: Record<
     stroke: colors.blueberry400,
     dash: '6 5',
     badge: 'Directional',
-  },
-  Future: {
-    bg: colors.soap100,
-    fg: colors.blackPepper400,
-    stroke: colors.soap500,
-    dash: '4 6',
-    badge: 'Future',
   },
 };
 
@@ -111,7 +105,7 @@ function pearsonCorrelation(a: number[], b: number[]): number | null {
   return numerator / denominator;
 }
 
-function correlationStrength(correlation: number | null): 'Strong' | 'Moderate' | 'Weak' | 'Future' {
+function correlationStrength(correlation: number | null): 'Strong' | 'Moderate' | 'Weak' {
   if (correlation == null) return 'Weak';
   const magnitude = Math.abs(correlation);
   if (magnitude >= 0.75) return 'Strong';
@@ -121,8 +115,8 @@ function correlationStrength(correlation: number | null): 'Strong' | 'Moderate' 
 
 function formatLevelSummary(level: string): string {
   if (level === 'Business Value Outcome') return 'North-star business result';
-  if (level === 'Product Value Drivers') return 'Operational drivers PMs can act on';
-  return 'Lower-level levers that shape the driver layer';
+  if (level === 'Product Value Drivers') return 'Measured product outcomes PMs can influence';
+  return 'Lower-level behaviours that speed up or slow down the layer above';
 }
 
 function chartData(values: number[], stroke: string, fill: string) {
@@ -197,10 +191,15 @@ function NodeCard({
     >
       <Flex justifyContent="space-between" gap="s" alignItems="flex-start" style={{ marginBottom: 8 }}>
         <Box style={{ minWidth: 0 }}>
-          <div style={{ fontSize: 11, color: colors.blackPepper400, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            {node.shortTitle ?? node.level}
+          <div style={{ fontSize: 10, color: colors.blackPepper400, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            {node.level}
           </div>
-          <div style={{ fontSize: 14, fontWeight: 700, color: colors.blackPepper600, lineHeight: 1.25 }}>{node.title}</div>
+          <div style={{ fontSize: 15, fontWeight: 700, color: colors.blackPepper600, lineHeight: 1.25 }}>{node.title}</div>
+          {node.shortTitle ? (
+            <div style={{ fontSize: 10, color: colors.blackPepper400, lineHeight: 1.35, marginTop: 2 }}>
+              {node.shortTitle}
+            </div>
+          ) : null}
         </Box>
         <span
           style={{
@@ -223,7 +222,7 @@ function NodeCard({
       <Flex justifyContent="space-between" alignItems="center" style={{ marginTop: 10 }}>
         <span
           style={{
-            fontSize: 10,
+            fontSize: 9,
             color: colors.blackPepper400,
             background: colors.soap100,
             borderRadius: 999,
@@ -232,7 +231,7 @@ function NodeCard({
         >
           {node.source}
         </span>
-        <div style={{ width: 112, height: 28 }}>
+        <div style={{ width: 96, height: 24 }}>
           <Line
             data={chartData(node.trend, confidence.stroke, `${confidence.stroke}22`)}
             options={miniChartOptions}
@@ -247,7 +246,7 @@ export const RecruitingMetricTreePage: React.FC = () => {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const dragMovedRef = useRef(false);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
-  const [view, setView] = useState<ViewportState>({ x: 55, y: 10, scale: 0.72 });
+  const [view, setView] = useState<ViewportState>({ x: 48, y: 18, scale: 0.74 });
   const [drag, setDrag] = useState<DragState>({
     active: false,
     pointerX: 0,
@@ -263,9 +262,8 @@ export const RecruitingMetricTreePage: React.FC = () => {
       TREE_EDGES.map((edge) => {
         const from = nodeMap.get(edge.from);
         const to = nodeMap.get(edge.to);
-        const correlation =
-          edge.confidence === 'Future' || !from || !to ? null : pearsonCorrelation(from.trend, to.trend);
-        const strength = edge.confidence === 'Future' ? 'Future' : correlationStrength(correlation);
+        const correlation = !from || !to ? null : pearsonCorrelation(from.trend, to.trend);
+        const strength = correlationStrength(correlation);
         return {
           ...edge,
           correlation,
@@ -386,7 +384,7 @@ export const RecruitingMetricTreePage: React.FC = () => {
           width: canvasWidth,
           overflow: 'hidden',
           cursor: drag.active ? 'grabbing' : 'grab',
-          backgroundColor: '#f8fafc',
+          backgroundColor: SANA_PAGE_CANVAS,
           backgroundImage:
             'linear-gradient(to right, rgba(15,23,42,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.04) 1px, transparent 1px)',
           backgroundSize: '40px 40px',
@@ -433,11 +431,11 @@ export const RecruitingMetricTreePage: React.FC = () => {
               if (!from || !to) return null;
               const confidence = CONFIDENCE_STYLE[edge.confidence];
               const insight = edgeInsights.find((item) => item.from === edge.from && item.to === edge.to);
-              const label = insight?.strength ?? 'Weak';
+              const strength = insight?.strength ?? 'Weak';
               const fromWidth = from.width ?? DEFAULT_NODE_WIDTH;
               const toWidth = to.width ?? DEFAULT_NODE_WIDTH;
               const labelX = ((from.x + fromWidth / 2) + (to.x + toWidth / 2)) / 2;
-              const labelY = ((from.y < to.y ? from.y + NODE_HEIGHT : from.y) + (from.y < to.y ? to.y : to.y + NODE_HEIGHT)) / 2 - 8;
+              const labelY = ((from.y < to.y ? from.y + NODE_HEIGHT : from.y) + (from.y < to.y ? to.y : to.y + NODE_HEIGHT)) / 2 - 10;
               return (
                 <g key={`${edge.from}-${edge.to}`}>
                   <title>
@@ -454,29 +452,39 @@ export const RecruitingMetricTreePage: React.FC = () => {
                     markerEnd={`url(#arrow-${edge.confidence})`}
                   />
                   <rect
-                    x={labelX - 64}
-                    y={labelY - 11}
-                    width={128}
-                    height={22}
-                    rx={11}
+                    x={labelX - 78}
+                    y={labelY - 13}
+                    width={156}
+                    height={30}
+                    rx={12}
                     fill="#ffffff"
                     opacity={0.94}
                   />
                   <text
                     x={labelX}
-                    y={labelY + 4}
+                    y={labelY}
                     textAnchor="middle"
-                    fill={colors.blackPepper400}
+                    fill={colors.blackPepper500}
                     fontSize="10"
                     fontWeight="600"
                   >
-                    {label}
+                    {edge.label}
+                  </text>
+                  <text
+                    x={labelX}
+                    y={labelY + 11}
+                    textAnchor="middle"
+                    fill={colors.blackPepper400}
+                    fontSize="9"
+                    fontWeight="600"
+                  >
+                    {strength}
                   </text>
                 </g>
               );
             })}
             <defs>
-              {(['Measured', 'Directional', 'Future'] as MetricTreeConfidence[]).map((confidence) => (
+              {(['Measured', 'Directional'] as MetricTreeConfidence[]).map((confidence) => (
                 <marker
                   key={confidence}
                   id={`arrow-${confidence}`}
@@ -512,7 +520,7 @@ export const RecruitingMetricTreePage: React.FC = () => {
         style={{
           position: 'absolute',
           top: 16,
-          right: 16,
+          right: selectedNode ? RAIL_WIDTH + 16 : 16,
           padding: 8,
           borderRadius: 999,
           background: 'rgba(255,255,255,0.92)',
@@ -526,7 +534,7 @@ export const RecruitingMetricTreePage: React.FC = () => {
         <SecondaryButton size="small" onClick={() => setView((current) => ({ ...current, scale: clamp(current.scale * 1.12, 0.48, 1.4) }))}>
           +
         </SecondaryButton>
-        <SecondaryButton size="small" onClick={() => setView({ x: 55, y: 10, scale: 0.72 })}>
+        <SecondaryButton size="small" onClick={() => setView({ x: 48, y: 18, scale: 0.74 })}>
           Reset
         </SecondaryButton>
       </Flex>

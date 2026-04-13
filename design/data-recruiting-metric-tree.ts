@@ -6,13 +6,15 @@ import {
   INTERVIEW_ROUNDS_MONTHLY,
 } from './data-interview-metrics';
 import { addDocumentsMonthly } from './data-add-documents';
+import { offerDocumentStepMonthly } from './data-offer-steps';
+import { employmentAgreementStepMonthly } from './data-employment-agreement-steps';
 
 export type MetricTreeLevel =
   | 'Business Value Outcome'
   | 'Product Value Drivers'
   | 'Operational Drivers';
 
-export type MetricTreeConfidence = 'Measured' | 'Directional' | 'Future';
+export type MetricTreeConfidence = 'Measured' | 'Directional';
 
 export type MetricTreeNode = {
   id: string;
@@ -41,12 +43,12 @@ export type MetricTreeEdge = {
 export const TREE_META = {
   title: 'Workday Recruiting Value Driver Tree',
   subtitle:
-    'Twin north-star framing: "How fast do we hire?" (Avg Time to Hire) and "How efficiently do recruiters operate?" (Recruiter Capacity).\nOnly metrics with a plausible causal chain to these outcomes are included.',
+    'Twin north-star framing: "How fast do we hire?" (Avg Time to Hire) and "How efficiently do recruiters operate?" (Recruiter Capacity).\nOnly live, working metrics with a plausible operational chain to those outcomes are included.',
   sourceSummary:
-    'Combines live metric-name-resolved IUMs (SANDBOX), production interview analytics (PROD), and Add Documents usage.',
+    'Combines live metric-name-resolved IUMs (SANDBOX), production interview and offer analytics (PROD), and Add Documents usage.',
   caveat:
-    'The tree favours metrics with a clear operational relationship to the north-star outcomes. Some links remain directional because the warehouse does not yet support direct causal joins across all layers.',
-  canvas: { width: 1800, height: 1000 },
+    'The tree favours metrics with a clear operational relationship to the north-star outcomes. Directional links indicate a credible driver hypothesis, but not a direct causal join.',
+  canvas: { width: 1860, height: 1030 },
 } as const;
 
 function lastN(values: number[], count = 6): number[] {
@@ -85,8 +87,6 @@ function metricValue(value: number | null, fallback = 0): number {
 
 const timeToHire = VALUE_REALIZATION_IUMS.timeToHire;
 const recruiterCapacity = VALUE_REALIZATION_IUMS.recruiterProductivity;
-const offersAccepted = VALUE_REALIZATION_IUMS.offersAccepted;
-const eaAcceptance = VALUE_REALIZATION_IUMS.employmentAgreementAcceptance;
 
 const timeToHireSeries = definedSeries(timeToHire.series.map((point) => point.avgValue));
 const recruiterCapacitySeries = recruiterCapacity.series
@@ -94,16 +94,25 @@ const recruiterCapacitySeries = recruiterCapacity.series
   .map((point) => point.avgValue);
 const cleanedRecruiterCapacitySeries = definedSeries(recruiterCapacitySeries);
 
-const offersAcceptedSeries = definedSeries(offersAccepted.series.map((point) => point.avgValue));
-const eaAcceptanceSeries = definedSeries(eaAcceptance.series.map((point) => point.avgValue));
 const feedbackTimeSeries = FEEDBACK_SUBMISSION_TIME.map((point) => point.avgValue);
-
 const interviewBpSeries = AVG_TIME_IN_INTERVIEW_BP.map((point) => point.avgValue);
 const jobApplicationsSeries = JOB_APPLICATIONS_MONTHLY.map((point) => point.value / point.tenants);
 const interviewRoundsSeries = INTERVIEW_ROUNDS_MONTHLY.map((point) => point.value / point.tenants);
-const addDocumentsSeries = addDocumentsMonthly.slice(-6).map((point) => point.adoptionRatePct);
+const addDocumentsSeries = addDocumentsMonthly.map((point) => point.adoptionRatePct);
+
+// Global completed-path Offer duration extracted from the materialised PROD bp_event_stats export.
+const offerDurationSeries = [5.96, 5.39, 5.17, 5.62, 4.6, 3.9, 3.96, 3.97, 4.87, 5.17, 4.57, 5.3];
+const employmentAgreementDurationSeries = [2.81, 2.6, 2.58, 2.5, 2.34, 2.26, 2.25, 2.28, 2.89, 2.3, 2.24, 1.83];
+const offerDocumentReviewSeries = definedSeries(
+  offerDocumentStepMonthly['Review Documents'].map((point) => point.avgHours)
+);
+const employmentAgreementApprovalSeries = definedSeries(
+  employmentAgreementStepMonthly['Bulk Approve'].map((point) => point.avgHours)
+);
 
 const latestAddDocuments = addDocumentsMonthly[addDocumentsMonthly.length - 1];
+const latestOfferDurationYm = '2026-03';
+const latestEaDurationYm = '2026-03';
 
 export const TREE_LEVELS: MetricTreeLevel[] = [
   'Business Value Outcome',
@@ -117,8 +126,8 @@ export const TREE_NODES: MetricTreeNode[] = [
     id: 'avg-time-to-hire',
     title: 'Average Time to Hire',
     level: 'Business Value Outcome',
-    x: 520,
-    y: 72,
+    x: 500,
+    y: 92,
     width: 320,
     value: formatDays(metricValue(timeToHire.latestValue)),
     valueContext: `${timeToHire.latestYm} · ${timeToHire.environment} · ${changeText(lastN(timeToHireSeries))}`,
@@ -134,8 +143,8 @@ export const TREE_NODES: MetricTreeNode[] = [
     title: 'Recruiter Capacity',
     shortTitle: 'Live IUM name: Recruiter Productivity',
     level: 'Business Value Outcome',
-    x: 1080,
-    y: 72,
+    x: 1060,
+    y: 92,
     width: 320,
     value: `${metricValue(recruiterCapacity.latestValue).toFixed(1)} avg reqs`,
     valueContext: `${recruiterCapacity.latestYm} · ${recruiterCapacity.environment} · ${changeText(lastN(cleanedRecruiterCapacitySeries))}`,
@@ -151,8 +160,8 @@ export const TREE_NODES: MetricTreeNode[] = [
     id: 'time-in-interview-bp',
     title: 'Time in Interview BP',
     level: 'Product Value Drivers',
-    x: 200,
-    y: 350,
+    x: 180,
+    y: 360,
     width: 300,
     value: formatDays(AVG_TIME_IN_INTERVIEW_BP[AVG_TIME_IN_INTERVIEW_BP.length - 1].avgValue),
     valueContext: 'Latest production interview series',
@@ -163,43 +172,44 @@ export const TREE_NODES: MetricTreeNode[] = [
     caveat: 'Recent months can be right-censored, so the latest point is best read alongside the broader trend.',
   },
   {
-    id: 'offers-accepted',
-    title: 'Offers Accepted',
+    id: 'offer-duration',
+    title: 'Offer Duration',
     level: 'Product Value Drivers',
     x: 700,
-    y: 350,
+    y: 360,
     width: 300,
-    value: `${metricValue(offersAccepted.latestValue).toFixed(0)} / tenant`,
-    valueContext: `${offersAccepted.latestYm} · ${offersAccepted.environment} · ${changeTextCount(lastN(offersAcceptedSeries))}`,
-    trend: lastN(offersAcceptedSeries),
-    source: 'IUM · SANDBOX',
+    value: formatDays(offerDurationSeries[offerDurationSeries.length - 1]),
+    valueContext: `${latestOfferDurationYm} · PROD offer sub-BP · ${changeText(lastN(offerDurationSeries))}`,
+    trend: lastN(offerDurationSeries),
+    source: 'bp_event_stats · PROD',
     confidence: 'Measured',
     definition:
-      'Average offers accepted per tenant per month. Throughput conversion metric: when offers are accepted faster and in greater volume, positions fill sooner and TTH drops.',
+      'Average completed-event duration in the Offer business process. Because the live Time to Hire metric ends at latest accepted offer, slower offer handling is a direct late-stage drag on hiring speed.',
+    caveat: 'Per-event Offer timing, not an Offer-to-EA chain metric.',
   },
   {
-    id: 'offer-ea-chain',
-    title: 'Offer / EA Timing',
+    id: 'employment-agreement-duration',
+    title: 'Employment Agreement Duration',
     level: 'Product Value Drivers',
-    x: 1200,
-    y: 350,
+    x: 1220,
+    y: 360,
     width: 300,
-    value: 'Future metric',
-    valueContext: 'Tracker expects job-app chain timing',
-    trend: [0, 0, 0, 0, 0, 0],
-    source: 'Blocked / future instrumentation',
-    confidence: 'Future',
+    value: formatDays(employmentAgreementDurationSeries[employmentAgreementDurationSeries.length - 1]),
+    valueContext: `${latestEaDurationYm} · PROD EA sub-BP · ${changeText(lastN(employmentAgreementDurationSeries))}`,
+    trend: lastN(employmentAgreementDurationSeries),
+    source: 'bp_event_stats · PROD',
+    confidence: 'Measured',
     definition:
-      'Tracker definition expects first EA start through final completed EA on the job application chain, which differs from the per-event sub-BP durations currently available.',
-    caveat: 'Keep this as a target driver only until a clean live chain metric exists.',
+      'Average completed-event duration in the Employment Agreement sub-process. This does not feed the live Time to Hire metric directly, but it is a real late-stage workload and completion driver.',
+    caveat: 'The live Time to Hire IUM excludes Employment Agreement, so read this as downstream operational efficiency rather than direct TTH logic.',
   },
   // ── Level 3: Operational Drivers ──
   {
     id: 'job-applications',
     title: 'Job Applications',
     level: 'Operational Drivers',
-    x: 50,
-    y: 700,
+    x: 40,
+    y: 710,
     width: 280,
     value: `${jobApplicationsSeries[jobApplicationsSeries.length - 1].toFixed(0)} / tenant`,
     valueContext: 'Production interview feed',
@@ -213,8 +223,8 @@ export const TREE_NODES: MetricTreeNode[] = [
     id: 'interview-rounds',
     title: 'Interview Rounds',
     level: 'Operational Drivers',
-    x: 350,
-    y: 700,
+    x: 330,
+    y: 710,
     width: 280,
     value: `${interviewRoundsSeries[interviewRoundsSeries.length - 1].toFixed(0)} / tenant`,
     valueContext: 'Production interview feed',
@@ -229,8 +239,8 @@ export const TREE_NODES: MetricTreeNode[] = [
     title: 'Feedback Submission Time',
     shortTitle: 'Rate Interview / Give Feedback',
     level: 'Operational Drivers',
-    x: 650,
-    y: 700,
+    x: 620,
+    y: 710,
     width: 280,
     value: formatHours(feedbackTimeSeries[feedbackTimeSeries.length - 1]),
     valueContext: `Latest month · PROD · ${changeText(lastN(feedbackTimeSeries))}`,
@@ -242,11 +252,28 @@ export const TREE_NODES: MetricTreeNode[] = [
     caveat: 'Measured in hours. ~2,300 reporting tenants; smaller coverage than volume metrics.',
   },
   {
-    id: 'add-documents',
-    title: 'Add Documents',
+    id: 'offer-document-review',
+    title: 'Offer Document Review',
+    shortTitle: 'Review Documents',
     level: 'Operational Drivers',
-    x: 950,
-    y: 700,
+    x: 910,
+    y: 710,
+    width: 280,
+    value: formatHours(offerDocumentReviewSeries[offerDocumentReviewSeries.length - 1]),
+    valueContext: `2026-03 · PROD task latency · ${changeText(lastN(offerDocumentReviewSeries))}`,
+    trend: lastN(offerDocumentReviewSeries),
+    source: 'bp_event_record_stats · PROD',
+    confidence: 'Measured',
+    definition:
+      'Average hours spent in the Offer "Review Documents" task. This is the clearest measured late-stage document bottleneck in the live Offer task telemetry.',
+    caveat: 'Task-level step latency, not whole-offer duration.',
+  },
+  {
+    id: 'add-documents',
+    title: 'Add Documents Adoption',
+    level: 'Operational Drivers',
+    x: 1200,
+    y: 710,
     width: 280,
     value: `${latestAddDocuments.adoptionRatePct.toFixed(1)}%`,
     valueContext: `${latestAddDocuments.ym} adoption rate`,
@@ -254,39 +281,38 @@ export const TREE_NODES: MetricTreeNode[] = [
     source: 'IUM · SANDBOX',
     confidence: 'Measured',
     definition:
-      'Add Documents adoption rate. A concrete product lever that reduces late-stage document friction in offer and employment-agreement steps.',
+      'Add Documents adoption rate. A concrete product lever that can change how much late-stage document handling is pushed into Offer and Employment Agreement steps.',
     caveat: 'Kept because it is a specific product lever, not a broad vanity adoption metric.',
   },
   {
-    id: 'ea-acceptance',
-    title: 'EA Acceptance',
-    shortTitle: 'Employment Agreement Acceptance',
+    id: 'ea-approval-time',
+    title: 'EA Approval Time',
+    shortTitle: 'Bulk Approve',
     level: 'Operational Drivers',
-    x: 1250,
-    y: 700,
+    x: 1490,
+    y: 710,
     width: 280,
-    value: `${metricValue(eaAcceptance.latestValue).toFixed(0)} / tenant`,
-    valueContext: `${eaAcceptance.latestYm} · ${eaAcceptance.environment} · ${changeTextCount(lastN(eaAcceptanceSeries))}`,
-    trend: lastN(eaAcceptanceSeries),
-    source: 'IUM · SANDBOX',
+    value: formatHours(employmentAgreementApprovalSeries[employmentAgreementApprovalSeries.length - 1]),
+    valueContext: `2026-03 · PROD approval step · ${changeText(lastN(employmentAgreementApprovalSeries))}`,
+    trend: lastN(employmentAgreementApprovalSeries),
+    source: 'bp_event_record_stats · PROD',
     confidence: 'Measured',
     definition:
-      'Average employment agreements accepted per tenant per month. Provides measured throughput evidence that EAs are completing, feeding the Offer/EA chain timing picture.',
+      'Average hours spent in the Employment Agreement "Bulk Approve" step. This is the strongest measured EA approval latency signal currently available in the repo.',
+    caveat: 'Approval-task latency is low-coverage compared with the top-line EA duration series, so read the trend as directional operations evidence.',
   },
 ];
 
 export const TREE_EDGES: MetricTreeEdge[] = [
   // Product Value Drivers → Business Value Outcomes
   { from: 'time-in-interview-bp', to: 'avg-time-to-hire', label: 'cycle-time drag', confidence: 'Measured' },
-  { from: 'offers-accepted', to: 'avg-time-to-hire', label: 'throughput velocity', confidence: 'Measured' },
-  { from: 'offer-ea-chain', to: 'avg-time-to-hire', label: 'late-stage delay', confidence: 'Future' },
-  { from: 'time-in-interview-bp', to: 'recruiter-capacity', label: 'workload amplifier', confidence: 'Directional' },
+  { from: 'offer-duration', to: 'avg-time-to-hire', label: 'late-stage drag', confidence: 'Measured' },
+  { from: 'employment-agreement-duration', to: 'recruiter-capacity', label: 'late-stage workload', confidence: 'Directional' },
   { from: 'job-applications', to: 'recruiter-capacity', label: 'requisition load', confidence: 'Measured' },
   // Operational Drivers → Product Value Drivers
-  { from: 'job-applications', to: 'time-in-interview-bp', label: 'candidate volume', confidence: 'Directional' },
   { from: 'interview-rounds', to: 'time-in-interview-bp', label: 'panel complexity', confidence: 'Measured' },
   { from: 'feedback-time', to: 'time-in-interview-bp', label: 'feedback bottleneck', confidence: 'Measured' },
-  { from: 'interview-rounds', to: 'offers-accepted', label: 'decision pipeline', confidence: 'Directional' },
-  { from: 'add-documents', to: 'offer-ea-chain', label: 'document readiness', confidence: 'Directional' },
-  { from: 'ea-acceptance', to: 'offer-ea-chain', label: 'completion signal', confidence: 'Measured' },
+  { from: 'offer-document-review', to: 'offer-duration', label: 'document review latency', confidence: 'Measured' },
+  { from: 'add-documents', to: 'offer-duration', label: 'document prep behaviour', confidence: 'Directional' },
+  { from: 'ea-approval-time', to: 'employment-agreement-duration', label: 'approval latency', confidence: 'Measured' },
 ];

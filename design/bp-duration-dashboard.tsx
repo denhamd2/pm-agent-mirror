@@ -1846,86 +1846,88 @@ export const BpDurationDashboard = () => {
     <Flex flexDirection="column" minHeight="100vh" style={{ backgroundColor: SANA_PAGE_CANVAS }}>
       <DashboardGlobalNav activeMetricsSlug="bp-durations" />
       <Box padding="l" flex={1}>
-      <PageHeader
-        title="Job Application Sub-BP Duration & Quality"
-        subtitle={"Shows how long each recruiting sub-process takes, how often it completes, and where quality signals like sent back or correction rates are concentrated.\nSource: dw.swh.bp_event_stats · PROD completed-event aggregates over the last 12 months, with mean and median cycle times shown separately."}
-      />
-
-      <Flex gap="s" style={{ marginBottom: 12 }} alignItems="center">
-        <span style={{ fontSize: 12, color: colors.blackPepper400, fontWeight: 600 }}>Related:</span>
-        <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/interview-metrics`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>Interview Process</a>
-        <span style={{ color: colors.soap400 }}>|</span>
-        <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/view-dashboard`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>Offer Duration Benchmark</a>
-      </Flex>
-
-      <TenantRegionIndustryFilterCard filters={sliceFilter} onChange={setSliceFilter} />
-
-      {viewMode === 'overview' && (
-        <Flex gap="s" style={{ marginTop: 16 }} flexWrap="wrap">
-          {subBps.map(bp => {
-            const h = headline[bp.key];
-            return (
-                           <MetricCard
-                key={bp.key}
-                label={bp.label}
-                value={h?.avgDaysCompleted != null ? `${h.avgDaysCompleted} d` : 'N/A'}
-                helperText={`Median: ${h?.medianDaysCompleted ?? 'N/A'} d | ${h?.completionPct ?? 0}% complete`}
-                changeIndicator={{ text: `${fmtK(h?.totalEvents ?? 0)} events | ${h?.maxTenants?.toLocaleString() ?? 0} tenants`, sentiment: 'neutral' }}
-                tooltip={
-                  bp.key === 'employment_agreement'
-                    ? 'Propose Compensation Offer/Employment Agreement: mean completed-event duration from bp_event_stats. Not the TA tracker “Time in Offer/EA” (first EA start through final completed EA on one job application).'
-                    : `Mean completed-event duration in days for ${bp.label} from monthly bp_event_stats aggregates for this slice.`
-                }
-              />
-            );
-          })}
-        </Flex>
-      )}
-
-      <Flex gap="xs" style={{ marginTop: 20 }} alignItems="center">
-        {(['overview', 'detail', 'quality'] as ViewMode[]).map(mode => {
-          const label = mode === 'overview' ? 'Overview (All BPs)' : mode === 'detail' ? 'Single BP Detail' : 'Process Quality';
-          return (
-            <SecondaryButton
-              key={mode}
-              onClick={() => setViewMode(mode)}
-              style={{
-                backgroundColor: viewMode === mode ? colors.blueberry400 : undefined,
-                color: viewMode === mode ? '#fff' : undefined,
-                borderColor: viewMode === mode ? colors.blueberry400 : undefined,
-                fontWeight: viewMode === mode ? 600 : 400,
-                borderRadius: 20,
-                fontSize: 13,
-              }}
-            >
-              {label}
-            </SecondaryButton>
-          );
-        })}
-        {viewMode === 'detail' && (
-          <select
-            value={selectedBp}
-            onChange={e => setSelectedBp(e.target.value)}
-            style={selectStyle}
-          >
-            {subBps.map(bp => (
-              <option key={bp.key} value={bp.key}>{bp.label}</option>
-            ))}
-          </select>
-        )}
-      </Flex>
-
-      <Box style={{ marginTop: 8 }}>
-        {viewMode === 'overview' && <OverviewTab subBps={subBps} />}
-        {viewMode === 'detail' && activeBp && (
-          <DetailTab
-            bp={activeBp}
-            headlineEntry={headline[activeBp.key]}
-            showSliceNote={!isGlobal}
+        <Box style={{ maxWidth: 1280, margin: '0 auto' }}>
+          <PageHeader
+            title="Job Application Sub-BP Duration & Quality"
+            subtitle={"Shows how long each recruiting sub-process takes, how often it completes, and where quality signals like sent back or correction rates are concentrated.\nSource: dw.swh.bp_event_stats · PROD completed-event aggregates over the last 12 months, with mean and median cycle times shown separately."}
           />
-        )}
-        {viewMode === 'quality' && <QualityTab subBps={subBps} />}
-      </Box>
+
+          <Flex gap="s" style={{ marginBottom: 14, flexWrap: 'wrap' }} alignItems="center">
+            <span style={{ fontSize: 12, color: colors.blackPepper400, fontWeight: 600 }}>Related:</span>
+            <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/interview-metrics`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>Interview Process</a>
+            <span style={{ color: colors.soap400 }}>|</span>
+            <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/view-dashboard`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>Offer Duration Benchmark</a>
+          </Flex>
+
+          <TenantRegionIndustryFilterCard filters={sliceFilter} onChange={setSliceFilter} />
+
+          {viewMode === 'overview' && (
+            <Flex gap="s" style={{ marginTop: 16 }} flexWrap="wrap">
+              {subBps.map(bp => {
+                const h = headline[bp.key];
+                return (
+                  <MetricCard
+                    key={bp.key}
+                    label={bp.label}
+                    value={h?.avgDaysCompleted != null ? `${h.avgDaysCompleted} d` : 'N/A'}
+                    helperText={`Median: ${h?.medianDaysCompleted ?? 'N/A'} d | ${h?.completionPct ?? 0}% complete`}
+                    changeIndicator={{ text: `${fmtK(h?.totalEvents ?? 0)} events | ${h?.maxTenants?.toLocaleString() ?? 0} tenants`, sentiment: 'neutral' }}
+                    tooltip={
+                      bp.key === 'employment_agreement'
+                        ? 'Propose Compensation Offer/Employment Agreement: mean completed-event duration from bp_event_stats. Not the TA tracker “Time in Offer/EA” (first EA start through final completed EA on one job application).'
+                        : `Mean completed-event duration in days for ${bp.label} from monthly bp_event_stats aggregates for this slice.`
+                    }
+                  />
+                );
+              })}
+            </Flex>
+          )}
+
+          <Flex gap="xs" style={{ marginTop: 20, flexWrap: 'wrap' }} alignItems="center">
+            {(['overview', 'detail', 'quality'] as ViewMode[]).map(mode => {
+              const label = mode === 'overview' ? 'Overview (All BPs)' : mode === 'detail' ? 'Single BP Detail' : 'Process Quality';
+              return (
+                <SecondaryButton
+                  key={mode}
+                  onClick={() => setViewMode(mode)}
+                  style={{
+                    backgroundColor: viewMode === mode ? colors.blueberry400 : undefined,
+                    color: viewMode === mode ? '#fff' : undefined,
+                    borderColor: viewMode === mode ? colors.blueberry400 : undefined,
+                    fontWeight: viewMode === mode ? 600 : 400,
+                    borderRadius: 20,
+                    fontSize: 13,
+                  }}
+                >
+                  {label}
+                </SecondaryButton>
+              );
+            })}
+            {viewMode === 'detail' && (
+              <select
+                value={selectedBp}
+                onChange={e => setSelectedBp(e.target.value)}
+                style={selectStyle}
+              >
+                {subBps.map(bp => (
+                  <option key={bp.key} value={bp.key}>{bp.label}</option>
+                ))}
+              </select>
+            )}
+          </Flex>
+
+          <Box style={{ marginTop: 8 }}>
+            {viewMode === 'overview' && <OverviewTab subBps={subBps} />}
+            {viewMode === 'detail' && activeBp && (
+              <DetailTab
+                bp={activeBp}
+                headlineEntry={headline[activeBp.key]}
+                showSliceNote={!isGlobal}
+              />
+            )}
+            {viewMode === 'quality' && <QualityTab subBps={subBps} />}
+          </Box>
+        </Box>
       </Box>
     </Flex>
   );
