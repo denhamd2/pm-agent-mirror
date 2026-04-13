@@ -96,6 +96,17 @@ function adjustConfidenceWithQValue(row: FeatureCorrelationStat): 'high' | 'medi
   return 'medium';
 }
 
+function confidenceFromSupportAndQ(
+  nOnTth: number,
+  nOffTth: number,
+  qTth?: number
+): 'high' | 'medium' | 'low' {
+  const minArm = Math.min(nOnTth, nOffTth);
+  if (minArm < 10) return 'low';
+  if (qTth != null && minArm >= 30 && qTth <= 0.05) return 'high';
+  return 'medium';
+}
+
 function sampleSizeColor(n: number): string {
   if (n < 10) return colors.cantaloupe400;
   return 'inherit';
@@ -371,14 +382,12 @@ function computeFilteredCorrelations(
 
     if (deltaTth === 0) continue;
 
-    const totalOn = Math.max(ttfOn.length, tthOn.length);
-    const totalOff = Math.max(ttfOff.length, tthOff.length);
-    const confidence: 'high' | 'medium' | 'low' =
-      totalOn >= 10 && totalOff >= 10 ? 'medium' : 'low';
-
     const prebaked = isGlobal
       ? FEATURE_CORRELATIONS_GLOBAL.find((r) => r.feature === feature)
       : undefined;
+    const globalRow = FEATURE_CORRELATIONS_GLOBAL.find((r) => r.feature === feature);
+    const qTth = prebaked?.qTth ?? globalRow?.qTth ?? 1;
+    const confidence = confidenceFromSupportAndQ(tthOn.length, tthOff.length, qTth);
 
     const row: FeatureCorrelationStat = {
       feature,
@@ -386,7 +395,7 @@ function computeFilteredCorrelations(
       deltaTtfDays: deltaTtf,
       deltaTthDays: deltaTth,
       qTtf: prebaked?.qTtf ?? 0,
-      qTth: prebaked?.qTth ?? 0,
+      qTth,
       confidence,
       nOnTtf: ttfOn.length,
       nOffTtf: ttfOff.length,
@@ -469,8 +478,8 @@ function computeIndustryTop3(): IndustryTop3[] {
         if (tthOn.length < minN || tthOff.length < minN) return undefined;
         const deltaTthDays = medianOfArr(tthOff) - medianOfArr(tthOn);
         if (deltaTthDays <= 0) return undefined; // only keep features associated with lower TTH
-        const confidence: 'high' | 'medium' | 'low' =
-          tthOn.length >= 10 && tthOff.length >= 10 ? 'medium' : 'low';
+        const globalRow = FEATURE_CORRELATIONS_GLOBAL.find((row) => row.feature === feature);
+        const confidence = confidenceFromSupportAndQ(tthOn.length, tthOff.length, globalRow?.qTth ?? 1);
         return { feature, deltaTthDays, confidence, nOn: tthOn.length, nOff: tthOff.length };
       }).filter((row): row is NonNullable<typeof row> => Boolean(row))
         .sort((a, b) => b.deltaTthDays - a.deltaTthDays)
@@ -645,7 +654,7 @@ export const CustomerScorecardDashboard = () => {
                   </Heading>
                   <BodyText size="small" marginBottom="s" style={{ color: colors.blackPepper500 }}>
                     {isFiltered
-                      ? 'Showing median TTH delta for the selected segment. Positive values = adopters have lower TTH; negative = higher. q-values are not recomputed for filtered views; confidence capped at medium.'
+                      ? 'Showing median TTH delta for the selected segment. Positive values = adopters have lower TTH; negative = higher. q-values are not recomputed for filtered views; high confidence is shown where sample size is strong and global q-support exists.'
                       : 'Correlation only, not causation. Positive values = adopters have lower TTH; negative = adopters have higher TTH. Ranked by median TTH impact, with q(TTH) and sample support checks.'}
                   </BodyText>
                   <Flex gap="m" flexWrap="wrap" marginBottom="s">
