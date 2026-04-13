@@ -31,7 +31,7 @@ jobs:
         working-directory: design
         run: |
           npm ci
-          VITE_BASE_PATH=./ npx vite build
+          VITE_BASE_PATH=/pm-agent/ npx vite build
         env:
           NODE_OPTIONS: --max-old-space-size=8192
 
