@@ -132,9 +132,19 @@ const VALID_TABS = new Set<DashboardTab>([
   'agent-flow',
 ]);
 
+function getTabFromHash(): DashboardTab | null {
+  const h = window.location.hash.replace(/^#\/?/, '');
+  const qIdx = h.indexOf('?');
+  if (qIdx < 0) return null;
+  const tab = new URLSearchParams(h.slice(qIdx)).get('tab');
+  return VALID_TABS.has(tab as DashboardTab) ? (tab as DashboardTab) : null;
+}
+
 function getInitialTab(): DashboardTab {
-  const tab = new URLSearchParams(window.location.search).get('tab');
-  return VALID_TABS.has(tab as DashboardTab) ? (tab as DashboardTab) : 'morning-roundup';
+  const fromHash = getTabFromHash();
+  if (fromHash) return fromHash;
+  const fromSearch = new URLSearchParams(window.location.search).get('tab');
+  return VALID_TABS.has(fromSearch as DashboardTab) ? (fromSearch as DashboardTab) : 'morning-roundup';
 }
 
 function getPrototypeFiles(proto: PrototypeEntry): string[] {
@@ -268,10 +278,20 @@ export const PMAgentDashboard: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    const url = new URL(window.location.href);
-    url.searchParams.set('tab', activeTab);
-    window.history.replaceState({}, '', url.toString());
+    const newHash = `#pm-agent-dashboard?tab=${activeTab}`;
+    if (window.location.hash !== newHash) {
+      window.history.replaceState({}, '', newHash);
+    }
   }, [activeTab]);
+
+  React.useEffect(() => {
+    const onHashChange = () => {
+      const tab = getTabFromHash();
+      if (tab) setActiveTab(tab);
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
 
   const toggleSave = async (slug: string, proto: PrototypeEntry) => {
     const previousSaved = [...savedPrototypes];
