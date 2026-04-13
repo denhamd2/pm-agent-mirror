@@ -387,14 +387,6 @@ export const RecruitingMetricTreePage: React.FC = () => {
       >
         <div style={{ position: 'absolute', width: TREE_META.canvas.width, height: TREE_META.canvas.height, transform: `translate(${view.x}px, ${view.y}px) scale(${view.scale})`, transformOrigin: 'top left' }}>
           <svg width={TREE_META.canvas.width} height={TREE_META.canvas.height} viewBox={`0 0 ${TREE_META.canvas.width} ${TREE_META.canvas.height}`} style={{ position: 'absolute', left: 0, top: 0, overflow: 'visible' }}>
-            {TREE_LEVELS.map((level) => (
-              <g key={level}>
-                <rect x={32} y={LEVEL_Y[level]} width={310} height={38} rx={19} fill="rgba(15,23,42,0.06)" stroke="rgba(15,23,42,0.05)" />
-                <text x={50} y={LEVEL_Y[level] + 16} fill={colors.blackPepper600} fontSize="12" fontWeight="700">{level}</text>
-                <text x={50} y={LEVEL_Y[level] + 29} fill={colors.blackPepper400} fontSize="10">{formatLevelSummary(level)}</text>
-              </g>
-            ))}
-
             {TREE_EDGES.map((edge) => {
               const from = nodeMap.get(edge.from);
               const to = nodeMap.get(edge.to);
@@ -406,13 +398,21 @@ export const RecruitingMetricTreePage: React.FC = () => {
                   d={edgePath(from, to)}
                   fill="none"
                   stroke={confidence.stroke}
-                  strokeWidth={1.5}
+                  strokeWidth={2}
                   strokeDasharray={confidence.dash}
                   opacity={0.9}
                   markerEnd={`url(#arrow-${edge.confidence})`}
                 />
               );
             })}
+
+            {TREE_LEVELS.map((level) => (
+              <g key={level}>
+                <rect x={32} y={LEVEL_Y[level]} width={310} height={38} rx={19} fill="rgba(15,23,42,0.06)" stroke="rgba(15,23,42,0.05)" />
+                <text x={50} y={LEVEL_Y[level] + 16} fill={colors.blackPepper600} fontSize="12" fontWeight="700">{level}</text>
+                <text x={50} y={LEVEL_Y[level] + 29} fill={colors.blackPepper400} fontSize="10">{formatLevelSummary(level)}</text>
+              </g>
+            ))}
 
             {TREE_EDGES.map((edge) => {
               const from = nodeMap.get(edge.from);
