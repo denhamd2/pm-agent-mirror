@@ -1798,19 +1798,19 @@ function QualityTab({ subBps }: { subBps: SubBpConfig[] }) {
 }
 
 function initialViewFromUrl(): ViewMode {
-  const v = new URLSearchParams(window.location.search).get('view');
+  const v = getBpDurationsParams().get('view');
   if (v === 'overview' || v === 'detail' || v === 'quality') return v;
   return 'overview';
 }
 
 function initialBpFromUrl(): string {
-  const bp = new URLSearchParams(window.location.search).get('bp');
+  const bp = getBpDurationsParams().get('bp');
   if (bp && ALL_SUB_BP_KEYS.includes(bp)) return bp;
   return ALL_SUB_BP_KEYS[0] ?? '';
 }
 
 function initialSliceFromUrl(): TenantRegionIndustryFilter {
-  const q = new URLSearchParams(window.location.search);
+  const q = getBpDurationsParams();
   return {
     tenant: q.get('tenant') || '',
     region: q.get('region') || '',
@@ -1819,9 +1819,21 @@ function initialSliceFromUrl(): TenantRegionIndustryFilter {
 }
 
 function initialBpTypeFromUrl(): BpTypeFilter {
-  const v = new URLSearchParams(window.location.search).get('bpType');
+  const v = getBpDurationsParams().get('bpType');
   if (v === 'offer' || v === 'ea') return v;
   return 'all';
+}
+
+function getBpDurationsParams(): URLSearchParams {
+  const h = window.location.hash.replace(/^#\/?/, '');
+  if (h.startsWith('bp-durations')) {
+    const qIdx = h.indexOf('?');
+    if (qIdx >= 0) {
+      return new URLSearchParams(h.slice(qIdx + 1));
+    }
+    return new URLSearchParams();
+  }
+  return new URLSearchParams(window.location.search);
 }
 
 function syncBpDurationsUrl(view: ViewMode, bp: string, slice: TenantRegionIndustryFilter, bpType: BpTypeFilter) {
@@ -1832,6 +1844,14 @@ function syncBpDurationsUrl(view: ViewMode, bp: string, slice: TenantRegionIndus
   if (slice.tenant) q.set('tenant', slice.tenant);
   if (slice.region) q.set('region', slice.region);
   if (slice.industry) q.set('industry', slice.industry);
+  const h = window.location.hash.replace(/^#\/?/, '');
+  if (h.startsWith('bp-durations')) {
+    const hash = q.toString() ? `#bp-durations?${q.toString()}` : '#bp-durations';
+    if (window.location.hash !== hash) {
+      window.history.replaceState({}, '', hash);
+    }
+    return;
+  }
   const path = window.location.pathname || '/';
   window.history.replaceState({}, '', `${path}?${q.toString()}`);
 }
@@ -1861,7 +1881,11 @@ export const BpDurationDashboard = () => {
       setBpType(initialBpTypeFromUrl());
     };
     window.addEventListener('popstate', onPop);
-    return () => window.removeEventListener('popstate', onPop);
+    window.addEventListener('hashchange', onPop);
+    return () => {
+      window.removeEventListener('popstate', onPop);
+      window.removeEventListener('hashchange', onPop);
+    };
   }, []);
 
   const selectStyle: React.CSSProperties = {
