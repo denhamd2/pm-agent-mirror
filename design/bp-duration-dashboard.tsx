@@ -135,13 +135,31 @@ function bpColorIndex(subBps: SubBpConfig[], key: string): number {
   return i >= 0 ? i % BP_COLORS.length : 0;
 }
 
+export type BpTypeFilter = 'all' | 'offer' | 'ea';
+
+const BP_TYPE_OPTIONS: { value: BpTypeFilter; label: string }[] = [
+  { value: 'all', label: 'All sub-BPs' },
+  { value: 'offer', label: 'Offer only' },
+  { value: 'ea', label: 'EA only' },
+];
+
+export function filterSubBpsByType(subBps: SubBpConfig[], bpType: BpTypeFilter): SubBpConfig[] {
+  if (bpType === 'offer') return subBps.filter(bp => bp.key === 'offer');
+  if (bpType === 'ea') return subBps.filter(bp => bp.key === 'employment_agreement');
+  return subBps;
+}
+
 /** Global tenant / region / industry slice (precedence: tenant > region > industry > all). */
 function TenantRegionIndustryFilterCard({
   filters,
   onChange,
+  bpType,
+  onBpTypeChange,
 }: {
   filters: TenantRegionIndustryFilter;
   onChange: (f: TenantRegionIndustryFilter) => void;
+  bpType: BpTypeFilter;
+  onBpTypeChange: (bt: BpTypeFilter) => void;
 }) {
   const selectStyle: React.CSSProperties = {
     padding: '6px 10px',
@@ -154,21 +172,33 @@ function TenantRegionIndustryFilterCard({
     maxWidth: 280,
     color: colors.blackPepper500,
   };
-  const active = Boolean(filters.tenant || filters.region || filters.industry);
+  const active = Boolean(filters.tenant || filters.region || filters.industry || bpType !== 'all');
   return (
     <Card style={{ ...chartCard, marginTop: 16, padding: 16, border: active ? `2px solid ${colors.blueberry400}` : undefined }}>
       <Flex justifyContent="flex-end" alignItems="center" style={{ marginBottom: 12 }}>
         {active && (
           <SecondaryButton
             size="small"
-            onClick={() => onChange({ ...EMPTY_TENANT_FILTER })}
+            onClick={() => { onChange({ ...EMPTY_TENANT_FILTER }); onBpTypeChange('all'); }}
             style={{ fontSize: 12, borderRadius: 16, padding: '2px 12px' }}
           >
-            Clear slice
+            Clear filters
           </SecondaryButton>
         )}
       </Flex>
       <Flex gap="m" flexWrap="wrap" alignItems="flex-end">
+        <Box>
+          <div style={filterLabelStyle}>BP Type</div>
+          <select
+            value={bpType}
+            onChange={e => onBpTypeChange(e.target.value as BpTypeFilter)}
+            style={selectStyle}
+          >
+            {BP_TYPE_OPTIONS.map(o => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
+        </Box>
         <Box>
           <div style={filterLabelStyle}>Tenant</div>
           <select
@@ -1788,10 +1818,17 @@ function initialSliceFromUrl(): TenantRegionIndustryFilter {
   };
 }
 
-function syncBpDurationsUrl(view: ViewMode, bp: string, slice: TenantRegionIndustryFilter) {
+function initialBpTypeFromUrl(): BpTypeFilter {
+  const v = new URLSearchParams(window.location.search).get('bpType');
+  if (v === 'offer' || v === 'ea') return v;
+  return 'all';
+}
+
+function syncBpDurationsUrl(view: ViewMode, bp: string, slice: TenantRegionIndustryFilter, bpType: BpTypeFilter) {
   const q = new URLSearchParams();
   q.set('view', view);
   q.set('bp', bp);
+  if (bpType !== 'all') q.set('bpType', bpType);
   if (slice.tenant) q.set('tenant', slice.tenant);
   if (slice.region) q.set('region', slice.region);
   if (slice.industry) q.set('industry', slice.industry);
@@ -1805,20 +1842,23 @@ export const BpDurationDashboard = () => {
   const [viewMode, setViewMode] = useState<ViewMode>(initialViewFromUrl);
   const [selectedBp, setSelectedBp] = useState<string>(initialBpFromUrl);
   const [sliceFilter, setSliceFilter] = useState<TenantRegionIndustryFilter>(initialSliceFromUrl);
+  const [bpType, setBpType] = useState<BpTypeFilter>(initialBpTypeFromUrl);
 
-  const { subBps, headline, isGlobal } = useMemo(() => getSliceSubBpsAndHeadline(sliceFilter), [sliceFilter]);
+  const { subBps: allSubBps, headline, isGlobal } = useMemo(() => getSliceSubBpsAndHeadline(sliceFilter), [sliceFilter]);
+  const subBps = useMemo(() => filterSubBpsByType(allSubBps, bpType), [allSubBps, bpType]);
 
-  const activeBp = subBps.find(bp => bp.key === selectedBp);
+  const activeBp = subBps.find(bp => bp.key === selectedBp) || subBps[0];
 
   useEffect(() => {
-    syncBpDurationsUrl(viewMode, selectedBp, sliceFilter);
-  }, [viewMode, selectedBp, sliceFilter]);
+    syncBpDurationsUrl(viewMode, selectedBp, sliceFilter, bpType);
+  }, [viewMode, selectedBp, sliceFilter, bpType]);
 
   useEffect(() => {
     const onPop = () => {
       setViewMode(initialViewFromUrl());
       setSelectedBp(initialBpFromUrl());
       setSliceFilter(initialSliceFromUrl());
+      setBpType(initialBpTypeFromUrl());
     };
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
@@ -1852,7 +1892,7 @@ export const BpDurationDashboard = () => {
             <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/view-dashboard`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>Offer Duration Benchmark</a>
           </Flex>
 
-          <TenantRegionIndustryFilterCard filters={sliceFilter} onChange={setSliceFilter} />
+          <TenantRegionIndustryFilterCard filters={sliceFilter} onChange={setSliceFilter} bpType={bpType} onBpTypeChange={setBpType} />
 
           {viewMode === 'overview' && (
             <Flex gap="s" style={{ marginTop: 16 }} flexWrap="wrap">
@@ -1898,7 +1938,7 @@ export const BpDurationDashboard = () => {
             })}
             {viewMode === 'detail' && (
               <select
-                value={selectedBp}
+                value={activeBp?.key ?? selectedBp}
                 onChange={e => setSelectedBp(e.target.value)}
                 style={selectStyle}
               >

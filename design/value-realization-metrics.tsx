@@ -45,7 +45,7 @@ const TOOLTIPS = {
   interview:
     'Interview funnel KPIs from Pharos recruiting analytics: job applications, rounds, sessions, and mean time in Interview BP (completed-path averages, excludes right-censored months per series notes).',
   subBp:
-    'Per sub-business-process duration from dw.swh.bp_event_stats: mean and median days for Completed events, aggregated by month. Employment Agreement uses bp_type_id Propose Compensation Offer/Employment Agreement.',
+    'Average of Offer and Employment Agreement completed-event durations from dw.swh.bp_event_stats. Dashboard filters allow Offer-only or EA-only views.',
   scorecard:
     'Per-tenant scorecard: IUM time to hire/fill plus PCA feature adoption and bottleneck strip from sub-BP medians.',
   recruiting:
@@ -256,14 +256,14 @@ export const ValueRealizationMetrics: React.FC = () => {
               />
               <DashboardLink
                 href="/bp-durations"
-                title="Sub-BP durations and bottlenecks"
-                description="Offer, Employment Agreement (after Offer in flow), and other recruiting sub-BPs: averages, medians, task bottlenecks."
+                title="Offer / EA durations and bottlenecks"
+                description="Combined Offer and Employment Agreement sub-BP durations. Filter by Offer or EA on the dashboard."
                 metricCard={
                   <MetricCard
-                    label="Offer vs Employment Agreement (avg completed)"
-                    value={`${fmtDays(offerH?.avgDaysCompleted ?? 0)} · ${fmtDays(eaH?.avgDaysCompleted ?? 0)}`}
-                    helperText={`Global PROD slice · ${latestYm} headline`}
-                    changeIndicator={{ text: 'Detail tab per sub-BP', sentiment: 'neutral' }}
+                    label="Avg Time in Offer/EA BPs"
+                    value={`${(((offerH?.avgDaysCompleted ?? 0) + (eaH?.avgDaysCompleted ?? 0)) / 2).toFixed(1)} days`}
+                    helperText={`Offer ${fmtDays(offerH?.avgDaysCompleted ?? 0)} · EA ${fmtDays(eaH?.avgDaysCompleted ?? 0)} · ${latestYm}`}
+                    changeIndicator={{ text: 'Filter by Offer or EA on dashboard', sentiment: 'neutral' }}
                     tooltip={TOOLTIPS.subBp}
                   />
                 }
