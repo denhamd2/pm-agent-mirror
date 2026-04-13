@@ -31,9 +31,9 @@ jobs:
         working-directory: design
         run: |
           npm ci
-          npm run build
+          VITE_BASE_PATH=./ npx vite build
         env:
-          VITE_BASE_PATH: ./
+          NODE_OPTIONS: --max-old-space-size=8192
 
       - name: Prepare dashboard files
         run: |
