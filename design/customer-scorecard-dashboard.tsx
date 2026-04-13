@@ -310,19 +310,17 @@ function computeFilteredCorrelations(
   regionFilter: string,
   industryFilter: string,
 ): FeatureCorrelationStat[] {
-  if (!regionFilter && !industryFilter) {
-    return [...FEATURE_CORRELATIONS_GLOBAL]
-      .map((row) => ({ ...row, confidence: adjustConfidenceWithQValue(row) }))
-      .sort((a, b) => b.deltaTthDays - a.deltaTthDays);
-  }
+  const isGlobal = !regionFilter && !industryFilter;
 
-  const matchingTenants = SCORECARD_TENANT_NAMES.filter((tn) => {
-    const enr = TENANT_ENRICHMENT[tn];
-    if (!enr) return false;
-    if (regionFilter && enr.region !== regionFilter) return false;
-    if (industryFilter && enr.industry !== industryFilter) return false;
-    return true;
-  });
+  const matchingTenants = isGlobal
+    ? SCORECARD_TENANT_NAMES
+    : SCORECARD_TENANT_NAMES.filter((tn) => {
+        const enr = TENANT_ENRICHMENT[tn];
+        if (!enr) return false;
+        if (regionFilter && enr.region !== regionFilter) return false;
+        if (industryFilter && enr.industry !== industryFilter) return false;
+        return true;
+      });
 
   if (matchingTenants.length < 10) return [];
 
@@ -360,19 +358,29 @@ function computeFilteredCorrelations(
     const confidence: 'high' | 'medium' | 'low' =
       totalOn >= 10 && totalOff >= 10 ? 'medium' : 'low';
 
-    results.push({
+    const prebaked = isGlobal
+      ? FEATURE_CORRELATIONS_GLOBAL.find((r) => r.feature === feature)
+      : undefined;
+
+    const row: FeatureCorrelationStat = {
       feature,
       correlationScore: Math.abs(deltaTth),
       deltaTtfDays: deltaTtf,
       deltaTthDays: deltaTth,
-      qTtf: 0,
-      qTth: 0,
+      qTtf: prebaked?.qTtf ?? 0,
+      qTth: prebaked?.qTth ?? 0,
       confidence,
       nOnTtf: ttfOn.length,
       nOffTtf: ttfOff.length,
       nOnTth: tthOn.length,
       nOffTth: tthOff.length,
-    });
+    };
+
+    if (isGlobal && prebaked) {
+      row.confidence = adjustConfidenceWithQValue(row);
+    }
+
+    results.push(row);
   }
 
   results.sort((a, b) => b.deltaTthDays - a.deltaTthDays);

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Flex, Box } from '@workday/canvas-kit-react/layout';
-import { Card } from '@workday/canvas-kit-react/card';
 import { colors } from '@workday/canvas-kit-react/tokens';
 
 const PRIMARY_NAV_ITEMS = [
@@ -13,50 +12,31 @@ const PRIMARY_NAV_ITEMS = [
   { id: 'metrics', label: 'Metrics', hrefType: 'metrics-home' },
 ] as const;
 
-const METRIC_GROUPS = [
-  {
-    id: 'portfolio-overview',
-    label: 'Portfolio Overview',
-    items: [
-      { slug: 'value-realization-metrics', label: 'Value Realisation' },
-      { slug: 'customer-scorecard', label: 'Customer Scorecard' },
-      { slug: 'recruiting-metric-tree', label: 'Recruiting KPI Tree', newWindow: true },
-    ],
-  },
-  {
-    id: 'hiring-outcomes',
-    label: 'Hiring Outcomes',
-    items: [
-      { slug: 'avg-time-to-hire', label: 'Time to Hire' },
-      { slug: 'avg-time-to-fill', label: 'Time to Fill (Legacy)' },
-    ],
-  },
-  {
-    id: 'recruiting-operations',
-    label: 'Recruiting Operations',
-    items: [
-      { slug: 'recruiter-capacity', label: 'Recruiter Load' },
-      { slug: 'interview-metrics', label: 'Interview Process' },
-      { slug: 'bp-durations', label: 'Job App Stage Durations' },
-      { slug: 'view-dashboard', label: 'Offer Duration Benchmark' },
-      { slug: 'positions-open-vs-filled', label: 'Open vs Filled (Legacy)' },
-    ],
-  },
-  {
-    id: 'feature-adoption',
-    label: 'Feature Adoption',
-    items: [
-      { slug: 'recruiting-adoption', label: 'Recruiting Adoption' },
-      { slug: 'add-documents-impact', label: 'Add Documents Effect' },
-    ],
-  },
+const METRIC_ITEMS = [
+  { slug: 'value-realization-metrics', label: 'Value Realisation' },
+  { slug: 'customer-scorecard', label: 'Customer Scorecard' },
+  { slug: 'recruiting-metric-tree', label: 'Value Driver Tree', newWindow: true },
+  { slug: 'bp-durations', label: 'Job App Stage Durations' },
 ] as const;
 
+/** Maps child dashboard slugs to a parent nav item so the correct chip highlights. */
+const CHILD_TO_PARENT: Record<string, string> = {
+  'avg-time-to-hire': 'value-realization-metrics',
+  'avg-time-to-fill': 'value-realization-metrics',
+  'recruiter-capacity': 'value-realization-metrics',
+  'positions-open-vs-filled': 'value-realization-metrics',
+  'recruiting-adoption': 'value-realization-metrics',
+  'add-documents-impact': 'value-realization-metrics',
+  'interview-metrics': 'bp-durations',
+  'view-dashboard': 'bp-durations',
+};
+
 type PrimaryNavId = (typeof PRIMARY_NAV_ITEMS)[number]['id'];
-export type MetricsSlug = (typeof METRIC_GROUPS)[number]['items'][number]['slug'] | null;
+type ChildSlug = keyof typeof CHILD_TO_PARENT;
+export type MetricsSlug = (typeof METRIC_ITEMS)[number]['slug'] | ChildSlug | null;
 type MainTabId = Exclude<PrimaryNavId, 'metrics'>;
 type MetricNavItem = { slug: string; label: string; newWindow?: boolean };
-const ALL_METRIC_ITEMS: MetricNavItem[] = METRIC_GROUPS.flatMap((group) => [...group.items]) as MetricNavItem[];
+const ALL_METRIC_ITEMS: MetricNavItem[] = [...METRIC_ITEMS];
 
 export interface DashboardGlobalNavProps {
   activeMetricsSlug?: MetricsSlug;
@@ -143,73 +123,35 @@ export const DashboardGlobalNav: React.FC<DashboardGlobalNavProps> = ({
 }) => {
   const metricsVisible = showMetricsNav ?? activeMetricsSlug != null;
   const activePrimaryId: PrimaryNavId | null = activeMetricsSlug ? 'metrics' : activeMainTab;
-  const activeGroup =
-    METRIC_GROUPS.find((group) => group.items.some((item) => item.slug === activeMetricsSlug)) ?? METRIC_GROUPS[0];
+  const resolvedSlug = activeMetricsSlug
+    ? CHILD_TO_PARENT[activeMetricsSlug] ?? activeMetricsSlug
+    : null;
   const pageLabel =
     activeMetricsSlug
-      ? activeGroup.items.find((item) => item.slug === activeMetricsSlug)?.label ?? 'Metrics'
+      ? ALL_METRIC_ITEMS.find((item) => item.slug === activeMetricsSlug)?.label
+        ?? ALL_METRIC_ITEMS.find((item) => item.slug === resolvedSlug)?.label
+        ?? 'Metrics'
       : PRIMARY_NAV_ITEMS.find((item) => item.id === activeMainTab)?.label ?? 'Workspace';
 
   return (
     <Box
       style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 40,
         borderBottom: `1px solid ${colors.soap300}`,
-        background: 'rgba(255, 255, 255, 0.94)',
-        backdropFilter: 'blur(12px)',
+        background: '#ffffff',
       }}
     >
-      <Box style={{ maxWidth: 1280, margin: '0 auto', padding: '14px 24px 16px' }}>
-        <Flex justifyContent="space-between" alignItems="flex-start" gap="l" style={{ flexWrap: 'wrap', marginBottom: 10 }}>
-          <Box>
+      <Box style={{ maxWidth: 1280, margin: '0 auto', padding: '12px 24px' }}>
+        <Flex justifyContent="space-between" alignItems="center" gap="l" style={{ flexWrap: 'wrap', marginBottom: showMainTabs ? 10 : 0 }}>
+          <Box style={{ minWidth: 0 }}>
             <a href={pmDashboardHref('morning-roundup')} style={{ textDecoration: 'none' }}>
-              <div style={{ fontSize: 22, fontWeight: 700, color: colors.blackPepper600, lineHeight: 1.1 }}>
+              <div style={{ fontSize: 20, fontWeight: 700, color: colors.blackPepper600, lineHeight: 1.1 }}>
                 PM Agent Dashboard
               </div>
             </a>
-            <div style={{ fontSize: 12, color: colors.blackPepper400, marginTop: 4 }}>
-              {activeMetricsSlug ? 'Metrics workspace' : 'Workspace overview'} · {pageLabel}
+            <div style={{ fontSize: 12, color: colors.blackPepper400, marginTop: 2 }}>
+              {pageLabel}
             </div>
           </Box>
-          {activeMetricsSlug ? (
-            <Box style={{ minWidth: 240 }}>
-              <div style={{ fontSize: 11, color: colors.blackPepper400, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
-                Quick jump
-              </div>
-              <select
-                value={activeMetricsSlug}
-                onChange={(event) => {
-                  const selected = ALL_METRIC_ITEMS.find((item) => item.slug === event.target.value);
-                  if (selected?.newWindow) {
-                    window.open(metricsHref(selected.slug), '_blank', 'noopener,noreferrer');
-                    return;
-                  }
-                  window.location.href = metricsHref(event.target.value);
-                }}
-                style={{
-                  width: '100%',
-                  padding: '10px 12px',
-                  borderRadius: 10,
-                  border: `1px solid ${colors.soap300}`,
-                  backgroundColor: '#fff',
-                  color: colors.blackPepper500,
-                  fontSize: 13,
-                }}
-              >
-                {METRIC_GROUPS.map((group) => (
-                  <optgroup key={group.id} label={group.label}>
-                    {group.items.map((item) => (
-                      <option key={item.slug} value={item.slug}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </optgroup>
-                ))}
-              </select>
-            </Box>
-          ) : null}
         </Flex>
 
         {showMainTabs ? (
@@ -223,46 +165,22 @@ export const DashboardGlobalNav: React.FC<DashboardGlobalNavProps> = ({
         ) : null}
 
         {metricsVisible ? (
-          <Card style={{ marginTop: 14, padding: 14, borderRadius: 16, border: `1px solid ${colors.soap200}`, backgroundColor: '#fcfcfd' }}>
-            <Flex justifyContent="space-between" alignItems="center" gap="m" style={{ flexWrap: 'wrap', marginBottom: 12 }}>
-              <Box>
-                <div style={{ fontSize: 11, color: colors.blackPepper400, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Metric Dashboards
-                </div>
-                <div style={{ fontSize: 14, color: colors.blackPepper500, marginTop: 4 }}>
-                  Browse by dashboard group, then jump within the active group.
-                </div>
-              </Box>
-            </Flex>
-
-            <Flex gap="s" style={{ flexWrap: 'wrap', marginBottom: 12 }}>
-              {METRIC_GROUPS.map((group) => {
-                const isActive = group.id === activeGroup.id;
-                const { href } = metricDestination(group.items[0]);
-                return (
-                  <a key={group.id} href={href} style={chipStyle(isActive)}>
-                    {group.label}
-                  </a>
-                );
-              })}
-            </Flex>
-
-            <Flex gap="s" style={{ flexWrap: 'wrap' }}>
-              {activeGroup.items.map((item) => {
-                const destination = metricDestination(item);
-                return (
+          <Flex gap="s" style={{ flexWrap: 'wrap', paddingTop: 4 }}>
+            {ALL_METRIC_ITEMS.map((item) => {
+              const destination = metricDestination(item);
+              return (
                 <a
                   key={item.slug}
                   href={destination.href}
                   target={destination.target}
                   rel={destination.rel}
-                  style={metricLinkStyle(activeMetricsSlug === item.slug)}
+                  style={chipStyle(resolvedSlug === item.slug)}
                 >
                   {item.label}
                 </a>
-              )})}
-            </Flex>
-          </Card>
+              );
+            })}
+          </Flex>
         ) : null}
       </Box>
     </Box>

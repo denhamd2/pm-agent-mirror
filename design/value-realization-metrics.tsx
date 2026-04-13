@@ -197,19 +197,8 @@ export const ValueRealizationMetrics: React.FC = () => {
         <Box style={{ maxWidth: 1200, margin: '0 auto' }}>
         <PageHeader
           title="Value Realisation Metrics"
-          subtitle={"Maps Jamie Moore's value tracker to the dashboards in this workspace and shows which metrics are live, legacy, proxy-only, or still blocked.\nSources: live metric-name-resolved IUMs from dw.swh_raw.internal_usage_metrics_report_kafka plus dw.swh.bp_event_stats for sub-BP timing; current recruiting IUM matches are SANDBOX-only unless noted."}
+          subtitle={"Landing page for all Workday Recruiting outcome and adoption dashboards, showing which metrics are live, legacy, or blocked.\nSources: IUMs from Pharos · bp_event_stats for sub-BP timing · PROD adoption metrics."}
         />
-
-        <BodyText size="small" color={colors.blackPepper500} style={{ marginBottom: 20, lineHeight: 1.6, maxWidth: 900 }}>
-          This landing page maps the{' '}
-          <strong>Talent Acquisition Business Value Metric Tracker</strong> (Jamie Moore, validated 12 Apr 2026) to dashboards in this workspace.
-          Live IUMs are now resolved by <strong>metric name first</strong> rather than by reusing older hard-coded IDs, because current Pharos outputs show metric drift over time.
-          <strong> Time to Hire</strong> currently resolves live as <strong>Average Time to Hire</strong>, while tracker <strong>Recruiter Capacity</strong> currently resolves live as <strong>Recruiter Productivity</strong>.
-          <strong> Avg. time in [sub-BP]</strong> here is{' '}
-          <strong>not</strong> the same as the tracker’s “Time in Offer/EA” definition (first EA start → final completed EA on a job application).
-          We use <strong>per-event</strong> completed durations from <code style={{ fontSize: 11, backgroundColor: colors.soap100, padding: '2px 6px', borderRadius: 4 }}>dw.swh.bp_event_stats</code>, monthly aggregates.
-          Matching the tracker would need job-application-level chaining (HRREC-90616 direction) or the delivered IUM once in tables.
-        </BodyText>
 
         <Flex gap="l" marginBottom="l" style={{ flexWrap: 'wrap', alignItems: 'stretch' }}>
           <DashboardLink

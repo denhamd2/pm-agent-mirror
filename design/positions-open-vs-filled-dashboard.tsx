@@ -527,6 +527,9 @@ export const PositionsOpenVsFilledDashboard: React.FC = () => {
       <DashboardGlobalNav activeMetricsSlug="positions-open-vs-filled" />
       <Box padding="32px" flex={1}>
         <Box style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div style={{ marginBottom: 8 }}>
+          <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/value-realization-metrics`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>&larr; Value Realisation</a>
+        </div>
         <PageHeader
           title="Legacy Positions: Open Requisitions vs Filled"
           subtitle={"Historical comparison of average open requisitions versus filled positions per reporting tenant.\nSource: materialised 10 Apr 2026 SANDBOX extract using older 2360/2361 mappings; current live warehouse names have drifted, so treat this page as legacy reference only."}

@@ -879,6 +879,9 @@ export const InterviewMetricsDashboard = () => {
     <Flex flexDirection="column" minHeight="100vh" style={{ backgroundColor: SANA_PAGE_CANVAS }}>
       <DashboardGlobalNav activeMetricsSlug="interview-metrics" />
       <Box padding="l" flex={1}>
+      <div style={{ marginBottom: 8 }}>
+        <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/bp-durations`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>&larr; Job App Stage Durations</a>
+      </div>
       <PageHeader title={QUERY_META.title} subtitle={QUERY_META.subtitle} />
 
       <Flex gap="s" style={{ marginTop: 24 }} flexWrap="wrap">

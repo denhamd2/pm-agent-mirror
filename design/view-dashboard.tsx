@@ -3,7 +3,7 @@ import { Flex, Box } from '@workday/canvas-kit-react/layout';
 import { Card } from '@workday/canvas-kit-react/card';
 import { Heading, BodyText } from '@workday/canvas-kit-react/text';
 import { colors } from '@workday/canvas-kit-react/tokens';
-import { PageHeader, MetricCard } from './components';
+import { PageHeader, MetricCard, DashboardGlobalNav } from './components';
 import {
   SANA_PAGE_CANVAS,
   SANA_CARD_RADIUS_LG,
@@ -233,6 +233,10 @@ export const ViewDashboard = () => {
   const ac = ADOPTION_COUNTS;
   return (
     <div style={{ background: SANA_PAGE_CANVAS, minHeight: '100vh' }}>
+      <DashboardGlobalNav activeMetricsSlug="view-dashboard" />
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '8px 32px 0' }}>
+        <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/bp-durations`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>&larr; Job App Stage Durations</a>
+      </div>
       <PageHeader title={QUERY_META.title} subtitle={QUERY_META.subtitle} />
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 32px' }}>
         <Flex gap="s" flexWrap="wrap" style={{ marginBottom: 24 }}>

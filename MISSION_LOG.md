@@ -254,6 +254,18 @@ Archived: MISSION-009, MISSION-010, MISSION-011, MISSION-014, MISSION-015, MISSI
 **Owner:** David Denham + Data Scientist workflow  
 **Status:** Implemented
 
+### DECISION-015: Metrics tree becomes a value-driver canvas and nav is de-cluttered
+**Date:** 13 April 2026  
+**Context:** The standalone tree still behaved like a dashboard because large left and right explainer panels consumed canvas space, and the metrics shell still duplicated navigation with a grouped sub-nav plus quick jump. The tree content also mixed genuine drivers with descriptive or vanity metrics.  
+**Choice:** Remove the side panels from the tree and keep only a minimal zoom/reset control; refocus the metric set into a smaller value-driver model (`Average Time to Hire` <- `Recruiter Capacity`, `Time in Interview BP`, `Offer / EA Timing` <- `Job Applications`, `Interview Rounds`, `Add Documents`); rename the tree surface to `Value Driver Tree`; make the global nav non-sticky; flatten the metrics sub-nav into a single compact row; and remove the duplicate quick-jump control and explanatory sub-nav header copy.  
+**Rationale:** 
+- Restores the tree as a canvas-first artefact rather than another dashboard with side rails
+- Keeps only metrics with a plausible driver relationship to the north-star outcome
+- Removes visual duplication and header weight from the metrics shell
+- Uses the more precise `Value Driver Tree` framing now that the page is intentionally not a broad metric catalogue  
+**Owner:** David Denham + PM dashboard workflow  
+**Status:** Implemented
+
 ### DECISION-014: Scorecard benchmarks and KPI tree move to clearer PM framing
 **Date:** 13 April 2026  
 **Context:** The refined metrics shell still left ambiguity between outcomes, impact, and operational dashboards. At the same time, the customer scorecard hero cards were not using the two customer KPIs PMs actually need first, and the KPI tree needed more screen real estate plus a cleaner level model.  

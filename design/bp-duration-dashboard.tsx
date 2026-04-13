@@ -1851,6 +1851,13 @@ export const BpDurationDashboard = () => {
         subtitle={"Shows how long each recruiting sub-process takes, how often it completes, and where quality signals like sent back or correction rates are concentrated.\nSource: dw.swh.bp_event_stats · PROD completed-event aggregates over the last 12 months, with mean and median cycle times shown separately."}
       />
 
+      <Flex gap="s" style={{ marginBottom: 12 }} alignItems="center">
+        <span style={{ fontSize: 12, color: colors.blackPepper400, fontWeight: 600 }}>Related:</span>
+        <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/interview-metrics`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>Interview Process</a>
+        <span style={{ color: colors.soap400 }}>|</span>
+        <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/view-dashboard`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>Offer Duration Benchmark</a>
+      </Flex>
+
       <TenantRegionIndustryFilterCard filters={sliceFilter} onChange={setSliceFilter} />
 
       {viewMode === 'overview' && (

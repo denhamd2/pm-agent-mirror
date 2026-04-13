@@ -479,6 +479,9 @@ export const AvgTimeToFillDashboard: React.FC = () => {
       <DashboardGlobalNav activeMetricsSlug="avg-time-to-fill" />
       <Box padding="32px" flex={1}>
         <Box style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div style={{ marginBottom: 8 }}>
+          <a href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/value-realization-metrics`} style={{ fontSize: 12, color: colors.blueberry500, textDecoration: 'none', fontWeight: 600 }}>&larr; Value Realisation</a>
+        </div>
         <PageHeader
           title="Average Time to Fill"
           subtitle={"Historical tenant-level average time to fill from requisition open to filled position, shown here as the monthly mean across reporting tenants.\nSource: materialised 10 Apr 2026 SANDBOX extract originally keyed to IUM 2359 · keep as a legacy reference until a fresh live metric-name replacement is revalidated."}
