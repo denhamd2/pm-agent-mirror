@@ -68,14 +68,14 @@ const CONFIDENCE_STYLE: Record<
     bg: colors.blueberry100,
     fg: colors.blueberry600,
     stroke: colors.blueberry400,
-    dash: '6 5',
+    dash: '1.5 5',
     badge: 'Measured',
   },
   Directional: {
     bg: colors.blueberry100,
     fg: colors.blueberry600,
     stroke: colors.blueberry400,
-    dash: '6 5',
+    dash: '1.5 5',
     badge: 'Directional',
   },
 };
@@ -101,14 +101,22 @@ function edgePath(from: MetricTreeNode, to: MetricTreeNode): string {
   return `M ${startX} ${startY} C ${startX} ${midY}, ${endX} ${midY}, ${endX} ${endY}`;
 }
 
-function alignSeries(a: number[], b: number[]): [number[], number[]] {
-  const length = Math.min(a.length, b.length);
-  return [a.slice(-length), b.slice(-length)];
+const MIN_CORRELATION_OVERLAP = 6;
+
+function alignSeriesByMonth(a: MetricTreeNode, b: MetricTreeNode): [number[], number[]] {
+  if (!a.trendYm || !b.trendYm || a.trend.length !== a.trendYm.length || b.trend.length !== b.trendYm.length) {
+    return [[], []];
+  }
+  const aByYm = new Map(a.trendYm.map((ym, index) => [ym, a.trend[index]]));
+  const sharedYms = b.trendYm.filter((ym) => aByYm.has(ym));
+  return [
+    sharedYms.map((ym) => aByYm.get(ym) as number),
+    sharedYms.map((ym) => b.trend[b.trendYm!.indexOf(ym)]),
+  ];
 }
 
-function pearsonCorrelation(a: number[], b: number[]): number | null {
-  const [seriesA, seriesB] = alignSeries(a, b);
-  if (seriesA.length < 3) return null;
+function pearsonCorrelation(seriesA: number[], seriesB: number[]): number | null {
+  if (seriesA.length < 3 || seriesB.length < 3) return null;
   const meanA = seriesA.reduce((sum, value) => sum + value, 0) / seriesA.length;
   const meanB = seriesB.reduce((sum, value) => sum + value, 0) / seriesB.length;
   const centeredA = seriesA.map((value) => value - meanA);
@@ -121,8 +129,8 @@ function pearsonCorrelation(a: number[], b: number[]): number | null {
   return numerator / denominator;
 }
 
-function correlationStrength(correlation: number | null): 'Strong' | 'Moderate' | 'Weak' {
-  if (correlation == null) return 'Weak';
+function correlationStrength(correlation: number | null, overlapPoints: number): 'Strong' | 'Moderate' | 'Weak' {
+  if (correlation == null || overlapPoints < MIN_CORRELATION_OVERLAP) return 'Weak';
   const magnitude = Math.abs(correlation);
   if (magnitude >= 0.75) return 'Strong';
   if (magnitude >= 0.45) return 'Moderate';
@@ -167,40 +175,44 @@ const railChartOptions: ChartOptions<'line'> = {
 
 function buildFilteredTthNode(filteredTenants: string[], base: MetricTreeNode): MetricTreeNode {
   const labels = Array.from(new Set(filteredTenants.flatMap((t) => (TENANT_TIME_SERIES[t] ?? []).map((p) => p.ym)))).sort();
-  const trendByMonth = labels.map((ym) => {
+  const trendPoints = labels.map((ym) => {
     const values = filteredTenants
       .map((t) => TENANT_TIME_SERIES[t]?.find((p) => p.ym === ym)?.v)
       .filter((v): v is number => v != null && Number.isFinite(v));
-    return values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : null;
-  });
-  const series = definedSeries(trendByMonth);
+    return values.length > 0 ? { ym, value: values.reduce((a, b) => a + b, 0) / values.length } : null;
+  }).filter((point): point is { ym: string; value: number } => point != null);
+  const series = trendPoints.map((point) => point.value);
   if (series.length === 0) return { ...base, value: 'Unavailable', valueContext: 'No matching tenants', trend: [] };
   const latest = series[series.length - 1];
+  const recent = trendPoints.slice(-6);
   return {
     ...base,
     value: formatDays(latest),
     valueContext: `Filtered (${filteredTenants.length} tenants) · ${changeText(lastN(series))}`,
-    trend: lastN(series),
+    trend: recent.map((point) => point.value),
+    trendYm: recent.map((point) => point.ym),
   };
 }
 
 function buildFilteredRcNode(filteredTenants: string[], base: MetricTreeNode): MetricTreeNode {
   const rcTenants = filteredTenants.filter((t) => RECRUITER_CAPACITY_TENANT_SERIES[t]);
   const labels = Array.from(new Set(rcTenants.flatMap((t) => (RECRUITER_CAPACITY_TENANT_SERIES[t] ?? []).map((p) => p.ym)))).sort();
-  const trendByMonth = labels.map((ym) => {
+  const trendPoints = labels.map((ym) => {
     const values = rcTenants
       .map((t) => RECRUITER_CAPACITY_TENANT_SERIES[t]?.find((p) => p.ym === ym)?.value)
       .filter((v): v is number => v != null && Number.isFinite(v));
-    return values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : null;
-  });
-  const series = definedSeries(trendByMonth);
+    return values.length > 0 ? { ym, value: values.reduce((a, b) => a + b, 0) / values.length } : null;
+  }).filter((point): point is { ym: string; value: number } => point != null);
+  const series = trendPoints.map((point) => point.value);
   if (series.length === 0) return { ...base, value: 'Unavailable', valueContext: 'No matching tenants', trend: [] };
   const latest = series[series.length - 1];
+  const recent = trendPoints.slice(-6);
   return {
     ...base,
     value: `${latest.toFixed(1)} avg reqs`,
     valueContext: `Filtered (${rcTenants.length} tenants) · ${changeText(lastN(series))}`,
-    trend: lastN(series),
+    trend: recent.map((point) => point.value),
+    trendYm: recent.map((point) => point.ym),
   };
 }
 
@@ -249,10 +261,12 @@ function NodeCard({ node, selected, onSelect }: { node: MetricTreeNode; selected
         {node.title}
       </div>
 
-      <div style={{ fontSize: 22, fontWeight: 700, color: colors.blackPepper600, lineHeight: 1.2 }}>{node.value}</div>
+      <div style={{ fontSize: 22, fontWeight: 700, color: colors.blackPepper600, lineHeight: 1.2, textAlign: 'center' }}>{node.value}</div>
 
-      <div style={{ width: '100%', height: 28, marginTop: 4 }}>
-        <Line data={chartData(node.trend.length > 0 ? node.trend : [0], stroke, fill)} options={miniChartOptions} />
+      <div style={{ width: '100%', height: 28, marginTop: 4, display: 'flex', justifyContent: 'center' }}>
+        <div style={{ width: '88%', height: '100%' }}>
+          <Line data={chartData(node.trend.length > 0 ? node.trend : [0], stroke, fill)} options={miniChartOptions} />
+        </div>
       </div>
 
       <Flex justifyContent="center" gap="zero" style={{ marginTop: 6, borderTop: `1px solid ${colors.soap200}`, paddingTop: 4 }}>
@@ -298,9 +312,11 @@ export const RecruitingMetricTreePage: React.FC = () => {
       TREE_EDGES.map((edge) => {
         const from = nodeMap.get(edge.from);
         const to = nodeMap.get(edge.to);
-        const correlation = !from || !to ? null : pearsonCorrelation(from.trend, to.trend);
-        const strength = correlationStrength(correlation);
-        return { ...edge, correlation, strength };
+        const [fromSeries, toSeries] = !from || !to ? [[], []] : alignSeriesByMonth(from, to);
+        const overlapPoints = Math.min(fromSeries.length, toSeries.length);
+        const correlation = !from || !to ? null : pearsonCorrelation(fromSeries, toSeries);
+        const strength = correlationStrength(correlation, overlapPoints);
+        return { ...edge, correlation, strength, overlapPoints };
       }),
     [nodeMap]
   );
@@ -384,6 +400,24 @@ export const RecruitingMetricTreePage: React.FC = () => {
               const to = nodeMap.get(edge.to);
               if (!from || !to) return null;
               const confidence = CONFIDENCE_STYLE[edge.confidence];
+              return (
+                <path
+                  key={`path-${edge.from}-${edge.to}`}
+                  d={edgePath(from, to)}
+                  fill="none"
+                  stroke={confidence.stroke}
+                  strokeWidth={1.5}
+                  strokeDasharray={confidence.dash}
+                  opacity={0.9}
+                  markerEnd={`url(#arrow-${edge.confidence})`}
+                />
+              );
+            })}
+
+            {TREE_EDGES.map((edge) => {
+              const from = nodeMap.get(edge.from);
+              const to = nodeMap.get(edge.to);
+              if (!from || !to) return null;
               const insight = edgeInsights.find((item) => item.from === edge.from && item.to === edge.to);
               const strength = insight?.strength ?? 'Weak';
               const strengthStyle = STRENGTH_STYLE[strength] ?? STRENGTH_STYLE.Weak;
@@ -393,8 +427,7 @@ export const RecruitingMetricTreePage: React.FC = () => {
               const labelY = ((from.y < to.y ? from.y + NODE_HEIGHT : from.y) + (from.y < to.y ? to.y : to.y + NODE_HEIGHT)) / 2 - 10;
               return (
                 <g key={`${edge.from}-${edge.to}`}>
-                  <title>{edge.label}{insight?.correlation != null ? ` · r=${insight.correlation.toFixed(2)}` : ''}</title>
-                  <path d={edgePath(from, to)} fill="none" stroke={confidence.stroke} strokeWidth={2} strokeDasharray={confidence.dash} opacity={0.9} markerEnd={`url(#arrow-${edge.confidence})`} />
+                  <title>{edge.label}{insight?.correlation != null ? ` · r=${insight.correlation.toFixed(2)} · n=${insight.overlapPoints}` : ''}</title>
                   {/* Edge label pill */}
                   <rect x={labelX - 78} y={labelY - 13} width={156} height={30} rx={12} fill="#ffffff" opacity={0.94} />
                   <text x={labelX} y={labelY} textAnchor="middle" fill={colors.blackPepper500} fontSize="10" fontWeight="600">{edge.label}</text>
@@ -442,6 +475,9 @@ export const RecruitingMetricTreePage: React.FC = () => {
           Scope: {filterParts.join(' · ')} — all metrics filtered to matching tenants
         </Box>
       )}
+      <Box style={{ position: 'absolute', top: isFiltered ? 104 : 80, left: 16, padding: '4px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.9)', fontSize: 11, color: colors.blackPepper500 }}>
+        Correlation strength uses month-aligned overlap (min {MIN_CORRELATION_OVERLAP} points for Moderate/Strong) and is exploratory, not causal.
+      </Box>
 
       {/* Zoom controls */}
       <Flex gap="s" style={{ position: 'absolute', top: 16, right: selectedNode ? RAIL_WIDTH + 16 : 16, padding: 8, borderRadius: 999, background: 'rgba(255,255,255,0.92)', border: `1px solid ${colors.soap300}`, backdropFilter: 'blur(10px)' }}>
@@ -497,7 +533,7 @@ export const RecruitingMetricTreePage: React.FC = () => {
                     <div style={{ fontSize: 12, fontWeight: 700, color: colors.blackPepper600, marginBottom: 4 }}>{peerNode.title}</div>
                     <div style={{ fontSize: 12, color: colors.blackPepper500, marginBottom: 4 }}>
                       {edge.label} · <span style={{ display: 'inline-block', padding: '1px 6px', borderRadius: 6, background: sStyle.bg, color: sStyle.fg, fontSize: 10, fontWeight: 700 }}>{edge.strength}</span>
-                      {edge.correlation != null ? ` (r=${edge.correlation.toFixed(2)})` : ''}
+                      {edge.correlation != null ? ` (r=${edge.correlation.toFixed(2)}, n=${edge.overlapPoints})` : ''}
                     </div>
                     <div style={{ fontSize: 11, color: colors.blackPepper400 }}>Based on aligned recent trend points for the connected metrics.</div>
                   </Box>

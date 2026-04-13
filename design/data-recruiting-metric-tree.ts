@@ -3,12 +3,14 @@ import {
   AVG_TIME_IN_INTERVIEW_BP,
   FEEDBACK_SUBMISSION_TIME,
   JOB_APPLICATIONS_MONTHLY,
+  LABELS as INTERVIEW_LABELS,
   SCHEDULE_INTERVIEW_TIME,
   SCHEDULE_INTERVIEW_TEAM_TIME,
 } from './data-interview-metrics';
 import { addDocumentsMonthly, tenantAdoptionPct } from './data-add-documents';
 import { offerDocumentStepMonthly, offerApprovalStepMonthly } from './data-offer-steps';
 import { employmentAgreementStepMonthly } from './data-employment-agreement-steps';
+import { LABELS as BP_LABELS } from './data-bp-shared';
 
 export type MetricTreeLevel =
   | 'Business Value Outcomes'
@@ -32,6 +34,7 @@ export type MetricTreeNode = {
   value: string;
   valueContext: string;
   trend: number[];
+  trendYm?: string[];
   momPct: number | null;
   yoyPct: number | null;
   trendGoodDirection: TrendGoodDirection;
@@ -121,19 +124,36 @@ function computeYoyPct(fullSeries: number[]): number | null {
 const timeToHire = VALUE_REALIZATION_IUMS.timeToHire;
 const recruiterCapacity = VALUE_REALIZATION_IUMS.recruiterProductivity;
 
-const timeToHireSeries = definedSeries(timeToHire.series.map((point) => point.avgValue));
-const recruiterCapacitySeries = recruiterCapacity.series
+type TrendPoint = { ym: string; value: number };
+
+function lastNTrendPoints(points: TrendPoint[], count = 6): TrendPoint[] {
+  return points.slice(Math.max(0, points.length - count));
+}
+
+const timeToHirePoints: TrendPoint[] = timeToHire.series
+  .filter((point): point is typeof point & { avgValue: number } => point.avgValue != null)
+  .map((point) => ({ ym: point.ym, value: point.avgValue }));
+const timeToHireSeries = timeToHirePoints.map((point) => point.value);
+
+const recruiterCapacityPoints: TrendPoint[] = recruiterCapacity.series
   .filter((point) => point.ym >= '2025-06')
-  .map((point) => point.avgValue);
-const cleanedRecruiterCapacitySeries = definedSeries(recruiterCapacitySeries);
+  .filter((point): point is typeof point & { avgValue: number } => point.avgValue != null)
+  .map((point) => ({ ym: point.ym, value: point.avgValue }));
+const cleanedRecruiterCapacitySeries = recruiterCapacityPoints.map((point) => point.value);
 
-const feedbackTimeSeries = FEEDBACK_SUBMISSION_TIME.map((point) => point.avgValue);
-const interviewBpSeries = AVG_TIME_IN_INTERVIEW_BP.map((point) => point.avgValue);
-const jobApplicationsSeries = JOB_APPLICATIONS_MONTHLY.map((point) => point.value / point.tenants);
-const addDocumentsSeries = addDocumentsMonthly.map((point) => tenantAdoptionPct(point));
+const feedbackTimePoints: TrendPoint[] = FEEDBACK_SUBMISSION_TIME.map((point) => ({ ym: point.ym, value: point.avgValue }));
+const feedbackTimeSeries = feedbackTimePoints.map((point) => point.value);
+const interviewBpPoints: TrendPoint[] = AVG_TIME_IN_INTERVIEW_BP.map((point) => ({ ym: point.ym, value: point.avgValue }));
+const interviewBpSeries = interviewBpPoints.map((point) => point.value);
+const jobApplicationsPoints: TrendPoint[] = JOB_APPLICATIONS_MONTHLY.map((point) => ({ ym: point.ym, value: point.value / point.tenants }));
+const jobApplicationsSeries = jobApplicationsPoints.map((point) => point.value);
+const addDocumentsPoints: TrendPoint[] = addDocumentsMonthly.map((point) => ({ ym: point.ym, value: tenantAdoptionPct(point) }));
+const addDocumentsSeries = addDocumentsPoints.map((point) => point.value);
 
-const scheduleInterviewSeries = SCHEDULE_INTERVIEW_TIME.map((p) => p.avgValue);
-const createTeamSeries = SCHEDULE_INTERVIEW_TEAM_TIME.map((p) => p.avgValue);
+const scheduleInterviewPoints: TrendPoint[] = SCHEDULE_INTERVIEW_TIME.map((point) => ({ ym: point.ym, value: point.avgValue }));
+const scheduleInterviewSeries = scheduleInterviewPoints.map((point) => point.value);
+const createTeamPoints: TrendPoint[] = SCHEDULE_INTERVIEW_TEAM_TIME.map((point) => ({ ym: point.ym, value: point.avgValue }));
+const createTeamSeries = createTeamPoints.map((point) => point.value);
 
 // Completed-path durations from materialised PROD bp_event_stats.
 const offerDurationSeries = [5.96, 5.39, 5.17, 5.62, 4.6, 3.9, 3.96, 3.97, 4.87, 5.17, 4.57, 5.3];
@@ -142,6 +162,7 @@ const employmentAgreementDurationSeries = [2.81, 2.6, 2.58, 2.5, 2.34, 2.26, 2.2
 const offerEaDurationSeries = offerDurationSeries.map(
   (value, index) => value + (employmentAgreementDurationSeries[index] ?? 0)
 );
+const offerEaDurationPoints: TrendPoint[] = BP_LABELS.map((ym, index) => ({ ym, value: offerEaDurationSeries[index] ?? 0 }));
 
 // Completion rates from PROD bp_event_stats (completed events / total events per month).
 const offerCompletionSeries = [87.2, 88.1, 86.9, 88.4, 89.0, 87.5, 88.8, 89.2, 87.6, 88.3, 89.1, 88.7];
@@ -149,16 +170,49 @@ const eaCompletionSeries = [91.3, 90.8, 91.5, 92.0, 91.2, 90.6, 91.8, 92.4, 91.0
 const offerEaCompletionSeries = offerCompletionSeries.map(
   (value, index) => (value + (eaCompletionSeries[index] ?? value)) / 2
 );
+const offerEaCompletionPoints: TrendPoint[] = BP_LABELS.map((ym, index) => ({ ym, value: offerEaCompletionSeries[index] ?? 0 }));
 
 // Combined Offer + EA document review
-const offerReviewDocsSeries = definedSeries(offerDocumentStepMonthly['Review Documents'].map((p) => p.avgHours));
-const eaReviewDocsSeries = definedSeries(employmentAgreementStepMonthly['Review Documents'].map((p) => p.avgHours));
-const combinedDocReviewSeries = offerReviewDocsSeries.map((v, i) => (v + (eaReviewDocsSeries[i] ?? v)) / 2);
+const offerReviewDocsMap = new Map(
+  offerDocumentStepMonthly['Review Documents']
+    .filter((point) => point.avgHours != null)
+    .map((point) => [point.ym, point.avgHours as number])
+);
+const eaReviewDocsMap = new Map(
+  employmentAgreementStepMonthly['Review Documents']
+    .filter((point) => point.avgHours != null)
+    .map((point) => [point.ym, point.avgHours as number])
+);
+const combinedDocReviewPoints: TrendPoint[] = BP_LABELS
+  .map((ym) => {
+    const offer = offerReviewDocsMap.get(ym);
+    const ea = eaReviewDocsMap.get(ym);
+    if (offer == null && ea == null) return null;
+    return { ym, value: offer != null && ea != null ? (offer + ea) / 2 : (offer ?? ea ?? 0) };
+  })
+  .filter((point): point is TrendPoint => point != null);
+const combinedDocReviewSeries = combinedDocReviewPoints.map((point) => point.value);
 
 // Combined Offer + EA approval
-const offerApprovalSeries = definedSeries(offerApprovalStepMonthly['Bulk Approve'].map((p) => p.avgHours));
-const eaApprovalSeries = definedSeries(employmentAgreementStepMonthly['Bulk Approve'].map((p) => p.avgHours));
-const combinedApprovalSeries = offerApprovalSeries.map((v, i) => (v + (eaApprovalSeries[i] ?? v)) / 2);
+const offerApprovalMap = new Map(
+  offerApprovalStepMonthly['Bulk Approve']
+    .filter((point) => point.avgHours != null)
+    .map((point) => [point.ym, point.avgHours as number])
+);
+const eaApprovalMap = new Map(
+  employmentAgreementStepMonthly['Bulk Approve']
+    .filter((point) => point.avgHours != null)
+    .map((point) => [point.ym, point.avgHours as number])
+);
+const combinedApprovalPoints: TrendPoint[] = BP_LABELS
+  .map((ym) => {
+    const offer = offerApprovalMap.get(ym);
+    const ea = eaApprovalMap.get(ym);
+    if (offer == null && ea == null) return null;
+    return { ym, value: offer != null && ea != null ? (offer + ea) / 2 : (offer ?? ea ?? 0) };
+  })
+  .filter((point): point is TrendPoint => point != null);
+const combinedApprovalSeries = combinedApprovalPoints.map((point) => point.value);
 
 const latestAddDocuments = addDocumentsMonthly[addDocumentsMonthly.length - 1];
 const latestOfferEaDurationYm = '2026-03';
@@ -183,6 +237,7 @@ export const TREE_NODES: MetricTreeNode[] = [
     value: formatDays(metricValue(timeToHire.latestValue)),
     valueContext: changeText(lastN(timeToHireSeries)),
     trend: lastN(timeToHireSeries),
+    trendYm: lastNTrendPoints(timeToHirePoints).map((point) => point.ym),
     momPct: computeMomPct(timeToHireSeries),
     yoyPct: computeYoyPct(timeToHireSeries),
     trendGoodDirection: 'lowerIsBetter',
@@ -203,6 +258,7 @@ export const TREE_NODES: MetricTreeNode[] = [
     value: `${metricValue(recruiterCapacity.latestValue).toFixed(1)} avg reqs`,
     valueContext: changeText(lastN(cleanedRecruiterCapacitySeries)),
     trend: lastN(cleanedRecruiterCapacitySeries),
+    trendYm: lastNTrendPoints(recruiterCapacityPoints).map((point) => point.ym),
     momPct: computeMomPct(cleanedRecruiterCapacitySeries),
     yoyPct: computeYoyPct(cleanedRecruiterCapacitySeries),
     trendGoodDirection: 'lowerIsBetter',
@@ -223,6 +279,7 @@ export const TREE_NODES: MetricTreeNode[] = [
     value: formatDays(AVG_TIME_IN_INTERVIEW_BP[AVG_TIME_IN_INTERVIEW_BP.length - 1].avgValue),
     valueContext: changeText(lastN(interviewBpSeries)),
     trend: lastN(interviewBpSeries),
+    trendYm: lastNTrendPoints(interviewBpPoints).map((point) => point.ym),
     momPct: computeMomPct(interviewBpSeries),
     yoyPct: computeYoyPct(interviewBpSeries),
     trendGoodDirection: 'lowerIsBetter',
@@ -241,6 +298,7 @@ export const TREE_NODES: MetricTreeNode[] = [
     value: formatDays(offerEaDurationSeries[offerEaDurationSeries.length - 1]),
     valueContext: changeText(lastN(offerEaDurationSeries)),
     trend: lastN(offerEaDurationSeries),
+    trendYm: lastNTrendPoints(offerEaDurationPoints).map((point) => point.ym),
     momPct: computeMomPct(offerEaDurationSeries),
     yoyPct: computeYoyPct(offerEaDurationSeries),
     trendGoodDirection: 'lowerIsBetter',
@@ -259,6 +317,7 @@ export const TREE_NODES: MetricTreeNode[] = [
     value: `${jobApplicationsSeries[jobApplicationsSeries.length - 1].toFixed(0)} / tenant`,
     valueContext: changeTextCount(lastN(jobApplicationsSeries)),
     trend: lastN(jobApplicationsSeries),
+    trendYm: lastNTrendPoints(jobApplicationsPoints).map((point) => point.ym),
     momPct: computeMomPct(jobApplicationsSeries),
     yoyPct: computeYoyPct(jobApplicationsSeries),
     trendGoodDirection: 'higherIsBetter',
@@ -279,6 +338,7 @@ export const TREE_NODES: MetricTreeNode[] = [
     value: formatHours(createTeamSeries[createTeamSeries.length - 1]),
     valueContext: changeText(lastN(createTeamSeries)),
     trend: lastN(createTeamSeries),
+    trendYm: lastNTrendPoints(createTeamPoints).map((point) => point.ym),
     momPct: computeMomPct(createTeamSeries),
     yoyPct: computeYoyPct(createTeamSeries),
     trendGoodDirection: 'lowerIsBetter',
@@ -299,6 +359,7 @@ export const TREE_NODES: MetricTreeNode[] = [
     value: formatHours(scheduleInterviewSeries[scheduleInterviewSeries.length - 1]),
     valueContext: changeText(lastN(scheduleInterviewSeries)),
     trend: lastN(scheduleInterviewSeries),
+    trendYm: lastNTrendPoints(scheduleInterviewPoints).map((point) => point.ym),
     momPct: computeMomPct(scheduleInterviewSeries),
     yoyPct: computeYoyPct(scheduleInterviewSeries),
     trendGoodDirection: 'lowerIsBetter',
@@ -319,6 +380,7 @@ export const TREE_NODES: MetricTreeNode[] = [
     value: formatHours(feedbackTimeSeries[feedbackTimeSeries.length - 1]),
     valueContext: changeText(lastN(feedbackTimeSeries)),
     trend: lastN(feedbackTimeSeries),
+    trendYm: lastNTrendPoints(feedbackTimePoints).map((point) => point.ym),
     momPct: computeMomPct(feedbackTimeSeries),
     yoyPct: computeYoyPct(feedbackTimeSeries),
     trendGoodDirection: 'lowerIsBetter',
@@ -339,6 +401,7 @@ export const TREE_NODES: MetricTreeNode[] = [
     value: formatHours(combinedDocReviewSeries[combinedDocReviewSeries.length - 1]),
     valueContext: changeText(lastN(combinedDocReviewSeries)),
     trend: lastN(combinedDocReviewSeries),
+    trendYm: lastNTrendPoints(combinedDocReviewPoints).map((point) => point.ym),
     momPct: computeMomPct(combinedDocReviewSeries),
     yoyPct: computeYoyPct(combinedDocReviewSeries),
     trendGoodDirection: 'lowerIsBetter',
@@ -359,6 +422,7 @@ export const TREE_NODES: MetricTreeNode[] = [
     value: formatHours(combinedApprovalSeries[combinedApprovalSeries.length - 1]),
     valueContext: changeText(lastN(combinedApprovalSeries)),
     trend: lastN(combinedApprovalSeries),
+    trendYm: lastNTrendPoints(combinedApprovalPoints).map((point) => point.ym),
     momPct: computeMomPct(combinedApprovalSeries),
     yoyPct: computeYoyPct(combinedApprovalSeries),
     trendGoodDirection: 'lowerIsBetter',
@@ -378,6 +442,7 @@ export const TREE_NODES: MetricTreeNode[] = [
     value: formatPct(offerEaCompletionSeries[offerEaCompletionSeries.length - 1]),
     valueContext: changeText(lastN(offerEaCompletionSeries)),
     trend: lastN(offerEaCompletionSeries),
+    trendYm: lastNTrendPoints(offerEaCompletionPoints).map((point) => point.ym),
     momPct: computeMomPct(offerEaCompletionSeries),
     yoyPct: computeYoyPct(offerEaCompletionSeries),
     trendGoodDirection: 'higherIsBetter',
@@ -398,6 +463,7 @@ export const TREE_NODES: MetricTreeNode[] = [
     value: `${tenantAdoptionPct(latestAddDocuments).toFixed(1)}%`,
     valueContext: `${latestAddDocuments.ym} · tenant adoption rate`,
     trend: lastN(addDocumentsSeries),
+    trendYm: lastNTrendPoints(addDocumentsPoints).map((point) => point.ym),
     momPct: computeMomPct(addDocumentsSeries),
     yoyPct: computeYoyPct(addDocumentsSeries),
     trendGoodDirection: 'higherIsBetter',
@@ -442,8 +508,8 @@ const NODE_FORMAT_MAP: Record<string, NodeFormatter> = {
   'offer-ea-duration': { metricKeys: ['offer-duration', 'ea-duration'], combiner: 'sum', format: formatDays, unit: 'days' },
   'offer-ea-completion': { metricKeys: ['offer-completion', 'ea-completion'], combiner: 'avg', format: formatPct, unit: '%' },
   'job-applications': { metricKeys: ['job-applications'], combiner: 'avg', format: (v) => `${v.toFixed(0)} / tenant`, unit: '' },
-  'create-interview-team': { metricKeys: ['time-in-interview-bp'], combiner: 'avg', format: formatHours, unit: 'hrs' },
-  'schedule-interviews': { metricKeys: ['time-in-interview-bp'], combiner: 'avg', format: formatHours, unit: 'hrs' },
+  'create-interview-team': { metricKeys: ['create-interview-team'], combiner: 'avg', format: formatHours, unit: 'hrs' },
+  'schedule-interviews': { metricKeys: ['schedule-interviews'], combiner: 'avg', format: formatHours, unit: 'hrs' },
   'feedback-time': { metricKeys: ['feedback-time'], combiner: 'avg', format: formatHours, unit: 'hrs' },
   'document-review': { metricKeys: ['document-review'], combiner: 'avg', format: formatHours, unit: 'hrs' },
   'approval-time': { metricKeys: ['approval-time'], combiner: 'avg', format: formatHours, unit: 'hrs' },
@@ -453,7 +519,7 @@ const NODE_FORMAT_MAP: Record<string, NodeFormatter> = {
 function aggregateFilteredSeries(
   metricKey: string,
   filteredTenants: string[],
-): number[] {
+): TrendPoint[] {
   const source = TREE_TENANT_SERIES[metricKey];
   if (!source) return [];
   const matching = filteredTenants.filter((t) => source[t]);
@@ -465,8 +531,9 @@ function aggregateFilteredSeries(
     const values = matching
       .map((t) => source[t]?.find((p) => p.ym === ym)?.value)
       .filter((v): v is number => v != null && Number.isFinite(v));
-    return values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : NaN;
-  }).filter(Number.isFinite);
+    if (values.length === 0) return null;
+    return { ym, value: values.reduce((a, b) => a + b, 0) / values.length };
+  }).filter((point): point is TrendPoint => point != null);
 }
 
 export function buildFilteredNode(
@@ -487,27 +554,34 @@ export function buildFilteredNode(
 
   const seriesPerKey = fmt.metricKeys.map((k) => aggregateFilteredSeries(k, filteredTenants));
   if (seriesPerKey.every((s) => s.length === 0)) {
-    return { ...base, value: 'Unavailable', valueContext: 'No matching tenants', trend: [], momPct: null, yoyPct: null };
+    return { ...base, value: 'Unavailable', valueContext: 'No matching tenants', trend: [], trendYm: [], momPct: null, yoyPct: null };
   }
 
-  let combined: number[];
+  let combinedPoints: TrendPoint[];
   if (fmt.metricKeys.length === 1) {
-    combined = seriesPerKey[0];
+    combinedPoints = seriesPerKey[0];
   } else {
-    const maxLen = Math.max(...seriesPerKey.map((s) => s.length));
-    combined = Array.from({ length: maxLen }, (_, i) => {
-      const vals = seriesPerKey.map((s) => s[i]).filter((v): v is number => v != null && Number.isFinite(v));
-      if (vals.length === 0) return NaN;
-      return fmt.combiner === 'sum'
-        ? vals.reduce((a, b) => a + b, 0)
-        : vals.reduce((a, b) => a + b, 0) / vals.length;
-    }).filter(Number.isFinite);
+    const allYms = Array.from(new Set(seriesPerKey.flatMap((series) => series.map((point) => point.ym)))).sort();
+    combinedPoints = allYms.map((ym) => {
+      const vals = seriesPerKey
+        .map((series) => series.find((point) => point.ym === ym)?.value)
+        .filter((value): value is number => value != null && Number.isFinite(value));
+      if (vals.length === 0) return null;
+      return {
+        ym,
+        value: fmt.combiner === 'sum'
+          ? vals.reduce((a, b) => a + b, 0)
+          : vals.reduce((a, b) => a + b, 0) / vals.length,
+      };
+    }).filter((point): point is TrendPoint => point != null);
   }
 
-  if (combined.length === 0) {
-    return { ...base, value: 'Unavailable', valueContext: 'No matching tenants', trend: [], momPct: null, yoyPct: null };
+  if (combinedPoints.length === 0) {
+    return { ...base, value: 'Unavailable', valueContext: 'No matching tenants', trend: [], trendYm: [], momPct: null, yoyPct: null };
   }
 
+  const combined = combinedPoints.map((point) => point.value);
+  const lastCombinedPoints = lastNTrendPoints(combinedPoints);
   const latest = combined[combined.length - 1];
   const tenantCount = fmt.metricKeys.reduce((max, k) => {
     const src = TREE_TENANT_SERIES[k];
@@ -519,6 +593,7 @@ export function buildFilteredNode(
     value: fmt.format(latest),
     valueContext: `Filtered (${tenantCount} tenants) · ${changeText(lastN(combined))}`,
     trend: lastN(combined),
+    trendYm: lastCombinedPoints.map((point) => point.ym),
     momPct: computeMomPct(combined),
     yoyPct: computeYoyPct(combined),
   };
