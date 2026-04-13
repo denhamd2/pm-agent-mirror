@@ -1,4 +1,4 @@
-# Deploy PM Agent Dashboard (docs/*.html) to gh-pages root
+# Deploy PM Agent Dashboard (Vite app from design/) to gh-pages root
 # Requires: repo Settings → Pages → Build from branch "gh-pages" / root.
 
 name: Deploy PM Agent Dashboard
@@ -37,13 +37,8 @@ jobs:
 
       - name: Prepare dashboard files
         run: |
-          mkdir -p dashboard-dist/dashboard
-          mkdir -p dashboard-dist/docs
-          cp -r docs/* dashboard-dist/docs/
+          mkdir -p dashboard-dist
           cp -r design/dist/* dashboard-dist/
-          cp docs/pm-agent-*.html dashboard-dist/dashboard/
-          cp docs/dashboard-nav.js dashboard-dist/dashboard/ 2>/dev/null || true
-          cp docs/manifest.json dashboard-dist/dashboard/ 2>/dev/null || true
           echo "Files to deploy:"
           ls -la dashboard-dist/
 
