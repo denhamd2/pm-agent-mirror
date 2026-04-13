@@ -550,6 +550,30 @@ export const AvgTimeToHireDashboard: React.FC = () => {
           subtitle={"Average tenant-level time to hire from first job posting to latest accepted offer, shown here as the monthly mean across reporting tenants.\nSource: dw.swh_raw.internal_usage_metrics_report_kafka · live metric-name resolution to Average Time to Hire (2358) · SANDBOX only in the current accessible warehouse."}
         />
 
+        {/* ─── Filters ─── */}
+        <Card
+          padding="m"
+          style={{ borderRadius: SANA_CARD_RADIUS_LG, border: `1px solid ${colors.soap300}`, marginBottom: '16px' }}
+        >
+          <BodyText size="small" style={{ fontWeight: 700, color: colors.blackPepper500, marginBottom: '12px', textTransform: 'uppercase', fontSize: 11, letterSpacing: '0.06em' }}>
+            Filters
+          </BodyText>
+          <Flex gap="m" style={{ flexWrap: 'wrap' }}>
+            <Box style={{ flex: '1 1 180px' }}>
+              <FormSelect id="region-filter" label="Region" value={regionFilter} onChange={setRegionFilter} options={REGION_OPTIONS} />
+            </Box>
+            <Box style={{ flex: '1 1 180px' }}>
+              <FormSelect id="cloud-platform-filter" label="Cloud platform" value={infraFilter} onChange={setInfraFilter} options={INFRA_OPTIONS} />
+            </Box>
+            <Box style={{ flex: '1 1 180px' }}>
+              <TenantSearchInput value={tenantSearch} onChange={setTenantSearch} />
+            </Box>
+            <Box style={{ flex: '1 1 180px' }}>
+              <FormSelect id="range-filter" label="Time Range" value={rangeFilter} onChange={setRangeFilter} options={RANGE_OPTIONS} />
+            </Box>
+          </Flex>
+        </Card>
+
         {/* ─── KPI row ─── */}
         <Flex gap="m" marginBottom="l" style={{ flexWrap: 'wrap' }}>
           <MetricCard
@@ -583,30 +607,6 @@ export const AvgTimeToHireDashboard: React.FC = () => {
             tooltip="High end of the tenant-level average distribution in the latest month (capped to limit bad data spikes)."
           />
         </Flex>
-
-        {/* ─── Filters ─── */}
-        <Card
-          padding="m"
-          style={{ borderRadius: SANA_CARD_RADIUS_LG, border: `1px solid ${colors.soap300}`, marginBottom: '16px' }}
-        >
-          <BodyText size="small" style={{ fontWeight: 700, color: colors.blackPepper500, marginBottom: '12px', textTransform: 'uppercase', fontSize: 11, letterSpacing: '0.06em' }}>
-            Filters
-          </BodyText>
-          <Flex gap="m" style={{ flexWrap: 'wrap' }}>
-            <Box style={{ flex: '1 1 180px' }}>
-              <FormSelect id="region-filter" label="Region" value={regionFilter} onChange={setRegionFilter} options={REGION_OPTIONS} />
-            </Box>
-            <Box style={{ flex: '1 1 180px' }}>
-              <FormSelect id="cloud-platform-filter" label="Cloud platform" value={infraFilter} onChange={setInfraFilter} options={INFRA_OPTIONS} />
-            </Box>
-            <Box style={{ flex: '1 1 180px' }}>
-              <TenantSearchInput value={tenantSearch} onChange={setTenantSearch} />
-            </Box>
-            <Box style={{ flex: '1 1 180px' }}>
-              <FormSelect id="range-filter" label="Time Range" value={rangeFilter} onChange={setRangeFilter} options={RANGE_OPTIONS} />
-            </Box>
-          </Flex>
-        </Card>
 
         {/* ─── Tabs ─── */}
         <Flex gap="xs" marginBottom="m" style={{ borderBottom: `1px solid ${colors.soap300}`, paddingBottom: '8px', flexWrap: 'wrap' }}>

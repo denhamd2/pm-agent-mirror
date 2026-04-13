@@ -17,7 +17,7 @@ import {
   Filler,
 } from 'chart.js';
 import { Line, Bar } from 'react-chartjs-2';
-import { DashboardGlobalNav, MetricCard, PageHeader } from './components';
+import { DashboardGlobalNav, MetricCard, PageHeader, FormSelect } from './components';
 import { SANA_CARD_RADIUS_LG, SANA_CARD_SHADOW, SANA_PAGE_CANVAS } from './components/sanaShellTheme';
 import {
   QUERY_META,
@@ -39,6 +39,11 @@ const TABS: Array<{ id: TabId; label: string }> = [
   { id: 'trend', label: 'Trend' },
   { id: 'context', label: 'Context' },
   { id: 'guide', label: 'Interpretation' },
+];
+
+const RANGE_OPTIONS = [
+  { value: '6', label: 'Last 6 months' },
+  { value: 'all', label: 'All data' },
 ];
 
 const chartCardStyle: React.CSSProperties = {
@@ -102,9 +107,10 @@ function formatSeriesDelta(rows: Array<{ value: number | null }>, digits = 1): s
   return `${prefix}${delta.toFixed(digits)} vs prev month`;
 }
 
-function OverviewTab() {
-  const capacityValues = CAPACITY_TREND.map((point) => point.value);
-  const pressureValues = MODELLED_PRESSURE_INDEX.map((point) => point.value);
+function OverviewTab({ rangeSlice }: { rangeSlice: number }) {
+  const labels = LABELS.slice(rangeSlice);
+  const capacityValues = CAPACITY_TREND.slice(rangeSlice).map((point) => point.value);
+  const pressureValues = MODELLED_PRESSURE_INDEX.slice(rangeSlice).map((point) => point.value);
 
   return (
     <Flex flexDirection="column" gap="l">
@@ -120,7 +126,7 @@ function OverviewTab() {
           <div style={{ height: 320 }}>
             <Line
               data={{
-                labels: LABELS,
+                labels,
                 datasets: [
                   {
                     label: 'Recruiter Capacity',
@@ -215,7 +221,8 @@ function OverviewTab() {
   );
 }
 
-function TrendTab() {
+function TrendTab({ rangeSlice }: { rangeSlice: number }) {
+  const labels = LABELS.slice(rangeSlice);
   return (
     <Flex flexDirection="column" gap="l">
       <Flex gap="l" style={{ flexWrap: 'wrap', alignItems: 'stretch' }}>
@@ -226,11 +233,11 @@ function TrendTab() {
           <div style={{ height: 320 }}>
             <Line
               data={{
-                labels: LABELS,
+                labels,
                 datasets: [
                   {
                     label: 'Recruiter Capacity',
-                    data: CAPACITY_TREND.map((point) => point.value),
+                    data: CAPACITY_TREND.slice(rangeSlice).map((point) => point.value),
                     borderColor: colors.blueberry500,
                     backgroundColor: 'rgba(0,112,210,0.12)',
                     fill: true,
@@ -251,11 +258,11 @@ function TrendTab() {
           <div style={{ height: 320 }}>
             <Bar
               data={{
-                labels: LABELS,
+                labels,
                 datasets: [
                   {
                     label: 'Reporting tenants',
-                    data: CAPACITY_TREND.map((point) => point.tenants),
+                    data: CAPACITY_TREND.slice(rangeSlice).map((point) => point.tenants),
                     backgroundColor: colors.soap400,
                     borderRadius: 6,
                   },
@@ -275,11 +282,11 @@ function TrendTab() {
           <div style={{ height: 300 }}>
             <Line
               data={{
-                labels: LABELS,
+                labels,
                 datasets: [
                   {
                     label: 'Applications per tenant',
-                    data: CONTEXT_SERIES.jobApplicationsPerTenant.map((point) => point.value),
+                    data: CONTEXT_SERIES.jobApplicationsPerTenant.slice(rangeSlice).map((point) => point.value),
                     borderColor: colors.cantaloupe400,
                     backgroundColor: 'rgba(255,159,10,0.10)',
                     pointRadius: 2,
@@ -287,7 +294,7 @@ function TrendTab() {
                   },
                   {
                     label: 'Interview rounds per tenant',
-                    data: CONTEXT_SERIES.interviewRoundsPerTenant.map((point) => point.value),
+                    data: CONTEXT_SERIES.interviewRoundsPerTenant.slice(rangeSlice).map((point) => point.value),
                     borderColor: colors.greenApple500,
                     backgroundColor: 'rgba(51,153,102,0.10)',
                     pointRadius: 2,
@@ -310,11 +317,11 @@ function TrendTab() {
           <div style={{ height: 300 }}>
             <Line
               data={{
-                labels: LABELS,
+                labels,
                 datasets: [
                   {
                     label: 'Interview sessions per tenant',
-                    data: CONTEXT_SERIES.interviewSessionsPerTenant.map((point) => point.value),
+                    data: CONTEXT_SERIES.interviewSessionsPerTenant.slice(rangeSlice).map((point) => point.value),
                     borderColor: colors.blackPepper500,
                     backgroundColor: 'rgba(56,65,74,0.08)',
                     pointRadius: 2,
@@ -332,11 +339,12 @@ function TrendTab() {
   );
 }
 
-function ContextTab() {
+function ContextTab({ rangeSlice }: { rangeSlice: number }) {
   const interviewBpCurrent = lastValue(CONTEXT_SERIES.avgTimeInInterviewBp);
   const interviewBpPrev = previousValue(CONTEXT_SERIES.avgTimeInInterviewBp);
   const adoptionCurrent = lastValue(CONTEXT_SERIES.recruitingCoreAdoptionPct);
   const adoptionPrev = previousValue(CONTEXT_SERIES.recruitingCoreAdoptionPct);
+  const labels = LABELS.slice(rangeSlice);
 
   return (
     <Flex flexDirection="column" gap="l">
@@ -348,11 +356,11 @@ function ContextTab() {
           <div style={{ height: 320 }}>
             <Line
               data={{
-                labels: LABELS,
+                labels,
                 datasets: [
                   {
                     label: 'Avg time in Interview BP',
-                    data: CONTEXT_SERIES.avgTimeInInterviewBp.map((point) => point.value),
+                    data: CONTEXT_SERIES.avgTimeInInterviewBp.slice(rangeSlice).map((point) => point.value),
                     borderColor: colors.peachSchnapps500,
                     backgroundColor: 'rgba(255,95,86,0.10)',
                     pointRadius: 2,
@@ -360,7 +368,7 @@ function ContextTab() {
                   },
                   {
                     label: 'MISST sessions per req',
-                    data: CONTEXT_SERIES.misstSessionsPerReq.map((point) => point.value),
+                    data: CONTEXT_SERIES.misstSessionsPerReq.slice(rangeSlice).map((point) => point.value),
                     borderColor: colors.blueberry500,
                     backgroundColor: 'rgba(0,112,210,0.08)',
                     pointRadius: 2,
@@ -396,11 +404,11 @@ function ContextTab() {
           <div style={{ height: 320 }}>
             <Line
               data={{
-                labels: LABELS,
+                labels,
                 datasets: [
                   {
                     label: 'Recruiting core adoption %',
-                    data: CONTEXT_SERIES.recruitingCoreAdoptionPct.map((point) => point.value),
+                    data: CONTEXT_SERIES.recruitingCoreAdoptionPct.slice(rangeSlice).map((point) => point.value),
                     borderColor: colors.greenApple500,
                     backgroundColor: 'rgba(51,153,102,0.12)',
                     pointRadius: 2,
@@ -473,13 +481,19 @@ function GuideTab() {
 
 export const RecruiterCapacityDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabId>('overview');
+  const [rangeFilter, setRangeFilter] = useState('all');
+
+  const rangeSlice = useMemo(() => {
+    if (rangeFilter === 'all') return 0;
+    return LABELS.length - Number(rangeFilter);
+  }, [rangeFilter]);
 
   const tabContent = useMemo(() => {
-    if (activeTab === 'trend') return <TrendTab />;
-    if (activeTab === 'context') return <ContextTab />;
+    if (activeTab === 'trend') return <TrendTab rangeSlice={rangeSlice} />;
+    if (activeTab === 'context') return <ContextTab rangeSlice={rangeSlice} />;
     if (activeTab === 'guide') return <GuideTab />;
-    return <OverviewTab />;
-  }, [activeTab]);
+    return <OverviewTab rangeSlice={rangeSlice} />;
+  }, [activeTab, rangeSlice]);
 
   return (
     <Flex flexDirection="column" minHeight="100vh" style={{ backgroundColor: SANA_PAGE_CANVAS }}>
@@ -496,6 +510,20 @@ export const RecruiterCapacityDashboard: React.FC = () => {
             accessible IUM feed. The surrounding application, interview, and adoption series are production context signals used
             to interpret pressure, not to redefine the recruiter-load metric itself.
           </BodyText>
+
+          <Card
+            padding="m"
+            style={{ borderRadius: SANA_CARD_RADIUS_LG, border: `1px solid ${colors.soap300}`, marginBottom: '16px' }}
+          >
+            <BodyText size="small" style={{ fontWeight: 700, color: colors.blackPepper500, marginBottom: '12px', textTransform: 'uppercase', fontSize: 11, letterSpacing: '0.06em' }}>
+              Filters
+            </BodyText>
+            <Flex gap="m" style={{ flexWrap: 'wrap' }}>
+              <Box style={{ flex: '1 1 180px', maxWidth: 240 }}>
+                <FormSelect id="rc-range-filter" label="Time Range" value={rangeFilter} onChange={setRangeFilter} options={RANGE_OPTIONS} />
+              </Box>
+            </Flex>
+          </Card>
 
           <Flex gap="l" marginBottom="l" style={{ flexWrap: 'wrap' }}>
             {HEADLINE_KPIS.map((metric) => (
