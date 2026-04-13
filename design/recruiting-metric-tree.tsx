@@ -14,6 +14,7 @@ import {
   type ChartOptions,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { FormSelect } from './components';
 import { SANA_PAGE_CANVAS } from './components/sanaShellTheme';
 import {
   TREE_META,
@@ -22,23 +23,30 @@ import {
   TREE_LEVELS,
   type MetricTreeConfidence,
   type MetricTreeNode,
+  lastN,
+  definedSeries,
+  formatDays,
+  changeText,
+  metricValue,
+  buildFilteredNode,
 } from './data-recruiting-metric-tree';
+import {
+  type DashboardFilterState,
+  EMPTY_DASHBOARD_FILTERS,
+  SEGMENT_FILTER_OPTIONS,
+  REGION_FILTER_OPTIONS,
+  INDUSTRY_FILTER_OPTIONS,
+  filterTenantNames,
+  describeActiveFilters,
+  normaliseTenantInput,
+} from './dashboard-filter-utils';
+import { TENANT_TIME_SERIES, ALL_TENANTS } from './data-avg-time-to-hire';
+import { RECRUITER_CAPACITY_TENANT_SERIES } from './data-dashboard-tenant-filters';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, ChartTooltip);
 
-type ViewportState = {
-  x: number;
-  y: number;
-  scale: number;
-};
-
-type DragState = {
-  active: boolean;
-  pointerX: number;
-  pointerY: number;
-  originX: number;
-  originY: number;
-};
+type ViewportState = { x: number; y: number; scale: number };
+type DragState = { active: boolean; pointerX: number; pointerY: number; originX: number; originY: number };
 
 const NODE_HEIGHT = 138;
 const DEFAULT_NODE_WIDTH = 228;
@@ -68,6 +76,12 @@ const CONFIDENCE_STYLE: Record<
     dash: '6 5',
     badge: 'Directional',
   },
+};
+
+const STRENGTH_STYLE: Record<string, { bg: string; fg: string }> = {
+  Strong: { bg: colors.greenApple100, fg: colors.greenApple600 },
+  Moderate: { bg: '#fff3e0', fg: '#e67700' },
+  Weak: { bg: colors.soap200, fg: colors.blackPepper500 },
 };
 
 function clamp(value: number, min: number, max: number): number {
@@ -122,17 +136,7 @@ function formatLevelSummary(level: string): string {
 function chartData(values: number[], stroke: string, fill: string) {
   return {
     labels: values.map((_, index) => `P${index + 1}`),
-    datasets: [
-      {
-        data: values,
-        borderColor: stroke,
-        backgroundColor: fill,
-        fill: true,
-        borderWidth: 2,
-        pointRadius: 0,
-        tension: 0.35,
-      },
-    ],
+    datasets: [{ data: values, borderColor: stroke, backgroundColor: fill, fill: true, borderWidth: 2, pointRadius: 0, tension: 0.35 }],
   };
 }
 
@@ -156,23 +160,55 @@ const railChartOptions: ChartOptions<'line'> = {
   },
 };
 
-function NodeCard({
-  node,
-  selected,
-  onSelect,
-}: {
-  node: MetricTreeNode;
-  selected: boolean;
-  onSelect: (nodeId: string) => void;
-}) {
+// ── Filtered node builder helpers ──
+
+function buildFilteredTthNode(filteredTenants: string[], base: MetricTreeNode): MetricTreeNode {
+  const labels = Array.from(new Set(filteredTenants.flatMap((t) => (TENANT_TIME_SERIES[t] ?? []).map((p) => p.ym)))).sort();
+  const trendByMonth = labels.map((ym) => {
+    const values = filteredTenants
+      .map((t) => TENANT_TIME_SERIES[t]?.find((p) => p.ym === ym)?.v)
+      .filter((v): v is number => v != null && Number.isFinite(v));
+    return values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : null;
+  });
+  const series = definedSeries(trendByMonth);
+  if (series.length === 0) return { ...base, value: 'Unavailable', valueContext: 'No matching tenants', trend: [] };
+  const latest = series[series.length - 1];
+  return {
+    ...base,
+    value: formatDays(latest),
+    valueContext: `Filtered (${filteredTenants.length} tenants) · ${changeText(lastN(series))}`,
+    trend: lastN(series),
+  };
+}
+
+function buildFilteredRcNode(filteredTenants: string[], base: MetricTreeNode): MetricTreeNode {
+  const rcTenants = filteredTenants.filter((t) => RECRUITER_CAPACITY_TENANT_SERIES[t]);
+  const labels = Array.from(new Set(rcTenants.flatMap((t) => (RECRUITER_CAPACITY_TENANT_SERIES[t] ?? []).map((p) => p.ym)))).sort();
+  const trendByMonth = labels.map((ym) => {
+    const values = rcTenants
+      .map((t) => RECRUITER_CAPACITY_TENANT_SERIES[t]?.find((p) => p.ym === ym)?.value)
+      .filter((v): v is number => v != null && Number.isFinite(v));
+    return values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : null;
+  });
+  const series = definedSeries(trendByMonth);
+  if (series.length === 0) return { ...base, value: 'Unavailable', valueContext: 'No matching tenants', trend: [] };
+  const latest = series[series.length - 1];
+  return {
+    ...base,
+    value: `${latest.toFixed(1)} avg reqs`,
+    valueContext: `Filtered (${rcTenants.length} tenants) · ${changeText(lastN(series))}`,
+    trend: lastN(series),
+  };
+}
+
+// ── NodeCard ──
+
+function NodeCard({ node, selected, onSelect }: { node: MetricTreeNode; selected: boolean; onSelect: (id: string) => void }) {
   const confidence = CONFIDENCE_STYLE[node.confidence];
   return (
     <button
       type="button"
-      onClick={(event) => {
-        event.stopPropagation();
-        onSelect(node.id);
-      }}
+      onClick={(event) => { event.stopPropagation(); onSelect(node.id); }}
       style={{
         position: 'absolute',
         left: node.x,
@@ -183,79 +219,74 @@ function NodeCard({
         border: selected ? `2px solid ${colors.blueberry500}` : `1px solid ${colors.soap300}`,
         background: selected ? '#f7fbff' : colors.frenchVanilla100,
         boxShadow: selected ? '0 10px 26px rgba(0,112,210,0.18)' : '0 8px 22px rgba(0,0,0,0.08)',
-        padding: '12px 14px',
+        padding: '10px 12px',
         cursor: 'pointer',
         textAlign: 'left',
+        overflow: 'hidden',
       }}
       onMouseDown={(event) => event.stopPropagation()}
     >
-      <Flex justifyContent="space-between" gap="s" alignItems="flex-start" style={{ marginBottom: 8 }}>
-        <Box style={{ minWidth: 0 }}>
-          <div style={{ fontSize: 10, color: colors.blackPepper400, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+      <Flex justifyContent="space-between" gap="s" alignItems="flex-start" style={{ marginBottom: 4 }}>
+        <Box style={{ minWidth: 0, overflow: 'hidden' }}>
+          <div style={{ fontSize: 9, color: colors.blackPepper400, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             {node.level}
           </div>
-          <div style={{ fontSize: 15, fontWeight: 700, color: colors.blackPepper600, lineHeight: 1.25 }}>{node.title}</div>
-          {node.shortTitle ? (
-            <div style={{ fontSize: 10, color: colors.blackPepper400, lineHeight: 1.35, marginTop: 2 }}>
-              {node.shortTitle}
-            </div>
-          ) : null}
-        </Box>
-        <span
-          style={{
-            flexShrink: 0,
-            padding: '3px 8px',
-            borderRadius: 999,
-            background: confidence.bg,
-            color: confidence.fg,
-            fontSize: 11,
+          <div style={{
+            fontSize: 13,
             fontWeight: 700,
-          }}
-        >
+            color: colors.blackPepper600,
+            lineHeight: 1.25,
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical' as const,
+            overflow: 'hidden',
+          }}>
+            {node.title}
+          </div>
+        </Box>
+        <span style={{ flexShrink: 0, padding: '2px 7px', borderRadius: 999, background: confidence.bg, color: confidence.fg, fontSize: 10, fontWeight: 700 }}>
           {confidence.badge}
         </span>
       </Flex>
 
-      <div style={{ fontSize: 24, fontWeight: 700, color: colors.blackPepper600 }}>{node.value}</div>
-      <div style={{ fontSize: 11, color: colors.blackPepper400, lineHeight: 1.35, marginTop: 4 }}>{node.valueContext}</div>
+      <div style={{ fontSize: 20, fontWeight: 700, color: colors.blackPepper600, lineHeight: 1.2 }}>{node.value}</div>
+      <div style={{ fontSize: 10, color: colors.blackPepper400, lineHeight: 1.3, marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{node.valueContext}</div>
 
-      <Flex justifyContent="space-between" alignItems="center" style={{ marginTop: 10 }}>
-        <span
-          style={{
-            fontSize: 9,
-            color: colors.blackPepper400,
-            background: colors.soap100,
-            borderRadius: 999,
-            padding: '3px 7px',
-          }}
-        >
+      <Flex justifyContent="space-between" alignItems="center" style={{ marginTop: 6 }}>
+        <span style={{ fontSize: 8, color: colors.blackPepper400, background: colors.soap100, borderRadius: 999, padding: '2px 6px' }}>
           {node.source}
         </span>
-        <div style={{ width: 96, height: 24 }}>
-          <Line
-            data={chartData(node.trend, confidence.stroke, `${confidence.stroke}22`)}
-            options={miniChartOptions}
-          />
+        <div style={{ width: 80, height: 20, flexShrink: 0 }}>
+          <Line data={chartData(node.trend.length > 0 ? node.trend : [0], confidence.stroke, `${confidence.stroke}22`)} options={miniChartOptions} />
         </div>
       </Flex>
     </button>
   );
 }
 
+// ── Main page component ──
+
 export const RecruitingMetricTreePage: React.FC = () => {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const dragMovedRef = useRef(false);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [view, setView] = useState<ViewportState>({ x: 48, y: 18, scale: 0.74 });
-  const [drag, setDrag] = useState<DragState>({
-    active: false,
-    pointerX: 0,
-    pointerY: 0,
-    originX: 0,
-    originY: 0,
-  });
+  const [drag, setDrag] = useState<DragState>({ active: false, pointerX: 0, pointerY: 0, originX: 0, originY: 0 });
+  const [filters, setFilters] = useState<DashboardFilterState>(EMPTY_DASHBOARD_FILTERS);
 
-  const nodeMap = useMemo(() => new Map(TREE_NODES.map((node) => [node.id, node])), []);
+  const isFiltered = filters.segment !== 'all' || filters.region !== 'all' || filters.industry !== 'all' || !!filters.tenant;
+
+  const treeNodes = useMemo(() => {
+    if (!isFiltered) return TREE_NODES;
+    const filteredTenants = filterTenantNames(ALL_TENANTS, filters);
+    return TREE_NODES.map((node) => {
+      if (node.id === 'avg-time-to-hire') return buildFilteredTthNode(filteredTenants, node);
+      if (node.id === 'recruiter-capacity') return buildFilteredRcNode(filteredTenants, node);
+      return buildFilteredNode(node.id, filteredTenants, node);
+    });
+  }, [isFiltered, filters]);
+
+  const nodeMap = useMemo(() => new Map(treeNodes.map((node) => [node.id, node])), [treeNodes]);
   const selectedNode = selectedNodeId ? nodeMap.get(selectedNodeId) ?? null : null;
   const edgeInsights = useMemo(
     () =>
@@ -264,164 +295,82 @@ export const RecruitingMetricTreePage: React.FC = () => {
         const to = nodeMap.get(edge.to);
         const correlation = !from || !to ? null : pearsonCorrelation(from.trend, to.trend);
         const strength = correlationStrength(correlation);
-        return {
-          ...edge,
-          correlation,
-          strength,
-        };
+        return { ...edge, correlation, strength };
       }),
     [nodeMap]
   );
   const connectedEdges = useMemo(
-    () =>
-      selectedNodeId
-        ? edgeInsights.filter((edge) => edge.from === selectedNodeId || edge.to === selectedNodeId)
-        : [],
+    () => selectedNodeId ? edgeInsights.filter((edge) => edge.from === selectedNodeId || edge.to === selectedNodeId) : [],
     [edgeInsights, selectedNodeId]
   );
 
   const setViewForNode = (node: MetricTreeNode, scale = 0.96) => {
     const rect = viewportRef.current?.getBoundingClientRect();
-    if (!rect) {
-      setView({ x: 40, y: 20, scale });
-      return;
-    }
+    if (!rect) { setView({ x: 40, y: 20, scale }); return; }
     const nodeWidth = node.width ?? DEFAULT_NODE_WIDTH;
-    setView({
-      scale,
-      x: rect.width / 2 - (node.x + nodeWidth / 2) * scale,
-      y: rect.height / 3 - (node.y + NODE_HEIGHT / 2) * scale,
-    });
-  };
-
-  const focusLevel = (level: (typeof TREE_LEVELS)[number]) => {
-    const rect = viewportRef.current?.getBoundingClientRect();
-    const nodes = TREE_NODES.filter((node) => node.level === level);
-    if (!rect || nodes.length === 0) return;
-    const left = Math.min(...nodes.map((node) => node.x));
-    const right = Math.max(...nodes.map((node) => node.x + (node.width ?? DEFAULT_NODE_WIDTH)));
-    const top = Math.min(...nodes.map((node) => node.y));
-    const bottom = Math.max(...nodes.map((node) => node.y + NODE_HEIGHT));
-    const scale = clamp(Math.min((rect.width - 80) / (right - left + 80), (rect.height - 120) / (bottom - top + 80)), 0.48, 1.12);
-    setView({
-      scale,
-      x: 40 - left * scale,
-      y: 70 - top * scale,
-    });
+    setView({ scale, x: rect.width / 2 - (node.x + nodeWidth / 2) * scale, y: rect.height / 3 - (node.y + NODE_HEIGHT / 2) * scale });
   };
 
   const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
     event.preventDefault();
     const rect = viewportRef.current?.getBoundingClientRect();
     if (!rect) return;
-
     const pointerX = event.clientX - rect.left;
     const pointerY = event.clientY - rect.top;
     const nextScale = clamp(view.scale * (event.deltaY < 0 ? 1.08 : 0.92), 0.48, 1.4);
     const worldX = (pointerX - view.x) / view.scale;
     const worldY = (pointerY - view.y) / view.scale;
-
-    setView({
-      scale: nextScale,
-      x: pointerX - worldX * nextScale,
-      y: pointerY - worldY * nextScale,
-    });
+    setView({ scale: nextScale, x: pointerX - worldX * nextScale, y: pointerY - worldY * nextScale });
   };
 
   const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     dragMovedRef.current = false;
-    setDrag({
-      active: true,
-      pointerX: event.clientX,
-      pointerY: event.clientY,
-      originX: view.x,
-      originY: view.y,
-    });
+    setDrag({ active: true, pointerX: event.clientX, pointerY: event.clientY, originX: view.x, originY: view.y });
   };
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!drag.active) return;
-    if (Math.abs(event.clientX - drag.pointerX) > 2 || Math.abs(event.clientY - drag.pointerY) > 2) {
-      dragMovedRef.current = true;
-    }
-    setView((current) => ({
-      ...current,
-      x: drag.originX + (event.clientX - drag.pointerX),
-      y: drag.originY + (event.clientY - drag.pointerY),
-    }));
+    if (Math.abs(event.clientX - drag.pointerX) > 2 || Math.abs(event.clientY - drag.pointerY) > 2) dragMovedRef.current = true;
+    setView((c) => ({ ...c, x: drag.originX + (event.clientX - drag.pointerX), y: drag.originY + (event.clientY - drag.pointerY) }));
   };
 
-  const stopDragging = () => {
-    setDrag((current) => ({ ...current, active: false }));
-  };
-
+  const stopDragging = () => setDrag((c) => ({ ...c, active: false }));
   const canvasWidth = selectedNode ? `calc(100vw - ${RAIL_WIDTH}px)` : '100vw';
+  const filterParts = describeActiveFilters(filters);
+
+  const updateFilter = (key: keyof DashboardFilterState, value: string) => setFilters((prev) => ({ ...prev, [key]: value }));
+
+  const tenantOptions = useMemo(() => {
+    const rcKeys = Object.keys(RECRUITER_CAPACITY_TENANT_SERIES);
+    const allKeys = Array.from(new Set([...ALL_TENANTS, ...rcKeys])).sort();
+    return [{ value: '', label: 'All tenants' }, ...allKeys.map((t) => ({ value: t, label: t }))];
+  }, []);
 
   return (
-    <Box
-      style={{
-        position: 'relative',
-        height: '100vh',
-        overflow: 'hidden',
-        backgroundColor: SANA_PAGE_CANVAS,
-      }}
-    >
+    <Box style={{ position: 'relative', height: '100vh', overflow: 'hidden', backgroundColor: SANA_PAGE_CANVAS }}>
+      {/* Viewport */}
       <div
         ref={viewportRef}
-        onClick={() => {
-          if (!dragMovedRef.current) setSelectedNodeId(null);
-        }}
+        onClick={() => { if (!dragMovedRef.current) setSelectedNodeId(null); }}
         onWheel={handleWheel}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={stopDragging}
         onMouseLeave={stopDragging}
         style={{
-          position: 'absolute',
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: canvasWidth,
-          overflow: 'hidden',
-          cursor: drag.active ? 'grabbing' : 'grab',
-          backgroundColor: SANA_PAGE_CANVAS,
-          backgroundImage:
-            'linear-gradient(to right, rgba(15,23,42,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.04) 1px, transparent 1px)',
+          position: 'absolute', left: 0, top: 0, bottom: 0, width: canvasWidth, overflow: 'hidden',
+          cursor: drag.active ? 'grabbing' : 'grab', backgroundColor: SANA_PAGE_CANVAS,
+          backgroundImage: 'linear-gradient(to right, rgba(15,23,42,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.04) 1px, transparent 1px)',
           backgroundSize: '40px 40px',
         }}
       >
-        <div
-          style={{
-            position: 'absolute',
-            width: TREE_META.canvas.width,
-            height: TREE_META.canvas.height,
-            transform: `translate(${view.x}px, ${view.y}px) scale(${view.scale})`,
-            transformOrigin: 'top left',
-          }}
-        >
-          <svg
-            width={TREE_META.canvas.width}
-            height={TREE_META.canvas.height}
-            viewBox={`0 0 ${TREE_META.canvas.width} ${TREE_META.canvas.height}`}
-            style={{ position: 'absolute', left: 0, top: 0, overflow: 'visible' }}
-          >
+        <div style={{ position: 'absolute', width: TREE_META.canvas.width, height: TREE_META.canvas.height, transform: `translate(${view.x}px, ${view.y}px) scale(${view.scale})`, transformOrigin: 'top left' }}>
+          <svg width={TREE_META.canvas.width} height={TREE_META.canvas.height} viewBox={`0 0 ${TREE_META.canvas.width} ${TREE_META.canvas.height}`} style={{ position: 'absolute', left: 0, top: 0, overflow: 'visible' }}>
             {TREE_LEVELS.map((level) => (
               <g key={level}>
-                <rect
-                  x={32}
-                  y={LEVEL_Y[level]}
-                  width={260}
-                  height={38}
-                  rx={19}
-                  fill="rgba(15,23,42,0.06)"
-                  stroke="rgba(15,23,42,0.05)"
-                />
-                <text x={50} y={LEVEL_Y[level] + 16} fill={colors.blackPepper600} fontSize="12" fontWeight="700">
-                  {level}
-                </text>
-                <text x={50} y={LEVEL_Y[level] + 29} fill={colors.blackPepper400} fontSize="10">
-                  {formatLevelSummary(level)}
-                </text>
+                <rect x={32} y={LEVEL_Y[level]} width={260} height={38} rx={19} fill="rgba(15,23,42,0.06)" stroke="rgba(15,23,42,0.05)" />
+                <text x={50} y={LEVEL_Y[level] + 16} fill={colors.blackPepper600} fontSize="12" fontWeight="700">{level}</text>
+                <text x={50} y={LEVEL_Y[level] + 29} fill={colors.blackPepper400} fontSize="10">{formatLevelSummary(level)}</text>
               </g>
             ))}
 
@@ -432,251 +381,125 @@ export const RecruitingMetricTreePage: React.FC = () => {
               const confidence = CONFIDENCE_STYLE[edge.confidence];
               const insight = edgeInsights.find((item) => item.from === edge.from && item.to === edge.to);
               const strength = insight?.strength ?? 'Weak';
+              const strengthStyle = STRENGTH_STYLE[strength] ?? STRENGTH_STYLE.Weak;
               const fromWidth = from.width ?? DEFAULT_NODE_WIDTH;
               const toWidth = to.width ?? DEFAULT_NODE_WIDTH;
               const labelX = ((from.x + fromWidth / 2) + (to.x + toWidth / 2)) / 2;
               const labelY = ((from.y < to.y ? from.y + NODE_HEIGHT : from.y) + (from.y < to.y ? to.y : to.y + NODE_HEIGHT)) / 2 - 10;
               return (
                 <g key={`${edge.from}-${edge.to}`}>
-                  <title>
-                    {edge.label}
-                    {insight?.correlation != null ? ` · correlation ${insight.correlation.toFixed(2)}` : ''}
-                  </title>
-                  <path
-                    d={edgePath(from, to)}
-                    fill="none"
-                    stroke={confidence.stroke}
-                    strokeWidth={2}
-                    strokeDasharray={confidence.dash}
-                    opacity={0.9}
-                    markerEnd={`url(#arrow-${edge.confidence})`}
-                  />
-                  <rect
-                    x={labelX - 78}
-                    y={labelY - 13}
-                    width={156}
-                    height={30}
-                    rx={12}
-                    fill="#ffffff"
-                    opacity={0.94}
-                  />
-                  <text
-                    x={labelX}
-                    y={labelY}
-                    textAnchor="middle"
-                    fill={colors.blackPepper500}
-                    fontSize="10"
-                    fontWeight="600"
-                  >
-                    {edge.label}
-                  </text>
-                  <text
-                    x={labelX}
-                    y={labelY + 11}
-                    textAnchor="middle"
-                    fill={colors.blackPepper400}
-                    fontSize="9"
-                    fontWeight="600"
-                  >
-                    {strength}
-                  </text>
+                  <title>{edge.label}{insight?.correlation != null ? ` · r=${insight.correlation.toFixed(2)}` : ''}</title>
+                  <path d={edgePath(from, to)} fill="none" stroke={confidence.stroke} strokeWidth={2} strokeDasharray={confidence.dash} opacity={0.9} markerEnd={`url(#arrow-${edge.confidence})`} />
+                  {/* Edge label pill */}
+                  <rect x={labelX - 78} y={labelY - 13} width={156} height={30} rx={12} fill="#ffffff" opacity={0.94} />
+                  <text x={labelX} y={labelY} textAnchor="middle" fill={colors.blackPepper500} fontSize="10" fontWeight="600">{edge.label}</text>
+                  {/* Strength pill */}
+                  <rect x={labelX - 26} y={labelY + 3} width={52} height={16} rx={8} fill={strengthStyle.bg} />
+                  <text x={labelX} y={labelY + 14} textAnchor="middle" fill={strengthStyle.fg} fontSize="9" fontWeight="700">{strength}</text>
                 </g>
               );
             })}
             <defs>
-              {(['Measured', 'Directional'] as MetricTreeConfidence[]).map((confidence) => (
-                <marker
-                  key={confidence}
-                  id={`arrow-${confidence}`}
-                  markerWidth="10"
-                  markerHeight="10"
-                  refX="8"
-                  refY="5"
-                  orient="auto"
-                  markerUnits="strokeWidth"
-                >
-                  <path d="M 0 0 L 10 5 L 0 10 z" fill={CONFIDENCE_STYLE[confidence].stroke} />
+              {(['Measured', 'Directional'] as MetricTreeConfidence[]).map((c) => (
+                <marker key={c} id={`arrow-${c}`} markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill={CONFIDENCE_STYLE[c].stroke} />
                 </marker>
               ))}
             </defs>
           </svg>
 
-          {TREE_NODES.map((node) => (
-            <NodeCard
-              key={node.id}
-              node={node}
-              selected={selectedNodeId === node.id}
-              onSelect={(nodeId) => {
-                setSelectedNodeId(nodeId);
-                const nextNode = nodeMap.get(nodeId);
-                if (nextNode) setViewForNode(nextNode, 0.9);
-              }}
-            />
+          {treeNodes.map((node) => (
+            <NodeCard key={node.id} node={node} selected={selectedNodeId === node.id} onSelect={(nodeId) => { setSelectedNodeId(nodeId); const n = nodeMap.get(nodeId); if (n) setViewForNode(n, 0.9); }} />
           ))}
         </div>
       </div>
-      <Flex
-        gap="s"
+
+      {/* Filter bar (top-left) */}
+      <Box
+        onClick={(event) => event.stopPropagation()}
+        onMouseDown={(event) => event.stopPropagation()}
         style={{
-          position: 'absolute',
-          top: 16,
-          right: selectedNode ? RAIL_WIDTH + 16 : 16,
-          padding: 8,
-          borderRadius: 999,
-          background: 'rgba(255,255,255,0.92)',
-          border: `1px solid ${colors.soap300}`,
-          backdropFilter: 'blur(10px)',
+          position: 'absolute', top: 12, left: 12, display: 'flex', gap: 8, alignItems: 'flex-end', flexWrap: 'wrap',
+          padding: '10px 14px', borderRadius: 14, background: 'rgba(255,255,255,0.95)', border: `1px solid ${colors.soap300}`, backdropFilter: 'blur(10px)', maxWidth: 680,
         }}
       >
-        <SecondaryButton size="small" onClick={() => setView((current) => ({ ...current, scale: clamp(current.scale * 0.9, 0.48, 1.4) }))}>
-          -
-        </SecondaryButton>
-        <SecondaryButton size="small" onClick={() => setView((current) => ({ ...current, scale: clamp(current.scale * 1.12, 0.48, 1.4) }))}>
-          +
-        </SecondaryButton>
-        <SecondaryButton size="small" onClick={() => setView({ x: 48, y: 18, scale: 0.74 })}>
-          Reset
-        </SecondaryButton>
+        <Box style={{ width: 140 }}><FormSelect id="tree-segment" label="Segment" value={filters.segment} onChange={(v) => updateFilter('segment', v)} options={SEGMENT_FILTER_OPTIONS} /></Box>
+        <Box style={{ width: 140 }}><FormSelect id="tree-region" label="Region" value={filters.region} onChange={(v) => updateFilter('region', v)} options={REGION_FILTER_OPTIONS} /></Box>
+        <Box style={{ width: 160 }}><FormSelect id="tree-industry" label="Industry" value={filters.industry} onChange={(v) => updateFilter('industry', v)} options={INDUSTRY_FILTER_OPTIONS} /></Box>
+        <Box style={{ width: 140 }}><FormSelect id="tree-tenant" label="Tenant" value={filters.tenant} onChange={(v) => updateFilter('tenant', v)} options={tenantOptions} /></Box>
+        {isFiltered && (
+          <SecondaryButton size="small" onClick={() => setFilters(EMPTY_DASHBOARD_FILTERS)} style={{ marginBottom: 2 }}>Clear</SecondaryButton>
+        )}
+      </Box>
+
+      {isFiltered && filterParts.length > 0 && (
+        <Box style={{ position: 'absolute', top: 80, left: 16, padding: '4px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.9)', fontSize: 11, color: colors.blackPepper500 }}>
+          Scope: {filterParts.join(' · ')} — all metrics filtered to matching tenants
+        </Box>
+      )}
+
+      {/* Zoom controls */}
+      <Flex gap="s" style={{ position: 'absolute', top: 16, right: selectedNode ? RAIL_WIDTH + 16 : 16, padding: 8, borderRadius: 999, background: 'rgba(255,255,255,0.92)', border: `1px solid ${colors.soap300}`, backdropFilter: 'blur(10px)' }}>
+        <SecondaryButton size="small" onClick={() => setView((c) => ({ ...c, scale: clamp(c.scale * 0.9, 0.48, 1.4) }))}>-</SecondaryButton>
+        <SecondaryButton size="small" onClick={() => setView((c) => ({ ...c, scale: clamp(c.scale * 1.12, 0.48, 1.4) }))}>+</SecondaryButton>
+        <SecondaryButton size="small" onClick={() => setView({ x: 48, y: 18, scale: 0.74 })}>Reset</SecondaryButton>
       </Flex>
 
+      {/* Detail rail */}
       <Box
         onClick={(event) => event.stopPropagation()}
         style={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          width: RAIL_WIDTH,
-          height: '100%',
-          background: 'rgba(255,255,255,0.98)',
-          borderLeft: `1px solid ${colors.soap300}`,
-          boxShadow: '-10px 0 24px rgba(15,23,42,0.08)',
-          transform: selectedNode ? 'translateX(0)' : `translateX(${RAIL_WIDTH}px)`,
-          transition: 'transform 180ms ease',
-          overflowY: 'auto',
-          pointerEvents: selectedNode ? 'auto' : 'none',
-          padding: 20,
+          position: 'absolute', top: 0, right: 0, width: RAIL_WIDTH, height: '100%',
+          background: 'rgba(255,255,255,0.98)', borderLeft: `1px solid ${colors.soap300}`, boxShadow: '-10px 0 24px rgba(15,23,42,0.08)',
+          transform: selectedNode ? 'translateX(0)' : `translateX(${RAIL_WIDTH}px)`, transition: 'transform 180ms ease',
+          overflowY: 'auto', pointerEvents: selectedNode ? 'auto' : 'none', padding: 20,
         }}
       >
         {selectedNode ? (
           <>
             <Flex justifyContent="space-between" alignItems="flex-start" gap="s" style={{ marginBottom: 12 }}>
               <Box>
-                <Heading size="small" marginBottom="xxs">
-                  {selectedNode.title}
-                </Heading>
-                <BodyText size="small" color={colors.blackPepper400}>
-                  {selectedNode.level}
-                </BodyText>
+                <Heading size="small" marginBottom="xxs">{selectedNode.title}</Heading>
+                <BodyText size="small" color={colors.blackPepper400}>{selectedNode.level}</BodyText>
               </Box>
-              <button
-                type="button"
-                onClick={() => setSelectedNodeId(null)}
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  color: colors.blackPepper500,
-                  fontSize: 20,
-                  lineHeight: 1,
-                  cursor: 'pointer',
-                }}
-                aria-label="Close details"
-              >
-                ×
-              </button>
+              <button type="button" onClick={() => setSelectedNodeId(null)} style={{ border: 'none', background: 'transparent', color: colors.blackPepper500, fontSize: 20, lineHeight: 1, cursor: 'pointer' }} aria-label="Close details">x</button>
             </Flex>
 
-            <div style={{ fontSize: 30, fontWeight: 700, color: colors.blackPepper600, marginBottom: 4 }}>
-              {selectedNode.value}
-            </div>
-            <BodyText size="small" color={colors.blackPepper400} style={{ marginBottom: 12 }}>
-              {selectedNode.valueContext}
-            </BodyText>
+            <div style={{ fontSize: 30, fontWeight: 700, color: colors.blackPepper600, marginBottom: 4 }}>{selectedNode.value}</div>
+            <BodyText size="small" color={colors.blackPepper400} style={{ marginBottom: 12 }}>{selectedNode.valueContext}</BodyText>
 
             <div style={{ height: 180, marginBottom: 16 }}>
-              <Line
-                data={chartData(
-                  selectedNode.trend,
-                  CONFIDENCE_STYLE[selectedNode.confidence].stroke,
-                  `${CONFIDENCE_STYLE[selectedNode.confidence].stroke}22`
-                )}
-                options={railChartOptions}
-              />
+              <Line data={chartData(selectedNode.trend.length > 0 ? selectedNode.trend : [0], CONFIDENCE_STYLE[selectedNode.confidence].stroke, `${CONFIDENCE_STYLE[selectedNode.confidence].stroke}22`)} options={railChartOptions} />
             </div>
 
             <Flex gap="s" style={{ flexWrap: 'wrap', marginBottom: 16 }}>
-              <span
-                style={{
-                  padding: '4px 9px',
-                  borderRadius: 999,
-                  background: CONFIDENCE_STYLE[selectedNode.confidence].bg,
-                  color: CONFIDENCE_STYLE[selectedNode.confidence].fg,
-                  fontSize: 11,
-                  fontWeight: 700,
-                }}
-              >
-                {selectedNode.confidence}
-              </span>
-              <span
-                style={{
-                  padding: '4px 9px',
-                  borderRadius: 999,
-                  background: colors.soap100,
-                  color: colors.blackPepper500,
-                  fontSize: 11,
-                }}
-              >
-                {selectedNode.source}
-              </span>
+              <span style={{ padding: '4px 9px', borderRadius: 999, background: CONFIDENCE_STYLE[selectedNode.confidence].bg, color: CONFIDENCE_STYLE[selectedNode.confidence].fg, fontSize: 11, fontWeight: 700 }}>{selectedNode.confidence}</span>
+              <span style={{ padding: '4px 9px', borderRadius: 999, background: colors.soap100, color: colors.blackPepper500, fontSize: 11 }}>{selectedNode.source}</span>
             </Flex>
 
-            <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.6, marginBottom: 14 }}>
-              {selectedNode.definition}
-            </BodyText>
+            <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.6, marginBottom: 14 }}>{selectedNode.definition}</BodyText>
 
             {selectedNode.caveat ? (
-              <Box
-                style={{
-                  borderRadius: 12,
-                  padding: 12,
-                  background: '#fff8eb',
-                  border: '1px solid #f1d199',
-                  marginBottom: 16,
-                }}
-              >
-                <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.5 }}>
-                  <strong>Caveat:</strong> {selectedNode.caveat}
-                </BodyText>
+              <Box style={{ borderRadius: 12, padding: 12, background: '#fff8eb', border: '1px solid #f1d199', marginBottom: 16 }}>
+                <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.5 }}><strong>Caveat:</strong> {selectedNode.caveat}</BodyText>
               </Box>
             ) : null}
 
-            <Heading size="small" marginBottom="xs">
-              Connected driver relationships
-            </Heading>
+            <Heading size="small" marginBottom="xs">Connected driver relationships</Heading>
             <Flex flexDirection="column" gap="s">
               {connectedEdges.map((edge) => {
                 const peerId = edge.from === selectedNode.id ? edge.to : edge.from;
                 const peerNode = nodeMap.get(peerId);
                 if (!peerNode) return null;
+                const sStyle = STRENGTH_STYLE[edge.strength] ?? STRENGTH_STYLE.Weak;
                 return (
-                  <Box
-                    key={`${edge.from}-${edge.to}`}
-                    style={{
-                      borderRadius: 12,
-                      padding: 12,
-                      border: `1px solid ${colors.soap300}`,
-                      background: '#fff',
-                    }}
-                  >
-                    <div style={{ fontSize: 12, fontWeight: 700, color: colors.blackPepper600, marginBottom: 4 }}>
-                      {peerNode.title}
-                    </div>
+                  <Box key={`${edge.from}-${edge.to}`} style={{ borderRadius: 12, padding: 12, border: `1px solid ${colors.soap300}`, background: '#fff' }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: colors.blackPepper600, marginBottom: 4 }}>{peerNode.title}</div>
                     <div style={{ fontSize: 12, color: colors.blackPepper500, marginBottom: 4 }}>
-                      {edge.label} · {edge.strength}
-                      {edge.correlation != null ? ` (${edge.correlation.toFixed(2)})` : ''}
+                      {edge.label} · <span style={{ display: 'inline-block', padding: '1px 6px', borderRadius: 6, background: sStyle.bg, color: sStyle.fg, fontSize: 10, fontWeight: 700 }}>{edge.strength}</span>
+                      {edge.correlation != null ? ` (r=${edge.correlation.toFixed(2)})` : ''}
                     </div>
-                    <div style={{ fontSize: 11, color: colors.blackPepper400 }}>
-                      Based on aligned recent trend points for the connected metrics.
-                    </div>
+                    <div style={{ fontSize: 11, color: colors.blackPepper400 }}>Based on aligned recent trend points for the connected metrics.</div>
                   </Box>
                 );
               })}

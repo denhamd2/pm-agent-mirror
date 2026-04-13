@@ -237,6 +237,24 @@ const tdStyle: React.CSSProperties = { padding: '8px 6px' };
 const tdRight: React.CSSProperties = { ...tdStyle, textAlign: 'right' };
 const tdCenter: React.CSSProperties = { ...tdStyle, textAlign: 'center' };
 
+function zebraRow(idx: number): React.CSSProperties {
+  return { borderBottom: `1px solid ${colors.soap200}`, backgroundColor: idx % 2 === 1 ? colors.soap100 : undefined };
+}
+
+function TabBar({ tabs, active, onChange }: { tabs: string[]; active: number; onChange: (idx: number) => void }) {
+  return (
+    <Flex gap="xs" style={{ borderBottom: `1px solid ${colors.soap300}`, marginBottom: 16 }}>
+      {tabs.map((label, idx) => (
+        <button key={label} type="button" onClick={() => onChange(idx)} style={{
+          padding: '8px 16px', fontSize: 13, fontWeight: active === idx ? 700 : 500, cursor: 'pointer',
+          border: 'none', borderBottom: active === idx ? `2px solid ${colors.blueberry500}` : '2px solid transparent',
+          color: active === idx ? colors.blueberry600 : colors.blackPepper500, background: 'transparent',
+        }}>{label}</button>
+      ))}
+    </Flex>
+  );
+}
+
 function medianOfArr(arr: number[]): number {
   if (arr.length === 0) return 0;
   const sorted = [...arr].sort((a, b) => a - b);
@@ -476,6 +494,8 @@ export const CustomerScorecardDashboard = () => {
   const [tenant, setTenant] = useState<string>(() => tenantFromSearch());
   const [regionFilter, setRegionFilter] = useState('');
   const [industryFilter, setIndustryFilter] = useState('');
+  const [globalTab, setGlobalTab] = useState(0);
+  const [tenantTab, setTenantTab] = useState(0);
 
   const datum = tenant ? getTenantScorecard(tenant) : undefined;
   const tenantInsight = tenant ? getTenantInsight(tenant) : undefined;
@@ -608,204 +628,149 @@ export const CustomerScorecardDashboard = () => {
 
           {!tenant ? (
             <>
-              <Box style={listCard}>
-                <BottleneckFlowStrip
-                  title="Bottleneck analyser · job application flow"
-                  titleHelp={BOTTLENECK_STRIP_HELP}
-                  subtitle="Recruiting sub-business-process stages (global aggregate). Segment width is proportional to completed duration for each stage, using median first and labelling average whenever median is missing. Employment Agreement follows Offer."
-                  stages={globalBottleneckStages}
-                  footnote={`Source: dw.swh.bp_event_stats aggregates · completed events · latest month ${latestYm}`}
-                />
-              </Box>
-              <Heading as="h2" size="small" marginY="xs">
-                Feature Correlations With Median Time to Hire{isFiltered ? ' (filtered)' : ' (global)'}
-              </Heading>
-              <BodyText size="small" marginBottom="s" style={{ color: colors.blackPepper500 }}>
-                {isFiltered
-                  ? 'Showing median TTH delta for the selected segment. Positive values = adopters have lower TTH; negative = higher. q-values are not recomputed for filtered views; confidence capped at medium.'
-                  : 'Correlation only, not causation. Positive values = adopters have lower TTH; negative = adopters have higher TTH. Ranked by median TTH impact, with q(TTH) and sample support checks.'}
-              </BodyText>
-
-              <Flex gap="m" flexWrap="wrap" marginBottom="s">
-                <Box flex="1 1 200px" maxWidth={280}>
-                  <FormSelect
-                    id="corr-region"
-                    label="Region"
-                    value={regionFilter}
-                    onChange={setRegionFilter}
-                    options={regionSelectOptions}
-                  />
-                </Box>
-                <Box flex="1 1 200px" maxWidth={280}>
-                  <FormSelect
-                    id="corr-industry"
-                    label="Industry"
-                    value={industryFilter}
-                    onChange={setIndustryFilter}
-                    options={industrySelectOptions}
-                  />
-                </Box>
-              </Flex>
-
-              {filteredCorrelations.length === 0 ? (
-                <Box style={listCard}>
-                  <BodyText size="small" style={{ color: colors.blackPepper500 }}>
-                    Not enough tenants in this segment to compute meaningful correlations (minimum 10 required).
+              <TabBar tabs={['Overview', 'Leaderboard']} active={globalTab} onChange={setGlobalTab} />
+              {globalTab === 0 && (
+                <>
+                  <Box style={listCard}>
+                    <BottleneckFlowStrip
+                      title="Bottleneck analyser · job application flow"
+                      titleHelp={BOTTLENECK_STRIP_HELP}
+                      subtitle="Recruiting sub-business-process stages (global aggregate). Segment width is proportional to completed duration for each stage, using median first and labelling average whenever median is missing. Employment Agreement follows Offer."
+                      stages={globalBottleneckStages}
+                      footnote={`Source: dw.swh.bp_event_stats aggregates · completed events · latest month ${latestYm}`}
+                    />
+                  </Box>
+                  <Heading as="h2" size="small" marginY="xs">
+                    Feature Correlations With Median Time to Hire{isFiltered ? ' (filtered)' : ' (global)'}
+                  </Heading>
+                  <BodyText size="small" marginBottom="s" style={{ color: colors.blackPepper500 }}>
+                    {isFiltered
+                      ? 'Showing median TTH delta for the selected segment. Positive values = adopters have lower TTH; negative = higher. q-values are not recomputed for filtered views; confidence capped at medium.'
+                      : 'Correlation only, not causation. Positive values = adopters have lower TTH; negative = adopters have higher TTH. Ranked by median TTH impact, with q(TTH) and sample support checks.'}
                   </BodyText>
-                </Box>
-              ) : (
-                <Box style={listCard}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-                    <thead>
-                      <tr style={{ borderBottom: `1px solid ${colors.soap300}` }}>
-                        <th style={thStyle}>Feature</th>
-                        <th style={thRight}>Median TTH impact (days)</th>
-                        {!isFiltered && <th style={thRight}>q(TTH)</th>}
-                        <th style={thRight}>n(on)</th>
-                        <th style={thRight}>n(off)</th>
-                        <th style={thCenter}>Confidence</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredCorrelations.map((row) => (
-                        <tr key={row.feature} style={{ borderBottom: `1px solid ${colors.soap200}` }}>
-                          <td style={tdStyle}>{row.feature}</td>
-                          <td style={{ ...tdRight, color: tthImpactTextColor(row.deltaTthDays), fontWeight: 500 }}>
-                            {row.deltaTthDays > 0 ? '−' : '+'}{Math.abs(row.deltaTthDays).toFixed(1)} days {row.deltaTthDays > 0 ? '(lower)' : row.deltaTthDays < 0 ? '(higher)' : ''}
-                          </td>
-                          {!isFiltered && <td style={tdRight}>{row.qTth.toFixed(3)}</td>}
-                          <td style={tdRight} title={row.nOnTth < 10 ? 'Small cohort - interpret with caution' : undefined}>
-                            <span style={{ color: sampleSizeColor(row.nOnTth), fontWeight: row.nOnTth < 10 ? 600 : 'normal' }}>
-                              {row.nOnTth}{row.nOnTth < 10 ? ' ⚠' : ''}
-                            </span>
-                          </td>
-                          <td style={tdRight} title={row.nOffTth < 10 ? 'Small cohort - interpret with caution' : undefined}>
-                            <span style={{ color: sampleSizeColor(row.nOffTth), fontWeight: row.nOffTth < 10 ? 600 : 'normal' }}>
-                              {row.nOffTth}{row.nOffTth < 10 ? ' ⚠' : ''}
-                            </span>
-                          </td>
-                          <td style={tdCenter}>
-                            <span
-                              style={{
-                                display: 'inline-block',
-                                borderRadius: 10,
-                                padding: '2px 8px',
-                                color: '#fff',
-                                background: confidenceColor(row.confidence),
-                                fontSize: 11,
-                                textTransform: 'uppercase',
-                              }}
-                            >
-                              {row.confidence}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </Box>
+                  <Flex gap="m" flexWrap="wrap" marginBottom="s">
+                    <Box flex="1 1 200px" maxWidth={280}>
+                      <FormSelect id="corr-region" label="Region" value={regionFilter} onChange={setRegionFilter} options={regionSelectOptions} />
+                    </Box>
+                    <Box flex="1 1 200px" maxWidth={280}>
+                      <FormSelect id="corr-industry" label="Industry" value={industryFilter} onChange={setIndustryFilter} options={industrySelectOptions} />
+                    </Box>
+                  </Flex>
+                  {filteredCorrelations.length === 0 ? (
+                    <Box style={listCard}>
+                      <BodyText size="small" style={{ color: colors.blackPepper500 }}>Not enough tenants in this segment to compute meaningful correlations (minimum 10 required).</BodyText>
+                    </Box>
+                  ) : (
+                    <Box style={listCard}>
+                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                        <thead>
+                          <tr style={{ borderBottom: `1px solid ${colors.soap300}` }}>
+                            <th style={thStyle}>Feature</th>
+                            <th style={thRight}>Median TTH impact (days)</th>
+                            {!isFiltered && <th style={thRight}>q(TTH)</th>}
+                            <th style={thRight}>n(on)</th>
+                            <th style={thRight}>n(off)</th>
+                            <th style={thCenter}>Confidence</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {filteredCorrelations.map((row, idx) => (
+                            <tr key={row.feature} style={{ borderBottom: `1px solid ${colors.soap200}`, backgroundColor: tthImpactColor(row.deltaTthDays) }}>
+                              <td style={tdStyle}>{row.feature}</td>
+                              <td style={{ ...tdRight, color: tthImpactTextColor(row.deltaTthDays), fontWeight: 500 }}>
+                                {row.deltaTthDays > 0 ? '\u2212' : '+'}{Math.abs(row.deltaTthDays).toFixed(1)} days {row.deltaTthDays > 0 ? '(lower)' : row.deltaTthDays < 0 ? '(higher)' : ''}
+                              </td>
+                              {!isFiltered && <td style={tdRight}>{row.qTth.toFixed(3)}</td>}
+                              <td style={tdRight} title={row.nOnTth < 10 ? 'Small cohort - interpret with caution' : undefined}>
+                                <span style={{ color: sampleSizeColor(row.nOnTth), fontWeight: row.nOnTth < 10 ? 600 : 'normal' }}>{row.nOnTth}{row.nOnTth < 10 ? ' !' : ''}</span>
+                              </td>
+                              <td style={tdRight} title={row.nOffTth < 10 ? 'Small cohort - interpret with caution' : undefined}>
+                                <span style={{ color: sampleSizeColor(row.nOffTth), fontWeight: row.nOffTth < 10 ? 600 : 'normal' }}>{row.nOffTth}{row.nOffTth < 10 ? ' !' : ''}</span>
+                              </td>
+                              <td style={tdCenter}>
+                                <span style={{ display: 'inline-block', borderRadius: 10, padding: '2px 8px', color: '#fff', background: confidenceColor(row.confidence), fontSize: 11, textTransform: 'uppercase' }}>{row.confidence}</span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </Box>
+                  )}
+                </>
               )}
-
-              <Heading as="h2" size="small" marginTop="m" marginBottom="xs">
-                Top 10 tenants by adoption score
-              </Heading>
-              <BodyText size="small" marginBottom="s" style={{ color: colors.blackPepper500 }}>
-                Ranked by PCA feature coverage (adopted / {featureTotal}). Click a tenant name to view their full scorecard.
-              </BodyText>
-              <Box style={listCard}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-                  <thead>
-                    <tr style={{ borderBottom: `1px solid ${colors.soap300}` }}>
-                      <th style={thStyle}>#</th>
-                      <th style={thStyle}>Tenant</th>
-                      <th style={thRight}>Adoption score</th>
-                      <th style={thRight}>Features</th>
-                      <th style={thStyle}>Industry</th>
-                      <th style={thStyle}>Region</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {top10.map((row) => (
-                      <tr key={row.tenant} style={{ borderBottom: `1px solid ${colors.soap200}` }}>
-                        <td style={tdStyle}>{row.rank}</td>
-                        <td style={tdStyle}>
-                          <button
-                            type="button"
-                            onClick={() => onTenantChange(row.tenant)}
-                            style={{ background: 'none', border: 'none', color: colors.blueberry400, cursor: 'pointer', padding: 0, fontSize: 13, textDecoration: 'underline' }}
-                          >
-                            {getTenantDisplayName(row.tenant)}
-                          </button>
-                        </td>
-                        <td style={tdRight}>{row.adoptionScore.toFixed(1)}</td>
-                        <td style={tdRight}>{row.featuresAdopted} / {featureTotal}</td>
-                        <td style={tdStyle}>{row.industry}</td>
-                        <td style={tdStyle}>{row.region}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </Box>
-
-              <Heading as="h2" size="small" marginTop="m" marginBottom="xs">
-                Top 3 customers by industry
-              </Heading>
-              <BodyText size="small" marginBottom="s" style={{ color: colors.blackPepper500 }}>
-                Highest adoption scores within each industry vertical. Click a name to view their full scorecard.
-              </BodyText>
-              <Flex flexDirection="row" flexWrap="wrap" gap="m">
-                {industryTop3.map((group) => (
-                  <Box key={group.industry} flex="1 1 340px" maxWidth={480} style={listCard}>
-                    <Heading as="h3" size="small" marginBottom="xs">{group.industry}</Heading>
+              {globalTab === 1 && (
+                <>
+                  <Heading as="h2" size="small" marginBottom="xs">Top 10 tenants by adoption score</Heading>
+                  <BodyText size="small" marginBottom="s" style={{ color: colors.blackPepper500 }}>
+                    Ranked by PCA feature coverage (adopted / {featureTotal}). Click a tenant name to view their full scorecard.
+                  </BodyText>
+                  <Box style={listCard}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                       <thead>
                         <tr style={{ borderBottom: `1px solid ${colors.soap300}` }}>
-                          <th style={{ ...thStyle, padding: '4px 6px' }}>#</th>
-                          <th style={{ ...thStyle, padding: '4px 6px' }}>Customer</th>
-                          <th style={{ ...thRight, padding: '4px 6px' }}>Score</th>
-                          <th style={{ ...thRight, padding: '4px 6px' }}>Features</th>
+                          <th style={thStyle}>#</th><th style={thStyle}>Tenant</th><th style={thRight}>Adoption score</th><th style={thRight}>Features</th><th style={thStyle}>Industry</th><th style={thStyle}>Region</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {group.tenants.map((t, idx) => (
-                          <tr key={t.tenant} style={{ borderBottom: `1px solid ${colors.soap200}` }}>
-                            <td style={{ ...tdStyle, padding: '4px 6px' }}>{idx + 1}</td>
-                            <td style={{ ...tdStyle, padding: '4px 6px' }}>
-                              <button
-                                type="button"
-                                onClick={() => onTenantChange(t.tenant)}
-                                style={{ background: 'none', border: 'none', color: colors.blueberry400, cursor: 'pointer', padding: 0, fontSize: 13, textDecoration: 'underline' }}
-                              >
-                                {getTenantDisplayName(t.tenant)}
-                              </button>
+                        {top10.map((row, idx) => (
+                          <tr key={row.tenant} style={zebraRow(idx)}>
+                            <td style={tdStyle}>{row.rank}</td>
+                            <td style={tdStyle}>
+                              <button type="button" onClick={() => onTenantChange(row.tenant)} style={{ background: 'none', border: 'none', color: colors.blueberry400, cursor: 'pointer', padding: 0, fontSize: 13, textDecoration: 'underline' }}>{getTenantDisplayName(row.tenant)}</button>
                             </td>
-                            <td style={{ ...tdRight, padding: '4px 6px' }}>{t.adoptionScore.toFixed(1)}</td>
-                            <td style={{ ...tdRight, padding: '4px 6px' }}>{t.featuresAdopted} / {featureTotal}</td>
+                            <td style={tdRight}>{row.adoptionScore.toFixed(1)}</td>
+                            <td style={tdRight}>{row.featuresAdopted} / {featureTotal}</td>
+                            <td style={tdStyle}>{row.industry}</td>
+                            <td style={tdStyle}>{row.region}</td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
-                    <div style={{ marginTop: 10, borderTop: `1px solid ${colors.soap200}`, paddingTop: 8 }}>
-                      <BodyText size="small" style={{ color: colors.blackPepper500, marginBottom: 6 }}>
-                        Top 3 features correlated with lower median time to hire ({group.industry} context)
-                      </BodyText>
-                      {group.topTthFeatures.length === 0 ? (
-                        <BodyText size="small" style={{ color: colors.blackPepper500 }}>
-                          Not enough TTH coverage in this industry to estimate feature-level lifts.
-                        </BodyText>
-                      ) : (
-                        <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.5, fontSize: 13 }}>
-                          {group.topTthFeatures.map((row) => (
-                            <li key={`${group.industry}-${row.feature}`}>
-                              <strong>{row.feature}</strong> - {row.deltaTthDays.toFixed(1)} days lower median TTH ({row.confidence} confidence; n(on)={row.nOn}, n(off)={row.nOff})
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
                   </Box>
-                ))}
-              </Flex>
+                  <Heading as="h2" size="small" marginTop="m" marginBottom="xs">Top 3 customers by industry</Heading>
+                  <BodyText size="small" marginBottom="s" style={{ color: colors.blackPepper500 }}>
+                    Highest adoption scores within each industry vertical. Click a name to view their full scorecard.
+                  </BodyText>
+                  <Flex flexDirection="row" flexWrap="wrap" gap="m">
+                    {industryTop3.map((group) => (
+                      <Box key={group.industry} flex="1 1 340px" maxWidth={480} style={listCard}>
+                        <Heading as="h3" size="small" marginBottom="xs">{group.industry}</Heading>
+                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                          <thead>
+                            <tr style={{ borderBottom: `1px solid ${colors.soap300}` }}>
+                              <th style={{ ...thStyle, padding: '4px 6px' }}>#</th><th style={{ ...thStyle, padding: '4px 6px' }}>Customer</th><th style={{ ...thRight, padding: '4px 6px' }}>Score</th><th style={{ ...thRight, padding: '4px 6px' }}>Features</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {group.tenants.map((t, idx) => (
+                              <tr key={t.tenant} style={zebraRow(idx)}>
+                                <td style={{ ...tdStyle, padding: '4px 6px' }}>{idx + 1}</td>
+                                <td style={{ ...tdStyle, padding: '4px 6px' }}>
+                                  <button type="button" onClick={() => onTenantChange(t.tenant)} style={{ background: 'none', border: 'none', color: colors.blueberry400, cursor: 'pointer', padding: 0, fontSize: 13, textDecoration: 'underline' }}>{getTenantDisplayName(t.tenant)}</button>
+                                </td>
+                                <td style={{ ...tdRight, padding: '4px 6px' }}>{t.adoptionScore.toFixed(1)}</td>
+                                <td style={{ ...tdRight, padding: '4px 6px' }}>{t.featuresAdopted} / {featureTotal}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                        <div style={{ marginTop: 10, borderTop: `1px solid ${colors.soap200}`, paddingTop: 8 }}>
+                          <BodyText size="small" style={{ color: colors.blackPepper500, marginBottom: 6 }}>Top 3 features correlated with lower median time to hire ({group.industry} context)</BodyText>
+                          {group.topTthFeatures.length === 0 ? (
+                            <BodyText size="small" style={{ color: colors.blackPepper500 }}>Not enough TTH coverage in this industry to estimate feature-level lifts.</BodyText>
+                          ) : (
+                            <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.5, fontSize: 13 }}>
+                              {group.topTthFeatures.map((row) => (
+                                <li key={`${group.industry}-${row.feature}`}><strong>{row.feature}</strong> - {row.deltaTthDays.toFixed(1)} days lower median TTH ({row.confidence} confidence; n(on)={row.nOn}, n(off)={row.nOff})</li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      </Box>
+                    ))}
+                  </Flex>
+                </>
+              )}
             </>
           ) : !datum ? (
             <BodyText size="small">No scorecard data for this tenant.</BodyText>
@@ -869,51 +834,6 @@ export const CustomerScorecardDashboard = () => {
                 />
               </Box>
 
-              <Heading as="h2" size="small" marginY="xs">
-                Talent Acquisition feature adoption (PCA)
-                {countBadge(featureLists.adopted.length, featureTotal, colors.greenApple400)}
-              </Heading>
-              <BodyText size="small" marginBottom="s" style={{ color: colors.blackPepper500 }}>
-                Source of truth: PCA task-to-feature mapping. Enabled means any mapped task had usage (&gt;0 users or transactions) in the 12-month window.
-              </BodyText>
-
-              <Flex flexDirection="row" flexWrap="wrap" gap="m">
-                <Box flex="1 1 320px" style={listCard}>
-                  <Heading as="h3" size="small" marginBottom="s">
-                    Enabled
-                    {countBadge(featureLists.adopted.length, featureTotal, colors.greenApple400)}
-                  </Heading>
-                  {featureLists.adopted.length === 0 ? (
-                    <BodyText size="small" style={{ color: colors.blackPepper500 }}>
-                      No PCA Talent Acquisition features marked as enabled for this tenant.
-                    </BodyText>
-                  ) : (
-                    <FeatureImpactList
-                      features={featureLists.adopted}
-                      correlations={tenantInsight?.effectiveCorrelations ?? []}
-                      modelLabel={tenantInsight?.segmentModelUsed}
-                    />
-                  )}
-                </Box>
-                <Box flex="1 1 320px" style={listCard}>
-                  <Heading as="h3" size="small" marginBottom="s">
-                    Not enabled
-                    {countBadge(featureLists.notAdopted.length, featureTotal, colors.cantaloupe400)}
-                  </Heading>
-                  {featureLists.notAdopted.length === 0 ? (
-                    <BodyText size="small" style={{ color: colors.blackPepper500 }}>
-                      All PCA Talent Acquisition features are enabled.
-                    </BodyText>
-                  ) : (
-                    <FeatureImpactList
-                      features={featureLists.notAdopted}
-                      correlations={tenantInsight?.effectiveCorrelations ?? []}
-                      modelLabel={tenantInsight?.segmentModelUsed}
-                    />
-                  )}
-                </Box>
-              </Flex>
-
               <Heading as="h2" size="small" marginTop="m" marginBottom="xs">
                 Data Scientist adoption score and recommendations
               </Heading>
@@ -921,133 +841,134 @@ export const CustomerScorecardDashboard = () => {
                 Segment and industry-aware correlation model. Recommendations prioritise missing features associated with lower median TTH among peers in the same usage segment and industry. Correlation does not imply causation.
               </BodyText>
 
-              {!tenantInsight ? (
-                <Box style={listCard}>
-                  <BodyText size="small" style={{ color: colors.blackPepper500 }}>
-                    No data scientist insight available for this tenant yet.
-                  </BodyText>
-                </Box>
-              ) : (
-                <Flex flexDirection="row" flexWrap="wrap" gap="m">
-                  <Box flex="1 1 100%" style={listCard}>
-                    <Heading as="h3" size="small" marginBottom="s">Data Scientist TL;DR</Heading>
-                    <ul style={{ margin: 0, paddingLeft: 20, color: colors.blackPepper600, fontSize: 14, lineHeight: 1.6 }}>
-                      {tldrInsights.map((insight, index) => (
-                        <li key={`tldr-${index}`}>{insight}</li>
-                      ))}
-                    </ul>
-                  </Box>
-                  <Box flex="1 1 260px" style={listCard}>
-                    <Heading as="h3" size="small" marginBottom="s">Adoption score</Heading>
-                    <Heading as="h2" size="small" style={{ margin: 0 }}>{tenantInsight.adoptionScore.toFixed(1)} / 100</Heading>
-                    <BodyText size="small" style={{ color: colors.blackPepper500 }}>
-                      Segment: {tenantInsight.segment} · Industry: {tenantInsight.industry}
-                    </BodyText>
-                    <BodyText size="small" style={{ color: colors.blackPepper500, fontSize: 12, marginTop: 4 }}>
-                      Model: {tenantInsight.segmentModelUsed}
-                    </BodyText>
-                    <BodyText size="small" style={{ color: colors.blackPepper500, marginTop: 8 }}>
-                      Strengths: {tenantInsight.strengthFeatures.length > 0 ? tenantInsight.strengthFeatures.join(', ') : 'none flagged'}
-                    </BodyText>
-                  </Box>
+              <TabBar tabs={['Adoption & Recommendations', 'Peer Benchmark', 'Feature Adoption Detail']} active={tenantTab} onChange={setTenantTab} />
 
-                  <Box flex="2 1 420px" style={listCard}>
-                    <Heading as="h3" size="small" marginBottom="s">Missing features likely to improve median time to hire{tenantInsight.industry !== 'Unknown' ? ` (${tenantInsight.industry})` : ''}</Heading>
-                    {tenantInsight.recommendedMissingFeatures.length === 0 ? (
-                      <BodyText size="small" style={{ color: colors.blackPepper500 }}>
-                        No high-value missing features detected under current correlation thresholds.
-                      </BodyText>
-                    ) : (
-                      <ul style={{ margin: 0, paddingLeft: 20, color: colors.blackPepper600, fontSize: 14, lineHeight: 1.6 }}>
-                        {tenantInsight.recommendedMissingFeatures.map((rec) => (
-                          <li key={rec.feature}>
-                            <strong>{rec.feature}</strong>
-                            {' '}-
-                            {' '}associated with {Math.abs(rec.deltaTthDays).toFixed(1)} days {rec.deltaTthDays >= 0 ? 'lower' : 'higher'} median TTH
-                            {' '}({rec.confidence} confidence)
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </Box>
-                </Flex>
+              {tenantTab === 0 && (
+                <>
+                  {!tenantInsight ? (
+                    <Box style={listCard}>
+                      <BodyText size="small" style={{ color: colors.blackPepper500 }}>No data scientist insight available for this tenant yet.</BodyText>
+                    </Box>
+                  ) : (
+                    <Flex flexDirection="row" flexWrap="wrap" gap="m">
+                      <Box flex="1 1 100%" style={listCard}>
+                        <Heading as="h3" size="small" marginBottom="s">Data Scientist TL;DR</Heading>
+                        <ul style={{ margin: 0, paddingLeft: 20, color: colors.blackPepper600, fontSize: 14, lineHeight: 1.6 }}>
+                          {tldrInsights.map((insight, index) => (<li key={`tldr-${index}`}>{insight}</li>))}
+                        </ul>
+                      </Box>
+                      <Box flex="1 1 260px" style={listCard}>
+                        <Heading as="h3" size="small" marginBottom="s">Adoption score</Heading>
+                        <Heading as="h2" size="small" style={{ margin: 0 }}>{tenantInsight.adoptionScore.toFixed(1)} / 100</Heading>
+                        <BodyText size="small" style={{ color: colors.blackPepper500 }}>Segment: {tenantInsight.segment} · Industry: {tenantInsight.industry}</BodyText>
+                        <BodyText size="small" style={{ color: colors.blackPepper500, fontSize: 12, marginTop: 4 }}>Model: {tenantInsight.segmentModelUsed}</BodyText>
+                        <BodyText size="small" style={{ color: colors.blackPepper500, marginTop: 8 }}>Strengths: {tenantInsight.strengthFeatures.length > 0 ? tenantInsight.strengthFeatures.join(', ') : 'none flagged'}</BodyText>
+                      </Box>
+                      <Box flex="2 1 420px" style={listCard}>
+                        <Heading as="h3" size="small" marginBottom="s">Missing features likely to improve median time to hire{tenantInsight.industry !== 'Unknown' ? ` (${tenantInsight.industry})` : ''}</Heading>
+                        {tenantInsight.recommendedMissingFeatures.length === 0 ? (
+                          <BodyText size="small" style={{ color: colors.blackPepper500 }}>No high-value missing features detected under current correlation thresholds.</BodyText>
+                        ) : (
+                          <ul style={{ margin: 0, paddingLeft: 20, color: colors.blackPepper600, fontSize: 14, lineHeight: 1.6 }}>
+                            {tenantInsight.recommendedMissingFeatures.map((rec) => (
+                              <li key={rec.feature}><strong>{rec.feature}</strong> - associated with {Math.abs(rec.deltaTthDays).toFixed(1)} days {rec.deltaTthDays >= 0 ? 'lower' : 'higher'} median TTH ({rec.confidence} confidence)</li>
+                            ))}
+                          </ul>
+                        )}
+                      </Box>
+                    </Flex>
+                  )}
+                </>
               )}
 
-              <Box style={listCard}>
-                <Heading as="h3" size="small" marginBottom="s">
-                  Peer benchmark{peerBenchmarkInsight ? ` (${peerBenchmarkInsight.industryFiltered ? `${peerBenchmarkInsight.industry}, ` : ''}${peerBenchmarkInsight.segment})` : ''}
-                </Heading>
-                {!peerBenchmarkInsight ? (
-                  <BodyText size="small" style={{ color: colors.blackPepper500 }}>
-                    Not enough peers in this segment to benchmark yet.
-                  </BodyText>
-                ) : (
-                  <>
-                    <BodyText size="small" style={{ color: colors.blackPepper500 }}>
-                      Your score: <strong>{tenantInsight?.adoptionScore.toFixed(1)}</strong> · Peer median: <strong>{peerBenchmarkInsight.segmentPeerMedian.toFixed(1)}</strong> · Peer p75: <strong>{peerBenchmarkInsight.segmentPeerP75.toFixed(1)}</strong> · Percentile: <strong>{peerBenchmarkInsight.tenantPercentile.toFixed(0)}th</strong>
-                    </BodyText>
-                    <BodyText size="small" style={{ color: colors.blackPepper500, marginTop: 6 }}>
-                      {peerBenchmarkInsight.industryFiltered
-                        ? `Benchmarked against ${peerBenchmarkInsight.industry} peers in the ${peerBenchmarkInsight.segment} segment.`
-                        : `Industry pool too small for ${peerBenchmarkInsight.industry}; benchmarked against all ${peerBenchmarkInsight.segment} peers.`}
-                      {' '}Directional, not causal proof.
-                    </BodyText>
-
-                    {peerBenchmarkInsight.topPeers.length === 0 ? (
-                      <BodyText size="small" style={{ color: colors.blackPepper500, marginTop: 10 }}>
-                        No comparable peers with additional high-value features were found.
+              {tenantTab === 1 && (
+                <Box style={listCard}>
+                  <Heading as="h3" size="small" marginBottom="s">
+                    Peer benchmark{peerBenchmarkInsight ? ` (${peerBenchmarkInsight.industryFiltered ? `${peerBenchmarkInsight.industry}, ` : ''}${peerBenchmarkInsight.segment})` : ''}
+                  </Heading>
+                  {!peerBenchmarkInsight ? (
+                    <BodyText size="small" style={{ color: colors.blackPepper500 }}>Not enough peers in this segment to benchmark yet.</BodyText>
+                  ) : (
+                    <>
+                      <BodyText size="small" style={{ color: colors.blackPepper500 }}>
+                        Your score: <strong>{tenantInsight?.adoptionScore.toFixed(1)}</strong> · Peer median: <strong>{peerBenchmarkInsight.segmentPeerMedian.toFixed(1)}</strong> · Peer p75: <strong>{peerBenchmarkInsight.segmentPeerP75.toFixed(1)}</strong> · Percentile: <strong>{peerBenchmarkInsight.tenantPercentile.toFixed(0)}th</strong>
                       </BodyText>
-                    ) : (
-                      <div style={{ marginTop: 12 }}>
-                        <Heading as="h4" size="small" marginBottom="s">Top 3 peers</Heading>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-                          <thead>
-                            <tr style={{ borderBottom: `1px solid ${colors.soap300}` }}>
-                              <th style={thStyle}>Peer</th>
-                              <th style={thRight}>Adoption score</th>
-                              <th style={thRight}>Gap vs tenant</th>
-                              <th style={thStyle}>Peer-only enabled features you do not have</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {peerBenchmarkInsight.topPeers.map((peer) => (
-                              <tr key={peer.peerTenant} style={{ borderBottom: `1px solid ${colors.soap200}` }}>
-                                <td style={tdStyle}>
-                                  <button
-                                    type="button"
-                                    onClick={() => onTenantChange(peer.peerTenant)}
-                                    style={{ background: 'none', border: 'none', color: colors.blueberry400, cursor: 'pointer', padding: 0, fontSize: 13, textDecoration: 'underline' }}
-                                  >
-                                    {getTenantDisplayName(peer.peerTenant)}
-                                  </button>
-                                </td>
-                                <td style={tdRight}>{peer.peerAdoptionScore.toFixed(1)}</td>
-                                <td style={tdRight}>
-                                  {peer.scoreGapVsTenant >= 0 ? '+' : ''}
-                                  {peer.scoreGapVsTenant.toFixed(1)}
-                                </td>
-                                <td style={tdStyle}>
-                                  {peer.missingFeatures.length === 0 ? (
-                                    <span style={{ color: colors.blackPepper500 }}>No differentiating features</span>
-                                  ) : (
-                                    <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.5 }}>
-                                      {peer.missingFeatures.map((feature) => (
-                                        <li key={`${peer.peerTenant}-${feature.feature}`}>
-                                          <strong>{feature.feature}</strong> - {Math.abs(feature.deltaTthDays).toFixed(1)} days {feature.deltaTthDays >= 0 ? 'lower' : 'higher'} median TTH ({feature.confidence})
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  )}
-                                </td>
+                      <BodyText size="small" style={{ color: colors.blackPepper500, marginTop: 6 }}>
+                        {peerBenchmarkInsight.industryFiltered
+                          ? `Benchmarked against ${peerBenchmarkInsight.industry} peers in the ${peerBenchmarkInsight.segment} segment.`
+                          : `Industry pool too small for ${peerBenchmarkInsight.industry}; benchmarked against all ${peerBenchmarkInsight.segment} peers.`}
+                        {' '}Directional, not causal proof.
+                      </BodyText>
+                      {peerBenchmarkInsight.topPeers.length === 0 ? (
+                        <BodyText size="small" style={{ color: colors.blackPepper500, marginTop: 10 }}>No comparable peers with additional high-value features were found.</BodyText>
+                      ) : (
+                        <div style={{ marginTop: 12 }}>
+                          <Heading as="h4" size="small" marginBottom="s">Top 3 peers</Heading>
+                          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                            <thead>
+                              <tr style={{ borderBottom: `1px solid ${colors.soap300}` }}>
+                                <th style={thStyle}>Peer</th><th style={thRight}>Adoption score</th><th style={thRight}>Gap vs tenant</th><th style={thStyle}>Peer-only enabled features you do not have</th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </>
-                )}
-              </Box>
+                            </thead>
+                            <tbody>
+                              {peerBenchmarkInsight.topPeers.map((peer, idx) => (
+                                <tr key={peer.peerTenant} style={zebraRow(idx)}>
+                                  <td style={tdStyle}>
+                                    <button type="button" onClick={() => onTenantChange(peer.peerTenant)} style={{ background: 'none', border: 'none', color: colors.blueberry400, cursor: 'pointer', padding: 0, fontSize: 13, textDecoration: 'underline' }}>{getTenantDisplayName(peer.peerTenant)}</button>
+                                  </td>
+                                  <td style={tdRight}>{peer.peerAdoptionScore.toFixed(1)}</td>
+                                  <td style={tdRight}>{peer.scoreGapVsTenant >= 0 ? '+' : ''}{peer.scoreGapVsTenant.toFixed(1)}</td>
+                                  <td style={tdStyle}>
+                                    {peer.missingFeatures.length === 0 ? (
+                                      <span style={{ color: colors.blackPepper500 }}>No differentiating features</span>
+                                    ) : (
+                                      <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.5 }}>
+                                        {peer.missingFeatures.map((feature) => (
+                                          <li key={`${peer.peerTenant}-${feature.feature}`}><strong>{feature.feature}</strong> - {Math.abs(feature.deltaTthDays).toFixed(1)} days {feature.deltaTthDays >= 0 ? 'lower' : 'higher'} median TTH ({feature.confidence})</li>
+                                        ))}
+                                      </ul>
+                                    )}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </Box>
+              )}
+
+              {tenantTab === 2 && (
+                <>
+                  <Heading as="h2" size="small" marginY="xs">
+                    Talent Acquisition feature adoption (PCA)
+                    {countBadge(featureLists.adopted.length, featureTotal, colors.greenApple400)}
+                  </Heading>
+                  <BodyText size="small" marginBottom="s" style={{ color: colors.blackPepper500 }}>
+                    Source of truth: PCA task-to-feature mapping. Enabled means any mapped task had usage (&gt;0 users or transactions) in the 12-month window.
+                  </BodyText>
+                  <Flex flexDirection="row" flexWrap="wrap" gap="m">
+                    <Box flex="1 1 320px" style={listCard}>
+                      <Heading as="h3" size="small" marginBottom="s">Enabled {countBadge(featureLists.adopted.length, featureTotal, colors.greenApple400)}</Heading>
+                      {featureLists.adopted.length === 0 ? (
+                        <BodyText size="small" style={{ color: colors.blackPepper500 }}>No PCA Talent Acquisition features marked as enabled for this tenant.</BodyText>
+                      ) : (
+                        <FeatureImpactList features={featureLists.adopted} correlations={tenantInsight?.effectiveCorrelations ?? []} modelLabel={tenantInsight?.segmentModelUsed} />
+                      )}
+                    </Box>
+                    <Box flex="1 1 320px" style={listCard}>
+                      <Heading as="h3" size="small" marginBottom="s">Not enabled {countBadge(featureLists.notAdopted.length, featureTotal, colors.cantaloupe400)}</Heading>
+                      {featureLists.notAdopted.length === 0 ? (
+                        <BodyText size="small" style={{ color: colors.blackPepper500 }}>All PCA Talent Acquisition features are enabled.</BodyText>
+                      ) : (
+                        <FeatureImpactList features={featureLists.notAdopted} correlations={tenantInsight?.effectiveCorrelations ?? []} modelLabel={tenantInsight?.segmentModelUsed} />
+                      )}
+                    </Box>
+                  </Flex>
+                </>
+              )}
 
               <BodyText size="small" style={{ lineHeight: 1.6, color: colors.blackPepper500 }}>
                 Usage source: <strong>{SCORECARD_SOURCE.customer360Table}</strong> ({SCORECARD_SOURCE.usageEnvironment}, {SCORECARD_SOURCE.usageDateRange}). Mapping source: <strong>{SCORECARD_SOURCE.taskToPcaTable}</strong>.

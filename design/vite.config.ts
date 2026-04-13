@@ -116,6 +116,10 @@ export default defineConfig({
           if (id.includes('data-bp-durations.ts') && !id.includes('by-segment')) return 'data-bp-durations';
           if (id.includes('data-employment-agreement-durations.ts')) return 'data-ea-durations';
           if (id.includes('data-customer-scorecard.ts')) return 'data-customer-scorecard';
+          if (id.includes('data-dashboard-tenant-filters.ts')) return 'data-tenant-filters';
+          if (id.includes('data-avg-time-to-hire.ts')) return 'data-avg-time-to-hire';
+          if (id.includes('data-positions.ts')) return 'data-positions';
+          if (id.includes('data-tree-tenant-series.ts')) return 'data-tree-tenant-series';
         },
       },
     },
