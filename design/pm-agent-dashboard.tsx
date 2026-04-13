@@ -278,6 +278,9 @@ export const PMAgentDashboard: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
+    const currentHash = window.location.hash.replace(/^#\/?/, '');
+    const isOwnRoute = currentHash.startsWith('pm-agent-dashboard');
+    if (!isOwnRoute) return;
     const newHash = `#pm-agent-dashboard?tab=${activeTab}`;
     if (window.location.hash !== newHash) {
       window.history.replaceState({}, '', newHash);
@@ -286,6 +289,8 @@ export const PMAgentDashboard: React.FC = () => {
 
   React.useEffect(() => {
     const onHashChange = () => {
+      const h = window.location.hash.replace(/^#\/?/, '');
+      if (!h.startsWith('pm-agent-dashboard')) return;
       const tab = getTabFromHash();
       if (tab) setActiveTab(tab);
     };
