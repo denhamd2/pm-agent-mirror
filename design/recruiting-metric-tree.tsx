@@ -257,7 +257,7 @@ function NodeCard({ node, selected, onSelect }: { node: MetricTreeNode; selected
       }}
       onMouseDown={(event) => event.stopPropagation()}
     >
-      <div style={{ fontSize: 12, fontWeight: 600, color: colors.blackPepper500, lineHeight: 1.25, marginBottom: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: colors.blackPepper500, lineHeight: 1.25, marginBottom: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', textAlign: 'center' }}>
         {node.title}
       </div>
 
