@@ -841,9 +841,9 @@ export const CustomerScorecardDashboard = () => {
                 Segment and industry-aware correlation model. Recommendations prioritise missing features associated with lower median TTH among peers in the same usage segment and industry. Correlation does not imply causation.
               </BodyText>
 
-              <TabBar tabs={['Adoption & Recommendations', 'Peer Benchmark', 'Feature Adoption Detail']} active={tenantTab} onChange={setTenantTab} />
+              <TabBar tabs={['Feature Adoption Detail', 'Adoption & Recommendations', 'Peer Benchmark']} active={tenantTab} onChange={setTenantTab} />
 
-              {tenantTab === 0 && (
+              {tenantTab === 1 && (
                 <>
                   {!tenantInsight ? (
                     <Box style={listCard}>
@@ -881,7 +881,7 @@ export const CustomerScorecardDashboard = () => {
                 </>
               )}
 
-              {tenantTab === 1 && (
+              {tenantTab === 2 && (
                 <Box style={listCard}>
                   <Heading as="h3" size="small" marginBottom="s">
                     Peer benchmark{peerBenchmarkInsight ? ` (${peerBenchmarkInsight.industryFiltered ? `${peerBenchmarkInsight.industry}, ` : ''}${peerBenchmarkInsight.segment})` : ''}
@@ -940,7 +940,7 @@ export const CustomerScorecardDashboard = () => {
                 </Box>
               )}
 
-              {tenantTab === 2 && (
+              {tenantTab === 0 && (
                 <>
                   <Heading as="h2" size="small" marginY="xs">
                     Talent Acquisition feature adoption (PCA)

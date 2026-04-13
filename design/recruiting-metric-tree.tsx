@@ -23,6 +23,7 @@ import {
   TREE_LEVELS,
   type MetricTreeConfidence,
   type MetricTreeNode,
+  type TrendGoodDirection,
   lastN,
   definedSeries,
   formatDays,
@@ -53,9 +54,10 @@ const DEFAULT_NODE_WIDTH = 228;
 const RAIL_WIDTH = 360;
 
 const LEVEL_Y: Record<(typeof TREE_LEVELS)[number], number> = {
-  'Business Value Outcome': 44,
-  'Product Value Drivers': 312,
-  'Operational Drivers': 662,
+  'Business Value Outcomes': 12,
+  'Product Value Outcomes': 262,
+  'User Outcomes': 510,
+  'Feature Adoption & Usage': 760,
 };
 
 const CONFIDENCE_STYLE: Record<
@@ -63,9 +65,9 @@ const CONFIDENCE_STYLE: Record<
   { bg: string; fg: string; stroke: string; dash?: string; badge: string }
 > = {
   Measured: {
-    bg: colors.greenApple100,
-    fg: colors.greenApple700,
-    stroke: colors.greenApple500,
+    bg: colors.blueberry100,
+    fg: colors.blueberry600,
+    stroke: colors.blueberry400,
     dash: '6 5',
     badge: 'Measured',
   },
@@ -128,9 +130,10 @@ function correlationStrength(correlation: number | null): 'Strong' | 'Moderate' 
 }
 
 function formatLevelSummary(level: string): string {
-  if (level === 'Business Value Outcome') return 'North-star business result';
-  if (level === 'Product Value Drivers') return 'Measured product outcomes PMs can influence';
-  return 'Lower-level behaviours that speed up or slow down the layer above';
+  if (level === 'Business Value Outcomes') return 'North-star business results';
+  if (level === 'Product Value Outcomes') return 'Measured product outcomes PMs can influence';
+  if (level === 'User Outcomes') return 'User behaviours that speed up or slow down the layer above';
+  return 'Feature adoption that drives user outcomes';
 }
 
 function chartData(values: number[], stroke: string, fill: string) {
@@ -203,8 +206,24 @@ function buildFilteredRcNode(filteredTenants: string[], base: MetricTreeNode): M
 
 // ── NodeCard ──
 
+const TREND_GOOD = '#188038';
+const TREND_BAD = '#d93025';
+
+function trendArrow(pct: number | null, direction: TrendGoodDirection): { symbol: string; color: string; text: string } {
+  if (pct == null || !Number.isFinite(pct)) return { symbol: '', color: colors.blackPepper400, text: '--' };
+  const abs = Math.abs(pct).toFixed(1);
+  if (pct === 0) return { symbol: '', color: colors.blackPepper400, text: '0.0%' };
+  const symbol = pct < 0 ? '\u2193' : '\u2191';
+  const good =
+    direction === 'lowerIsBetter' ? pct < 0 : pct > 0;
+  return { symbol, color: good ? TREND_GOOD : TREND_BAD, text: `${abs}%` };
+}
+
 function NodeCard({ node, selected, onSelect }: { node: MetricTreeNode; selected: boolean; onSelect: (id: string) => void }) {
-  const confidence = CONFIDENCE_STYLE[node.confidence];
+  const stroke = colors.blueberry400;
+  const fill = `${colors.blueberry400}22`;
+  const mom = trendArrow(node.momPct, node.trendGoodDirection);
+  const yoy = trendArrow(node.yoyPct, node.trendGoodDirection);
   return (
     <button
       type="button"
@@ -226,39 +245,25 @@ function NodeCard({ node, selected, onSelect }: { node: MetricTreeNode; selected
       }}
       onMouseDown={(event) => event.stopPropagation()}
     >
-      <Flex justifyContent="space-between" gap="s" alignItems="flex-start" style={{ marginBottom: 4 }}>
-        <Box style={{ minWidth: 0, overflow: 'hidden' }}>
-          <div style={{ fontSize: 9, color: colors.blackPepper400, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            {node.level}
-          </div>
-          <div style={{
-            fontSize: 13,
-            fontWeight: 700,
-            color: colors.blackPepper600,
-            lineHeight: 1.25,
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical' as const,
-            overflow: 'hidden',
-          }}>
-            {node.title}
-          </div>
+      <div style={{ fontSize: 12, fontWeight: 600, color: colors.blackPepper500, lineHeight: 1.25, marginBottom: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        {node.title}
+      </div>
+
+      <div style={{ fontSize: 22, fontWeight: 700, color: colors.blackPepper600, lineHeight: 1.2 }}>{node.value}</div>
+
+      <div style={{ width: '100%', height: 28, marginTop: 4 }}>
+        <Line data={chartData(node.trend.length > 0 ? node.trend : [0], stroke, fill)} options={miniChartOptions} />
+      </div>
+
+      <Flex justifyContent="center" gap="zero" style={{ marginTop: 6, borderTop: `1px solid ${colors.soap200}`, paddingTop: 4 }}>
+        <Box style={{ flex: 1, textAlign: 'center', borderRight: `1px solid ${colors.soap200}`, padding: '0 4px' }}>
+          <div style={{ fontSize: 9, color: colors.blackPepper400, fontWeight: 600, textTransform: 'uppercase' }}>MoM</div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: mom.color }}>{mom.symbol}{mom.text}</div>
         </Box>
-        <span style={{ flexShrink: 0, padding: '2px 7px', borderRadius: 999, background: confidence.bg, color: confidence.fg, fontSize: 10, fontWeight: 700 }}>
-          {confidence.badge}
-        </span>
-      </Flex>
-
-      <div style={{ fontSize: 20, fontWeight: 700, color: colors.blackPepper600, lineHeight: 1.2 }}>{node.value}</div>
-      <div style={{ fontSize: 10, color: colors.blackPepper400, lineHeight: 1.3, marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{node.valueContext}</div>
-
-      <Flex justifyContent="space-between" alignItems="center" style={{ marginTop: 6 }}>
-        <span style={{ fontSize: 8, color: colors.blackPepper400, background: colors.soap100, borderRadius: 999, padding: '2px 6px' }}>
-          {node.source}
-        </span>
-        <div style={{ width: 80, height: 20, flexShrink: 0 }}>
-          <Line data={chartData(node.trend.length > 0 ? node.trend : [0], confidence.stroke, `${confidence.stroke}22`)} options={miniChartOptions} />
-        </div>
+        <Box style={{ flex: 1, textAlign: 'center', padding: '0 4px' }}>
+          <div style={{ fontSize: 9, color: colors.blackPepper400, fontWeight: 600, textTransform: 'uppercase' }}>YoY</div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: yoy.color }}>{yoy.symbol}{yoy.text}</div>
+        </Box>
       </Flex>
     </button>
   );
@@ -368,7 +373,7 @@ export const RecruitingMetricTreePage: React.FC = () => {
           <svg width={TREE_META.canvas.width} height={TREE_META.canvas.height} viewBox={`0 0 ${TREE_META.canvas.width} ${TREE_META.canvas.height}`} style={{ position: 'absolute', left: 0, top: 0, overflow: 'visible' }}>
             {TREE_LEVELS.map((level) => (
               <g key={level}>
-                <rect x={32} y={LEVEL_Y[level]} width={260} height={38} rx={19} fill="rgba(15,23,42,0.06)" stroke="rgba(15,23,42,0.05)" />
+                <rect x={32} y={LEVEL_Y[level]} width={310} height={38} rx={19} fill="rgba(15,23,42,0.06)" stroke="rgba(15,23,42,0.05)" />
                 <text x={50} y={LEVEL_Y[level] + 16} fill={colors.blackPepper600} fontSize="12" fontWeight="700">{level}</text>
                 <text x={50} y={LEVEL_Y[level] + 29} fill={colors.blackPepper400} fontSize="10">{formatLevelSummary(level)}</text>
               </g>
@@ -469,13 +474,8 @@ export const RecruitingMetricTreePage: React.FC = () => {
             <BodyText size="small" color={colors.blackPepper400} style={{ marginBottom: 12 }}>{selectedNode.valueContext}</BodyText>
 
             <div style={{ height: 180, marginBottom: 16 }}>
-              <Line data={chartData(selectedNode.trend.length > 0 ? selectedNode.trend : [0], CONFIDENCE_STYLE[selectedNode.confidence].stroke, `${CONFIDENCE_STYLE[selectedNode.confidence].stroke}22`)} options={railChartOptions} />
+              <Line data={chartData(selectedNode.trend.length > 0 ? selectedNode.trend : [0], colors.blueberry400, `${colors.blueberry400}22`)} options={railChartOptions} />
             </div>
-
-            <Flex gap="s" style={{ flexWrap: 'wrap', marginBottom: 16 }}>
-              <span style={{ padding: '4px 9px', borderRadius: 999, background: CONFIDENCE_STYLE[selectedNode.confidence].bg, color: CONFIDENCE_STYLE[selectedNode.confidence].fg, fontSize: 11, fontWeight: 700 }}>{selectedNode.confidence}</span>
-              <span style={{ padding: '4px 9px', borderRadius: 999, background: colors.soap100, color: colors.blackPepper500, fontSize: 11 }}>{selectedNode.source}</span>
-            </Flex>
 
             <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.6, marginBottom: 14 }}>{selectedNode.definition}</BodyText>
 

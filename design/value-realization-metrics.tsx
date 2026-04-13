@@ -198,7 +198,7 @@ export const ValueRealizationMetrics: React.FC = () => {
           subtitle={"Landing page for all Workday Recruiting outcome and adoption dashboards, showing which metrics are live, legacy, or blocked.\nSources: IUMs from Pharos · bp_event_stats for sub-BP timing · PROD adoption metrics."}
         />
 
-        <Heading size="small" marginBottom="s">Core business outcome dashboards</Heading>
+        <Heading size="small" marginBottom="s">Business Value Outcomes</Heading>
         <Flex gap="l" marginBottom="l" style={{ flexWrap: 'wrap', alignItems: 'stretch' }}>
           <DashboardLink
             href="/avg-time-to-hire"

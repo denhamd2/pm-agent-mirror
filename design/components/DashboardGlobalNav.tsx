@@ -4,19 +4,19 @@ import { colors } from '@workday/canvas-kit-react/tokens';
 
 const PRIMARY_NAV_ITEMS = [
   { id: 'morning-roundup', label: 'Morning Roundup', hrefType: 'pm-tab' },
-  { id: 'agent-health', label: 'Agent Health', hrefType: 'pm-tab' },
-  { id: 'prototypes', label: 'Saved Prototypes', hrefType: 'pm-tab' },
+  { id: 'metrics', label: 'Value Realization Metrics', hrefType: 'metrics-home' },
+  { id: 'prototypes', label: 'My Saved Prototypes', hrefType: 'pm-tab' },
+  { id: 'agent-flow', label: 'Agent Flow', hrefType: 'pm-tab' },
   { id: 'data-sources', label: 'Data Sources', hrefType: 'pm-tab' },
   { id: 'design-system', label: 'Design System', hrefType: 'pm-tab' },
-  { id: 'agent-flow', label: 'Agent Flow', hrefType: 'pm-tab' },
-  { id: 'metrics', label: 'Metrics', hrefType: 'metrics-home' },
+  { id: 'agent-health', label: 'Agent Health', hrefType: 'pm-tab' },
 ] as const;
 
 const METRIC_ITEMS = [
   { slug: 'value-realization-metrics', label: 'Value Realisation' },
   { slug: 'customer-scorecard', label: 'Customer Scorecard' },
   { slug: 'recruiting-metric-tree', label: 'Value Driver Tree', newWindow: true },
-  { slug: 'bp-durations', label: 'Job App Stage Durations' },
+  { slug: 'bp-durations', label: 'Job App Stage Metrics' },
 ] as const;
 
 /** Maps child dashboard slugs to a parent nav item so the correct chip highlights. */

@@ -53,6 +53,14 @@ export const ADD_DOCUMENTS_SOURCE = {
 /** Real data is present and safe to render. */
 export const HAS_ADD_DOCUMENTS_DATA = true;
 
+/** Total active Workday Recruiting customers used as denominator for tenant-based adoption rates. */
+export const TOTAL_ACTIVE_RECRUITING_TENANTS = 5908;
+
+/** Tenant-based Add Documents adoption rate for a given month: tenants using Add Documents / total recruiting tenants. */
+export function tenantAdoptionPct(point: AddDocumentsMonthlyPoint): number {
+  return (point.refsWithDocsTenants / TOTAL_ACTIVE_RECRUITING_TENANTS) * 100;
+}
+
 export const addDocumentsMetricCards: AddDocumentsMetricCard[] = [
   {
     label: 'Configured BP definitions',

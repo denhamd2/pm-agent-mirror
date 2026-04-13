@@ -51,6 +51,15 @@ export function normaliseTenantInput(value: string): string {
   return value.trim().toLowerCase();
 }
 
+export function isValidMetric(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value);
+}
+
+export function safeFixed(value: number | null | undefined, digits = 1, fallback = '--'): string {
+  if (value == null || !Number.isFinite(value)) return fallback;
+  return value.toFixed(digits);
+}
+
 export function getTenantMeta(tenant: string) {
   return TENANT_FILTER_METADATA[tenant];
 }
@@ -83,7 +92,7 @@ export function aggregateTenantSeries(
   return labels.map((ym) => {
     const values = tenantNames.flatMap((tenant) => {
       const point = source[tenant]?.find((row) => row.ym === ym);
-      return point ? [point.value] : [];
+      return point && Number.isFinite(point.value) ? [point.value] : [];
     });
 
     if (values.length === 0) {
@@ -91,9 +100,10 @@ export function aggregateTenantSeries(
     }
 
     const total = values.reduce((sum, value) => sum + value, 0);
+    const avg = total / values.length;
     return {
       ym,
-      avg: total / values.length,
+      avg: Number.isFinite(avg) ? avg : null,
       tenants: values.length,
       min: Math.min(...values),
       max: Math.max(...values),

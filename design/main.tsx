@@ -19,20 +19,22 @@ import { InterviewIntelligenceAgentV96 } from './interview-intelligence-agent-v9
 import AISystemOfRecordV97 from './ai-system-of-record-v97';
 import { CanvasKitTest } from './components/CanvasKitTest';
 import PMAgentDashboard from './pm-agent-dashboard';
-import { AvgTimeToHireDashboard } from './avg-time-to-hire-dashboard';
-import { PositionsOpenVsFilledDashboard } from './positions-open-vs-filled-dashboard';
-import { ValueRealizationMetrics } from './value-realization-metrics';
-import { RecruiterCapacityDashboard } from './recruiter-capacity-dashboard';
-import { AddDocumentsImpactDashboard } from './add-documents-impact-dashboard';
-import { ViewDashboard } from './view-dashboard';
-import { RecruitingAdoptionDashboard } from './recruiting-adoption-dashboard';
-import { InterviewMetricsDashboard } from './interview-metrics-dashboard';
+const AvgTimeToHireDashboard = React.lazy(() => import('./avg-time-to-hire-dashboard').then((m) => ({ default: m.AvgTimeToHireDashboard })));
+const PositionsOpenVsFilledDashboard = React.lazy(() => import('./positions-open-vs-filled-dashboard').then((m) => ({ default: m.PositionsOpenVsFilledDashboard })));
+const ValueRealizationMetrics = React.lazy(() => import('./value-realization-metrics').then((m) => ({ default: m.ValueRealizationMetrics })));
+const RecruiterCapacityDashboard = React.lazy(() => import('./recruiter-capacity-dashboard').then((m) => ({ default: m.RecruiterCapacityDashboard })));
+const AddDocumentsImpactDashboard = React.lazy(() => import('./add-documents-impact-dashboard').then((m) => ({ default: m.AddDocumentsImpactDashboard })));
+const ViewDashboard = React.lazy(() => import('./view-dashboard').then((m) => ({ default: m.ViewDashboard })));
+const RecruitingAdoptionDashboard = React.lazy(() => import('./recruiting-adoption-dashboard').then((m) => ({ default: m.RecruitingAdoptionDashboard })));
+const InterviewMetricsDashboard = React.lazy(() => import('./interview-metrics-dashboard').then((m) => ({ default: m.InterviewMetricsDashboard })));
 const BpDurationDashboard = React.lazy(() => import('./bp-duration-dashboard').then((m) => ({ default: m.BpDurationDashboard })));
 const CustomerScorecardDashboard = React.lazy(() => import('./customer-scorecard-dashboard').then((m) => ({ default: m.CustomerScorecardDashboard })));
-const RecruitingMetricTreePage = React.lazy(() =>
-  import('./recruiting-metric-tree').then((m) => ({ default: m.RecruitingMetricTreePage }))
-);
+const RecruitingMetricTreePage = React.lazy(() => import('./recruiting-metric-tree').then((m) => ({ default: m.RecruitingMetricTreePage })));
 import { SANA_PAGE_CANVAS } from './components';
+
+function LoadingPlaceholder() {
+  return <div style={{ padding: 40, textAlign: 'center', color: '#666' }}>Loading...</div>;
+}
 
 /** Prototype slugs backed by `design/*.tsx` modules in this branch (see `vite.config.ts` `slugs` Set). */
 function prototypeFromLocation():
@@ -220,49 +222,37 @@ function AppRoot() {
     return <CanvasKitTest />;
   }
   if (route === 'customer-scorecard') {
-    return (
-      <React.Suspense fallback={<div style={{ padding: 40, textAlign: 'center', color: '#666' }}>Loading scorecard...</div>}>
-        <CustomerScorecardDashboard />
-      </React.Suspense>
-    );
+    return <React.Suspense fallback={<LoadingPlaceholder />}><CustomerScorecardDashboard /></React.Suspense>;
   }
   if (route === 'recruiting-adoption') {
-    return <RecruitingAdoptionDashboard />;
+    return <React.Suspense fallback={<LoadingPlaceholder />}><RecruitingAdoptionDashboard /></React.Suspense>;
   }
   if (route === 'bp-durations') {
-    return (
-      <React.Suspense fallback={<div style={{ padding: 40, textAlign: 'center', color: '#666' }}>Loading BP durations...</div>}>
-        <BpDurationDashboard />
-      </React.Suspense>
-    );
+    return <React.Suspense fallback={<LoadingPlaceholder />}><BpDurationDashboard /></React.Suspense>;
   }
   if (route === 'interview-metrics') {
-    return <InterviewMetricsDashboard />;
+    return <React.Suspense fallback={<LoadingPlaceholder />}><InterviewMetricsDashboard /></React.Suspense>;
   }
   if (route === 'view-dashboard') {
-    return <ViewDashboard />;
+    return <React.Suspense fallback={<LoadingPlaceholder />}><ViewDashboard /></React.Suspense>;
   }
   if (route === 'value-realization-metrics') {
-    return <ValueRealizationMetrics />;
+    return <React.Suspense fallback={<LoadingPlaceholder />}><ValueRealizationMetrics /></React.Suspense>;
   }
   if (route === 'recruiter-capacity') {
-    return <RecruiterCapacityDashboard />;
+    return <React.Suspense fallback={<LoadingPlaceholder />}><RecruiterCapacityDashboard /></React.Suspense>;
   }
   if (route === 'recruiting-metric-tree') {
-    return (
-      <React.Suspense fallback={<div style={{ padding: 40, textAlign: 'center', color: '#666' }}>Loading metric tree...</div>}>
-        <RecruitingMetricTreePage />
-      </React.Suspense>
-    );
+    return <React.Suspense fallback={<LoadingPlaceholder />}><RecruitingMetricTreePage /></React.Suspense>;
   }
   if (route === 'add-documents-impact') {
-    return <AddDocumentsImpactDashboard />;
+    return <React.Suspense fallback={<LoadingPlaceholder />}><AddDocumentsImpactDashboard /></React.Suspense>;
   }
   if (route === 'positions-open-vs-filled') {
-    return <PositionsOpenVsFilledDashboard />;
+    return <React.Suspense fallback={<LoadingPlaceholder />}><PositionsOpenVsFilledDashboard /></React.Suspense>;
   }
   if (route === 'avg-time-to-hire') {
-    return <AvgTimeToHireDashboard />;
+    return <React.Suspense fallback={<LoadingPlaceholder />}><AvgTimeToHireDashboard /></React.Suspense>;
   }
   if (route === 'pm-agent-dashboard') {
     return <PMAgentDashboard />;

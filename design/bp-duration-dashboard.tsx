@@ -45,6 +45,7 @@ import {
   addDocumentsMetricCards,
   addDocumentsMonthly,
   addDocumentsTopTenants,
+  tenantAdoptionPct,
 } from './data-add-documents';
 import {
   EMPLOYMENT_AGREEMENT_STEPS_SOURCE,
@@ -156,10 +157,7 @@ function TenantRegionIndustryFilterCard({
   const active = Boolean(filters.tenant || filters.region || filters.industry);
   return (
     <Card style={{ ...chartCard, marginTop: 16, padding: 16, border: active ? `2px solid ${colors.blueberry400}` : undefined }}>
-      <Flex justifyContent="space-between" alignItems="center" style={{ marginBottom: 12 }}>
-        <Heading size="small" style={{ margin: 0, fontSize: 14 }}>
-          Tenant / region / industry slice
-        </Heading>
+      <Flex justifyContent="flex-end" alignItems="center" style={{ marginBottom: 12 }}>
         {active && (
           <SecondaryButton
             size="small"
@@ -170,11 +168,6 @@ function TenantRegionIndustryFilterCard({
           </SecondaryButton>
         )}
       </Flex>
-      <BodyText size="small" style={{ color: colors.blackPepper400, marginBottom: 12, maxWidth: 960, lineHeight: 1.5 }}>
-        Segmented sub-BP charts use the same join as interview dashboards: <code>dw.swh.bp_event_stats</code> tenants matched to{' '}
-        <code>dw.user_test.interview_dashboard_tenant_filters</code>. Not every PROD tenant appears in that filter table; small slices can look sparse.
-        Precedence: tenant overrides region and industry. Offer task-level charts below stay PROD-global (see source block).
-      </BodyText>
       <Flex gap="m" flexWrap="wrap" alignItems="flex-end">
         <Box>
           <div style={filterLabelStyle}>Tenant</div>
@@ -882,8 +875,8 @@ function OfferAddDocumentsBottomSection() {
     labels: paddedLabels,
     datasets: [
       {
-        label: 'Adoption rate',
-        data: paddedMonthly.map(p => p.adoptionRatePct),
+        label: 'Tenant adoption rate',
+        data: paddedMonthly.map(p => tenantAdoptionPct(p)),
         borderColor: colors.blueberry400,
         backgroundColor: colors.blueberry400 + '22',
         tension: 0.3,
@@ -1848,8 +1841,8 @@ export const BpDurationDashboard = () => {
       <Box padding="l" flex={1}>
         <Box style={{ maxWidth: 1280, margin: '0 auto' }}>
           <PageHeader
-            title="Job Application Sub-BP Duration & Quality"
-            subtitle={"Shows how long each recruiting sub-process takes, how often it completes, and where quality signals like sent back or correction rates are concentrated.\nSource: dw.swh.bp_event_stats · PROD completed-event aggregates over the last 12 months, with mean and median cycle times shown separately."}
+            title="Job App Stage Metrics"
+            subtitle="Shows how long each recruiting sub-process takes, how often it completes, and where quality signals like sent back or correction rates are concentrated."
           />
 
           <Flex gap="s" style={{ marginBottom: 14, flexWrap: 'wrap' }} alignItems="center">
