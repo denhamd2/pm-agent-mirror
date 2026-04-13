@@ -33,7 +33,30 @@ const RecruitingMetricTreePage = React.lazy(() => import('./recruiting-metric-tr
 import { SANA_PAGE_CANVAS } from './components';
 
 function LoadingPlaceholder() {
-  return <div style={{ padding: 40, textAlign: 'center', color: '#666' }}>Loading...</div>;
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '60vh',
+      gap: 16,
+    }}>
+      <div style={{
+        width: 40,
+        height: 40,
+        border: '3px solid #e8e8e8',
+        borderTop: '3px solid #0875e1',
+        borderRadius: '50%',
+        animation: 'pm-spin 0.8s linear infinite',
+      }} />
+      <div style={{ fontSize: 16, fontWeight: 600, color: '#333' }}>Loading dashboard</div>
+      <div style={{ fontSize: 13, color: '#888', maxWidth: 280, textAlign: 'center' }}>
+        Crunching a large dataset - this can take up to 30 seconds.
+      </div>
+      <style>{`@keyframes pm-spin { to { transform: rotate(360deg) } }`}</style>
+    </div>
+  );
 }
 
 /** Prototype slugs backed by `design/*.tsx` modules in this branch (see `vite.config.ts` `slugs` Set). */
