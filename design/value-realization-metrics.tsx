@@ -64,6 +64,14 @@ const DashboardLink: React.FC<{
 }> = ({ href, title, description, metricCard }) => (
   <a
     href={href}
+    onClick={(event) => {
+      if (!href.startsWith('#')) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      if (window.location.hash !== href) {
+        window.location.hash = href;
+      }
+    }}
     style={{
       textDecoration: 'none',
       color: 'inherit',
