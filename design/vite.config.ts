@@ -31,6 +31,8 @@ function prototypeSpaSlugFallback(): Plugin {
       'india-whatsapp-candidate-messaging-v88',
       'gcc-interview-scheduling-v90',
       'recruiter-hub-genui-v95',
+      'recruiter-hub-conversational-v98',
+      'recruiter-hub-conversational-v99',
       'india-native-whatsapp-v91',
       'interview-intelligence-agent-v96',
       'ai-system-of-record-v97',

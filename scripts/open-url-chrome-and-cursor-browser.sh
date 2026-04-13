@@ -17,8 +17,20 @@ url_encode() {
   python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1], safe=''))" "$1"
 }
 
-# Built-in Simple Browser in VS Code / Cursor (same handler on many installs).
-simple_browser_deeplink() {
+# Built-in Simple Browser deeplinks (Cursor + VS Code variants).
+simple_browser_deeplink_cursor() {
+  local enc
+  enc="$(url_encode "$URL")"
+  echo "cursor://vscode/simple-browser/show?url=${enc}"
+}
+
+simple_browser_deeplink_cursor_legacy() {
+  local enc
+  enc="$(url_encode "$URL")"
+  echo "cursor://simple-browser/show?url=${enc}"
+}
+
+simple_browser_deeplink_vscode() {
   local enc
   enc="$(url_encode "$URL")"
   echo "vscode://vscode/simple-browser/show?url=${enc}"
@@ -51,25 +63,36 @@ open_cursor_simple_browser() {
   if [[ "${OPEN_IN_CURSOR_BROWSER:-1}" == "0" ]]; then
     return 0
   fi
+  local links
+  links=(
+    "$(simple_browser_deeplink_cursor)"
+    "$(simple_browser_deeplink_cursor_legacy)"
+    "$(simple_browser_deeplink_vscode)"
+  )
   local link
-  link="$(simple_browser_deeplink)"
   if command -v cursor >/dev/null 2>&1; then
-    if cursor --open-url "$link" 2>/dev/null; then
-      return 0
-    fi
+    for link in "${links[@]}"; do
+      if cursor --open-url "$link" 2>/dev/null; then
+        return 0
+      fi
+    done
   fi
   if [[ "$(uname -s)" == "Darwin" ]]; then
-    if open "$link" 2>/dev/null; then
-      return 0
-    fi
+    for link in "${links[@]}"; do
+      if open "$link" 2>/dev/null; then
+        return 0
+      fi
+    done
   fi
   if command -v xdg-open >/dev/null 2>&1; then
-    if xdg-open "$link" 2>/dev/null; then
-      return 0
-    fi
+    for link in "${links[@]}"; do
+      if xdg-open "$link" 2>/dev/null; then
+        return 0
+      fi
+    done
   fi
   echo "[open-url] Could not open Cursor Simple Browser (deeplink). URL: $URL"
-  echo "[open-url] Open Command Palette → \"Simple Browser: Show\" and paste the URL, or use Chrome only (OPEN_IN_CURSOR_BROWSER=0)."
+  echo "[open-url] Open Command Palette -> \"Simple Browser: Show\" and paste the URL."
   return 1
 }
 

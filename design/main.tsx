@@ -14,6 +14,8 @@ import { CandidateSmartViewV86 } from './candidate-smart-view-v86';
 import { IndiaWhatsappCandidateMessagingV88 } from './india-whatsapp-candidate-messaging-v88';
 import { GccInterviewSchedulingComplianceNudgesV90 } from './gcc-interview-scheduling-compliance-nudges-v90';
 import { RecruiterHubGenUIV95 } from './recruiter-hub-genui-v95';
+import { RecruiterHubConversationalV98 } from './recruiter-hub-conversational-v98';
+import { RecruiterHubConversationalV99 } from './recruiter-hub-conversational-v99';
 import { IndiaNativeWhatsappV91 } from './india-native-whatsapp-v91';
 import { InterviewIntelligenceAgentV96 } from './interview-intelligence-agent-v96';
 import AISystemOfRecordV97 from './ai-system-of-record-v97';
@@ -59,174 +61,64 @@ function LoadingPlaceholder() {
   );
 }
 
-/** Prototype slugs backed by `design/*.tsx` modules in this branch (see `vite.config.ts` `slugs` Set). */
-function prototypeFromLocation():
-  | 'gcc-recruiter-dashboard'
-  | 'aadhaar-adobe-sign-v01'
-  | 'candidate-grid-v84'
-  | 'recruiter-home-v85'
-  | 'candidate-smart-view-v86'
-  | 'india-whatsapp-candidate-messaging-v88'
-  | 'gcc-interview-scheduling-v90'
-  | 'recruiter-hub-genui-v95'
-  | 'india-native-whatsapp-v91'
-  | 'interview-intelligence-agent-v96'
-  | 'ai-system-of-record-v97'
-  | 'canvas-kit-test'
-  | 'pm-agent-dashboard'
-  | 'avg-time-to-hire'
-  | 'add-documents-impact'
-  | 'positions-open-vs-filled'
-  | 'value-realization-metrics'
-  | 'recruiter-capacity'
-  | 'recruiting-metric-tree'
-  | 'recruiting-adoption'
-  | 'interview-metrics'
-  | 'bp-durations'
-  | 'view-dashboard'
-  | 'customer-scorecard' {
-  const path = window.location.pathname.replace(/\/+$/, '') || '/';
-  if (path.endsWith('customer-scorecard')) {
-    return 'customer-scorecard';
-  }
-  if (path.endsWith('bp-durations')) {
-    return 'bp-durations';
-  }
-  if (path.endsWith('interview-metrics')) {
-    return 'interview-metrics';
-  }
-  if (path.endsWith('recruiting-adoption')) {
-    return 'recruiting-adoption';
-  }
-  if (path.endsWith('view-dashboard')) {
-    return 'view-dashboard';
-  }
-  if (path.endsWith('value-realization-metrics')) {
-    return 'value-realization-metrics';
-  }
-  if (path.endsWith('recruiter-capacity')) {
-    return 'recruiter-capacity';
-  }
-  if (path.endsWith('recruiting-metric-tree')) {
-    return 'recruiting-metric-tree';
-  }
-  if (path.endsWith('add-documents-impact')) {
-    return 'add-documents-impact';
-  }
-  if (path.endsWith('positions-open-vs-filled')) {
-    return 'positions-open-vs-filled';
-  }
-  if (path.endsWith('avg-time-to-hire')) {
-    return 'avg-time-to-hire';
-  }
-  if (path.endsWith('pm-agent-dashboard')) {
-    return 'pm-agent-dashboard';
-  }
-  if (path.endsWith('canvas-kit-test')) {
-    return 'canvas-kit-test';
-  }
-  if (path.endsWith('ai-system-of-record-v97')) {
-    return 'ai-system-of-record-v97';
-  }
-  if (path.endsWith('interview-intelligence-agent-v96')) {
-    return 'interview-intelligence-agent-v96';
-  }
-  if (path.endsWith('india-native-whatsapp-v91')) {
-    return 'india-native-whatsapp-v91';
-  }
-  if (path.endsWith('recruiter-hub-genui-v95')) {
-    return 'recruiter-hub-genui-v95';
-  }
-  if (path.endsWith('gcc-interview-scheduling-v90')) {
-    return 'gcc-interview-scheduling-v90';
-  }
-  if (path.endsWith('india-whatsapp-candidate-messaging-v88')) {
-    return 'india-whatsapp-candidate-messaging-v88';
-  }
-  if (path.endsWith('candidate-smart-view-v86')) {
-    return 'candidate-smart-view-v86';
-  }
-  if (path.endsWith('recruiter-home-v85')) {
-    return 'recruiter-home-v85';
-  }
-  if (path.endsWith('candidate-grid-v84')) {
-    return 'candidate-grid-v84';
-  }
-  if (path.endsWith('aadhaar-adobe-sign-v01')) return 'aadhaar-adobe-sign-v01';
-  if (path.endsWith('gcc-recruiter-dashboard')) return 'gcc-recruiter-dashboard';
+/**
+ * All recognised prototype slugs. Keep in sync with `vite.config.ts` `slugs` Set.
+ * Order does not matter - lookup is Set-based.
+ */
+const PROTOTYPE_SLUGS = [
+  'gcc-recruiter-dashboard',
+  'aadhaar-adobe-sign-v01',
+  'candidate-grid-v84',
+  'recruiter-home-v85',
+  'candidate-smart-view-v86',
+  'india-whatsapp-candidate-messaging-v88',
+  'gcc-interview-scheduling-v90',
+  'recruiter-hub-genui-v95',
+  'recruiter-hub-conversational-v98',
+  'recruiter-hub-conversational-v99',
+  'india-native-whatsapp-v91',
+  'interview-intelligence-agent-v96',
+  'ai-system-of-record-v97',
+  'canvas-kit-test',
+  'pm-agent-dashboard',
+  'avg-time-to-hire',
+  'add-documents-impact',
+  'positions-open-vs-filled',
+  'value-realization-metrics',
+  'recruiter-capacity',
+  'recruiting-metric-tree',
+  'recruiting-adoption',
+  'interview-metrics',
+  'bp-durations',
+  'view-dashboard',
+  'customer-scorecard',
+] as const;
+
+type PrototypeSlug = (typeof PROTOTYPE_SLUGS)[number];
+
+const SLUG_SET: ReadonlySet<string> = new Set(PROTOTYPE_SLUGS);
+
+/**
+ * Resolve the active prototype from the current URL.
+ *
+ * Hash is checked **first** because dashboard inter-page navigation uses hash hrefs
+ * (`#customer-scorecard`). On GitHub Pages the pathname stays fixed (served via 404.html
+ * SPA fallback) while the hash changes, so pathname-first matching would ignore the
+ * navigation and keep showing the previous page.
+ */
+function prototypeFromLocation(): PrototypeSlug {
   const h = window.location.hash.replace(/^#\/?/, '');
-  if (h === 'aadhaar-adobe-sign-v01' || h.startsWith('aadhaar-adobe-sign-v01')) {
-    return 'aadhaar-adobe-sign-v01';
+  const hashSlug = h.split('?')[0];
+  if (hashSlug && SLUG_SET.has(hashSlug)) return hashSlug as PrototypeSlug;
+  for (const slug of PROTOTYPE_SLUGS) {
+    if (hashSlug.startsWith(slug)) return slug;
   }
-  if (h === 'gcc-recruiter-dashboard' || h.startsWith('gcc-recruiter-dashboard')) {
-    return 'gcc-recruiter-dashboard';
+
+  const pathname = window.location.pathname.replace(/\/+$/, '') || '/';
+  for (const slug of PROTOTYPE_SLUGS) {
+    if (pathname.endsWith(slug)) return slug;
   }
-  if (h === 'candidate-grid-v84' || h.startsWith('candidate-grid-v84')) {
-    return 'candidate-grid-v84';
-  }
-  if (h === 'recruiter-home-v85' || h.startsWith('recruiter-home-v85')) {
-    return 'recruiter-home-v85';
-  }
-  if (h === 'candidate-smart-view-v86' || h.startsWith('candidate-smart-view-v86')) {
-    return 'candidate-smart-view-v86';
-  }
-  if (h === 'india-whatsapp-candidate-messaging-v88' || h.startsWith('india-whatsapp-candidate-messaging-v88')) {
-    return 'india-whatsapp-candidate-messaging-v88';
-  }
-  if (h === 'gcc-interview-scheduling-v90' || h.startsWith('gcc-interview-scheduling-v90')) {
-    return 'gcc-interview-scheduling-v90';
-  }
-  if (h === 'recruiter-hub-genui-v95' || h.startsWith('recruiter-hub-genui-v95')) {
-    return 'recruiter-hub-genui-v95';
-  }
-  if (h === 'india-native-whatsapp-v91' || h.startsWith('india-native-whatsapp-v91')) {
-    return 'india-native-whatsapp-v91';
-  }
-  if (h === 'interview-intelligence-agent-v96' || h.startsWith('interview-intelligence-agent-v96')) {
-    return 'interview-intelligence-agent-v96';
-  }
-  if (h === 'ai-system-of-record-v97' || h.startsWith('ai-system-of-record-v97')) {
-    return 'ai-system-of-record-v97';
-  }
-  if (h === 'canvas-kit-test' || h.startsWith('canvas-kit-test')) {
-    return 'canvas-kit-test';
-  }
-  if (h === 'pm-agent-dashboard' || h.startsWith('pm-agent-dashboard')) {
-    return 'pm-agent-dashboard';
-  }
-  if (h === 'avg-time-to-hire' || h.startsWith('avg-time-to-hire')) {
-    return 'avg-time-to-hire';
-  }
-  if (h === 'positions-open-vs-filled' || h.startsWith('positions-open-vs-filled')) {
-    return 'positions-open-vs-filled';
-  }
-  if (h === 'value-realization-metrics' || h.startsWith('value-realization-metrics')) {
-    return 'value-realization-metrics';
-  }
-  if (h === 'recruiter-capacity' || h.startsWith('recruiter-capacity')) {
-    return 'recruiter-capacity';
-  }
-  if (h === 'recruiting-metric-tree' || h.startsWith('recruiting-metric-tree')) {
-    return 'recruiting-metric-tree';
-  }
-  if (h === 'add-documents-impact' || h.startsWith('add-documents-impact')) {
-    return 'add-documents-impact';
-  }
-  if (h === 'recruiting-adoption' || h.startsWith('recruiting-adoption')) {
-    return 'recruiting-adoption';
-  }
-  if (h === 'bp-durations' || h.startsWith('bp-durations')) {
-    return 'bp-durations';
-  }
-  if (h === 'interview-metrics' || h.startsWith('interview-metrics')) {
-    return 'interview-metrics';
-  }
-  if (h === 'view-dashboard' || h.startsWith('view-dashboard')) {
-    return 'view-dashboard';
-  }
-  if (h === 'customer-scorecard' || h.startsWith('customer-scorecard')) {
-    return 'customer-scorecard';
-  }
+
   return 'recruiter-home-v85';
 }
 
@@ -291,6 +183,12 @@ function AppRoot() {
   }
   if (route === 'recruiter-hub-genui-v95') {
     return <RecruiterHubGenUIV95 />;
+  }
+  if (route === 'recruiter-hub-conversational-v98') {
+    return <RecruiterHubConversationalV98 />;
+  }
+  if (route === 'recruiter-hub-conversational-v99') {
+    return <RecruiterHubConversationalV99 />;
   }
   if (route === 'india-native-whatsapp-v91') {
     return <IndiaNativeWhatsappV91 />;

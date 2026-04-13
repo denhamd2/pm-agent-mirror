@@ -389,8 +389,8 @@ When receiving **"Build prototype from the Design Brief at design/[feature]-desi
    cd design && VITE_PROTOTYPE_SLUG=[feature-slug-vNN] npm run dev
    ```
    - Vite's `openChromeAndCursorBrowser` plugin reads `VITE_PROTOTYPE_SLUG` and constructs `http://localhost:5199/[feature-slug-vNN]`
-   - Browser opens automatically to versioned URL
-   - **Verify in output**: Browser should show full URL with prototype slug, NOT root URL
+   - The launch must open in BOTH Google Chrome and Cursor Simple Browser
+   - **Verify in output**: Browser should show full URL with prototype slug, NOT root URL, in BOTH targets
    
    **Case 2: Port 5199 is IN USE (server already running)**
    ```bash
@@ -398,12 +398,13 @@ When receiving **"Build prototype from the Design Brief at design/[feature]-desi
    bash scripts/open-url-chrome-and-cursor-browser.sh 'http://localhost:5199/[feature-slug-vNN]'
    ```
    - Do NOT attempt to start a new server (will fail with "Port in use")
-   - Script opens the full versioned URL in existing server
-   - **Verify**: Confirm URL in browser address bar shows `/[feature-slug-vNN]` path
+   - Script opens the full versioned URL in BOTH Google Chrome and Cursor Simple Browser
+   - **Verify**: Confirm URL in both browsers shows `/[feature-slug-vNN]` path (or `#[feature-slug-vNN]` for hash routes)
    
    **FORBIDDEN**:
    - ❌ Starting dev server without `VITE_PROTOTYPE_SLUG` environment variable
    - ❌ Opening browser to root URL (`http://localhost:5199/`) without prototype slug
+   - ❌ Launching only one browser target (Chrome-only or Cursor-only)
    - ❌ Assuming server will route correctly without checking URL
    - ❌ Skipping port check (leads to ambiguous behavior)
    
