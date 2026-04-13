@@ -195,7 +195,7 @@ export const ValueRealizationMetrics: React.FC = () => {
         <Box style={{ maxWidth: 1200, margin: '0 auto' }}>
         <PageHeader
           title="Value Realisation Metrics"
-          subtitle={"Landing page for all Workday Recruiting outcome and adoption dashboards, showing which metrics are live, legacy, or blocked.\nSources: IUMs from Pharos · bp_event_stats for sub-BP timing · PROD adoption metrics."}
+          subtitle="Landing page for all Workday Recruiting outcome and adoption dashboards."
         />
 
         <Heading size="small" marginBottom="s">Business Value Outcomes</Heading>
