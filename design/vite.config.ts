@@ -37,7 +37,6 @@ function prototypeSpaSlugFallback(): Plugin {
       'canvas-kit-test',
       'pm-agent-dashboard',
       'avg-time-to-hire',
-      'avg-time-to-fill',
       'positions-open-vs-filled',
       'value-realization-metrics',
       'recruiter-capacity',

@@ -20,7 +20,6 @@ import AISystemOfRecordV97 from './ai-system-of-record-v97';
 import { CanvasKitTest } from './components/CanvasKitTest';
 import PMAgentDashboard from './pm-agent-dashboard';
 import { AvgTimeToHireDashboard } from './avg-time-to-hire-dashboard';
-import { AvgTimeToFillDashboard } from './avg-time-to-fill-dashboard';
 import { PositionsOpenVsFilledDashboard } from './positions-open-vs-filled-dashboard';
 import { ValueRealizationMetrics } from './value-realization-metrics';
 import { RecruiterCapacityDashboard } from './recruiter-capacity-dashboard';
@@ -51,7 +50,6 @@ function prototypeFromLocation():
   | 'canvas-kit-test'
   | 'pm-agent-dashboard'
   | 'avg-time-to-hire'
-  | 'avg-time-to-fill'
   | 'add-documents-impact'
   | 'positions-open-vs-filled'
   | 'value-realization-metrics'
@@ -92,9 +90,6 @@ function prototypeFromLocation():
   }
   if (path.endsWith('positions-open-vs-filled')) {
     return 'positions-open-vs-filled';
-  }
-  if (path.endsWith('avg-time-to-fill')) {
-    return 'avg-time-to-fill';
   }
   if (path.endsWith('avg-time-to-hire')) {
     return 'avg-time-to-hire';
@@ -176,9 +171,6 @@ function prototypeFromLocation():
   }
   if (h === 'avg-time-to-hire' || h.startsWith('avg-time-to-hire')) {
     return 'avg-time-to-hire';
-  }
-  if (h === 'avg-time-to-fill' || h.startsWith('avg-time-to-fill')) {
-    return 'avg-time-to-fill';
   }
   if (h === 'positions-open-vs-filled' || h.startsWith('positions-open-vs-filled')) {
     return 'positions-open-vs-filled';
@@ -268,9 +260,6 @@ function AppRoot() {
   }
   if (route === 'positions-open-vs-filled') {
     return <PositionsOpenVsFilledDashboard />;
-  }
-  if (route === 'avg-time-to-fill') {
-    return <AvgTimeToFillDashboard />;
   }
   if (route === 'avg-time-to-hire') {
     return <AvgTimeToHireDashboard />;

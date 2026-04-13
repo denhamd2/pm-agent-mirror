@@ -14,7 +14,7 @@ import { APPLICANT_VOLUME_BREAKDOWNS, QUERY_META as VALUE_IUM_QUERY_META, VALUE_
 /** Cross-check against TA Business Value Metric Tracker (Jamie Moore PDF). Status = data we can surface in this workspace today. */
 const TRACKER_COVERAGE: { category: string; metric: string; status: string; dashboard: string; notes: string }[] = [
   { category: 'Time to Hire', metric: 'Time to Hire (IUM 2358)', status: 'Yes - SANDBOX', dashboard: 'Average Time to Hire', notes: 'Start: first posting date. End: latest offer accepted. Excludes EA.' },
-  { category: 'Time to Hire', metric: 'Time to (first) Fill', status: 'Legacy snapshot only', dashboard: 'Average Time to Fill', notes: 'Current live metric-name match is unresolved; page retains a legacy workspace snapshot without reusing the stale historical ID mapping.' },
+  { category: 'Time to Hire', metric: 'Time to (first) Fill', status: 'Removed', dashboard: '-', notes: 'Legacy IUM with unresolved metric-name match. Removed from workspace.' },
   { category: 'Time to Hire', metric: 'TTH Internal / Agency Candidates', status: 'Not yet', dashboard: '-', notes: 'HRREC-89120, HRREC-89061. In progress.' },
   { category: 'Interview', metric: 'Time in Interview BP', status: 'Yes - Pharos', dashboard: 'Interview metrics', notes: 'Delivered.' },
   { category: 'Interview', metric: 'Time to First Interview Team Creation', status: 'Yes - Pharos', dashboard: 'Interview metrics', notes: 'JR initiation to first MISST submission.' },
@@ -37,8 +37,6 @@ const TRACKER_COVERAGE: { category: string; metric: string; status: string; dash
 const TOOLTIPS = {
   tth:
     'Live metric-name-resolved IUM: Average Time to Hire (currently metric_id 2358). Mean tenant-level time to hire in days from first job posting date to latest offer accepted date. Excludes Employment Agreement.',
-  ttf:
-    'Legacy workspace snapshot retained while a current live metric-name match for Time to Fill remains unresolved in internal_usage_metrics_report_kafka. We intentionally do not reuse the stale historical ID mapping.',
   recruiterProductivity:
     'Live IUM metric-name-resolved card. Current live metric name is Recruiter Productivity (currently metric_id 2361). Jira HRREC-81526 defines this as the average number of open job requisitions and evergreens for each primary recruiter.',
   recruiterCapacityDashboard:
@@ -184,7 +182,6 @@ export const ValueRealizationMetrics: React.FC = () => {
   const latestRecruiting = FEATURE_ADOPTION['Recruiting (core)']?.slice(-1)[0];
   const recruitingPct = ((latestRecruiting?.adoption ?? 0) * 100).toFixed(1);
   const timeToHire = VALUE_REALIZATION_IUMS.timeToHire;
-  const timeToFill = VALUE_REALIZATION_IUMS.timeToFill;
   const recruiterProductivity = VALUE_REALIZATION_IUMS.recruiterProductivity;
   const offersAccepted = VALUE_REALIZATION_IUMS.offersAccepted;
   const employmentAgreementAcceptance = VALUE_REALIZATION_IUMS.employmentAgreementAcceptance;
@@ -212,20 +209,6 @@ export const ValueRealizationMetrics: React.FC = () => {
                 helperText={buildHelperText(timeToHire)}
                 changeIndicator={buildChangeIndicator(timeToHire, 'lower-is-better')}
                 tooltip={TOOLTIPS.tth}
-              />
-            }
-          />
-          <DashboardLink
-            href="/avg-time-to-fill"
-            title="Average Time to Fill"
-            description={timeToFill.description}
-            metricCard={
-              <MetricCard
-                label={timeToFill.label}
-                value={formatDaysMetric(timeToFill.latestValue)}
-                helperText={buildHelperText(timeToFill, { legacy: true })}
-                changeIndicator={{ text: 'Live metric unresolved', sentiment: 'neutral' }}
-                tooltip={TOOLTIPS.ttf}
               />
             }
           />
@@ -442,8 +425,6 @@ export const ValueRealizationMetrics: React.FC = () => {
           <Box style={{ marginTop: '16px', padding: '12px', backgroundColor: colors.soap100, borderRadius: '8px' }}>
             <BodyText size="small" color={colors.blackPepper400} style={{ fontSize: 12 }}>
               <strong>Live resolved metrics:</strong> {timeToHire.metricName} ({timeToHire.metricId}) · {recruiterProductivity.metricName} ({recruiterProductivity.metricId}) · {offersAccepted.metricName} ({offersAccepted.metricId}) · {employmentAgreementAcceptance.metricName} ({employmentAgreementAcceptance.metricId}) · {internalJobApplications.metricName} ({internalJobApplications.metricId})
-              <br />
-              <strong>Time to Fill:</strong> legacy workspace snapshot retained; current live metric-name match unresolved
               <br />
               <strong>Last refreshed:</strong> {VALUE_IUM_QUERY_META.queryDate}
             </BodyText>

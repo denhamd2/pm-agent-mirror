@@ -22,7 +22,6 @@ const METRIC_ITEMS = [
 /** Maps child dashboard slugs to a parent nav item so the correct chip highlights. */
 const CHILD_TO_PARENT: Record<string, string> = {
   'avg-time-to-hire': 'value-realization-metrics',
-  'avg-time-to-fill': 'value-realization-metrics',
   'recruiter-capacity': 'value-realization-metrics',
   'positions-open-vs-filled': 'value-realization-metrics',
   'recruiting-adoption': 'value-realization-metrics',
