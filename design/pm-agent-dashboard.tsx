@@ -536,7 +536,7 @@ export const PMAgentDashboard: React.FC = () => {
                             </Table.Cell>
                             <Table.Cell>
                               <Flex gap="s" flexWrap="wrap">
-                                <SecondaryButton size="small" as="a" href={`/${route}`} target="_blank">
+                                <SecondaryButton size="small" as="a" href={`#${route}`} target="_blank">
                                   Open
                                 </SecondaryButton>
                                 {proto.prd && (
