@@ -656,7 +656,7 @@ export const CustomerScorecardDashboard = () => {
         <Flex flexDirection="column" gap="l" maxWidth={1200} marginX="auto">
           <PageHeader
             title="Customer Scorecard"
-            subtitle="Shows, in simple terms, which features customers have adopted and how that adoption correlates with better or worse Avg. Time to Hire across peer groups. It then shows the selected tenant's KPI snapshot."
+            subtitle="Shows which features customers have adopted and how that adoption correlates with better or worse Avg. Time to Hire across peer groups. It then shows the selected tenant's KPI snapshot."
           />
           <Box style={listCard}>
             <FormSelect
