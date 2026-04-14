@@ -99,11 +99,10 @@ function adjustConfidenceWithQValue(row: FeatureCorrelationStat): 'high' | 'medi
 function confidenceFromSupportAndQ(
   nOnTth: number,
   nOffTth: number,
-  qTth?: number
-): 'high' | 'medium' | 'low' {
+  _qTth?: number
+): 'medium' | 'low' {
   const minArm = Math.min(nOnTth, nOffTth);
   if (minArm < 10) return 'low';
-  if (qTth != null && minArm >= 30 && qTth <= 0.05) return 'high';
   return 'medium';
 }
 
@@ -692,7 +691,7 @@ export const CustomerScorecardDashboard = () => {
                   </Heading>
                   <BodyText size="small" marginBottom="s" style={{ color: colors.blackPepper500 }}>
                     {isFiltered
-                      ? 'Showing median TTH delta for the selected segment. Positive values = adopters have lower TTH; negative = higher. q-values are not recomputed for filtered views; high confidence is shown where sample size is strong and global q-support exists.'
+                      ? 'Showing median TTH delta for the selected segment. Positive values = adopters have lower TTH; negative = higher. q-values are not recomputed for filtered views; support level reflects sample size only (medium or low).'
                       : 'Correlation only, not causation. Positive values = adopters have lower TTH; negative = adopters have higher TTH. Ranked by median TTH impact, with q(TTH) and sample support checks.'}
                   </BodyText>
                   <Flex gap="m" flexWrap="wrap" marginBottom="s">
@@ -718,7 +717,7 @@ export const CustomerScorecardDashboard = () => {
                             {!isFiltered && <th style={thRight}>q(TTH)</th>}
                             <th style={thRight}>n(on)</th>
                             <th style={thRight}>n(off)</th>
-                            <th style={thCenter}>Confidence</th>
+                            <th style={thCenter}>{isFiltered ? 'Support' : 'Confidence'}</th>
                           </tr>
                         </thead>
                         <tbody>
