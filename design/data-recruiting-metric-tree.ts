@@ -112,9 +112,9 @@ function computeMomPct(fullSeries: number[]): number | null {
 }
 
 function computeYoyPct(fullSeries: number[]): number | null {
-  if (fullSeries.length < 12) return null;
+  if (fullSeries.length < 13) return null;
   const latest = fullSeries[fullSeries.length - 1];
-  const yearAgo = fullSeries[fullSeries.length - 12];
+  const yearAgo = fullSeries[fullSeries.length - 13];
   if (!Number.isFinite(yearAgo) || yearAgo === 0) return null;
   return ((latest - yearAgo) / Math.abs(yearAgo)) * 100;
 }
