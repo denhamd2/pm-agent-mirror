@@ -1905,8 +1905,8 @@ export const BpDurationDashboard = () => {
       <Box padding="l" flex={1}>
         <Box style={{ maxWidth: 1280, margin: '0 auto' }}>
           <PageHeader
-            title="Offer / EA Durations"
-            subtitle="Duration, completion rate, and process quality for Offer and Employment Agreement business processes."
+            title="Job App Durations"
+            subtitle="Duration, completion rate, and process quality for job application stage business processes (Offer, Employment Agreement)."
           />
 
           <Flex gap="s" style={{ marginBottom: 14, flexWrap: 'wrap' }} alignItems="center">
