@@ -8,9 +8,33 @@ import {
   SCHEDULE_INTERVIEW_TEAM_TIME,
 } from './data-interview-metrics';
 import { addDocumentsMonthly, tenantAdoptionPct } from './data-add-documents';
+import { ADD_DOCUMENTS_ADOPTED_TENANTS } from './data-add-documents-adoption-by-tenant';
 import { offerDocumentStepMonthly, offerApprovalStepMonthly } from './data-offer-steps';
 import { employmentAgreementStepMonthly } from './data-employment-agreement-steps';
 import { LABELS as BP_LABELS } from './data-bp-shared';
+import { SCORECARD_BY_TENANT } from './data-customer-scorecard';
+import { TREE_TENANT_SERIES } from './data-tree-tenant-series';
+
+const ADD_DOCUMENTS_ADOPTED_TENANT_SET = new Set(ADD_DOCUMENTS_ADOPTED_TENANTS);
+const REGENERATE_OFFER_FEATURE = 'Regenerate Offer Documents Business Process';
+const REGENERATE_EA_FEATURE = 'Regenerate Employment Agreement Business Process';
+
+function buildFeatureAdopterSet(features: readonly string[]): Set<string> {
+  const adopters = new Set<string>();
+  const desired = new Set(features);
+  Object.entries(SCORECARD_BY_TENANT).forEach(([tenant, row]) => {
+    if (row.adoptedFeatures.some((feature) => desired.has(feature))) adopters.add(tenant);
+  });
+  return adopters;
+}
+
+const REGENERATE_OFFER_ADOPTED_TENANT_SET = buildFeatureAdopterSet([REGENERATE_OFFER_FEATURE]);
+// The EA-specific regenerate feature is not yet split in the scorecard export.
+// We currently use the regenerate-offer feature footprint as the best available proxy.
+const REGENERATE_EA_ADOPTED_TENANT_SET = buildFeatureAdopterSet([
+  REGENERATE_EA_FEATURE,
+  REGENERATE_OFFER_FEATURE,
+]);
 
 export type MetricTreeLevel =
   | 'Business Value Outcomes'
@@ -135,6 +159,49 @@ const recruiterCapacity = VALUE_REALIZATION_IUMS.recruiterProductivity;
 
 type TrendPoint = { ym: string; value: number };
 
+type AdoptionSeriesPoint = TrendPoint & {
+  adoptedTenants: number;
+  activeTenants: number;
+};
+
+function buildFeatureAdoptionSeries(
+  adopters: ReadonlySet<string>,
+  activityMetricKey: string,
+  scopedTenants?: readonly string[],
+): AdoptionSeriesPoint[] {
+  const activitySeries = TREE_TENANT_SERIES[activityMetricKey] ?? {};
+  const sourceTenants = scopedTenants
+    ? scopedTenants.filter((tenant) => Boolean(activitySeries[tenant]))
+    : Object.keys(activitySeries);
+  if (sourceTenants.length === 0) return [];
+
+  const ymSet = new Set<string>();
+  sourceTenants.forEach((tenant) => {
+    activitySeries[tenant]?.forEach((point) => ymSet.add(point.ym));
+  });
+  const yms = Array.from(ymSet).sort();
+
+  return yms
+    .map((ym) => {
+      let activeTenants = 0;
+      let adoptedTenants = 0;
+      sourceTenants.forEach((tenant) => {
+        const isActive = Boolean(activitySeries[tenant]?.some((point) => point.ym === ym));
+        if (!isActive) return;
+        activeTenants += 1;
+        if (adopters.has(tenant)) adoptedTenants += 1;
+      });
+      if (activeTenants === 0) return null;
+      return {
+        ym,
+        value: (adoptedTenants / activeTenants) * 100,
+        adoptedTenants,
+        activeTenants,
+      };
+    })
+    .filter((point): point is AdoptionSeriesPoint => point != null);
+}
+
 function lastNTrendPoints(points: TrendPoint[], count = 6): TrendPoint[] {
   return points.slice(Math.max(0, points.length - count));
 }
@@ -158,6 +225,10 @@ const jobApplicationsPoints: TrendPoint[] = JOB_APPLICATIONS_MONTHLY.map((point)
 const jobApplicationsSeries = jobApplicationsPoints.map((point) => point.value);
 const addDocumentsPoints: TrendPoint[] = addDocumentsMonthly.map((point) => ({ ym: point.ym, value: tenantAdoptionPct(point) }));
 const addDocumentsSeries = addDocumentsPoints.map((point) => point.value);
+const regenerateOfferAdoptionPoints = buildFeatureAdoptionSeries(REGENERATE_OFFER_ADOPTED_TENANT_SET, 'offer-duration');
+const regenerateOfferAdoptionSeries = regenerateOfferAdoptionPoints.map((point) => point.value);
+const regenerateEaAdoptionPoints = buildFeatureAdoptionSeries(REGENERATE_EA_ADOPTED_TENANT_SET, 'ea-duration');
+const regenerateEaAdoptionSeries = regenerateEaAdoptionPoints.map((point) => point.value);
 
 const scheduleInterviewPoints: TrendPoint[] = SCHEDULE_INTERVIEW_TIME.map((point) => ({ ym: point.ym, value: point.avgValue }));
 const scheduleInterviewSeries = scheduleInterviewPoints.map((point) => point.value);
@@ -482,6 +553,52 @@ export const TREE_NODES: MetricTreeNode[] = [
       'Add Documents adoption rate. A concrete product lever that can reduce late-stage document handling time in Offer and Employment Agreement steps.',
     caveat: 'Kept because it is a specific product lever, not a broad vanity adoption metric.',
   },
+  {
+    id: 'regenerate-offer',
+    title: 'Regenerate Offer Adoption',
+    level: 'Feature Adoption & Usage',
+    x: 1110,
+    y: 810,
+    width: 270,
+    value: formatPct(regenerateOfferAdoptionSeries[regenerateOfferAdoptionSeries.length - 1] ?? 0),
+    valueContext: regenerateOfferAdoptionPoints.length
+      ? `${regenerateOfferAdoptionPoints[regenerateOfferAdoptionPoints.length - 1].ym} · active-tenant adoption`
+      : 'No monthly adoption series',
+    trend: lastN(regenerateOfferAdoptionSeries),
+    trendYm: lastNTrendPoints(regenerateOfferAdoptionPoints).map((point) => point.ym),
+    momPct: computeMomPct(regenerateOfferAdoptionSeries),
+    yoyPct: computeYoyPct(regenerateOfferAdoptionSeries),
+    trendGoodDirection: 'higherIsBetter',
+    source: 'scorecard features + bp_event_stats · blended',
+    confidence: 'Directional',
+    definition:
+      'Share of tenants active in Offer duration telemetry that also have Regenerate Offer Documents feature adoption.',
+    caveat:
+      'Adoption series is calculated against monthly active Offer tenants, not a dedicated regenerate-event metric.',
+  },
+  {
+    id: 'regenerate-ea',
+    title: 'Regenerate EA Adoption',
+    level: 'Feature Adoption & Usage',
+    x: 1400,
+    y: 810,
+    width: 250,
+    value: formatPct(regenerateEaAdoptionSeries[regenerateEaAdoptionSeries.length - 1] ?? 0),
+    valueContext: regenerateEaAdoptionPoints.length
+      ? `${regenerateEaAdoptionPoints[regenerateEaAdoptionPoints.length - 1].ym} · active-tenant adoption`
+      : 'No monthly adoption series',
+    trend: lastN(regenerateEaAdoptionSeries),
+    trendYm: lastNTrendPoints(regenerateEaAdoptionPoints).map((point) => point.ym),
+    momPct: computeMomPct(regenerateEaAdoptionSeries),
+    yoyPct: computeYoyPct(regenerateEaAdoptionSeries),
+    trendGoodDirection: 'higherIsBetter',
+    source: 'scorecard features + bp_event_stats · blended',
+    confidence: 'Directional',
+    definition:
+      'Share of tenants active in Employment Agreement telemetry with regenerate-documents feature adoption footprint.',
+    caveat:
+      'EA-specific regenerate feature naming is not split in scorecard exports yet; this uses the current regenerate-documents feature footprint as proxy.',
+  },
 ];
 
 export const TREE_EDGES: MetricTreeEdge[] = [
@@ -499,11 +616,11 @@ export const TREE_EDGES: MetricTreeEdge[] = [
   { from: 'offer-ea-completion', to: 'offer-ea-duration', label: 'completion throughput', confidence: 'Directional' },
   // Feature Adoption & Usage → User Outcomes
   { from: 'add-documents', to: 'document-review', label: 'document prep adoption', confidence: 'Directional' },
+  { from: 'regenerate-offer', to: 'document-review', label: 'offer doc regen coverage', confidence: 'Directional' },
+  { from: 'regenerate-ea', to: 'offer-ea-duration', label: 'ea doc regen coverage', confidence: 'Directional' },
 ];
 
 // ── Helpers for filtered tree recomputation ──
-
-import { TREE_TENANT_SERIES } from './data-tree-tenant-series';
 
 type NodeFormatter = {
   metricKeys: string[];
@@ -524,6 +641,31 @@ const NODE_FORMAT_MAP: Record<string, NodeFormatter> = {
   'approval-time': { metricKeys: ['approval-time'], combiner: 'avg', format: formatHours, unit: 'hrs' },
   'add-documents': { metricKeys: ['add-documents'], combiner: 'avg', format: (v) => `${v.toFixed(1)}`, unit: 'refs' },
 };
+
+function buildFilteredFeatureAdoptionNode(
+  base: MetricTreeNode,
+  filteredTenants: string[],
+  adopters: ReadonlySet<string>,
+  activityMetricKey: string,
+  caveat: string,
+): MetricTreeNode {
+  const scopedPoints = buildFeatureAdoptionSeries(adopters, activityMetricKey, filteredTenants);
+  if (scopedPoints.length === 0) {
+    return { ...base, value: 'Unavailable', valueContext: 'No matching tenants', trend: [], trendYm: [], momPct: null, yoyPct: null };
+  }
+  const series = scopedPoints.map((point) => point.value);
+  const latest = scopedPoints[scopedPoints.length - 1];
+  return {
+    ...base,
+    value: formatPct(latest.value),
+    valueContext: `Filtered (${latest.adoptedTenants}/${latest.activeTenants} active tenants) · ${latest.ym}`,
+    trend: lastN(series),
+    trendYm: lastNTrendPoints(scopedPoints).map((point) => point.ym),
+    momPct: computeMomPct(series),
+    yoyPct: computeYoyPct(series),
+    caveat,
+  };
+}
 
 function aggregateFilteredSeries(
   metricKey: string,
@@ -550,6 +692,34 @@ export function buildFilteredNode(
   filteredTenants: string[],
   base: MetricTreeNode,
 ): MetricTreeNode {
+  if (nodeId === 'add-documents') {
+    return buildFilteredFeatureAdoptionNode(
+      base,
+      filteredTenants,
+      ADD_DOCUMENTS_ADOPTED_TENANT_SET,
+      'offer-duration',
+      'Filtered Add Documents trend uses monthly active Offer tenants with Add Documents feature adoption footprint.',
+    );
+  }
+  if (nodeId === 'regenerate-offer') {
+    return buildFilteredFeatureAdoptionNode(
+      base,
+      filteredTenants,
+      REGENERATE_OFFER_ADOPTED_TENANT_SET,
+      'offer-duration',
+      'Filtered Regenerate Offer trend uses monthly active Offer tenants with regenerate-documents feature adoption.',
+    );
+  }
+  if (nodeId === 'regenerate-ea') {
+    return buildFilteredFeatureAdoptionNode(
+      base,
+      filteredTenants,
+      REGENERATE_EA_ADOPTED_TENANT_SET,
+      'ea-duration',
+      'Filtered Regenerate EA trend uses monthly active EA tenants with current regenerate-documents feature footprint proxy.',
+    );
+  }
+
   const fmt = NODE_FORMAT_MAP[nodeId];
   if (!fmt) return base;
 
