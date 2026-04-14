@@ -442,133 +442,148 @@ export const RecruitingMetricTreePage: React.FC = () => {
 
   return (
     <Box style={{ position: 'relative', height: '100vh', overflow: 'hidden', backgroundColor: SANA_PAGE_CANVAS }}>
+      {/* Left column: title in flow (centred above tree), then tree viewport */}
       <Box
         style={{
           position: 'absolute',
-          top: 12,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 2,
-          padding: '6px 14px',
-          borderRadius: 10,
-          background: 'rgba(255,255,255,0.92)',
-          border: `1px solid ${colors.soap300}`,
+          left: 0,
+          top: 0,
+          bottom: 0,
+          width: canvasWidth,
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
         }}
       >
-        <Heading size="small" style={{ margin: 0 }}>
-          Value Driver Tree - Workday Recruiting
-        </Heading>
-      </Box>
+        <Box style={{ flexShrink: 0, textAlign: 'center', paddingTop: 16, paddingBottom: 8 }}>
+          <Heading size="small" style={{ margin: 0, color: colors.blackPepper600 }}>
+            Value Driver Tree - Workday Recruiting
+          </Heading>
+        </Box>
+        <Box style={{ flex: '1 1 auto', minHeight: 0, position: 'relative' }}>
+          {/* Viewport */}
+          <div
+            ref={viewportRef}
+            onClick={() => { if (!dragMovedRef.current) setSelectedNodeId(null); }}
+            onWheel={handleWheel}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={stopDragging}
+            onMouseLeave={stopDragging}
+            style={{
+              position: 'absolute', left: 0, top: 0, right: 0, bottom: 0, overflow: 'hidden',
+              cursor: drag.active ? 'grabbing' : 'grab', backgroundColor: SANA_PAGE_CANVAS,
+              backgroundImage: 'linear-gradient(to right, rgba(15,23,42,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.04) 1px, transparent 1px)',
+              backgroundSize: '40px 40px',
+            }}
+          >
+            <div style={{ position: 'absolute', width: TREE_META.canvas.width, height: TREE_META.canvas.height, transform: `translate(${view.x}px, ${view.y}px) scale(${view.scale})`, transformOrigin: 'top left' }}>
+              <svg width={TREE_META.canvas.width} height={TREE_META.canvas.height} viewBox={`0 0 ${TREE_META.canvas.width} ${TREE_META.canvas.height}`} style={{ position: 'absolute', left: 0, top: 0, overflow: 'visible' }}>
+                {TREE_EDGES.map((edge) => {
+                  const from = nodeMap.get(edge.from);
+                  const to = nodeMap.get(edge.to);
+                  if (!from || !to) return null;
+                  const confidence = CONFIDENCE_STYLE[edge.confidence];
+                  const insight = edgeInsights.find((item) => item.from === edge.from && item.to === edge.to);
+                  const strength = insight?.strength ?? 'Weak';
+                  const strengthStyle = STRENGTH_STYLE[strength] ?? STRENGTH_STYLE.Weak;
+                  const dashArray = strengthStyle.dash ?? confidence.dash;
+                  return (
+                    <path
+                      key={`path-${edge.from}-${edge.to}`}
+                      d={edgePath(from, to)}
+                      fill="none"
+                      stroke={confidence.stroke}
+                      strokeWidth={strength === 'Weak' ? 1.5 : 2}
+                      strokeDasharray={dashArray}
+                      opacity={strength === 'Weak' ? 0.6 : 0.9}
+                      markerEnd={`url(#arrow-${edge.confidence})`}
+                    />
+                  );
+                })}
 
-      {/* Viewport */}
-      <div
-        ref={viewportRef}
-        onClick={() => { if (!dragMovedRef.current) setSelectedNodeId(null); }}
-        onWheel={handleWheel}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={stopDragging}
-        onMouseLeave={stopDragging}
-        style={{
-          position: 'absolute', left: 0, top: 0, bottom: 0, width: canvasWidth, overflow: 'hidden',
-          cursor: drag.active ? 'grabbing' : 'grab', backgroundColor: SANA_PAGE_CANVAS,
-          backgroundImage: 'linear-gradient(to right, rgba(15,23,42,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.04) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-      >
-        <div style={{ position: 'absolute', width: TREE_META.canvas.width, height: TREE_META.canvas.height, transform: `translate(${view.x}px, ${view.y}px) scale(${view.scale})`, transformOrigin: 'top left' }}>
-          <svg width={TREE_META.canvas.width} height={TREE_META.canvas.height} viewBox={`0 0 ${TREE_META.canvas.width} ${TREE_META.canvas.height}`} style={{ position: 'absolute', left: 0, top: 0, overflow: 'visible' }}>
-            {TREE_EDGES.map((edge) => {
-              const from = nodeMap.get(edge.from);
-              const to = nodeMap.get(edge.to);
-              if (!from || !to) return null;
-              const confidence = CONFIDENCE_STYLE[edge.confidence];
-              const insight = edgeInsights.find((item) => item.from === edge.from && item.to === edge.to);
-              const strength = insight?.strength ?? 'Weak';
-              const strengthStyle = STRENGTH_STYLE[strength] ?? STRENGTH_STYLE.Weak;
-              const dashArray = strengthStyle.dash ?? confidence.dash;
-              return (
-                <path
-                  key={`path-${edge.from}-${edge.to}`}
-                  d={edgePath(from, to)}
-                  fill="none"
-                  stroke={confidence.stroke}
-                  strokeWidth={strength === 'Weak' ? 1.5 : 2}
-                  strokeDasharray={dashArray}
-                  opacity={strength === 'Weak' ? 0.6 : 0.9}
-                  markerEnd={`url(#arrow-${edge.confidence})`}
-                />
-              );
-            })}
+                {TREE_LEVELS.map((level) => (
+                  <g key={level}>
+                    <rect x={8} y={LEVEL_Y[level]} width={220} height={38} rx={19} fill="rgba(15,23,42,0.06)" stroke="rgba(15,23,42,0.05)" />
+                    <text x={24} y={LEVEL_Y[level] + 16} fill={colors.blackPepper600} fontSize="12" fontWeight="700">{level}</text>
+                    <text x={24} y={LEVEL_Y[level] + 29} fill={colors.blackPepper400} fontSize="10">{formatLevelSummary(level)}</text>
+                  </g>
+                ))}
 
-            {TREE_LEVELS.map((level) => (
-              <g key={level}>
-                <rect x={8} y={LEVEL_Y[level]} width={220} height={38} rx={19} fill="rgba(15,23,42,0.06)" stroke="rgba(15,23,42,0.05)" />
-                <text x={24} y={LEVEL_Y[level] + 16} fill={colors.blackPepper600} fontSize="12" fontWeight="700">{level}</text>
-                <text x={24} y={LEVEL_Y[level] + 29} fill={colors.blackPepper400} fontSize="10">{formatLevelSummary(level)}</text>
-              </g>
-            ))}
+                {TREE_EDGES.map((edge) => {
+                  const from = nodeMap.get(edge.from);
+                  const to = nodeMap.get(edge.to);
+                  if (!from || !to) return null;
+                  const insight = edgeInsights.find((item) => item.from === edge.from && item.to === edge.to);
+                  const strength = insight?.strength ?? 'Weak';
+                  const strengthStyle = STRENGTH_STYLE[strength] ?? STRENGTH_STYLE.Weak;
+                  const fromWidth = from.width ?? DEFAULT_NODE_WIDTH;
+                  const toWidth = to.width ?? DEFAULT_NODE_WIDTH;
+                  const labelX = ((from.x + fromWidth / 2) + (to.x + toWidth / 2)) / 2;
+                  const labelY = ((from.y < to.y ? from.y + NODE_HEIGHT : from.y) + (from.y < to.y ? to.y : to.y + NODE_HEIGHT)) / 2 - 10;
+                  return (
+                    <g key={`${edge.from}-${edge.to}`}>
+                      <title>{correlationTooltip(edge.label, insight?.correlation ?? null, insight?.overlapPoints ?? 0, strength)}</title>
+                      {/* Edge label pill */}
+                      <rect x={labelX - 78} y={labelY - 13} width={156} height={30} rx={12} fill="#ffffff" opacity={0.94} />
+                      <text x={labelX} y={labelY} textAnchor="middle" fill={colors.blackPepper500} fontSize="10" fontWeight="600">{edge.label}</text>
+                      {/* Strength pill with info indicator */}
+                      <rect x={labelX - 26} y={labelY + 3} width={52} height={16} rx={8} fill={strengthStyle.bg} />
+                      <text x={labelX} y={labelY + 14} textAnchor="middle" fill={strengthStyle.fg} fontSize="9" fontWeight="700">{strength}</text>
+                      <text x={labelX + 30} y={labelY + 13} fill={strengthStyle.fg} fontSize="8" opacity={0.7}>{'\u24D8'}</text>
+                    </g>
+                  );
+                })}
+                <defs>
+                  {(['Measured', 'Directional'] as MetricTreeConfidence[]).map((c) => (
+                    <marker key={c} id={`arrow-${c}`} markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+                      <path d="M 0 0 L 10 5 L 0 10 z" fill={CONFIDENCE_STYLE[c].stroke} />
+                    </marker>
+                  ))}
+                </defs>
+              </svg>
 
-            {TREE_EDGES.map((edge) => {
-              const from = nodeMap.get(edge.from);
-              const to = nodeMap.get(edge.to);
-              if (!from || !to) return null;
-              const insight = edgeInsights.find((item) => item.from === edge.from && item.to === edge.to);
-              const strength = insight?.strength ?? 'Weak';
-              const strengthStyle = STRENGTH_STYLE[strength] ?? STRENGTH_STYLE.Weak;
-              const fromWidth = from.width ?? DEFAULT_NODE_WIDTH;
-              const toWidth = to.width ?? DEFAULT_NODE_WIDTH;
-              const labelX = ((from.x + fromWidth / 2) + (to.x + toWidth / 2)) / 2;
-              const labelY = ((from.y < to.y ? from.y + NODE_HEIGHT : from.y) + (from.y < to.y ? to.y : to.y + NODE_HEIGHT)) / 2 - 10;
-              return (
-                <g key={`${edge.from}-${edge.to}`}>
-                  <title>{correlationTooltip(edge.label, insight?.correlation ?? null, insight?.overlapPoints ?? 0, strength)}</title>
-                  {/* Edge label pill */}
-                  <rect x={labelX - 78} y={labelY - 13} width={156} height={30} rx={12} fill="#ffffff" opacity={0.94} />
-                  <text x={labelX} y={labelY} textAnchor="middle" fill={colors.blackPepper500} fontSize="10" fontWeight="600">{edge.label}</text>
-                  {/* Strength pill with info indicator */}
-                  <rect x={labelX - 26} y={labelY + 3} width={52} height={16} rx={8} fill={strengthStyle.bg} />
-                  <text x={labelX} y={labelY + 14} textAnchor="middle" fill={strengthStyle.fg} fontSize="9" fontWeight="700">{strength}</text>
-                  <text x={labelX + 30} y={labelY + 13} fill={strengthStyle.fg} fontSize="8" opacity={0.7}>ⓘ</text>
-                </g>
-              );
-            })}
-            <defs>
-              {(['Measured', 'Directional'] as MetricTreeConfidence[]).map((c) => (
-                <marker key={c} id={`arrow-${c}`} markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
-                  <path d="M 0 0 L 10 5 L 0 10 z" fill={CONFIDENCE_STYLE[c].stroke} />
-                </marker>
+              {treeNodes.map((node) => (
+                <NodeCard key={node.id} node={node} selected={selectedNodeId === node.id} onSelect={(nodeId) => { setSelectedNodeId(nodeId); const n = nodeMap.get(nodeId); if (n) setViewForNode(n, 0.9); }} />
               ))}
-            </defs>
-          </svg>
+            </div>
+          </div>
 
-          {treeNodes.map((node) => (
-            <NodeCard key={node.id} node={node} selected={selectedNodeId === node.id} onSelect={(nodeId) => { setSelectedNodeId(nodeId); const n = nodeMap.get(nodeId); if (n) setViewForNode(n, 0.9); }} />
-          ))}
-        </div>
-      </div>
+          {/* Filter bar (bottom-left) — stays out of the main canvas read path */}
+          <Box
+            onClick={(event) => event.stopPropagation()}
+            onMouseDown={(event) => event.stopPropagation()}
+            style={{
+              position: 'absolute', bottom: 12, left: 12, zIndex: 2, display: 'flex', gap: 8, alignItems: 'flex-end', flexWrap: 'wrap',
+              padding: '10px 14px', borderRadius: 14, background: 'rgba(255,255,255,0.95)', border: `1px solid ${colors.soap300}`, backdropFilter: 'blur(10px)', maxWidth: 680,
+            }}
+          >
+            <Box style={{ width: 140 }}><FormSelect id="tree-segment" label="Segment" value={filters.segment} onChange={(v) => updateFilter('segment', v)} options={SEGMENT_FILTER_OPTIONS} /></Box>
+            <Box style={{ width: 140 }}><FormSelect id="tree-region" label="Region" value={filters.region} onChange={(v) => updateFilter('region', v)} options={REGION_FILTER_OPTIONS} /></Box>
+            <Box style={{ width: 160 }}><FormSelect id="tree-industry" label="Industry" value={filters.industry} onChange={(v) => updateFilter('industry', v)} options={INDUSTRY_FILTER_OPTIONS} /></Box>
+            <Box style={{ width: 140 }}><FormSelect id="tree-tenant" label="Tenant" value={filters.tenant} onChange={(v) => updateFilter('tenant', v)} options={tenantOptions} /></Box>
+            {isFiltered && (
+              <SecondaryButton size="small" onClick={() => setFilters(EMPTY_DASHBOARD_FILTERS)} style={{ marginBottom: 2 }}>Clear</SecondaryButton>
+            )}
+            <SecondaryButton size="small" onClick={() => setExplainMetricsOpen(true)} style={{ marginBottom: 2 }}>
+              Explain these metrics to me
+            </SecondaryButton>
+            <Box style={{ width: '100%', fontSize: 11, color: colors.blackPepper500, marginTop: 2 }}>
+              Correlation strength uses month-aligned overlap (min {MIN_CORRELATION_OVERLAP} points for Moderate/Strong) and is exploratory, not causal.
+            </Box>
+          </Box>
 
-      {/* Filter bar (bottom-left) — stays out of the main canvas read path */}
-      <Box
-        onClick={(event) => event.stopPropagation()}
-        onMouseDown={(event) => event.stopPropagation()}
-        style={{
-          position: 'absolute', bottom: 12, left: 12, zIndex: 2, display: 'flex', gap: 8, alignItems: 'flex-end', flexWrap: 'wrap',
-          padding: '10px 14px', borderRadius: 14, background: 'rgba(255,255,255,0.95)', border: `1px solid ${colors.soap300}`, backdropFilter: 'blur(10px)', maxWidth: 680,
-        }}
-      >
-        <Box style={{ width: 140 }}><FormSelect id="tree-segment" label="Segment" value={filters.segment} onChange={(v) => updateFilter('segment', v)} options={SEGMENT_FILTER_OPTIONS} /></Box>
-        <Box style={{ width: 140 }}><FormSelect id="tree-region" label="Region" value={filters.region} onChange={(v) => updateFilter('region', v)} options={REGION_FILTER_OPTIONS} /></Box>
-        <Box style={{ width: 160 }}><FormSelect id="tree-industry" label="Industry" value={filters.industry} onChange={(v) => updateFilter('industry', v)} options={INDUSTRY_FILTER_OPTIONS} /></Box>
-        <Box style={{ width: 140 }}><FormSelect id="tree-tenant" label="Tenant" value={filters.tenant} onChange={(v) => updateFilter('tenant', v)} options={tenantOptions} /></Box>
-        {isFiltered && (
-          <SecondaryButton size="small" onClick={() => setFilters(EMPTY_DASHBOARD_FILTERS)} style={{ marginBottom: 2 }}>Clear</SecondaryButton>
-        )}
-        <SecondaryButton size="small" onClick={() => setExplainMetricsOpen(true)} style={{ marginBottom: 2 }}>
-          Explain these metrics to me
-        </SecondaryButton>
-        <Box style={{ width: '100%', fontSize: 11, color: colors.blackPepper500, marginTop: 2 }}>
-          Correlation strength uses month-aligned overlap (min {MIN_CORRELATION_OVERLAP} points for Moderate/Strong) and is exploratory, not causal.
+          {isFiltered && filterParts.length > 0 && (
+            <Box style={{ position: 'absolute', top: 12, left: 16, zIndex: 1, padding: '4px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.9)', fontSize: 11, color: colors.blackPepper500 }}>
+              Scope: {filterParts.join(' · ')} — all metrics filtered to matching tenants
+            </Box>
+          )}
+          {/* Zoom controls (tree column only; rail sits outside this column) */}
+          <Flex gap="s" style={{ position: 'absolute', bottom: 16, right: 16, padding: 8, borderRadius: 999, background: 'rgba(255,255,255,0.92)', border: `1px solid ${colors.soap300}`, backdropFilter: 'blur(10px)' }}>
+            <SecondaryButton size="small" onClick={() => setView((c) => ({ ...c, scale: clamp(c.scale * 0.9, 0.48, 1.4) }))}>-</SecondaryButton>
+            <SecondaryButton size="small" onClick={() => setView((c) => ({ ...c, scale: clamp(c.scale * 1.12, 0.48, 1.4) }))}>+</SecondaryButton>
+            <SecondaryButton size="small" onClick={() => setView({ x: 48, y: 18, scale: 0.74 })}>Reset</SecondaryButton>
+          </Flex>
         </Box>
       </Box>
 
@@ -618,18 +633,6 @@ export const RecruitingMetricTreePage: React.FC = () => {
           </Box>
         </Flex>
       </WorkdayModal>
-
-      {isFiltered && filterParts.length > 0 && (
-        <Box style={{ position: 'absolute', top: 12, left: 16, zIndex: 1, padding: '4px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.9)', fontSize: 11, color: colors.blackPepper500 }}>
-          Scope: {filterParts.join(' · ')} — all metrics filtered to matching tenants
-        </Box>
-      )}
-      {/* Zoom controls */}
-      <Flex gap="s" style={{ position: 'absolute', bottom: 16, right: selectedNode ? RAIL_WIDTH + 16 : 16, padding: 8, borderRadius: 999, background: 'rgba(255,255,255,0.92)', border: `1px solid ${colors.soap300}`, backdropFilter: 'blur(10px)' }}>
-        <SecondaryButton size="small" onClick={() => setView((c) => ({ ...c, scale: clamp(c.scale * 0.9, 0.48, 1.4) }))}>-</SecondaryButton>
-        <SecondaryButton size="small" onClick={() => setView((c) => ({ ...c, scale: clamp(c.scale * 1.12, 0.48, 1.4) }))}>+</SecondaryButton>
-        <SecondaryButton size="small" onClick={() => setView({ x: 48, y: 18, scale: 0.74 })}>Reset</SecondaryButton>
-      </Flex>
 
       {/* Detail rail */}
       <Box
