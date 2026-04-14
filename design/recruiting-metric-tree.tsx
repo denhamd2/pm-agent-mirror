@@ -213,6 +213,15 @@ function chartData(values: number[], stroke: string, fill: string) {
   };
 }
 
+function median(values: number[]): number {
+  if (values.length === 0) return 0;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0
+    ? (sorted[mid - 1] + sorted[mid]) / 2
+    : sorted[mid];
+}
+
 const miniChartOptions: ChartOptions<'line'> = {
   responsive: true,
   maintainAspectRatio: false,
@@ -241,7 +250,7 @@ function buildFilteredTthNode(filteredTenants: string[], base: MetricTreeNode): 
     const values = filteredTenants
       .map((t) => TENANT_TIME_SERIES[t]?.find((p) => p.ym === ym)?.v)
       .filter((v): v is number => v != null && Number.isFinite(v));
-    return values.length > 0 ? { ym, value: values.reduce((a, b) => a + b, 0) / values.length } : null;
+    return values.length > 0 ? { ym, value: median(values) } : null;
   }).filter((point): point is { ym: string; value: number } => point != null);
   const series = trendPoints.map((point) => point.value);
   if (series.length === 0) return { ...base, value: 'Unavailable', valueContext: 'No matching tenants', trend: [] };
@@ -263,7 +272,7 @@ function buildFilteredRcNode(filteredTenants: string[], base: MetricTreeNode): M
     const values = rcTenants
       .map((t) => RECRUITER_CAPACITY_TENANT_SERIES[t]?.find((p) => p.ym === ym)?.value)
       .filter((v): v is number => v != null && Number.isFinite(v));
-    return values.length > 0 ? { ym, value: values.reduce((a, b) => a + b, 0) / values.length } : null;
+    return values.length > 0 ? { ym, value: median(values) } : null;
   }).filter((point): point is { ym: string; value: number } => point != null);
   const series = trendPoints.map((point) => point.value);
   if (series.length === 0) return { ...base, value: 'Unavailable', valueContext: 'No matching tenants', trend: [] };
@@ -433,6 +442,24 @@ export const RecruitingMetricTreePage: React.FC = () => {
 
   return (
     <Box style={{ position: 'relative', height: '100vh', overflow: 'hidden', backgroundColor: SANA_PAGE_CANVAS }}>
+      <Box
+        style={{
+          position: 'absolute',
+          top: 12,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 2,
+          padding: '6px 14px',
+          borderRadius: 10,
+          background: 'rgba(255,255,255,0.92)',
+          border: `1px solid ${colors.soap300}`,
+        }}
+      >
+        <Heading size="small" style={{ margin: 0 }}>
+          Value Driver Tree - Workday Recruiting
+        </Heading>
+      </Box>
+
       {/* Viewport */}
       <div
         ref={viewportRef}
@@ -540,6 +567,9 @@ export const RecruitingMetricTreePage: React.FC = () => {
         <SecondaryButton size="small" onClick={() => setExplainMetricsOpen(true)} style={{ marginBottom: 2 }}>
           Explain these metrics to me
         </SecondaryButton>
+        <Box style={{ width: '100%', fontSize: 11, color: colors.blackPepper500, marginTop: 2 }}>
+          Correlation strength uses month-aligned overlap (min {MIN_CORRELATION_OVERLAP} points for Moderate/Strong) and is exploratory, not causal.
+        </Box>
       </Box>
 
       <WorkdayModal
@@ -594,12 +624,8 @@ export const RecruitingMetricTreePage: React.FC = () => {
           Scope: {filterParts.join(' · ')} — all metrics filtered to matching tenants
         </Box>
       )}
-      <Box style={{ position: 'absolute', top: isFiltered ? 44 : 12, left: 16, zIndex: 1, padding: '4px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.9)', fontSize: 11, color: colors.blackPepper500 }}>
-        Correlation strength uses month-aligned overlap (min {MIN_CORRELATION_OVERLAP} points for Moderate/Strong) and is exploratory, not causal.
-      </Box>
-
       {/* Zoom controls */}
-      <Flex gap="s" style={{ position: 'absolute', top: 16, right: selectedNode ? RAIL_WIDTH + 16 : 16, padding: 8, borderRadius: 999, background: 'rgba(255,255,255,0.92)', border: `1px solid ${colors.soap300}`, backdropFilter: 'blur(10px)' }}>
+      <Flex gap="s" style={{ position: 'absolute', bottom: 16, right: selectedNode ? RAIL_WIDTH + 16 : 16, padding: 8, borderRadius: 999, background: 'rgba(255,255,255,0.92)', border: `1px solid ${colors.soap300}`, backdropFilter: 'blur(10px)' }}>
         <SecondaryButton size="small" onClick={() => setView((c) => ({ ...c, scale: clamp(c.scale * 0.9, 0.48, 1.4) }))}>-</SecondaryButton>
         <SecondaryButton size="small" onClick={() => setView((c) => ({ ...c, scale: clamp(c.scale * 1.12, 0.48, 1.4) }))}>+</SecondaryButton>
         <SecondaryButton size="small" onClick={() => setView({ x: 48, y: 18, scale: 0.74 })}>Reset</SecondaryButton>

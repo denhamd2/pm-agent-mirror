@@ -200,6 +200,9 @@ export const ValueRealizationMetrics: React.FC = () => {
           title="Value Realisation Metrics"
           subtitle="Your starting point for live Workday Recruiting outcome and adoption dashboards: time to hire, recruiter capacity, pipeline health, Add Documents, and other IUM-backed views you can open in one click."
         />
+        <BodyText size="small" color={colors.blackPepper500} marginBottom="m">
+          Change badges on this page are absolute month-on-month deltas in metric units (for example days or average requisitions), not percentage change.
+        </BodyText>
 
         <Heading size="small" marginBottom="s">Business Value Outcomes</Heading>
         <Flex gap="l" marginBottom="l" style={{ flexWrap: 'wrap', alignItems: 'stretch' }}>

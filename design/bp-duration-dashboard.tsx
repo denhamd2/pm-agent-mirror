@@ -1906,7 +1906,7 @@ export const BpDurationDashboard = () => {
         <Box style={{ maxWidth: 1280, margin: '0 auto' }}>
           <PageHeader
             title="Job App Stage Metrics"
-            subtitle="Durations and completion for Offer and Employment Agreement sub-processes, bottleneck ranking to spot delays, and - where the charts are shown - trends for rework (sent back) and post-completion corrections."
+            subtitle="Shows the full job application stage flow, including where time is spent, completion levels across Offer and Employment Agreement stages, and where rework signals like sent back and corrections are concentrated."
           />
 
           <Flex gap="s" style={{ marginBottom: 14, flexWrap: 'wrap' }} alignItems="center">

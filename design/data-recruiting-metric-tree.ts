@@ -103,6 +103,15 @@ function metricValue(value: number | null, fallback = 0): number {
   return value ?? fallback;
 }
 
+function median(values: number[]): number {
+  if (values.length === 0) return 0;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0
+    ? (sorted[mid - 1] + sorted[mid]) / 2
+    : sorted[mid];
+}
+
 function computeMomPct(fullSeries: number[]): number | null {
   if (fullSeries.length < 2) return null;
   const latest = fullSeries[fullSeries.length - 1];
@@ -532,7 +541,7 @@ function aggregateFilteredSeries(
       .map((t) => source[t]?.find((p) => p.ym === ym)?.value)
       .filter((v): v is number => v != null && Number.isFinite(v));
     if (values.length === 0) return null;
-    return { ym, value: values.reduce((a, b) => a + b, 0) / values.length };
+    return { ym, value: median(values) };
   }).filter((point): point is TrendPoint => point != null);
 }
 
