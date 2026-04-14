@@ -36,6 +36,7 @@ function prototypeSpaSlugFallback(): Plugin {
       'india-native-whatsapp-v91',
       'interview-intelligence-agent-v96',
       'ai-system-of-record-v97',
+      'universal-profile-eudi-wallet-v1',
       'canvas-kit-test',
       'pm-agent-dashboard',
       'avg-time-to-hire',

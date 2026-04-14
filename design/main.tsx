@@ -19,6 +19,7 @@ import { RecruiterHubConversationalV99 } from './recruiter-hub-conversational-v9
 import { IndiaNativeWhatsappV91 } from './india-native-whatsapp-v91';
 import { InterviewIntelligenceAgentV96 } from './interview-intelligence-agent-v96';
 import AISystemOfRecordV97 from './ai-system-of-record-v97';
+import UniversalProfilePrototype from './universal-profile-eudi-wallet-v1';
 import { CanvasKitTest } from './components/CanvasKitTest';
 import PMAgentDashboard from './pm-agent-dashboard';
 const AvgTimeToHireDashboard = React.lazy(() => import('./avg-time-to-hire-dashboard').then((m) => ({ default: m.AvgTimeToHireDashboard })));
@@ -78,6 +79,7 @@ const PROTOTYPE_SLUGS = [
   'india-native-whatsapp-v91',
   'interview-intelligence-agent-v96',
   'ai-system-of-record-v97',
+  'universal-profile-eudi-wallet-v1',
   'canvas-kit-test',
   'pm-agent-dashboard',
   'avg-time-to-hire',
@@ -169,6 +171,9 @@ function AppRoot() {
   }
   if (route === 'ai-system-of-record-v97') {
     return <AISystemOfRecordV97 />;
+  }
+  if (route === 'universal-profile-eudi-wallet-v1') {
+    return <UniversalProfilePrototype />;
   }
   if (route === 'interview-intelligence-agent-v96') {
     return <InterviewIntelligenceAgentV96 />;

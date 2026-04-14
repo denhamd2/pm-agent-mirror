@@ -188,7 +188,7 @@ const combinedDocReviewPoints: TrendPoint[] = BP_LABELS
     const offer = offerReviewDocsMap.get(ym);
     const ea = eaReviewDocsMap.get(ym);
     if (offer == null && ea == null) return null;
-    return { ym, value: offer != null && ea != null ? (offer + ea) / 2 : (offer ?? ea ?? 0) };
+    return { ym: ym as string, value: offer != null && ea != null ? (offer + ea) / 2 : (offer ?? ea ?? 0) };
   })
   .filter((point): point is TrendPoint => point != null);
 const combinedDocReviewSeries = combinedDocReviewPoints.map((point) => point.value);
@@ -209,7 +209,7 @@ const combinedApprovalPoints: TrendPoint[] = BP_LABELS
     const offer = offerApprovalMap.get(ym);
     const ea = eaApprovalMap.get(ym);
     if (offer == null && ea == null) return null;
-    return { ym, value: offer != null && ea != null ? (offer + ea) / 2 : (offer ?? ea ?? 0) };
+    return { ym: ym as string, value: offer != null && ea != null ? (offer + ea) / 2 : (offer ?? ea ?? 0) };
   })
   .filter((point): point is TrendPoint => point != null);
 const combinedApprovalSeries = combinedApprovalPoints.map((point) => point.value);

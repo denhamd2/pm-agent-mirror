@@ -192,12 +192,11 @@ export const RecruiterHubConversationalV98: React.FC = () => {
 
   return (
     <Flex height="100vh" flexDirection="column" style={{ backgroundColor: SANA_PAGE_CANVAS, overflow: 'hidden' }}>
-      <WorkdayTopNav />
+      <WorkdayTopNav searchValue="" onSearchChange={() => {}} />
       <Flex flex={1} style={{ minHeight: 0 }}>
         <WorkdayLeftTabBar
           primaryItems={PRIMARY_RAIL}
-          activePrimaryId="Recruiting"
-          title="Recruiting"
+          secondaryTitle="Recruiting"
           tabs={TABS}
           activeTabId={activeTab}
           onTabChange={setActiveTab}
@@ -315,7 +314,7 @@ export const RecruiterHubConversationalV98: React.FC = () => {
           ) : (
             <Box padding="l">
               <Heading size="large">Standard {TABS.find(t => t.id === activeTab)?.label} View</Heading>
-              <BodyText marginTop="m">This tab would contain the standard, non-conversational interface.</BodyText>
+              <BodyText size="medium" marginTop="m">This tab would contain the standard, non-conversational interface.</BodyText>
             </Box>
           )}
         </Flex>

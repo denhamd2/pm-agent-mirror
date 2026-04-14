@@ -80,11 +80,73 @@ const CONFIDENCE_STYLE: Record<
   },
 };
 
-const STRENGTH_STYLE: Record<string, { bg: string; fg: string }> = {
+const STRENGTH_STYLE: Record<string, { bg: string; fg: string; dash?: string }> = {
   Strong: { bg: colors.greenApple100, fg: colors.greenApple600 },
   Moderate: { bg: '#fff3e0', fg: '#e67700' },
-  Weak: { bg: colors.soap200, fg: colors.blackPepper500 },
+  Weak: { bg: colors.soap200, fg: colors.blackPepper500, dash: '4 4' },
 };
+
+/**
+ * Fisher z-transformation for computing p-value of Pearson correlation.
+ * z = 0.5 * ln((1 + r) / (1 - r))
+ * SE = 1 / sqrt(n - 3)
+ * z_score = z / SE
+ * p-value = 2 * (1 - Φ(|z_score|)) for two-tailed test
+ */
+function fisherZPValue(r: number, n: number): number | null {
+  if (n < 4 || Math.abs(r) >= 1) return null;
+  const z = 0.5 * Math.log((1 + r) / (1 - r));
+  const se = 1 / Math.sqrt(n - 3);
+  const zScore = Math.abs(z / se);
+  const pValue = 2 * (1 - normalCDF(zScore));
+  return pValue;
+}
+
+function normalCDF(x: number): number {
+  const a1 = 0.254829592;
+  const a2 = -0.284496736;
+  const a3 = 1.421413741;
+  const a4 = -1.453152027;
+  const a5 = 1.061405429;
+  const p = 0.3275911;
+  const sign = x < 0 ? -1 : 1;
+  const absX = Math.abs(x);
+  const t = 1 / (1 + p * absX);
+  const y = 1 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-absX * absX);
+  return 0.5 * (1 + sign * y);
+}
+
+function formatPValue(pValue: number | null): string {
+  if (pValue == null) return 'p = N/A';
+  if (pValue < 0.001) return 'p < 0.001';
+  if (pValue < 0.01) return `p < 0.01`;
+  if (pValue < 0.05) return `p < 0.05`;
+  return `p = ${pValue.toFixed(3)}`;
+}
+
+function correlationTooltip(
+  label: string,
+  correlation: number | null,
+  overlapPoints: number,
+  strength: string
+): string {
+  const base = label;
+  if (correlation == null) return `${base} · Insufficient data for correlation`;
+  const rValue = `r = ${correlation.toFixed(2)}`;
+  const nValue = `n = ${overlapPoints} months`;
+  const pValue = fisherZPValue(correlation, overlapPoints);
+  const pValueStr = formatPValue(pValue);
+  const isSignificant = pValue != null && pValue < 0.05;
+  const strengthNote = strength === 'Weak'
+    ? 'Exploratory only: too few data points for reliable inference'
+    : strength === 'Moderate'
+    ? 'Moderate association: treat as directional hypothesis, not validated causal link'
+    : 'Strong association: treat as directional hypothesis, not validated causal link';
+  const sigNote = isSignificant
+    ? '⚠️ Note: Statistical significance with small samples (n~6) should be interpreted cautiously due to low power.'
+    : 'Not statistically significant at α = 0.05.';
+  return `${base}\n${rValue} · ${nValue} · ${pValueStr}\n${strengthNote}\n\n${sigNote}\n\nCaveats: Pearson r computed on short time series. Mixed SANDBOX/PROD environments. Time-series autocorrelation not addressed.`;
+}
 
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
@@ -316,7 +378,8 @@ export const RecruitingMetricTreePage: React.FC = () => {
         const overlapPoints = Math.min(fromSeries.length, toSeries.length);
         const correlation = !from || !to ? null : pearsonCorrelation(fromSeries, toSeries);
         const strength = correlationStrength(correlation, overlapPoints);
-        return { ...edge, correlation, strength, overlapPoints };
+        const pValue = correlation != null ? fisherZPValue(correlation, overlapPoints) : null;
+        return { ...edge, correlation, strength, overlapPoints, pValue };
       }),
     [nodeMap]
   );
@@ -392,15 +455,19 @@ export const RecruitingMetricTreePage: React.FC = () => {
               const to = nodeMap.get(edge.to);
               if (!from || !to) return null;
               const confidence = CONFIDENCE_STYLE[edge.confidence];
+              const insight = edgeInsights.find((item) => item.from === edge.from && item.to === edge.to);
+              const strength = insight?.strength ?? 'Weak';
+              const strengthStyle = STRENGTH_STYLE[strength] ?? STRENGTH_STYLE.Weak;
+              const dashArray = strengthStyle.dash ?? confidence.dash;
               return (
                 <path
                   key={`path-${edge.from}-${edge.to}`}
                   d={edgePath(from, to)}
                   fill="none"
                   stroke={confidence.stroke}
-                  strokeWidth={2}
-                  strokeDasharray={confidence.dash}
-                  opacity={0.9}
+                  strokeWidth={strength === 'Weak' ? 1.5 : 2}
+                  strokeDasharray={dashArray}
+                  opacity={strength === 'Weak' ? 0.6 : 0.9}
                   markerEnd={`url(#arrow-${edge.confidence})`}
                 />
               );
@@ -427,13 +494,14 @@ export const RecruitingMetricTreePage: React.FC = () => {
               const labelY = ((from.y < to.y ? from.y + NODE_HEIGHT : from.y) + (from.y < to.y ? to.y : to.y + NODE_HEIGHT)) / 2 - 10;
               return (
                 <g key={`${edge.from}-${edge.to}`}>
-                  <title>{edge.label}{insight?.correlation != null ? ` · r=${insight.correlation.toFixed(2)} · n=${insight.overlapPoints}` : ''}</title>
+                  <title>{correlationTooltip(edge.label, insight?.correlation ?? null, insight?.overlapPoints ?? 0, strength)}</title>
                   {/* Edge label pill */}
                   <rect x={labelX - 78} y={labelY - 13} width={156} height={30} rx={12} fill="#ffffff" opacity={0.94} />
                   <text x={labelX} y={labelY} textAnchor="middle" fill={colors.blackPepper500} fontSize="10" fontWeight="600">{edge.label}</text>
-                  {/* Strength pill */}
+                  {/* Strength pill with info indicator */}
                   <rect x={labelX - 26} y={labelY + 3} width={52} height={16} rx={8} fill={strengthStyle.bg} />
                   <text x={labelX} y={labelY + 14} textAnchor="middle" fill={strengthStyle.fg} fontSize="9" fontWeight="700">{strength}</text>
+                  <text x={labelX + 30} y={labelY + 13} fill={strengthStyle.fg} fontSize="8" opacity={0.7}>ⓘ</text>
                 </g>
               );
             })}
@@ -533,9 +601,14 @@ export const RecruitingMetricTreePage: React.FC = () => {
                     <div style={{ fontSize: 12, fontWeight: 700, color: colors.blackPepper600, marginBottom: 4 }}>{peerNode.title}</div>
                     <div style={{ fontSize: 12, color: colors.blackPepper500, marginBottom: 4 }}>
                       {edge.label} · <span style={{ display: 'inline-block', padding: '1px 6px', borderRadius: 6, background: sStyle.bg, color: sStyle.fg, fontSize: 10, fontWeight: 700 }}>{edge.strength}</span>
-                      {edge.correlation != null ? ` (r=${edge.correlation.toFixed(2)}, n=${edge.overlapPoints})` : ''}
+                      {edge.correlation != null ? ` (r=${edge.correlation.toFixed(2)}, n=${edge.overlapPoints}, ${formatPValue(edge.pValue)})` : ''}
                     </div>
-                    <div style={{ fontSize: 11, color: colors.blackPepper400 }}>Based on aligned recent trend points for the connected metrics.</div>
+                    <div style={{ fontSize: 11, color: colors.blackPepper400, marginBottom: 4 }}>Fisher z-transformed p-value for two-tailed test of H₀: ρ = 0.</div>
+                    {edge.pValue != null && edge.pValue >= 0.05 && (
+                      <div style={{ fontSize: 10, padding: '4px 8px', borderRadius: 6, background: '#fff3e0', color: '#e67700' }}>
+                        ⚠️ Not statistically significant (p ≥ 0.05). Treat as exploratory.
+                      </div>
+                    )}
                   </Box>
                 );
               })}

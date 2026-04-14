@@ -217,6 +217,11 @@ const METRICS_INVENTORY: { category: string; name: string; description: string; 
   { category: 'Segmentation', name: 'Tenant Region/Segment', description: 'Per-tenant segment (APAC, EMEA, North America, Japan, Corporate, US Federal) from interview dashboard tenant filters lookup table.', source: 'interview_dashboard_tenant_filters', dashboard: 'Multiple (Scorecard, BP Durations)' },
   { category: 'Segmentation', name: 'Tenant Industry (super_industry)', description: 'Per-tenant industry classification (14 industries). ~225 tenants have missing values.', source: 'interview_dashboard_tenant_filters', dashboard: 'Multiple (Scorecard, BP Durations)' },
   { category: 'Segmentation', name: 'Tenant Company Size Band', description: 'Per-tenant company size classification from tenant filters lookup.', source: 'interview_dashboard_tenant_filters', dashboard: 'Interview Metrics' },
+
+  // Statistical Methods
+  { category: 'Statistical Methods', name: 'Pearson Correlation (Value Driver Tree)', description: 'Standard Pearson r on monthly time series between linked metrics. Requires min 3 overlapping months; 5+ for non-Weak rating. Thresholds: |r| ≥ 0.75 Strong, ≥ 0.45 Moderate, else Weak. Exploratory only due to small n (~6) and no significance testing.', source: 'recruiting-metric-tree.tsx', dashboard: 'Value Driver Tree' },
+  { category: 'Statistical Methods', name: 'Median TTH Impact (Customer Scorecard)', description: 'median(TTH_off) − median(TTH_on) per feature. Mann-Whitney U test with Benjamini-Hochberg FDR correction. Confidence: High = q ≤ 0.05 AND n ≥ 30 both arms; Medium = n ≥ 10; Low = otherwise. Cohen\'s d effect size now included. impactMagnitudeDays field = abs(deltaTthDays).', source: 'IUM 2358 + PCA adoption', dashboard: 'Customer Scorecard' },
+  { category: 'Statistical Methods', name: 'Bottleneck Score (BP Durations)', description: 'Composite ranking heuristic: avgHours × log10(1 + volume). Prioritises bottlenecks by combining duration and frequency. Not a statistical correlation - no hypothesis testing applied.', source: 'bp_event_record_stats', dashboard: 'BP Durations' },
 ];
 
 const sourceChipStyle: React.CSSProperties = {
@@ -716,6 +721,50 @@ export const PMAgentDashboard: React.FC = () => {
                     </tbody>
                   </table>
                 </Box>
+              </Card>
+
+              <Card padding="l" marginTop="l" style={{ borderRadius: SANA_CARD_RADIUS_LG }}>
+                <Heading size="medium" marginBottom="xxs">Correlation and Statistical Methods</Heading>
+                <BodyText size="small" color={colors.licorice400} marginBottom="m">
+                  This dashboard uses two distinct approaches for measuring relationships between metrics and features. Understanding their differences is important for interpreting confidence levels.
+                </BodyText>
+
+                <Flex gap="l" flexDirection="column">
+                  <Box>
+                    <Heading size="small" marginBottom="xs">Method 1: Value Driver Tree - Pearson Correlation</Heading>
+                    <BodyText size="small" color={colors.blackPepper500} marginBottom="s">
+                      Shows directional relationships between linked metrics in the driver tree.
+                    </BodyText>
+                    <ul style={{ margin: 0, paddingLeft: 20, color: colors.blackPepper500, fontSize: 14, lineHeight: 1.8 }}>
+                      <li><strong>Calculation:</strong> Standard Pearson correlation coefficient (r) on monthly time series</li>
+                      <li><strong>Sample size:</strong> Requires minimum 3 overlapping months; 5+ for non-Weak rating</li>
+                      <li><strong>Strength thresholds:</strong> |r| ≥ 0.75 Strong, ≥ 0.45 Moderate, else Weak (Cohen's conventions)</li>
+                      <li><strong>Limitations:</strong> Short series (n~6), no significance testing, mixed environments (SANDBOX/PROD), time-series autocorrelation not addressed</li>
+                      <li><strong>Interpretation:</strong> Treat as exploratory hypotheses about metric relationships, not validated causal links</li>
+                    </ul>
+                  </Box>
+
+                  <Box>
+                    <Heading size="small" marginBottom="xs">Method 2: Customer Scorecard - Median TTH Impact</Heading>
+                    <BodyText size="small" color={colors.blackPepper500} marginBottom="s">
+                      Ranks features by their association with faster Time to Hire.
+                    </BodyText>
+                    <ul style={{ margin: 0, paddingLeft: 20, color: colors.blackPepper500, fontSize: 14, lineHeight: 1.8 }}>
+                      <li><strong>Calculation:</strong> median(TTH_off) − median(TTH_on) per feature, where "on" = adopted, "off" = not adopted</li>
+                      <li><strong>Statistical test:</strong> Mann-Whitney U (non-parametric, handles skewed distributions)</li>
+                      <li><strong>Multiple comparison correction:</strong> Benjamini-Hochberg FDR (q-values) across 75 features</li>
+                      <li><strong>Confidence levels:</strong> High = q ≤ 0.05 AND n ≥ 30 both arms; Medium = n ≥ 10; Low = otherwise</li>
+                      <li><strong>Note:</strong> The impactMagnitudeDays field is the absolute magnitude in days, not a correlation coefficient. Cohen's d effect size is also computed to quantify standardised effect magnitude.</li>
+                      <li><strong>Interpretation:</strong> High-confidence features have statistically significant TTH differences between adopters and non-adopters</li>
+                    </ul>
+                  </Box>
+
+                  <Box style={{ backgroundColor: colors.soap100, padding: 16, borderRadius: 8 }}>
+                    <BodyText size="small" color={colors.blackPepper600}>
+                      <strong>Key distinction:</strong> The scorecard's "correlation" is observational - it shows association, not causation. Confounders (tenant size, industry, maturity) may explain differences. The Value Driver Tree correlations are exploratory due to small sample sizes (~6 months).
+                    </BodyText>
+                  </Box>
+                </Flex>
               </Card>
             </Box>
           )}

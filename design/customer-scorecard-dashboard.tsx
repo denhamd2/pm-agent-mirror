@@ -280,6 +280,33 @@ function medianOfArr(arr: number[]): number {
   return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 }
 
+function stdDevOf(arr: number[]): number {
+  if (arr.length < 2) return 0;
+  const mean = arr.reduce((sum, v) => sum + v, 0) / arr.length;
+  const variance = arr.reduce((sum, v) => sum + (v - mean) ** 2, 0) / (arr.length - 1);
+  return Math.sqrt(variance);
+}
+
+function computeCohensD(group1: number[], group2: number[]): number | undefined {
+  if (group1.length < 2 || group2.length < 2) return undefined;
+  const n1 = group1.length;
+  const n2 = group2.length;
+  const mean1 = group1.reduce((sum, v) => sum + v, 0) / n1;
+  const mean2 = group2.reduce((sum, v) => sum + v, 0) / n2;
+  const s1 = stdDevOf(group1);
+  const s2 = stdDevOf(group2);
+  const pooled = Math.sqrt(((n1 - 1) * s1 ** 2 + (n2 - 1) * s2 ** 2) / (n1 + n2 - 2));
+  if (pooled === 0) return undefined;
+  return (mean2 - mean1) / pooled;
+}
+
+function formatCohensD(d: number | undefined): string {
+  if (d == null) return '-';
+  const abs = Math.abs(d);
+  const mag = abs < 0.2 ? 'negligible' : abs < 0.5 ? 'small' : abs < 0.8 ? 'medium' : 'large';
+  return `${d > 0 ? '+' : ''}${d.toFixed(2)} (${mag})`;
+}
+
 function validMetricValue(value: number | null | undefined): value is number {
   return value != null && Number.isFinite(value) && value > 0;
 }
@@ -396,9 +423,11 @@ function computeFilteredCorrelations(
     const qTth = prebaked?.qTth ?? globalRow?.qTth ?? 1;
     const confidence = confidenceFromSupportAndQ(tthOn.length, tthOff.length, qTth);
 
+    const cohensD = computeCohensD(tthOn, tthOff);
+
     const row: FeatureCorrelationStat = {
       feature,
-      correlationScore: Math.abs(deltaTth),
+      impactMagnitudeDays: Math.abs(deltaTth),
       deltaTtfDays: deltaTtf,
       deltaTthDays: deltaTth,
       qTtf: prebaked?.qTtf ?? 0,
@@ -408,6 +437,7 @@ function computeFilteredCorrelations(
       nOffTtf: ttfOff.length,
       nOnTth: tthOn.length,
       nOffTth: tthOff.length,
+      cohensD,
     };
 
     if (isGlobal && prebaked) {
@@ -502,6 +532,7 @@ function computeIndustryTop3(): IndustryTop3[] {
 }
 
 export const CustomerScorecardDashboard = () => {
+  console.log('CustomerScorecardDashboard rendering!');
   const sortedTenants = useMemo(
     () => [...SCORECARD_TENANT_NAMES].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' })),
     [],
@@ -683,6 +714,7 @@ export const CustomerScorecardDashboard = () => {
                           <tr style={{ borderBottom: `1px solid ${colors.soap300}` }}>
                             <th style={thStyle}>Feature</th>
                             <th style={thRight}>Median TTH impact (days)</th>
+                            <th style={thRight} title="Cohen's d effect size: standardised mean difference. |d| < 0.2 = negligible, 0.2-0.5 = small, 0.5-0.8 = medium, > 0.8 = large">Cohen's d</th>
                             {!isFiltered && <th style={thRight}>q(TTH)</th>}
                             <th style={thRight}>n(on)</th>
                             <th style={thRight}>n(off)</th>
@@ -695,6 +727,9 @@ export const CustomerScorecardDashboard = () => {
                               <td style={tdStyle}>{row.feature}</td>
                               <td style={{ ...tdRight, color: tthImpactTextColor(row.deltaTthDays), fontWeight: 500 }}>
                                 {row.deltaTthDays > 0 ? '\u2212' : '+'}{Math.abs(row.deltaTthDays).toFixed(1)} days {row.deltaTthDays > 0 ? '(lower)' : row.deltaTthDays < 0 ? '(higher)' : ''}
+                              </td>
+                              <td style={tdRight} title="Cohen's d: positive = non-adopters have higher TTH (feature associated with lower TTH)">
+                                <span style={{ fontSize: 11 }}>{formatCohensD(row.cohensD)}</span>
                               </td>
                               {!isFiltered && <td style={tdRight}>{formatQValue(row.qTth)}</td>}
                               <td style={tdRight} title={row.nOnTth < 10 ? 'Small cohort - interpret with caution' : undefined}>
