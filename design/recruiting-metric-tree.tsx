@@ -56,6 +56,8 @@ const RAIL_WIDTH = 360;
 const TREE_TITLE_BAND_PX = 52;
 const FILTER_RAIL_EXPANDED_PX = 188;
 const FILTER_RAIL_COLLAPSED_PX = 36;
+/** Keep tree nodes/links to the right of grey section headers. */
+const TREE_CONTENT_OFFSET_X = 210;
 
 const LEVEL_Y: Record<(typeof TREE_LEVELS)[number], number> = {
   'Business Value Outcomes': 12,
@@ -306,7 +308,17 @@ function trendArrow(pct: number | null, direction: TrendGoodDirection): { symbol
   return { symbol, color: good ? TREND_GOOD : TREND_BAD, text: `${abs}%` };
 }
 
-function NodeCard({ node, selected, onSelect }: { node: MetricTreeNode; selected: boolean; onSelect: (id: string) => void }) {
+function NodeCard({
+  node,
+  selected,
+  onSelect,
+  xOffset = 0,
+}: {
+  node: MetricTreeNode;
+  selected: boolean;
+  onSelect: (id: string) => void;
+  xOffset?: number;
+}) {
   const stroke = colors.blueberry400;
   const fill = `${colors.blueberry400}22`;
   const mom = trendArrow(node.momPct, node.trendGoodDirection);
@@ -317,7 +329,7 @@ function NodeCard({ node, selected, onSelect }: { node: MetricTreeNode; selected
       onClick={(event) => { event.stopPropagation(); onSelect(node.id); }}
       style={{
         position: 'absolute',
-        left: node.x,
+        left: node.x + xOffset,
         top: node.y,
         width: node.width ?? DEFAULT_NODE_WIDTH,
         height: NODE_HEIGHT,
@@ -407,7 +419,11 @@ export const RecruitingMetricTreePage: React.FC = () => {
     const rect = viewportRef.current?.getBoundingClientRect();
     if (!rect) { setView({ x: 40, y: 20, scale }); return; }
     const nodeWidth = node.width ?? DEFAULT_NODE_WIDTH;
-    setView({ scale, x: rect.width / 2 - (node.x + nodeWidth / 2) * scale, y: rect.height / 3 - (node.y + NODE_HEIGHT / 2) * scale });
+    setView({
+      scale,
+      x: rect.width / 2 - (node.x + TREE_CONTENT_OFFSET_X + nodeWidth / 2) * scale,
+      y: rect.height / 3 - (node.y + NODE_HEIGHT / 2) * scale,
+    });
   };
 
   const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
@@ -596,6 +612,7 @@ export const RecruitingMetricTreePage: React.FC = () => {
               </div>
               <div style={{ position: 'absolute', left: 0, top: TREE_TITLE_BAND_PX, width: TREE_META.canvas.width, height: TREE_META.canvas.height }}>
               <svg width={TREE_META.canvas.width} height={TREE_META.canvas.height} viewBox={`0 0 ${TREE_META.canvas.width} ${TREE_META.canvas.height}`} style={{ position: 'absolute', left: 0, top: 0, overflow: 'visible' }}>
+                <g transform={`translate(${TREE_CONTENT_OFFSET_X}, 0)`}>
                 {TREE_EDGES.map((edge) => {
                   const from = nodeMap.get(edge.from);
                   const to = nodeMap.get(edge.to);
@@ -618,6 +635,7 @@ export const RecruitingMetricTreePage: React.FC = () => {
                     />
                   );
                 })}
+                </g>
 
                 {TREE_LEVELS.map((level) => (
                   <g key={level}>
@@ -626,7 +644,7 @@ export const RecruitingMetricTreePage: React.FC = () => {
                     <text x={24} y={LEVEL_Y[level] + 29} fill={colors.blackPepper400} fontSize="10">{formatLevelSummary(level)}</text>
                   </g>
                 ))}
-
+                <g transform={`translate(${TREE_CONTENT_OFFSET_X}, 0)`}>
                 {TREE_EDGES.map((edge) => {
                   const from = nodeMap.get(edge.from);
                   const to = nodeMap.get(edge.to);
@@ -651,6 +669,7 @@ export const RecruitingMetricTreePage: React.FC = () => {
                     </g>
                   );
                 })}
+                </g>
                 <defs>
                   {(['Measured', 'Directional'] as MetricTreeConfidence[]).map((c) => (
                     <marker key={c} id={`arrow-${c}`} markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
@@ -661,7 +680,7 @@ export const RecruitingMetricTreePage: React.FC = () => {
               </svg>
 
               {treeNodes.map((node) => (
-                <NodeCard key={node.id} node={node} selected={selectedNodeId === node.id} onSelect={(nodeId) => { setSelectedNodeId(nodeId); const n = nodeMap.get(nodeId); if (n) setViewForNode(n, 0.9); }} />
+                <NodeCard key={node.id} node={node} xOffset={TREE_CONTENT_OFFSET_X} selected={selectedNodeId === node.id} onSelect={(nodeId) => { setSelectedNodeId(nodeId); const n = nodeMap.get(nodeId); if (n) setViewForNode(n, 0.9); }} />
               ))}
               </div>
             </div>
