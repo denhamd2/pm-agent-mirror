@@ -521,12 +521,12 @@ export const RecruitingMetricTreePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Filter bar (top-left) */}
+      {/* Filter bar (bottom-left) — stays out of the main canvas read path */}
       <Box
         onClick={(event) => event.stopPropagation()}
         onMouseDown={(event) => event.stopPropagation()}
         style={{
-          position: 'absolute', top: 12, left: 12, display: 'flex', gap: 8, alignItems: 'flex-end', flexWrap: 'wrap',
+          position: 'absolute', bottom: 12, left: 12, zIndex: 2, display: 'flex', gap: 8, alignItems: 'flex-end', flexWrap: 'wrap',
           padding: '10px 14px', borderRadius: 14, background: 'rgba(255,255,255,0.95)', border: `1px solid ${colors.soap300}`, backdropFilter: 'blur(10px)', maxWidth: 680,
         }}
       >
@@ -590,11 +590,11 @@ export const RecruitingMetricTreePage: React.FC = () => {
       </WorkdayModal>
 
       {isFiltered && filterParts.length > 0 && (
-        <Box style={{ position: 'absolute', top: 80, left: 16, padding: '4px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.9)', fontSize: 11, color: colors.blackPepper500 }}>
+        <Box style={{ position: 'absolute', top: 12, left: 16, zIndex: 1, padding: '4px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.9)', fontSize: 11, color: colors.blackPepper500 }}>
           Scope: {filterParts.join(' · ')} — all metrics filtered to matching tenants
         </Box>
       )}
-      <Box style={{ position: 'absolute', top: isFiltered ? 104 : 80, left: 16, padding: '4px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.9)', fontSize: 11, color: colors.blackPepper500 }}>
+      <Box style={{ position: 'absolute', top: isFiltered ? 44 : 12, left: 16, zIndex: 1, padding: '4px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.9)', fontSize: 11, color: colors.blackPepper500 }}>
         Correlation strength uses month-aligned overlap (min {MIN_CORRELATION_OVERLAP} points for Moderate/Strong) and is exploratory, not causal.
       </Box>
 
