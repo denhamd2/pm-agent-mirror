@@ -14,7 +14,7 @@ import {
   type ChartOptions,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { FormSelect } from './components';
+import { FormSelect, WorkdayModal } from './components';
 import { SANA_PAGE_CANVAS } from './components/sanaShellTheme';
 import {
   TREE_META,
@@ -354,6 +354,7 @@ export const RecruitingMetricTreePage: React.FC = () => {
   const [view, setView] = useState<ViewportState>({ x: 48, y: 18, scale: 0.74 });
   const [drag, setDrag] = useState<DragState>({ active: false, pointerX: 0, pointerY: 0, originX: 0, originY: 0 });
   const [filters, setFilters] = useState<DashboardFilterState>(EMPTY_DASHBOARD_FILTERS);
+  const [explainMetricsOpen, setExplainMetricsOpen] = useState(false);
 
   const isFiltered = filters.segment !== 'all' || filters.region !== 'all' || filters.industry !== 'all' || !!filters.tenant;
 
@@ -536,7 +537,57 @@ export const RecruitingMetricTreePage: React.FC = () => {
         {isFiltered && (
           <SecondaryButton size="small" onClick={() => setFilters(EMPTY_DASHBOARD_FILTERS)} style={{ marginBottom: 2 }}>Clear</SecondaryButton>
         )}
+        <SecondaryButton size="small" onClick={() => setExplainMetricsOpen(true)} style={{ marginBottom: 2 }}>
+          Explain these metrics to me
+        </SecondaryButton>
       </Box>
+
+      <WorkdayModal
+        title="How to read this value driver tree"
+        isOpen={explainMetricsOpen}
+        onClose={() => setExplainMetricsOpen(false)}
+        secondaryActionText="Close"
+        width="620px"
+      >
+        <Flex flexDirection="column" gap="m">
+          <Box>
+            <BodyText size="small" fontWeight="bold" marginBottom="xxs">What this view is for</BodyText>
+            <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.6 }}>
+              This is a value driver tree for Workday Recruiting. It connects outcomes you care about (chiefly how fast we hire, and how productive recruiters are) to product and usage signals further down the chain. It is a map for prioritisation and conversation, not a proof that one metric caused another.
+            </BodyText>
+          </Box>
+          <Box>
+            <BodyText size="small" fontWeight="bold" marginBottom="xxs">Types of metrics you will see</BodyText>
+            <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.6 }}>
+              The rows group metrics into four layers: business value outcomes at the top, then product value outcomes, then user outcomes, then feature adoption and usage at the bottom. Higher layers are the results we want; lower layers are behaviours and adoption that we believe can influence those results.
+            </BodyText>
+          </Box>
+          <Box>
+            <BodyText size="small" fontWeight="bold" marginBottom="xxs">Where the numbers come from</BodyText>
+            <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.6 }}>
+              {TREE_META.sourceSummary} Filters (segment, region, industry, tenant) narrow which customers feed the charts so you can compare like-for-like cohorts when data allows.
+            </BodyText>
+          </Box>
+          <Box>
+            <BodyText size="small" fontWeight="bold" marginBottom="xxs">What the labels mean</BodyText>
+            <BodyText as="p" size="small" color={colors.blackPepper500} style={{ lineHeight: 1.6, margin: '0 0 8px 0' }}>
+              Each box is one metric with its latest value and a short trend. The curved lines show how we think work flows between metrics. The small text on each link is the relationship name (for example which outcome a behaviour is meant to support).
+            </BodyText>
+            <BodyText as="p" size="small" color={colors.blackPepper500} style={{ lineHeight: 1.6, margin: 0 }}>
+              Each link is tagged in the data as measured or directional (how strong the underlying evidence is for that relationship in our model). Separately, you will see Strong, Moderate, or Weak for how closely the two metrics moved together in recent months. Weak co-movement is also drawn a little lighter on the canvas so it does not look as strong as moderate or strong links.
+            </BodyText>
+          </Box>
+          <Box>
+            <BodyText size="small" fontWeight="bold" marginBottom="xxs">How link strength is worked out</BodyText>
+            <BodyText as="p" size="small" color={colors.blackPepper500} style={{ lineHeight: 1.6, margin: '0 0 8px 0' }}>
+              For each pair of metrics we line up the same calendar months and ask, in plain terms, whether the two series rise and fall together. That produces a score from weak to strong. We only show moderate or strong when there are at least {MIN_CORRELATION_OVERLAP} overlapping months; otherwise we keep the label weak so we do not over-claim from a thin slice of history.
+            </BodyText>
+            <BodyText as="p" size="small" color={colors.blackPepper500} style={{ lineHeight: 1.6, margin: 0 }}>
+              Treat these strengths as exploratory: they help you spot patterns worth a deeper dive, not as statistical proof of causation. The detail panel can show a p-value for analysts; for product decisions, lean on the caveats and on whether the story matches how recruiting actually works in your segment.
+            </BodyText>
+          </Box>
+        </Flex>
+      </WorkdayModal>
 
       {isFiltered && filterParts.length > 0 && (
         <Box style={{ position: 'absolute', top: 80, left: 16, padding: '4px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.9)', fontSize: 11, color: colors.blackPepper500 }}>
