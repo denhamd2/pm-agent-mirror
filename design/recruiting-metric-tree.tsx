@@ -52,6 +52,10 @@ type DragState = { active: boolean; pointerX: number; pointerY: number; originX:
 const NODE_HEIGHT = 138;
 const DEFAULT_NODE_WIDTH = 228;
 const RAIL_WIDTH = 360;
+/** Pannable world: title band above the metric SVG (moves with pan/zoom). */
+const TREE_TITLE_BAND_PX = 52;
+const FILTER_RAIL_EXPANDED_PX = 188;
+const FILTER_RAIL_COLLAPSED_PX = 36;
 
 const LEVEL_Y: Record<(typeof TREE_LEVELS)[number], number> = {
   'Business Value Outcomes': 12,
@@ -364,6 +368,7 @@ export const RecruitingMetricTreePage: React.FC = () => {
   const [drag, setDrag] = useState<DragState>({ active: false, pointerX: 0, pointerY: 0, originX: 0, originY: 0 });
   const [filters, setFilters] = useState<DashboardFilterState>(EMPTY_DASHBOARD_FILTERS);
   const [explainMetricsOpen, setExplainMetricsOpen] = useState(false);
+  const [filterRailExpanded, setFilterRailExpanded] = useState(true);
 
   const isFiltered = filters.segment !== 'all' || filters.region !== 'all' || filters.industry !== 'all' || !!filters.tenant;
 
@@ -440,9 +445,22 @@ export const RecruitingMetricTreePage: React.FC = () => {
     return [{ value: '', label: 'All tenants' }, ...allKeys.map((t) => ({ value: t, label: t }))];
   }, []);
 
+  const railToggleStyle: React.CSSProperties = {
+    border: `1px solid ${colors.soap300}`,
+    background: colors.frenchVanilla100,
+    borderRadius: 6,
+    cursor: 'pointer',
+    color: colors.blackPepper500,
+    fontSize: 14,
+    lineHeight: 1,
+    padding: '4px 6px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
+
   return (
     <Box style={{ position: 'relative', height: '100vh', overflow: 'hidden', backgroundColor: SANA_PAGE_CANVAS }}>
-      {/* Left column: title in flow (centred above tree), then tree viewport */}
       <Box
         style={{
           position: 'absolute',
@@ -451,17 +469,85 @@ export const RecruitingMetricTreePage: React.FC = () => {
           bottom: 0,
           width: canvasWidth,
           display: 'flex',
-          flexDirection: 'column',
+          flexDirection: 'row',
           overflow: 'hidden',
         }}
       >
-        <Box style={{ flexShrink: 0, textAlign: 'center', paddingTop: 16, paddingBottom: 8 }}>
-          <Heading size="small" style={{ margin: 0, color: colors.blackPepper600 }}>
-            Value Driver Tree - Workday Recruiting
-          </Heading>
+        {/* Narrow collapsible filter rail */}
+        <Box
+          onClick={(event) => event.stopPropagation()}
+          onMouseDown={(event) => event.stopPropagation()}
+          style={{
+            width: filterRailExpanded ? FILTER_RAIL_EXPANDED_PX : FILTER_RAIL_COLLAPSED_PX,
+            flexShrink: 0,
+            transition: 'width 200ms ease',
+            borderRight: `1px solid ${colors.soap300}`,
+            background: 'rgba(255,255,255,0.97)',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+            zIndex: 3,
+          }}
+        >
+          {filterRailExpanded ? (
+            <Flex flexDirection="column" flex={1} minHeight={0} style={{ padding: '8px 10px', gap: 8, overflowY: 'auto' }}>
+              <Flex justifyContent="space-between" alignItems="center" style={{ flexShrink: 0 }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: colors.blackPepper600 }}>Filters</span>
+                <button
+                  type="button"
+                  aria-label="Collapse filter rail"
+                  onClick={() => setFilterRailExpanded(false)}
+                  style={railToggleStyle}
+                >
+                  {'\u2039'}
+                </button>
+              </Flex>
+              <Box style={{ width: '100%' }}>
+                <FormSelect id="tree-segment" label="Segment" value={filters.segment} onChange={(v) => updateFilter('segment', v)} options={SEGMENT_FILTER_OPTIONS} compact />
+              </Box>
+              <Box style={{ width: '100%' }}>
+                <FormSelect id="tree-region" label="Region" value={filters.region} onChange={(v) => updateFilter('region', v)} options={REGION_FILTER_OPTIONS} compact />
+              </Box>
+              <Box style={{ width: '100%' }}>
+                <FormSelect id="tree-industry" label="Industry" value={filters.industry} onChange={(v) => updateFilter('industry', v)} options={INDUSTRY_FILTER_OPTIONS} compact />
+              </Box>
+              <Box style={{ width: '100%' }}>
+                <FormSelect id="tree-tenant" label="Tenant" value={filters.tenant} onChange={(v) => updateFilter('tenant', v)} options={tenantOptions} compact />
+              </Box>
+              {isFiltered && (
+                <SecondaryButton size="small" onClick={() => setFilters(EMPTY_DASHBOARD_FILTERS)} style={{ fontSize: 11, minHeight: 28, padding: '4px 8px' }}>
+                  Clear filters
+                </SecondaryButton>
+              )}
+              {isFiltered && filterParts.length > 0 && (
+                <BodyText size="small" style={{ fontSize: 10, color: colors.blackPepper500, lineHeight: 1.35, margin: 0 }}>
+                  Scope: {filterParts.join(' · ')}
+                </BodyText>
+              )}
+              <Box style={{ borderTop: `1px solid ${colors.soap300}`, marginTop: 4, paddingTop: 10, flexShrink: 0 }} />
+              <SecondaryButton size="small" onClick={() => setExplainMetricsOpen(true)} style={{ fontSize: 11, minHeight: 28, padding: '4px 8px' }}>
+                Explain metrics
+              </SecondaryButton>
+              <BodyText size="small" style={{ fontSize: 10, color: colors.blackPepper500, lineHeight: 1.35, margin: 0, marginTop: 4 }}>
+                Correlation strength uses month-aligned overlap (min {MIN_CORRELATION_OVERLAP} points for Moderate/Strong) and is exploratory, not causal.
+              </BodyText>
+            </Flex>
+          ) : (
+            <Flex flex={1} alignItems="center" justifyContent="center" style={{ minHeight: 0 }}>
+              <button
+                type="button"
+                aria-label="Expand filter rail"
+                onClick={() => setFilterRailExpanded(true)}
+                style={{ ...railToggleStyle, padding: '6px 4px' }}
+              >
+                {'\u203A'}
+              </button>
+            </Flex>
+          )}
         </Box>
-        <Box style={{ flex: '1 1 auto', minHeight: 0, position: 'relative' }}>
-          {/* Viewport */}
+
+        {/* Tree viewport (full remaining width) */}
+        <Box style={{ flex: '1 1 auto', minWidth: 0, position: 'relative', minHeight: 0 }}>
           <div
             ref={viewportRef}
             onClick={() => { if (!dragMovedRef.current) setSelectedNodeId(null); }}
@@ -477,7 +563,38 @@ export const RecruitingMetricTreePage: React.FC = () => {
               backgroundSize: '40px 40px',
             }}
           >
-            <div style={{ position: 'absolute', width: TREE_META.canvas.width, height: TREE_META.canvas.height, transform: `translate(${view.x}px, ${view.y}px) scale(${view.scale})`, transformOrigin: 'top left' }}>
+            <div
+              style={{
+                position: 'absolute',
+                width: TREE_META.canvas.width,
+                height: TREE_META.canvas.height + TREE_TITLE_BAND_PX,
+                transform: `translate(${view.x}px, ${view.y}px) scale(${view.scale})`,
+                transformOrigin: 'top left',
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  top: 0,
+                  width: '100%',
+                  height: TREE_TITLE_BAND_PX,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '0 20px',
+                  boxSizing: 'border-box',
+                  pointerEvents: 'none',
+                  color: colors.blackPepper600,
+                  fontSize: 18,
+                  fontWeight: 600,
+                  lineHeight: 1.25,
+                  textAlign: 'center',
+                }}
+              >
+                Value Driver Tree - Workday Recruiting
+              </div>
+              <div style={{ position: 'absolute', left: 0, top: TREE_TITLE_BAND_PX, width: TREE_META.canvas.width, height: TREE_META.canvas.height }}>
               <svg width={TREE_META.canvas.width} height={TREE_META.canvas.height} viewBox={`0 0 ${TREE_META.canvas.width} ${TREE_META.canvas.height}`} style={{ position: 'absolute', left: 0, top: 0, overflow: 'visible' }}>
                 {TREE_EDGES.map((edge) => {
                   const from = nodeMap.get(edge.from);
@@ -546,43 +663,14 @@ export const RecruitingMetricTreePage: React.FC = () => {
               {treeNodes.map((node) => (
                 <NodeCard key={node.id} node={node} selected={selectedNodeId === node.id} onSelect={(nodeId) => { setSelectedNodeId(nodeId); const n = nodeMap.get(nodeId); if (n) setViewForNode(n, 0.9); }} />
               ))}
+              </div>
             </div>
           </div>
 
-          {/* Filter bar (bottom-left) — stays out of the main canvas read path */}
-          <Box
-            onClick={(event) => event.stopPropagation()}
-            onMouseDown={(event) => event.stopPropagation()}
-            style={{
-              position: 'absolute', bottom: 12, left: 12, zIndex: 2, display: 'flex', gap: 8, alignItems: 'flex-end', flexWrap: 'wrap',
-              padding: '10px 14px', borderRadius: 14, background: 'rgba(255,255,255,0.95)', border: `1px solid ${colors.soap300}`, backdropFilter: 'blur(10px)', maxWidth: 680,
-            }}
-          >
-            <Box style={{ width: 140 }}><FormSelect id="tree-segment" label="Segment" value={filters.segment} onChange={(v) => updateFilter('segment', v)} options={SEGMENT_FILTER_OPTIONS} /></Box>
-            <Box style={{ width: 140 }}><FormSelect id="tree-region" label="Region" value={filters.region} onChange={(v) => updateFilter('region', v)} options={REGION_FILTER_OPTIONS} /></Box>
-            <Box style={{ width: 160 }}><FormSelect id="tree-industry" label="Industry" value={filters.industry} onChange={(v) => updateFilter('industry', v)} options={INDUSTRY_FILTER_OPTIONS} /></Box>
-            <Box style={{ width: 140 }}><FormSelect id="tree-tenant" label="Tenant" value={filters.tenant} onChange={(v) => updateFilter('tenant', v)} options={tenantOptions} /></Box>
-            {isFiltered && (
-              <SecondaryButton size="small" onClick={() => setFilters(EMPTY_DASHBOARD_FILTERS)} style={{ marginBottom: 2 }}>Clear</SecondaryButton>
-            )}
-            <SecondaryButton size="small" onClick={() => setExplainMetricsOpen(true)} style={{ marginBottom: 2 }}>
-              Explain these metrics to me
-            </SecondaryButton>
-            <Box style={{ width: '100%', fontSize: 11, color: colors.blackPepper500, marginTop: 2 }}>
-              Correlation strength uses month-aligned overlap (min {MIN_CORRELATION_OVERLAP} points for Moderate/Strong) and is exploratory, not causal.
-            </Box>
-          </Box>
-
-          {isFiltered && filterParts.length > 0 && (
-            <Box style={{ position: 'absolute', top: 12, left: 16, zIndex: 1, padding: '4px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.9)', fontSize: 11, color: colors.blackPepper500 }}>
-              Scope: {filterParts.join(' · ')} — all metrics filtered to matching tenants
-            </Box>
-          )}
-          {/* Zoom controls (tree column only; rail sits outside this column) */}
-          <Flex gap="s" style={{ position: 'absolute', bottom: 16, right: 16, padding: 8, borderRadius: 999, background: 'rgba(255,255,255,0.92)', border: `1px solid ${colors.soap300}`, backdropFilter: 'blur(10px)' }}>
-            <SecondaryButton size="small" onClick={() => setView((c) => ({ ...c, scale: clamp(c.scale * 0.9, 0.48, 1.4) }))}>-</SecondaryButton>
-            <SecondaryButton size="small" onClick={() => setView((c) => ({ ...c, scale: clamp(c.scale * 1.12, 0.48, 1.4) }))}>+</SecondaryButton>
-            <SecondaryButton size="small" onClick={() => setView({ x: 48, y: 18, scale: 0.74 })}>Reset</SecondaryButton>
+          <Flex gap="xxs" style={{ position: 'absolute', bottom: 12, right: 12, zIndex: 2, padding: 6, borderRadius: 999, background: 'rgba(255,255,255,0.92)', border: `1px solid ${colors.soap300}`, backdropFilter: 'blur(10px)' }}>
+            <SecondaryButton size="small" onClick={() => setView((c) => ({ ...c, scale: clamp(c.scale * 0.9, 0.48, 1.4) }))} style={{ minHeight: 28, padding: '2px 10px', fontSize: 13 }}>-</SecondaryButton>
+            <SecondaryButton size="small" onClick={() => setView((c) => ({ ...c, scale: clamp(c.scale * 1.12, 0.48, 1.4) }))} style={{ minHeight: 28, padding: '2px 10px', fontSize: 13 }}>+</SecondaryButton>
+            <SecondaryButton size="small" onClick={() => setView({ x: 48, y: 18, scale: 0.74 })} style={{ minHeight: 28, padding: '2px 10px', fontSize: 11 }}>Reset</SecondaryButton>
           </Flex>
         </Box>
       </Box>

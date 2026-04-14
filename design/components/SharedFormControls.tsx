@@ -28,6 +28,8 @@ export interface FormSelectProps {
   options: Array<{ value: string; label: string }>;
   disabled?: boolean;
   required?: boolean;
+  /** Narrow rail / dense filter layouts (e.g. metric tree side nav) */
+  compact?: boolean;
 }
 
 /**
@@ -55,11 +57,12 @@ export const FormSelect: React.FC<FormSelectProps> = ({
   options,
   disabled = false,
   required = false,
+  compact = false,
 }) => {
   return (
   <FormField>
-    <FormField.Label htmlFor={id}>
-      {label}
+    <FormField.Label htmlFor={id} style={compact ? { marginBottom: '2px' } : undefined}>
+      <span style={{ fontSize: compact ? 11 : 14, fontWeight: 600 }}>{label}</span>
       {required && <span style={{ color: 'var(--ck-color-fg-critical)' }}> *</span>}
     </FormField.Label>
     <select
@@ -71,9 +74,9 @@ export const FormSelect: React.FC<FormSelectProps> = ({
       disabled={disabled}
       style={{
         width: '100%',
-        padding: '8px 12px',
-        fontSize: '14px',
-        lineHeight: '20px',
+        padding: compact ? '4px 8px' : '8px 12px',
+        fontSize: compact ? '12px' : '14px',
+        lineHeight: compact ? '18px' : '20px',
         border: `1px solid #C5C5C5`,
         borderRadius: '4px',
         backgroundColor: '#FFFFFF',
