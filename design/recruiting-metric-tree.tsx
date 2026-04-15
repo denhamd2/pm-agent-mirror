@@ -58,7 +58,6 @@ type DragState = { active: boolean; pointerX: number; pointerY: number; originX:
 
 const NODE_HEIGHT = 138;
 const DEFAULT_NODE_WIDTH = 228;
-const RAIL_WIDTH = 520;
 /** Pannable world: title band above the metric SVG (moves with pan/zoom). */
 const TREE_TITLE_BAND_PX = 52;
 const FILTER_RAIL_EXPANDED_PX = 188;
@@ -242,17 +241,6 @@ const miniChartOptions: ChartOptions<'line'> = {
   plugins: { legend: { display: false }, tooltip: { enabled: false } },
   scales: { x: { display: false }, y: { display: false } },
   elements: { line: { capBezierPoints: true } },
-};
-
-const railChartOptions: ChartOptions<'line'> = {
-  responsive: true,
-  maintainAspectRatio: false,
-  animation: false,
-  plugins: { legend: { display: false } },
-  scales: {
-    x: { display: false, grid: { display: false } },
-    y: { display: true, grid: { color: 'rgba(15,23,42,0.08)' }, ticks: { color: colors.blackPepper400, maxTicksLimit: 4 } },
-  },
 };
 
 const UPSTREAM_SERIES_COLORS: Record<string, string> = {
@@ -693,7 +681,7 @@ export const RecruitingMetricTreePage: React.FC = () => {
   };
 
   const stopDragging = () => setDrag((c) => ({ ...c, active: false }));
-  const canvasWidth = selectedNode ? `calc(100vw - ${RAIL_WIDTH}px)` : '100vw';
+  const canvasWidth = '100vw';
   const filterParts = describeActiveFilters(filters);
 
   const updateFilter = (key: keyof DashboardFilterState, value: string) => setFilters((prev) => ({ ...prev, [key]: value }));
@@ -717,6 +705,62 @@ export const RecruitingMetricTreePage: React.FC = () => {
     alignItems: 'center',
     justifyContent: 'center',
   };
+
+  const detailContent = selectedNode ? (
+    <>
+      <div style={{ fontSize: 30, fontWeight: 700, color: colors.blackPepper600, marginBottom: 4 }}>{selectedNode.value}</div>
+      <BodyText size="small" color={colors.blackPepper400} style={{ marginBottom: 12 }}>{selectedNode.valueContext}</BodyText>
+
+      {(() => {
+        const upstreamIds = getUpstreamPath(selectedNode.id);
+        const firstAdoptionYm = FEATURE_FIRST_ADOPTION[selectedNode.id];
+        const { labels, datasets, adoptionLineIndex } = buildMultiSeriesChartData(
+          selectedNode.id,
+          upstreamIds,
+          firstAdoptionYm
+        );
+        const detailOptions = buildDetailChartOptions(adoptionLineIndex, labels);
+        return (
+          <div style={{ height: 320, marginBottom: 16 }}>
+            <Line data={{ labels, datasets }} options={detailOptions} />
+          </div>
+        );
+      })()}
+
+      <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.6, marginBottom: 14 }}>{selectedNode.definition}</BodyText>
+
+      {selectedNode.caveat ? (
+        <Box style={{ borderRadius: 12, padding: 12, background: '#fff8eb', border: '1px solid #f1d199', marginBottom: 16 }}>
+          <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.5 }}><strong>Caveat:</strong> {selectedNode.caveat}</BodyText>
+        </Box>
+      ) : null}
+
+      <Heading size="small" marginBottom="xs">Connected driver relationships</Heading>
+      <Flex flexDirection="column" gap="s">
+        {connectedEdges.map((edge) => {
+          const peerId = edge.from === selectedNode.id ? edge.to : edge.from;
+          const peerNode = nodeMap.get(peerId);
+          if (!peerNode) return null;
+          const sStyle = STRENGTH_STYLE[edge.strength] ?? STRENGTH_STYLE.Weak;
+          return (
+            <Box key={`${edge.from}-${edge.to}`} style={{ borderRadius: 12, padding: 12, border: `1px solid ${colors.soap300}`, background: '#fff' }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: colors.blackPepper600, marginBottom: 4 }}>{peerNode.title}</div>
+              <div style={{ fontSize: 12, color: colors.blackPepper500, marginBottom: 4 }}>
+                {edge.label} · <span style={{ display: 'inline-block', padding: '1px 6px', borderRadius: 6, background: sStyle.bg, color: sStyle.fg, fontSize: 10, fontWeight: 700 }}>{edge.strength}</span>
+                {edge.correlation != null ? ` (r=${edge.correlation.toFixed(2)}, n=${edge.overlapPoints}, ${formatPValue(edge.pValue)})` : ''}
+              </div>
+              <div style={{ fontSize: 11, color: colors.blackPepper400, marginBottom: 4 }}>Fisher z-transformed p-value for two-tailed test of H₀: ρ = 0.</div>
+              {edge.pValue != null && edge.pValue >= 0.05 && (
+                <div style={{ fontSize: 10, padding: '4px 8px', borderRadius: 6, background: '#fff3e0', color: '#e67700' }}>
+                  ⚠️ Not statistically significant (p ≥ 0.05). Treat as exploratory.
+                </div>
+              )}
+            </Box>
+          );
+        })}
+      </Flex>
+    </>
+  ) : null;
 
   return (
     <Box style={{ position: 'relative', height: '100vh', overflow: 'hidden', backgroundColor: SANA_PAGE_CANVAS }}>
@@ -984,80 +1028,15 @@ export const RecruitingMetricTreePage: React.FC = () => {
         </Flex>
       </WorkdayModal>
 
-      {/* Detail rail */}
-      <Box
-        onClick={(event) => event.stopPropagation()}
-        style={{
-          position: 'absolute', top: 0, right: 0, width: RAIL_WIDTH, height: '100%',
-          background: 'rgba(255,255,255,0.98)', borderLeft: `1px solid ${colors.soap300}`, boxShadow: '-10px 0 24px rgba(15,23,42,0.08)',
-          transform: selectedNode ? 'translateX(0)' : `translateX(${RAIL_WIDTH}px)`, transition: 'transform 180ms ease',
-          overflowY: 'auto', pointerEvents: selectedNode ? 'auto' : 'none', padding: 20,
-        }}
+      <WorkdayModal
+        title={selectedNode ? selectedNode.title : 'Feature detail'}
+        isOpen={Boolean(selectedNode)}
+        onClose={() => setSelectedNodeId(null)}
+        secondaryActionText="Close"
+        width="80vw"
       >
-        {selectedNode ? (
-          <>
-            <Flex justifyContent="space-between" alignItems="flex-start" gap="s" style={{ marginBottom: 12 }}>
-              <Box>
-                <Heading size="small" marginBottom="xxs">{selectedNode.title}</Heading>
-                <BodyText size="small" color={colors.blackPepper400}>{selectedNode.level}</BodyText>
-              </Box>
-              <button type="button" onClick={() => setSelectedNodeId(null)} style={{ border: 'none', background: 'transparent', color: colors.blackPepper500, fontSize: 20, lineHeight: 1, cursor: 'pointer' }} aria-label="Close details">x</button>
-            </Flex>
-
-            <div style={{ fontSize: 30, fontWeight: 700, color: colors.blackPepper600, marginBottom: 4 }}>{selectedNode.value}</div>
-            <BodyText size="small" color={colors.blackPepper400} style={{ marginBottom: 12 }}>{selectedNode.valueContext}</BodyText>
-
-            {(() => {
-              const upstreamIds = getUpstreamPath(selectedNode.id);
-              const firstAdoptionYm = FEATURE_FIRST_ADOPTION[selectedNode.id];
-              const { labels, datasets, adoptionLineIndex } = buildMultiSeriesChartData(
-                selectedNode.id,
-                upstreamIds,
-                firstAdoptionYm
-              );
-              const detailOptions = buildDetailChartOptions(adoptionLineIndex, labels);
-              return (
-                <div style={{ height: 320, marginBottom: 16 }}>
-                  <Line data={{ labels, datasets }} options={detailOptions} />
-                </div>
-              );
-            })()}
-
-            <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.6, marginBottom: 14 }}>{selectedNode.definition}</BodyText>
-
-            {selectedNode.caveat ? (
-              <Box style={{ borderRadius: 12, padding: 12, background: '#fff8eb', border: '1px solid #f1d199', marginBottom: 16 }}>
-                <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.5 }}><strong>Caveat:</strong> {selectedNode.caveat}</BodyText>
-              </Box>
-            ) : null}
-
-            <Heading size="small" marginBottom="xs">Connected driver relationships</Heading>
-            <Flex flexDirection="column" gap="s">
-              {connectedEdges.map((edge) => {
-                const peerId = edge.from === selectedNode.id ? edge.to : edge.from;
-                const peerNode = nodeMap.get(peerId);
-                if (!peerNode) return null;
-                const sStyle = STRENGTH_STYLE[edge.strength] ?? STRENGTH_STYLE.Weak;
-                return (
-                  <Box key={`${edge.from}-${edge.to}`} style={{ borderRadius: 12, padding: 12, border: `1px solid ${colors.soap300}`, background: '#fff' }}>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: colors.blackPepper600, marginBottom: 4 }}>{peerNode.title}</div>
-                    <div style={{ fontSize: 12, color: colors.blackPepper500, marginBottom: 4 }}>
-                      {edge.label} · <span style={{ display: 'inline-block', padding: '1px 6px', borderRadius: 6, background: sStyle.bg, color: sStyle.fg, fontSize: 10, fontWeight: 700 }}>{edge.strength}</span>
-                      {edge.correlation != null ? ` (r=${edge.correlation.toFixed(2)}, n=${edge.overlapPoints}, ${formatPValue(edge.pValue)})` : ''}
-                    </div>
-                    <div style={{ fontSize: 11, color: colors.blackPepper400, marginBottom: 4 }}>Fisher z-transformed p-value for two-tailed test of H₀: ρ = 0.</div>
-                    {edge.pValue != null && edge.pValue >= 0.05 && (
-                      <div style={{ fontSize: 10, padding: '4px 8px', borderRadius: 6, background: '#fff3e0', color: '#e67700' }}>
-                        ⚠️ Not statistically significant (p ≥ 0.05). Treat as exploratory.
-                      </div>
-                    )}
-                  </Box>
-                );
-              })}
-            </Flex>
-          </>
-        ) : null}
-      </Box>
+        {detailContent}
+      </WorkdayModal>
     </Box>
   );
 };
