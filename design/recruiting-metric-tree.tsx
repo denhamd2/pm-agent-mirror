@@ -7,12 +7,14 @@ import {
   Chart as ChartJS,
   CategoryScale,
   Filler,
+  Legend,
   LineElement,
   LinearScale,
   PointElement,
   Tooltip as ChartTooltip,
   type ChartOptions,
 } from 'chart.js';
+import annotationPlugin from 'chartjs-plugin-annotation';
 import { Line } from 'react-chartjs-2';
 import { FormSelect, WorkdayModal } from './components';
 import { SANA_PAGE_CANVAS } from './components/sanaShellTheme';
@@ -21,9 +23,14 @@ import {
   TREE_NODES,
   TREE_EDGES,
   TREE_LEVELS,
+  FULL_SERIES,
+  FEATURE_FIRST_ADOPTION,
+  getUpstreamPath,
+  cumulativeAdoption,
   type MetricTreeConfidence,
   type MetricTreeNode,
   type TrendGoodDirection,
+  type TrendPoint,
   lastN,
   definedSeries,
   formatDays,
@@ -44,14 +51,14 @@ import {
 import { TENANT_TIME_SERIES, ALL_TENANTS } from './data-avg-time-to-hire';
 import { RECRUITER_CAPACITY_TENANT_SERIES } from './data-dashboard-tenant-filters';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, ChartTooltip);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, ChartTooltip, Legend, annotationPlugin);
 
 type ViewportState = { x: number; y: number; scale: number };
 type DragState = { active: boolean; pointerX: number; pointerY: number; originX: number; originY: number };
 
 const NODE_HEIGHT = 138;
 const DEFAULT_NODE_WIDTH = 228;
-const RAIL_WIDTH = 360;
+const RAIL_WIDTH = 520;
 /** Pannable world: title band above the metric SVG (moves with pan/zoom). */
 const TREE_TITLE_BAND_PX = 52;
 const FILTER_RAIL_EXPANDED_PX = 188;
@@ -247,6 +254,242 @@ const railChartOptions: ChartOptions<'line'> = {
     y: { display: true, grid: { color: 'rgba(15,23,42,0.08)' }, ticks: { color: colors.blackPepper400, maxTicksLimit: 4 } },
   },
 };
+
+const UPSTREAM_SERIES_COLORS: Record<string, string> = {
+  'document-review': colors.cantaloupe400,
+  'offer-ea-duration': colors.cinnamon400,
+  'avg-time-to-hire': colors.greenApple500,
+  'recruiter-capacity': colors.sourLemon500,
+  'time-in-interview-bp': colors.watermelon400,
+  'feedback-time': colors.juicyPear400,
+  'schedule-interviews': colors.peach400,
+  'create-interview-team': colors.plum400,
+  'approval-time': colors.blueberry300,
+  'offer-ea-completion': colors.licorice300,
+  'job-applications': colors.pomegranate400,
+};
+
+const NODE_LABELS: Record<string, string> = {
+  'add-documents': 'Add Documents Adoption',
+  'regenerate-offer': 'Regenerate Offer Adoption',
+  'regenerate-ea': 'Regenerate EA Adoption',
+  'document-review': 'Document Review Time',
+  'offer-ea-duration': 'Offer/EA Duration',
+  'avg-time-to-hire': 'Avg Time to Hire',
+  'recruiter-capacity': 'Recruiter Capacity',
+  'time-in-interview-bp': 'Time in Interview BP',
+  'feedback-time': 'Feedback Submission Time',
+  'schedule-interviews': 'Schedule Interview Time',
+  'create-interview-team': 'Create Interview Team Time',
+  'approval-time': 'Approval Time',
+  'offer-ea-completion': 'Offer/EA Completion Rate',
+  'job-applications': 'Job Applications',
+};
+
+function normaliseSeriesMinMax(points: TrendPoint[]): TrendPoint[] {
+  if (points.length === 0) return [];
+  const values = points.map((p) => p.value);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = max - min;
+  if (range === 0) return points.map((p) => ({ ym: p.ym, value: 50 }));
+  return points.map((p) => ({ ym: p.ym, value: ((p.value - min) / range) * 100 }));
+}
+
+function buildMultiSeriesChartData(
+  nodeId: string,
+  upstreamIds: string[],
+  firstAdoptionYm: string | undefined
+): {
+  labels: string[];
+  datasets: Array<{
+    label: string;
+    data: (number | null)[];
+    borderColor: string;
+    backgroundColor: string;
+    fill: boolean;
+    borderWidth: number;
+    pointRadius: number;
+    tension: number;
+    yAxisID: string;
+    borderDash?: number[];
+  }>;
+  adoptionLineIndex: number | null;
+} {
+  const selectedSeries = FULL_SERIES[nodeId] ?? [];
+  const isFeatureAdoption = nodeId.startsWith('add-documents') || nodeId.startsWith('regenerate-');
+  
+  const adoptionSeries = isFeatureAdoption ? cumulativeAdoption(selectedSeries) : selectedSeries;
+  const adoptionYmSet = new Set(adoptionSeries.map((p) => p.ym));
+  
+  let startYm = firstAdoptionYm;
+  if (!startYm && adoptionSeries.length > 0) {
+    startYm = adoptionSeries[0].ym;
+  }
+  
+  const upstreamData: Array<{ id: string; points: TrendPoint[] }> = [];
+  for (const upId of upstreamIds) {
+    const rawSeries = FULL_SERIES[upId] ?? [];
+    if (rawSeries.length === 0) continue;
+    const normalised = normaliseSeriesMinMax(rawSeries);
+    upstreamData.push({ id: upId, points: normalised });
+  }
+  
+  const allYms = new Set<string>();
+  adoptionSeries.forEach((p) => allYms.add(p.ym));
+  upstreamData.forEach(({ points }) => points.forEach((p) => allYms.add(p.ym)));
+  
+  let labels = Array.from(allYms).sort();
+  
+  if (startYm) {
+    const startIndex = labels.indexOf(startYm);
+    const monthsBefore = 12;
+    const cutoffIndex = Math.max(0, startIndex - monthsBefore);
+    labels = labels.slice(cutoffIndex);
+  }
+  
+  const adoptionMap = new Map(adoptionSeries.map((p) => [p.ym, p.value]));
+  const adoptionData = labels.map((ym) => adoptionMap.get(ym) ?? null);
+  
+  const datasets: Array<{
+    label: string;
+    data: (number | null)[];
+    borderColor: string;
+    backgroundColor: string;
+    fill: boolean;
+    borderWidth: number;
+    pointRadius: number;
+    tension: number;
+    yAxisID: string;
+    borderDash?: number[];
+  }> = [
+    {
+      label: NODE_LABELS[nodeId] ?? nodeId,
+      data: adoptionData,
+      borderColor: colors.blueberry500,
+      backgroundColor: `${colors.blueberry500}22`,
+      fill: true,
+      borderWidth: 3,
+      pointRadius: 0,
+      tension: 0.35,
+      yAxisID: 'y',
+    },
+  ];
+  
+  for (const { id, points } of upstreamData) {
+    const pointMap = new Map(points.map((p) => [p.ym, p.value]));
+    const data = labels.map((ym) => pointMap.get(ym) ?? null);
+    datasets.push({
+      label: NODE_LABELS[id] ?? id,
+      data,
+      borderColor: UPSTREAM_SERIES_COLORS[id] ?? colors.soap400,
+      backgroundColor: 'transparent',
+      fill: false,
+      borderWidth: 2,
+      pointRadius: 0,
+      tension: 0.35,
+      yAxisID: 'y1',
+      borderDash: [4, 4],
+    });
+  }
+  
+  const adoptionLineIndex = startYm ? labels.indexOf(startYm) : null;
+  
+  return { labels, datasets, adoptionLineIndex };
+}
+
+function buildDetailChartOptions(adoptionLineIndex: number | null, _labels: string[]): ChartOptions<'line'> {
+  const annotationConfig = adoptionLineIndex != null && adoptionLineIndex >= 0
+    ? {
+        annotations: {
+          adoptionLine: {
+            type: 'line' as const,
+            xMin: adoptionLineIndex,
+            xMax: adoptionLineIndex,
+            borderColor: colors.cinnamon500,
+            borderWidth: 2,
+            borderDash: [6, 4],
+            label: {
+              display: true,
+              content: 'First Adoption',
+              position: 'start' as const,
+              backgroundColor: colors.cinnamon100,
+              color: colors.cinnamon600,
+              font: { size: 10, weight: 'bold' as const },
+              padding: 4,
+            },
+          },
+        },
+      }
+    : {};
+  
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: false,
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
+    plugins: {
+      legend: {
+        display: true,
+        position: 'bottom',
+        labels: {
+          boxWidth: 12,
+          boxHeight: 12,
+          padding: 8,
+          font: { size: 10 },
+          color: colors.blackPepper500,
+        },
+      },
+      annotation: annotationConfig,
+    },
+    scales: {
+      x: {
+        display: true,
+        grid: { display: false },
+        ticks: {
+          color: colors.blackPepper400,
+          font: { size: 9 },
+          maxRotation: 45,
+          autoSkip: true,
+          maxTicksLimit: 12,
+        },
+      },
+      y: {
+        type: 'linear',
+        display: true,
+        position: 'left',
+        title: {
+          display: true,
+          text: 'Adoption %',
+          color: colors.blueberry500,
+          font: { size: 10 },
+        },
+        grid: { color: 'rgba(15,23,42,0.08)' },
+        ticks: { color: colors.blueberry500, maxTicksLimit: 5 },
+        min: 0,
+        max: 100,
+      },
+      y1: {
+        type: 'linear',
+        display: true,
+        position: 'right',
+        title: {
+          display: true,
+          text: 'Normalised (0-100)',
+          color: colors.blackPepper400,
+          font: { size: 10 },
+        },
+        grid: { drawOnChartArea: false },
+        ticks: { color: colors.blackPepper400, maxTicksLimit: 5 },
+        min: 0,
+        max: 100,
+      },
+    },
+  };
+}
 
 // ── Filtered node builder helpers ──
 
@@ -764,9 +1007,21 @@ export const RecruitingMetricTreePage: React.FC = () => {
             <div style={{ fontSize: 30, fontWeight: 700, color: colors.blackPepper600, marginBottom: 4 }}>{selectedNode.value}</div>
             <BodyText size="small" color={colors.blackPepper400} style={{ marginBottom: 12 }}>{selectedNode.valueContext}</BodyText>
 
-            <div style={{ height: 180, marginBottom: 16 }}>
-              <Line data={chartData(selectedNode.trend.length > 0 ? selectedNode.trend : [0], colors.blueberry400, `${colors.blueberry400}22`)} options={railChartOptions} />
-            </div>
+            {(() => {
+              const upstreamIds = getUpstreamPath(selectedNode.id);
+              const firstAdoptionYm = FEATURE_FIRST_ADOPTION[selectedNode.id];
+              const { labels, datasets, adoptionLineIndex } = buildMultiSeriesChartData(
+                selectedNode.id,
+                upstreamIds,
+                firstAdoptionYm
+              );
+              const detailOptions = buildDetailChartOptions(adoptionLineIndex, labels);
+              return (
+                <div style={{ height: 320, marginBottom: 16 }}>
+                  <Line data={{ labels, datasets }} options={detailOptions} />
+                </div>
+              );
+            })()}
 
             <BodyText size="small" color={colors.blackPepper500} style={{ lineHeight: 1.6, marginBottom: 14 }}>{selectedNode.definition}</BodyText>
 

@@ -157,7 +157,7 @@ function computeYoyPct(fullSeries: number[]): number | null {
 const timeToHire = VALUE_REALIZATION_IUMS.timeToHire;
 const recruiterCapacity = VALUE_REALIZATION_IUMS.recruiterProductivity;
 
-type TrendPoint = { ym: string; value: number };
+export type TrendPoint = { ym: string; value: number };
 
 type AdoptionSeriesPoint = TrendPoint & {
   adoptedTenants: number;
@@ -619,6 +619,66 @@ export const TREE_EDGES: MetricTreeEdge[] = [
   { from: 'regenerate-offer', to: 'document-review', label: 'offer doc regen coverage', confidence: 'Directional' },
   { from: 'regenerate-ea', to: 'document-review', label: 'ea doc regen coverage', confidence: 'Directional' },
 ];
+
+// ── Full time series for expanded detail panel ──
+
+export const FULL_SERIES: Record<string, TrendPoint[]> = {
+  'add-documents': addDocumentsPoints,
+  'regenerate-offer': regenerateOfferAdoptionPoints,
+  'regenerate-ea': regenerateEaAdoptionPoints,
+  'document-review': combinedDocReviewPoints,
+  'approval-time': combinedApprovalPoints,
+  'offer-ea-duration': offerEaDurationPoints,
+  'offer-ea-completion': offerEaCompletionPoints,
+  'avg-time-to-hire': timeToHirePoints,
+  'recruiter-capacity': recruiterCapacityPoints,
+  'time-in-interview-bp': interviewBpPoints,
+  'feedback-time': feedbackTimePoints,
+  'schedule-interviews': scheduleInterviewPoints,
+  'create-interview-team': createTeamPoints,
+  'job-applications': jobApplicationsPoints,
+};
+
+/**
+ * Convert point-in-time adoption to cumulative (monotonically increasing).
+ * Useful for showing feature adoption growth over time.
+ */
+export function cumulativeAdoption(points: TrendPoint[]): TrendPoint[] {
+  let cumulative = 0;
+  return points.map((p) => {
+    cumulative = Math.max(cumulative, p.value);
+    return { ym: p.ym, value: cumulative };
+  });
+}
+
+/** First adoption month for each feature (when adoption first became positive). */
+export const FEATURE_FIRST_ADOPTION: Record<string, string> = {
+  'add-documents': '2023-03',
+  'regenerate-offer': '2024-06',
+  'regenerate-ea': '2024-06',
+};
+
+/**
+ * Get all upstream (outcome) nodes reachable from a given node by following edges.
+ * Edges go from (driver) to (outcome), so upstream means following edge.to direction.
+ */
+export function getUpstreamPath(nodeId: string): string[] {
+  const visited = new Set<string>();
+  const result: string[] = [];
+
+  function traverse(id: string) {
+    if (visited.has(id)) return;
+    visited.add(id);
+    const upstreamEdges = TREE_EDGES.filter((e) => e.from === id);
+    for (const edge of upstreamEdges) {
+      result.push(edge.to);
+      traverse(edge.to);
+    }
+  }
+
+  traverse(nodeId);
+  return result;
+}
 
 // ── Helpers for filtered tree recomputation ──
 
