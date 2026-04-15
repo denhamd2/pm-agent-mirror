@@ -617,7 +617,7 @@ export const TREE_EDGES: MetricTreeEdge[] = [
   // Feature Adoption & Usage → User Outcomes
   { from: 'add-documents', to: 'document-review', label: 'document prep adoption', confidence: 'Directional' },
   { from: 'regenerate-offer', to: 'document-review', label: 'offer doc regen coverage', confidence: 'Directional' },
-  { from: 'regenerate-ea', to: 'offer-ea-duration', label: 'ea doc regen coverage', confidence: 'Directional' },
+  { from: 'regenerate-ea', to: 'document-review', label: 'ea doc regen coverage', confidence: 'Directional' },
 ];
 
 // ── Helpers for filtered tree recomputation ──
