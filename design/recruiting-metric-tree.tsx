@@ -253,7 +253,8 @@ const UPSTREAM_SERIES_COLORS: Record<string, string> = {
   'schedule-interviews': colors.peach400,
   'create-interview-team': colors.plum400,
   'approval-time': colors.blueberry300,
-  'offer-ea-completion': colors.licorice300,
+  'offer-acceptance-rate': colors.licorice300,
+  'ea-acceptance-rate': colors.licorice200,
   'job-applications': colors.pomegranate400,
 };
 
@@ -270,7 +271,8 @@ const NODE_LABELS: Record<string, string> = {
   'schedule-interviews': 'Schedule Interview Time',
   'create-interview-team': 'Create Interview Team Time',
   'approval-time': 'Approval Time',
-  'offer-ea-completion': 'Offer/EA Completion Rate',
+  'offer-acceptance-rate': 'Offer Acceptance Rate',
+  'ea-acceptance-rate': 'EA Acceptance Rate',
   'job-applications': 'Job Applications',
 };
 

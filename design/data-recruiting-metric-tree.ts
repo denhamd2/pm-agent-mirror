@@ -243,13 +243,12 @@ const offerEaDurationSeries = offerDurationSeries.map(
 );
 const offerEaDurationPoints: TrendPoint[] = BP_LABELS.map((ym, index) => ({ ym, value: offerEaDurationSeries[index] ?? 0 }));
 
-// Completion rates from PROD bp_event_stats (completed events / total events per month).
-const offerCompletionSeries = [87.2, 88.1, 86.9, 88.4, 89.0, 87.5, 88.8, 89.2, 87.6, 88.3, 89.1, 88.7];
-const eaCompletionSeries = [91.3, 90.8, 91.5, 92.0, 91.2, 90.6, 91.8, 92.4, 91.0, 91.7, 92.1, 91.5];
-const offerEaCompletionSeries = offerCompletionSeries.map(
-  (value, index) => (value + (eaCompletionSeries[index] ?? value)) / 2
-);
-const offerEaCompletionPoints: TrendPoint[] = BP_LABELS.map((ym, index) => ({ ym, value: offerEaCompletionSeries[index] ?? 0 }));
+// Acceptance rates from PROD bp_event_stats (completed events / total initiated events per month).
+// "Completed" in the Offer and EA BPs = candidate accepted. Proxy until HRREC-90613 (issued count) is live.
+const offerAcceptanceSeries = [87.2, 88.1, 86.9, 88.4, 89.0, 87.5, 88.8, 89.2, 87.6, 88.3, 89.1, 88.7];
+const eaAcceptanceSeries = [91.3, 90.8, 91.5, 92.0, 91.2, 90.6, 91.8, 92.4, 91.0, 91.7, 92.1, 91.5];
+const offerAcceptancePoints: TrendPoint[] = BP_LABELS.map((ym, index) => ({ ym, value: offerAcceptanceSeries[index] ?? 0 }));
+const eaAcceptancePoints: TrendPoint[] = BP_LABELS.map((ym, index) => ({ ym, value: eaAcceptanceSeries[index] ?? 0 }));
 
 // Combined Offer + EA document review
 const offerReviewDocsMap = new Map(
@@ -512,24 +511,44 @@ export const TREE_NODES: MetricTreeNode[] = [
     caveat: 'Unweighted mean of Offer and EA approval latencies. Low tenant coverage compared with top-line duration series.',
   },
   {
-    id: 'offer-ea-completion',
-    title: 'Offer/EA Completion Rate',
+    id: 'offer-acceptance-rate',
+    title: 'Offer Acceptance Rate',
     level: 'User Outcomes',
-    x: 1370,
+    x: 1300,
     y: 560,
-    width: 280,
-    value: formatPct(offerEaCompletionSeries[offerEaCompletionSeries.length - 1]),
-    valueContext: changeText(lastN(offerEaCompletionSeries)),
-    trend: lastN(offerEaCompletionSeries),
-    trendYm: lastNTrendPoints(offerEaCompletionPoints).map((point) => point.ym),
-    momPct: computeMomPct(offerEaCompletionSeries),
-    yoyPct: computeYoyPct(offerEaCompletionSeries),
+    width: 260,
+    value: formatPct(offerAcceptanceSeries[offerAcceptanceSeries.length - 1]),
+    valueContext: changeText(lastN(offerAcceptanceSeries)),
+    trend: lastN(offerAcceptanceSeries),
+    trendYm: lastNTrendPoints(offerAcceptancePoints).map((point) => point.ym),
+    momPct: computeMomPct(offerAcceptanceSeries),
+    yoyPct: computeYoyPct(offerAcceptanceSeries),
     trendGoodDirection: 'higherIsBetter',
     source: 'bp_event_stats · PROD',
     confidence: 'Measured',
     definition:
-      'Unweighted mean of Offer and EA per-BP completion rates (completed events / total initiated events). Higher completion correlates with faster hiring velocity and less rework.',
-    caveat: 'Mean of two BP rates, not a pooled or funnel conversion metric. Per-job-application chaining is not yet available (HRREC-90616). Treat as a directional health indicator.',
+      'Percentage of Offer BP events that reached Completed status (accepted) out of all initiated Offer events. Proxy for tracker "# Offers Accepted" (HRREC-81532) / "# Offers/EAs Issued" (HRREC-90613, not yet live).',
+    caveat: 'Uses BP completion as acceptance proxy. True acceptance rate requires HRREC-90613 (issued count) which is not yet data-ready. "Completed" in Offer BP = candidate accepted the offer.',
+  },
+  {
+    id: 'ea-acceptance-rate',
+    title: 'EA Acceptance Rate',
+    level: 'User Outcomes',
+    x: 1570,
+    y: 560,
+    width: 260,
+    value: formatPct(eaAcceptanceSeries[eaAcceptanceSeries.length - 1]),
+    valueContext: changeText(lastN(eaAcceptanceSeries)),
+    trend: lastN(eaAcceptanceSeries),
+    trendYm: lastNTrendPoints(eaAcceptancePoints).map((point) => point.ym),
+    momPct: computeMomPct(eaAcceptanceSeries),
+    yoyPct: computeYoyPct(eaAcceptanceSeries),
+    trendGoodDirection: 'higherIsBetter',
+    source: 'bp_event_stats · PROD',
+    confidence: 'Measured',
+    definition:
+      'Percentage of Employment Agreement BP events that reached Completed status (accepted) out of all initiated EA events. Proxy for tracker "# EA Accepted" (HRREC-81533) / "# Offers/EAs Issued" (HRREC-90613, not yet live).',
+    caveat: 'Uses BP completion as acceptance proxy. True acceptance rate requires HRREC-90613 (issued count) which is not yet data-ready. "Completed" in EA BP = candidate accepted the employment agreement.',
   },
   // ── Level 4: Feature Adoption & Usage ──
   {
@@ -612,7 +631,8 @@ export const TREE_EDGES: MetricTreeEdge[] = [
   { from: 'feedback-time', to: 'time-in-interview-bp', label: 'feedback bottleneck', confidence: 'Measured' },
   { from: 'document-review', to: 'offer-ea-duration', label: 'document review latency', confidence: 'Measured' },
   { from: 'approval-time', to: 'offer-ea-duration', label: 'approval latency', confidence: 'Measured' },
-  { from: 'offer-ea-completion', to: 'offer-ea-duration', label: 'completion throughput', confidence: 'Directional' },
+  { from: 'offer-acceptance-rate', to: 'offer-ea-duration', label: 'offer acceptance throughput', confidence: 'Directional' },
+  { from: 'ea-acceptance-rate', to: 'offer-ea-duration', label: 'EA acceptance throughput', confidence: 'Directional' },
   // Feature Adoption & Usage → User Outcomes
   { from: 'add-documents', to: 'document-review', label: 'document prep adoption', confidence: 'Directional' },
   { from: 'regenerate-offer', to: 'document-review', label: 'offer doc regen coverage', confidence: 'Directional' },
@@ -628,7 +648,8 @@ export const FULL_SERIES: Record<string, TrendPoint[]> = {
   'document-review': combinedDocReviewPoints,
   'approval-time': combinedApprovalPoints,
   'offer-ea-duration': offerEaDurationPoints,
-  'offer-ea-completion': offerEaCompletionPoints,
+  'offer-acceptance-rate': offerAcceptancePoints,
+  'ea-acceptance-rate': eaAcceptancePoints,
   'avg-time-to-hire': timeToHirePoints,
   'recruiter-capacity': recruiterCapacityPoints,
   'time-in-interview-bp': interviewBpPoints,
@@ -696,7 +717,8 @@ type NodeFormatter = {
 const NODE_FORMAT_MAP: Record<string, NodeFormatter> = {
   'time-in-interview-bp': { metricKeys: ['time-in-interview-bp'], combiner: 'avg', format: formatDays, unit: 'days' },
   'offer-ea-duration': { metricKeys: ['offer-duration', 'ea-duration'], combiner: 'sum', format: formatDays, unit: 'days' },
-  'offer-ea-completion': { metricKeys: ['offer-completion', 'ea-completion'], combiner: 'avg', format: formatPct, unit: '%' },
+  'offer-acceptance-rate': { metricKeys: ['offer-completion'], combiner: 'avg', format: formatPct, unit: '%' },
+  'ea-acceptance-rate': { metricKeys: ['ea-completion'], combiner: 'avg', format: formatPct, unit: '%' },
   'job-applications': { metricKeys: ['job-applications'], combiner: 'avg', format: (v) => `${v.toFixed(0)} / tenant`, unit: '' },
   'create-interview-team': { metricKeys: ['create-interview-team'], combiner: 'avg', format: formatHours, unit: 'hrs' },
   'schedule-interviews': { metricKeys: ['schedule-interviews'], combiner: 'avg', format: formatHours, unit: 'hrs' },
