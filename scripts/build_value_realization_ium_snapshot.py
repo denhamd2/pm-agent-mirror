@@ -289,7 +289,7 @@ SELECT
   count(DISTINCT tenant_name) AS tenants,
   avg(try_cast(value AS double)) AS avg_value
 FROM dw.swh_raw.internal_usage_metrics_report_kafka
-WHERE wd_event_date >= to_iso8601(current_date - interval '365' day)
+WHERE wd_event_date >= to_iso8601(current_date - interval '1500' day)
   AND metric_name IN ({name_list})
 GROUP BY 1, 2, 3, 4
 ORDER BY metric_name, year, month
@@ -310,7 +310,7 @@ SELECT
   wd_env_type,
   count(DISTINCT tenant_name) AS tenants
 FROM dw.swh_raw.internal_usage_metrics_report_kafka
-WHERE wd_event_date >= to_iso8601(current_date - interval '365' day)
+WHERE wd_event_date >= to_iso8601(current_date - interval '1500' day)
   AND metric_name IN ({name_list})
 GROUP BY 1, 2, 3, 4
 ORDER BY metric_name, year, month, wd_env_type

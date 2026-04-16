@@ -1,4 +1,5 @@
 import { spawn } from 'node:child_process';
+import { copyFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig, type Plugin } from 'vite';
@@ -104,9 +105,22 @@ function openChromeAndCursorBrowser(): Plugin {
   };
 }
 
+/** Copy index.html -> 404.html in the build output so GitHub Pages serves the SPA for all routes. */
+function spaFallback404(): Plugin {
+  return {
+    name: 'spa-fallback-404',
+    closeBundle() {
+      try {
+        const outDir = path.resolve(__dirname, 'dist');
+        copyFileSync(path.join(outDir, 'index.html'), path.join(outDir, '404.html'));
+      } catch { /* dev server — no dist yet */ }
+    },
+  };
+}
+
 export default defineConfig({
   base: process.env.VITE_BASE_PATH ? normaliseBase(process.env.VITE_BASE_PATH) : './',
-  plugins: [prototypeSpaSlugFallback(), react(), openChromeAndCursorBrowser()],
+  plugins: [prototypeSpaSlugFallback(), react(), openChromeAndCursorBrowser(), spaFallback404()],
   root: '.',
   server: {
     port: 5199,

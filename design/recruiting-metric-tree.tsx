@@ -303,6 +303,7 @@ function buildMultiSeriesChartData(
     borderDash?: number[];
   }>;
   adoptionLineIndex: number | null;
+  dataAvailabilityNotes: string[];
 } {
   const selectedSeries = FULL_SERIES[nodeId] ?? [];
   const isFeatureAdoption = nodeId.startsWith('add-documents') || nodeId.startsWith('regenerate-');
@@ -382,8 +383,25 @@ function buildMultiSeriesChartData(
   }
   
   const adoptionLineIndex = startYm ? labels.indexOf(startYm) : null;
+
+  const dataAvailabilityNotes = datasets.flatMap((dataset) => {
+    const firstIdx = dataset.data.findIndex((value) => value != null);
+    if (firstIdx < 0) return [`${dataset.label}: no data available in selected window.`];
+    let lastIdx = -1;
+    for (let i = dataset.data.length - 1; i >= 0; i -= 1) {
+      if (dataset.data[i] != null) {
+        lastIdx = i;
+        break;
+      }
+    }
+    if (lastIdx < firstIdx) return [];
+    const missingInside = dataset.data
+      .slice(firstIdx, lastIdx + 1)
+      .filter((value) => value == null).length;
+    return missingInside > 0 ? [`${dataset.label}: ${missingInside} months unavailable in source history.`] : [];
+  });
   
-  return { labels, datasets, adoptionLineIndex };
+  return { labels, datasets, adoptionLineIndex, dataAvailabilityNotes };
 }
 
 function buildDetailChartOptions(adoptionLineIndex: number | null, _labels: string[]): ChartOptions<'line'> {
@@ -714,16 +732,23 @@ export const RecruitingMetricTreePage: React.FC = () => {
       {(() => {
         const upstreamIds = getUpstreamPath(selectedNode.id);
         const firstAdoptionYm = FEATURE_FIRST_ADOPTION[selectedNode.id];
-        const { labels, datasets, adoptionLineIndex } = buildMultiSeriesChartData(
+        const { labels, datasets, adoptionLineIndex, dataAvailabilityNotes } = buildMultiSeriesChartData(
           selectedNode.id,
           upstreamIds,
           firstAdoptionYm
         );
         const detailOptions = buildDetailChartOptions(adoptionLineIndex, labels);
         return (
-          <div style={{ height: 320, marginBottom: 16 }}>
-            <Line data={{ labels, datasets }} options={detailOptions} />
-          </div>
+          <>
+            <div style={{ height: 320, marginBottom: dataAvailabilityNotes.length > 0 ? 8 : 16 }}>
+              <Line data={{ labels, datasets }} options={detailOptions} />
+            </div>
+            {dataAvailabilityNotes.length > 0 ? (
+              <BodyText size="small" color={colors.blackPepper400} style={{ marginBottom: 16, lineHeight: 1.5 }}>
+                {`Data availability note: ${dataAvailabilityNotes.join(' ')}`}
+              </BodyText>
+            ) : null}
+          </>
         );
       })()}
 

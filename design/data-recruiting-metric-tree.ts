@@ -212,7 +212,6 @@ const timeToHirePoints: TrendPoint[] = timeToHire.series
 const timeToHireSeries = timeToHirePoints.map((point) => point.value);
 
 const recruiterCapacityPoints: TrendPoint[] = recruiterCapacity.series
-  .filter((point) => point.ym >= '2025-06')
   .filter((point): point is typeof point & { avgValue: number } => point.avgValue != null)
   .map((point) => ({ ym: point.ym, value: point.avgValue }));
 const cleanedRecruiterCapacitySeries = recruiterCapacityPoints.map((point) => point.value);
@@ -651,11 +650,16 @@ export function cumulativeAdoption(points: TrendPoint[]): TrendPoint[] {
   });
 }
 
-/** First adoption month for each feature (when adoption first became positive). */
+function firstPositiveYm(points: TrendPoint[]): string | null {
+  const point = points.find((entry) => Number.isFinite(entry.value) && entry.value > 0);
+  return point?.ym ?? null;
+}
+
+/** First adoption month for each feature (computed from observed monthly series). */
 export const FEATURE_FIRST_ADOPTION: Record<string, string> = {
-  'add-documents': '2023-03',
-  'regenerate-offer': '2024-06',
-  'regenerate-ea': '2024-06',
+  'add-documents': firstPositiveYm(addDocumentsPoints) ?? addDocumentsPoints[0]?.ym ?? '',
+  'regenerate-offer': firstPositiveYm(regenerateOfferAdoptionPoints) ?? regenerateOfferAdoptionPoints[0]?.ym ?? '',
+  'regenerate-ea': firstPositiveYm(regenerateEaAdoptionPoints) ?? regenerateEaAdoptionPoints[0]?.ym ?? '',
 };
 
 /**
