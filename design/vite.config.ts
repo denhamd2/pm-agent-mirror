@@ -50,6 +50,7 @@ function prototypeSpaSlugFallback(): Plugin {
       'interview-metrics',
       'bp-durations',
       'view-dashboard',
+      'recruiting-agency-user',
       'customer-scorecard',
     ]);
   return {

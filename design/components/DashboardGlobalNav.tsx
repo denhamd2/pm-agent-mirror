@@ -17,6 +17,7 @@ const METRIC_ITEMS = [
   { slug: 'customer-scorecard', label: 'Customer Scorecard' },
   { slug: 'recruiting-metric-tree', label: 'Value Driver Tree', newWindow: true },
   { slug: 'bp-durations', label: 'Job App Stage Metrics' },
+  { slug: 'recruiting-agency-user', label: 'Recruiting Agency User' },
 ] as const;
 
 /** Maps child dashboard slugs to a parent nav item so the correct chip highlights. */
@@ -25,6 +26,7 @@ const CHILD_TO_PARENT: Record<string, string> = {
   'recruiter-capacity': 'value-realization-metrics',
   'positions-open-vs-filled': 'value-realization-metrics',
   'add-documents-impact': 'value-realization-metrics',
+  'recruiting-agency-user': 'value-realization-metrics',
   'interview-metrics': 'bp-durations',
   'view-dashboard': 'bp-durations',
 };

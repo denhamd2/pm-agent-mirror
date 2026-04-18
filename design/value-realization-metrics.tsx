@@ -10,6 +10,7 @@ import { LABELS } from './data-bp-shared';
 import { HEADLINE_KPIS } from './data-interview-metrics';
 import { getSliceSubBpsAndHeadline, EMPTY_TENANT_FILTER } from './data-bp-durations-by-segment';
 import { APPLICANT_VOLUME_BREAKDOWNS, QUERY_META as VALUE_IUM_QUERY_META, VALUE_REALIZATION_IUMS, type MetricSnapshot } from './data-value-realization-iums';
+import { KPIS as AGENCY_TYPES_KPIS } from './data-view-dashboard';
 
 /** Cross-check against TA Business Value Metric Tracker (Jamie Moore PDF). Status = data we can surface in this workspace today. */
 const TRACKER_COVERAGE: { category: string; metric: string; status: string; dashboard: string; notes: string }[] = [
@@ -271,6 +272,20 @@ export const ValueRealizationMetrics: React.FC = () => {
                     helperText={`Offer ${fmtDays(offerH?.avgDaysCompleted ?? 0)} · EA ${fmtDays(eaH?.avgDaysCompleted ?? 0)} · ${latestYm}`}
                     changeIndicator={{ text: 'Filter by Offer or EA on dashboard', sentiment: 'neutral' }}
                     tooltip={TOOLTIPS.subBp}
+                  />
+                }
+              />
+              <DashboardLink
+                href="#recruiting-agency-user"
+                title="Recruiting Agency User"
+                description="HRREC-81393 bulk Post to Agency Types: OMS-backed adoption share, tenant penetration, menu intent, and cumulative reach (Pharos PROD)."
+                metricCard={
+                  <MetricCard
+                    label={AGENCY_TYPES_KPIS[0]?.label ?? 'Adoption Share'}
+                    value={AGENCY_TYPES_KPIS[0]?.value ?? '—'}
+                    helperText={AGENCY_TYPES_KPIS[0]?.detail ?? 'See dashboard for weekly trend'}
+                    changeIndicator={{ text: 'OMS · weekly Saturday samples', sentiment: 'neutral' }}
+                    tooltip="Definitive adoption uses Post Job payload filters (15$478022 + 15604$). No dedicated IUM; see docs/analytics/hrrec-81393-impact-report.md."
                   />
                 }
               />

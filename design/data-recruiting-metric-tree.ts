@@ -15,6 +15,8 @@ import { LABELS as BP_LABELS } from './data-bp-shared';
 import { SCORECARD_BY_TENANT } from './data-customer-scorecard';
 import { TREE_TENANT_SERIES } from './data-tree-tenant-series';
 
+/** HRREC-81393 (Agency Types) is not modelled on this tree: OMS adoption is measured, but general IUM 2358/2361 links would over-claim causation until agency-scoped outcome metrics exist (see `docs/analytics/hrrec-81393-impact-report.md`). */
+
 const ADD_DOCUMENTS_ADOPTED_TENANT_SET = new Set(ADD_DOCUMENTS_ADOPTED_TENANTS);
 const REGENERATE_OFFER_FEATURE = 'Regenerate Offer Documents Business Process';
 const REGENERATE_EA_FEATURE = 'Regenerate Employment Agreement Business Process';
@@ -234,21 +236,62 @@ const scheduleInterviewSeries = scheduleInterviewPoints.map((point) => point.val
 const createTeamPoints: TrendPoint[] = SCHEDULE_INTERVIEW_TEAM_TIME.map((point) => ({ ym: point.ym, value: point.avgValue }));
 const createTeamSeries = createTeamPoints.map((point) => point.value);
 
-// Completed-path durations from materialised PROD bp_event_stats.
-const offerDurationSeries = [5.96, 5.39, 5.17, 5.62, 4.6, 3.9, 3.96, 3.97, 4.87, 5.17, 4.57, 5.3];
-const employmentAgreementDurationSeries = [2.81, 2.6, 2.58, 2.5, 2.34, 2.26, 2.25, 2.28, 2.89, 2.3, 2.24, 1.83];
+// Completed-path durations from PROD bp_event_stats, queried 17 April 2026.
+// Extended back to 2024-07 (earliest available partition: 2024-06-27).
+// task_name = 'Offer (Web Service)', status = 'Successfully Completed', duration/86400.
+const offerDurationPoints: TrendPoint[] = [
+  { ym: '2024-07', value: 16.72 }, { ym: '2024-08', value: 32.83 },
+  { ym: '2024-09', value: 3.69 }, { ym: '2024-10', value: 3.10 }, { ym: '2024-11', value: 3.04 }, { ym: '2024-12', value: 1.25 },
+  { ym: '2025-01', value: 1.20 }, { ym: '2025-02', value: 1.62 }, { ym: '2025-03', value: 2.06 },
+  { ym: '2025-04', value: 1.76 }, { ym: '2025-05', value: 1.83 }, { ym: '2025-06', value: 3.48 },
+  { ym: '2025-07', value: 1.99 }, { ym: '2025-08', value: 2.23 }, { ym: '2025-09', value: 3.11 },
+  { ym: '2025-10', value: 2.65 }, { ym: '2025-11', value: 8.71 }, { ym: '2025-12', value: 3.66 },
+  { ym: '2026-01', value: 3.46 }, { ym: '2026-02', value: 2.43 }, { ym: '2026-03', value: 2.97 },
+];
+const offerDurationSeries = offerDurationPoints.map((p) => p.value);
 
-const offerEaDurationSeries = offerDurationSeries.map(
-  (value, index) => value + (employmentAgreementDurationSeries[index] ?? 0)
-);
-const offerEaDurationPoints: TrendPoint[] = BP_LABELS.map((ym, index) => ({ ym, value: offerEaDurationSeries[index] ?? 0 }));
+// task_name = 'Employment Agreement (Web Service)', status = 'Successfully Completed'.
+const eaDurationPoints: TrendPoint[] = [
+  { ym: '2024-07', value: 4.18 }, { ym: '2024-08', value: 1.08 },
+  { ym: '2024-09', value: 1.04 }, { ym: '2024-10', value: 1.31 }, { ym: '2024-11', value: 1.04 }, { ym: '2024-12', value: 1.01 },
+  { ym: '2025-01', value: 2.08 }, { ym: '2025-02', value: 2.53 }, { ym: '2025-03', value: 2.75 },
+  { ym: '2025-04', value: 2.57 }, { ym: '2025-05', value: 2.65 }, { ym: '2025-06', value: 2.26 },
+  { ym: '2025-07', value: 2.17 }, { ym: '2025-08', value: 2.41 }, { ym: '2025-09', value: 2.19 },
+  { ym: '2025-10', value: 2.23 }, { ym: '2025-11', value: 2.60 }, { ym: '2025-12', value: 2.53 },
+  { ym: '2026-01', value: 2.34 }, { ym: '2026-02', value: 2.65 }, { ym: '2026-03', value: 2.31 },
+];
+const employmentAgreementDurationSeries = eaDurationPoints.map((p) => p.value);
 
-// Acceptance rates from PROD bp_event_stats (completed events / total initiated events per month).
-// "Completed" in the Offer and EA BPs = candidate accepted. Proxy until HRREC-90613 (issued count) is live.
-const offerAcceptanceSeries = [87.2, 88.1, 86.9, 88.4, 89.0, 87.5, 88.8, 89.2, 87.6, 88.3, 89.1, 88.7];
-const eaAcceptanceSeries = [91.3, 90.8, 91.5, 92.0, 91.2, 90.6, 91.8, 92.4, 91.0, 91.7, 92.1, 91.5];
-const offerAcceptancePoints: TrendPoint[] = BP_LABELS.map((ym, index) => ({ ym, value: offerAcceptanceSeries[index] ?? 0 }));
-const eaAcceptancePoints: TrendPoint[] = BP_LABELS.map((ym, index) => ({ ym, value: eaAcceptanceSeries[index] ?? 0 }));
+// Combined Offer + EA duration joined by month.
+const eaDurationMap = new Map(eaDurationPoints.map((p) => [p.ym, p.value]));
+const offerEaDurationPoints: TrendPoint[] = offerDurationPoints
+  .filter((p) => eaDurationMap.has(p.ym))
+  .map((p) => ({ ym: p.ym, value: p.value + (eaDurationMap.get(p.ym) ?? 0) }));
+const offerEaDurationSeries = offerEaDurationPoints.map((p) => p.value);
+
+// Acceptance rates from PROD bp_event_stats (Successfully Completed / (Successfully Completed + Canceled)), queried 17 April 2026.
+// Proxy until HRREC-90613 (issued count) is live. Extended back to 2024-07.
+const offerAcceptancePoints: TrendPoint[] = [
+  { ym: '2024-07', value: 93.1 }, { ym: '2024-08', value: 86.4 },
+  { ym: '2024-09', value: 98.2 }, { ym: '2024-10', value: 94.8 }, { ym: '2024-11', value: 91.2 }, { ym: '2024-12', value: 84.6 },
+  { ym: '2025-01', value: 78.0 }, { ym: '2025-02', value: 78.6 }, { ym: '2025-03', value: 77.7 },
+  { ym: '2025-04', value: 78.6 }, { ym: '2025-05', value: 79.5 }, { ym: '2025-06', value: 80.7 },
+  { ym: '2025-07', value: 81.8 }, { ym: '2025-08', value: 83.8 }, { ym: '2025-09', value: 86.5 },
+  { ym: '2025-10', value: 89.8 }, { ym: '2025-11', value: 90.7 }, { ym: '2025-12', value: 86.8 },
+  { ym: '2026-01', value: 86.3 }, { ym: '2026-02', value: 85.8 }, { ym: '2026-03', value: 84.4 },
+];
+const offerAcceptanceSeries = offerAcceptancePoints.map((p) => p.value);
+
+const eaAcceptancePoints: TrendPoint[] = [
+  { ym: '2024-07', value: 88.4 }, { ym: '2024-08', value: 87.4 },
+  { ym: '2024-09', value: 87.4 }, { ym: '2024-10', value: 87.9 }, { ym: '2024-11', value: 87.7 }, { ym: '2024-12', value: 87.0 },
+  { ym: '2025-01', value: 84.2 }, { ym: '2025-02', value: 85.7 }, { ym: '2025-03', value: 85.6 },
+  { ym: '2025-04', value: 84.9 }, { ym: '2025-05', value: 85.3 }, { ym: '2025-06', value: 85.6 },
+  { ym: '2025-07', value: 85.1 }, { ym: '2025-08', value: 86.5 }, { ym: '2025-09', value: 86.9 },
+  { ym: '2025-10', value: 85.9 }, { ym: '2025-11', value: 89.5 }, { ym: '2025-12', value: 87.6 },
+  { ym: '2026-01', value: 87.6 }, { ym: '2026-02', value: 86.7 }, { ym: '2026-03', value: 88.1 },
+];
+const eaAcceptanceSeries = eaAcceptancePoints.map((p) => p.value);
 
 // Combined Offer + EA document review
 const offerReviewDocsMap = new Map(

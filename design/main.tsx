@@ -28,6 +28,9 @@ const ValueRealizationMetrics = React.lazy(() => import('./value-realization-met
 const RecruiterCapacityDashboard = React.lazy(() => import('./recruiter-capacity-dashboard').then((m) => ({ default: m.RecruiterCapacityDashboard })));
 const AddDocumentsImpactDashboard = React.lazy(() => import('./add-documents-impact-dashboard').then((m) => ({ default: m.AddDocumentsImpactDashboard })));
 const ViewDashboard = React.lazy(() => import('./view-dashboard').then((m) => ({ default: m.ViewDashboard })));
+const RecruitingAgencyUserDashboard = React.lazy(() =>
+  import('./recruiting-agency-user-dashboard').then((m) => ({ default: m.RecruitingAgencyUserDashboard }))
+);
 const InterviewMetricsDashboard = React.lazy(() => import('./interview-metrics-dashboard').then((m) => ({ default: m.InterviewMetricsDashboard })));
 const BpDurationDashboard = React.lazy(() => import('./bp-duration-dashboard').then((m) => ({ default: m.BpDurationDashboard })));
 const CustomerScorecardDashboard = React.lazy(() => import('./customer-scorecard-dashboard').then((m) => ({ default: m.CustomerScorecardDashboard })));
@@ -91,6 +94,7 @@ const PROTOTYPE_SLUGS = [
   'interview-metrics',
   'bp-durations',
   'view-dashboard',
+  'recruiting-agency-user',
   'customer-scorecard',
 ] as const;
 
@@ -144,6 +148,13 @@ function AppRoot() {
   }
   if (route === 'interview-metrics') {
     return <React.Suspense fallback={<LoadingPlaceholder />}><InterviewMetricsDashboard /></React.Suspense>;
+  }
+  if (route === 'recruiting-agency-user') {
+    return (
+      <React.Suspense fallback={<LoadingPlaceholder />}>
+        <RecruitingAgencyUserDashboard />
+      </React.Suspense>
+    );
   }
   if (route === 'view-dashboard') {
     return <React.Suspense fallback={<LoadingPlaceholder />}><ViewDashboard /></React.Suspense>;
