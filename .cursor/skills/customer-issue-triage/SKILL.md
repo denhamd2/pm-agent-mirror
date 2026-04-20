@@ -7,11 +7,13 @@ description: >-
   confidence percentage. Salomon searches org knowledge (Slack, Jira, Confluence,
   Admin Guide); XO inspects live codebase metadata (classes, method bindings,
   BPTs, validations). If Salomon indicates a configuration issue, the Deployment
-  Agent is invoked to generate customer-facing fix instructions. If bug, XO
-  metadata analysis proposes a fix. Appends results to a Confluence triage table.
-  Accepts Jira IDs from prompt text or extracted from attachments (.xlsx, .pdf).
-  Use when the user asks to triage a customer issue, check if something is WAD
-  or a bug, analyse a Jira, or run customer issue triage.
+  Agent provides customer-facing fix instructions. If Salomon indicates a bug,
+  the Deployment Agent documents expected behaviour so the PM knows what
+  'fixed' looks like. XO metadata analysis proposes a code-level fix for bugs.
+  Appends results to a Confluence triage table. Accepts Jira IDs from prompt
+  text or extracted from attachments (.xlsx, .pdf). Use when the user asks to
+  triage a customer issue, check if something is WAD or a bug, analyse a Jira,
+  or run customer issue triage.
 ---
 
 # Customer Issue Triage
@@ -21,7 +23,8 @@ to determine whether each issue is **Working As Designed (WAD)**, a **customer
 configuration issue**, or a **genuine bug** - using Salomon for primary
 classification (org knowledge) and XO metadata inspection for code-level
 evidence, with the Deployment Agent providing customer-facing configuration
-guidance when needed - and record the outcome on Confluence.
+guidance for config issues and expected behaviour documentation for bugs - and
+record the outcome on Confluence.
 
 ## Input Handling
 
@@ -49,8 +52,10 @@ steps for one before moving to the next.
 1. Step 1 (Ingest) runs first.
 2. Step 2 (Salomon) and Step 4 (XO Metadata) run **in parallel**.
    Salomon provides the primary classification; XO inspects live code metadata.
-3. Step 3 (Deployment Agent) runs **after Step 2 completes**, and ONLY if
-   Salomon's verdict is "Configuration Issue". Otherwise Step 3 returns "N/A".
+3. Step 3 (Deployment Agent) runs **after Step 2 completes**. It fires for
+   "Configuration Issue" (provides fix instructions) and "Likely Bug" (provides
+   expected behaviour documentation). For WAD or Inconclusive, Step 3 returns
+   "N/A".
 4. Steps 5-7 run sequentially after all analysis paths complete.
 
 ### Step 1: Ingest the Jira
@@ -126,16 +131,19 @@ both the chat table and Confluence HTML. Example:
 
 ### Step 3: Deployment Agent Analysis (Conditional)
 
-**This step ONLY runs if Step 2 (Salomon) returned a verdict of
-"Configuration Issue".** If Salomon's verdict is WAD, Likely Bug, or
-Inconclusive, skip this step entirely and record the DA column as **"N/A"**.
+This step runs **after Step 2 (Salomon) completes** and follows one of three
+paths depending on the Salomon verdict. The Deployment Agent does NOT
+contribute to the Status classification or confidence score.
 
-The Deployment Agent provides customer-facing configuration guidance. It does
-NOT contribute to the Status classification or confidence score.
+**Path A - Configuration Issue:** Salomon verdict == "Configuration Issue"
+**Path B - Likely Bug:** Salomon verdict == "Likely Bug"
+**Path C - WAD / Inconclusive:** DA column = "N/A"
 
-**Trigger condition:** Salomon verdict == "Configuration Issue"
+---
 
-**Ask the Deployment Agent:**
+**Path A: Configuration guidance** (Salomon verdict == "Configuration Issue")
+
+Ask the DA for step-by-step fix instructions:
 ```
 CallMcpTool  server: "user-deployment-agent"  toolName: "ask_deployment_agent"
 arguments: {
@@ -143,7 +151,7 @@ arguments: {
 }
 ```
 
-**Format the DA output:**
+**Format the Path A output:**
 - Rewrite the DA's configuration guidance as **bullet-pointed steps**
 - Use plain language a customer administrator would understand
 - No XO IDs, instance IDs, or internal engineering references
@@ -163,9 +171,43 @@ arguments: {
   Sources: [Edit Business Process Definition](https://doc.workday.com/...)
   ```
 
-**If Salomon verdict is NOT "Configuration Issue":**
-Record the DA column as: **"N/A - Salomon did not indicate a configuration
-issue."**
+---
+
+**Path B: Expected behaviour documentation** (Salomon verdict == "Likely Bug")
+
+The DA is not used for classification here. Instead, ask it to document what
+the feature *should* do when working correctly - giving the PM and customer a
+baseline for what "fixed" looks like.
+
+Ask the DA for expected behaviour:
+```
+CallMcpTool  server: "user-deployment-agent"  toolName: "ask_deployment_agent"
+arguments: {
+  "question": "A customer reports the following issue which appears to be a software defect: {Jira summary}. Details: {Jira description, truncated to key symptoms}. What is the expected behaviour for this feature when working correctly? Describe how the feature should function, including any relevant configuration prerequisites or business process steps. Include links to any relevant Workday documentation or admin guide pages."
+}
+```
+
+**Format the Path B output:**
+- Rewrite as a brief **"Expected behaviour"** statement (2-4 bullets)
+- Plain language, PM-friendly - describe what the user should see when the
+  feature works correctly
+- Include any Admin Guide links the DA surfaces
+- Example format:
+  ```
+  Expected behaviour:
+  - When exporting questionnaire results from a candidate profile, each
+    export should contain only the results for the selected questionnaire
+  - Sequential exports of different questionnaires should produce distinct,
+    correct files regardless of export order
+  - No workaround (e.g. re-downloading) should be required
+  Sources: [Questionnaire Configuration](https://doc.workday.com/...)
+  ```
+
+---
+
+**Path C: WAD or Inconclusive** (Salomon verdict == "WAD" or "Inconclusive")
+
+Record the DA column as: **"N/A"**
 
 ### Step 4: XO Metadata Inspection
 
@@ -280,13 +322,19 @@ arguments: { "pageId": "4387111554" }
 ```
 
 **Step 6b - Build the new row HTML (6 columns):**
+
+The DA column (column 5) varies by Salomon verdict:
+- **Config:** Configuration steps with source links
+- **Bug:** Expected behaviour documentation with source links
+- **WAD / Inconclusive:** "N/A"
+
 ```html
 <tr>
   <td><a href="https://jira2.workday.com/browse/{ISSUE_KEY}">{ISSUE_KEY}</a> - {Jira Title}</td>
   <td>{Short PM-friendly description}</td>
   <td><strong>{Status label, e.g. Config (90%)}</strong></td>
   <td><strong>{Salomon Verdict}</strong><br/>{Salomon rationale}<br/>Sources: <a href="{url}">{article title}</a>, ...</td>
-  <td>{If Salomon=Config: <strong>Configuration Steps</strong><br/>{bullet-pointed instructions}<br/>Sources: <a href="{url}">{doc title}</a> | Otherwise: <strong>N/A</strong>}</td>
+  <td>{If Config: <strong>Configuration Steps</strong><br/>{bullet-pointed instructions}<br/>Sources: <a href="{url}">{doc title}</a> | If Bug: <strong>Expected Behaviour</strong><br/>{2-4 bullets describing correct functionality}<br/>Sources: <a href="{url}">{doc title}</a> | If WAD/Inconclusive: <strong>N/A</strong>}</td>
   <td>{XO metadata findings. If defect evidence: proposed fix details referencing specific XO objects. If none: "No relevant XO metadata identified."}</td>
 </tr>
 ```
@@ -333,8 +381,13 @@ Confluence columns**, followed by a link to the Confluence page.
 | Jira # & Title | Description | Status | Salomon | Deployment Agent | XO Metadata |
 |---|---|---|---|---|---|
 | [HRREC-12345](https://jira2.workday.com/browse/HRREC-12345) - Title | Short desc | Config (90%) | Config Issue: rationale. Sources: [article](url) | Config steps: bullet points. Sources: [doc](url) | No relevant metadata identified |
-| [HRREC-67890](https://jira2.workday.com/browse/HRREC-67890) - Title | Short desc | Bug (85%) | Likely Bug: rationale. Sources: [article](url) | N/A | Confirms defect: MB 87$1234 missing validation on element X. Proposed fix: add guard condition. |
+| [HRREC-67890](https://jira2.workday.com/browse/HRREC-67890) - Title | Short desc | Bug (85%) | Likely Bug: rationale. Sources: [article](url) | Expected behaviour: each export should return the correct questionnaire. Sources: [doc](url) | Confirms defect: MB 87$1234 missing validation on element X. Proposed fix: add guard condition. |
+| [HRREC-11111](https://jira2.workday.com/browse/HRREC-11111) - Title | Short desc | WAD (80%) | WAD: rationale. Sources: [article](url) | N/A | No relevant metadata identified |
 ```
+
+Note: Bug rows show **Expected behaviour** in the DA column (what the feature
+should do when fixed). Config rows show **Configuration steps**. WAD and
+Inconclusive rows show **N/A**.
 
 After the table, always include:
 
@@ -394,7 +447,7 @@ PM to adjudicate.
 | `user-salomon-jira` | `jira_details_tool` | Fallback Jira ingestion (lightweight markdown) |
 | `user-salomon-internal-knowledge` | `search_workday_internal_knowledge` | Knowledge base search (WAD articles, config patterns) |
 | `user-salomon-internal-knowledge` | `get_page_content` | Fetch specific internal page content |
-| `user-deployment-agent` | `ask_deployment_agent` | Config guidance (only invoked when Salomon verdict = Configuration Issue) |
+| `user-deployment-agent` | `ask_deployment_agent` | Config guidance (Config verdict) or expected behaviour documentation (Bug verdict) |
 | `user-xo-mcp` | `xo_search` | Search XO metadata (classes, BPTs, tasks, method bindings) |
 | `user-xo-mcp` | `ui_task_analysis_get` | UI task analysis (elements, validations, display options) |
 | `user-xo-mcp` | `business_logic_get` | Business logic inspection (validations, constraints) |
@@ -416,10 +469,16 @@ PM to adjudicate.
 - **Salomon returns no relevant articles**: Mark Salomon verdict as
   "Inconclusive - no matching knowledge base articles found." If XO metadata
   found bug evidence, use that (60-75% range). DA column becomes "N/A" (no
-  Config verdict to act on).
+  Config or Bug verdict to act on).
 - **Deployment Agent unavailable or times out**: If Salomon said Config, mark
   DA column as "Unavailable - Deployment Agent unreachable. Manual config
-  investigation recommended." This does NOT affect the Status confidence score.
+  investigation recommended." If Salomon said Bug, mark DA column as
+  "Unavailable - expected behaviour documentation could not be retrieved."
+  This does NOT affect the Status confidence score.
+- **Salomon returns Bug but DA cannot describe expected behaviour**: If the DA
+  returns a generic or unhelpful response that does not meaningfully describe
+  the feature's correct behaviour, record DA column as "Expected behaviour
+  unavailable - DA could not describe baseline functionality for this feature."
 - **Salomon returns Config but DA disagrees**: The DA column still shows the
   DA's configuration guidance (since Salomon triggered it). The Status is still
   based on Salomon classification adjusted by XO metadata evidence. Note the
