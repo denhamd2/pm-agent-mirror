@@ -122,12 +122,15 @@ Review all returned articles. Classify as one of:
 | **Likely Bug** | No articles explain the behaviour as intended; symptoms suggest a defect |
 | **Inconclusive** | Insufficient matching articles to make a confident call |
 
-Record: the verdict, a 1-2 sentence rationale, and **source links**. For each
-key article that informed the verdict, include the article title and its
-`articleSource` URL (from the Salomon response). Format as clickable links in
-both the chat table and Confluence HTML. Example:
-- Source: [How Does the Hire Reason Dropdown Behave...](https://slack.com/archives/C0FLMUB3N/p1699395484658289)
-- Source: [HRREC-84897](https://jira2.workday.com/browse/HRREC-84897)
+Record a **concise explanation block** containing:
+1. **Verdict line**: `WAD`, `Configuration Issue`, `Likely Bug`, or `Inconclusive`.
+2. **Explanation**: 3-4 concise lines explaining exactly why this verdict was selected based on the articles. This should read as a short, cohesive paragraph that justifies the classification (e.g., why it is a Bug and not WAD or Configuration).
+3. **Sources**: At least 2 source links when available (or an explicit note if only 1 or no usable source was found). Include the article title and its `articleSource` URL formatted as clickable links.
+
+Format example:
+**Likely Bug**
+Multiple Slack threads and Jira HRREC-84897 confirm this error appears when the integration runs, describing the exact same symptom as a known defect. It is not a Configuration Issue because the customer's BP setup matches the Admin Guide requirements, indicating the system is failing to evaluate the context correctly.
+Sources: [Slack Thread](url), [HRREC-84897](url)
 
 ### Step 3: Deployment Agent Analysis (Conditional)
 
@@ -209,6 +212,19 @@ arguments: {
 
 Record the DA column as: **"N/A"**
 
+---
+
+**High-Volume DA Execution (Rate Limiting)**
+
+The Deployment Agent MCP has strict rate limits (max 10 requests per minute). When processing batches of Jiras:
+- **Throttle requests**: Ensure no more than 8 DA calls are made per rolling 60-second window. Use the `Await` tool to pause if approaching this limit.
+- **Sequential execution**: Only allow one DA request in-flight at a time.
+- **Retry logic**: If a `Rate limit exceeded` error occurs, parse the retry seconds from the error message, use the `Await` tool to wait that duration plus a 2-second buffer, and retry the same Jira (up to 3 attempts).
+- **Deterministic fallback**: If all 3 retries fail, record the DA column as:
+  - For Config: `Unavailable - Deployment Agent unreachable. Manual config investigation recommended.`
+  - For Bug: `Unavailable - expected behaviour documentation could not be retrieved.`
+- **Continue batch**: Never abort the entire batch due to DA rate limits. Record the fallback text for the throttled Jira and continue processing the rest of the batch.
+
 ### Step 4: XO Metadata Inspection
 
 Inspect the live XO metadata graph on the SUV to find code-level evidence that
@@ -266,13 +282,16 @@ arguments: {
 XO does not produce an independent WAD/Config/Bug verdict. Instead, record:
 - **Metadata evidence** that supports or contradicts the Salomon verdict
 - **Specific objects inspected** (by descriptor, instance ID, and type)
-- **If evidence points to a defect**: identify the specific metadata object(s)
-  involved (validation, display option, method binding, element content),
-  describe what appears to be wrong, propose a fix referencing the specific XO
-  objects by descriptor and type, and note any related method bindings or BEM
-  processes that may need updating
-- **If no relevant metadata found**: record "No relevant XO metadata identified
-  for this issue."
+- **If no relevant metadata found**: record "No relevant XO metadata identified for this issue."
+
+**Mandatory Proposed Fix (Bug Status Only):**
+Whenever the final synthesised Status (Step 5) is `Bug`, you MUST include a `Proposed Fix` subsection in the XO column output.
+- If XO evidence is strong, the proposed fix must include:
+  - Target XO object(s) (descriptor + type).
+  - Intended change (e.g., add validation, update display option, modify MB guard condition).
+  - Verification notes (how to confirm the fix in workflow/tests).
+- If the bug is valid but XO metadata is insufficient to propose a specific code change, use this exact fallback wording:
+  - `Proposed fix unavailable - XO metadata insufficient; escalate for targeted code trace.`
 
 ### Step 5: Synthesise Status Label
 
@@ -314,11 +333,31 @@ Compose an HTML table row and insert it into the triage page.
 **IMPORTANT: Do NOT use `mode: "append"`** - it appends content after the
 table element, rendering as raw text. Use the read-then-replace pattern below.
 
-**Step 6a - Read the current page:**
+**Step 6a - Find and read the current page:**
+
+First, search for the page to get the current page ID:
+```
+CallMcpTool  server: "user-confluence-mcp"
+toolName: "search_confluence"
+arguments: { "query": "Customer Issue Triage POC" }
+```
+
+Extract the page ID from the search results. If the page doesn't exist, create it:
+```
+CallMcpTool  server: "user-confluence-mcp"
+toolName: "create_confluence_page"
+arguments: {
+  "spaceKey": "~david.denham",
+  "title": "Customer Issue Triage POC",
+  "content": "<table><thead><tr><th>Jira # &amp; Title</th><th>Short description of issue</th><th>Status</th><th>Salomon Guidance</th><th>Deployment Agent Guidance</th><th>XO Metadata Analysis / Proposed Fix</th></tr></thead><tbody></tbody></table>"
+}
+```
+
+Then read the page content:
 ```
 CallMcpTool  server: "user-confluence-mcp"
 toolName: "get_page_content"
-arguments: { "pageId": "4387111554" }
+arguments: { "pageId": "{discovered_page_id}" }
 ```
 
 **Step 6b - Build the new row HTML (6 columns):**
@@ -333,9 +372,9 @@ The DA column (column 5) varies by Salomon verdict:
   <td><a href="https://jira2.workday.com/browse/{ISSUE_KEY}">{ISSUE_KEY}</a> - {Jira Title}</td>
   <td>{Short PM-friendly description}</td>
   <td><strong>{Status label, e.g. Config (90%)}</strong></td>
-  <td><strong>{Salomon Verdict}</strong><br/>{Salomon rationale}<br/>Sources: <a href="{url}">{article title}</a>, ...</td>
+  <td><strong>{Salomon Verdict}</strong><br/>{3-4 concise lines explaining the verdict}<br/>Sources: <a href="{url}">{article title}</a>, ...</td>
   <td>{If Config: <strong>Configuration Steps</strong><br/>{bullet-pointed instructions}<br/>Sources: <a href="{url}">{doc title}</a> | If Bug: <strong>Expected Behaviour</strong><br/>{2-4 bullets describing correct functionality}<br/>Sources: <a href="{url}">{doc title}</a> | If WAD/Inconclusive: <strong>N/A</strong>}</td>
-  <td>{XO metadata findings. If defect evidence: proposed fix details referencing specific XO objects. If none: "No relevant XO metadata identified."}</td>
+  <td><strong>Metadata findings:</strong> {XO findings or "No relevant metadata identified."}<br/>{If Bug, add: <strong>Proposed Fix:</strong> {Target objects, intended change, verification notes OR "Proposed fix unavailable..."}}</td>
 </tr>
 ```
 
@@ -346,7 +385,7 @@ Take the existing page HTML, insert the new `<tr>` before the closing
 CallMcpTool  server: "user-confluence-mcp"
 toolName: "smart_update_confluence_page"
 arguments: {
-  "pageId": "4387111554",
+  "pageId": "{discovered_page_id}",
   "content": "<full table HTML with new row inserted before </tbody></table>>",
   "mode": "replace"
 }
@@ -380,9 +419,9 @@ Confluence columns**, followed by a link to the Confluence page.
 ```
 | Jira # & Title | Description | Status | Salomon | Deployment Agent | XO Metadata |
 |---|---|---|---|---|---|
-| [HRREC-12345](https://jira2.workday.com/browse/HRREC-12345) - Title | Short desc | Config (90%) | Config Issue: rationale. Sources: [article](url) | Config steps: bullet points. Sources: [doc](url) | No relevant metadata identified |
-| [HRREC-67890](https://jira2.workday.com/browse/HRREC-67890) - Title | Short desc | Bug (85%) | Likely Bug: rationale. Sources: [article](url) | Expected behaviour: each export should return the correct questionnaire. Sources: [doc](url) | Confirms defect: MB 87$1234 missing validation on element X. Proposed fix: add guard condition. |
-| [HRREC-11111](https://jira2.workday.com/browse/HRREC-11111) - Title | Short desc | WAD (80%) | WAD: rationale. Sources: [article](url) | N/A | No relevant metadata identified |
+| [HRREC-12345](https://jira2.workday.com/browse/HRREC-12345) - Title | Short desc | Config (90%) | **Config Issue**<br>Explanation in 3-4 concise lines detailing why this is a config issue and not a bug.<br>Sources: [article](url), [article](url) | **Configuration Steps**<br>• Step 1...<br>Sources: [doc](url) | **Metadata findings:** No relevant metadata identified. |
+| [HRREC-67890](https://jira2.workday.com/browse/HRREC-67890) - Title | Short desc | Bug (85%) | **Likely Bug**<br>Explanation in 3-4 concise lines detailing why this is a bug and not WAD.<br>Sources: [article](url), [article](url) | **Expected Behaviour**<br>• Feature should...<br>Sources: [doc](url) | **Metadata findings:** Confirms defect on MB 87$1234.<br>**Proposed Fix:** Add guard condition to element X. Verify via workflow Y. |
+| [HRREC-11111](https://jira2.workday.com/browse/HRREC-11111) - Title | Short desc | WAD (80%) | **WAD**<br>Explanation in 3-4 concise lines detailing why this is WAD.<br>Sources: [article](url) | **N/A** | **Metadata findings:** No relevant metadata identified. |
 ```
 
 Note: Bug rows show **Expected behaviour** in the DA column (what the feature
@@ -452,6 +491,8 @@ PM to adjudicate.
 | `user-xo-mcp` | `ui_task_analysis_get` | UI task analysis (elements, validations, display options) |
 | `user-xo-mcp` | `business_logic_get` | Business logic inspection (validations, constraints) |
 | `user-xo-mcp` | `element_content_get` | Element content detail (fields, display options, validations) |
+| `user-confluence-mcp` | `search_confluence` | Search for pages by title to discover current page ID |
+| `user-confluence-mcp` | `create_confluence_page` | Create new page if it doesn't exist |
 | `user-confluence-mcp` | `smart_update_confluence_page` | Write triage row to Confluence table |
 | `user-confluence-mcp` | `get_page_content` | Read current Confluence page for read-then-replace |
 
@@ -470,11 +511,10 @@ PM to adjudicate.
   "Inconclusive - no matching knowledge base articles found." If XO metadata
   found bug evidence, use that (60-75% range). DA column becomes "N/A" (no
   Config or Bug verdict to act on).
-- **Deployment Agent unavailable or times out**: If Salomon said Config, mark
-  DA column as "Unavailable - Deployment Agent unreachable. Manual config
-  investigation recommended." If Salomon said Bug, mark DA column as
-  "Unavailable - expected behaviour documentation could not be retrieved."
-  This does NOT affect the Status confidence score.
+- **Deployment Agent unavailable, times out, or rate-limited**: If the DA cannot be reached or exhausts its 3 rate-limit retries during a high-volume batch, mark the DA column as:
+  - For Config: "Unavailable - Deployment Agent unreachable. Manual config investigation recommended."
+  - For Bug: "Unavailable - expected behaviour documentation could not be retrieved."
+  This does NOT affect the Status confidence score. Continue processing the rest of the batch.
 - **Salomon returns Bug but DA cannot describe expected behaviour**: If the DA
   returns a generic or unhelpful response that does not meaningfully describe
   the feature's correct behaviour, record DA column as "Expected behaviour
@@ -487,6 +527,10 @@ PM to adjudicate.
   DA column is "N/A". Confidence is 50%.
 - **Batch of 5+ Jiras**: Process sequentially but present a single consolidated
   summary table at the end.
-- **Confluence page unreachable**: Write the full triage table to a local
-  markdown file at `docs/customer-issue-triage-output.md` as a fallback, and
-  inform the user.
+- **Confluence page not found**: If the search for "Customer Issue Triage POC"
+  returns no results, create the page with the initial table structure before
+  proceeding with the row insert. If page creation fails, fall back to writing
+  the full triage table to `docs/customer-issue-triage-output.md`.
+- **Confluence page unreachable or times out**: Write the full triage table to a
+  local markdown file at `docs/customer-issue-triage-output.md` as a fallback,
+  and inform the user.
