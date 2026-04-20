@@ -17,6 +17,8 @@ When the user mentions "backlog refinement", "create stories", "refine backlog",
 2. **420-story-mapping**: Story map from PRD + epic draft; HITL approval (still no Jira epic)
 3. **430-story-writing**: **Create Jira epic** from the draft, then write user stories with BDD and create them in Jira
 
+For features extending existing Workday tasks or services, ensure 420/430 use XO MCP (`user-xo-mcp`) to ground the story map and stories in current task structure, validations, and API coverage.
+
 **Each agent can also be used standalone** for modular workflows.
 
 ## Orchestration Workflow
@@ -41,6 +43,8 @@ When invoked for backlog refinement, execute these steps sequentially:
 
 **Invoke**: "Story map from epic draft at [path]. Part of backlog refinement."
 
+**XO grounding requirement (when applicable)**: Ask 420 to use XO MCP (`xo_search`, `ui_task_analysis_get`, `element_content_get`) for existing-task workflows so story slices account for required fields, display options, and known validation constraints.
+
 **HUMAN-IN-THE-LOOP**: 420 will present the story map structure with high-level story list for PM approval. 420 will use the `AskQuestion` tool to present:
 - Story map overview (activities, total stories, value slices)
 - High-level list of stories under each value slice
@@ -59,6 +63,8 @@ When invoked for backlog refinement, execute these steps sequentially:
 **Output**: **Jira epic key and URL**, created story URLs and count
 
 **Invoke**: "Create Jira epic and stories for approved story map. [Value slice filter: all / VS1 only / etc.]. Part of backlog refinement. **430** must apply **`319-copy-review.mdc`** to user-visible copy (labels, validation, errors, notifications, BDD-quoted UI) in each story **before** Jira create/update; invoke **060** via **319** for legal-sensitive strings."
+
+**XO grounding requirement (when applicable)**: Ask 430 to use XO MCP service/task analysis to map UI-task constraints to API/story acceptance criteria and surface explicit UI-vs-REST validation gaps.
 
 **This step ONLY executes after PM approval in Step 2.** 430 **must** create the epic in Jira **before** creating stories. No Jira epic exists before this step.
 

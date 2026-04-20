@@ -30,6 +30,22 @@ Use this to:
 
 **Before using**: Read tool descriptors in the MCP folder to understand available tools.
 
+### XO MCP (`user-xo-mcp`)
+**Location**: `/Users/david.denham/.cursor/projects/Users-david-denham-product-manager-agent/mcps/user-xo-mcp/`
+
+Use this for **technical grounding** before or during PRD drafting when the feature touches existing XO metadata:
+- Use `xo_search` to locate relevant tasks/classes/resources by name
+- Use `ui_task_analysis_get` to extract field structure, display options, and task-level constraints
+- Use `element_content_get` for deep dives on specific elements and validation-related behaviour
+- Use `service_description_get`/REST metadata tools to assess existing API coverage and identify scope gaps
+
+Use XO MCP findings to strengthen:
+- Current-state and constraints sections
+- Validation and acceptance-criteria clarity
+- Build-vs-extend decisions in solution scope
+
+If XO access is unavailable or SUV is offline, proceed with Deployment Agent + functional knowledge and mark XO validation as a follow-up.
+
 ### Confluence (`user-confluence-mcp`)
 
 **Not used for PRDs.** Do not call `create_confluence_page` or otherwise publish PRDs to Confluence. If stakeholders need Confluence, the PM copies from the markdown file manually.

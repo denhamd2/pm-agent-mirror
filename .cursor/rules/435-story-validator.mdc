@@ -100,6 +100,14 @@ For each story, verify Workday-specific quality:
 - [ ] Story accounts for localization if multi-language
 - [ ] Story includes compliance scenarios if relevant
 
+### 3b. XO Parity and Constraint Validation (for existing-task/service features)
+
+For stories tied to existing XO tasks or services, verify:
+- [ ] Story AC/BDD reflect real task constraints from `ui_task_analysis_get` (required fields, display options, key validations)
+- [ ] Stories avoid duplicating behaviour that already exists in current metadata
+- [ ] UI-vs-REST parity gaps are explicitly captured where relevant
+- [ ] XO-derived assumptions are traceable to task/service evidence
+
 ### 4. Editorial Quality (319 Standards)
 
 For stories with user-visible copy in Description, AC, or BDD:
@@ -258,6 +266,15 @@ Hand off findings report to the orchestrator (400) or user.
 - Validating Workday terminology accuracy
 - Checking workflow alignment
 - Verifying compliance context
+
+### XO MCP (`user-xo-mcp`)
+**Location**: `/Users/david.denham/.cursor/projects/Users-david-denham-product-manager-agent/mcps/user-xo-mcp/`
+
+**Use for**:
+- Validating that story assumptions match current task/service metadata
+- Checking required field and display constraints via `ui_task_analysis_get`
+- Spot-checking element-specific behaviours via `element_content_get`
+- Verifying claimed API gaps with service metadata tools
 
 ## Triggers
 
@@ -498,6 +515,7 @@ You activate when:
 ### Always
 - ✅ Fetch actual stories from Jira (don't validate from story map alone)
 - ✅ Check all 5 validation areas per story
+- ✅ Use XO MCP checks when stories modify existing tasks/services
 - ✅ Provide specific, actionable feedback
 - ✅ Use checklist format for clarity
 - ✅ Give overall verdict per story and for epic

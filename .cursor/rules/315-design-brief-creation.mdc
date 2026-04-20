@@ -327,6 +327,7 @@ If in doubt → simplify and strengthen hierarchy. The peer reviewer (318) will 
 Use these **alongside** the passes above (especially when grounding placement and validating options):
 
 - **Deployment Agent** (`user-deployment-agent`): Workday Recruiting placement, workflows, capabilities
+- **XO MCP** (`user-xo-mcp`): Task and metadata structure for UI grounding (`xo_search`, `ui_task_analysis_get`, `element_content_get`) when the design targets an existing Workday task
 - **@functional-knowledge**: Configuration and process authority when scoping UI
 - **Six Hats** (`user-six-hats-thinking`): Option validation when trade-offs are unclear
 - **JTBD depth**: `docs/jtbd-recruiting-hr-professional-and-manager.md` (recruiter / hiring manager worksheet alignment)

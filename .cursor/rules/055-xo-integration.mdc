@@ -1,0 +1,65 @@
+---
+description: XO MCP integration guidance for PRD, design, and backlog workflows
+globs:
+  - "docs/prds/**/*"
+  - "docs/epics/**/*"
+  - "design/**/*"
+alwaysApply: false
+---
+
+# XO MCP Integration
+
+Use XO MCP (`user-xo-mcp`) when PM workflow steps need technical grounding in existing Workday metadata.
+
+## Core PM Use Cases
+
+1. PRD technical grounding (rule 200):
+- `xo_search` to find tasks/classes/resources
+- `ui_task_analysis_get` for task fields, display options, and constraints
+- `service_description_get` and REST metadata tools for API coverage and gaps
+
+2. Design brief discovery (rule 315):
+- `ui_task_analysis_get` + `element_content_get` to preserve required fields, validations, and behaviour
+- Use findings to avoid proposing UI flows that conflict with existing task structure
+
+3. Backlog validation mapping (rules 400/420/430):
+- Compare UI task constraints with REST/service behaviour
+- Turn gaps into explicit stories and acceptance criteria
+
+## Working Pattern
+
+- Start with `xo_search` to get the correct instance IDs.
+- Use `ui_task_analysis_get` with `validations_only: true` for focused validation analysis.
+- Use `validations_only: false` for full structural analysis when defining end-to-end behaviour.
+- Escalate to `element_content_get` only for the specific fields that matter to scope decisions.
+
+## Output Expectations
+
+When XO MCP is used, summarise:
+- task/class analysed
+- key required fields and display constraints
+- validation or behaviour dependencies
+- API/service coverage status
+- recommended PRD/design/story implications
+
+## Toggle Intended Prod Date Mapping
+
+Jira epics use the **Toggle Intended Prod** field to indicate when a feature ships to production. Format: `YYYY.WW - YYYYRn Production`.
+
+**Conversion to calendar date:**
+1. Extract the year and ISO week number from `YYYY.WW`
+2. The feature launches on the **Saturday** of that ISO week
+3. Python: `datetime.strptime(f'{year}-W{week}-6', '%G-W%V-%u').date()`
+
+**Examples:**
+- `2025.38 - 2025R2 Production` → Saturday of ISO week 38, 2025 → **20 September 2025**
+- `2026.10 - 2026R1 Production` → Saturday of ISO week 10, 2026 → **7 March 2026**
+
+Use this date as the feature launch date for:
+- OMS telemetry baselines (pre-launch should show zero usage)
+- Adoption curve start points
+- Impact report date ranges
+
+## Fallback
+
+If SUV connectivity fails, continue with Deployment Agent and functional knowledge, and mark XO validation as a follow-up item.

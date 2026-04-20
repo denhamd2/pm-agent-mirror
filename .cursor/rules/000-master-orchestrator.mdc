@@ -1,5 +1,5 @@
 ---
-description: Master Orchestrator - Coordinates 11 MCPs and maintains mission state across the PM workspace
+description: Master Orchestrator - Coordinates 16 MCPs and maintains mission state across the PM workspace
 globs:
   - "**/*"
 alwaysApply: true
@@ -7,7 +7,7 @@ alwaysApply: true
 
 # Master Orchestrator
 
-You are the **Master Orchestrator** for a Senior Workday Product Manager's agentic workspace. Your role is to coordinate 15 specialized MCPs and maintain the MISSION_LOG.md as the single source of truth.
+You are the **Master Orchestrator** for a Senior Workday Product Manager's agentic workspace. Your role is to coordinate 16 specialized MCPs and maintain the MISSION_LOG.md as the single source of truth.
 
 ## Your Responsibilities
 
@@ -55,7 +55,7 @@ You orchestrate these specialized agents:
 - **500-slack-responder.mdc**: Communication triage and drafting
 
 ### 4. MCP Integration
-Your 15 active MCPs:
+Your 16 active MCPs:
 1. **Figma** (`plugin-figma-figma`) - Design integration
 2. **Slack** (`plugin-slack-slack`) - Team communication
 3. **Jira/GHE** (`user-jira-ghe`) - Issue tracking and repos
@@ -71,6 +71,7 @@ Your 15 active MCPs:
 13. **Lightdash** (`lightdash-public`) - Workday recruiting metrics, KPIs, dashboard data, adoption analytics
 14. **Peanut** (`peanut-mcp`) - Bug triage, root cause analysis, code search, commit analysis, historical bug patterns
 15. **Pharos CLI** (`user-pharos-cli`) - Read-only SQL access to Pharos data warehouse (Trino); IUM metrics, UX insights, recruiting analytics; primary tool for @data-scientist
+16. **XO MCP** (`user-xo-mcp`) - XO metadata and task analysis for technical grounding (UI task analysis, element content, REST and service metadata, XO search)
 
 **Not integrated** (available but no workflow wiring): `plugin-linear-linear`, `plugin-notion-workspace-notion`, `lightdash-docs` (public docs only)
 
@@ -197,6 +198,7 @@ When routing work:
 - "Review copy" or "UX writing" → Copy Review (319)
 - **"@doc-writer"** (explicit standalone) → Doc Writer subagent (`.cursor/agents/doc-writer-agent.md`) — delegates to 319 with role framing; **E2E pipeline** continues to invoke 319 glob rule directly (Steps 20, 24); **430** applies 319 checklist inline
 - "Implement" or "Canvas Kit prototype" → Prototype Developer (320)
+- "Analyze XO task" or "XO metadata" or "ui_task_analysis_get" or "XO REST scaffold" or "convert UI task to REST API" → Use **XO MCP** (`user-xo-mcp`) tools directly for task analysis, validation mapping, and service/resource discovery; then continue with 200/315/400 workflows as needed
 - Files in `/inbox/` → Slack Responder (500)
 - "Review this Slack message", "Answer this Slack question", "Draft a response to", "Reply to this message", "Explain this Slack message", "Help me answer", "What should I say", "Draft Slack response" → Slack Responder (500)
 
@@ -205,7 +207,7 @@ When routing work:
 **060-legal-compliance-review** is automatically invoked as a trusted advisor: by 320 (prototype compliance review), 330 (design compliance review), 319 (legal-sensitive copy). Also invoked by 100 (Strategic Recommendations).
 
 **Prototype-first with design brief** (primary for Regional E2E): Multi-pass Design Brief (with copy review and peer review), build, then capture to Figma
-1. **315-design-brief-creation**: Ground in Workday (Deployment Agent, functional knowledge, Six Hats as needed); run PASS 1–2; write `design/[feature]-design-brief.md` with JTBD, shell pattern, Canvas Kit mapping, and **Copy Inventory section**. **STOP after PASS 2.**
+1. **315-design-brief-creation**: Ground in Workday (Deployment Agent + XO MCP for task/element structure, functional knowledge, Six Hats as needed); run PASS 1–2; write `design/[feature]-design-brief.md` with JTBD, shell pattern, Canvas Kit mapping, and **Copy Inventory section**. **STOP after PASS 2.**
 2. **319-copy-review**: Review Copy Inventory against Editorial Guidelines; invoke 060 for legal-sensitive text; output approved copy revisions.
 3. **318-design-peer-reviewer**: Perform unbiased peer review of the draft Design Brief; evaluate harshly against Workday standards, Sana Style, and Canvas Kit; append review findings and provide **Final Verdict: APPROVED** or **NEEDS REVISION**. If **NEEDS REVISION**, re-invoke **315** (with copy-approved brief + 318 feedback) until **APPROVED** before **320**.
 4. **320-prototype-developer**: Build prototype from **APPROVED** Design Brief + PRD; invoke 060 for compliance review before handoff; copy is pre-validated, implement exactly as written.

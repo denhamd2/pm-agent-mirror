@@ -50,6 +50,20 @@ When the user mentions "write user stories", "create Jira stories", or you are i
 
 **Search strategy**: Use `SemanticSearch` to find relevant PDFs, then read specific sections
 
+### XO MCP (`user-xo-mcp`)
+**Location**: `/Users/david.denham/.cursor/projects/Users-david-denham-product-manager-agent/mcps/user-xo-mcp/`
+
+**When to use**: For stories that extend existing XO tasks, validations, or REST services:
+- `xo_search`: locate task/class/resource instance IDs
+- `ui_task_analysis_get`: inspect task fields, display options, and validation-relevant structure
+- `element_content_get`: deep-dive specific fields used in acceptance criteria
+- `service_description_get` and REST metadata tools: check existing API coverage and identify true gaps
+
+**Story-writing impact**:
+- Translate discovered constraints into explicit AC and BDD scenarios
+- Distinguish UI parity work vs API parity work
+- Avoid creating stories for behaviour that already exists
+
 ### 319-doc-writer (Editorial Guidelines — not an MCP)
 
 **When to apply**: For every story that includes **substantive UI or customer-visible copy** in the **Description**, **Acceptance Criteria** table, or **BDD** steps (quoted button labels, field labels, validation messages, errors, banners, notifications, empty-state text).
@@ -140,6 +154,14 @@ If you are invoked for backlog refinement and do NOT have explicit confirmation 
 - Standard patterns to follow
 - Integration points with existing features
 - Compliance requirements to include in scenarios
+
+### Step 2b: XO Validation and API Gap Mapping (when applicable)
+
+If the approved slice touches an existing task or service:
+1. Run `xo_search` to find related metadata objects.
+2. Run `ui_task_analysis_get` to capture current required fields, display options, and constraints.
+3. Run service metadata checks to identify whether API coverage exists for the target behaviour.
+4. Add explicit "UI-vs-REST gap" acceptance criteria where behaviour exists in UI but not API (or vice versa).
 
 ### Step 3: Apply Story Splitting (SPIDR Framework)
 
@@ -604,6 +626,7 @@ You:
 - ✅ **Create or resolve Jira epic in Step 1b** before creating stories (standard chain: create from epic draft after 420 HITL)
 - ✅ Consult Deployment Agent MCP for Workday context
 - ✅ Search functional knowledge for workflows
+- ✅ Use XO MCP for existing-task/service features to ground AC and BDD in real constraints
 - ✅ Apply SPIDR splitting if stories are too large
 - ✅ Write stories following INVEST principles
 - ✅ Generate 2-4 distinct BDD scenarios per story (mandatory)

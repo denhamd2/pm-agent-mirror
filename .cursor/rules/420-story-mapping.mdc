@@ -47,6 +47,19 @@ When the user mentions "story map", "user story mapping", or you are invoked as 
 
 **Example query**: "How does interview scheduling work in Workday Recruiting? What are the user activities and steps in the current flow?"
 
+### XO MCP (`user-xo-mcp`)
+**Location**: `/Users/david.denham/.cursor/projects/Users-david-denham-product-manager-agent/mcps/user-xo-mcp/`
+
+**When to use**: If the epic extends an existing Workday task, service, or metadata object:
+- Use `xo_search` to find the relevant task/class/resource
+- Use `ui_task_analysis_get` to understand field structure, required display options, and known constraints
+- Use `element_content_get` for key fields where story slicing depends on validation or behaviour details
+
+**Why this matters for mapping**:
+- Keeps VS1 grounded in real constraints
+- Prevents slices that ignore required fields or existing task rules
+- Improves handoff quality to 430 for acceptance criteria
+
 ## Story Mapping Workflow
 
 ### Step 1: Read Context
@@ -76,6 +89,15 @@ When the user mentions "story map", "user story mapping", or you are invoked as 
 - "Where does [capability] fit? What comes before and after in the flow?"
 
 **Output from this step**: Context on current Workday user activities and flow to ensure the story map accurately reflects existing vs. new functionality and integrates correctly with the system.
+
+### Step 2b: XO Structure Check (for existing-task features)
+
+If the feature modifies an existing Workday task or REST surface:
+- Run `xo_search` to identify target objects
+- Run `ui_task_analysis_get` for the target task
+- Optionally run `element_content_get` for high-risk elements (required fields, compliance validations, dynamic display rules)
+
+Capture any hard constraints in the story-map notes and reflect them in VS1 tasks.
 
 ### Step 3: Identify User Activities (Horizontal Backbone)
 
@@ -511,6 +533,7 @@ You:
 ### Always
 - ✅ Search functional knowledge before building story map
 - ✅ Query Deployment Agent MCP if questions about current Workday functionality
+- ✅ Use XO MCP for existing-task workflows to ground value-slice scope and constraints
 - ✅ Read epic **draft** and PRD before mapping
 - ✅ Create user activities (horizontal backbone)
 - ✅ Break into user tasks (vertical slices)

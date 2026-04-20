@@ -85,6 +85,91 @@ Archived: MISSION-009, MISSION-010, MISSION-011, MISSION-014, MISSION-015, MISSI
 
 ## Decision Log
 
+### DECISION-024: HRREC-81393 Metrics Verified, Historical Backfill, and Dashboard Enhancement
+**Date:** 17 April 2026  
+**Context:** Needed to verify the adoption metrics are correct (exclude old flow), determine launch date, and provide a full adoption trend since launch.  
+**Choice:** (1) Verified metrics via 4 probe queries: pre-launch baseline (19 Sep 2025, 1 early preview), post-launch signal (22 Sep 2025, 1,196 subs / 344 tenants), OLD path exclusion (1,188 correctly excluded), workset exclusivity (zero co-occurrence). (2) Calculated launch date from Toggle Intended Prod `2025.38` = 20 Sep 2025. (3) Ran weekly backfill (30 Saturdays, 20 Sep 2025 to 12 Apr 2026) with cumulative tenant tracking. (4) Added submissions trend line chart and cumulative tenant adoption chart to dashboard. (5) Added Toggle Intended Prod date mapping to `055-xo-integration.mdc`.  
+**Rationale:**
+- Verification confirms dual-filter (`15$478022` + `15604$`) correctly isolates NEW feature
+- Cumulative tenant count (9 to 233 in 29 weeks) demonstrates steady organic growth
+- Near-linear acquisition rate (~7.7 new tenants/week) shows no plateau
+- Toggle Intended Prod rule makes launch date calculation reusable across features  
+**Owner:** David Denham  
+**Status:** Implemented
+
+### DECISION-025: HRREC-81393 agency-scoped share, weekday calibration, exploratory IUM correlation
+**Date:** 17 April 2026  
+**Context:** Stakeholders needed a clearer denominator among customers who actually use agency types, validation that Saturday weekly samples are interpretable, and a cautious read on whether general recruiting IUMs differ for Agency Types adopters.  
+**Choice:** (1) Documented **Metric D** (OLD-path `15604$` without `15$478022`) and **agency-scoped NEW share** approx. **54.3%** on 16 Apr 2026 (365 of 367 agency-touching tenants with NEW activity). (2) Recorded **Tuesday 15 Apr 2026** Metric A calibration (1,252 subs / 363 tenants) and total Post Job volume 129,646 for narrative on sampling. (3) Exported SANDBOX IUM **2358** and **2361** per tenant for **`wd_event_date`** Feb 2026 to `docs/analytics/data/ium-2358-2361-feb2026-tenant.csv`; ran **Mann-Whitney U** vs non-adopters from `tenant-agency-types-usage.csv` (significant; **confounded**). (4) Updated impact report, OMS metrics doc, and dashboard data; **no** new Value Driver Tree node until agency-scoped outcome IUM exists.  
+**Rationale:** Agency-touch denominator answers a different question than global Post Job share; weekday spot-check bounds backfill interpretation; IUM tests are explicitly non-causal and use the only available warehouse month slice without timeout.  
+**Owner:** David Denham  
+**Status:** Implemented
+
+### DECISION-023: HRREC-81393 PM Impact Report with calculated adoption metrics
+**Date:** 17 April 2026  
+**Context:** Raw OMS metrics (DECISION-021/022) needed PM-level interpretation to demonstrate feature impact for stakeholder communication.  
+**Choice:** Created `docs/analytics/hrrec-81393-impact-report.md` with three calculated KPIs: (1) **Adoption Share** = NEW submissions / total Post Job submissions (~1.1%); (2) **Tenant Penetration** = NEW tenants / total Post Job tenants (~11%); (3) **Menu Migration** = NEW opens / (OLD + NEW opens) (~27-34%). Queried total Post Job denominators from OMS for two sample dates (2026-03-18 and 2026-04-16).  
+**Rationale:** 
+- Transforms raw counts into actionable PM metrics
+- Low adoption share (1.1%) is contextualised as expected (not all postings use agency types)
+- Tenant penetration (11%) demonstrates meaningful breadth
+- Menu migration shows behaviour shift from legacy path
+- Report includes follow-up metrics (sites per type, time-to-post, error rate, cohort retention)  
+**Owner:** David Denham  
+**Status:** Implemented
+
+### DECISION-022: Automated daily HRREC-81393 Agency menu metrics backfill script
+**Date:** 17 April 2026  
+**Context:** Interactive Pharos queries for HRREC-81393 menu metrics are expensive on `dw.swh_raw.oms_requests` and can time out when run across broad date ranges. We needed a repeatable, partition-safe way to generate trend data for both OLD and NEW menu paths.  
+**Choice:** Added `scripts/build_hrrec_81393_agency_menu_daily_metrics.py` to run per-day queries and emit `docs/analytics/data/hrrec-81393-agency-menu-daily-metrics.csv`. The script calculates: (A) NEW feature submissions using refined filter `processed_element_json` contains both `15$478022` and `15604$`; (B) OLD menu opens via prompt `45$17735`; (C) NEW menu opens via prompt `45$28385`. Added run instructions to `docs/analytics/hrrec-81393-post-job-agency-type-oms-metrics.md`.  
+**Rationale:** 
+- Makes metric collection repeatable and less error-prone
+- Avoids broad scans by operating on `wd_event_date` partitions
+- Preserves the refined NEW-submission definition and old/new prompt comparability  
+**Owner:** David Denham  
+**Status:** Implemented (smoke test passed for 2026-04-16)
+
+### DECISION-021: HRREC-81393 Agency menu usage measured via OMS (dual metrics + refined submission filter)
+**Date:** 17 April 2026  
+**Context:** [HRREC-81393](https://jira2.workday.com/browse/HRREC-81393) added **Agency Types** (bulk post by type) alongside existing **Agency by Type** (type then sites). No IUM; wide Pharos scans on `oms_requests` time out.  
+**Choice:** Document canonical Pharos SQL in `docs/analytics/hrrec-81393-post-job-agency-type-oms-metrics.md`. **Submissions (NEW feature):** Post Job `U` rows with `processed_element_json` matching **both** workset `15$478022` and class prefix `15604$` (excludes OLD drill path where `15604$` can appear under `15$157785`). **OLD vs NEW menu intent:** count `getReferencePrompt` rows with `oms_request` containing `45$17735` (Agency by Type) vs `45$28385` (Agency Types). Run per `wd_event_date` for performance.  
+**Rationale:** Gives a definitive adoption signal for VS4 and a comparable navigation proxy for the legacy GST; avoids overstating NEW usage when counting `15604$` alone.  
+**Owner:** David Denham  
+**Status:** Implemented (sample PROD snapshots: 2026-03-18 and 2026-04-16 recorded in analytics doc)
+
+### DECISION-020: XO MCP extended to epic definition and story validation
+**Date:** 17 April 2026  
+**Context:** Backlog refinement had XO guidance in 400/420/430, but early epic framing (410) and post-creation quality gate (435) did not yet explicitly validate scope and parity against XO task/service metadata.  
+**Choice:** Updated `.cursor/rules/410-epic-definition.mdc` and `.cursor/rules/435-story-validator.mdc` to add XO MCP grounding and validation paths (`xo_search`, `ui_task_analysis_get`, element checks, and service metadata parity checks) for existing-task/service features.  
+**Rationale:** 
+- Improves epic scope quality before story mapping starts
+- Adds objective parity checks during post-creation validation
+- Reduces risk of duplicate or mis-scoped stories reaching sprint planning  
+**Owner:** David Denham + PM backlog quality workflow  
+**Status:** Implemented
+
+### DECISION-019: XO MCP expanded into backlog refinement workflow
+**Date:** 17 April 2026  
+**Context:** XO MCP had been integrated for PRD and design grounding, but backlog refinement rules still lacked explicit guidance for mapping UI-task constraints and API coverage into story slices and acceptance criteria.  
+**Choice:** Updated `.cursor/rules/400-backlog-refinement.mdc`, `.cursor/rules/420-story-mapping.mdc`, and `.cursor/rules/430-story-writing.mdc` to require XO MCP usage for existing-task/service features (search, task analysis, element deep dives, and service metadata checks) and to surface UI-vs-REST validation gaps as explicit story scope.  
+**Rationale:** 
+- Improves story-map quality by grounding VS1 in real task constraints
+- Reduces rework from missing required fields and hidden validation dependencies
+- Produces stronger AC/BDD with explicit parity-gap coverage between UI and API  
+**Owner:** David Denham + PM backlog workflow  
+**Status:** Implemented
+
+### DECISION-018: XO MCP integrated for PM technical grounding
+**Date:** 17 April 2026  
+**Context:** PRD and design workflows needed direct access to XO task and metadata structure so scope, validations, and API coverage could be grounded in current implementation details rather than narrative-only sources.  
+**Choice:** Installed Contexto and integrated XO MCP into Cursor config; updated orchestrator and workflow rules to treat XO MCP as a first-class source for PRD grounding (200), design discovery (315), and backlog validation mapping. Added dedicated guidance in `.cursor/rules/055-xo-integration.mdc`.  
+**Rationale:** 
+- Improves PRD accuracy with real task/field/validation context
+- Reduces design rework by validating existing task behaviour early
+- Strengthens story quality by exposing UI-vs-REST validation gaps earlier  
+**Owner:** David Denham + PM orchestrator  
+**Status:** Implemented
+
 ### DECISION-017: Dashboard filters standardise on tenant enrichment dimensions
 **Date:** 13 April 2026  
 **Context:** The Average Time to Hire and Recruiter Capacity dashboards had drifted into different filter models. Time to Hire still used region and cloud-platform controls that did not consistently scope every chart, while Recruiter Capacity only exposed a time-range filter. The Value Realisation landing page also repeated too many secondary links in its dashboard section.  
@@ -386,7 +471,7 @@ Archived: MISSION-009, MISSION-010, MISSION-011, MISSION-014, MISSION-015, MISSI
 **Status:** Implemented and awaiting data
 
 ## Handoff Queue
-_Items requiring attention or delegation will appear here._
+- [ ] **2026-04-17 Morning Roundup refresh:** `user-jira-ghe` MCP returned `Session not found. Please re-initialize.` for `searchJiraTickets` / `discoverApis`; morning roundup regenerated with competitor news only, Jira sections left empty until MCP session is re-initialised in Cursor Settings.
 
 ## Notes
 
