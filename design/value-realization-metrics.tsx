@@ -22,6 +22,7 @@ const TRACKER_COVERAGE: { category: string; metric: string; status: string; dash
   { category: 'Interview', metric: 'Time Interview to Feedback', status: 'Not yet', dashboard: '-', notes: 'HRREC-88029.' },
   { category: 'Interview', metric: 'Volumes (interviewers, sessions, applicants)', status: 'Yes', dashboard: 'Interview metrics', notes: 'All three delivered.' },
   { category: 'Productivity', metric: 'Recruiter Capacity / Productivity', status: 'Yes - live IUM', dashboard: 'Value Realisation', notes: 'Tracker wording is Recruiter Capacity; current live IUM metric name is Recruiter Productivity. Measures average open job reqs and evergreens per primary recruiter.' },
+  { category: 'Posting', metric: 'Bulk Post to Agency Types (VS4)', status: 'Yes - OMS (PROD)', dashboard: 'Recruiting Agency User', notes: 'HRREC-81393. No packaged IUM; adoption and menu intent from dw.swh_raw.oms_requests (Post Job updates and getReferencePrompt).' },
   { category: 'Offers / EAs', metric: 'Time in sub-BP (per event)', status: 'Yes - bp_event_stats', dashboard: 'Sub-BP durations', notes: 'Per-event completed durations. Different from tracker job-app chain.' },
   { category: 'Offers / EAs', metric: 'Time in Offer/EA (job-app chain)', status: 'Not yet', dashboard: '-', notes: 'HRREC-90616. 1st EA start to final completed EA.' },
   { category: 'Offers / EAs', metric: '# Offers/EAs Issued, Renegotiations', status: 'Proxy-only', dashboard: '-', notes: 'Live Pharos candidates exist, but none cleanly reproduce the tracker job-application event-chain definition yet.' },
@@ -199,7 +200,7 @@ export const ValueRealizationMetrics: React.FC = () => {
         <Box style={{ maxWidth: 1200, margin: '0 auto' }}>
         <PageHeader
           title="Value Realisation Metrics"
-          subtitle="Your starting point for live Workday Recruiting outcome and adoption dashboards: time to hire, recruiter capacity, pipeline health, Add Documents, and other IUM-backed views you can open in one click."
+          subtitle="Your starting point for live Workday Recruiting outcome and adoption dashboards: time to hire, recruiter capacity, Post Job bulk Agency Types usage (HRREC-81393, OMS-backed Recruiting Agency User dashboard), pipeline health, Add Documents, and other IUM-backed views you can open in one click."
         />
         <BodyText size="small" color={colors.blackPepper500} marginBottom="m">
           Change badges on this page are absolute month-on-month deltas in metric units (for example days or average requisitions), not percentage change.
@@ -232,6 +233,29 @@ export const ValueRealizationMetrics: React.FC = () => {
                 helperText={buildHelperText(recruiterProductivity)}
                 changeIndicator={buildChangeIndicator(recruiterProductivity, 'higher-is-better')}
                 tooltip={TOOLTIPS.recruiterCapacityDashboard}
+              />
+            }
+          />
+        </Flex>
+
+        <Heading size="small" marginBottom="s">
+          Agency Types posting (HRREC-81393, OMS)
+        </Heading>
+        <BodyText size="small" color={colors.blackPepper500} marginBottom="m" style={{ lineHeight: 1.6 }}>
+          Bulk Post to Agency Types adoption is measured in Pharos PROD (no dedicated IUM yet). Open the dashboard for weekly adoption share, tenant penetration, menu opens, and cumulative tenants since launch.
+        </BodyText>
+        <Flex gap="l" marginBottom="l" style={{ flexWrap: 'wrap', alignItems: 'stretch' }}>
+          <DashboardLink
+            href="#recruiting-agency-user"
+            title="Recruiting Agency User"
+            description="HRREC-81393 bulk Post to Agency Types: OMS-backed adoption share, tenant penetration, menu intent, and cumulative reach (Pharos PROD)."
+            metricCard={
+              <MetricCard
+                label={AGENCY_TYPES_KPIS[0]?.label ?? 'Adoption Share'}
+                value={AGENCY_TYPES_KPIS[0]?.value ?? '—'}
+                helperText={AGENCY_TYPES_KPIS[0]?.detail ?? 'See dashboard for weekly trend'}
+                changeIndicator={{ text: 'OMS · weekly Saturday samples', sentiment: 'neutral' }}
+                tooltip="Definitive adoption uses Post Job payload filters (15$478022 + 15604$). No dedicated IUM; see docs/analytics/hrrec-81393-impact-report.md."
               />
             }
           />
@@ -275,21 +299,24 @@ export const ValueRealizationMetrics: React.FC = () => {
                   />
                 }
               />
-              <DashboardLink
-                href="#recruiting-agency-user"
-                title="Recruiting Agency User"
-                description="HRREC-81393 bulk Post to Agency Types: OMS-backed adoption share, tenant penetration, menu intent, and cumulative reach (Pharos PROD)."
-                metricCard={
-                  <MetricCard
-                    label={AGENCY_TYPES_KPIS[0]?.label ?? 'Adoption Share'}
-                    value={AGENCY_TYPES_KPIS[0]?.value ?? '—'}
-                    helperText={AGENCY_TYPES_KPIS[0]?.detail ?? 'See dashboard for weekly trend'}
-                    changeIndicator={{ text: 'OMS · weekly Saturday samples', sentiment: 'neutral' }}
-                    tooltip="Definitive adoption uses Post Job payload filters (15$478022 + 15604$). No dedicated IUM; see docs/analytics/hrrec-81393-impact-report.md."
-                  />
-                }
-              />
             </Flex>
+            <BodyText size="small" color={colors.blackPepper500} marginTop="s" style={{ lineHeight: 1.6 }}>
+              For <strong>Agency Types</strong> (HRREC-81393) posting metrics, use the{' '}
+              <a
+                href="#recruiting-agency-user"
+                style={{ color: colors.blueberry500, fontWeight: 600, textDecoration: 'none' }}
+                onClick={(event) => {
+                  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                  event.preventDefault();
+                  if (window.location.hash !== '#recruiting-agency-user') {
+                    window.location.hash = 'recruiting-agency-user';
+                  }
+                }}
+              >
+                Recruiting Agency User
+              </a>{' '}
+              dashboard (same card as above the tabs).
+            </BodyText>
           </Tabs.Panel>
 
           <Tabs.Panel data-id="coverage">
