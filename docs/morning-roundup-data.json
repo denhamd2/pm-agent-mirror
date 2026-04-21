@@ -1,67 +1,82 @@
 {
-  "generated": "2026-04-17T13:29:08Z",
+  "generated": "2026-04-21T09:15:00Z",
   "jiraResponses": [],
   "customerIssues": [],
   "competitorNews": [
     {
+      "competitor": "SmartRecruiters",
+      "title": "SmartRecruiters Unveils AI Agents for Autonomous Hiring Future",
+      "url": "https://uk.finance.yahoo.com/news/smartrecruiters-introduces-future-hiring-ai-125900292.html",
+      "date": "2026-04-15",
+      "bullets": [
+        "SmartRecruiters unveiled Winston AI agents for autonomous hiring including Winston Interview for first-round screening at scale",
+        "Winston Chat enables embedded assessments with reported 66% application completion rates",
+        "Winston Match delivers sub-scores for education, skills, and experience with enhanced candidate analysis",
+        "Agentic CRM activates talent pools by surfacing, ranking, and re-engaging candidates already in databases",
+        "Applicant Fraud Detection prototype identifies and quarantines suspicious submissions"
+      ],
+      "type": "feature-release",
+      "workdayImplication": "SmartRecruiters advancing on agentic AI; counter with HiredScore depth and Paradox integration as unified platform."
+    },
+    {
       "competitor": "SAP SuccessFactors",
-      "title": "SAP SuccessFactors 1H 2026 Release",
+      "title": "SAP SuccessFactors 1H 2026 Release: Strengthening Connection Across HR",
       "url": "https://news.sap.com/2026/04/sap-successfactors-1h-2026-release/",
       "date": "2026-04-13",
       "bullets": [
-        "SAP announced 1H 2026 release focused on connected AI, unified experiences, compliance, and skills governance.",
-        "Agentic AI network now spans recruiting, workforce administration, payroll, learning, performance, and talent development.",
-        "Native SmartRecruiters integration is positioned as connected recruiting plus onboarding with Employee Central.",
-        "Release introduces additional pay-transparency and governance capabilities tied to evolving regulation.",
-        "Positioning emphasizes end-to-end suite cohesion and confidence in enterprise decision-making."
+        "SAP announced 1H 2026 release with connected AI agents spanning recruiting, payroll, learning, and talent development",
+        "Applicant Management tool now supports OnChange rules for status field changes with validations",
+        "Native SmartRecruiters integration positioned as connected recruiting plus onboarding with Employee Central",
+        "Release emphasises suite-wide AI cohesion, compliance foundations, and skills governance",
+        "Pay transparency and governance capabilities added for evolving regulation"
       ],
       "type": "feature-release",
-      "workdayImplication": "SAP is tightening suite lock-in; defend Workday's unified HCM and compliance depth in enterprise deals."
-    },
-    {
-      "competitor": "SmartRecruiters",
-      "title": "April 2026 Product Release Highlights",
-      "url": "https://prod.smartrecruiters.com/resources/article/optimize-ai-in-your-recruiting-process/",
-      "date": "2026-04-09",
-      "bullets": [
-        "SmartRecruiters released Winston Companion Knowledge Base Agent for in-product, natural-language support answers.",
-        "The agent cites Help Center sources with direct links, reducing recruiter and hiring-manager dependency on admins.",
-        "New AI Disclosure capability adds candidate-facing transparency messaging across channels and regions.",
-        "Regional controls for disclosure text are positioned as global compliance support for AI use in recruiting.",
-        "Company reiterates monthly release cadence and AI-first recruiting workflow optimisation."
-      ],
-      "type": "feature-release",
-      "workdayImplication": "SmartRecruiters is moving fast on explainable AI UX; prioritise transparent AI disclosure controls."
+      "workdayImplication": "SAP tightening suite lock-in with native SmartRecruiters; defend unified HCM and compliance depth in deals."
     },
     {
       "competitor": "iCIMS",
-      "title": "iCIMS Spring 2026 Product Release",
+      "title": "iCIMS Expands Enterprise Platform with Frontline AI",
       "url": "https://www.prnewswire.com/news-releases/icims-expands-its-enterprise-talent-acquisition-platform-with-icims-frontline-ai-and-new-automation-configurability-and-sourcing-insights-302714426.html",
       "date": "2026-03-16",
       "bullets": [
-        "iCIMS launched Frontline AI for high-volume hiring with candidate and hiring-manager AI experiences.",
-        "Candidate flow supports AI-led interactions across SMS, WhatsApp, and web in a mobile-first journey.",
-        "Platform update adds trigger-based automation, source attribution, and interview scheduling improvements.",
-        "iCIMS claims up to 75% faster time to fill and up to 90% reduction in manual hiring tasks in customer outcomes.",
-        "Release leans into a unified enterprise platform narrative spanning corporate and frontline hiring."
+        "iCIMS launched Frontline AI for high-volume hiring with AI-led conversational candidate experience",
+        "Platform supports 24/7 candidate interactions across SMS, WhatsApp, and web in mobile-first journey",
+        "Claims up to 75% faster time to fill and up to 90% reduction in manual hiring tasks",
+        "Added trigger-based automation, source attribution, and interview scheduling improvements",
+        "Unified enterprise platform narrative spanning corporate and frontline hiring segments"
       ],
       "type": "feature-release",
-      "workdayImplication": "iCIMS is pressing on frontline AI speed claims; counter with HiredScore depth and enterprise scale."
+      "workdayImplication": "iCIMS frontline speed claims need countering; HiredScore + Paradox for enterprise scale differentiation."
     },
     {
       "competitor": "Greenhouse",
-      "title": "Greenhouse Release Notes - March 2026",
+      "title": "Greenhouse March 2026 Release Notes",
       "url": "https://support.greenhouse.io/hc/en-us/articles/48148047128987-Release-Notes-March-2026",
       "date": "2026-03-31",
       "bullets": [
-        "Greenhouse improved candidate profile actions and panel usability, including clearer action labels and close controls.",
-        "Duplicate candidate detection was tightened to email, phone, or LinkedIn URL to reduce false positives.",
-        "Suggested interview times now support multi-calendar views to reduce scheduling back-and-forth.",
-        "Greenhouse introduced Hire Link for Workday to export new-hire data and initiate onboarding in Workday.",
-        "New stage-mapping and API-usage visibility features target process transparency and integration observability."
+        "Improved candidate profile actions and panel usability with clearer action labels and close controls",
+        "Duplicate candidate detection tightened to email, phone, or LinkedIn URL to reduce false positives",
+        "Suggested interview times now support multi-calendar views to reduce scheduling back-and-forth",
+        "Introduced Hire Link for Workday to export new-hire data and initiate onboarding in Workday",
+        "Stage-mapping and API-usage visibility features target process transparency and integration observability"
       ],
       "type": "feature-release",
-      "workdayImplication": "Greenhouse is reducing ATS-to-HCM friction; reinforce Workday native flow as lower-complexity default."
+      "workdayImplication": "Greenhouse Hire Link targets Workday handoff friction; reinforce native flow as lower-complexity default."
+    },
+    {
+      "competitor": "Tracker",
+      "title": "Tracker Launches LinkedIn Hiring Assistant Integration",
+      "url": "https://www.tracker-rms.com/press-releases/tracker-lnkedin-rsc-integration",
+      "date": "2026-03-31",
+      "bullets": [
+        "Tracker launched RSC+ integration with LinkedIn Hiring Assistant among first ATS platforms",
+        "Integration enables unified pipeline of all applicants within LinkedIn Hiring Assistant",
+        "AI-powered evaluations combine LinkedIn and Tracker data with real-time syncing",
+        "Early adopters report saving up to 15 hours per week per recruiter",
+        "Future enhancements include bidirectional stage syncing between platforms"
+      ],
+      "type": "partnership",
+      "workdayImplication": "LinkedIn assistant integrations gaining traction; assess Workday RSC parity and recruiter productivity gains."
     }
   ]
 }

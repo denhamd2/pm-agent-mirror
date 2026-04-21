@@ -9,7 +9,10 @@ description: >-
   BPTs, validations). If Salomon indicates a configuration issue, the Deployment
   Agent provides customer-facing fix instructions. If Salomon indicates a bug,
   the Deployment Agent documents expected behaviour so the PM knows what
-  'fixed' looks like. XO metadata analysis proposes a code-level fix for bugs.
+  'fixed' looks like. CRITICAL: Every triage row MUST include an actionable
+  resolution - Proposed Fix for bugs, Customer Resolution for config/WAD,
+  Needs Further Investigation for inconclusive. XO metadata analysis proposes
+  code-level fixes for bugs and customer-facing resolutions for all other types.
   Appends results to a Confluence triage table. Accepts Jira IDs from prompt
   text or extracted from attachments (.xlsx, .pdf). Use when the user asks to
   triage a customer issue, check if something is WAD or a bug, analyse a Jira,
@@ -40,6 +43,24 @@ If the user attaches a file instead of typing Jira IDs:
 3. Deduplicate and process each.
 
 If no valid Jira IDs are found, ask the user to provide them.
+
+---
+
+## Critical Output Requirement
+
+**EVERY triage row MUST include an actionable resolution in the XO column.**
+
+The XO Metadata Analysis / Proposed Fix column is the most valuable part of the
+triage output. It tells the PM exactly what to do next. NEVER leave this column
+with only technical evidence - always include one of:
+
+| Status | Required Section | Content |
+|--------|-----------------|---------|
+| **Bug** | `Proposed Fix:` | Numbered steps for code change + verification |
+| **Config** | `Customer Resolution:` | Numbered steps for configuration change |
+| **WAD** | `Customer Resolution:` | Explain behaviour, suggest alternatives, close rationale |
+| **Inconclusive** | `Needs Further Investigation:` | What info needed, questions to ask, escalation path |
+| **Known Limitation** | `Proposed Fix (Enhancement):` + `Workaround:` | Enhancement path + current alternative |
 
 ---
 
@@ -122,15 +143,28 @@ Review all returned articles. Classify as one of:
 | **Likely Bug** | No articles explain the behaviour as intended; symptoms suggest a defect |
 | **Inconclusive** | Insufficient matching articles to make a confident call |
 
-Record a **concise explanation block** containing:
+Record a **long-form explanation block** containing:
 1. **Verdict line**: `WAD`, `Configuration Issue`, `Likely Bug`, or `Inconclusive`.
-2. **Explanation**: 3-4 concise lines explaining exactly why this verdict was selected based on the articles. This should read as a short, cohesive paragraph that justifies the classification (e.g., why it is a Bug and not WAD or Configuration).
-3. **Sources**: At least 2 source links when available (or an explicit note if only 1 or no usable source was found). Include the article title and its `articleSource` URL formatted as clickable links.
+2. **Explanation**: 5-7 lines (target 110-150 words) in plain PM language that explain:
+   - what users are experiencing
+   - why this is the selected verdict
+   - why this is **not** at least one other likely outcome (Bug vs WAD vs Config), using explicit contrast language such as "This is not WAD because..." or "This is not Config because..."
+   Keep this practical and outcome-focused. Avoid self-referential phrasing such as "direct match", "exact symptom", or "tracked defect" without interpretation.
+3. **Sources**: At least 2 source links when available. Include the article title and its `articleSource` URL formatted as clickable links.
+   - If only 1 usable source exists, write: `Only one usable source found: <a ...>Title</a>`
+   - If no usable sources exist, write: `No usable Salomon source links found for this verdict.`
+4. **Length rule (mandatory)**: Do NOT shorten this block due to batch size, output pressure, or token budget. Preserve the full 110-150 word explanation for every Jira row.
 
 Format example:
 **Likely Bug**
-Multiple Slack threads and Jira HRREC-84897 confirm this error appears when the integration runs, describing the exact same symptom as a known defect. It is not a Configuration Issue because the customer's BP setup matches the Admin Guide requirements, indicating the system is failing to evaluate the context correctly.
-Sources: [Slack Thread](url), [HRREC-84897](url)
+Users complete the flow successfully, but the expected notification still does not reach the intended recruiter. The impact is operational because recruiting teams assume the workflow completed correctly while key stakeholders never receive the alert. This is likely a Bug because the failure occurs after a valid business process event and persists across repeated tests. This is not WAD because no source describes missed delivery as expected behaviour for this event type. This is not a Configuration Issue because the documented setup was validated and still reproduces. The evidence points to product logic failing after correct setup.
+Sources: <a href="url" target="_blank" rel="noopener noreferrer">Slack Thread</a>, <a href="url" target="_blank" rel="noopener noreferrer">HRREC-84897</a>
+
+PM-language sentence starters (use when helpful):
+- "Users see ..."
+- "This is not WAD because ..."
+- "This is not Config because ..."
+- "This is likely a Bug because ..."
 
 ### Step 3: Deployment Agent Analysis (Conditional)
 
@@ -171,7 +205,7 @@ arguments: {
   - Remove the entry conditions from this step, OR add a complementary
     decision step with the opposite conditions
   - Test with a candidate in Sandbox before applying to Production
-  Sources: [Edit Business Process Definition](https://doc.workday.com/...)
+  Sources: <a href="https://doc.workday.com/..." target="_blank" rel="noopener noreferrer">Edit Business Process Definition</a>
   ```
 
 ---
@@ -203,7 +237,7 @@ arguments: {
   - Sequential exports of different questionnaires should produce distinct,
     correct files regardless of export order
   - No workaround (e.g. re-downloading) should be required
-  Sources: [Questionnaire Configuration](https://doc.workday.com/...)
+  Sources: <a href="https://doc.workday.com/..." target="_blank" rel="noopener noreferrer">Questionnaire Configuration</a>
   ```
 
 ---
@@ -227,9 +261,9 @@ The Deployment Agent MCP has strict rate limits (max 10 requests per minute). Wh
 
 ### Step 4: XO Metadata Inspection
 
-Inspect the live XO metadata graph on the SUV to find code-level evidence that
-supports or contradicts the Salomon verdict. This step runs in parallel with
-Steps 2-3 and does NOT depend on Salomon's output.
+Inspect XO metadata on the SUV to gather technical evidence that supports or
+contradicts the Salomon verdict. This step runs in parallel with Steps 2-3 and
+does NOT depend on Salomon's output.
 
 Unlike Salomon (which searches org knowledge - Slack, Jira, Confluence, Admin
 Guide), XO metadata tools search the **live codebase**: classes, method
@@ -278,20 +312,46 @@ arguments: {
 }
 ```
 
-**4e. Record metadata findings:**
-XO does not produce an independent WAD/Config/Bug verdict. Instead, record:
-- **Metadata evidence** that supports or contradicts the Salomon verdict
-- **Specific objects inspected** (by descriptor, instance ID, and type)
-- **If no relevant metadata found**: record "No relevant XO metadata identified for this issue."
+**4e. Record metadata findings (PM-friendly format):**
+XO does not produce an independent WAD/Config/Bug verdict. Instead, record this
+in three parts:
+1. **What this means for the PM** - 1-2 plain-language lines describing impact
+   and confidence (no jargon).
+2. **Technical evidence checked** - brief list of key objects inspected
+   (descriptor + type + ID).
+3. **If no relevant metadata found**: record "No relevant XO metadata identified for this issue."
 
-**Mandatory Proposed Fix (Bug Status Only):**
-Whenever the final synthesised Status (Step 5) is `Bug`, you MUST include a `Proposed Fix` subsection in the XO column output.
-- If XO evidence is strong, the proposed fix must include:
-  - Target XO object(s) (descriptor + type).
-  - Intended change (e.g., add validation, update display option, modify MB guard condition).
-  - Verification notes (how to confirm the fix in workflow/tests).
-- If the bug is valid but XO metadata is insufficient to propose a specific code change, use this exact fallback wording:
-  - `Proposed fix unavailable - XO metadata insufficient; escalate for targeted code trace.`
+Write the PM interpretation first, then technical detail. Do not lead with IDs.
+
+**Mandatory Action/Resolution Section (ALL Status Types):**
+The XO column MUST ALWAYS include an actionable resolution section, regardless of status type. This is the most important part of the triage output - it tells the PM what to do next.
+
+**For Bug status:**
+Include a `Proposed Fix:` subsection with:
+- Target XO object(s) (descriptor + type)
+- Intended change (e.g., add validation, update display option, modify MB guard condition)
+- Verification notes (how to confirm the fix in workflow/tests)
+- Format as a **numbered list** (`1.`, `2.`, `3.`, `4.`)
+- If XO metadata is insufficient: `Proposed fix unavailable - XO metadata insufficient; escalate for targeted code trace.`
+
+**For Configuration Issue / WAD status:**
+Include a `Customer Resolution:` subsection with:
+- Step-by-step configuration or workaround instructions
+- Specific Workday task names and navigation paths
+- What the customer should verify after making changes
+- Format as a **numbered list** (`1.`, `2.`, `3.`, `4.`)
+
+**For Known Limitation status:**
+Include both:
+- `Proposed Fix (Enhancement):` - what product change would address this
+- `Workaround:` - current alternative approach for the customer
+
+**For Inconclusive status:**
+Include a `Needs Further Investigation:` subsection with:
+- What additional information is needed from the customer
+- Specific questions to ask
+- Which team to escalate to
+- Format as a **numbered list** (`1.`, `2.`, `3.`, `4.`)
 
 ### Step 5: Synthesise Status Label
 
@@ -367,14 +427,25 @@ The DA column (column 5) varies by Salomon verdict:
 - **Bug:** Expected behaviour documentation with source links
 - **WAD / Inconclusive:** "N/A"
 
+**Source link formatting rule (mandatory):**
+- In both Confluence HTML and chat output, format source links as:
+  `<a href="{url}" target="_blank" rel="noopener noreferrer">{title}</a>`
+- This ensures every source opens in a new window.
+
+**Formatting guardrails (mandatory before write):**
+- Validate every generated row contains valid `<a ...>` tags for every cited source in Salomon, Deployment Agent, and XO columns.
+- If any source URL is present as plain text, convert it to the anchor format before final output.
+- If any HTML is malformed (broken `<a>`, missing closing tags, malformed `<br/>`), repair the row before writing to Confluence or posting in chat.
+- Do not compress wording to "make it fit". Split output into additional chunks instead.
+
 ```html
 <tr>
-  <td><a href="https://jira2.workday.com/browse/{ISSUE_KEY}">{ISSUE_KEY}</a> - {Jira Title}</td>
+  <td><a href="https://jira2.workday.com/browse/{ISSUE_KEY}" target="_blank" rel="noopener noreferrer">{ISSUE_KEY}</a> - {Jira Title}</td>
   <td>{Short PM-friendly description}</td>
   <td><strong>{Status label, e.g. Config (90%)}</strong></td>
-  <td><strong>{Salomon Verdict}</strong><br/>{3-4 concise lines explaining the verdict}<br/>Sources: <a href="{url}">{article title}</a>, ...</td>
-  <td>{If Config: <strong>Configuration Steps</strong><br/>{bullet-pointed instructions}<br/>Sources: <a href="{url}">{doc title}</a> | If Bug: <strong>Expected Behaviour</strong><br/>{2-4 bullets describing correct functionality}<br/>Sources: <a href="{url}">{doc title}</a> | If WAD/Inconclusive: <strong>N/A</strong>}</td>
-  <td><strong>Metadata findings:</strong> {XO findings or "No relevant metadata identified."}<br/>{If Bug, add: <strong>Proposed Fix:</strong> {Target objects, intended change, verification notes OR "Proposed fix unavailable..."}}</td>
+  <td><strong>{Salomon Verdict}</strong><br/>{5-7 PM-friendly lines (110-150 words): user impact, why this verdict, why not Bug/WAD/Config alternatives}<br/>Sources: <a href="{url}" target="_blank" rel="noopener noreferrer">{article title}</a>, ...</td>
+  <td>{If Config: <strong>Configuration Steps</strong><br/>{bullet-pointed instructions}<br/>Sources: <a href="{url}" target="_blank" rel="noopener noreferrer">{doc title}</a> | If Bug: <strong>Expected Behaviour</strong><br/>{2-4 bullets describing correct functionality in plain PM language}<br/>Sources: <a href="{url}" target="_blank" rel="noopener noreferrer">{doc title}</a> | If WAD/Inconclusive: <strong>N/A</strong>}</td>
+  <td><strong>Technical evidence:</strong> {XO findings or "No relevant metadata identified."}<br/><br/>{MANDATORY - Include ONE of the following based on Status:}<br/><br/>{If Bug: <strong>Proposed Fix:</strong><br/>1. {Target object and intended change}<br/>2. {Secondary change or guard condition}<br/>3. {Verification notes}<br/>4. {Regression test scope} OR "Proposed fix unavailable - XO metadata insufficient; escalate for targeted code trace."}<br/><br/>{If Config/WAD: <strong>Customer Resolution:</strong><br/>1. {Navigate to specific Workday task}<br/>2. {Configuration change to make}<br/>3. {Verification step}<br/>4. {Expected outcome after change}}<br/><br/>{If Known Limitation: <strong>Proposed Fix (Enhancement):</strong><br/>{What product change would address this}<br/><strong>Workaround:</strong> {Current alternative for customer}}<br/><br/>{If Inconclusive: <strong>Needs Further Investigation:</strong><br/>1. {What info needed from customer}<br/>2. {Specific questions to ask}<br/>3. {Which team to escalate to}<br/>4. {Recommended next step}}</td>
 </tr>
 ```
 
@@ -412,21 +483,32 @@ If the page is empty or has no table yet, create the full table structure:
 
 ### Step 7: Report to User
 
-After processing all Jiras, present a **full table in chat matching all
-Confluence columns**, followed by a link to the Confluence page.
+After processing all Jiras, present chat output using the following batch policy:
+
+- **1-9 Jiras**: Present one full table in chat matching all Confluence columns, then the Confluence link.
+- **10+ Jiras (high-volume mode)**: Present full-detail chat tables in chunks of **3-4 Jira rows per chunk**.
+  - Keep all 6 columns and full text for each row (no summary-only compression).
+  - Label each chunk clearly: `Chunk 1 of N`, `Chunk 2 of N`, etc.
+  - After the final chunk, include a **Batch Completion** block listing all chunk labels so the reader can confirm coverage of the entire Jira set.
+  - If a chunk is still too large, split again into smaller chunks instead of shortening Salomon/DA/XO content.
 
 **Chat table format:**
 ```
-| Jira # & Title | Description | Status | Salomon | Deployment Agent | XO Metadata |
+| Jira # & Title | Description | Status | Salomon | Deployment Agent | XO Metadata / Proposed Fix |
 |---|---|---|---|---|---|
-| [HRREC-12345](https://jira2.workday.com/browse/HRREC-12345) - Title | Short desc | Config (90%) | **Config Issue**<br>Explanation in 3-4 concise lines detailing why this is a config issue and not a bug.<br>Sources: [article](url), [article](url) | **Configuration Steps**<br>• Step 1...<br>Sources: [doc](url) | **Metadata findings:** No relevant metadata identified. |
-| [HRREC-67890](https://jira2.workday.com/browse/HRREC-67890) - Title | Short desc | Bug (85%) | **Likely Bug**<br>Explanation in 3-4 concise lines detailing why this is a bug and not WAD.<br>Sources: [article](url), [article](url) | **Expected Behaviour**<br>• Feature should...<br>Sources: [doc](url) | **Metadata findings:** Confirms defect on MB 87$1234.<br>**Proposed Fix:** Add guard condition to element X. Verify via workflow Y. |
-| [HRREC-11111](https://jira2.workday.com/browse/HRREC-11111) - Title | Short desc | WAD (80%) | **WAD**<br>Explanation in 3-4 concise lines detailing why this is WAD.<br>Sources: [article](url) | **N/A** | **Metadata findings:** No relevant metadata identified. |
+| <a href="https://jira2.workday.com/browse/HRREC-12345" target="_blank" rel="noopener noreferrer">HRREC-12345</a> - Title | Short desc | Config (90%) | **Configuration Issue**<br>Users can complete setup, but one required configuration condition is missing, which explains the failure. This is not a Bug because the product behaves correctly once the missing condition is added. This is not WAD because the current customer outcome is not the intended configured flow.<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a>, <a href="url" target="_blank" rel="noopener noreferrer">Article 2</a> | **Configuration Steps**<br>• Step 1...<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Admin guide page</a> | **Technical evidence:** Key task and validation metadata align with required setup pattern.<br><br>**Customer Resolution:**<br>1. Navigate to Edit Tenant Setup - Recruiting<br>2. Enable/disable the specific configuration flag<br>3. Test in Sandbox before applying to Production<br>4. Verify expected behaviour after change |
+| <a href="https://jira2.workday.com/browse/HRREC-67890" target="_blank" rel="noopener noreferrer">HRREC-67890</a> - Title | Short desc | Bug (85%) | **Likely Bug**<br>Users follow the documented process, but the expected system response still fails. This is not WAD because no source describes this as expected behaviour. This is not Config because setup prerequisites were met before failure.<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a>, <a href="url" target="_blank" rel="noopener noreferrer">Article 2</a> | **Expected Behaviour**<br>• Feature should...<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Admin guide page</a> | **Technical evidence:** Confirms defect signal in recipient-resolution path.<br><br>**Proposed Fix:**<br>1. Update guard condition on target method binding<br>2. Ensure context resolves from job application object<br>3. Add unit test for edge case<br>4. Verify with end-to-end repro and regression tests |
+| <a href="https://jira2.workday.com/browse/HRREC-11111" target="_blank" rel="noopener noreferrer">HRREC-11111</a> - Title | Short desc | WAD (80%) | **WAD**<br>Users are seeing expected system behaviour under current design rules. This is not a Bug because the observed result matches documented logic. This is not Config because no missing setup was identified as the trigger.<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a> | **N/A** | **Technical evidence:** No contradictory metadata found. Behaviour follows intended design.<br><br>**Customer Resolution:**<br>1. Explain expected behaviour to customer with documentation link<br>2. Suggest alternative workflow if customer needs different outcome<br>3. Log enhancement request if behaviour change is warranted<br>4. Close as WAD with clear rationale |
+| <a href="https://jira2.workday.com/browse/HRREC-22222" target="_blank" rel="noopener noreferrer">HRREC-22222</a> - Title | Short desc | Inconclusive (60%) | **Inconclusive**<br>Insufficient evidence to classify. Could not reproduce, or conflicting signals from sources.<br>Sources: Limited | **N/A** | **Technical evidence:** Insufficient metadata to determine root cause.<br><br>**Needs Further Investigation:**<br>1. Request specific repro steps and tenant details from customer<br>2. Ask which Workday task and configuration settings are in use<br>3. Escalate to #hrrec_prodsupport with gathered context<br>4. Consider SUV reproduction if customer provides sample data |
+| <a href="https://jira2.workday.com/browse/HRREC-33333" target="_blank" rel="noopener noreferrer">HRREC-33333</a> - Title | Short desc | Known Limitation (85%) | **Known Limitation**<br>Feature has documented architectural constraints that prevent the requested behaviour. This is not a Bug because the limitation is by design. This is not Config because no configuration change can enable the behaviour.<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a> | **N/A** | **Technical evidence:** Architectural constraint confirmed in platform documentation.<br><br>**Proposed Fix (Enhancement):**<br>1. Extend platform component to support requested behaviour<br>2. Add feature flag for gradual rollout<br>3. Update documentation when enhancement ships<br><br>**Workaround:**<br>Use alternative approach X until enhancement is available |
 ```
 
-Note: Bug rows show **Expected behaviour** in the DA column (what the feature
-should do when fixed). Config rows show **Configuration steps**. WAD and
-Inconclusive rows show **N/A**.
+Note: The XO column MUST ALWAYS include an actionable section:
+- **Bug**: Proposed Fix (numbered steps for code change)
+- **Config**: Customer Resolution (numbered steps for configuration)
+- **WAD**: Customer Resolution (explain behaviour, suggest alternatives)
+- **Inconclusive**: Needs Further Investigation (numbered steps for follow-up)
+- **Known Limitation**: Proposed Fix (Enhancement) + Workaround
 
 After the table, always include:
 
@@ -435,6 +517,31 @@ After the table, always include:
 Highlight any cases where **XO metadata contradicts the Salomon verdict** -
 these warrant closer human review. If the Status confidence is below 70%,
 explicitly recommend the PM investigate further.
+
+### Step 7a: High-Volume Chunk Template (10+ Jiras)
+
+Use this pattern in chat:
+
+```
+Chunk 1 of N (Rows 1-4)
+| Jira # & Title | Description | Status | Salomon | Deployment Agent | XO Metadata / Proposed Fix |
+|---|---|---|---|---|---|
+| ...full-detail rows... |
+
+Chunk 2 of N (Rows 5-8)
+| Jira # & Title | Description | Status | Salomon | Deployment Agent | XO Metadata / Proposed Fix |
+|---|---|---|---|---|---|
+| ...full-detail rows... |
+```
+
+After the last chunk, add:
+
+```
+Batch Completion:
+- Total Jira processed: <count>
+- Chunks delivered: Chunk 1 of N, Chunk 2 of N, ..., Chunk N of N
+- All rows include full Salomon, Deployment Agent, XO detail and clickable links.
+```
 
 ---
 
@@ -525,8 +632,9 @@ PM to adjudicate.
   DA's perspective in the guidance for the PM's consideration.
 - **Both Salomon and XO have nothing**: Report honestly and suggest escalation.
   DA column is "N/A". Confidence is 50%.
-- **Batch of 5+ Jiras**: Process sequentially but present a single consolidated
-  summary table at the end.
+- **Batch of 5-9 Jiras**: Process sequentially and present one consolidated full-detail table at the end.
+- **Batch of 10+ Jiras**: Process sequentially and present full-detail output in chunks of 3-4 Jira rows. Never shorten Salomon/DA/XO cells to force a single message.
+- **Output truncation risk**: If a message is near truncation, split into additional chunks immediately. Do not remove source links, line breaks, or resolution detail.
 - **Confluence page not found**: If the search for "Customer Issue Triage POC"
   returns no results, create the page with the initial table structure before
   proceeding with the row insert. If page creation fails, fall back to writing
@@ -534,3 +642,24 @@ PM to adjudicate.
 - **Confluence page unreachable or times out**: Write the full triage table to a
   local markdown file at `docs/customer-issue-triage-output.md` as a fallback,
   and inform the user.
+
+---
+
+## Validation Checks (Run Before Final Response)
+
+Use these checks to prevent shortened guidance, broken links, or malformed high-volume output.
+
+### Validation A - Small Batch (1-2 Jiras)
+
+1. Confirm each Salomon cell is 5-7 lines and approximately 110-150 words.
+2. Confirm each Salomon cell includes explicit contrast rationale (for example, "This is not WAD because...").
+3. Confirm each cited source is clickable with `<a href="..." target="_blank" rel="noopener noreferrer">`.
+4. Confirm all 6 columns are present in chat and Confluence row content.
+
+### Validation B - Large Batch (11 Jiras)
+
+1. Confirm output uses high-volume mode with chunks of 3-4 rows.
+2. Confirm each chunk preserves full row detail for Salomon, Deployment Agent, and XO columns.
+3. Confirm no chunk drops source links or HTML anchor formatting.
+4. Confirm final Batch Completion block lists all chunk labels and total Jira count.
+5. Confirm Confluence row format remains aligned with the same 6-column schema.

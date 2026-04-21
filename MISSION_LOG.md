@@ -85,6 +85,22 @@ Archived: MISSION-009, MISSION-010, MISSION-011, MISSION-014, MISSION-015, MISSI
 
 ## Decision Log
 
+### DECISION-026: Customer issue triage run recorded for HRREC-82310
+**Date:** 21 April 2026  
+**Context:** `/customer-issue-triage HRREC-82310` was executed to classify whether referral endorsement notification behaviour is WAD, configuration-related, or a software defect.  
+**Choice:** Classified `HRREC-82310` as **Bug (90%)** using Salomon primary evidence plus XO metadata inspection, and appended a new six-column row to Confluence page **Customer Issue Triage POC** (version 9).  
+**Rationale:** Salomon returned a direct symptom match for the same Endorse Candidate/Primary Recruiter notification failure, while XO task/element metadata aligned with the impacted path and did not contradict a defect classification.  
+**Owner:** David Denham + PM triage workflow  
+**Status:** Implemented
+
+### DECISION-027: Customer issue triage batch recorded for three HRREC tickets
+**Date:** 21 April 2026  
+**Context:** `/customer-issue-triage HRREC-82310 HRREC-81610 HRREC-78147` was executed to classify each issue as WAD, Config, or Bug using Salomon primary guidance with XO metadata evidence and Deployment Agent expected-behaviour context.  
+**Choice:** Classified all three as **Bug** with confidence scores: `HRREC-82310 (90%)`, `HRREC-81610 (84%)`, and `HRREC-78147 (88%)`, and appended a new six-column triage table section to Confluence page **Customer Issue Triage POC** (version 10).  
+**Rationale:** Salomon evidence for each ticket identified known defect patterns or known bug-linked workarounds, while XO checks either supported the impacted execution paths (`HRREC-82310`, `HRREC-78147`) or provided neutral structural evidence without contradiction (`HRREC-81610`).  
+**Owner:** David Denham + PM triage workflow  
+**Status:** Implemented
+
 ### DECISION-024: HRREC-81393 Metrics Verified, Historical Backfill, and Dashboard Enhancement
 **Date:** 17 April 2026  
 **Context:** Needed to verify the adoption metrics are correct (exclude old flow), determine launch date, and provide a full adoption trend since launch.  
