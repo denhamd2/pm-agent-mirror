@@ -4,19 +4,22 @@ description: >-
   Triages customer-reported Jira issues using Salomon for primary classification
   and XO metadata inspection for code-level evidence. Classifies each issue as
   WAD (Working As Designed), customer configuration issue, or bug with a
-  confidence percentage. Salomon searches org knowledge (Slack, Jira, Confluence,
-  Admin Guide); XO inspects live codebase metadata (classes, method bindings,
-  BPTs, validations). If Salomon indicates a configuration issue, the Deployment
-  Agent provides customer-facing fix instructions. If Salomon indicates a bug,
-  the Deployment Agent documents expected behaviour so the PM knows what
-  'fixed' looks like. CRITICAL: Every triage row MUST include an actionable
-  resolution - Proposed Fix for bugs, Customer Resolution for config/WAD,
-  Needs Further Investigation for inconclusive. XO metadata analysis proposes
-  code-level fixes for bugs and customer-facing resolutions for all other types.
-  Appends results to a Confluence triage table. Accepts Jira IDs from prompt
-  text or extracted from attachments (.xlsx, .pdf). Use when the user asks to
-  triage a customer issue, check if something is WAD or a bug, analyse a Jira,
-  or run customer issue triage.
+  confidence percentage. Provides closure recommendations (CLOSE vs KEEP) based
+  on bug age, customer activity, and confidence scores - ideal for bulk triage
+  of old bugs. Salomon searches org knowledge (Slack, Jira, Confluence, Admin
+  Guide); XO inspects live codebase metadata (classes, method bindings, BPTs,
+  validations). If Salomon indicates a configuration issue, the Deployment Agent
+  provides customer-facing fix instructions. If Salomon indicates a bug, the
+  Deployment Agent documents expected behaviour so the PM knows what 'fixed'
+  looks like. CRITICAL: Every triage row MUST include an actionable resolution -
+  Proposed Fix for bugs, Customer Resolution for config/WAD, Needs Further
+  Investigation for inconclusive. XO metadata analysis proposes code-level fixes
+  for bugs and customer-facing resolutions for all other types. Generates batch
+  summary reports for 10+ Jiras with closure recommendations rollup. Appends
+  results to a 7-column Confluence triage table. Accepts Jira IDs from prompt
+  text or extracted from attachments (.xlsx, .pdf, .csv). Use when the user asks
+  to triage a customer issue, check if something is WAD or a bug, analyse a Jira,
+  run customer issue triage, or bulk triage old bugs for closure decisions.
 ---
 
 # Customer Issue Triage
@@ -104,6 +107,72 @@ Extract and note these fields for subsequent steps:
 - **Linked tickets** (may reveal duplicates or related root causes)
 - **Affected area** (BP type, task, element, feature name)
 
+### Step 1b: Extract Age and Activity Metadata
+
+After ingesting the Jira in Step 1, extract age and activity signals to support closure recommendations and age-based confidence adjustments.
+
+**From Jira response, extract:**
+
+1. **Bug age** - Calculate from created date to current date
+   ```
+   created_date = parse from "created" field
+   bug_age_days = current_date - created_date
+   bug_age_years = bug_age_days / 365
+   ```
+
+2. **Last activity date** - Most recent of:
+   - Last comment date (from comments array)
+   - Last status change (from "updated" field)
+   - Last workflow transition
+   
+   ```
+   updated_date = parse from "updated" field
+   last_comment_date = parse from comments[-1].created if comments exist
+   last_activity_date = max(updated_date, last_comment_date)
+   days_since_activity = current_date - last_activity_date
+   ```
+
+3. **Activity categorization** - Classify based on last activity:
+   - **Active**: Activity within 6 months (days_since_activity < 180)
+   - **Recent**: Activity 6-24 months ago (180 ≤ days_since_activity < 730)
+   - **Stale**: No activity 2+ years (730 ≤ days_since_activity < 1825)
+   - **Very stale**: No activity 5+ years (days_since_activity ≥ 1825)
+
+4. **Recent comment count** - Count comments in last 2 years:
+   ```
+   recent_comments = count of comments where (current_date - comment.created) < 730 days
+   ```
+
+5. **Linked Support cases** - Extract from linked issues:
+   - Look for linked issues with type "Support Case" or "Customer Case"
+   - Note their status (Open, Closed, Resolved)
+   - Example: "Linked to CASE-12345 (Closed)"
+
+6. **Customer engagement signals** - Check for high-priority indicators:
+   - **Labels**: Look for "Gartner", "Executive", "Escalation", "Priority"
+   - **Priority field**: P0, P1, Critical
+   - **Comments**: Mentions of "customer escalation", "executive review"
+   - Flag as `has_high_engagement = true` if any of these present
+
+**Store metadata for later use:**
+```
+jira_metadata = {
+  "bug_age_years": float,
+  "days_since_activity": int,
+  "activity_category": "Active" | "Recent" | "Stale" | "Very stale",
+  "recent_comment_count": int,
+  "linked_support_cases": [{status, key}],
+  "has_high_engagement": boolean,
+  "engagement_signals": [list of specific tags/labels/mentions]
+}
+```
+
+**Usage in subsequent steps:**
+- **Step 2 (Salomon)**: Include age context in explanation ("Open 5 years with no activity suggests...")
+- **Step 5 (Status synthesis)**: Apply age-based confidence adjustments
+- **Step 6 (Recommendation)**: Calculate CLOSE vs KEEP based on age + activity + status
+- **Step 7b (Batch summary)**: Group by recommendation type and activity level
+
 ### Step 2: Salomon Analysis
 
 Query Salomon's internal knowledge base to check whether this issue is a known
@@ -143,28 +212,28 @@ Review all returned articles. Classify as one of:
 | **Likely Bug** | No articles explain the behaviour as intended; symptoms suggest a defect |
 | **Inconclusive** | Insufficient matching articles to make a confident call |
 
-Record a **long-form explanation block** containing:
+Record a **concise explanation block** containing:
 1. **Verdict line**: `WAD`, `Configuration Issue`, `Likely Bug`, or `Inconclusive`.
-2. **Explanation**: 5-7 lines (target 110-150 words) in plain PM language that explain:
-   - what users are experiencing
-   - why this is the selected verdict
-   - why this is **not** at least one other likely outcome (Bug vs WAD vs Config), using explicit contrast language such as "This is not WAD because..." or "This is not Config because..."
+2. **Explanation**: 3-4 lines (target 60-80 words) that explain:
+   - **START with verdict rationale** ("This is likely a Bug because...")
+   - why this is **not** at least one other likely outcome, using explicit contrast language ("This is not WAD because...", "This is not Config because...")
+   - **Do NOT include user experience summary** - jump straight to the classification rationale
    Keep this practical and outcome-focused. Avoid self-referential phrasing such as "direct match", "exact symptom", or "tracked defect" without interpretation.
 3. **Sources**: At least 2 source links when available. Include the article title and its `articleSource` URL formatted as clickable links.
    - If only 1 usable source exists, write: `Only one usable source found: <a ...>Title</a>`
    - If no usable sources exist, write: `No usable Salomon source links found for this verdict.`
-4. **Length rule (mandatory)**: Do NOT shorten this block due to batch size, output pressure, or token budget. Preserve the full 110-150 word explanation for every Jira row.
 
 Format example:
 **Likely Bug**
-Users complete the flow successfully, but the expected notification still does not reach the intended recruiter. The impact is operational because recruiting teams assume the workflow completed correctly while key stakeholders never receive the alert. This is likely a Bug because the failure occurs after a valid business process event and persists across repeated tests. This is not WAD because no source describes missed delivery as expected behaviour for this event type. This is not a Configuration Issue because the documented setup was validated and still reproduces. The evidence points to product logic failing after correct setup.
+This is likely a Bug because the notification failure occurs after a valid business process event and persists across repeated tests with correct configuration. This is not WAD because no source describes missed delivery as expected behaviour for this event type. This is not a Configuration Issue because the documented setup was validated and still reproduces across multiple environments.
 Sources: <a href="url" target="_blank" rel="noopener noreferrer">Slack Thread</a>, <a href="url" target="_blank" rel="noopener noreferrer">HRREC-84897</a>
 
-PM-language sentence starters (use when helpful):
-- "Users see ..."
-- "This is not WAD because ..."
-- "This is not Config because ..."
+PM-language sentence starters (MANDATORY - always start with these):
 - "This is likely a Bug because ..."
+- "This is WAD because ..."
+- "This is a Configuration Issue because ..."
+- "This is Inconclusive because ..."
+Then add contrast: "This is not WAD because ...", "This is not Config because ..."
 
 ### Step 3: Deployment Agent Analysis (Conditional)
 
@@ -367,16 +436,25 @@ classification or confidence score.
 
 | Scenario | Confidence Range | Notes |
 |---|---|---|
-| Salomon verdict + XO metadata confirms | 85-95% | Strong: org knowledge aligns with code evidence |
-| Salomon verdict + XO finds no relevant metadata | 65-80% | Moderate: relies on Salomon alone, no code contradiction |
+| Salomon verdict + XO metadata confirms | 85-95% | Strong: org knowledge aligns with code evidence; +5% if 5+ years old (cap 95%) |
+| Salomon verdict + XO finds no relevant metadata | 65-80% | Moderate: relies on Salomon alone, no code contradiction; +5% if 5+ years old (cap 85%) |
 | Salomon verdict + XO metadata contradicts | 55-70% | Flag for human review: code evidence disagrees with Salomon |
 | Salomon Inconclusive + XO finds bug evidence | 60-75% | XO metadata alone suggests defect |
 | Both have nothing | 50% | Escalate to human review |
 
-**Format**: `Config (90%)` or `WAD (75%)` or `Bug (70%)`
+**Age-based confidence adjustments:**
+- **Bug age 5+ years + WAD or Config verdict**: Add +5% confidence (cap at 95%)
+  - Rationale: Long-standing WAD/Config issues with no code changes suggest stable behavior
+- **Bug age 2+ years + no activity**: Note "Stale - no recent customer engagement" in Salomon explanation
+  - Rationale: Lack of customer activity suggests issue may no longer be relevant or was worked around
+- **Bug age <1 year**: No adjustment (normal handling)
+- **Active engagement (Gartner, Executive tags)**: Do NOT apply age bonuses even if old
+  - Rationale: High-priority customer engagement overrides age-based assumptions
+
+**Format**: `Config (90%)` or `WAD (80%)` or `Bug (70%)`
 
 The status label goes in the Status column. It represents the Salomon
-classification adjusted by XO metadata evidence.
+classification adjusted by XO metadata evidence and bug age.
 
 ### Step 6: Write to Confluence
 
@@ -409,7 +487,7 @@ toolName: "create_confluence_page"
 arguments: {
   "spaceKey": "~david.denham",
   "title": "Customer Issue Triage POC",
-  "content": "<table><thead><tr><th>Jira # &amp; Title</th><th>Short description of issue</th><th>Status</th><th>Salomon Guidance</th><th>Deployment Agent Guidance</th><th>XO Metadata Analysis / Proposed Fix</th></tr></thead><tbody></tbody></table>"
+  "content": "<table><thead><tr><th>Jira # &amp; Title</th><th>Short description of issue</th><th>Status</th><th>Salomon Guidance</th><th>Deployment Agent Guidance</th><th>XO Metadata Analysis / Proposed Fix</th><th>Recommendation</th></tr></thead><tbody></tbody></table>"
 }
 ```
 
@@ -420,7 +498,70 @@ toolName: "get_page_content"
 arguments: { "pageId": "{discovered_page_id}" }
 ```
 
-**Step 6b - Build the new row HTML (6 columns):**
+**Step 6a2 - Calculate Closure Recommendation:**
+
+Before building the table row, calculate the closure recommendation based on Status, confidence, bug age, and activity metadata from Step 1b.
+
+**Recommendation logic:**
+
+```python
+# Input from previous steps:
+# - status: "WAD", "Config", or "Bug"
+# - confidence: 50-95%
+# - bug_age_years: from Step 1b
+# - days_since_activity: from Step 1b
+# - activity_category: "Active", "Recent", "Stale", "Very stale"
+# - has_high_engagement: boolean (Gartner, Executive tags)
+
+# Calculate recommendation:
+if has_high_engagement:
+    recommendation = "KEEP (Active)"
+    rationale = f"High-priority customer engagement (Executive/Gartner tagged) overrides age and status"
+
+elif status == "Bug" and activity_category in ["Active", "Recent"]:
+    recommendation = "KEEP (Active)"
+    rationale = f"Bug with customer activity in last {days_since_activity} days - requires investigation"
+
+elif status == "Inconclusive":
+    recommendation = "KEEP (Unclear)"
+    rationale = f"Insufficient evidence to classify - needs human review before closure"
+
+elif status == "WAD" and confidence >= 85 and bug_age_years >= 2:
+    recommendation = "CLOSE (High Confidence)"
+    rationale = f"WAD {confidence}%, open {bug_age_years:.1f} years, {activity_category.lower()} - safe to close"
+
+elif status == "Config" and confidence >= 85 and days_since_activity >= 730:  # 2+ years no activity
+    recommendation = "CLOSE (High Confidence)"
+    rationale = f"Config issue {confidence}%, no activity for {days_since_activity} days - likely resolved or worked around"
+
+elif status == "WAD" and confidence >= 70 and days_since_activity >= 730:  # 2+ years no activity
+    recommendation = "CLOSE (Review First)"
+    rationale = f"WAD {confidence}%, stale ({days_since_activity} days no activity) - review with team before closing"
+
+elif status == "Config" and confidence >= 70 and days_since_activity >= 730:
+    recommendation = "CLOSE (Review First)"
+    rationale = f"Config {confidence}%, stale - verify with Support before closing"
+
+elif bug_age_years >= 5 and days_since_activity >= 1825 and status in ["WAD", "Config"]:  # 5+ years no activity
+    recommendation = "CLOSE (Review First)"
+    rationale = f"Very old ({bug_age_years:.1f} years), very stale, {status} - likely safe to close but verify first"
+
+elif status == "Bug":
+    recommendation = "KEEP (Active)"
+    rationale = f"Genuine bug requires investigation - do not close without fix"
+
+else:
+    recommendation = "KEEP (Unclear)"
+    rationale = f"Status {status} {confidence}%, age {bug_age_years:.1f} years - review case details before deciding"
+```
+
+**Recommendation values (4 types):**
+- **CLOSE (High Confidence)**: WAD/Config 85%+, 2+ years old, no recent activity → Safe to close immediately
+- **CLOSE (Review First)**: WAD/Config 70-85%, stale → Likely closeable but verify with team/Support
+- **KEEP (Active)**: Bug, or high-priority engagement → Must keep open for investigation
+- **KEEP (Unclear)**: Inconclusive, or unclear case → Needs human review before any closure decision
+
+**Step 6b - Build the new row HTML (7 columns):**
 
 The DA column (column 5) varies by Salomon verdict:
 - **Config:** Configuration steps with source links
@@ -443,9 +584,10 @@ The DA column (column 5) varies by Salomon verdict:
   <td><a href="https://jira2.workday.com/browse/{ISSUE_KEY}" target="_blank" rel="noopener noreferrer">{ISSUE_KEY}</a> - {Jira Title}</td>
   <td>{Short PM-friendly description}</td>
   <td><strong>{Status label, e.g. Config (90%)}</strong></td>
-  <td><strong>{Salomon Verdict}</strong><br/>{5-7 PM-friendly lines (110-150 words): user impact, why this verdict, why not Bug/WAD/Config alternatives}<br/>Sources: <a href="{url}" target="_blank" rel="noopener noreferrer">{article title}</a>, ...</td>
+  <td><strong>{Salomon Verdict}</strong><br/>{3-4 concise lines (60-80 words): verdict rationale first, why not Bug/WAD/Config alternatives}<br/>Sources: <a href="{url}" target="_blank" rel="noopener noreferrer">{article title}</a>, ...</td>
   <td>{If Config: <strong>Configuration Steps</strong><br/>{bullet-pointed instructions}<br/>Sources: <a href="{url}" target="_blank" rel="noopener noreferrer">{doc title}</a> | If Bug: <strong>Expected Behaviour</strong><br/>{2-4 bullets describing correct functionality in plain PM language}<br/>Sources: <a href="{url}" target="_blank" rel="noopener noreferrer">{doc title}</a> | If WAD/Inconclusive: <strong>N/A</strong>}</td>
   <td><strong>Technical evidence:</strong> {XO findings or "No relevant metadata identified."}<br/><br/>{MANDATORY - Include ONE of the following based on Status:}<br/><br/>{If Bug: <strong>Proposed Fix:</strong><br/>1. {Target object and intended change}<br/>2. {Secondary change or guard condition}<br/>3. {Verification notes}<br/>4. {Regression test scope} OR "Proposed fix unavailable - XO metadata insufficient; escalate for targeted code trace."}<br/><br/>{If Config/WAD: <strong>Customer Resolution:</strong><br/>1. {Navigate to specific Workday task}<br/>2. {Configuration change to make}<br/>3. {Verification step}<br/>4. {Expected outcome after change}}<br/><br/>{If Known Limitation: <strong>Proposed Fix (Enhancement):</strong><br/>{What product change would address this}<br/><strong>Workaround:</strong> {Current alternative for customer}}<br/><br/>{If Inconclusive: <strong>Needs Further Investigation:</strong><br/>1. {What info needed from customer}<br/>2. {Specific questions to ask}<br/>3. {Which team to escalate to}<br/>4. {Recommended next step}}</td>
+  <td><strong>{Recommendation value from Step 6a2}</strong><br/>{Rationale from Step 6a2}<br/><br/>{Age context: "Open {bug_age_years} years, {activity_category}, {days_since_activity} days since last activity"}</td>
 </tr>
 ```
 
@@ -473,6 +615,7 @@ If the page is empty or has no table yet, create the full table structure:
       <th>Salomon Guidance</th>
       <th>Deployment Agent Guidance</th>
       <th>XO Metadata Analysis / Proposed Fix</th>
+      <th>Recommendation</th>
     </tr>
   </thead>
   <tbody>
@@ -487,20 +630,20 @@ After processing all Jiras, present chat output using the following batch policy
 
 - **1-9 Jiras**: Present one full table in chat matching all Confluence columns, then the Confluence link.
 - **10+ Jiras (high-volume mode)**: Present full-detail chat tables in chunks of **3-4 Jira rows per chunk**.
-  - Keep all 6 columns and full text for each row (no summary-only compression).
+  - Keep all 7 columns and full text for each row (no summary-only compression).
   - Label each chunk clearly: `Chunk 1 of N`, `Chunk 2 of N`, etc.
   - After the final chunk, include a **Batch Completion** block listing all chunk labels so the reader can confirm coverage of the entire Jira set.
   - If a chunk is still too large, split again into smaller chunks instead of shortening Salomon/DA/XO content.
 
 **Chat table format:**
 ```
-| Jira # & Title | Description | Status | Salomon | Deployment Agent | XO Metadata / Proposed Fix |
-|---|---|---|---|---|---|
-| <a href="https://jira2.workday.com/browse/HRREC-12345" target="_blank" rel="noopener noreferrer">HRREC-12345</a> - Title | Short desc | Config (90%) | **Configuration Issue**<br>Users can complete setup, but one required configuration condition is missing, which explains the failure. This is not a Bug because the product behaves correctly once the missing condition is added. This is not WAD because the current customer outcome is not the intended configured flow.<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a>, <a href="url" target="_blank" rel="noopener noreferrer">Article 2</a> | **Configuration Steps**<br>• Step 1...<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Admin guide page</a> | **Technical evidence:** Key task and validation metadata align with required setup pattern.<br><br>**Customer Resolution:**<br>1. Navigate to Edit Tenant Setup - Recruiting<br>2. Enable/disable the specific configuration flag<br>3. Test in Sandbox before applying to Production<br>4. Verify expected behaviour after change |
-| <a href="https://jira2.workday.com/browse/HRREC-67890" target="_blank" rel="noopener noreferrer">HRREC-67890</a> - Title | Short desc | Bug (85%) | **Likely Bug**<br>Users follow the documented process, but the expected system response still fails. This is not WAD because no source describes this as expected behaviour. This is not Config because setup prerequisites were met before failure.<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a>, <a href="url" target="_blank" rel="noopener noreferrer">Article 2</a> | **Expected Behaviour**<br>• Feature should...<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Admin guide page</a> | **Technical evidence:** Confirms defect signal in recipient-resolution path.<br><br>**Proposed Fix:**<br>1. Update guard condition on target method binding<br>2. Ensure context resolves from job application object<br>3. Add unit test for edge case<br>4. Verify with end-to-end repro and regression tests |
-| <a href="https://jira2.workday.com/browse/HRREC-11111" target="_blank" rel="noopener noreferrer">HRREC-11111</a> - Title | Short desc | WAD (80%) | **WAD**<br>Users are seeing expected system behaviour under current design rules. This is not a Bug because the observed result matches documented logic. This is not Config because no missing setup was identified as the trigger.<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a> | **N/A** | **Technical evidence:** No contradictory metadata found. Behaviour follows intended design.<br><br>**Customer Resolution:**<br>1. Explain expected behaviour to customer with documentation link<br>2. Suggest alternative workflow if customer needs different outcome<br>3. Log enhancement request if behaviour change is warranted<br>4. Close as WAD with clear rationale |
-| <a href="https://jira2.workday.com/browse/HRREC-22222" target="_blank" rel="noopener noreferrer">HRREC-22222</a> - Title | Short desc | Inconclusive (60%) | **Inconclusive**<br>Insufficient evidence to classify. Could not reproduce, or conflicting signals from sources.<br>Sources: Limited | **N/A** | **Technical evidence:** Insufficient metadata to determine root cause.<br><br>**Needs Further Investigation:**<br>1. Request specific repro steps and tenant details from customer<br>2. Ask which Workday task and configuration settings are in use<br>3. Escalate to #hrrec_prodsupport with gathered context<br>4. Consider SUV reproduction if customer provides sample data |
-| <a href="https://jira2.workday.com/browse/HRREC-33333" target="_blank" rel="noopener noreferrer">HRREC-33333</a> - Title | Short desc | Known Limitation (85%) | **Known Limitation**<br>Feature has documented architectural constraints that prevent the requested behaviour. This is not a Bug because the limitation is by design. This is not Config because no configuration change can enable the behaviour.<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a> | **N/A** | **Technical evidence:** Architectural constraint confirmed in platform documentation.<br><br>**Proposed Fix (Enhancement):**<br>1. Extend platform component to support requested behaviour<br>2. Add feature flag for gradual rollout<br>3. Update documentation when enhancement ships<br><br>**Workaround:**<br>Use alternative approach X until enhancement is available |
+| Jira # & Title | Description | Status | Salomon | Deployment Agent | XO Metadata / Proposed Fix | Recommendation |
+|---|---|---|---|---|---|---|
+| <a href="https://jira2.workday.com/browse/HRREC-12345" target="_blank" rel="noopener noreferrer">HRREC-12345</a> - Title | Short desc | Config (90%) | **Configuration Issue**<br>This is a Configuration Issue because a required setup condition is missing, which directly causes the observed failure. This is not a Bug because the product behaves correctly once the missing condition is added. This is not WAD because the current customer outcome is not the intended configured flow.<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a>, <a href="url" target="_blank" rel="noopener noreferrer">Article 2</a> | **Configuration Steps**<br>• Step 1...<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Admin guide page</a> | **Technical evidence:** Key task and validation metadata align with required setup pattern.<br><br>**Customer Resolution:**<br>1. Navigate to Edit Tenant Setup - Recruiting<br>2. Enable/disable the specific configuration flag<br>3. Test in Sandbox before applying to Production<br>4. Verify expected behaviour after change | **CLOSE (High Confidence)**<br>Config 90%, open 3.2 years, stale (846 days no activity) - safe to close |
+| <a href="https://jira2.workday.com/browse/HRREC-67890" target="_blank" rel="noopener noreferrer">HRREC-67890</a> - Title | Short desc | Bug (85%) | **Likely Bug**<br>This is likely a Bug because the expected system response fails despite following documented process and persists across repeated tests. This is not WAD because no source describes this as expected behaviour. This is not Config because setup prerequisites were met before failure.<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a>, <a href="url" target="_blank" rel="noopener noreferrer">Article 2</a> | **Expected Behaviour**<br>• Feature should...<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Admin guide page</a> | **Technical evidence:** Confirms defect signal in recipient-resolution path.<br><br>**Proposed Fix:**<br>1. Update guard condition on target method binding<br>2. Ensure context resolves from job application object<br>3. Add unit test for edge case<br>4. Verify with end-to-end repro and regression tests | **KEEP (Active)**<br>Bug requires investigation - do not close without fix |
+| <a href="https://jira2.workday.com/browse/HRREC-11111" target="_blank" rel="noopener noreferrer">HRREC-11111</a> - Title | Short desc | WAD (80%) | **WAD**<br>This is WAD because the observed result matches documented logic and system design rules. This is not a Bug because documented sources confirm this behaviour is expected. This is not Config because no missing setup was identified as the trigger.<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a> | **N/A** | **Technical evidence:** No contradictory metadata found. Behaviour follows intended design.<br><br>**Customer Resolution:**<br>1. Explain expected behaviour to customer with documentation link<br>2. Suggest alternative workflow if customer needs different outcome<br>3. Log enhancement request if behaviour change is warranted<br>4. Close as WAD with clear rationale | **CLOSE (Review First)**<br>WAD 80%, open 5.7 years, very stale (2103 days no activity) - review with team before closing |
+| <a href="https://jira2.workday.com/browse/HRREC-22222" target="_blank" rel="noopener noreferrer">HRREC-22222</a> - Title | Short desc | Inconclusive (60%) | **Inconclusive**<br>This is Inconclusive because insufficient evidence exists to classify - could not reproduce and conflicting signals from sources prevent confident determination.<br>Sources: Limited | **N/A** | **Technical evidence:** Insufficient metadata to determine root cause.<br><br>**Needs Further Investigation:**<br>1. Request specific repro steps and tenant details from customer<br>2. Ask which Workday task and configuration settings are in use<br>3. Escalate to #hrrec_prodsupport with gathered context<br>4. Consider SUV reproduction if customer provides sample data | **KEEP (Unclear)**<br>Inconclusive - needs human review before any closure decision |
+| <a href="https://jira2.workday.com/browse/HRREC-33333" target="_blank" rel="noopener noreferrer">HRREC-33333</a> - Title | Short desc | Known Limitation (85%) | **Known Limitation**<br>Feature has documented architectural constraints that prevent the requested behaviour. This is not a Bug because the limitation is by design. This is not Config because no configuration change can enable the behaviour.<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a> | **N/A** | **Technical evidence:** Architectural constraint confirmed in platform documentation.<br><br>**Proposed Fix (Enhancement):**<br>1. Extend platform component to support requested behaviour<br>2. Add feature flag for gradual rollout<br>3. Update documentation when enhancement ships<br><br>**Workaround:**<br>Use alternative approach X until enhancement is available | **KEEP (Unclear)**<br>Known limitation - requires enhancement, not closure |
 ```
 
 Note: The XO column MUST ALWAYS include an actionable section:
@@ -509,6 +652,12 @@ Note: The XO column MUST ALWAYS include an actionable section:
 - **WAD**: Customer Resolution (explain behaviour, suggest alternatives)
 - **Inconclusive**: Needs Further Investigation (numbered steps for follow-up)
 - **Known Limitation**: Proposed Fix (Enhancement) + Workaround
+
+Note: The Recommendation column provides closure guidance:
+- **CLOSE (High Confidence)**: WAD/Config 85%+, 2+ years old, no recent activity
+- **CLOSE (Review First)**: WAD/Config 70-85%, stale → verify before closing
+- **KEEP (Active)**: Bug or high-priority engagement → must investigate
+- **KEEP (Unclear)**: Inconclusive → needs human review
 
 After the table, always include:
 
@@ -524,13 +673,13 @@ Use this pattern in chat:
 
 ```
 Chunk 1 of N (Rows 1-4)
-| Jira # & Title | Description | Status | Salomon | Deployment Agent | XO Metadata / Proposed Fix |
-|---|---|---|---|---|---|
+| Jira # & Title | Description | Status | Salomon | Deployment Agent | XO Metadata / Proposed Fix | Recommendation |
+|---|---|---|---|---|---|---|
 | ...full-detail rows... |
 
 Chunk 2 of N (Rows 5-8)
-| Jira # & Title | Description | Status | Salomon | Deployment Agent | XO Metadata / Proposed Fix |
-|---|---|---|---|---|---|
+| Jira # & Title | Description | Status | Salomon | Deployment Agent | XO Metadata / Proposed Fix | Recommendation |
+|---|---|---|---|---|---|---|
 | ...full-detail rows... |
 ```
 
@@ -540,7 +689,77 @@ After the last chunk, add:
 Batch Completion:
 - Total Jira processed: <count>
 - Chunks delivered: Chunk 1 of N, Chunk 2 of N, ..., Chunk N of N
-- All rows include full Salomon, Deployment Agent, XO detail and clickable links.
+- All rows include full Salomon, Deployment Agent, XO, Recommendation detail and clickable links.
+```
+
+### Step 7b: Batch Summary Report (10+ Jiras)
+
+For batches of 10 or more Jiras, generate an **Executive Summary** BEFORE the detailed chunks. This gives PMs a quick rollup of close/keep recommendations.
+
+**Format:**
+
+```markdown
+## Batch Triage Summary
+
+**Total Jiras processed**: {count}
+
+### Closure Recommendations
+- **CLOSE (High Confidence)**: {count} bugs
+  - {count} WAD (85%+ confidence, 2+ years old, no recent activity)
+  - {count} Config (85%+ confidence, 2+ years no activity)
+- **CLOSE (Review First)**: {count} bugs
+  - {count} WAD (70-85% confidence, stale)
+  - {count} Config (70-85% confidence, stale)
+  - {count} Very old (5+ years, very stale)
+- **KEEP (Active)**: {count} bugs
+  - {count} Genuine bugs requiring investigation
+  - {count} High-priority engagement (Gartner, Executive)
+- **KEEP (Unclear)**: {count} bugs
+  - {count} Inconclusive (insufficient evidence)
+  - {count} Needs human review before deciding
+
+### Priority Actions
+1. **Safe to close** ({count}): WAD/Config with high confidence, no recent activity → Close immediately
+2. **Review before closing** ({count}): Likely closeable but verify with team/Support first
+3. **Keep investigating** ({count}): Active bugs or high-priority cases → Do not close
+
+### Detailed Results
+[See Chunks 1-N below with full 7-column analysis per Jira]
+```
+
+**Generation logic:**
+1. After processing all Jiras, calculate counts for each recommendation type
+2. Group by recommendation value (CLOSE High Confidence, CLOSE Review First, KEEP Active, KEEP Unclear)
+3. Break down each group by classification (WAD, Config, Bug, Inconclusive)
+4. Present summary before the chunked detailed tables
+
+**Example:**
+
+```markdown
+## Batch Triage Summary
+
+**Total Jiras processed**: 47
+
+### Closure Recommendations
+- **CLOSE (High Confidence)**: 28 bugs
+  - 22 WAD (85%+ confidence, 2+ years old, no recent activity)
+  - 6 Config (85%+ confidence, 2+ years no activity)
+- **CLOSE (Review First)**: 12 bugs
+  - 8 WAD (70-85% confidence, stale)
+  - 4 Very old (5+ years, very stale)
+- **KEEP (Active)**: 4 bugs
+  - 3 Genuine bugs requiring investigation
+  - 1 High-priority engagement (Gartner tagged)
+- **KEEP (Unclear)**: 3 bugs
+  - 3 Inconclusive (insufficient evidence)
+
+### Priority Actions
+1. **Safe to close** (28): WAD/Config with high confidence, no recent activity → Close immediately
+2. **Review before closing** (12): Likely closeable but verify with team/Support first
+3. **Keep investigating** (7): Active bugs or high-priority cases → Do not close
+
+### Detailed Results
+[See Chunks 1-12 below with full 7-column analysis per Jira]
 ```
 
 ---
@@ -651,7 +870,7 @@ Use these checks to prevent shortened guidance, broken links, or malformed high-
 
 ### Validation A - Small Batch (1-2 Jiras)
 
-1. Confirm each Salomon cell is 5-7 lines and approximately 110-150 words.
+1. Confirm each Salomon cell is 3-4 lines and approximately 60-80 words.
 2. Confirm each Salomon cell includes explicit contrast rationale (for example, "This is not WAD because...").
 3. Confirm each cited source is clickable with `<a href="..." target="_blank" rel="noopener noreferrer">`.
 4. Confirm all 6 columns are present in chat and Confluence row content.
@@ -662,4 +881,4 @@ Use these checks to prevent shortened guidance, broken links, or malformed high-
 2. Confirm each chunk preserves full row detail for Salomon, Deployment Agent, and XO columns.
 3. Confirm no chunk drops source links or HTML anchor formatting.
 4. Confirm final Batch Completion block lists all chunk labels and total Jira count.
-5. Confirm Confluence row format remains aligned with the same 6-column schema.
+5. Confirm Confluence row format remains aligned with the same 7-column schema.
