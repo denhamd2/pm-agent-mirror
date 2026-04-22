@@ -40,6 +40,7 @@ function prototypeSpaSlugFallback(): Plugin {
       'universal-profile-eudi-wallet-v1',
       'canvas-kit-test',
       'pm-agent-dashboard',
+      'offers-dashboard-v01',
       'avg-time-to-hire',
       'positions-open-vs-filled',
       'value-realization-metrics',

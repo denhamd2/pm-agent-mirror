@@ -1,0 +1,278 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Manages the sending, tracking, and templating of various communication types, including email for system alerts and user interactions.",
+    "version": "v1",
+    "title": "communications",
+    "x-workday-internal-source": "xo",
+    "x-workday-internal-routing": "Public",
+    "x-workday-internal-protected-usage-enabled": false,
+    "x-workday-internal-service-container-id": "ab0bda55beb7100023bd409b97b60001"
+  },
+  "host": "<tenantHostname>",
+  "basePath": "/communications/v1",
+  "tags": [
+    {
+      "name": "managedRecipient",
+      "description": "This service collects and saves a recipients communication actions.",
+      "x-workday-confidence-level": "Production"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/managedRecipient": {
+      "post": {
+        "tags": [
+          "managedRecipient"
+        ],
+        "summary": "This API is used to manage a user’s consent status for a messaging channel, allowing opt-in or opt-out actions using the associated phone number.",
+        "description": "This API is used to manage a user’s consent status for a messaging channel, allowing opt-in or opt-out actions using the associated phone number.\n\n<b>Secured by:</b> Administer Communications, Messaging Opt-In/Opt-Out\n\n<b>Scope:</b> System",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "messagingOptInOut",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/messagingOptInOut_1326c1d568ac10000f2e73e47fc90000"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Resource created.",
+            "schema": {
+              "$ref": "#/definitions/messagingOptInOut_1326c1d568ac10000f2e73e47fc90000"
+            }
+          },
+          "400": {
+            "description": "Invalid request. (https://community.workday.com/rest/error-messages)\n| Severity | Error Code | Validation Message |\n --- | --- | --- |\n| Critical | A3276 | Workday ID is not valid. |\n| Critical | A3277 | Messaging is not enabled for this tenant in any region. |\n| Critical | A3278 | Enter phone number in the valid E164 format (For example: +12223334444). |\n| Critical | A3279 | Channel Service Definition Name must be SMS. |\n| Critical | A3280 | Phone Number is invalid for SMS Opt-In/Out. |",
+            "schema": {
+              "$ref": "#/definitions/VALIDATION_ERROR_MODEL_REFERENCE"
+            }
+          },
+          "401": {
+            "description": "Unauthorized: Missing or invalid credentials. (https://community.workday.com/rest/error-messages)",
+            "schema": {
+              "$ref": "#/definitions/VALIDATION_ERROR_MODEL_REFERENCE"
+            }
+          },
+          "403": {
+            "description": "User has insufficient permissions. (https://community.workday.com/rest/error-messages)",
+            "schema": {
+              "$ref": "#/definitions/VALIDATION_ERROR_MODEL_REFERENCE"
+            }
+          },
+          "404": {
+            "description": "Resource not found. (https://community.workday.com/rest/error-messages)",
+            "schema": {
+              "$ref": "#/definitions/VALIDATION_ERROR_MODEL_REFERENCE"
+            }
+          },
+          "default": {
+            "description": "An error occurred.",
+            "schema": {
+              "$ref": "#/definitions/ERROR_MODEL_REFERENCE"
+            }
+          }
+        },
+        "x-workday-confidence-level": "Production",
+        "x-workday-internal-try-enabled": "false",
+        "x-workday-operation-id": "1326c1d568ac10000e736ac55a7a0000"
+      }
+    }
+  },
+  "securityDefinitions": {
+    "OAuth2": {
+      "type": "oauth2",
+      "authorizationUrl": "https://<tenantAuthorizationHostname>",
+      "flow": "implicit"
+    }
+  },
+  "definitions": {
+    "INSTANCE_MODEL_REFERENCE": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Workday Id or Reference Id of the instance.",
+          "pattern": "^(([0-9a-f]{32})|(\\S+=\\S+))$"
+        },
+        "descriptor": {
+          "type": "string",
+          "description": "The display name of the instance",
+          "readOnly": true
+        },
+        "href": {
+          "type": "string",
+          "description": "A link to the instance",
+          "readOnly": true
+        }
+      }
+    },
+    "ERROR_MODEL_REFERENCE": {
+      "type": "object",
+      "required": [
+        "error"
+      ],
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "A description of the error"
+        },
+        "code": {
+          "type": "string",
+          "description": "The code that corresponds to the error message. Use the error code to drive programmatic error-handling behavior. Don't use error message strings for this purpose because they are subject to change"
+        },
+        "field": {
+          "type": "string",
+          "description": "The field related to the error"
+        },
+        "path": {
+          "type": "string",
+          "description": "The path of the field related to the error"
+        },
+        "severity": {
+          "type": "string",
+          "description": "Severity of the validation (e.g. Critical, Warning)."
+        },
+        "internalMessage": {
+          "type": "string",
+          "description": "Internal message providing additional context for the validation (e.g. representation content validation details)."
+        }
+      }
+    },
+    "VALIDATION_ERROR_MODEL_REFERENCE": {
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "error"
+          ],
+          "properties": {
+            "error": {
+              "type": "string",
+              "description": "A description of the error"
+            },
+            "errors": {
+              "type": "array",
+              "description": "An array of validation errors",
+              "items": {
+                "$ref": "#/definitions/ERROR_MODEL_REFERENCE"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "FACETS_MODEL_REFERENCE": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "This object represents the possible facets for this resource",
+        "readOnly": true,
+        "properties": {
+          "descriptor": {
+            "type": "string",
+            "description": "A description of the facet"
+          },
+          "facetParameter": {
+            "type": "string",
+            "description": "The alias used to select the facet"
+          },
+          "values": {
+            "type": "array",
+            "description": "the facet values",
+            "items": {
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "The number of instances returned by this facet"
+                },
+                "id": {
+                  "type": "string",
+                  "description": "Workday Id or Reference Id of the instance.",
+                  "pattern": "^(([0-9a-f]{32})|(\\S+=\\S+))$"
+                },
+                "descriptor": {
+                  "type": "string",
+                  "description": "A description of the facet"
+                },
+                "href": {
+                  "type": "string",
+                  "description": "A link to the instance",
+                  "readOnly": true
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "MULTIPLE_INSTANCE_MODEL_REFERENCE": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/INSTANCE_MODEL_REFERENCE"
+          }
+        }
+      }
+    },
+    "messagingOptInOut_1326c1d568ac10000f2e73e47fc90000": {
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "channel",
+            "messagingContactable_ID",
+            "optInPreference",
+            "phoneNumber"
+          ],
+          "properties": {
+            "channel": {
+              "type": "string",
+              "example": "Lorem ipsum dolor sit amet, cum choro singulis consectetuer ut, ubique iisque contentiones ex duo. Quo lorem etiam eu.",
+              "description": "Communication channel for Opt-In/Out",
+              "x-workday-type": "Text"
+            },
+            "optInPreference": {
+              "type": "boolean",
+              "example": true,
+              "description": "Opt-in preference",
+              "x-workday-type": "Boolean"
+            },
+            "phoneNumber": {
+              "type": "string",
+              "example": "Lorem ipsum dolor sit amet, cum choro singulis consectetuer ut, ubique iisque contentiones ex duo. Quo lorem etiam eu.",
+              "description": "Phone number of the user for opt-in/outInternational Phone Number",
+              "x-workday-type": "Text"
+            },
+            "messagingContactable_ID": {
+              "type": "string",
+              "example": "Lorem ipsum dolor sit amet, cum choro singulis consectetuer ut, ubique iisque contentiones ex duo. Quo lorem etiam eu.",
+              "description": "Workday ID of User for Opt-In/Out",
+              "x-workday-type": "Text"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

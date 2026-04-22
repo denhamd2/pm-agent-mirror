@@ -11,6 +11,10 @@ build/
 .env
 .env.local
 
+# Local-only auth / credential notes (never commit tokens, PATs, etc.)
+docs/confluence-auth-resolved.md
+docs/*auth*.md
+
 # OS files
 .DS_Store
 Thumbs.db

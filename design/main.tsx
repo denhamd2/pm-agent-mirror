@@ -22,6 +22,7 @@ import AISystemOfRecordV97 from './ai-system-of-record-v97';
 import UniversalProfilePrototype from './universal-profile-eudi-wallet-v1';
 import { CanvasKitTest } from './components/CanvasKitTest';
 import PMAgentDashboard from './pm-agent-dashboard';
+import OffersDashboardV01 from './offers-dashboard-v01';
 const AvgTimeToHireDashboard = React.lazy(() => import('./avg-time-to-hire-dashboard').then((m) => ({ default: m.AvgTimeToHireDashboard })));
 const PositionsOpenVsFilledDashboard = React.lazy(() => import('./positions-open-vs-filled-dashboard').then((m) => ({ default: m.PositionsOpenVsFilledDashboard })));
 const ValueRealizationMetrics = React.lazy(() => import('./value-realization-metrics').then((m) => ({ default: m.ValueRealizationMetrics })));
@@ -85,6 +86,7 @@ const PROTOTYPE_SLUGS = [
   'universal-profile-eudi-wallet-v1',
   'canvas-kit-test',
   'pm-agent-dashboard',
+  'offers-dashboard-v01',
   'avg-time-to-hire',
   'add-documents-impact',
   'positions-open-vs-filled',
@@ -179,6 +181,9 @@ function AppRoot() {
   }
   if (route === 'pm-agent-dashboard') {
     return <PMAgentDashboard />;
+  }
+  if (route === 'offers-dashboard-v01') {
+    return <OffersDashboardV01 />;
   }
   if (route === 'ai-system-of-record-v97') {
     return <AISystemOfRecordV97 />;
