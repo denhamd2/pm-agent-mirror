@@ -1,0 +1,90 @@
+---
+description: Standing permission to auto-commit and push after edits so GHE Pages auto-deploys
+alwaysApply: true
+---
+
+# Auto-Commit & Auto-Deploy (Standing Permission)
+
+The Product Manager has granted **standing, explicit permission** to auto-commit and push file edits in this workspace without asking each time. This overrides the default "never commit unless explicitly asked" rule **for this repository only** (`/Users/david.denham/product-manager-agent`).
+
+GHE Pages deployment is already wired via `.github/workflows/deploy-dashboard.yml` and `.github/workflows/deploy-design-preview.yml` (both trigger on `push: branches: [main]`). So **push to main = Pages auto-deploys**. You do not need to run any separate deploy step.
+
+## When to auto-commit
+
+After you complete a logical unit of work that touches files on disk, commit and push. A "logical unit" means:
+
+- A plan's todo list is fully completed, OR
+- A user request that produced file edits has finished, OR
+- A set of related edits that belong together conceptually (one feature, one fix, one doc update).
+
+**Do NOT auto-commit:**
+- Mid-workflow, between todos (wait until the overall request is done).
+- After purely read-only work (grep, analysis, reports) that didn't change any tracked files.
+- If `git status` shows zero changes.
+- If the user explicitly said "don't commit yet" or "hold off on the push".
+
+## Commit flow (mandatory steps, in order)
+
+1. **Status check**: `git status` to see the actual change surface.
+2. **Secret scan** (blocking): run `git diff --cached --no-color | rg -i 'token|secret|password|api[_-]key|bearer [a-z0-9]|-----BEGIN|aws_access_key|aws_secret|sk-[a-z0-9]{20,}'` (or equivalent grep). If any hit looks like a real credential, **STOP**, tell the PM what was detected, and let them decide. Do not auto-commit secrets. Previous incident on 21 April 2026: a Confluence PAT was pushed and had to be rotated - do not repeat.
+3. **Stage explicitly**: `git add <specific files>` - never `git add -A` or `git add .` blindly, because that picks up `.env`, temp files, and anything you weren't intentionally editing.
+4. **Commit message**: follow the existing repo style (see `git log --oneline -10`). Imperative mood, one-line summary ~60-72 chars, optional body explaining the "why" in 2-5 bullet lines. Always use a HEREDOC (see example below) so markdown survives.
+5. **Push to main**: `git push origin main`. Never `--force` against main.
+6. **Report back**: tell the PM in one line what was committed (short SHA + summary) and remind them Pages is rebuilding from the workflow.
+
+## Guardrails (hard rules)
+
+- **Never** force-push, force-push-with-lease, or rewrite history on `main`. If you broke something, fix forward with a new commit.
+- **Never** skip hooks (`--no-verify`, `--no-gpg-sign`).
+- **Never** amend a commit that has already been pushed to origin. If a pre-commit hook auto-modifies files after your commit, amend is allowed (see `/Users/david.denham/.cursor/rules/git-safety.md` or standard guidance).
+- **Never** commit files matching `.env`, `*.token`, `credentials*`, `secrets*`, or anything under `docs/*auth*.md` (already in `.gitignore` - treat as a belt-and-braces check).
+- **Never** auto-commit if the diff touches `~/.cursor/mcp.json` or any `mcp.json` - those live outside the repo but if they somehow got staged, stop immediately.
+- **Do not batch unrelated changes** into one commit just because they happened in the same session. Split into two commits if two logically distinct things changed.
+- If `git push` fails (auth, network, conflict), surface the error to the PM in plain English and ask how to proceed. Do not retry blindly.
+- If the pre-push hook rejects the push, fix the reported issue and push again with a new commit (not `--no-verify`).
+
+## When to ask first (not auto-commit)
+
+Ask the PM before committing if any of these apply:
+- The change deletes more than ~20 tracked files.
+- The change modifies a file under `.github/workflows/` (deploy behaviour change - deserves conscious approval).
+- The change touches `MISSION_LOG.md` in ways that would erase active mission state.
+- The diff includes a file the PM didn't ask you to touch (you wandered).
+- You're about to commit generated artefacts (`.pptx`, `dashboard-dist/`, `design/dist/`) that aren't typically committed - check `.gitignore` first.
+
+## Standard commit message format
+
+Use this HEREDOC pattern (mirrors Cursor's standard git commit guidance):
+
+```bash
+git commit -m "$(cat <<'EOF'
+Short imperative summary (~60-72 chars)
+
+- Bullet explaining the why or the first key change.
+- Second bullet if needed.
+- Third bullet if needed.
+EOF
+)"
+```
+
+Example recent commits from this repo (mirror this style):
+- `Fix XO Developer ecosystem consistency drift`
+- `Add customer-issue-triage skill with Salomon, Deployment Agent, and XO analysis`
+- `Streamline Salomon analysis output in customer issue triage`
+
+## What auto-deploy looks like
+
+After `git push origin main`:
+
+1. GHE Actions picks up the push (~5-30s delay).
+2. `deploy-dashboard.yml` builds `design/` with Vite and publishes to `gh-pages` root.
+3. `deploy-design-preview.yml` also builds `design/` and publishes a timestamped preview under `gh-pages/preview/<slug>/`, plus updates `gh-pages/preview/latest/` redirect.
+4. GHE Pages serves the `gh-pages` branch at whatever origin is configured in repo Settings -> Pages.
+
+You do not orchestrate any of this. Pushing is enough.
+
+If the PM asks "did it deploy?", you can check workflow status with `gh run list --repo david-denham/pm-agent --limit 5` (requires `gh` CLI authenticated against GHE; if `gh` isn't available, tell them to check the Actions tab in GHE directly).
+
+## One-line summary
+
+**Complete the work -> secret-scan -> stage explicitly -> commit with a meaningful message -> push to main -> Pages auto-deploys. No approval needed per commit; escalate on the guardrail triggers above.**
