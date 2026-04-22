@@ -315,11 +315,11 @@ export function OffersPlaygroundV01() {
                 Offer Events REST playground
               </Heading>
               <BodyText size="medium" color={colors.blackPepper500} marginTop="xxs">
-                Dogfooding the four XO Agent Tools end to end. Every button below fires a real HTTP call to
+                Dogfooding the four XO Agent Tools end to end. Every button below exercises
                 <code style={{ margin: '0 4px', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' }}>
                   XOAgents/labs/offer-events
                 </code>
-                on the development SUV, via the local proxy on port 8787.
+                on the development SUV via the local proxy on port 8787, which forwards through the hosted XO MCP. Response bodies are identical to a direct REST call.
               </BodyText>
             </Box>
             <Flex gap="s" alignItems="center">

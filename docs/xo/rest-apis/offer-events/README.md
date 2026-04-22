@@ -53,10 +53,14 @@ Design-time schema (`suv_rest_call` with `fetch_schema=True`) confirms all five 
 
 ## Prototype (dogfood)
 
-A Canvas Kit playground that makes live HTTP calls through a local proxy lives at:
+A Canvas Kit playground that exercises the live REST response shape (including drift) lives at:
 
 - `design/offers-playground-v01.tsx` (UI at `http://localhost:5199/offers-playground-v01`)
-- `design/proxy/offer-events-proxy.mjs` (Node proxy on `http://localhost:8787`; reuses `~/contexto/.env`)
+- `design/proxy/offer-events-proxy.mjs` (Node proxy on `http://localhost:8787`)
+
+**Transport:** Browser -> local proxy -> hosted XO MCP (`workbench-mcp.prod.dev.megaleo.com/suv/mcp`) -> SUV REST. Earlier versions tried plain HTTP Basic directly against the SUV, but the modern `/ccx/api/...` paths require OAuth bearer tokens and the legacy `/ccx/service/...` paths 404 for XO Agents resources. The only auth channel that works end-to-end today is the hosted XO MCP's `suv_rest_call` tool, so the proxy forwards browser HTTP to MCP JSON-RPC. Response bodies shown in the playground are identical to a direct REST call - the drift story is preserved.
+
+Credentials are read from the `xo-mcp` entry in `~/.cursor/mcp.json` (`Authorization`, `SUV_HOSTNAME`, `SUV_PASSWORD`). Nothing is written to disk.
 
 Run with `npm run dev:proxy` in one terminal and `npm run dev` in another, both from `design/`.
 
