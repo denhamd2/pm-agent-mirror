@@ -41,6 +41,7 @@ function prototypeSpaSlugFallback(): Plugin {
       'canvas-kit-test',
       'pm-agent-dashboard',
       'offers-dashboard-v01',
+      'offers-playground-v01',
       'avg-time-to-hire',
       'positions-open-vs-filled',
       'value-realization-metrics',
@@ -127,6 +128,13 @@ export default defineConfig({
   server: {
     port: 5199,
     strictPort: true,
+    proxy: {
+      '/api/offer-events': {
+        target: 'http://localhost:8787',
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/api/, ''),
+      },
+    },
   },
   build: {
     rollupOptions: {
