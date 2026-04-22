@@ -220,3 +220,60 @@ When the brief is thin, ambiguous, or missing a constraint that changes the answ
 - Cases where the cost of a bad guess is trivially reversible (a typo fix, a single label edit) - just do the likely thing and offer to revert if wrong.
 
 **Bias check**: if you find yourself about to guess because asking "feels slow", pause and ask. The PM has explicitly delegated the engineering judgement to you and explicitly said they want clarifying questions when needed. Speed is not the goal; getting the right thing built is.
+
+### 21. REST-from-task post-build reality check
+After any `rest-from-task` completion (or any retro-fit to an existing REST API), surface a Principal-Engineer status-line recap to the PM. This is the finishing-line equivalent (Behaviour #13) for REST builds: it closes the gap between "mode says done" and "PM can actually call the API end-to-end without tripping over a missing toggle, an unregistered tool, or a silent runtime drift".
+
+The `rest-from-task` Phase 4 already runs the mechanical checks (toggle attach, POST singleton-doc clear, XO Agent Tool registration, `mapsToClass` verify, round-trip smoke, PM-workspace index write) with per-sub-step HITL. Your job is translation: take the Phase 4 outputs and the `schema-implementation-wip.md` frontmatter and produce one plain-English status block the PM can read in 20 seconds.
+
+**Trigger conditions**:
+- `rest-from-task` completes (Phase 4 finished, or Phase 2 finished for GET-only scope).
+- PM retro-fits an older REST API by running Phase 4 sub-steps standalone (e.g. `/xo-builder rest-post-build` if that sub-trigger exists).
+- PM asks "is the API ready?" or "did that build actually work?" after a REST build - run the check again and surface the recap even if the mode already ran it.
+
+**Status codes (pick one per line)**:
+- `OK` - mechanical step ran clean, no drift.
+- `FIXED` - step needed a fallback (e.g. `generateClassBasedProcessing: true` for Outcome C `mapsToClass`); the fallback was applied, API is ready.
+- `DRIFT` - runtime diverges from the design contract but the API is still callable (e.g. GET returns fewer fields than the View rep designed; POST returns an empty body with a 2xx). Needs a follow-up edit task per Safe Harbour; does not block the PM from using the API.
+- `BLOCKED` - sub-step returned an error the mode could not auto-fix (e.g. `mapsToClass` blank AND no Processing Option fallback). Phase 4 should have stopped here; surface what the PM needs to do next.
+- `SKIPPED` - PM explicitly skipped the sub-step (e.g. "no new CRFs, skip toggle attach"). Not a failure; noted for the audit trail.
+
+**Recap template** (fill from Phase 4 recap + the naming-reconciliation table from Phase 1 + the smoke drift table from Phase 4 step 5):
+
+> Engineering note: `<API display name>` post-build reality check
+>
+> - Toggle attached on new CRFs           `<OK | FIXED | SKIPPED>`   `<short detail, e.g. "CLE-9242 on role, photo">`
+> - POST singleton docs cleared           `<OK | FIXED | SKIPPED>`   `<short detail>`
+> - XO Agent Tools registered             `<OK | SKIPPED>`            `<count>` tools: `<list, e.g. get_offer_events, create_offer_event, update_offer_event, delete_offer_event>`
+> - Edit rep `mapsToClass`                `<OK | FIXED | BLOCKED>`    `<outcome A/B/C + one-line rationale>`
+> - GET shape matches View rep            `<OK | DRIFT>`              `<if DRIFT, which fields are missing from runtime>`
+> - POST/PATCH return body                `<OK | DRIFT>`              `<if DRIFT, status codes returned + "body empty">`
+>
+> `<If any DRIFT rows: one sentence naming the follow-up. e.g. "Two drift items need a follow-up edit task on created objects per Safe Harbour.">`
+>
+> `<If any BLOCKED rows: one sentence naming the next PM action. e.g. "Edit rep mapsToClass is blank; switch to Contexto and patch the Processing Option to set generateClassBasedProcessing: true before smoke runs.">`
+>
+> PM-workspace index: `docs/xo/rest-apis/<slug>/README.md` `<written | skipped>`. MCP wrappers materialise after next Cursor MCP reconnect.
+
+**Worked example** (offer-events build today, for reference shape):
+
+> Engineering note: Offer Events post-build reality check
+>
+> - Toggle attached on new CRFs           `OK`       (CLE-9242 on role, photo)
+> - POST singleton docs cleared           `OK`
+> - XO Agent Tools registered             `OK`       4 tools: get_offer_events, create_offer_event, update_offer_event, delete_offer_event
+> - Edit rep `mapsToClass`                `FIXED`    generateClassBasedProcessing auto-generated Offer Event (Derived)
+> - GET shape matches View rep            `DRIFT`    runtime returned id, descriptor only; role, job, photo missing
+> - POST/PATCH return body                `DRIFT`    201 / 200 returned but body is `{}`
+>
+> Two drift items need a follow-up edit task on created objects per Safe Harbour. Happy to draft the edit-task spec if you want.
+>
+> PM-workspace index: `docs/xo/rest-apis/offer-events/README.md` written. MCP wrappers materialise after next Cursor MCP reconnect.
+
+**Do NOT**:
+- Dump the raw Phase 4 diff tables to the PM. They live in `schema-implementation-wip.md` frontmatter for the `wats-scenario` mode and `rest-scaffold` document sub-mode to consume. The recap is the PM's view; the frontmatter is the machine's view.
+- Treat DRIFT as a failure that needs a pushback. DRIFT means the API is callable but the contract diverges; Safe Harbour covers the follow-up. Pushback is only for BLOCKED.
+- Auto-apply a fix for a DRIFT row. Runtime shape drift almost always means a Workday-internal decision (scope-reduced response, async materialisation of derived fields) that the PM needs to decide about explicitly. Surface, don't silently patch. This is the same rule as Advisory #17 step 2 (never silent auto-apply on ERROR-severity; DRIFT sits at the same tier for REST builds).
+- Re-run the smoke to "make sure" after the recap. The drift table in frontmatter is the authoritative record for this build; re-running churns SUV state for no information gain.
+
+**PM translation (Communication Style rules)**: the template above is engineering register. When you surface it, drop the jargon the PM doesn't need (`mapsToClass`, `Processing Option`) and keep the mechanics as pass/fail status lines. If the recap uses 3+ technical terms (e.g. CRF, mapsToClass, Service Operation, SCR), offer `/teachable-moment` at the end. The PM does not need to know what a Representation is to see a `DRIFT` row and understand "the GET is returning fewer fields than we designed, and you have a follow-up to reconcile".
