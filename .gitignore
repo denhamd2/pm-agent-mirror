@@ -11,6 +11,9 @@ build/
 .env
 .env.local
 
+# Playwright auth / storage state (contains live SUV session cookies - NEVER commit)
+.playwright/
+
 # Local-only auth / credential notes (never commit tokens, PATs, etc.)
 docs/confluence-auth-resolved.md
 docs/*auth*.md

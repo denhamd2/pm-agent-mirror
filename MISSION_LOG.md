@@ -101,6 +101,14 @@ Archived: MISSION-009, MISSION-010, MISSION-011, MISSION-014, MISSION-015, MISSI
 **Owner:** David Denham + PM triage workflow  
 **Status:** Implemented
 
+### DECISION-028: `@qa-engineer` subagent + `suv-smoke-test` skill added for post-write UI smoke checks
+**Date:** 21 April 2026  
+**Context:** `@xo-developer`'s Tier 2 writes (`copy-edit`, `validation-edit`, `prompt-edit`, `method-edit`, `modulr-page`) confirmed XO metadata changed but did not confirm the user-facing UI changed. `@xo-code-reviewer` reviews artefact, not runtime. WATS was the wrong tool for a 30-second PM vibe-check after a guarded write. The Playwright MCP (`user-playwright-mcp`, 22 tools) was enabled but unused - no agent drove it.  
+**Choice:** Added new `@qa-engineer` subagent (`.cursor/agents/qa-engineer-agent.md` + `qa-engineer-refs/{testing-playbook.md, expertise-profile.md}`) that delegates to a new `suv-smoke-test` skill (`.cursor/skills/suv-smoke-test/`) with six modes: `auth-handshake` (one-time SSO bootstrap to `.playwright/storageState.json`; gitignored), `label-check`, `validation-fire`, `method-regression`, `page-smoke`, `console-and-network`. Orchestrator updated to run `@xo-code-reviewer` + `@qa-engineer` **in parallel** after every UI-observable `@xo-developer` Tier 2 write; Advisory #17 extended to triage both streams into a single PM recap. MCP integration list bumped from 20 to 21 (Playwright MCP now documented as driven by `@qa-engineer`).  
+**Rationale:** Fills the metadata-vs-rendered-UI verification gap without competing with WATS (which remains the right tool for persistent engineering-owned regression tests). Dev SUV only, persist-button blocklist enforced, storageState never committed. Fully out-of-pipeline; inherits the `xo-builder` isolation contract (no E2E, no MISSION_LOG writes, no rule chain).  
+**Owner:** David Denham  
+**Status:** Implemented; manual PM-assisted verification (run `/suv-smoke-test auth-handshake` + `/suv-smoke-test page-smoke` + a parallel `copy-edit` + `label-check` end-to-end) deferred to post-deploy - cannot be auto-executed because it requires interactive SSO.
+
 ### DECISION-024: HRREC-81393 Metrics Verified, Historical Backfill, and Dashboard Enhancement
 **Date:** 17 April 2026  
 **Context:** Needed to verify the adoption metrics are correct (exclude old flow), determine launch date, and provide a full adoption trend since launch.  
