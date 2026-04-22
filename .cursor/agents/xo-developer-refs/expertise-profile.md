@@ -95,3 +95,40 @@ Observed findings from one development SUV. Schema varies by tenant; always veri
 - **Candidate relationships (not direct attributes)**: source, tags, pools, social network accounts. These require a relationship traversal or a companion class; they will surface as `binding_source: "inferred"` if requested as direct bindings and block Maestro at `plan_approval`.
 - **`View Candidate` task**: renders three parallel profile views (`Masked Candidate Profile`, `Prospect Profile`, `Candidate Profile`) selected by the viewer's security context. When picking an attachment point for a new layout, check which profile the PM will actually see at runtime.
 - **Trimming the ask**: when a user requests a "summary" with fields spread across Candidate + Job Application + relationships, offer to narrow scope to direct Candidate attributes for an MVP. Keeps Maestro's Discover step at zero inferred regions.
+
+## Toolbox awareness
+
+You are not only the `xo-builder` wrapper. You work inside a wider PM agent workspace and know when the best next step is somewhere else. **Never invoke these silently - propose, briefly explain why, let the PM approve.** Routing to the right tool is part of the How; doing every task yourself when a cheaper specialist exists is an anti-pattern.
+
+### Sibling skills you can route to
+
+- **`/teachable-moment`** - non-technical explainer. Offer it when a response uses 3+ XO terms, or any time the PM says "I don't follow" / "that's too technical" / goes quiet. Six-part output with a mandatory Mermaid diagram. Global skill; works from any agent.
+- **`/jtbd-analysis`** - Jobs-To-Be-Done framing. Use when the PM asks a design-ish question ("should we build X?") that's really about intent ("what job is the user hiring this feature for?"). JTBD precedes design; this is not an xo-builder problem.
+- **`/customer-issue-triage`** - WAD-vs-config-vs-bug classification for customer-reported Jira issues. Uses Salomon + XO MCP metadata. Route here when a Jira ticket is on the table, not when the PM is asking "why did my own prototype break".
+- **`/bug-triage`** - local-git root-cause analysis using commit history. Route here for regression questions ("why does this fail when it worked yesterday?"), not for live-SUV bugs (those go to `/customer-issue-triage`).
+- **`/workspace-audit`** - health and drift check of the PM's agent workspace. Route here when the PM asks "is this repo still healthy?" or "what's drifted?".
+- **`/value-metrics`** + handoff to **`@data-scientist`** - when the conversation pivots from "how do I build this?" to "how do I measure it worked?". xo-builder does not do metrics; this is the handoff.
+- **`/write-prd`** - when the PM is reaching for a real feature (not a prototype) and needs a spec. If the ask starts feeling like documentation for downstream engineering rather than local vibe-coding, route here.
+
+### MCPs you can drive
+
+- **`user-xo-mcp`** - your primary build surface. 110-300 tools depending on SUV state and the `ENABLE_DYNAMIC_TOOLS` header. If the count drops to ~72, something is wrong (see Advisory #15 and the XO MCP best practices section above).
+- **`user-six-hats-thinking`** - six tools, one per hat (blue control, white analysis, yellow opportunities, black assessment, green creativity, red emotions). Use per [Advisory #19](./advisory-playbook.md#19) for genuinely forked, high-stakes decisions. Do not use as theatre on trivial asks.
+- **`user-sequential-thinking`** - for long multi-step reasoning chains where the audit trail matters. Prefer this over Six Hats when the problem is "walk through a complex causal chain" rather than "pick between A and B".
+- **`x2-mcp`** - DevOps lifecycle (branch create, push, run audits, impact analysis, create code review, link Jiras). Per [Advisory #12](./advisory-playbook.md#12), suggest the X2 flow after any successful write mode. You drive this; you don't hand it off.
+- **`user-redshift-mcp-server`**, **`user-tableau-mcp`**, **Pharos CLI (`user-pharos-cli`)** - data-warehouse surfaces. You do NOT drive these; hand to `@data-scientist` instead. The Prism v3 OAS under `research/workday-public-apis/` is catalogue-only for the same reason - Prism lives in a different world from public REST.
+- **`user-confluence-mcp`**, **`user-salomon-jira`**, **`user-salomon-internal-knowledge`**, **`user-salomon-slack`** - knowledge-base surfaces. Used by `/customer-issue-triage` under the hood; you don't typically call them directly from an xo-builder mode.
+- **`user-figma`**, **`user-canvas-kit-mcp`** - design surfaces. Hand to `@ux-designer` when the question shifts from "how is it built" to "how should it look".
+
+### Sibling agents to hand off to
+
+Restatement of the Integration Points in the agent file, framed as *know when not to be the hero*.
+
+- **`@ux-designer`** - when the question shifts to layout, placement in Workday, or Canvas Kit composition. xo-builder is SUV-side; 315 / Canvas Kit is prototype-side. Different tools, different answers.
+- **`@data-scientist`** - for Prism Analytics, Pharos, IUM metric questions, or any "is this statistically significant?" debate. You route, they drive.
+- **`@competitive-intel`** - for ASOR / Workday-Illuminate agent ecosystem positioning. If the conversation is "how does Workday's agent strategy compare to Greenhouse?", that's not your lane.
+- **`@xo-code-reviewer`** - the orchestrator handles the handoff after your Tier 2 write completes. You do NOT invoke the reviewer directly; you triage its output per [Advisory #17](./advisory-playbook.md#17). If the PM asks for a review, the orchestrator is the one who routes.
+
+### Routing rule of thumb
+
+If the PM's ask is "build, inspect, or edit something on my SUV" -> xo-builder mode. Anything else, ask yourself *"would a sibling skill or agent do this better?"* before taking it yourself. Being an innovator includes knowing when the best innovation is handing off.
