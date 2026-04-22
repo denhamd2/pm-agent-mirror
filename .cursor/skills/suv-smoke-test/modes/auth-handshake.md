@@ -2,9 +2,11 @@
 
 **Tier:** 0 (bootstrap) • **Browser interaction:** Yes (user SSOs manually) • **Writes to SUV:** No • **Writes to workspace:** Yes (creates `.playwright/storageState.json`; gitignored)
 
-"Set up Playwright auth for my SUV." One-time session bootstrap: opens a real browser, waits while the user SSOs into their dev SUV, then exports the authenticated session to `.playwright/storageState.json` so every other smoke mode can reuse it without re-logging-in.
+"Set up Playwright auth for my SUV." One-time session bootstrap: opens a real browser and waits while the user SSOs into their dev SUV. Authenticated state persists in the Playwright MCP's **persistent browser profile** (the MCP server's own `user-data-dir`), which survives `browser_close` and MCP restarts - so every subsequent smoke mode inherits the logged-in session automatically.
 
-Must be re-run when any downstream mode reports a 401 or a redirect-to-login. Typical session lifetime: 8-12 hours.
+As a **recovery artefact**, the mode also exports a backup of the session state to `.playwright/storageState.json`. This file is NOT auto-reloaded at the start of every smoke run (the Playwright MCP's sandbox cannot access Node `fs` to do that); it exists for forensic debugging and for future tooling that can inject storage state outside the sandbox. See [../SKILL.md#authentication-lifecycle](../SKILL.md#authentication-lifecycle) for the full framing.
+
+Must be re-run when any downstream mode's session-presence probe fires (login form detected after navigation) or reports a 401. Typical SSO session lifetime: 8-12 hours.
 
 ## Worked Example Prompts
 
@@ -53,7 +55,7 @@ If the `.gitignore` check fails, stop and ask the user to add `.playwright/` to 
 
 5. **Verify the PM is logged in.** Once the PM says `ready` (or `browser_wait_for` resolved), call `browser_snapshot`. Confirm the accessibility tree contains a post-login marker - typically the home search bar, the banner with the user's name, or the `Inbox` button. If the snapshot still shows a login form, the SSO did not complete; loop back to step 4 with a gentle prompt.
 
-6. **Export the authenticated session.** Call `browser_run_code` with a Playwright snippet that writes the storage state to the target path:
+6. **Export the authenticated session (recovery backup only).** Call `browser_run_code` with a Playwright snippet that writes the storage state to the target path:
 
    ```js
    // Playwright context is available as `context`
@@ -61,17 +63,21 @@ If the `.gitignore` check fails, stop and ask the user to add `.playwright/` to 
    return { ok: true, path: '.playwright/storageState.json' };
    ```
 
-   If `browser_run_code` cannot see the `context` handle, fall back to `browser_evaluate` with a script that reads `document.cookie` and other auth-relevant storage, then write to disk via a shell helper outside the MCP. Prefer the `context.storageState` path; document the fallback inline only if needed.
+   If `browser_run_code` cannot see the `context` handle (known limitation of the Playwright MCP sandbox - no `require`, no `fs`, no dynamic import of Node modules), fall back to `browser_evaluate` with a script that reads what it can and write to disk via a shell helper outside the MCP. **Do not block the handshake on this step failing.** The persistent browser profile (next step) is what actually keeps the PM logged in for subsequent smoke runs; this file is a forensic backup.
 
-7. **Verify the file exists and is gitignored.** Run a shell one-liner:
+7. **Verify the backup artefact (if written) exists and is gitignored.** Run a shell one-liner:
 
    ```bash
    [ -f .playwright/storageState.json ] && grep -q '^.playwright/' .gitignore && stat -f "mtime=%Sm size=%z path=%N" .playwright/storageState.json
    ```
 
-   Report only: `{ exists: true, mtime: <ISO8601>, size_bytes: <N>, gitignored: true }`. **Never print the file's contents, cookies, tokens, or headers to chat.** Treat the storageState the same way you'd treat a password.
+   Report only: `{ exists: true, mtime: <ISO8601>, size_bytes: <N>, gitignored: true }`. If the file does not exist because step 6 hit a sandbox limitation, report `{ exists: false, reason: "sandbox could not reach context.storageState; primary auth still active via persistent profile" }` and proceed. **Never print the file's contents, cookies, tokens, or headers to chat.** Treat the storageState the same way you'd treat a password.
 
-8. **Close the browser.** Call `browser_close`. Tell the PM: *"Auth handshake complete. Session saved to `.playwright/storageState.json` (mtime `<ISO8601>`). Expires in ~8-12 hours; re-run this mode if any smoke test reports a 401 or a login redirect."*
+8. **Confirm the primary auth source is active.** The Playwright MCP's persistent browser profile now holds the authenticated session. Tell the PM:
+
+   > *"Auth handshake complete. Primary auth: Playwright MCP's persistent browser profile (survives `browser_close`; every subsequent smoke mode will inherit this logged-in session automatically - no reload step required). Backup artefact: `.playwright/storageState.json` (mtime `<ISO8601>` if written; forensic only, not auto-reloaded). Expected SSO session lifetime: ~8-12 hours. Re-run this mode when any smoke mode's session-presence probe reports `session-expired`."*
+
+   **Browser close is optional.** If the PM wants to immediately chain a smoke mode, leave the browser open and tell them so. If they plan to run smoke modes later, call `browser_close` to free resources - the persistent profile retains auth either way.
 
 ## Guardrails
 
@@ -110,7 +116,8 @@ Mode:
 
 ## End-of-run
 
-- Browser closed via `browser_close`.
-- `.playwright/storageState.json` exists and is gitignored.
+- Playwright MCP's persistent browser profile holds the authenticated session (this is the primary auth source for every subsequent smoke run).
+- `.playwright/storageState.json` exists as a recovery backup, OR reports `{ exists: false }` with the sandbox-limitation reason if step 6 could not reach `context.storageState`. Either way, the persistent profile is active.
+- Browser was closed via `browser_close`, OR left open because the PM wanted to chain a smoke mode immediately (confirm which before ending the turn).
 - Do not write to `MISSION_LOG.md`. Do not invoke any rule.
 - Ask the user if they want to run a smoke mode now that auth is set up, but do not auto-chain.

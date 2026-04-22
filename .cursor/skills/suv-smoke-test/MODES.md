@@ -13,8 +13,9 @@ Every mode below can be invoked two ways: via the direct skill trigger (as liste
 ### `modes/auth-handshake.md`
 - **Browser interaction:** Yes (user SSOs manually into the SUV)
 - **Writes to SUV:** No
-- **Writes to workspace:** Yes (creates `.playwright/storageState.json`; gitignored)
-- **Primary tools:** `browser_install`, `browser_navigate`, `browser_snapshot`, `browser_wait_for`, `browser_run_code` (for exporting storage state)
+- **Primary auth mechanism:** Playwright MCP's persistent browser profile (survives `browser_close` and MCP restarts; every subsequent smoke mode inherits the logged-in session automatically - no reload step required).
+- **Writes to workspace:** Yes, recovery-backup only (creates `.playwright/storageState.json`; gitignored). This backup is NOT auto-reloaded by downstream modes; it exists for forensic debugging. See [SKILL.md#authentication-lifecycle](SKILL.md#authentication-lifecycle).
+- **Primary tools:** `browser_install`, `browser_navigate`, `browser_snapshot`, `browser_wait_for`, `browser_run_code` (for the recovery-backup export; allowed to fail without blocking handshake completion)
 - **Triggers:**
   - `/suv-smoke-test auth-handshake`
   - "set up Playwright auth"

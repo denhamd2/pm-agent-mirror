@@ -82,7 +82,7 @@ When a trigger fires:
 1. **If umbrella trigger** (no mode specified): print the Mode Catalogue table, ask "Which mode?", then stop. Do not auto-pick.
 2. **If mode-specific trigger**: read `modes/<mode>.md` and follow its instructions exactly. Do not pre-empt.
 3. **If ambiguous** (trigger matches multiple modes): ask which mode; do not auto-pick.
-4. **If storageState is missing or stale**: every mode except `auth-handshake` must refuse and route the user to `auth-handshake` first.
+4. **If the session-presence probe fires** (Flow step 1 of every smoke mode detects a login form or redirect to `/login`): the mode stops, emits a single `[ERROR]` tagged `session-expired`, and routes the PM to `auth-handshake`. The skill never inspects storageState mtime as a freshness heuristic - see "Authentication Lifecycle".
 5. **If the user signals confusion** ("I don't understand", "what's a snapshot", extended silence): pause and offer `/teachable-moment` on the concept.
 
 ## Global Pre-Flight (common to all modes except auth-handshake)
@@ -91,19 +91,36 @@ Before any mode runs:
 
 - [ ] **Target SUV is dev, not shared**: the mode's `<SUV_URL>` input must not contain `shared`, `prod`, `staging` in the hostname. If the user pastes one, stop and ask.
 - [ ] **Playwright MCP is reachable**: if `user-playwright-mcp` tools are not listed as available, stop and tell the user to check Cursor's MCP panel.
-- [ ] **storageState is fresh**: `.playwright/storageState.json` must exist and have been written within the last **8 hours** (Workday SSO sessions typically last 8-12 hours; err conservative). If stale or missing, route to `auth-handshake` and stop.
 - [ ] **Target page URL**: the mode needs a full SUV URL (e.g. `https://<tenant>.workday.com/d/task/1$12345/...`). If the user only gave a task WID, ask for the URL.
+- [ ] **Session presence**: each mode runs a post-navigation session-presence probe (see below) as step 1 of its Flow. The pre-flight does not look at `.playwright/storageState.json` mtime, because that file is a recovery artefact, not the live auth source of truth - see "Authentication Lifecycle" below.
 
 If any pre-flight item is missing, stop and ask the user.
 
-## storageState Lifecycle
+## Authentication Lifecycle
 
-Authenticated browser sessions are persisted to `.playwright/storageState.json` by the `auth-handshake` mode. This file contains session cookies and MUST NOT be committed to git.
+Authenticated browser sessions are driven primarily by the Playwright MCP's **persistent browser profile** (the MCP server's own `user-data-dir`). The persistent profile retains cookies and local storage across `browser_close` calls and across MCP-server restarts, so once the PM has SSOed once via `auth-handshake`, every subsequent smoke mode in the same workspace inherits that authenticated state with no explicit reloading step.
 
-- **Location**: `.playwright/storageState.json` (workspace-relative; `.playwright/` is gitignored).
-- **Lifetime**: 8-12 hours typical; re-run `auth-handshake` when any mode reports a 401 / redirect-to-login.
-- **Rotation**: automatic on `auth-handshake` re-run (overwrites the old file).
+This is the runtime reality, not a workaround. The previous version of this doc claimed that modes would "load" `.playwright/storageState.json` at the start of each run; they don't, because the Playwright MCP's `browser_run_code` sandbox cannot access Node's `fs` to reload a storage state file. The persistent profile is what actually keeps the PM logged in.
+
+- **Primary auth source**: Playwright MCP's persistent browser profile (managed by the MCP server; not a file the PM interacts with).
+- **Recovery artefact**: `.playwright/storageState.json`, written by `auth-handshake` step 7. This file is a **backup** of the authenticated session state - useful for forensic debugging (did the handshake actually capture a session?) and for future tooling that can inject storage state outside the MCP sandbox. It is NOT auto-reloaded at the start of every smoke run.
+- **Lifetime**: 8-12 hours typical SSO session. The persistent profile itself survives longer than any single cookie; when cookies inside it expire, the PM re-runs `auth-handshake` to refresh.
+- **Signal that re-auth is needed**: a smoke mode's session-presence probe (Flow step 1) detects a login form or a 401 and routes the PM to `auth-handshake`. Modes do NOT inspect storageState mtime as a heuristic; they observe the actual rendered page.
+- **Rotation**: `auth-handshake` overwrites `.playwright/storageState.json` on each run; the persistent profile rotates via SSO itself.
 - **Never log the contents**: modes must not print cookies, tokens, or the file's raw bytes to chat. Report only `{ exists: bool, mtime: ISO8601, path: ".playwright/storageState.json" }`.
+
+### Session-presence probe (first Flow step of every smoke mode)
+
+Every mode except `auth-handshake` and `console-and-network` starts its Flow with the same probe:
+
+1. After the first `browser_navigate`, call `browser_snapshot`.
+2. Inspect the accessibility tree for login-indicator markers:
+   - A heading or region labelled "Sign In", "Sign in to Workday", "Password", "Single Sign-On", or a `form` containing a `textbox` labelled "Username" / "Email" + `textbox` labelled "Password".
+   - A URL redirect to `/login`, `/sso`, `/saml`, or any path containing `login` after navigation settles.
+3. If any marker is found: stop the mode, emit a single `[ERROR]` finding tagged `session-expired`, recommend `/suv-smoke-test auth-handshake`, and close the browser. Do not proceed.
+4. If no marker is found: continue with the mode's documented Flow.
+
+`console-and-network` is exempt because it is a tail mode with no navigation; its pre-flight instead checks that the current session has non-trivial activity to tail.
 
 ## Output Contract (shared by every smoke mode)
 
@@ -119,6 +136,18 @@ Each finding includes:
 **Verdict** at the end of the report: `pass`, `pass with warnings`, or `fail`.
 
 This is machine-triageable output for `@xo-developer`. The PM sees the plain-English recap `@xo-developer` generates from it, not the raw findings.
+
+## Noise Allowlist
+
+Workday dev SUVs emit persistent, cross-page background noise that is independent of whatever change the PM is verifying (CDN CORS fallbacks, external telemetry beacons that are unreachable by design). Left unfiltered, these show up as `[WARNING]` findings on every run and train the reader to ignore warnings.
+
+The skill-scoped allowlist at [noise-allowlist.md](noise-allowlist.md) defines URL patterns that modes consult during classification. A matched event gets:
+
+- **Severity downgraded** to `[INFO]` with the tag `(allowlisted noise)` on the evidence line.
+- **Counted** in a rolled-up summary line at the end of the rubric (e.g. `[INFO] noise-allowlisted-matches: 2 patterns matched; 3 console events and 2 network events auto-downgraded.`).
+- **Never suppressed outright**: the PM can still see that noise occurred; it just stops being a warning.
+
+Only `page-smoke` and `console-and-network` currently consult the allowlist. Other modes opt in explicitly by referencing [noise-allowlist.md](noise-allowlist.md) in their own classification step. The allowlist is downgrade-only - it can never raise severity or suppress a finding entirely. See the allowlist file for the current entries and the protocol for adding new ones.
 
 ## Safety Guardrails (apply to every mode)
 

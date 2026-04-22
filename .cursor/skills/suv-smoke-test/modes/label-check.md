@@ -30,9 +30,8 @@ Catches the three most common "metadata patched, UI didn't update" failure modes
 - [ ] Global pre-flight from [../SKILL.md](../SKILL.md#global-pre-flight-common-to-all-modes-except-auth-handshake) passed.
 - [ ] Target URL is a dev SUV (no `shared`, `prod`, `staging`).
 - [ ] Expected value captured verbatim.
-- [ ] `.playwright/storageState.json` exists and is less than 8 hours old.
 
-If storageState is stale or missing, stop and route the PM to [`auth-handshake`](auth-handshake.md).
+Authentication is NOT gated on storageState mtime. The session-presence probe at Flow step 2 detects unauthenticated state at runtime and routes the PM to [`auth-handshake`](auth-handshake.md) if needed. See [../SKILL.md#authentication-lifecycle](../SKILL.md#authentication-lifecycle).
 
 ## Tools Used
 
@@ -47,9 +46,9 @@ If storageState is stale or missing, stop and route the PM to [`auth-handshake`]
 
 ## Flow
 
-1. **Load session.** Initialise the browser context with `storageState: '.playwright/storageState.json'`. If the storageState is missing, refuse (see pre-flight).
+1. **Navigate.** Call `browser_navigate` with the SUV page URL. The Playwright MCP's persistent browser profile supplies the authenticated session automatically (see [../SKILL.md#authentication-lifecycle](../SKILL.md#authentication-lifecycle)).
 
-2. **Navigate.** Call `browser_navigate` with the SUV page URL.
+2. **Session-presence probe.** Call `browser_snapshot` once the navigation settles. Scan the accessibility tree for login-indicator markers (heading `Sign In` / `Single Sign-On`, a `form` with `Username` + `Password` textboxes, or a post-navigation URL containing `/login` / `/sso` / `/saml`). If any marker is present, stop immediately, emit a single `[ERROR]` tagged `session-expired` recommending `/suv-smoke-test auth-handshake`, call `browser_close`, and return. Do not continue to step 3.
 
 3. **Wait for settle.** Either:
    - The PM provided an anchor selector -> `browser_wait_for` on that selector.
@@ -97,7 +96,7 @@ If storageState is stale or missing, stop and route the PM to [`auth-handshake`]
 
 - **Never click on anything.** This is a read-only verification. No links, no buttons, no form fills.
 - **Never hard-refresh programmatically.** If cache is suspected, surface it as a finding and ask the PM to refresh.
-- **Never print the storageState content.** Metadata only; see [../SKILL.md](../SKILL.md#storagestate-lifecycle).
+- **Never print the storageState content.** Metadata only; see [../SKILL.md#authentication-lifecycle](../SKILL.md#authentication-lifecycle).
 - **Never batch across multiple element contents in one run.** If the PM wants to verify three renames, run the mode three times.
 - **One page per run.** If the label should appear on two pages, ask the PM to specify which one matters and run the mode again if needed.
 
@@ -114,7 +113,7 @@ If storageState is stale or missing, stop and route the PM to [`auth-handshake`]
 User: "Confirm the 'Priority Offer' label renders on <SUV URL>."
 
 Mode:
-  1. Pre-flight: URL is dev, storageState fresh
+  1. Pre-flight: URL is dev; session-presence probe will run post-navigation
   2. browser_navigate -> <SUV URL>, loaded with saved session
   3. browser_wait_for / settle
   4. browser_snapshot -> captures tree

@@ -33,7 +33,7 @@ Catches the most common "method metadata updated, consumer page breaks" failure 
 - [ ] Global pre-flight passed.
 - [ ] Consumer URL is dev SUV.
 - [ ] Method WID or name captured for finding scope.
-- [ ] `.playwright/storageState.json` fresh.
+- [ ] Authentication is NOT gated on storageState mtime - the session-presence probe at Flow step 2 handles expired sessions at runtime. See [../SKILL.md#authentication-lifecycle](../SKILL.md#authentication-lifecycle).
 - [ ] If a baseline path is provided, the file exists. If missing, the mode will run in "capture baseline" mode and record the current state as the new baseline (with explicit PM approval before writing).
 
 ## Tools Used
@@ -49,15 +49,17 @@ Catches the most common "method metadata updated, consumer page breaks" failure 
 
 ## Flow
 
-1. **Load session + navigate.** `browser_navigate` to the consumer URL.
+1. **Navigate.** `browser_navigate` to the consumer URL. The Playwright MCP's persistent browser profile supplies the authenticated session automatically.
 
-2. **Wait for settle.** `browser_wait_for` on the consumer locator.
+2. **Session-presence probe.** Call `browser_snapshot` after navigation settles. Scan the accessibility tree for login-indicator markers (heading `Sign In` / `Single Sign-On`, a `form` with `Username` + `Password` textboxes, or a post-navigation URL containing `/login` / `/sso` / `/saml`). If any marker is present, stop immediately, emit `[ERROR] session-expired` recommending `/suv-smoke-test auth-handshake`, call `browser_close`, and return.
 
-3. **Pre-click snapshot.** `browser_snapshot`. If the locator is a field (no click needed), this is the primary evidence.
+3. **Wait for settle.** `browser_wait_for` on the consumer locator.
 
-4. **If locator is a button**, click it once. Verify it is NOT on the persist blocklist. After click, `browser_wait_for` for 2-3s and take a second `browser_snapshot` (post-click = primary evidence).
+4. **Pre-click snapshot.** `browser_snapshot`. If the locator is a field (no click needed), this is the primary evidence.
 
-5. **Handle baseline logic:**
+5. **If locator is a button**, click it once. Verify it is NOT on the persist blocklist. After click, `browser_wait_for` for 2-3s and take a second `browser_snapshot` (post-click = primary evidence).
+
+6. **Handle baseline logic:**
 
    **Case A - baseline exists.** Diff current snapshot against baseline. Compare:
    - Presence of the consumer locator (field or button region).
@@ -79,16 +81,16 @@ Catches the most common "method metadata updated, consumer page breaks" failure 
    - `approve` -> write snapshot to `.playwright/baselines/<slug>.json`. Finding: `[INFO] method-regression: baseline captured at <path>`. Verdict = `pass (baseline captured)`.
    - `reject` -> skip baseline write; finding: `[INFO] method-regression: current state captured, no baseline saved`. Verdict = `pass (no baseline)`.
 
-6. **Check for error signals on the consumer page.** These promote the verdict regardless of baseline status:
+7. **Check for error signals on the consumer page.** These promote the verdict regardless of baseline status:
    - Console error messages -> `[WARNING]` or `[ERROR]` finding depending on content.
    - XHR 5xx responses on the page load or post-click -> `[ERROR]` finding; this is likely the method itself throwing.
    - An accessibility-tree alert node with error text (e.g. "Failed to load", "Something went wrong") -> `[ERROR]` finding.
 
    If any `[ERROR]` is raised, verdict downgrades to `fail` regardless of baseline match.
 
-7. **Close browser.** `browser_close`.
+8. **Close browser.** `browser_close`.
 
-8. **Emit findings report.** Machine-triageable; `@xo-developer` consumes and translates for the PM.
+9. **Emit findings report.** Machine-triageable; `@xo-developer` consumes and translates for the PM.
 
 ## Guardrails
 

@@ -30,7 +30,7 @@ Catches the two most common "validation patched, doesn't enforce" failure modes:
 - [ ] Global pre-flight passed.
 - [ ] Target URL is a dev SUV.
 - [ ] Trigger value and expected message captured verbatim.
-- [ ] `.playwright/storageState.json` is fresh.
+- [ ] Authentication is NOT gated on storageState mtime - the session-presence probe at Flow step 2 handles expired sessions at runtime. See [../SKILL.md#authentication-lifecycle](../SKILL.md#authentication-lifecycle).
 - [ ] **No persist button will be clicked.** The mode NEVER clicks Submit, Save, Done, or any label that persists data. Confirm the PM's "trigger point" is one of: `blur`, `change`, or `submit on a non-persist button` (e.g. `Next`, `Continue`, `Validate`). If the PM asks for a Save click, refuse and explain the guardrail.
 
 If the trigger point is unclear or risks a persist, stop and ask for a binary choice.
@@ -50,26 +50,28 @@ If the trigger point is unclear or risks a persist, stop and ask for a binary ch
 
 ## Flow
 
-1. **Load session + navigate.** `browser_navigate` with stored session to the form URL.
+1. **Navigate.** `browser_navigate` to the form URL. The Playwright MCP's persistent browser profile supplies the authenticated session automatically.
 
-2. **Wait for form render.** `browser_wait_for` on the target field selector (accessible label match). Time out at 10s with a clear failure message if the field never appears.
+2. **Session-presence probe.** Call `browser_snapshot` after navigation settles. Scan the accessibility tree for login-indicator markers (heading `Sign In` / `Single Sign-On`, a `form` with `Username` + `Password` textboxes, or a post-navigation URL containing `/login` / `/sso` / `/saml`). If any marker is present, stop immediately, emit `[ERROR] session-expired` recommending `/suv-smoke-test auth-handshake`, call `browser_close`, and return.
 
-3. **Pre-fill snapshot.** `browser_snapshot`. Confirm the target field exists in the tree and captures its state (empty / default value).
+3. **Wait for form render.** `browser_wait_for` on the target field selector (accessible label match). Time out at 10s with a clear failure message if the field never appears.
 
-4. **Fill the trigger value.** `browser_fill_form` with the target field's accessible label and the trigger value.
+4. **Pre-fill snapshot.** `browser_snapshot`. Confirm the target field exists in the tree and captures its state (empty / default value).
 
-5. **Trigger evaluation** (branch on trigger point):
+5. **Fill the trigger value.** `browser_fill_form` with the target field's accessible label and the trigger value.
+
+6. **Trigger evaluation** (branch on trigger point):
    - `blur` -> `browser_press_key('Tab')` to move focus off the field.
    - `change` -> typing is the trigger; no extra action.
    - `submit` -> `browser_click` on the non-persist button. Verify the button's accessible name is NOT in the persist blocklist (`Submit`, `Save`, `Done`, `Submit for Approval`, `Confirm`, `Apply`). If it is, refuse and report.
 
-6. **Wait briefly for async validation.** `browser_wait_for` 2-3 seconds, or on an error-region selector if the PM provided one.
+7. **Wait briefly for async validation.** `browser_wait_for` 2-3 seconds, or on an error-region selector if the PM provided one.
 
-7. **Post-trigger snapshot.** `browser_snapshot`.
+8. **Post-trigger snapshot.** `browser_snapshot`.
 
-8. **Assert the expected error message.** Substring match on the expected message string, scoped to the nearest error / alert region of the accessibility tree (nodes of type `alert`, `status`, or `text` inside a region labelled "error" / "validation").
+9. **Assert the expected error message.** Substring match on the expected message string, scoped to the nearest error / alert region of the accessibility tree (nodes of type `alert`, `status`, or `text` inside a region labelled "error" / "validation").
 
-9. **Handle the outcome cases:**
+10. **Handle the outcome cases:**
 
    **Case A - error present, matches expected.** Finding:
    ```
@@ -104,11 +106,11 @@ If the trigger point is unclear or risks a persist, stop and ask for a binary ch
    ```
    Verdict = `fail`.
 
-10. **Tail console and network.** Any console `error` or XHR status >= 500 raises a `WARNING` or `ERROR` finding.
+11. **Tail console and network.** Any console `error` or XHR status >= 500 raises a `WARNING` or `ERROR` finding.
 
-11. **Close the browser.** `browser_close`.
+12. **Close the browser.** `browser_close`.
 
-12. **Emit the findings report** per the shared output contract.
+13. **Emit the findings report** per the shared output contract.
 
 ## Guardrails
 

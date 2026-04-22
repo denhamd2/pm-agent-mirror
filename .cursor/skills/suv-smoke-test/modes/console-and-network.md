@@ -40,24 +40,30 @@ No navigation, no snapshot, no clicks, no close. The browser session remains as 
 
 2. **Pull network requests.** `browser_network_requests`.
 
-3. **Classify console messages:**
-   - `error` severity -> `[ERROR]` finding per message with text + source file/line if available.
-   - `warn` severity -> `[WARNING]` finding (suppressed if severity floor is `error`).
+3. **Classify console messages (with allowlist lookup):**
+   - `error` severity -> candidate for `[ERROR]` finding per message with text + source file/line if available.
+   - `warn` severity -> candidate for `[WARNING]` finding (suppressed if severity floor is `error`).
    - `info` / `log` / `debug` -> `[INFO]` finding (suppressed unless severity floor is `all`).
+   - **Allowlist lookup**: before emitting each candidate `[ERROR]` or `[WARNING]`, check its source URL / message text against [`../noise-allowlist.md`](../noise-allowlist.md) entries with `scope: console` or `scope: both`. On match, downgrade to `[INFO]` and tag the evidence line with `(allowlisted noise: <entry-id>)`. See the skill-level allowlist contract in [`../SKILL.md#noise-allowlist`](../SKILL.md#noise-allowlist).
 
-4. **Classify network requests:**
-   - Status >= 500 -> `[ERROR]` with method + URL + status + response time if available.
-   - Status 400-499 -> `[ERROR]` (client errors often indicate auth or schema problems).
-   - Status 300-399 -> `[WARNING]` (redirects; often benign but worth flagging if unexpected).
+4. **Classify network requests (with allowlist lookup):**
+   - Status >= 500 -> candidate for `[ERROR]` with method + URL + status + response time if available.
+   - Status 400-499 -> candidate for `[ERROR]` (client errors often indicate auth or schema problems).
+   - Status 300-399 -> candidate for `[WARNING]` (redirects; often benign but worth flagging if unexpected).
    - Status 200-299 -> `[INFO]` (summary only: "N successful XHRs"); full list omitted unless severity floor is `all`.
-   - Pending / unresolved after capture -> `[WARNING]` *"outstanding request at capture time"*.
+   - Pending / unresolved after capture -> candidate for `[WARNING]` *"outstanding request at capture time"*.
+   - **Allowlist lookup**: before emitting each non-2xx candidate, check the request URL against [`../noise-allowlist.md`](../noise-allowlist.md) entries with `scope: network` or `scope: both`. On match, downgrade to `[INFO]` and tag the evidence line with `(allowlisted noise: <entry-id>)`.
 
 5. **Apply URL pattern filter** if provided - include only matching XHRs in the findings.
 
-6. **Emit findings report.** Because this is a tail mode, the aggregate verdict is scoped to just what was tailed:
+6. **Rolled-up allowlist summary.** If any allowlist matches fired in steps 3 or 4, emit one `[INFO]` summary line:
+   > `[INFO] noise-allowlisted-matches: N patterns matched; M console events and K network events auto-downgraded. See .cursor/skills/suv-smoke-test/noise-allowlist.md.`
+
+7. **Emit findings report.** Because this is a tail mode, the aggregate verdict is scoped to just what was tailed:
    - Zero `[ERROR]` findings -> `pass` (tail-only; scope note: "no navigation; only reflects current session state").
    - Any `[WARNING]` without `[ERROR]` -> `pass with warnings`.
    - Any `[ERROR]` -> `fail`.
+   - Allowlist-downgraded `[INFO]` entries do NOT contribute to the verdict.
 
 The scope note is important: a clean tail does NOT mean the page is healthy; it means nothing errored during whatever window the session has been alive for. Callers must frame this honestly.
 
