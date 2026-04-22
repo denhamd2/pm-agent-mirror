@@ -83,7 +83,7 @@ All read-only.
 5. **Produce a combined markdown table.** Columns:
    - **Endpoint** (path, or service + resource for internal)
    - **Method** (GET/POST/PATCH/PUT/DELETE)
-   - **Source** (Public Recruiting v4, Public Staffing v6, Public Person v3, or Internal XO REST)
+   - **Source** (Public Recruiting v4, Public Staffing v7, Public Person v4, or Internal XO REST)
    - **Tag / service** (e.g. `prospects`, `jobChanges`, `people`)
    - **Schema** (primary request or response schema name)
    - **Notes** (writeable/read-only, public/internal-only, any gotchas)
@@ -118,11 +118,11 @@ Flag this path explicitly when recommending it: "live data is blocked by `<domai
 
 | Endpoint | Method | Source | Tag | Schema | Notes |
 |---|---|---|---|---|---|
-| `/people/{ID}` | GET | Person v3 | people | personRepresentation_e451... | Read-only on core person |
-| `/people/{ID}/phones` | GET | Person v3 | people | phoneNumbers_d8f2... | Collection |
-| `/homeContactInformationChanges` | POST | Person v3 | homeContactInformationChanges | homeContactChangeEvent_* | Creates a change event |
-| `/workContactInformationChanges` | POST | Person v3 | workContactInformationChanges | workContactChangeEvent_* | Creates a change event |
-| `/workers/{ID}` | GET | Staffing v6 | workers | worker_271b... | Worker core |
+| `/people/{ID}` | GET | Person v4 | people | personRepresentation_e451... | Read-only on core person |
+| `/people/{ID}/phones` | GET | Person v4 | people | phoneNumbers_d8f2... | Collection |
+| `/homeContactInformationChanges` | POST | Person v4 | homeContactInformationChanges | homeContactChangeEvent_* | Creates a change event |
+| `/workContactInformationChanges` | POST | Person v4 | workContactInformationChanges | workContactChangeEvent_* | Creates a change event |
+| `/workers/{ID}` | GET | Staffing v7 | workers | worker_271b... | Worker core |
 | ... | ... | ... | ... | ... | ... |
 
 **Internal surface** (from SUV)

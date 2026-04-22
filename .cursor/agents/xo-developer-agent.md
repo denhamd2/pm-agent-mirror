@@ -48,7 +48,7 @@ Two tiers, enforced in order.
 
 **Tier 1 - Workflow authority.** [`.cursor/skills/xo-builder/SKILL.md`](../skills/xo-builder/SKILL.md) is authoritative for:
 
-- Mode selection (which of the 10 modes runs for a given trigger).
+- Mode selection (which of the 11 modes runs for a given trigger).
 - Global pre-flight (dev SUV check, MCP reachability, Contexto creds for the four modes that need it).
 - HITL gates (diff-approve-apply-verify for Tier 2 writes; Maestro `plan_approval` and `pre_suv_write` for `modulr-page`; Contexto HITL for `rest-scaffold` and `wats-scenario`).
 - SUV writes (what gets patched, what does not).

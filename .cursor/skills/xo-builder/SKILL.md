@@ -7,7 +7,7 @@ description: >-
   REST API documentation/testing, and WATS test scenarios. Lives entirely
   outside the PM agent workflow: does NOT participate in E2E pipelines, does
   NOT chain into 315/320/330/400 or any rule, and does NOT write to
-  MISSION_LOG. Ten modes across three tiers (read-only, guarded write,
+  MISSION_LOG. Eleven modes across three tiers (read-only, guarded write,
   guarded build). Five modes run directly from the PM workspace using XO MCP
   tools; four modes switch workspace to ~/contexto and hand off to Contexto
   workflows or slash commands. Every write mode enforces a
@@ -18,7 +18,7 @@ description: >-
 
 # XO Builder (Standalone Umbrella Skill)
 
-Vibe-code XO artefacts on your Workday SUV. One dispatcher skill, ten modes, three tiers. Each mode is self-contained in `modes/<name>.md`; this file is the router + shared contract.
+Vibe-code XO artefacts on your Workday SUV. One dispatcher skill, eleven modes, three tiers. Each mode is self-contained in `modes/<name>.md`; this file is the router + shared contract.
 
 ## Trigger phrases
 
@@ -212,7 +212,7 @@ If a user asks "can xo-builder do X" and X is on this list, tell them: "Not in v
 
 xo-builder handles **code generation** on the SUV (via XO MCP tools). The **DevOps lifecycle** - branching, auditing, pushing, impact analysis, code reviews - is handled by **X2 MCP** (`x2-mcp`, `http://localhost:12050/mcp`), a separate local MCP server that bridges Cursor and the X2 Chrome extension.
 
-xo-builder does NOT invoke X2 MCP tools. However, when a write mode completes (especially `rest-from-task`, `modulr-page`, or any mode that creates XO artefacts), the `@xo-developer` advisory layer should suggest the X2 DevOps flow as a natural next step. See advisory #12 in `.cursor/agents/xo-developer-agent.md`.
+xo-builder does NOT invoke X2 MCP tools. However, when a write mode completes (especially `rest-from-task`, `modulr-page`, or any mode that creates XO artefacts), the `@xo-developer` advisory layer should suggest the X2 DevOps flow as a natural next step. See advisory #12 in `.cursor/agents/xo-developer-refs/advisory-playbook.md`.
 
 **Key X2 tools** (for reference, not invoked by xo-builder):
 - `createSuvBranch`, `pushChanges`, `getBranches` (branch management)

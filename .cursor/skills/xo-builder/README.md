@@ -26,6 +26,30 @@ If what you want is a real feature (new class, new BP), stop and use the PM agen
 - You want a dashboard, report, worklet, BP, integration, notification, or security change (all out of scope for v1).
 - You want to create a new class or attribute (belongs in an epic).
 
+## First 15 Minutes
+
+If this is your first time using `@xo-developer` or the xo-builder skill, try these three prompts in order. Each is read-only or low-risk and builds your mental model before any serious write operation. If any response is too technical, type `/teachable-moment` to get a plain-English version with a diagram.
+
+1. **Understand a task** (read-only, no SUV changes):
+   `@xo-developer analyse the Offer Management task and summarise what it does in plain English`
+   - Uses: [page-discovery](modes/page-discovery.md) mode.
+   - What you get: a plain-English summary of what the task does, who uses it, its inputs, outputs, and validations.
+   - Why start here: builds your mental model of how XO tasks are structured, without touching anything.
+
+2. **List available APIs** (read-only, no SUV changes):
+   `@xo-developer what public Workday APIs can I call for Recruiting?`
+   - Uses: [api-catalogue](modes/api-catalogue.md) mode.
+   - What you get: a shortlist of endpoints (Recruiting v4, Staffing v7, Person v4, WQL v1, etc.) with quickstart curls, grouped by intent (people, jobs, candidates, analytics).
+   - Why next: useful for sizing "can we do X via API?" questions before spec work.
+
+3. **Rename a method** (small guarded write, single field):
+   `@xo-developer rename the BA method Candidate@getActiveJobApplications to getActiveApplications`
+   - Uses: [method-edit](modes/method-edit.md) mode.
+   - What you get: a diff showing the current and proposed display name, a `HITL approve` gate, the XO MCP patch, then the `@xo-code-reviewer` pass, then a plain-English recap of what changed.
+   - Why end here: teaches you the full three-stage loop (implement -> review -> triage-and-apply) on the smallest safe write. If anything goes wrong, it's a name change on a dev method - trivial to revert.
+
+After these three, you'll have a working feel for read-only vs write modes, the HITL gate pattern, and the reviewer loop. From there, more ambitious prompts (REST scaffolding, ModulR layouts, validation creation) are safe to try.
+
 ## How it works
 
 1. Say a trigger phrase (see [SKILL.md](SKILL.md#trigger-phrases)).
