@@ -34,22 +34,54 @@ After the next Cursor MCP reconnect, these are callable from the PM workspace:
 - `update_offer_event` (PATCH)
 - `delete_offer_event` (DELETE)
 
-## Known response shape (Phase 4 smoke, 22 April 2026)
+## Known response shape (Phase 4 smoke, 22 April 2026, re-verified after programmatic fix attempts)
 
-| Step | Status | Expected (View rep `xoAgentOfferEventView`) | Actual (runtime) | Drift? |
+| Step | Status | Design-time schema (View rep `xoAgentOfferEventView`) | Actual runtime | Drift? |
 |---|---|---|---|---|
 | GET list | 200 | `{ total, data: [{ id, descriptor, role, job, photo }] }` | `{ total, data: [{ id, descriptor }] }` | Yes - `role`, `job`, `photo` missing |
 | GET by id | 200 | `{ id, descriptor, role, job, photo }` | `{ id, descriptor }` | Yes - same three fields missing |
-| POST | 201 | Full resource body | Empty body | Yes - empty body despite 2xx |
-| PATCH | 200 | Full resource body | Empty body | Yes - empty body despite 2xx |
+| POST | 201 | Full resource body (View rep) | `{}` | Yes - empty body despite 2xx |
+| PATCH | 200 | Full resource body (View rep) | `{}` | Yes - empty body despite 2xx |
 | DELETE | 204 | Empty | Empty | No |
 
-Design-time schema (`suv_rest_call` with `fetch_schema=True`) confirms all five fields should be present on the View rep. Runtime omission of the three reference-type fields (`role`, `job`, `photo`) is a known gap pending a follow-up edit task on the created Representation Content.
+The `suv_rest_call ... fetch_schema=True` response confirms all five fields on the View rep. The runtime omissions (GET missing three fields + POST/PATCH empty body) share one root cause: **Safe Harbour activation has not been run in the XO UI** against the objects `rest-from-task` created. These two drifts are the same teaching artefact.
 
-## Known follow-ups
+## Safe Harbour: single root cause, two symptoms
 
-- **Edit task on View representation content**: ensure `role`, `job`, and `photo` are materialised in the response. Per the Safe Harbour reminder, generated XO is development-quality until the edit task is run on every created object.
-- **POST/PATCH response body**: empty-body-on-write is an XO pattern, not necessarily a bug. Decide per-resource whether to populate the response body or keep it thin; the Offer Events API currently takes the thin path.
+Workday XO's `rest-from-task` generator produces a **callable** REST API in ~5 minutes. What it does **not** do automatically is run the follow-up "Edit" task that kernel-level validators use to (a) activate new CRFs and RCs into the runtime rendering cache and (b) wire a separate response representation onto write operations. That follow-up task is UI-only.
+
+### Attempted programmatic fixes (all failed as expected)
+
+| Attempt | Tool | Target | Result |
+|---|---|---|---|
+| 1 | `representation_content_patch` | RC rows for role/job/photo on View rep | 200 OK, GET drift unchanged |
+| 2a | `service_representation_workday_owned_patch` | View rep itself (name, description) | 200 OK, GET drift unchanged |
+| 2b | `class_report_field_patch` | Role CRF, Photo CRF (descriptions) | 200 OK, GET drift unchanged |
+| 3a | `service_operation_patch` POST/PATCH `defaultFieldRepresentations` -> View only | POST op, PATCH op | 500 `No 'Maps to Class' specified` - View rep has no `mapsToClass`, so request deserialisation broke |
+| 3b | `service_operation_patch` POST/PATCH `defaultFieldRepresentations` -> [Edit, View] | POST op, PATCH op | 500 same error - runtime picks one rep, not both |
+| 3c | Revert POST/PATCH to Edit-only | POST op, PATCH op | 201/200 with `{}` - baseline restored |
+
+### Why these failed
+
+The MCP-exposed patch tools (`*_patch`) write metadata fields but do not invoke the kernel-side validators or cache refresh that the UI "Edit" task runs. Specifically:
+
+- **GET drift** needs a re-save through the Service Representation edit task that materialises RC rows into the runtime View-rendering cache. The RC/CRF/SR patches above touch the right objects but do not trigger the cache rebuild.
+- **POST/PATCH drift** needs the View rep's `serviceOperations` back-reference to include POST and PATCH - this is a read-only field in `service_representation_workday_owned_patch`. Only the UI edit task can add that binding.
+
+## Remediation (UI-only; follow-up work)
+
+Run the XO "Edit" task in the SUV UI against these six objects (in this order):
+
+1. CRF `Role as Event Subject +TG` - WID `110d07c2bf08100011a2f7964c170000`
+2. CRF `Photo for Role +TG` - WID `110d07c2bf08100011a31c79eb280000`
+3. CRF `Job Requisition` (pre-existing) - WID `5223eb025034100018991a2fce2c01b3`
+4. Service Representation `xoAgentOfferEventView` - WID `110d07c2bf08100011a76e50b5610000`
+5. Service Operation `XOAgents/offer-events/post` - WID `110d07c2bf08100011b27a1912510000` (while editing, add `xoAgentOfferEventView` to `defaultFieldRepresentations`)
+6. Service Operation `XOAgents/offer-events/patch` - WID `110d07c2bf08100011b2d01206680000` (same addition)
+
+After step 4 completes, GET should return `role`/`job`/`photo`. After steps 5-6 complete, POST/PATCH should return a full View-rep body.
+
+Until those tasks run, the playground faithfully shows the runtime truth.
 
 ## Prototype (dogfood)
 

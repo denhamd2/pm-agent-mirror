@@ -12,9 +12,14 @@
  * work end-to-end, AND surface the runtime-vs-design drift so the PM can see exactly
  * what the API returns today vs what the View representation promised.
  *
- * Known drift (from Phase 4 smoke, recorded in docs/xo/rest-apis/offer-events/README.md):
+ * Known Safe Harbour drift (one root cause, two symptoms - full story in
+ * docs/xo/rest-apis/offer-events/README.md):
  *   - GET returns only `id` + `descriptor`; `role`, `job`, `photo` are missing.
  *   - POST/PATCH return empty body despite 2xx status.
+ *   Both are the same thing: `rest-from-task` wrote the metadata, but the kernel-level
+ *   UI edit task that activates new CRFs into the render cache and binds the View rep
+ *   onto write operations has not yet been run. Programmatic `*_patch` MCP tools touch
+ *   the metadata but do not fire the validators - fix requires opening the SUV UI.
  *
  * Route: /offers-playground-v01
  */
@@ -315,11 +320,14 @@ export function OffersPlaygroundV01() {
                 Offer Events REST playground
               </Heading>
               <BodyText size="medium" color={colors.blackPepper500} marginTop="xxs">
-                Dogfooding the four XO Agent Tools end to end. Every button below exercises
+                Honest dogfood of the four XO Agent Tools against
                 <code style={{ margin: '0 4px', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' }}>
                   XOAgents/labs/offer-events
                 </code>
-                on the development SUV via the local proxy on port 8787, which forwards through the hosted XO MCP. Response bodies are identical to a direct REST call.
+                on the development SUV. The red pills and 2xx-empty banners are not prototype bugs -
+                they are the real runtime state of a Safe Harbour REST API that has not yet had its follow-up
+                UI edit task. See <code style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' }}>docs/xo/rest-apis/offer-events/README.md</code>
+                for the six WIDs that need remediation.
               </BodyText>
             </Box>
             <Flex gap="s" alignItems="center">
@@ -488,10 +496,10 @@ function DriftBanner() {
         <Box style={{ minWidth: 24, fontSize: 20 }}>!</Box>
         <Box>
           <BodyText size="small" color={colors.blackPepper600} style={{ fontWeight: 600 }}>
-            Known runtime drift (Phase 4 smoke)
+            Safe Harbour drift - one root cause, two symptoms
           </BodyText>
           <BodyText size="small" color={colors.blackPepper500} marginTop="xxs">
-            The View representation designs for <code>id</code>, <code>descriptor</code>, <code>role</code>, <code>job</code>, <code>photo</code> - but the runtime currently returns only <code>id</code> and <code>descriptor</code>. POST and PATCH return 2xx with empty bodies. Fields flagged in red below are expected-but-missing - this is the honest gap between the schema and the live API.
+            The View rep declares <code>id</code>, <code>descriptor</code>, <code>role</code>, <code>job</code>, <code>photo</code> but the runtime returns only <code>id</code> and <code>descriptor</code>, and POST/PATCH return 2xx with empty bodies. Both are the same thing: <code>rest-from-task</code> wrote the metadata but the kernel-level edit task that activates new CRFs into the render cache and binds the View rep onto write ops has not yet been run in the SUV UI. We tried to fix it programmatically via <code>*_patch</code> MCP tools - those write metadata but do not fire the validators that activate it. Six WIDs need a UI edit pass; see the README for the remediation list.
           </BodyText>
         </Box>
       </Flex>
