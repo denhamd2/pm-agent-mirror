@@ -15,8 +15,9 @@ description: >-
   Proposed Fix for bugs, Customer Resolution for config/WAD, Needs Further
   Investigation for inconclusive. XO metadata analysis proposes code-level fixes
   for bugs and customer-facing resolutions for all other types. Generates batch
-  summary reports for 10+ Jiras with closure recommendations rollup. Appends
-  results to a 7-column Confluence triage table. After writing, opens the
+  summary reports for 10+ Jiras with closure recommendations rollup. Overwrites
+  the Confluence triage page with a fresh 7-column table each run (no stale
+  rows from prior batches). After writing, opens the
   Confluence triage page in both Google Chrome and the Cursor Simple Browser,
   then prompts the PM via AskQuestion whether to bulk-close high-confidence
   WAD / Config Jiras as "Won't Do" with a detailed comment (Yes / No / Other,
@@ -472,7 +473,9 @@ classification adjusted by XO metadata evidence and bug age.
 
 ### Step 6: Write to Confluence
 
-Compose an HTML table row and insert it into the triage page.
+Build a fresh HTML table from the current batch's rows and **overwrite** the
+entire Confluence page content. Each triage run replaces the previous results
+so the page always reflects the most recent batch.
 
 **Short description guidelines:**
 - 1-2 sentences maximum
@@ -482,12 +485,9 @@ Compose an HTML table row and insert it into the triage page.
 - Example: "When a recruiter moves a candidate to the Offer stage after an
   interview integration update, duplicate offer processes are created."
 
-**IMPORTANT: Do NOT use `mode: "append"`** - it appends content after the
-table element, rendering as raw text. Use the read-then-replace pattern below.
+**Step 6a - Find or create the Confluence page:**
 
-**Step 6a - Find and read the current page:**
-
-First, search for the page to get the current page ID:
+Search for the page to get the current page ID:
 ```
 CallMcpTool  server: "user-confluence-mcp"
 toolName: "search_confluence"
@@ -505,12 +505,7 @@ arguments: {
 }
 ```
 
-Then read the page content:
-```
-CallMcpTool  server: "user-confluence-mcp"
-toolName: "get_page_content"
-arguments: { "pageId": "{discovered_page_id}" }
-```
+Do NOT read the existing page content - each triage run overwrites it entirely.
 
 **Step 6a2 - Calculate Closure Recommendation:**
 
@@ -620,20 +615,11 @@ The DA column (column 5) varies by Salomon verdict:
 </tr>
 ```
 
-**Step 6c - Insert the row and replace the full page content:**
-Take the existing page HTML, insert the new `<tr>` before the closing
-`</tbody></table>` tags, then write the complete table back:
-```
-CallMcpTool  server: "user-confluence-mcp"
-toolName: "smart_update_confluence_page"
-arguments: {
-  "pageId": "{discovered_page_id}",
-  "content": "<full table HTML with new row inserted before </tbody></table>>",
-  "mode": "replace"
-}
-```
+**Step 6c - Build a fresh table and overwrite the page:**
 
-If the page is empty or has no table yet, create the full table structure:
+Construct a complete table containing **only** the rows from the current triage
+batch. Do NOT read or merge with previous page content - each run starts clean.
+
 ```html
 <table>
   <thead>
@@ -648,10 +634,24 @@ If the page is empty or has no table yet, create the full table structure:
     </tr>
   </thead>
   <tbody>
-    {new row here}
+    {all <tr> rows from this batch}
   </tbody>
 </table>
 ```
+
+Then replace the entire page content:
+```
+CallMcpTool  server: "user-confluence-mcp"
+toolName: "smart_update_confluence_page"
+arguments: {
+  "pageId": "{discovered_page_id}",
+  "content": "<full table HTML with all current-batch rows>",
+  "mode": "replace"
+}
+```
+
+This ensures the Confluence page always shows exactly the results from the most
+recent triage run, with no stale rows from prior batches.
 
 ### Step 7: Report to User
 
@@ -1013,8 +1013,7 @@ PM to adjudicate.
 | `user-xo-mcp` | `element_content_get` | Element content detail (fields, display options, validations) |
 | `user-confluence-mcp` | `search_confluence` | Search for pages by title to discover current page ID |
 | `user-confluence-mcp` | `create_confluence_page` | Create new page if it doesn't exist |
-| `user-confluence-mcp` | `smart_update_confluence_page` | Write triage row to Confluence table |
-| `user-confluence-mcp` | `get_page_content` | Read current Confluence page for read-then-replace |
+| `user-confluence-mcp` | `smart_update_confluence_page` | Overwrite Confluence page with fresh triage table |
 
 ---
 
