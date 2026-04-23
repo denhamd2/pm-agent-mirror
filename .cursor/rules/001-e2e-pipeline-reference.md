@@ -183,10 +183,12 @@ The pipeline invokes these **subagents** at specific steps (subagents delegate t
 | 16 | **080** | Glob rule | Red Team Review (PRD) |
 | 17 | **315** | Glob rule | Design Brief Creation |
 | 18 | **319** | Glob rule | Copy Review (Design Brief) |
+| 18a | **@doc-reviewer** | Subagent | Editorial Review (quality gate on 319 Step 18 output; feeds @doc-writer triage-and-apply; 2-cycle cap) |
 | 19 | **318** | Glob rule | Design Peer Review |
 | 21 | **320** | Glob rule | Prototype Development |
 | 22 | **321** | Glob rule | Visual Review |
 | 23 | **319** | Glob rule | Copy Review (Prototype) |
+| 23a | **@doc-reviewer** | Subagent | Editorial Review (quality gate on 319 Step 23 output; feeds @doc-writer triage-and-apply; 2-cycle cap) |
 | 24 | **330** | Glob rule | Figma Capture |
 | 25 | **410** | Glob rule | Epic Definition |
 | 26 | **420** | Glob rule | Story Mapping |
@@ -270,10 +272,12 @@ Use descriptive titles when invoking Task subagents to make pipeline progress tr
 - **Step 16 (080)**: "Red Team Review of PRD"
 - **Step 17 (315)**: "Creating Design Brief"
 - **Step 18 (319)**: "Reviewing Design Brief Copy"
+- **Step 18a (@doc-reviewer)**: "Editorial Review of Design Brief Copy" (quality gate; feeds @doc-writer triage-and-apply; 2-cycle cap)
 - **Step 19 (318)**: "Peer Reviewing Design Brief"
 - **Step 20 (320)**: "Building Canvas Kit Prototype"
 - **Step 21 (321)**: "Visual Review of Prototype"
 - **Step 22 (319)**: "Spot-Checking Prototype Copy"
+- **Step 22a (@doc-reviewer)**: "Editorial Review of Prototype Copy" (quality gate; feeds @doc-writer triage-and-apply; 2-cycle cap)
 - **Step 23 (330)**: "Capturing Prototype to Figma"
 - **Step 24 (410)**: "Defining Product Epic"
 - **Step 25 (420)**: "Creating Story Map"
@@ -416,6 +420,9 @@ When individual workflows are triggered standalone (e.g., "Write PRD for [featur
 31. Invoke 315 with Task description **"Creating Design Brief"**: "Perform design for the PRD at docs/prds/[feature]-prd.md. This is part of [REGION] e2e pipeline. Consult functional knowledge, ask Deployment Agent for placement guidance, validate with Six Hats Thinking as needed. Run **315** multi-pass process PASS 1-2 per **315-design-brief-creation.mdc**; write `design/[feature]-design-brief.md` including JTBD, shell pattern, Canvas Kit mapping, and **Copy Inventory section**. **After PASS 2 completes, STOP.**"
 32. **Update todo**: Mark Step 18 as completed, Step 19 as in_progress: `TodoWrite({ merge: true, todos: [{ id: "[region-code]-e2e-step-19", status: "completed" }, { id: "[region-code]-e2e-step-20", status: "in_progress" }] })`
 33. Invoke 319 with Task description **"Reviewing Design Brief Copy"**: "Review UI copy from Design Brief at design/[feature]-design-brief.md (PASS 2 Copy Inventory section). Apply Editorial Guidelines checklist. Flag legal-sensitive copy for 060. Output approved copy revisions. Part of [REGION] e2e pipeline."
+33a. **Doc Reviewer quality gate (Step 18a)**: Invoke `@doc-reviewer` with Task description **"Editorial Review of Design Brief Copy"**: "Review the copy revisions produced by 319 at design/[feature]-design-brief.md (Copy Inventory). Check against Editorial Guidelines, British English, Workday terminology, persona tone, and legal coverage. Produce severity-tagged findings (ERROR/WARNING/INFO) with string-specific evidence and proposed revisions. Do NOT rewrite copy. Part of [REGION] e2e pipeline."
+33b. **@doc-writer triage-and-apply (Step 18a continued)**: Hand the reviewer findings to `@doc-writer` via Task description **"Triage @doc-reviewer findings (Design Brief Copy)"**: "Apply triage-and-apply per doc-writer-agent.md. Auto-apply safe WARNING/INFO fixes within the original string scope. Escalate ERROR, legal-sensitive, or cross-string findings to PM in plain English. Iteration cap: 2 cycles. If cycle 2 still has ERRORs, escalate all remaining findings to PM and stop. Output plain-English recap."
+33c. **Iteration**: If `@doc-writer` recap flags remaining ERRORs within cycle budget, re-invoke `@doc-reviewer` on the updated copy (one more cycle only). Proceed to Step 19 regardless of recap outcome - reviewer findings are advisory, not blocking.
 34. **Update todo**: Mark Step 19 as completed, Step 20 as in_progress: `TodoWrite({ merge: true, todos: [{ id: "[region-code]-e2e-step-20", status: "completed" }, { id: "[region-code]-e2e-step-21", status: "in_progress" }] })`
 35. If legal-sensitive copy exists: 319 invokes 060 automatically per 319-copy-review.mdc rules.
 36. Invoke 318 with Task description **"Peer Reviewing Design Brief"**: "Perform peer review of Design Brief at design/[feature]-design-brief.md. This is part of [REGION] e2e pipeline. Evaluate harshly against Workday standards, Sana Style, Canvas Kit constraints, JTBD, shell pattern, Experience Principles (`docs/experience-principles.md`), no-breadcrumb rule. Append review findings and provide **Final Verdict: APPROVED** or **NEEDS REVISION**."
@@ -433,6 +440,9 @@ When individual workflows are triggered standalone (e.g., "Write PRD for [featur
 48. If 321 returns **APPROVED**: Proceed directly to step 22 (319 spot-check).
 49. **Update todo**: Mark Step 23 as in_progress: `TodoWrite({ merge: true, todos: [{ id: "[region-code]-e2e-step-24", status: "in_progress" }] })`
 50. Invoke 319 with Task description **"Spot-Checking Prototype Copy"**: "Review all UI copy in the prototype. Part of [REGION] e2e pipeline."
+50a. **Doc Reviewer quality gate (Step 22a)**: Invoke `@doc-reviewer` with Task description **"Editorial Review of Prototype Copy"**: "Review the prototype copy revisions produced by 319 against the implemented strings in design/[feature-slug-vNN].tsx. Check against Editorial Guidelines, British English, Workday terminology, persona tone, legal coverage, and scope completeness (every user-facing string covered). Produce severity-tagged findings (ERROR/WARNING/INFO) with file:line evidence and proposed revisions. Do NOT rewrite copy. Part of [REGION] e2e pipeline."
+50b. **@doc-writer triage-and-apply (Step 22a continued)**: Hand the reviewer findings to `@doc-writer` via Task description **"Triage @doc-reviewer findings (Prototype Copy)"**: "Apply triage-and-apply per doc-writer-agent.md. Auto-apply safe WARNING/INFO fixes directly in design/[feature-slug-vNN].tsx within the original string scope. Escalate ERROR, legal-sensitive, or cross-string findings to PM in plain English. Iteration cap: 2 cycles. Output plain-English recap with rollback instructions."
+50c. **Iteration**: If `@doc-writer` recap flags remaining ERRORs within cycle budget, re-invoke `@doc-reviewer` on the updated prototype (one more cycle only). Proceed to Step 23 regardless - reviewer findings are advisory, not blocking.
 51. **Update todo**: Mark Step 23 as completed, Step 24 as in_progress: `TodoWrite({ merge: true, todos: [{ id: "[region-code]-e2e-step-24", status: "completed" }, { id: "[region-code]-e2e-step-25", status: "in_progress" }] })`
 52. Invoke 330 with Task description **"Capturing Prototype to Figma"**: "Capture the running prototype at localhost to Figma. Part of [REGION] e2e pipeline. **Mandatory:** (1) Confirm `http://localhost:5199/` loads the prototype. (2) Call **official Figma MCP** `generate_figma_design` per `design/README.md` / `330-figma-integration.mdc` (e.g. `outputMode: newFile`, unique `fileName`, `planKey`). (3) Open the returned **`#figmacapture=…`** localhost URL once (e.g. `open "http://localhost:5199/#figmacapture=…"` on macOS, or use Chrome / Simple Browser from step 19) — **no in-app paste UI**; flow is MCP + browser URL only. (4) Poll capture status until complete; log the Figma file URL in MISSION_LOG. **Do not skip** starting the dev server or opening browsers in step 19 when the PM needs to see the prototype."
 53. **Update todo**: Mark Step 24 as completed, Step 25 as in_progress: `TodoWrite({ merge: true, todos: [{ id: "[region-code]-e2e-step-25", status: "completed" }, { id: "[region-code]-e2e-step-26", status: "in_progress" }] })`

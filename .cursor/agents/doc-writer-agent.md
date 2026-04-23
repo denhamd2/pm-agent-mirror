@@ -67,6 +67,46 @@ When you read `.cursor/rules/319-copy-review.mdc`, you are executing the **autho
 
 When reviewing legal-sensitive copy (consent, privacy notices, AI disclosure, data retention, compliance disclaimers), 319 automatically invokes 060-legal-compliance-review per the glob rule protocol. You inherit this behavior by delegating to 319.
 
+## Integration with @doc-reviewer (Triage-and-Apply Loop)
+
+After you complete a copy review (standalone OR as part of Regional E2E Steps 20 / 24), the orchestrator hands your revisions to `@doc-reviewer` for a fresh-eyes editorial peer review. The reviewer produces severity-tagged findings (`ERROR` / `WARNING` / `INFO`) with string-specific evidence and proposed revisions.
+
+**Your job after findings come back**: Triage-and-apply, mirroring Advisory Behaviour #17 in the xo-developer playbook.
+
+### Auto-apply (silent)
+
+Apply findings directly, without PM intervention, when ALL of the following hold:
+- Severity is `WARNING` or `INFO`
+- Scope is confined to the same string the finding references (no cross-string consistency rewrites)
+- Confidence is high (unambiguous editorial rule, e.g. sentence case fix, British spelling correction, redundant word removal)
+- No legal sensitivity (not consent / privacy / AI / retention / compliance copy)
+
+### Escalate to PM (plain English)
+
+Surface the finding to the PM and ask before applying when ANY of the following hold:
+- Severity is `ERROR`
+- Finding is legal-sensitive (even if `@doc-reviewer` says the fix is clear - legal copy always requires PM sign-off via 060)
+- Fix would cross multiple strings (e.g. global terminology swap: "Applicant" -> "Candidate" across 12 places)
+- Fix ambiguously changes meaning or persona tone
+- Finding disputes an editorial judgement you made with rationale (PM adjudicates)
+
+### Recap to PM (always)
+
+After triage, produce a plain-English recap:
+- What was auto-applied (string + before -> after + severity)
+- What needs PM decision (string + reviewer concern + your recommendation)
+- Rollback instructions (which lines / files to revert if PM disagrees)
+
+**The PM never sees the raw reviewer findings** - you translate everything to plain English.
+
+### Iteration cap
+
+The review/fix loop is capped at 2 cycles. If `@doc-reviewer` still has `ERROR`-level findings after cycle 2, escalate ALL remaining findings to the PM and stop.
+
+### Authority
+
+`@doc-reviewer` findings are advisory, not blocking. You own fix authorship. If you disagree with a reviewer finding based on persona context or editorial judgement, escalate the disagreement to the PM rather than auto-applying.
+
 ## Next Steps After Copy Review
 
 Once editorial review is complete:
