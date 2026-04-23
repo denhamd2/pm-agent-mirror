@@ -112,7 +112,7 @@ export function OffersPlaygroundV01() {
   const [postBody, setPostBody] = useState<string>(
     JSON.stringify(
       {
-        role: { id: '<role-wid>' },
+        role: '<candidate-role-wid>',
         job: { id: '<requisition-wid>' },
       },
       null,
@@ -327,7 +327,7 @@ export function OffersPlaygroundV01() {
                 on the development SUV. The red pills and 2xx-empty banners are not prototype bugs -
                 they are the real runtime state of a Safe Harbour REST API that has not yet had its follow-up
                 UI edit task. See <code style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' }}>docs/xo/rest-apis/offer-events/README.md</code>
-                for the six WIDs that need remediation.
+                for the fresh-SUV WIDs and remediation steps.
               </BodyText>
             </Box>
             <Flex gap="s" alignItems="center">
@@ -424,7 +424,7 @@ export function OffersPlaygroundV01() {
               {op === 'post' && (
                 <OpCard
                   title="POST /offer-events"
-                  description="Create a new offer event. Expect 2xx with empty body (known drift - confirm in response panel)."
+                  description="Create a new offer event. Use role as a string WID and job as { id }. Expect 2xx with empty body (known drift - confirm in response panel)."
                 >
                   <LabelledTextarea
                     label="Request body (JSON)"

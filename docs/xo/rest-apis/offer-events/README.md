@@ -19,10 +19,13 @@ This README is the PM-workspace discoverability stub for the API. Rich Contexto 
 ## Canonical WIDs
 
 - Backing class `Offer Event`: `1c619437537d4914a5482ac14eccc73f`
-- Derived class `Offer Event (Derived)`: `110d07c2bf081000154ac036a50b0000`
+- Derived class `Offer Event (Derived)`: `31cd28f2a8f4100018842124e7440000`
 - Service `XOAgents (labs - )`: `f25a77d68bd310001cc3c6bdf9f20000`
-- Service Collection Resource `XOAgents/offer-events (labs - )`: `110d07c2bf08100011ae49a281e60000`
-- Edit rep `mapsToClass` decision: Outcome C (`generateClassBasedProcessing: true` on the Service Operation Processing Option - no explicit derived subclass binding on the Edit rep)
+- Service Collection Resource `XOAgents/offer-events (labs - )`: `31cd28f2a8f41000187ec3a65aa80000`
+- View rep `xoAgentOfferEventView`: `31cd28f2a8f410001872ce71a9550000`
+- Edit rep `xoAgentOfferEventEdit`: `31cd28f2a8f410001872e110cbb40000`
+- Service operations: GET `31cd28f2a8f4100018817ebc24930000`, POST `31cd28f2a8f410001881b9f7d5400000`, PATCH `31cd28f2a8f41000188224e9bb110000`, DELETE `31cd28f2a8f4100018826528aa7c0000`
+- XO Agent tool registrations: `get_offer_events` `31cd28f2a8f4100019c6fb11bc130000`, `create_offer_event` `31cd28f2a8f4100019c726f10e4c0000`, `update_offer_event` `31cd28f2a8f4100019c713198f820000`, `delete_offer_event` `31cd28f2a8f4100019c739ce23930000`
 
 ## MCP tool wrappers
 
@@ -34,7 +37,7 @@ After the next Cursor MCP reconnect, these are callable from the PM workspace:
 - `update_offer_event` (PATCH)
 - `delete_offer_event` (DELETE)
 
-## Known response shape (Phase 4 smoke, 22 April 2026, re-verified after programmatic fix attempts)
+## Known response shape (fresh SUV Phase 4 smoke, 23 April 2026)
 
 | Step | Status | Design-time schema (View rep `xoAgentOfferEventView`) | Actual runtime | Drift? |
 |---|---|---|---|---|
@@ -44,7 +47,7 @@ After the next Cursor MCP reconnect, these are callable from the PM workspace:
 | PATCH | 200 | Full resource body (View rep) | `{}` | Yes - empty body despite 2xx |
 | DELETE | 204 | Empty | Empty | No |
 
-The `suv_rest_call ... fetch_schema=True` response confirms all five fields on the View rep. The runtime omissions (GET missing three fields + POST/PATCH empty body) share one root cause: **Safe Harbour activation has not been run in the XO UI** against the objects `rest-from-task` created. These two drifts are the same teaching artefact.
+The `suv_rest_call` smoke on `i-0f863f6efa928c162` confirms the surface is callable and tool-registered, but runtime omissions remain: GET omits `role`/`job` and POST/PATCH return empty bodies via MCP wrapper. `photo` is additionally blocked on a missing RSMB binding path for the CRF (`exposesRwmb`) in this environment.
 
 ## Safe Harbour: single root cause, two symptoms
 
@@ -70,16 +73,16 @@ The MCP-exposed patch tools (`*_patch`) write metadata fields but do not invoke 
 
 ## Remediation (UI-only; follow-up work)
 
-Run the XO "Edit" task in the SUV UI against these six objects (in this order):
+Run the XO "Edit" task in the SUV UI against these objects (fresh SUV WIDs):
 
-1. CRF `Role as Event Subject +TG` - WID `110d07c2bf08100011a2f7964c170000`
-2. CRF `Photo for Role +TG` - WID `110d07c2bf08100011a31c79eb280000`
-3. CRF `Job Requisition` (pre-existing) - WID `5223eb025034100018991a2fce2c01b3`
-4. Service Representation `xoAgentOfferEventView` - WID `110d07c2bf08100011a76e50b5610000`
-5. Service Operation `XOAgents/offer-events/post` - WID `110d07c2bf08100011b27a1912510000` (while editing, add `xoAgentOfferEventView` to `defaultFieldRepresentations`)
-6. Service Operation `XOAgents/offer-events/patch` - WID `110d07c2bf08100011b2d01206680000` (same addition)
+1. CRF `Role as Event Subject +TG` - WID `31cd28f2a8f41000184349335bde0000`
+2. CRF `Job Requisition` (pre-existing) - WID `5223eb025034100018991a2fce2c01b3`
+3. Service Representation `xoAgentOfferEventView` - WID `31cd28f2a8f410001872ce71a9550000`
+4. Service Operation `XOAgents/offer-events/post` - WID `31cd28f2a8f410001881b9f7d5400000` (ensure View rep binding for write response path)
+5. Service Operation `XOAgents/offer-events/patch` - WID `31cd28f2a8f41000188224e9bb110000` (same)
+6. Photo chain follow-up: add/locate an RSMB for recruit image and then create the photo CRF + View RC (see fresh artefact notes)
 
-After step 4 completes, GET should return `role`/`job`/`photo`. After steps 5-6 complete, POST/PATCH should return a full View-rep body.
+After step 3, GET should begin returning `role`/`job`. After steps 4-5, POST/PATCH should return a View-rep body. `photo` remains pending until step 6 is completed.
 
 Until those tasks run, the playground faithfully shows the runtime truth.
 
@@ -100,7 +103,7 @@ Run with `npm run dev:proxy` in one terminal and `npm run dev` in another, both 
 
 Contexto build artefacts live in `~/contexto/_bmad-output/implementation-artifacts/`:
 
-- Design: `schema-design-offer-sequence-task.md`
-- Implementation plan: `schema-implementation-offer-sequence-task.md`
+- Design: `schema-design-offer-sequence-task-fresh.md`
+- Implementation plan: `schema-implementation-offer-sequence-task-fresh.md`
 
 Schema and implementation artefacts are **not** duplicated here - this file is the PM-workspace pointer into the Contexto build trail.
