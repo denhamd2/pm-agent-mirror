@@ -499,7 +499,7 @@ function DriftBanner() {
             Safe Harbour drift - one root cause, two symptoms
           </BodyText>
           <BodyText size="small" color={colors.blackPepper500} marginTop="xxs">
-            The View rep declares <code>id</code>, <code>descriptor</code>, <code>role</code>, <code>job</code>, <code>photo</code> but the runtime returns only <code>id</code> and <code>descriptor</code>, and POST/PATCH return 2xx with empty bodies. Both are the same thing: <code>rest-from-task</code> wrote the metadata but the kernel-level edit task that activates new CRFs into the render cache and binds the View rep onto write ops has not yet been run in the SUV UI. We tried to fix it programmatically via <code>*_patch</code> MCP tools - those write metadata but do not fire the validators that activate it. Six WIDs need a UI edit pass; see the README for the remediation list.
+            The View rep declares <code>id</code>, <code>descriptor</code>, <code>role</code>, <code>job</code>, <code>photo</code> but the runtime returns only <code>id</code> and <code>descriptor</code>, and POST/PATCH return 2xx with empty bodies. Both are the same thing: <code>rest-from-task</code> wrote the metadata but the kernel-level edit task that activates new CRFs into the render cache and binds the View rep onto write ops has not yet been run in the SUV UI. We also completed the photo CRF + View RC metadata path on this SUV, but it still does not serialise until that UI activation pass happens. See the README for the current WIDs and regression check command.
           </BodyText>
         </Box>
       </Flex>

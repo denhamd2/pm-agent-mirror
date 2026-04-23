@@ -47,7 +47,7 @@ After the next Cursor MCP reconnect, these are callable from the PM workspace:
 | PATCH | 200 | Full resource body (View rep) | `{}` | Yes - empty body despite 2xx |
 | DELETE | 204 | Empty | Empty | No |
 
-The `suv_rest_call` smoke on `i-0f863f6efa928c162` confirms the surface is callable and tool-registered, but runtime omissions remain: GET omits `role`/`job` and POST/PATCH return empty bodies via MCP wrapper. `photo` is additionally blocked on a missing RSMB binding path for the CRF (`exposesRwmb`) in this environment.
+The `suv_rest_call` smoke on `i-0f863f6efa928c162` confirms the surface is callable and tool-registered, but runtime omissions remain: GET omits `role`/`job`/`photo` and POST/PATCH return empty bodies via MCP wrapper.
 
 ## Safe Harbour: single root cause, two symptoms
 
@@ -63,6 +63,9 @@ Workday XO's `rest-from-task` generator produces a **callable** REST API in ~5 m
 | 3a | `service_operation_patch` POST/PATCH `defaultFieldRepresentations` -> View only | POST op, PATCH op | 500 `No 'Maps to Class' specified` - View rep has no `mapsToClass`, so request deserialisation broke |
 | 3b | `service_operation_patch` POST/PATCH `defaultFieldRepresentations` -> [Edit, View] | POST op, PATCH op | 500 same error - runtime picks one rep, not both |
 | 3c | Revert POST/PATCH to Edit-only | POST op, PATCH op | 201/200 with `{}` - baseline restored |
+| 4a | `class_report_field_create` + `representation_content_workday_owned_create` | Added `photo` CRF `31cd28f2a8f410001afde59d05780000` and View RC `31cd28f2a8f410001b01f80bf3da0000` | Metadata create succeeded, runtime GET still omits fields |
+| 4b | Ordered re-save pass using `*_patch` no-op updates | role CRF, job CRF, photo CRF, view rep, POST/PATCH ops | 200 OK on all updates, runtime drift unchanged |
+| 4c | `service_operation_patch` POST/PATCH default reps -> `[View, Edit]` | POST op, PATCH op | Writes remain callable (no `mapsToClass` break), but response body still `{}` |
 
 ### Why these failed
 
@@ -77,14 +80,23 @@ Run the XO "Edit" task in the SUV UI against these objects (fresh SUV WIDs):
 
 1. CRF `Role as Event Subject +TG` - WID `31cd28f2a8f41000184349335bde0000`
 2. CRF `Job Requisition` (pre-existing) - WID `5223eb025034100018991a2fce2c01b3`
-3. Service Representation `xoAgentOfferEventView` - WID `31cd28f2a8f410001872ce71a9550000`
-4. Service Operation `XOAgents/offer-events/post` - WID `31cd28f2a8f410001881b9f7d5400000` (ensure View rep binding for write response path)
-5. Service Operation `XOAgents/offer-events/patch` - WID `31cd28f2a8f41000188224e9bb110000` (same)
-6. Photo chain follow-up: add/locate an RSMB for recruit image and then create the photo CRF + View RC (see fresh artefact notes)
+3. CRF `Photo for Role +TG` - WID `31cd28f2a8f410001afde59d05780000`
+4. Service Representation `xoAgentOfferEventView` - WID `31cd28f2a8f410001872ce71a9550000`
+5. Service Operation `XOAgents/offer-events/post` - WID `31cd28f2a8f410001881b9f7d5400000` (ensure View rep binding for write response path)
+6. Service Operation `XOAgents/offer-events/patch` - WID `31cd28f2a8f41000188224e9bb110000` (same)
 
-After step 3, GET should begin returning `role`/`job`. After steps 4-5, POST/PATCH should return a View-rep body. `photo` remains pending until step 6 is completed.
+After step 4, GET should begin returning `role`/`job`/`photo`. After steps 5-6, POST/PATCH should return a View-rep body.
 
 Until those tasks run, the playground faithfully shows the runtime truth.
+
+## Regression check
+
+Contract assertions are codified in:
+
+- `design/scripts/offer-events-contract-smoke.mjs`
+- `npm run test:offer-events-contract` (from `design/`)
+
+The script currently fails by design until drift is resolved, and prints a JSON report of missing fields and write-response emptiness.
 
 ## Prototype (dogfood)
 

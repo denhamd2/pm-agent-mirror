@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "dev:proxy": "node proxy/offer-events-proxy.mjs",
+    "test:offer-events-contract": "node scripts/offer-events-contract-smoke.mjs",
     "open:browsers": "bash ../scripts/open-url-chrome-and-cursor-browser.sh 'http://localhost:5199/'",
     "typecheck": "NODE_OPTIONS='--max-old-space-size=8192' tsc --noEmit",
     "build": "NODE_OPTIONS='--max-old-space-size=8192' tsc && NODE_OPTIONS='--max-old-space-size=16384' vite build",
