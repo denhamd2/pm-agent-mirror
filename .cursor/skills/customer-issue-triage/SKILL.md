@@ -16,10 +16,15 @@ description: >-
   Investigation for inconclusive. XO metadata analysis proposes code-level fixes
   for bugs and customer-facing resolutions for all other types. Generates batch
   summary reports for 10+ Jiras with closure recommendations rollup. Appends
-  results to a 7-column Confluence triage table. Accepts Jira IDs from prompt
-  text or extracted from attachments (.xlsx, .pdf, .csv). Use when the user asks
-  to triage a customer issue, check if something is WAD or a bug, analyse a Jira,
-  run customer issue triage, or bulk triage old bugs for closure decisions.
+  results to a 7-column Confluence triage table. After writing, opens the
+  Confluence triage page in both Google Chrome and the Cursor Simple Browser,
+  then prompts the PM via AskQuestion whether to bulk-close high-confidence
+  WAD / Config Jiras as "Won't Do" with a detailed comment (Yes / No / Other,
+  where Other lets the PM restrict closure to a specific Jira). Accepts Jira
+  IDs from prompt text or extracted from attachments (.xlsx, .pdf, .csv). Use
+  when the user asks to triage a customer issue, check if something is WAD or a
+  bug, analyse a Jira, run customer issue triage, or bulk triage old bugs for
+  closure decisions.
 ---
 
 # Customer Issue Triage
@@ -219,14 +224,17 @@ Record a **concise explanation block** containing:
    - why this is **not** at least one other likely outcome, using explicit contrast language ("This is not WAD because...", "This is not Config because...")
    - **Do NOT include user experience summary** - jump straight to the classification rationale
    Keep this practical and outcome-focused. Avoid self-referential phrasing such as "direct match", "exact symptom", or "tracked defect" without interpretation.
-3. **Sources**: At least 2 source links when available. Include the article title and its `articleSource` URL formatted as clickable links.
-   - If only 1 usable source exists, write: `Only one usable source found: <a ...>Title</a>`
-   - If no usable sources exist, write: `No usable Salomon source links found for this verdict.`
+3. **Sources**: At least 2 source links when available. Include the article title and its `articleSource` URL formatted as clickable links. Present sources as a **separate section** underneath the explanation, with a bold "Sources:" heading on its own line followed by a bullet-pointed list of links (each opening in a new window).
+   - If only 1 usable source exists, write a single bullet: `Sources:` then `• <a ...>Title</a>`
+   - If no usable sources exist, write: `Sources: No usable Salomon source links found for this verdict.`
 
 Format example:
 **Likely Bug**
 This is likely a Bug because the notification failure occurs after a valid business process event and persists across repeated tests with correct configuration. This is not WAD because no source describes missed delivery as expected behaviour for this event type. This is not a Configuration Issue because the documented setup was validated and still reproduces across multiple environments.
-Sources: <a href="url" target="_blank" rel="noopener noreferrer">Slack Thread</a>, <a href="url" target="_blank" rel="noopener noreferrer">HRREC-84897</a>
+
+Sources:
+• <a href="url" target="_blank" rel="noopener noreferrer">Slack Thread</a>
+• <a href="url" target="_blank" rel="noopener noreferrer">HRREC-84897</a>
 
 PM-language sentence starters (MANDATORY - always start with these):
 - "This is likely a Bug because ..."
@@ -274,7 +282,10 @@ arguments: {
   - Remove the entry conditions from this step, OR add a complementary
     decision step with the opposite conditions
   - Test with a candidate in Sandbox before applying to Production
-  Sources: <a href="https://doc.workday.com/..." target="_blank" rel="noopener noreferrer">Edit Business Process Definition</a>
+
+  Sources:
+  • <a href="https://doc.workday.com/..." target="_blank" rel="noopener noreferrer">Edit Business Process Definition</a>
+  • <a href="https://doc.workday.com/..." target="_blank" rel="noopener noreferrer">Admin Guide - Interview Setup</a>
   ```
 
 ---
@@ -306,7 +317,10 @@ arguments: {
   - Sequential exports of different questionnaires should produce distinct,
     correct files regardless of export order
   - No workaround (e.g. re-downloading) should be required
-  Sources: <a href="https://doc.workday.com/..." target="_blank" rel="noopener noreferrer">Questionnaire Configuration</a>
+
+  Sources:
+  • <a href="https://doc.workday.com/..." target="_blank" rel="noopener noreferrer">Questionnaire Configuration</a>
+  • <a href="https://doc.workday.com/..." target="_blank" rel="noopener noreferrer">Admin Guide - Export Settings</a>
   ```
 
 ---
@@ -569,9 +583,24 @@ The DA column (column 5) varies by Salomon verdict:
 - **WAD / Inconclusive:** "N/A"
 
 **Source link formatting rule (mandatory):**
-- In both Confluence HTML and chat output, format source links as:
-  `<a href="{url}" target="_blank" rel="noopener noreferrer">{title}</a>`
-- This ensures every source opens in a new window.
+- In both Confluence HTML and chat output, present sources as a **separated section** underneath the explanation text in each cell.
+- Use a bold "Sources:" heading on its own line, followed by a bullet-pointed list of links.
+- Each link uses: `<a href="{url}" target="_blank" rel="noopener noreferrer">{title}</a>`
+- **Confluence HTML format** (inside `<td>` cells):
+  ```html
+  <br/><strong>Sources:</strong>
+  <ul>
+    <li><a href="{url}" target="_blank" rel="noopener noreferrer">{title}</a></li>
+    <li><a href="{url}" target="_blank" rel="noopener noreferrer">{title}</a></li>
+  </ul>
+  ```
+- **Chat output format** (markdown):
+  ```
+  Sources:
+  • [Title](url)
+  • [Title](url)
+  ```
+- This ensures every source opens in a new window and is clearly separated from the explanation.
 
 **Formatting guardrails (mandatory before write):**
 - Validate every generated row contains valid `<a ...>` tags for every cited source in Salomon, Deployment Agent, and XO columns.
@@ -584,8 +613,8 @@ The DA column (column 5) varies by Salomon verdict:
   <td><a href="https://jira2.workday.com/browse/{ISSUE_KEY}" target="_blank" rel="noopener noreferrer">{ISSUE_KEY}</a> - {Jira Title}</td>
   <td>{Short PM-friendly description}</td>
   <td><strong>{Status label, e.g. Config (90%)}</strong></td>
-  <td><strong>{Salomon Verdict}</strong><br/>{3-4 concise lines (60-80 words): verdict rationale first, why not Bug/WAD/Config alternatives}<br/>Sources: <a href="{url}" target="_blank" rel="noopener noreferrer">{article title}</a>, ...</td>
-  <td>{If Config: <strong>Configuration Steps</strong><br/>{bullet-pointed instructions}<br/>Sources: <a href="{url}" target="_blank" rel="noopener noreferrer">{doc title}</a> | If Bug: <strong>Expected Behaviour</strong><br/>{2-4 bullets describing correct functionality in plain PM language}<br/>Sources: <a href="{url}" target="_blank" rel="noopener noreferrer">{doc title}</a> | If WAD/Inconclusive: <strong>N/A</strong>}</td>
+  <td><strong>{Salomon Verdict}</strong><br/>{3-4 concise lines (60-80 words): verdict rationale first, why not Bug/WAD/Config alternatives}<br/><strong>Sources:</strong><ul><li><a href="{url}" target="_blank" rel="noopener noreferrer">{article title}</a></li><li><a href="{url}" target="_blank" rel="noopener noreferrer">{article title 2}</a></li></ul></td>
+  <td>{If Config: <strong>Configuration Steps</strong><br/>{bullet-pointed instructions}<br/><strong>Sources:</strong><ul><li><a href="{url}" target="_blank" rel="noopener noreferrer">{doc title}</a></li><li><a href="{url}" target="_blank" rel="noopener noreferrer">{doc title 2}</a></li></ul> | If Bug: <strong>Expected Behaviour</strong><br/>{2-4 bullets describing correct functionality in plain PM language}<br/><strong>Sources:</strong><ul><li><a href="{url}" target="_blank" rel="noopener noreferrer">{doc title}</a></li><li><a href="{url}" target="_blank" rel="noopener noreferrer">{doc title 2}</a></li></ul> | If WAD/Inconclusive: <strong>N/A</strong>}</td>
   <td><strong>Technical evidence:</strong> {XO findings or "No relevant metadata identified."}<br/><br/>{MANDATORY - Include ONE of the following based on Status:}<br/><br/>{If Bug: <strong>Proposed Fix:</strong><br/>1. {Target object and intended change}<br/>2. {Secondary change or guard condition}<br/>3. {Verification notes}<br/>4. {Regression test scope} OR "Proposed fix unavailable - XO metadata insufficient; escalate for targeted code trace."}<br/><br/>{If Config/WAD: <strong>Customer Resolution:</strong><br/>1. {Navigate to specific Workday task}<br/>2. {Configuration change to make}<br/>3. {Verification step}<br/>4. {Expected outcome after change}}<br/><br/>{If Known Limitation: <strong>Proposed Fix (Enhancement):</strong><br/>{What product change would address this}<br/><strong>Workaround:</strong> {Current alternative for customer}}<br/><br/>{If Inconclusive: <strong>Needs Further Investigation:</strong><br/>1. {What info needed from customer}<br/>2. {Specific questions to ask}<br/>3. {Which team to escalate to}<br/>4. {Recommended next step}}</td>
   <td><strong>{Recommendation value from Step 6a2}</strong><br/>{Rationale from Step 6a2}<br/><br/>{Age context: "Open {bug_age_years} years, {activity_category}, {days_since_activity} days since last activity"}</td>
 </tr>
@@ -639,11 +668,11 @@ After processing all Jiras, present chat output using the following batch policy
 ```
 | Jira # & Title | Description | Status | Salomon | Deployment Agent | XO Metadata / Proposed Fix | Recommendation |
 |---|---|---|---|---|---|---|
-| <a href="https://jira2.workday.com/browse/HRREC-12345" target="_blank" rel="noopener noreferrer">HRREC-12345</a> - Title | Short desc | Config (90%) | **Configuration Issue**<br>This is a Configuration Issue because a required setup condition is missing, which directly causes the observed failure. This is not a Bug because the product behaves correctly once the missing condition is added. This is not WAD because the current customer outcome is not the intended configured flow.<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a>, <a href="url" target="_blank" rel="noopener noreferrer">Article 2</a> | **Configuration Steps**<br>• Step 1...<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Admin guide page</a> | **Technical evidence:** Key task and validation metadata align with required setup pattern.<br><br>**Customer Resolution:**<br>1. Navigate to Edit Tenant Setup - Recruiting<br>2. Enable/disable the specific configuration flag<br>3. Test in Sandbox before applying to Production<br>4. Verify expected behaviour after change | **CLOSE (High Confidence)**<br>Config 90%, open 3.2 years, stale (846 days no activity) - safe to close |
-| <a href="https://jira2.workday.com/browse/HRREC-67890" target="_blank" rel="noopener noreferrer">HRREC-67890</a> - Title | Short desc | Bug (85%) | **Likely Bug**<br>This is likely a Bug because the expected system response fails despite following documented process and persists across repeated tests. This is not WAD because no source describes this as expected behaviour. This is not Config because setup prerequisites were met before failure.<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a>, <a href="url" target="_blank" rel="noopener noreferrer">Article 2</a> | **Expected Behaviour**<br>• Feature should...<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Admin guide page</a> | **Technical evidence:** Confirms defect signal in recipient-resolution path.<br><br>**Proposed Fix:**<br>1. Update guard condition on target method binding<br>2. Ensure context resolves from job application object<br>3. Add unit test for edge case<br>4. Verify with end-to-end repro and regression tests | **KEEP (Active)**<br>Bug requires investigation - do not close without fix |
-| <a href="https://jira2.workday.com/browse/HRREC-11111" target="_blank" rel="noopener noreferrer">HRREC-11111</a> - Title | Short desc | WAD (80%) | **WAD**<br>This is WAD because the observed result matches documented logic and system design rules. This is not a Bug because documented sources confirm this behaviour is expected. This is not Config because no missing setup was identified as the trigger.<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a> | **N/A** | **Technical evidence:** No contradictory metadata found. Behaviour follows intended design.<br><br>**Customer Resolution:**<br>1. Explain expected behaviour to customer with documentation link<br>2. Suggest alternative workflow if customer needs different outcome<br>3. Log enhancement request if behaviour change is warranted<br>4. Close as WAD with clear rationale | **CLOSE (Review First)**<br>WAD 80%, open 5.7 years, very stale (2103 days no activity) - review with team before closing |
-| <a href="https://jira2.workday.com/browse/HRREC-22222" target="_blank" rel="noopener noreferrer">HRREC-22222</a> - Title | Short desc | Inconclusive (60%) | **Inconclusive**<br>This is Inconclusive because insufficient evidence exists to classify - could not reproduce and conflicting signals from sources prevent confident determination.<br>Sources: Limited | **N/A** | **Technical evidence:** Insufficient metadata to determine root cause.<br><br>**Needs Further Investigation:**<br>1. Request specific repro steps and tenant details from customer<br>2. Ask which Workday task and configuration settings are in use<br>3. Escalate to #hrrec_prodsupport with gathered context<br>4. Consider SUV reproduction if customer provides sample data | **KEEP (Unclear)**<br>Inconclusive - needs human review before any closure decision |
-| <a href="https://jira2.workday.com/browse/HRREC-33333" target="_blank" rel="noopener noreferrer">HRREC-33333</a> - Title | Short desc | Known Limitation (85%) | **Known Limitation**<br>Feature has documented architectural constraints that prevent the requested behaviour. This is not a Bug because the limitation is by design. This is not Config because no configuration change can enable the behaviour.<br>Sources: <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a> | **N/A** | **Technical evidence:** Architectural constraint confirmed in platform documentation.<br><br>**Proposed Fix (Enhancement):**<br>1. Extend platform component to support requested behaviour<br>2. Add feature flag for gradual rollout<br>3. Update documentation when enhancement ships<br><br>**Workaround:**<br>Use alternative approach X until enhancement is available | **KEEP (Unclear)**<br>Known limitation - requires enhancement, not closure |
+| <a href="https://jira2.workday.com/browse/HRREC-12345" target="_blank" rel="noopener noreferrer">HRREC-12345</a> - Title | Short desc | Config (90%) | **Configuration Issue**<br>This is a Configuration Issue because a required setup condition is missing, which directly causes the observed failure. This is not a Bug because the product behaves correctly once the missing condition is added. This is not WAD because the current customer outcome is not the intended configured flow.<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a><br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 2</a> | **Configuration Steps**<br>• Step 1...<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Admin guide page</a> | **Technical evidence:** Key task and validation metadata align with required setup pattern.<br><br>**Customer Resolution:**<br>1. Navigate to Edit Tenant Setup - Recruiting<br>2. Enable/disable the specific configuration flag<br>3. Test in Sandbox before applying to Production<br>4. Verify expected behaviour after change | **CLOSE (High Confidence)**<br>Config 90%, open 3.2 years, stale (846 days no activity) - safe to close |
+| <a href="https://jira2.workday.com/browse/HRREC-67890" target="_blank" rel="noopener noreferrer">HRREC-67890</a> - Title | Short desc | Bug (85%) | **Likely Bug**<br>This is likely a Bug because the expected system response fails despite following documented process and persists across repeated tests. This is not WAD because no source describes this as expected behaviour. This is not Config because setup prerequisites were met before failure.<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a><br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 2</a> | **Expected Behaviour**<br>• Feature should...<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Admin guide page</a> | **Technical evidence:** Confirms defect signal in recipient-resolution path.<br><br>**Proposed Fix:**<br>1. Update guard condition on target method binding<br>2. Ensure context resolves from job application object<br>3. Add unit test for edge case<br>4. Verify with end-to-end repro and regression tests | **KEEP (Active)**<br>Bug requires investigation - do not close without fix |
+| <a href="https://jira2.workday.com/browse/HRREC-11111" target="_blank" rel="noopener noreferrer">HRREC-11111</a> - Title | Short desc | WAD (80%) | **WAD**<br>This is WAD because the observed result matches documented logic and system design rules. This is not a Bug because documented sources confirm this behaviour is expected. This is not Config because no missing setup was identified as the trigger.<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a> | **N/A** | **Technical evidence:** No contradictory metadata found. Behaviour follows intended design.<br><br>**Customer Resolution:**<br>1. Explain expected behaviour to customer with documentation link<br>2. Suggest alternative workflow if customer needs different outcome<br>3. Log enhancement request if behaviour change is warranted<br>4. Close as WAD with clear rationale | **CLOSE (Review First)**<br>WAD 80%, open 5.7 years, very stale (2103 days no activity) - review with team before closing |
+| <a href="https://jira2.workday.com/browse/HRREC-22222" target="_blank" rel="noopener noreferrer">HRREC-22222</a> - Title | Short desc | Inconclusive (60%) | **Inconclusive**<br>This is Inconclusive because insufficient evidence exists to classify - could not reproduce and conflicting signals from sources prevent confident determination.<br><br>**Sources:**<br>• No usable Salomon source links found for this verdict. | **N/A** | **Technical evidence:** Insufficient metadata to determine root cause.<br><br>**Needs Further Investigation:**<br>1. Request specific repro steps and tenant details from customer<br>2. Ask which Workday task and configuration settings are in use<br>3. Escalate to #hrrec_prodsupport with gathered context<br>4. Consider SUV reproduction if customer provides sample data | **KEEP (Unclear)**<br>Inconclusive - needs human review before any closure decision |
+| <a href="https://jira2.workday.com/browse/HRREC-33333" target="_blank" rel="noopener noreferrer">HRREC-33333</a> - Title | Short desc | Known Limitation (85%) | **Known Limitation**<br>Feature has documented architectural constraints that prevent the requested behaviour. This is not a Bug because the limitation is by design. This is not Config because no configuration change can enable the behaviour.<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a> | **N/A** | **Technical evidence:** Architectural constraint confirmed in platform documentation.<br><br>**Proposed Fix (Enhancement):**<br>1. Extend platform component to support requested behaviour<br>2. Add feature flag for gradual rollout<br>3. Update documentation when enhancement ships<br><br>**Workaround:**<br>Use alternative approach X until enhancement is available | **KEEP (Unclear)**<br>Known limitation - requires enhancement, not closure |
 ```
 
 Note: The XO column MUST ALWAYS include an actionable section:
@@ -761,6 +790,171 @@ For batches of 10 or more Jiras, generate an **Executive Summary** BEFORE the de
 ### Detailed Results
 [See Chunks 1-12 below with full 7-column analysis per Jira]
 ```
+
+---
+
+### Step 8: Open Confluence Triage Page in Both Browsers
+
+After the chat response and the Confluence write are complete, open the triage page in **both Google Chrome (new window)** and the **Cursor Simple Browser** so the PM can review it alongside the chat.
+
+Use the existing helper script (do NOT reinvent with `open` or `xdg-open` directly):
+
+```
+Shell
+command: bash scripts/open-url-chrome-and-cursor-browser.sh "https://confluence.workday.com/display/~david.denham/Customer+Issue+Triage+POC"
+description: "Open Customer Issue Triage POC in Chrome + Cursor browser"
+```
+
+Rules:
+- Call this **once per triage run**, after Step 7 output is sent and after the Confluence page has been successfully updated (Step 6).
+- If the Confluence write fell back to `docs/customer-issue-triage-output.md` (adaptive behaviour), skip this step - there is no live Confluence page to show.
+- If the Shell call fails (missing Chrome, deeplink rejected, non-zero exit), continue to Step 9 regardless; the script already prints a fallback message.
+
+### Step 9: Prompt for Bulk Closure (AskQuestion)
+
+After Step 8 opens the Confluence page, offer the PM a one-click way to close the high-confidence, no-activity cases.
+
+**9a - Build the closure-candidate list.**
+
+From the current batch, include a Jira as a **closure candidate** only when ALL of these are true:
+- `status` is `WAD` or `Config` (not `Bug`, not `Inconclusive`, not `Known Limitation`)
+- `recommendation` from Step 6a2 is `CLOSE (High Confidence)` (i.e. confidence >= 85% AND stale/old per the logic)
+- `has_high_engagement` is false (no Gartner / Executive / Escalation tag)
+- Current Jira status is not already `Closed` / `Resolved` / `Won't Do`
+
+Record this list as `closure_candidates = [{key, title, status_label, confidence, recommendation_rationale}, ...]`.
+
+**9b - Decide whether to prompt.**
+
+- If `closure_candidates` is **empty**: skip the AskQuestion entirely. Tell the PM: "No Jiras in this batch meet the high-confidence closure bar (WAD/Config 85%+, stale, no priority engagement). Nothing to close." Then end.
+- If `closure_candidates` has 1+ entries: proceed to 9c.
+
+**9c - Present the AskQuestion prompt.**
+
+Before the tool call, list the candidate Jiras in chat as a short bulleted block so the PM can see exactly what "Yes" would close. Example:
+
+```
+Eligible for bulk closure (5 Jiras):
+- HRREC-12345 (WAD, 92%) - "Interview decision step fires twice"
+- HRREC-67890 (Config, 90%) - "Offer letter template not rendering"
+- HRREC-11111 (WAD, 88%) - "Duplicate candidate tile on dashboard"
+- HRREC-22222 (Config, 87%) - "Questionnaire export includes extra columns"
+- HRREC-33333 (WAD, 95%) - "Legacy recruiting Inbox label reads 'Pending'"
+```
+
+Then call AskQuestion with these exact options:
+
+```
+AskQuestion
+questions:
+  - id: "bulk_close"
+    prompt: "Would you like me to close these high-confidence WAD / Customer Configuration Jiras as 'Closed' with resolution 'Won't Do', and add a detailed comment to each explaining why?"
+    options:
+      - id: "yes"
+        label: "Yes - close all eligible Jiras listed above"
+      - id: "no"
+        label: "No - leave them open, I'll decide individually"
+      - id: "other"
+        label: "Other - I'll specify which Jiras or give a custom instruction"
+```
+
+### Step 10: Execute Bulk Closure Based on PM Response
+
+Handle the PM's selection from Step 9. For any closure action, **always call `addJiraComment` first, then `closeJiraTicket`** - this guarantees the rationale is attached even if the workflow transition is rejected.
+
+**Path Yes - close all eligible candidates**
+
+For each Jira in `closure_candidates`:
+
+1. Build the closure comment using the template in **Closure Comment Template** below.
+2. Call `addJiraComment`:
+   ```
+   CallMcpTool  server: "user-jira-ghe"  toolName: "addJiraComment"
+   arguments: { "jiraTicket": "<KEY>", "commentText": "<rendered comment>" }
+   ```
+3. Call `closeJiraTicket` with resolution `Won't Do`:
+   ```
+   CallMcpTool  server: "user-jira-ghe"  toolName: "closeJiraTicket"
+   arguments: { "jiraTicket": "<KEY>", "resolution": "Won't Do" }
+   ```
+4. Track success / failure per Jira.
+
+If a transition fails (e.g., workflow blocks direct close), keep the comment, record the error, and continue with the rest of the batch. Do **not** retry more than once per Jira.
+
+**Path No - take no action**
+
+Reply in chat: "Understood - no Jiras closed. Triage results remain on the Confluence page for manual review." End the turn.
+
+**Path Other - PM will specify**
+
+Reply in chat with a short follow-up prompt:
+
+> "Got it - which Jiras should I close? Reply with either:
+> - a single Jira key (e.g., `HRREC-12345`), or
+> - multiple keys separated by commas / spaces, or
+> - an instruction like `just do that for HRREC-12345` or `close all except HRREC-22222`.
+> I'll only close Jiras that are in the current triage batch."
+
+**Handling the PM's free-text follow-up** (next turn):
+- Extract all `[A-Z]+-\d+` IDs from the reply.
+- Intersect with `closure_candidates` (never close a Jira that wasn't a candidate; if the PM names a Bug, Inconclusive, or non-eligible Jira, refuse and explain).
+- Support simple negation patterns like `except`, `not`, `exclude` - treat listed Jiras as exclusions from the full candidate list.
+- If the reply is ambiguous or lists no valid candidate keys, ask once more for clarification. If still ambiguous, stop and tell the PM no action was taken.
+- For each resolved target, apply the same `addJiraComment` + `closeJiraTicket` sequence as Path Yes.
+
+**Closure Comment Template (PM-language, not engineering jargon)**
+
+Render one comment per Jira. Fill in values from the triage run:
+
+```
+Closing this issue as Won't Do after triage.
+
+Classification: {Status label and confidence}, e.g., "Working As Designed (92%)" or "Customer Configuration (90%)".
+
+Why we're closing:
+{2-4 sentence summary from the Salomon verdict block, PM language, no self-referential phrasing.
+ Include the "This is WAD because..." / "This is a Configuration Issue because..." sentence
+ and the relevant contrast line.}
+
+What to do instead:
+{Paste the Customer Resolution numbered list from the XO column verbatim.
+ For WAD: explain behaviour, suggest alternatives, note enhancement request path.
+ For Config: step-by-step configuration change with Workday task names and navigation paths.}
+
+Age and activity context:
+This issue has been open for {bug_age_years} years with {activity_category} activity
+({days_since_activity} days since last update). No high-priority engagement tags
+(Gartner / Executive / Escalation) were present.
+
+Full triage record (Salomon sources, Deployment Agent guidance, XO metadata evidence)
+is available on the Customer Issue Triage POC Confluence page:
+https://confluence.workday.com/display/~david.denham/Customer+Issue+Triage+POC
+
+If this closure is incorrect, please reopen with a comment explaining the gap
+and we will re-triage.
+```
+
+Guardrails for Step 10:
+- **Never** close a Jira that is not in `closure_candidates` - even if the PM says "close everything".
+- **Never** close a Jira whose status is `Bug` or `Inconclusive` - if the PM's free-text reply names one, refuse and explain.
+- **Never** skip the comment - the closure comment is the audit trail.
+- **Never** use resolution values other than `Won't Do` in this flow. If the PM wants `Duplicate` or `Cannot Reproduce`, route them back to manual Jira.
+- **Rate-limit awareness**: The Jira GHE MCP does not have a documented per-minute cap like the DA, but run closures sequentially (one at a time) to keep the audit order clean. Do not parallelise.
+
+**Final chat report after Step 10:**
+
+After all closures complete (Path Yes or the resolved subset of Path Other), post a short summary:
+
+```
+Bulk closure complete.
+- Closed as Won't Do: {count} Jiras -> {list of keys}
+- Skipped (non-eligible / status already closed): {count} -> {list with reason}
+- Failed to transition (comment added, close rejected by workflow): {count} -> {list with error}
+
+Detailed triage and rationale remain on the Customer Issue Triage POC Confluence page.
+```
+
+For Path No: simply confirm no action was taken.
 
 ---
 
