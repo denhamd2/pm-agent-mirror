@@ -872,14 +872,25 @@ For each Jira in `closure_candidates`:
    CallMcpTool  server: "user-jira-ghe"  toolName: "addJiraComment"
    arguments: { "jiraTicket": "<KEY>", "commentText": "<rendered comment>" }
    ```
-3. Call `closeJiraTicket` with resolution `Won't Do`:
+3. Close the ticket using `executeApi` with the "Close Issue" transition (id `"2"`), resolution "Won't Do" (id `"10200"`), and the required Escape Analysis field. The Escape Analysis value depends on the Salomon verdict:
+   - **Config** → `"Configuration Issue"` (id `"56516"`)
+   - **WAD** → `"Works as Designed"` (id `"125300"`)
+   - **Bug** (should not reach here, but if it does) → `"Existing Issue"` (id `"26101"`)
+
    ```
-   CallMcpTool  server: "user-jira-ghe"  toolName: "closeJiraTicket"
-   arguments: { "jiraTicket": "<KEY>", "resolution": "Won't Do" }
+   CallMcpTool  server: "user-jira-ghe"  toolName: "executeApi"
+   arguments: {
+     "code": "const r = await jira('/rest/api/2/issue/<KEY>/transitions', { method: 'POST', body: JSON.stringify({ transition: { id: '2' }, fields: { resolution: { id: '10200' }, customfield_13700: [{ id: '<escape_analysis_id>' }] } }), headers: { 'Content-Type': 'application/json' } }); const body = await r.json?.() || r.text?.(); return { status: r.status, body }"
+   }
    ```
+
+   A `204` response means success. If you get a `400`, call `executeApi` with `/rest/api/2/issue/<KEY>/transitions?expand=transitions.fields` to inspect which additional fields the workflow requires, then retry with those fields included.
+
 4. Track success / failure per Jira.
 
-If a transition fails (e.g., workflow blocks direct close), keep the comment, record the error, and continue with the rest of the batch. Do **not** retry more than once per Jira.
+If a transition fails after inspecting the required fields, keep the comment (the audit trail is already attached), record the error, and continue with the rest of the batch. Do **not** retry more than once per Jira.
+
+**Why not `closeJiraTicket`?** The convenience tool does not expose the Escape Analysis field (customfield_13700), which is required by the Workday Jira workflow. `executeApi` gives full control over the transition payload.
 
 **Path No - take no action**
 
