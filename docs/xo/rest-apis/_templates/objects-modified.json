@@ -1,0 +1,14 @@
+{
+  "runId": "<timestamp-or-uuid>",
+  "resourceSlug": "<resource-slug>",
+  "objects": [
+    {
+      "phase": "schema-implementation",
+      "objectType": "serviceOperation",
+      "action": "create",
+      "wid": "<wid>",
+      "name": "<name>",
+      "status": "ok"
+    }
+  ]
+}

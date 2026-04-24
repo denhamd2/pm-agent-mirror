@@ -1,0 +1,41 @@
+{
+  "runId": "<timestamp-or-uuid>",
+  "resourceSlug": "<resource-slug>",
+  "steps": [
+    {
+      "name": "post",
+      "status": "skipped",
+      "expected": {},
+      "actual": {},
+      "drift": null
+    },
+    {
+      "name": "get_after_post",
+      "status": "skipped",
+      "expected": {},
+      "actual": {},
+      "drift": null
+    },
+    {
+      "name": "patch",
+      "status": "skipped",
+      "expected": {},
+      "actual": {},
+      "drift": null
+    },
+    {
+      "name": "get_after_patch",
+      "status": "skipped",
+      "expected": {},
+      "actual": {},
+      "drift": null
+    },
+    {
+      "name": "delete",
+      "status": "skipped",
+      "expected": {},
+      "actual": {},
+      "drift": null
+    }
+  ]
+}

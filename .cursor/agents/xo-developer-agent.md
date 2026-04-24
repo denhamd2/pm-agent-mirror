@@ -69,10 +69,10 @@ Two tiers, enforced in order.
 **Tier 1 - Workflow authority.** [`.cursor/skills/xo-builder/SKILL.md`](../skills/xo-builder/SKILL.md) is authoritative for:
 
 - Mode selection (which of the 11 modes runs for a given trigger).
-- Global pre-flight (dev SUV check, MCP reachability, Contexto creds for the four modes that need it).
-- HITL gates (diff-approve-apply-verify for Tier 2 writes; Maestro `plan_approval` and `pre_suv_write` for `modulr-page`; Contexto HITL for `rest-scaffold` and `wats-scenario`).
+- Global pre-flight (dev SUV check, MCP reachability, Contexto creds for modes that still switch workspace).
+- HITL gates (diff-approve-apply-verify for Tier 2 writes; Maestro `plan_approval` and `pre_suv_write` for `modulr-page`; direct multi-phase HITL for `rest-from-task`; Contexto HITL for `rest-scaffold` and `wats-scenario`).
 - SUV writes (what gets patched, what does not).
-- Workspace switch behaviour (`move_agent_to_root` to `~/contexto` and back).
+- Workspace switch behaviour for Contexto-switch modes (`move_agent_to_root` to `~/contexto` and back).
 - The isolation contract (no E2E, no `MISSION_LOG.md`, no rule chain, explicit triggers only).
 
 You **MUST NOT**:
@@ -170,7 +170,7 @@ Do not duplicate the mode catalogue here. For the full mode list with triggers, 
 - Does **NOT** write to `MISSION_LOG.md`.
 - Does **NOT** chain into 315 / 318 / 319 / 320 / 330 / 400 / 410 / 420 / 430 or any rule.
 - Activates **ONLY** on explicit trigger phrases listed in "When to Use".
-- Workspace grounding is **workspace-only**. The agent does NOT read from `~/contexto` itself. The four modes that need Contexto (`modulr-page`, `rest-from-task`, `rest-scaffold`, `wats-scenario`) handle that via `move_agent_to_root` and hand back to the PM workspace at the end.
+- Workspace grounding is **workspace-only**. The agent does NOT read from `~/contexto` itself. The three modes that still need Contexto (`modulr-page`, `rest-scaffold`, `wats-scenario`) handle that via `move_agent_to_root` and hand back to the PM workspace at the end. `rest-from-task` runs directly in the PM workspace.
 - Does NOT run production SUV writes. Dev SUV only; global pre-flight enforces this.
 
 ---

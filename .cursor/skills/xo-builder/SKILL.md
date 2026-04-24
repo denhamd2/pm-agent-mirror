@@ -8,8 +8,8 @@ description: >-
   outside the PM agent workflow: does NOT participate in E2E pipelines, does
   NOT chain into 315/320/330/400 or any rule, and does NOT write to
   MISSION_LOG. Eleven modes across three tiers (read-only, guarded write,
-  guarded build). Five modes run directly from the PM workspace using XO MCP
-  tools; four modes switch workspace to ~/contexto and hand off to Contexto
+  guarded build). Six modes run directly from the PM workspace using XO MCP
+  tools; three modes switch workspace to ~/contexto and hand off to Contexto
   workflows or slash commands. Every write mode enforces a
   diff-approve-apply-verify HITL checkpoint. Activate ONLY on explicit trigger
   phrases. Legacy modulr-prototype triggers still work and route into this
@@ -91,7 +91,7 @@ The skill is authoritative for **workflow** (mode selection, pre-flight, HITL ga
 | 2 guarded write | [`validation-edit`](modes/validation-edit.md) | No | Yes (tight HITL) | XO MCP `validation_create`, `validation_patch`, `reusable_validation_implementation_create`, `ui_reusable_validation_bindings_create` |
 | 2 guarded write | [`prompt-edit`](modes/prompt-edit.md) | No | Yes (tight HITL) | XO MCP `prompt_get`, `prompt_patch`, `prompt_group_*` |
 | 2 guarded write | [`method-edit`](modes/method-edit.md) | No | Yes (tight HITL) | XO MCP `method_get`, type-specific `_get`/`_patch` for BA / EBE / EC methods, `method_binding_get` |
-| 2 guarded build | [`rest-from-task`](modes/rest-from-task.md) | **Yes** (`~/contexto`, Phases 1-3 only; Phase 4 runs in PM workspace) | Yes (heavy, via Contexto workflow HITL for Phases 1-3; Tier 2 HITL for Phase 4 cleanup/smoke/index) | XO MCP `ui_task_analysis_get` + Phase 4 writes (`class_report_field_patch`, `service_operation_workday_owned_patch`, `xo_agent_tool_create`, `suv_rest_call`); Contexto `schema-analysis`, `schema-implementation`, `processing-creation` |
+| 2 guarded build | [`rest-from-task`](modes/rest-from-task.md) | No | Yes (heavy, all phases in PM workspace via XO MCP + HITL gates) | XO MCP analysis + creation + processing toolchain (`ui_task_analysis_get`, `schema_analysis_get`, `class_report_field_*`, `service_*`, `representation_content_*`, `service_operation_*`, `service_operation_processing_option_*`, `linked_operation_processing_option_*`, `suv_rest_call`, `xo_agent_tool_registration_create`) |
 | 2 guarded build | [`rest-scaffold`](modes/rest-scaffold.md) | **Yes** (`~/contexto`) | Yes (via Contexto HITL) | Contexto `/generate-openapi-spec`, `/wats-rest-builder` |
 | 2 guarded build | [`wats-scenario`](modes/wats-scenario.md) | **Yes** (`~/contexto`) | Yes (via Contexto HITL) | Contexto `/wats-rest-builder` or direct `wats_scenario_create`, `wats_suite_create` |
 
@@ -174,7 +174,7 @@ Every Tier 2 write mode follows the **diff-approve-apply-verify** pattern. Do no
 
 Under no circumstance may a Tier 2 mode write to the SUV without the user having said `approve` (or an explicit synonym the skill instructions allow). Silent inference of approval is a bug.
 
-## Workspace Switch Helpers (used by modulr-page, rest-from-task, rest-scaffold, wats-scenario)
+## Workspace Switch Helpers (used by modulr-page, rest-scaffold, wats-scenario)
 
 When a mode needs to hand off to a Contexto slash command, use `cursor-app-control.move_agent_to_root`:
 

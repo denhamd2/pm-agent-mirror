@@ -1,0 +1,39 @@
+run_id: "<timestamp-or-uuid>"
+task_wid: "<wid>"
+task_name: "<task-name>"
+api_scope:
+  - GET
+  - POST
+  - PATCH
+  - DELETE
+resource_slug: "<resource-slug>"
+phase_status:
+  phase_1_schema_analysis: pending
+  phase_2_schema_implementation: pending
+  phase_3_processing_creation: pending
+  phase_4_post_build: pending
+canonical_wids:
+  backing_class_wid: null
+  service_wid: null
+  scr_wid: null
+  view_rep_wid: null
+  edit_rep_wid: null
+  get_operation_wid: null
+  post_operation_wid: null
+  patch_operation_wid: null
+  delete_operation_wid: null
+maps_to_class_decision: null
+created_object_counts:
+  business_objects: 0
+  class_report_fields: 0
+  representations: 0
+  representation_content: 0
+  service_collection_resources: 0
+  service_operations: 0
+  processing_options: 0
+smoke_summary:
+  post: skipped
+  get_after_post: skipped
+  patch: skipped
+  get_after_patch: skipped
+  delete: skipped
