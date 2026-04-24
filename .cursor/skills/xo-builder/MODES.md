@@ -125,18 +125,22 @@ Every mode below can be invoked two ways: via the direct skill trigger (as liste
 
 ---
 
-## Tier 2 - Guarded build (workspace switch, Contexto HITL)
+## Tier 2 - Guarded build (no workspace switch, direct XO MCP + HITL)
 
 ### `modes/rest-from-task.md`
-- **Workspace switch:** Yes (`~/contexto`)
-- **Writes to SUV:** Yes (heavily - creates BOs, CRFs, Service, Representations, RCs, SCR, Operations, Processing via three Contexto workflows with per-step HITL)
-- **Primary tools:** XO MCP `ui_task_analysis_get`, `xo_search` (pre-flight); Contexto `schema-analysis`, `schema-implementation`, `processing-creation` workflows (user-driven)
+- **Workspace switch:** No
+- **Writes to SUV:** Yes (heavily - creates BOs, CRFs, Service, Representations, RCs, SCR, Operations, Processing via PM-workspace direct workflows with per-phase HITL)
+- **Primary tools:** XO MCP direct toolchain (`ui_task_analysis_get`, `schema_analysis_get`, `class_report_field_*`, `service_*`, `representation_content_*`, `service_operation_*`, `service_operation_processing_option_*`, `linked_operation_processing_option_*`, `suv_rest_call`, `xo_agent_tool_registration_create`) + in-repo workflow maps (`workflows/schema-analysis-direct.md`, `workflows/schema-implementation-direct.md`, `workflows/processing-creation-direct.md`)
 - **Triggers:**
   - `/xo-builder rest-from-task`
   - "convert this task to REST"
   - "build REST API from this task"
   - "create REST endpoints for this task"
   - "convert this UI task to a REST API"
+
+---
+
+## Tier 2 - Guarded build (workspace switch, Contexto HITL)
 
 ### `modes/rest-scaffold.md`
 - **Workspace switch:** Yes (`~/contexto`)

@@ -50,6 +50,59 @@ If this is your first time using `@xo-developer` or the xo-builder skill, try th
 
 After these three, you'll have a working feel for read-only vs write modes, the HITL gate pattern, and the reviewer loop. From there, more ambitious prompts (REST scaffolding, ModulR layouts, validation creation) are safe to try.
 
+## Micro-task cookbook
+
+Quick prompts you can copy/paste when you want a narrow, outcome-focused run:
+
+- **Map one task quickly (read-only)**
+  - Prompt: `@xo-developer explain what task wid <TASK_WID> does and list its key validations`
+  - Mode: [page-discovery](modes/page-discovery.md)
+  - Output: task summary, inputs/outputs, validation touchpoints
+
+- **Check if public APIs already solve a request (read-only)**
+  - Prompt: `@xo-developer find public Workday APIs for candidate tagging and show likely endpoints`
+  - Mode: [api-catalogue](modes/api-catalogue.md)
+  - Output: API shortlist with candidate endpoints and usage notes
+
+- **Create a small fixture for design or QA (read-only)**
+  - Prompt: `@xo-developer run a WQL query for active candidates and save a fixture`
+  - Mode: [wql-query](modes/wql-query.md)
+  - Output: inline preview or `design/fixtures/<slug>.json`
+
+- **Do a low-risk UI text change (guarded write)**
+  - Prompt: `@xo-developer update the help text on element <ELEMENT_WID> to '<NEW_TEXT>'`
+  - Mode: [copy-edit](modes/copy-edit.md)
+  - Output: diff, HITL approval, patch, verification recap
+
+- **Convert one UI task to REST with phase gates (guarded build)**
+  - Prompt: `@xo-developer convert task wid <TASK_WID> to a full CRUD REST API`
+  - Mode: [rest-from-task](modes/rest-from-task.md)
+  - Output: phased recap, WIDs, wrappers, artifacts under `docs/xo/rest-apis/<slug>/`
+
+## MCP health quick checks
+
+Use this checklist when a mode fails early:
+
+- **Symptom:** expected XO tools are missing or commands fail with tool-not-found
+  - **Likely cause:** XO MCP is disconnected or dynamic tools are not enabled
+  - **Fix:** in `~/.cursor/mcp.json`, verify `"ENABLE_DYNAMIC_TOOLS": "true"` under `xo-mcp` headers, reconnect MCP, and confirm MCP panel shows >350 tools
+
+- **Symptom:** XO tool calls fail intermittently (timeouts/network errors)
+  - **Likely cause:** temporary SUV or MCP transport instability
+  - **Fix:** retry with new evidence (fresh call context) up to 2 times, then stop and escalate with the exact failing tool and payload shape
+
+- **Symptom:** workspace-switch mode cannot move to `~/contexto`
+  - **Likely cause:** `cursor-app-control` MCP unavailable
+  - **Fix:** open `~/contexto` manually in Cursor and continue with the instructed slash command
+
+- **Symptom:** Contexto slash command names differ from expected
+  - **Likely cause:** stale local Contexto checkout vs current SUV XORC revision
+  - **Fix:** run `git -C ~/contexto pull`, then use `/help` in Contexto to confirm current commands
+
+- **Symptom:** Contexto mode fails with credential/setup errors
+  - **Likely cause:** missing or stale `~/contexto/.env`
+  - **Fix:** load env via `~/contexto/xo-agents/skills/maestro-modulr-crud/scripts/load-env.sh` and retry
+
 ## How it works
 
 1. Say a trigger phrase (see [SKILL.md](SKILL.md#trigger-phrases)).

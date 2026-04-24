@@ -8,7 +8,7 @@ description: >-
   outside the PM agent workflow: does NOT participate in E2E pipelines, does
   NOT chain into 315/320/330/400 or any rule, and does NOT write to
   MISSION_LOG. Eleven modes across three tiers (read-only, guarded write,
-  guarded build). Six modes run directly from the PM workspace using XO MCP
+  guarded build). Eight modes run directly from the PM workspace using XO MCP
   tools; three modes switch workspace to ~/contexto and hand off to Contexto
   workflows or slash commands. Every write mode enforces a
   diff-approve-apply-verify HITL checkpoint. Activate ONLY on explicit trigger
@@ -95,7 +95,9 @@ The skill is authoritative for **workflow** (mode selection, pre-flight, HITL ga
 | 2 guarded build | [`rest-scaffold`](modes/rest-scaffold.md) | **Yes** (`~/contexto`) | Yes (via Contexto HITL) | Contexto `/generate-openapi-spec`, `/wats-rest-builder` |
 | 2 guarded build | [`wats-scenario`](modes/wats-scenario.md) | **Yes** (`~/contexto`) | Yes (via Contexto HITL) | Contexto `/wats-rest-builder` or direct `wats_scenario_create`, `wats_suite_create` |
 
-See [MODES.md](MODES.md) for a machine-readable index with per-mode trigger phrases, and [README.md](README.md) for the human quick-start.
+`MODES.md` is the canonical mode matrix for per-mode metadata (tier, workspace switch, SUV write behaviour, primary tools, and trigger lists). This file is the execution router and shared contract.
+
+See [MODES.md](MODES.md) for the machine-readable index with per-mode trigger phrases, and [README.md](README.md) for the human quick-start.
 
 ## Routing Logic
 
@@ -120,6 +122,15 @@ Before executing any mode's own pre-flight, confirm:
 - [ ] **Contexto documentation**: For installation guides, tutorials, and demos, see the Contexto docs site (internal - ask in #xo-agents-mcp for the current URL, or run `/help` in a Contexto workspace chat for capability discovery).
 
 If any pre-flight item is missing, stop and ask the user before proceeding.
+
+### Bounded retry rule (all modes)
+
+When a tool call fails, do not loop indefinitely:
+
+- Retry only when there is **new evidence** (fresh metadata, corrected inputs, changed state, or a clearly transient transport failure).
+- Maximum **2 retries** for the same failure shape.
+- If the second retry fails, stop and escalate with the failing tool name, concise error, and the next recommended action.
+- For write operations, do not retry blindly - re-establish HITL confirmation before any re-apply attempt.
 
 ### Tool-specific pitfalls
 

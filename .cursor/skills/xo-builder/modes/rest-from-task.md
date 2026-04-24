@@ -26,6 +26,7 @@ Before execution:
 - [ ] Task type is supported.
 - [ ] API scope and target service are confirmed.
 - [ ] Artifact root is reserved: `docs/xo/rest-apis/<resource-slug>/artifacts/`.
+- [ ] Rerun policy is explicit: reuse the same `artifacts/` filenames for the resource slug (latest-run semantics, no per-run subdirectories).
 - [ ] `run-state.yaml` initialized per `../workflows/state-contract.md`.
 
 ## Four-Phase Flow
@@ -105,6 +106,7 @@ Always update:
 
 - Four HITL-gated phases are mandatory.
 - No inferred approval for writes - require explicit `approve`.
+- Apply bounded retries for tool failures: retry only with new evidence, maximum 2 attempts for the same failure shape, then escalate.
 - No auto-chaining into `wats-scenario` or `rest-scaffold`.
 - Do not write to `MISSION_LOG.md`.
 - Dev SUV only.

@@ -57,5 +57,6 @@ smoke_summary:
 ## Write Policy
 
 - Update `run-state.yaml` at phase boundaries and after each approved write batch.
-- Never overwrite an existing run directory; create a new run subdirectory when rerunning the same resource.
+- Use a fixed artifact path per resource: `docs/xo/rest-apis/<resource-slug>/artifacts/`.
+- On rerun of the same resource slug, update the same filenames in place under `artifacts/` (latest-run semantics).
 - `README.md` at `docs/xo/rest-apis/<resource-slug>/README.md` is the human-facing summary. Artifacts stay under `artifacts/`.
