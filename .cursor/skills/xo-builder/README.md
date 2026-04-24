@@ -75,3 +75,9 @@ After these three, you'll have a working feel for read-only vs write modes, the 
 xo-builder uses **XO MCP** for code generation. For the **DevOps lifecycle** (branching, auditing, pushing, impact analysis, code reviews), use **X2 MCP** (`x2-mcp`) - a local MCP server that bridges Cursor and the X2 Chrome extension. After a write mode completes, `@xo-developer` will suggest the X2 DevOps flow as a next step.
 
 See [SKILL.md](SKILL.md) for the full dispatcher, [MODES.md](MODES.md) for the per-mode index, and `modes/*.md` for each mode's detail.
+
+## Resources
+
+- **Contexto docs site**: Installation guides, tutorials, and demos (internal - ask in #xo-agents-mcp for the current URL).
+- **#xo-agents-mcp Slack channel**: Support, announcements, and roadmap updates.
+- **Contexto repo**: `~/contexto` - pull regularly to stay current with SUV XORC revisions.

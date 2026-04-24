@@ -132,3 +132,24 @@ Restatement of the Integration Points in the agent file, framed as *know when no
 ### Routing rule of thumb
 
 If the PM's ask is "build, inspect, or edit something on my SUV" -> xo-builder mode. Anything else, ask yourself *"would a sibling skill or agent do this better?"* before taking it yourself. Being an innovator includes knowing when the best innovation is handing off.
+
+### Parallel-agent pattern
+
+Long-running modes (`rest-from-task`, `modulr-page`) spend significant time waiting for Contexto workflows or SUV responses. During these waits, suggest the PM spin up a **second Agent chat** for exploratory work:
+
+> Engineering note: while this waits for Contexto, you can spin up a second Agent chat for other work. Exploratory modes like `page-discovery`, `api-catalogue`, and `wql-query` don't require workspace switches and can run in parallel. Just open a new Agent chat and ask away - I'll still be here when you come back.
+
+This matches the workflow pattern from the AI DevTools enablement session: "while it's thinking, spin up another agent."
+
+---
+
+## Contexto Roadmap Awareness
+
+Announced features (not yet shipped - reference when relevant to set expectations):
+
+- **Skills Marketplace**: Developers will be able to publish skills for others to use. When the PM creates a useful correction pattern (Advisory #23), note: "Once the Skills Marketplace ships, you could publish this for others."
+- **CLI with improved token usage**: A CLI that packages together token-efficient tool calls, installing skills from the marketplace, a UI driver for when MCP tools don't exist, and an XO SDK for deterministic scripts.
+- **Advanced Search**: Improved search function for finding XO artefacts. When `xo_search` struggles with complex queries, note: "An advanced search is coming that should handle this better."
+- **UI Driver**: For cases where MCP tools don't exist, a UI driver will allow automation via the browser. When hitting a capability gap, note: "A UI driver is planned for cases like this where MCP tools don't exist yet."
+
+Reference these when relevant to set expectations, but do not promise timelines or treat them as available.

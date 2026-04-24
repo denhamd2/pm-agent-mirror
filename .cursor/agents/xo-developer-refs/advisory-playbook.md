@@ -277,3 +277,152 @@ The `rest-from-task` Phase 4 already runs the mechanical checks (toggle attach, 
 - Re-run the smoke to "make sure" after the recap. The drift table in frontmatter is the authoritative record for this build; re-running churns SUV state for no information gain.
 
 **PM translation (Communication Style rules)**: the template above is engineering register. When you surface it, drop the jargon the PM doesn't need (`mapsToClass`, `Processing Option`) and keep the mechanics as pass/fail status lines. If the recap uses 3+ technical terms (e.g. CRF, mapsToClass, Service Operation, SCR), offer `/teachable-moment` at the end. The PM does not need to know what a Representation is to see a `DRIFT` row and understand "the GET is returning fewer fields than we designed, and you have a follow-up to reconcile".
+
+### 22. Design-doc generation before build
+
+When the PM asks to convert a UI task to REST or build a ModulR page, offer to generate a **stakeholder-readable design document** first. This lets the PM share the proposed schema with coworkers, get feedback, or document the design decision before committing to a Contexto build.
+
+**Trigger conditions (offer proactively when any apply):**
+- PM invokes `rest-from-task` and has not run `page-discovery` on the task yet.
+- PM says "I need to share this with [stakeholder]" or "can I get a design doc first".
+- PM is converting a complex task (>15 elements, multiple backing classes, cross-service references).
+
+**Template:**
+
+> Engineering note: before we run the full build, want me to generate a design document you can share with [stakeholder / coworkers]? I'll run `ui_task_analysis_get`, capture the field mapping and proposed schema, and write it to `docs/xo/rest-apis/<slug>/DESIGN.md`. You can review it, get feedback, and then kick off `rest-from-task` when ready. Takes about 2 minutes. Want it?
+
+**Design doc template** (write to `docs/xo/rest-apis/<slug>/DESIGN.md`):
+
+```markdown
+# <Task Name> REST API - Design Document
+
+**Source task:** `<Task display name>` (`<Task WID>`)
+**Backing class:** `<Class name>` (`<Class WID>`)
+**Proposed service:** `<Service name>`
+**API scope:** `<GET / POST / PATCH / DELETE>`
+**Generated:** <date>
+
+## Field Mapping
+
+| UI Element | Type | Proposed CRF | REST Field Name | Notes |
+|---|---|---|---|---|
+| <element label> | <type> | <CRF name or "reuse existing"> | <camelCase> | <constraints, validations> |
+
+## Proposed Schema
+
+### GET Response (View representation)
+
+```json
+{
+  "id": "string (WID)",
+  "<field1>": "<type>",
+  "<field2>": "<type>"
+}
+```
+
+### POST/PATCH Body (Edit representation)
+
+```json
+{
+  "<field1>": "<type>",
+  "<field2>": "<type>"
+}
+```
+
+## Processing Notes
+
+- <Any derived classes, reusable processing, or special handling>
+
+## Open Questions
+
+- <Anything that needs PM decision before build>
+
+## Next Step
+
+Run `rest-from-task` with this design once approved.
+```
+
+**Do NOT:**
+- Auto-generate the design doc without asking - the PM may want to skip straight to build.
+- Block `rest-from-task` on design doc approval - it's an optional step.
+- Duplicate the design doc content in the PM-workspace README (Phase 4 step 6) - the README is post-build; the design doc is pre-build.
+
+### 23. Skill capture nudge after corrections
+
+When the PM manually corrects an xo-builder output during a HITL gate (e.g. edits the proposed diff, fixes a naming convention, adjusts a validation expression), offer to capture that correction as a reusable skill stub. This creates a flywheel where PM corrections become persistent guidance for future runs.
+
+**Trigger conditions:**
+- PM responds to a Tier 2 HITL gate with edits (not just `approve` or `reject`).
+- PM says "that's wrong, it should be [X]" or "always do it this way".
+- PM corrects the same pattern twice in one session (signals a systematic gap).
+
+**Template:**
+
+> Engineering note: you just corrected [specific correction, e.g. "the CRF naming from `candidateRole` to `role`"]. Want me to capture this as a skill stub so future runs get it right automatically? I'll save it to `.cursor/skills/xo-corrections/<pattern-name>.md` - you can refine it later or share it with the team.
+
+**Skill stub template** (write to `.cursor/skills/xo-corrections/<pattern-name>.md`):
+
+```markdown
+---
+name: <pattern-name>
+description: <one-line description of the correction>
+---
+
+# <Pattern Name>
+
+## When to Apply
+
+- <Describe the context where this correction applies>
+
+## Correction
+
+**Wrong:** <what the default behaviour produces>
+**Right:** <what the PM corrected it to>
+
+## Rationale
+
+<Why this is the correct pattern - captured from PM's explanation if given>
+
+## Example
+
+<Concrete before/after example>
+```
+
+**Do NOT:**
+- Auto-capture every correction - only offer when the correction seems systematic.
+- Overwrite existing skill stubs without asking.
+- Suggest this for trivial typo fixes - only for pattern-level corrections.
+
+### 24. Jira linkage nudge after builds
+
+After a successful `rest-from-task`, `modulr-page`, or other build mode completes, offer to link the build artefacts to a Jira ticket via the Jira GHE MCP. This closes the loop between engineering work and PM tracking.
+
+**Trigger conditions (offer proactively):**
+- Any Tier 2 build mode completes successfully (`rest-from-task`, `modulr-page`, `validation-edit` that creates a new validation, etc.).
+- PM mentioned a Jira ID earlier in the conversation.
+- PM asks "how do I track this" or "where should I log this".
+
+**Template (after build completion):**
+
+> Engineering note: build complete. Want to link this to a Jira? I can:
+> - **(A)** Attach the design doc or README to an existing Jira (give me the ID, e.g. `HRREC-12345`).
+> - **(B)** Create a new Jira with the build summary (I'll use `user-jira-ghe` MCP).
+> - **(C)** Skip - I'll just leave the artefacts in `docs/xo/rest-apis/<slug>/`.
+>
+> Which?
+
+**If PM picks (A):**
+- Use `user-jira-ghe` MCP to add a comment to the Jira with:
+  - Link to the PM-workspace README (`docs/xo/rest-apis/<slug>/README.md`)
+  - One-line summary of what was built
+  - WIDs of key artefacts (Service, SCR, Operations)
+
+**If PM picks (B):**
+- Use `user-jira-ghe` MCP to create a new Jira with:
+  - Title: `[XO Build] <API display name> REST API`
+  - Description: build summary from the post-completion output
+  - Labels: `xo-build`, `rest-api` (or `modulr-layout` for modulr-page)
+
+**Do NOT:**
+- Auto-create Jiras without asking - the PM may not want a ticket.
+- Block the build on Jira linkage - it's an optional post-completion step.
