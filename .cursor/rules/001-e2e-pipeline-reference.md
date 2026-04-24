@@ -265,6 +265,7 @@ Use descriptive titles when invoking Task subagents to make pipeline progress tr
 - **Step 11 (HITL)**: "Select Research Recommendation" (**E2E-only**; standalone Workflow 1 stops at Step 10)
 - **Step 12 (HITL)**: "PM Framing Conversation"
 - **Step 13 (200)**: "Writing Product Requirements Document"
+- **Step 13.5 (PRD Reviewer)**: "PRD Quality Review" (**quality gate before Legal**; validates structure, completeness, value metrics, Experience Principles, formatting per `.cursor/skills/prd-reviewer/SKILL.md`)
 - **Step 14 (060)**: "Legal Compliance Review of PRD"
 - **Step 14**: "PRD Legal Revision"
 - **Step 16 (080)**: "Red Team Review of PRD"
@@ -316,8 +317,9 @@ When individual workflows are triggered standalone (e.g., "Write PRD for [featur
        { id: "[region-code]-e2e-step-10", content: "Generating PMF Roadmap Deck (Step 10)", status: "pending" },
        { id: "[region-code]-e2e-step-11", content: "Select Research Recommendation (Step 11 - HITL)", status: "pending" },
        { id: "[region-code]-e2e-step-12", content: "PM Framing Conversation (Step 11 - HITL)", status: "pending" },
-       { id: "[region-code]-e2e-step-13", content: "Writing Product Requirements Document (Step 12)", status: "pending" },
-       { id: "[region-code]-e2e-step-14", content: "Legal Compliance Review of PRD (Step 13 - 060)", status: "pending" },
+      { id: "[region-code]-e2e-step-13", content: "Writing Product Requirements Document (Step 12)", status: "pending" },
+      { id: "[region-code]-e2e-step-13-5", content: "PRD Quality Review (Step 13.5 - PRD Reviewer)", status: "pending" },
+      { id: "[region-code]-e2e-step-14", content: "Legal Compliance Review of PRD (Step 14 - 060)", status: "pending" },
        { id: "[region-code]-e2e-step-15", content: "PRD Legal Revision (Step 14 - if needed)", status: "pending" },
        { id: "[region-code]-e2e-step-16", content: "Red Team Review of PRD (Step 15 - 080)", status: "pending" },
        { id: "[region-code]-e2e-step-17", content: "Creating Design Brief (Step 16)", status: "pending" },
@@ -403,6 +405,8 @@ When individual workflows are triggered standalone (e.g., "Write PRD for [featur
 16. **After user responds**: If "Provide refinements", capture PM's refinements in chat, then proceed. Update todo: `TodoWrite({ merge: true, todos: [{ id: "[region-code]-e2e-step-12", content: "PM Framing Conversation (Step 11 - [Approved/Refined])", status: "completed" }] })`
 17. **Update todo**: Mark Step 13 as in_progress: `TodoWrite({ merge: true, todos: [{ id: "[region-code]-e2e-step-14", status: "in_progress" }] })`
 18. Invoke 200 with Task description **"Writing Product Requirements Document"**: "Create PRD for the selected [REGION] opportunity: [recommendation]. Source: research/[REGION]/thematic-analysis/[latest].md. **PM framing from Step 12**: [problem statement, success criteria, scope boundaries, strategic intent, additional context]. Use PM framing as PRIMARY input (research as supporting evidence). **Required inputs:** read `research/competitive/matrices/[region-code]-competitive-matrix.md` (fresh from Step 4) and `research/competitive/[region-code]/[region-code]-competitive-scan-[YYYY-MM-DD]-[MISSION-ID].md` from Step 4; incorporate competitive differentiation and parity (Native/Workaround/Gap) from @competitive-intel into Overview and any competitive sections. **Deliver PRD as markdown only** at `docs/prds/[feature]-prd.md` per **200-prd-template.mdc** (no Confluence). This is part of [REGION] e2e pipeline."
+18.5. **PRD Quality Review (Step 13.5)**: Invoke PRD Reviewer skill with: "Review PRD at docs/prds/[feature]-prd.md for quality and completeness. Validate structure (all 12 required sections), Executive Summary (4-paragraph structure), value metrics (3-tier BV/PV/Adoption), Experience Principles section, Feature Solution format (bullets not prose), formatting standards (British English, no agentic metadata). Use `.cursor/skills/prd-reviewer/SKILL.md` output format. Return verdict: APPROVED or NEEDS REVISION with recommended fixes."
+18.6. If PRD Reviewer returns **NEEDS REVISION**: Reinvoke 200 with "Revise PRD at docs/prds/[feature]-prd.md to address PRD Quality Review feedback: [summary of critical + important issues from reviewer]. Address structural completeness, formatting, and quality issues. Maintain PRD structure. This is a revision (1 attempt max)." Pipeline continues to Step 14 regardless of whether revision resolves all issues.
 19. **Update todo**: Mark Step 13 as completed, Step 14 as in_progress: `TodoWrite({ merge: true, todos: [{ id: "[region-code]-e2e-step-14", status: "completed" }, { id: "[region-code]-e2e-step-15", status: "in_progress" }] })`
 20. Invoke 060 with Task description **"Legal Compliance Review of PRD"**: "Legal Compliance Review: review PRD at docs/prds/[feature]-prd.md for legal and compliance risks. Check GDPR (Art. 6, 9, 17, 22, 35), EU AI Act classification (if AI features), country-specific regulations for [REGION], data privacy requirements, consent flows, cross-border data transfers, retention policies. Use 060-legal-compliance-review.mdc standard response format with risk level and recommended actions. Present findings to orchestrator."
 21. **Update todo**: Mark Step 14 as completed, Step 15 as in_progress: `TodoWrite({ merge: true, todos: [{ id: "[region-code]-e2e-step-15", status: "completed" }, { id: "[region-code]-e2e-step-16", status: "in_progress" }] })`

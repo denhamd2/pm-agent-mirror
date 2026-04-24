@@ -195,6 +195,7 @@ When routing work:
 - "Create slides" or "presentation" for **short** decks (exec briefing, PRD summary, competitive intelligence readout, **110** templates, typically **~10–20 slides**) → Slide Generator (**110**)
 - "PRD" or "requirements" → Write PRD (200-prd-template.mdc invokes `/write-prd` skill)
 - "/write-prd" (standalone) → Write PRD skill directly
+- "Review PRD" or "PRD quality check" or "PRD completeness" or "Is this PRD ready" or "/prd-reviewer" → PRD Reviewer skill (`.cursor/skills/prd-reviewer/SKILL.md`) — quality and completeness gate before Legal (060) and Red Team (080); validates structure, value metrics, Experience Principles, formatting
 - "Prototype discovery" or "discover placement" or "ground in Workday" → Design Brief Creation (315) — produces draft Design Brief (PASS 1-2) before 319 and 318 review
 - **"@ux-designer"** (explicit standalone) → UX Designer subagent (`.cursor/agents/ux-designer-agent.md`) — delegates to 315 with role framing; **E2E pipeline** continues to invoke 315 glob rule directly (Step 19)
 - "Design peer review" or "review Design Brief" or "318 review" → Design Peer Reviewer (318) — evaluates existing Design Brief with Final Verdict
