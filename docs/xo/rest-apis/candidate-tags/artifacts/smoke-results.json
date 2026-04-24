@@ -1,0 +1,40 @@
+{
+  "runId": "candidate-tags-20260424-161050",
+  "resourceSlug": "candidate-tags",
+  "smoke": [
+    {
+      "step": "tool_registration_lookup",
+      "status": "pass",
+      "details": "All four wrappers resolved via xo_agent_tool_registration_get"
+    },
+    {
+      "step": "post",
+      "status": "not_run",
+      "details": "No direct runtime invoker exposed in current MCP surface for newly registered wrappers"
+    },
+    {
+      "step": "get_after_post",
+      "status": "not_run",
+      "details": "Blocked on runtime invocation surface"
+    },
+    {
+      "step": "patch",
+      "status": "not_run",
+      "details": "Blocked on runtime invocation surface"
+    },
+    {
+      "step": "get_after_patch",
+      "status": "not_run",
+      "details": "Blocked on runtime invocation surface"
+    },
+    {
+      "step": "delete",
+      "status": "blocked",
+      "details": "Delete operation exists, but delete processing option generation failed with A3211"
+    }
+  ],
+  "drift": [
+    "Edit representation is currently multi-instance (Candidate Tag (REST)); delete processing generation requires exactly one singular representation.",
+    "Runtime CRUD smoke requires invoking registered wrappers from a client surface that is not exposed as an MCP call in this session."
+  ]
+}

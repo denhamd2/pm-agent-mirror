@@ -1,0 +1,39 @@
+run_id: candidate-tags-20260424-161050
+task_wid: a624f92773c2100013ee66cb5e9f0036
+task_name: Maintain Candidate Tags
+api_scope:
+- GET
+- POST
+- PATCH
+- DELETE
+resource_slug: candidate-tags
+phase_status:
+  phase_1_schema_analysis: complete
+  phase_2_schema_implementation: complete
+  phase_3_processing_creation: complete
+  phase_4_post_build: complete
+canonical_wids:
+  backing_class_wid: a624f92773c2100012baf839b1680017
+  service_wid: f25a77d68bd310001cc3c6bdf9f20000
+  scr_wid: 466143eed9e61000279ad2edac150000
+  view_rep_wid: 466143eed9e610002792a15890790000
+  edit_rep_wid: 466143eed9e610002794a9fbdce50000
+  get_operation_wid: 466143eed9e61000279db810b1150000
+  post_operation_wid: 466143eed9e6100027a5eefdb90e0000
+  patch_operation_wid: 466143eed9e6100027a5dffd8a200000
+  delete_operation_wid: 466143eed9e6100027a605d4c1ac0000
+maps_to_class_decision: candidate-tag-class
+created_object_counts:
+  business_objects: 0
+  class_report_fields: 0
+  representations: 2
+  representation_content: 3
+  service_collection_resources: 1
+  service_operations: 4
+  processing_options: 2
+smoke_summary:
+  post: not_run
+  get_after_post: not_run
+  patch: not_run
+  get_after_patch: not_run
+  delete: blocked
