@@ -1,13 +1,13 @@
 ---
-description: Standing permission to auto-commit and push after edits so GHE Pages auto-deploys
+description: Standing permission to auto-commit and push file edits in this workspace
 alwaysApply: true
 ---
 
-# Auto-Commit & Auto-Deploy (Standing Permission)
+# Auto-Commit (Standing Permission)
 
 The Product Manager has granted **standing, explicit permission** to auto-commit and push file edits in this workspace without asking each time. This overrides the default "never commit unless explicitly asked" rule **for this repository only** (`/Users/david.denham/product-manager-agent`).
 
-GHE Pages deployment is already wired via `.github/workflows/deploy-dashboard.yml` and `.github/workflows/deploy-design-preview.yml` (both trigger on `push: branches: [main]`). So **push to main = Pages auto-deploys**. You do not need to run any separate deploy step.
+**Dashboard and prototype hosting is localhost-only.** GHE Pages deployment was disabled on 28 April 2026; the previous `deploy-dashboard.yml` and `deploy-design-preview.yml` workflows have been removed. The dashboard and design prototypes are now run locally with `cd design && npm run dev` (Vite on `http://localhost:5199/`). **Push to main no longer triggers any public deploy.** Treat anything committed to this repo as internal-GHE-source-only, not as a published artefact.
 
 ## When to auto-commit
 
@@ -30,7 +30,7 @@ After you complete a logical unit of work that touches files on disk, commit and
 3. **Stage explicitly**: `git add <specific files>` - never `git add -A` or `git add .` blindly, because that picks up `.env`, temp files, and anything you weren't intentionally editing.
 4. **Commit message**: follow the existing repo style (see `git log --oneline -10`). Imperative mood, one-line summary ~60-72 chars, optional body explaining the "why" in 2-5 bullet lines. Always use a HEREDOC (see example below) so markdown survives.
 5. **Push to main**: `git push origin main`. Never `--force` against main.
-6. **Report back**: tell the PM in one line what was committed (short SHA + summary) and remind them Pages is rebuilding from the workflow.
+6. **Report back**: tell the PM in one line what was committed (short SHA + summary). No deploy step to mention; hosting is localhost-only.
 
 ## Guardrails (hard rules)
 
@@ -47,7 +47,7 @@ After you complete a logical unit of work that touches files on disk, commit and
 
 Ask the PM before committing if any of these apply:
 - The change deletes more than ~20 tracked files.
-- The change modifies a file under `.github/workflows/` (deploy behaviour change - deserves conscious approval).
+- The change modifies a file under `.github/workflows/` (CI/CD behaviour change - deserves conscious approval; especially anything that would re-enable Pages publishing).
 - The change touches `MISSION_LOG.md` in ways that would erase active mission state.
 - The diff includes a file the PM didn't ask you to touch (you wandered).
 - You're about to commit generated artefacts (`.pptx`, `dashboard-dist/`, `design/dist/`) that aren't typically committed - check `.gitignore` first.
@@ -72,19 +72,16 @@ Example recent commits from this repo (mirror this style):
 - `Add customer-issue-triage skill with Salomon, Deployment Agent, and XO analysis`
 - `Streamline Salomon analysis output in customer issue triage`
 
-## What auto-deploy looks like
+## What happens after push
 
 After `git push origin main`:
 
-1. GHE Actions picks up the push (~5-30s delay).
-2. `deploy-dashboard.yml` builds `design/` with Vite and publishes to `gh-pages` root.
-3. `deploy-design-preview.yml` also builds `design/` and publishes a timestamped preview under `gh-pages/preview/<slug>/`, plus updates `gh-pages/preview/latest/` redirect.
-4. GHE Pages serves the `gh-pages` branch at whatever origin is configured in repo Settings -> Pages.
+1. GHE stores the commit. That's it. There is no Actions workflow watching `main` to publish a site.
+2. The dashboard and design prototypes are served locally only. Run `cd design && npm run dev` and open `http://localhost:5199/`.
+3. The `gh-pages` branch was wiped on 28 April 2026 and Pages was disabled in repo Settings. Do not re-enable Pages or recreate the deploy workflows without an explicit data-governance sign-off, because the dashboard data files (`design/data-*.ts`) contain tenant-attributable Pharos derivatives.
 
-You do not orchestrate any of this. Pushing is enough.
-
-If the PM asks "did it deploy?", you can check workflow status with `gh run list --repo david-denham/pm-agent --limit 5` (requires `gh` CLI authenticated against GHE; if `gh` isn't available, tell them to check the Actions tab in GHE directly).
+If you need a shareable artefact from this repo, hand the PM a path / file / screenshot. Do **not** suggest "I'll put it on Pages" as a delivery mechanism.
 
 ## One-line summary
 
-**Complete the work -> secret-scan -> stage explicitly -> commit with a meaningful message -> push to main -> Pages auto-deploys. No approval needed per commit; escalate on the guardrail triggers above.**
+**Complete the work -> secret-scan -> stage explicitly -> commit with a meaningful message -> push to main. No deploy. No Pages. Localhost only.**

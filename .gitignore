@@ -44,6 +44,10 @@ Thumbs.db
 # Local development
 design/dist/
 
+# Dashboard build outputs (no longer published to GHE Pages; localhost-only via `cd design && npm run dev`)
+dashboard-dist/
+assets/
+
 # Large data files (exceed GitHub 100 MB limit; keep local only)
 design/data-bp-durations.ts
 
