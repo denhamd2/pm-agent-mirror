@@ -4,7 +4,7 @@ import { Heading, BodyText } from '@workday/canvas-kit-react/text';
 import { Card } from '@workday/canvas-kit-react/card';
 import { PrimaryButton, SecondaryButton } from '@workday/canvas-kit-react/button';
 import { colors } from '@workday/canvas-kit-react/tokens';
-import { SANA_CARD_RADIUS_LG, SANA_CARD_SHADOW } from './sanaShellTheme';
+import { SANA_CARD_RADIUS_LG, SANA_CARD_SHADOW } from './index';
 
 export interface CandidateActionCardProps {
   name: string;

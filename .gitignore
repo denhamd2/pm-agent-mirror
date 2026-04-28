@@ -44,15 +44,9 @@ Thumbs.db
 # Local development
 design/dist/
 
-# Dashboard build outputs.
-# - design/dist/ and dashboard-dist/: localhost full dashboard (built only for local preview, not published).
-# - design/dashboard-public-dist/: public GHE Pages bundle (Design System + Agent Flow only).
-#   Built and published by .github/workflows/deploy-dashboard-public.yml; the forbidden-imports
-#   Vite plugin (design/vite-plugin-forbidden-imports.ts) prevents Pharos / customer data from
-#   ever reaching this build.
+# Dashboard build outputs (no longer published to GHE Pages; localhost-only via `cd design && npm run dev`)
 dashboard-dist/
 assets/
-design/dashboard-public-dist/
 
 # Large data files (exceed GitHub 100 MB limit; keep local only)
 design/data-bp-durations.ts
