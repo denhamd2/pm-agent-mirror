@@ -9,8 +9,11 @@
     "test:offer-events-contract": "node scripts/offer-events-contract-smoke.mjs",
     "open:browsers": "bash ../scripts/open-url-chrome-and-cursor-browser.sh 'http://localhost:5199/'",
     "typecheck": "NODE_OPTIONS='--max-old-space-size=8192' tsc --noEmit",
+    "typecheck:public": "NODE_OPTIONS='--max-old-space-size=8192' tsc -p tsconfig.public.json --noEmit",
     "build": "NODE_OPTIONS='--max-old-space-size=8192' tsc && NODE_OPTIONS='--max-old-space-size=16384' vite build",
-    "preview": "vite preview"
+    "build:public": "NODE_OPTIONS='--max-old-space-size=8192' tsc -p tsconfig.public.json && NODE_OPTIONS='--max-old-space-size=16384' vite build --config vite.config.public.ts",
+    "preview": "vite preview",
+    "preview:public": "vite preview --config vite.config.public.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
