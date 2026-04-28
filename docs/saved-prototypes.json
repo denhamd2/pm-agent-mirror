@@ -47,12 +47,6 @@
       ]
     },
     {
-      "slug": "avg-time-to-fill",
-      "files": [
-        "design/avg-time-to-fill-dashboard.tsx"
-      ]
-    },
-    {
       "slug": "avg-time-to-hire",
       "files": [
         "design/avg-time-to-hire-dashboard.tsx"
@@ -74,25 +68,9 @@
       ]
     },
     {
-      "slug": "offer-dashboard",
-      "files": [
-        "design/bp-duration-dashboard.tsx",
-        "design/data-bp-durations.ts",
-        "design/data-add-documents.ts",
-        "docs/offer-step-metrics-plan.md"
-      ]
-    },
-    {
       "slug": "positions-open-vs-filled",
       "files": [
         "design/positions-open-vs-filled-dashboard.tsx"
-      ]
-    },
-    {
-      "slug": "recruiting-adoption",
-      "files": [
-        "design/recruiting-adoption-dashboard.tsx",
-        "design/data-recruiting-adoption.ts"
       ]
     },
     {
