@@ -183,9 +183,9 @@ export {
   type PageHeaderProps,
 } from './PageHeader';
 export { DashboardGlobalNav, type DashboardGlobalNavProps, type MetricsSlug } from './DashboardGlobalNav';
-export {
-  BottleneckFlowStrip,
-  stagesFromSubBpsLatestMonth,
-  type BottleneckFlowStripProps,
-  type BottleneckStage,
-} from './BottleneckFlowStrip';
+
+// BottleneckFlowStrip is intentionally NOT re-exported from this barrel because
+// it transitively imports `../data-bp-durations` (Pharos-derived tenant data).
+// Localhost consumers must import it directly from './components/BottleneckFlowStrip'
+// so the public GHE Pages bundle (which uses this barrel) cannot pull it in.
+// See design/vite-plugin-forbidden-imports.ts for the build-time guardrail.

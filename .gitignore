@@ -48,6 +48,12 @@ design/dist/
 dashboard-dist/
 assets/
 
+# Public dashboard build output (catalogue + 13 prototypes published to GHE Pages
+# by .github/workflows/deploy-dashboard-public.yml; built into gh-pages branch
+# at deploy time, never tracked on main). Build is gated by
+# design/vite-plugin-forbidden-imports.ts which blocks Pharos-derived data.
+design/dashboard-public-dist/
+
 # Large data files (exceed GitHub 100 MB limit; keep local only)
 design/data-bp-durations.ts
 

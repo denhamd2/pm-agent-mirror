@@ -7,7 +7,9 @@ alwaysApply: true
 
 The Product Manager has granted **standing, explicit permission** to auto-commit and push file edits in this workspace without asking each time. This overrides the default "never commit unless explicitly asked" rule **for this repository only** (`/Users/david.denham/product-manager-agent`).
 
-**Dashboard and prototype hosting is localhost-only.** GHE Pages deployment was disabled on 28 April 2026; the previous `deploy-dashboard.yml` and `deploy-design-preview.yml` workflows have been removed. The dashboard and design prototypes are now run locally with `cd design && npm run dev` (Vite on `http://localhost:5199/`). **Push to main no longer triggers any public deploy.** Treat anything committed to this repo as internal-GHE-source-only, not as a published artefact.
+**Localhost is the canonical full dashboard.** Run `cd design && npm run dev` (Vite on `http://localhost:5199/`) for the complete experience: data-backed dashboards (IUM metrics, customer scorecards, business-process durations, value realisation), all 27 prototypes, the morning roundup, and the saved-prototypes / agent-flow / design-system tabs. Treat anything inside the localhost dashboard as internal-only.
+
+**Public scope on GHE Pages: catalogue + 13 UI-exploration prototypes only.** A separate workflow (`.github/workflows/deploy-dashboard-public.yml`) builds a scoped bundle from `design/main-public.tsx` and publishes the prototype catalogue plus the 13 safe UI-exploration prototypes listed in `design/public-catalogue.ts`. The build is gated by `design/vite-plugin-forbidden-imports.ts`, a hardcoded substring guardrail that fails the build if any module reaches a forbidden file (`data-*.ts`, `*-dashboard.tsx`, `pm-agent-dashboard`, `value-realization-metrics`, `recruiting-metric-tree`, the offers playgrounds, `BottleneckFlowStrip`, or sensitive JSON files). **No data-backed surface ships to Pages.**
 
 ## When to auto-commit
 
@@ -30,7 +32,7 @@ After you complete a logical unit of work that touches files on disk, commit and
 3. **Stage explicitly**: `git add <specific files>` - never `git add -A` or `git add .` blindly, because that picks up `.env`, temp files, and anything you weren't intentionally editing.
 4. **Commit message**: follow the existing repo style (see `git log --oneline -10`). Imperative mood, one-line summary ~60-72 chars, optional body explaining the "why" in 2-5 bullet lines. Always use a HEREDOC (see example below) so markdown survives.
 5. **Push to main**: `git push origin main`. Never `--force` against main.
-6. **Report back**: tell the PM in one line what was committed (short SHA + summary). No deploy step to mention; hosting is localhost-only.
+6. **Report back**: tell the PM in one line what was committed (short SHA + summary). If the diff touches anything in the public-build chain (`design/main-public.tsx`, `design/public-catalogue.ts`, `design/public-prototypes-catalogue.tsx`, `design/public.html`, `design/vite.config.public.ts`, `design/tsconfig.public.json`, `design/vite-plugin-forbidden-imports.ts`, the 13 allowlisted prototype `.tsx` files, or `.github/workflows/deploy-dashboard-public.yml`), mention that the public Pages workflow will rebuild from the change. Otherwise, no deploy step to mention.
 
 ## Guardrails (hard rules)
 
@@ -47,10 +49,12 @@ After you complete a logical unit of work that touches files on disk, commit and
 
 Ask the PM before committing if any of these apply:
 - The change deletes more than ~20 tracked files.
-- The change modifies a file under `.github/workflows/` (CI/CD behaviour change - deserves conscious approval; especially anything that would re-enable Pages publishing).
+- The change modifies a file under `.github/workflows/` (CI/CD behaviour change - deserves conscious approval).
+- The change weakens or removes entries from `design/vite-plugin-forbidden-imports.ts` (data-governance gate - any loosening of the guardrail must be PM-approved).
+- The change adds a new prototype to `design/public-catalogue.ts` (new public surface - even if the build passes, the PM should consciously decide what ships to Pages).
 - The change touches `MISSION_LOG.md` in ways that would erase active mission state.
 - The diff includes a file the PM didn't ask you to touch (you wandered).
-- You're about to commit generated artefacts (`.pptx`, `dashboard-dist/`, `design/dist/`) that aren't typically committed - check `.gitignore` first.
+- You're about to commit generated artefacts (`.pptx`, `dashboard-dist/`, `design/dist/`, `design/dashboard-public-dist/`) that aren't typically committed - check `.gitignore` first.
 
 ## Standard commit message format
 
@@ -76,12 +80,13 @@ Example recent commits from this repo (mirror this style):
 
 After `git push origin main`:
 
-1. GHE stores the commit. That's it. There is no Actions workflow watching `main` to publish a site.
-2. The dashboard and design prototypes are served locally only. Run `cd design && npm run dev` and open `http://localhost:5199/`.
-3. The `gh-pages` branch was wiped on 28 April 2026 and Pages was disabled in repo Settings. Do not re-enable Pages or recreate the deploy workflows without an explicit data-governance sign-off, because the dashboard data files (`design/data-*.ts`) contain tenant-attributable Pharos derivatives.
+1. GHE stores the commit.
+2. If the diff touches any file in the public-build chain (the path filter in `.github/workflows/deploy-dashboard-public.yml`), Actions builds the catalogue + 13 prototypes, runs the forbidden-imports plugin and the Python belt-and-braces grep, then publishes the bundle to the `gh-pages` branch root via `peaceiris/actions-gh-pages@v3`. Anything else (data-`*.ts` files, full dashboard, internal docs) does **not** trigger the workflow because it isn't in the path filter.
+3. The dashboard's full canonical experience is served locally only. Run `cd design && npm run dev` and open `http://localhost:5199/`.
+4. Pages must be re-enabled in repo Settings -> Pages (source = `gh-pages` branch / root) for the workflow output to actually serve. The PM is responsible for that one-time manual step.
 
-If you need a shareable artefact from this repo, hand the PM a path / file / screenshot. Do **not** suggest "I'll put it on Pages" as a delivery mechanism.
+If you need to share a data-backed dashboard (anything beyond the 13 catalogue prototypes), hand the PM a path / file / screenshot. The forbidden-imports plugin will block any attempt to ship data-backed surfaces via the public bundle.
 
 ## One-line summary
 
-**Complete the work -> secret-scan -> stage explicitly -> commit with a meaningful message -> push to main. No deploy. No Pages. Localhost only.**
+**Complete the work -> secret-scan -> stage explicitly -> commit with a meaningful message -> push to main. Localhost is canonical; Pages serves catalogue + 13 prototypes only via `deploy-dashboard-public.yml` and the forbidden-imports guardrail.**

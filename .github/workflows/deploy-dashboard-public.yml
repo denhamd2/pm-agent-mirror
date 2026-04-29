@@ -1,0 +1,142 @@
+name: Deploy public prototypes catalogue
+
+# Public scope: catalogue at GHE Pages root + 13 UI-exploration prototypes.
+# The full localhost dashboard (data-backed surfaces, IUM metrics, customer
+# scorecards, BP durations, value realisation, morning roundup) is NEVER
+# published. The build is gated by design/vite-plugin-forbidden-imports.ts and
+# a belt-and-braces Python grep below.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'design/main-public.tsx'
+      - 'design/public-catalogue.ts'
+      - 'design/public-prototypes-catalogue.tsx'
+      - 'design/public.html'
+      - 'design/vite.config.public.ts'
+      - 'design/tsconfig.public.json'
+      - 'design/vite-plugin-forbidden-imports.ts'
+      - 'design/components/**'
+      - 'design/aadhaar-adobe-sign-v01.tsx'
+      - 'design/gcc-candidate-grid-search.tsx'
+      - 'design/recruiter-home-v85.tsx'
+      - 'design/candidate-smart-view-v86.tsx'
+      - 'design/india-whatsapp-candidate-messaging-v88.tsx'
+      - 'design/gcc-interview-scheduling-compliance-nudges-v90.tsx'
+      - 'design/india-native-whatsapp-v91.tsx'
+      - 'design/recruiter-hub-genui-v95.tsx'
+      - 'design/interview-intelligence-agent-v96.tsx'
+      - 'design/ai-system-of-record-v97.tsx'
+      - 'design/recruiter-hub-conversational-v98.tsx'
+      - 'design/recruiter-hub-conversational-v99.tsx'
+      - 'design/universal-profile-eudi-wallet-v1.tsx'
+      - 'design/package.json'
+      - 'design/package-lock.json'
+      - '.github/workflows/deploy-dashboard-public.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-dashboard-public
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: design/package-lock.json
+
+      - name: Install dependencies
+        working-directory: design
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install --no-audit --no-fund
+          fi
+
+      - name: Resolve base path
+        id: base
+        run: |
+          REPO_NAME="${GITHUB_REPOSITORY##*/}"
+          echo "base=/${REPO_NAME}/" >> "$GITHUB_OUTPUT"
+          echo "Using VITE_BASE_PATH=/${REPO_NAME}/"
+
+      - name: Build public bundle (with forbidden-imports guardrail)
+        working-directory: design
+        env:
+          VITE_BASE_PATH: ${{ steps.base.outputs.base }}
+        run: npm run build:public
+
+      - name: Belt-and-braces forbidden-string scan
+        working-directory: design
+        run: |
+          python3 - <<'PY'
+          import os, sys
+          OUT = 'dashboard-public-dist'
+          FORBIDDEN = [
+              'VALUE_REALIZATION_IUMS',
+              'TENANT_OPTIONS',
+              'internal_usage_metrics_report_kafka',
+              'morning-roundup-data',
+              'data-bp-durations',
+              'data-customer-scorecard',
+              'data-value-realization-iums',
+              'data-recruiting-metric-tree',
+              'data-recruiting-adoption',
+              'data-employment-agreement-durations',
+              'data-interview-metrics',
+              'data-add-documents',
+              'data-positions',
+              'data-avg-time-to-hire',
+              'data-recruiter-capacity',
+              'data-scorecard-recruiter-capacity',
+              'data-recruiting-agency-user-dashboard',
+              'BottleneckFlowStrip',
+              'stagesFromSubBpsLatestMonth',
+              'pm-agent-dashboard',
+              'recruiting-metric-tree',
+              'value-realization-metrics',
+              'customer-scorecard-dashboard',
+              'SCORECARD_RECRUITER_CAPACITY_BY_TENANT',
+          ]
+          hits = []
+          for root, _, files in os.walk(OUT):
+              for f in files:
+                  if not (f.endswith('.js') or f.endswith('.html') or f.endswith('.css')):
+                      continue
+                  p = os.path.join(root, f)
+                  with open(p, 'r', encoding='utf-8', errors='ignore') as fh:
+                      c = fh.read()
+                  for n in FORBIDDEN:
+                      if n in c:
+                          hits.append((p, n))
+          if hits:
+              print('FORBIDDEN STRINGS FOUND IN PUBLIC BUNDLE:')
+              for p, n in hits:
+                  print(f'  {p}: {n}')
+              sys.exit(1)
+          print('OK: no forbidden Pharos-data signatures detected.')
+          PY
+
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: design/dashboard-public-dist
+          publish_branch: gh-pages
+          force_orphan: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Deploy public catalogue + 13 prototypes (${{ github.sha }})'

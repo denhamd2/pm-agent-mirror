@@ -3,7 +3,7 @@ import { Flex, Box } from '@workday/canvas-kit-react/layout';
 import { Heading, BodyText } from '@workday/canvas-kit-react/text';
 import { colors } from '@workday/canvas-kit-react/tokens';
 import { PageHeader, MetricCard, FormSelect, DashboardGlobalNav } from './components';
-import { BottleneckFlowStrip, stagesFromSubBpsLatestMonth } from './components';
+import { BottleneckFlowStrip, stagesFromSubBpsLatestMonth } from './components/BottleneckFlowStrip';
 import { SANA_PAGE_CANVAS, SANA_CARD_RADIUS_LG, SANA_CARD_SHADOW } from './components/sanaShellTheme';
 import { getSliceSubBpsAndHeadline } from './data-bp-durations-by-segment';
 import { LABELS } from './data-bp-shared';
