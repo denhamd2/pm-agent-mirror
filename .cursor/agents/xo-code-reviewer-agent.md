@@ -40,11 +40,14 @@ Your review checks two dimensions:
 3. **Review structural correctness**
    - Check method patterns and XO constraints (SSC, EC, EBE, GRA, IOP, DPU, bindings, IDs).
    - Validate identifier formats and referenced object consistency.
+   - Flag dead code introduced by the change (unused methods, imports, variables, unreachable branches).
+   - Flag existing code rendered unused by the change (now-unreferenced helpers, stale bindings).
    - Prefer high-signal findings over style noise.
 
 4. **Produce concise findings with machine-triageable structure**
    - Order by severity: `ERROR`, `WARNING`, `INFO`.
    - **Every finding MUST carry**: severity tag, one-line description, concrete evidence (object name, method, field, WID / IID), and the specific field that would need to change to fix it (so `@xo-developer` can triage against the originally approved mode's field scope).
+   - If the diff expands authenticated REST surface, introduces new sensitive data handling, or materially changes PII flow, add an `INFO` recommendation to run `/threat_model` (when available). This is advisory, not a merge blocker.
    - Prefer high-signal findings over style noise.
    - End with a clear verdict: `approve`, `approve with comments`, or `request changes`.
 
