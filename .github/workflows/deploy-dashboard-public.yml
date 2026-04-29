@@ -5,6 +5,7 @@ name: Deploy public prototypes catalogue
 # scorecards, BP durations, value realisation, morning roundup) is NEVER
 # published. The build is gated by design/vite-plugin-forbidden-imports.ts and
 # a belt-and-braces Python grep below.
+# Bootstrap run after Actions was enabled on the repo (29 April 2026).
 
 on:
   push:
