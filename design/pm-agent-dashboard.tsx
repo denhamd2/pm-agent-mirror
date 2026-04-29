@@ -235,6 +235,26 @@ const sourceChipStyle: React.CSSProperties = {
   fontWeight: 600,
 };
 
+const pillStyle = (
+  bg: string,
+  color: string,
+  overrides: React.CSSProperties = {},
+): React.CSSProperties => ({
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 4,
+  padding: '3px 10px',
+  borderRadius: 20,
+  fontSize: 11,
+  fontWeight: 700,
+  textTransform: 'uppercase',
+  letterSpacing: '0.05em',
+  whiteSpace: 'nowrap',
+  backgroundColor: bg,
+  color,
+  ...overrides,
+});
+
 export const PMAgentDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<DashboardTab>(getInitialTab);
 
@@ -358,32 +378,74 @@ export const PMAgentDashboard: React.FC = () => {
               <Box style={{ flex: '1 1 100%' }}>
                 <Heading size="medium" marginBottom="m">Jira Action Items</Heading>
                 {actionItems.length === 0 ? (
-                  <BodyText size="small" color={colors.licorice300}>No action items today.</BodyText>
+                  <Card padding="l" style={{ borderRadius: SANA_CARD_RADIUS_LG, textAlign: 'center' }}>
+                    <BodyText size="medium" color={colors.licorice300}>
+                      <span style={{ fontSize: 32, display: 'block', marginBottom: 8, opacity: 0.5 }}>{'\u2705'}</span>
+                      No action items - you are all caught up!
+                    </BodyText>
+                  </Card>
                 ) : (
                   <Flex gap="m" flexDirection="column">
-                    {actionItems.map((item: any, i: number) => (
-                      <Card key={i} padding="m" style={{ borderRadius: SANA_CARD_RADIUS_LG }}>
-                        <Flex justifyContent="space-between" alignItems="flex-start">
-                          <Box>
-                            <BodyText size="medium" fontWeight="bold">
-                              <a href={item.url} target="_blank" rel="noreferrer" style={{ color: colors.blueberry400, textDecoration: 'none' }}>
-                                {item.key}: {item.summary}
-                              </a>
-                            </BodyText>
-                            <BodyText size="small" color={colors.licorice400} marginTop="xxs">
-                              {item.tldrSummary}
-                            </BodyText>
-                          </Box>
-                          <Box style={{ backgroundColor: colors.soap200, padding: '4px 8px', borderRadius: '4px' }}>
-                            <BodyText size="small" fontWeight="bold">{item.priority}</BodyText>
-                          </Box>
-                        </Flex>
-                        <Box marginTop="m" padding="s" style={{ backgroundColor: colors.frenchVanilla100, borderLeft: `4px solid ${colors.blueberry400}` }}>
-                          <BodyText size="small" fontWeight="bold">{item.latestComment?.author} on {item.latestComment?.date}</BodyText>
-                          <BodyText size="small" marginTop="xxs">{item.latestComment?.tldr}</BodyText>
-                        </Box>
-                      </Card>
-                    ))}
+                    {actionItems.map((item: any, i: number) => {
+                      const p = (item.priority || 'Major').toLowerCase();
+                      const pStyle =
+                        p === 'blocker' || p === 'critical'
+                          ? { bg: '#fee2e2', color: '#b91c1c' }
+                          : p === 'major'
+                            ? { bg: '#fef3c7', color: '#92400e' }
+                            : { bg: colors.soap300, color: colors.licorice400 };
+                      return (
+                        <Card key={i} padding="m" style={{ borderRadius: SANA_CARD_RADIUS_LG }}>
+                          <Flex alignItems="center" gap="xs" flexWrap="wrap">
+                            <span style={pillStyle(pStyle.bg, pStyle.color)}>{item.priority || 'Major'}</span>
+                            <a
+                              href={item.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{ color: colors.blueberry400, fontWeight: 700, fontSize: 13, textDecoration: 'none' }}
+                            >
+                              {item.key}
+                            </a>
+                          </Flex>
+                          <BodyText size="medium" fontWeight="bold" marginTop="xs">{item.summary}</BodyText>
+                          <BodyText size="small" color={colors.licorice400} marginTop="xxs">{item.tldrSummary}</BodyText>
+                          {item.latestComment && (
+                            <Box marginTop="s" padding="s" style={{ backgroundColor: colors.frenchVanilla100, borderLeft: `4px solid ${colors.blueberry400}`, borderRadius: 4 }}>
+                              <BodyText size="small" fontWeight="bold">
+                                {'\u{1F4AC}'} {item.latestComment.author} ({item.latestComment.date})
+                              </BodyText>
+                              <BodyText size="small" marginTop="xxs">{item.latestComment.tldr}</BodyText>
+                            </Box>
+                          )}
+                          <Flex
+                            justifyContent="flex-end"
+                            alignItems="center"
+                            marginTop="s"
+                            paddingTop="s"
+                            style={{ borderTop: `1px dashed ${colors.soap400}` }}
+                          >
+                            <a
+                              href={item.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{
+                                display: 'inline-block',
+                                padding: '4px 12px',
+                                background: '#ffffff',
+                                border: `1px solid ${colors.soap400}`,
+                                borderRadius: 16,
+                                fontSize: 11,
+                                fontWeight: 600,
+                                color: colors.blackPepper500,
+                                textDecoration: 'none',
+                              }}
+                            >
+                              View in Jira
+                            </a>
+                          </Flex>
+                        </Card>
+                      );
+                    })}
                   </Flex>
                 )}
               </Box>
@@ -394,30 +456,121 @@ export const PMAgentDashboard: React.FC = () => {
                   <BodyText size="small" color={colors.licorice300}>No customer issues today.</BodyText>
                 ) : (
                   <Flex gap="m" flexDirection="column">
-                    {customerIssues.map((issue: any, i: number) => (
-                      <Card key={i} padding="m" style={{ borderRadius: SANA_CARD_RADIUS_LG, borderLeft: `4px solid ${colors.cinnamon500}` }}>
-                        <Flex justifyContent="space-between" alignItems="flex-start">
-                          <Box>
-                            <BodyText size="medium" fontWeight="bold">
-                              <a href={issue.url} target="_blank" rel="noreferrer" style={{ color: colors.blueberry400, textDecoration: 'none' }}>
-                                {issue.key}: {issue.summary}
-                              </a>
-                            </BodyText>
-                            <BodyText size="small" color={colors.licorice400} marginTop="xxs">
-                              Customer: {issue.customer} | Status: {issue.status} | Created: {issue.created}
-                            </BodyText>
-                            <BodyText size="small" marginTop="s">{issue.tldrSummary}</BodyText>
-                          </Box>
-                        </Flex>
-                        {issue.diagnosis && (
-                          <Box marginTop="m" padding="s" style={{ backgroundColor: colors.soap100, borderRadius: '4px' }}>
-                            <BodyText size="small" fontWeight="bold">Deployment Agent Diagnosis ({issue.diagnosis.confidence} Confidence)</BodyText>
-                            <BodyText size="small" marginTop="xxs">Classification: {issue.diagnosis.classification}</BodyText>
-                            <BodyText size="small" marginTop="xxs">{issue.diagnosis.reasoning}</BodyText>
-                          </Box>
-                        )}
-                      </Card>
-                    ))}
+                    {customerIssues.map((issue: any, i: number) => {
+                      const createdDate = new Date(issue.created);
+                      const daysOld = Math.floor((Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24));
+                      const agePriority =
+                        daysOld > 90
+                          ? { label: '\u{1F525} Urgent', bg: '#fee2e2', color: '#b91c1c' }
+                          : daysOld > 30
+                            ? { label: '\u{26A0}\u{FE0F} High', bg: '#fef3c7', color: '#92400e' }
+                            : { label: '\u{2022} Normal', bg: colors.soap300, color: colors.licorice400 };
+
+                      const statusKey = (issue.status || '').toLowerCase();
+                      const statusStyle =
+                        statusKey === 'reopened'
+                          ? { bg: '#fee2e2', color: '#b91c1c' }
+                          : statusKey === 'triage'
+                            ? { bg: '#fef3c7', color: '#92400e' }
+                            : { bg: '#dbeafe', color: '#1e40af' };
+
+                      const dx = issue.diagnosis;
+                      const dxKey = (dx?.classification || '').toLowerCase();
+                      const dxStyle =
+                        dxKey === 'bug'
+                          ? { bg: '#fee2e2', color: '#b91c1c', icon: '\u{1F41B}' }
+                          : dxKey === 'config'
+                            ? { bg: '#fef3c7', color: '#92400e', icon: '\u{2699}\u{FE0F}' }
+                            : { bg: '#e0e7ff', color: '#3730a3', icon: '\u{2713}' };
+
+                      return (
+                        <Card key={i} padding="m" style={{ borderRadius: SANA_CARD_RADIUS_LG, borderLeft: `4px solid ${colors.cinnamon500}` }}>
+                          <Flex alignItems="center" gap="xs" flexWrap="wrap">
+                            <span style={pillStyle(agePriority.bg, agePriority.color)}>{agePriority.label}</span>
+                            <a
+                              href={issue.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{ color: colors.blueberry400, fontWeight: 700, fontSize: 13, textDecoration: 'none' }}
+                            >
+                              {issue.key}
+                            </a>
+                            {issue.customer && (
+                              <span
+                                style={{
+                                  display: 'inline-block',
+                                  padding: '2px 8px',
+                                  background: colors.cantaloupe400,
+                                  color: '#ffffff',
+                                  borderRadius: 10,
+                                  fontSize: 10,
+                                  fontWeight: 600,
+                                }}
+                              >
+                                {issue.customer}
+                              </span>
+                            )}
+                            <span style={pillStyle(statusStyle.bg, statusStyle.color, { padding: '2px 8px', borderRadius: 10, textTransform: 'none' })}>
+                              {issue.status}
+                            </span>
+                            <span style={{ marginLeft: 'auto', fontSize: 13, color: colors.licorice300 }}>
+                              {daysOld} days old
+                            </span>
+                          </Flex>
+                          <BodyText size="medium" fontWeight="bold" marginTop="xs">{issue.summary}</BodyText>
+                          <BodyText size="small" color={colors.licorice400} marginTop="xxs">{issue.tldrSummary}</BodyText>
+                          {dx && (
+                            <Box marginTop="xs">
+                              <span
+                                title={dx.reasoning || ''}
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: 4,
+                                  padding: '2px 8px',
+                                  borderRadius: 12,
+                                  fontSize: 10,
+                                  fontWeight: 700,
+                                  backgroundColor: dxStyle.bg,
+                                  color: dxStyle.color,
+                                  cursor: 'help',
+                                }}
+                              >
+                                {dxStyle.icon} {dx.classification} ({dx.confidence})
+                              </span>
+                            </Box>
+                          )}
+                          <Flex
+                            justifyContent="space-between"
+                            alignItems="center"
+                            marginTop="s"
+                            paddingTop="s"
+                            style={{ borderTop: `1px dashed ${colors.soap400}` }}
+                          >
+                            <span style={{ fontSize: 12, fontWeight: 600, color: '#ef4444' }}>Awaiting triage</span>
+                            <span style={{ fontSize: 13, color: colors.licorice300 }}>Created: {issue.created}</span>
+                            <a
+                              href={issue.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{
+                                display: 'inline-block',
+                                padding: '4px 12px',
+                                background: '#ffffff',
+                                border: `1px solid ${colors.soap400}`,
+                                borderRadius: 16,
+                                fontSize: 11,
+                                fontWeight: 600,
+                                color: colors.blackPepper500,
+                                textDecoration: 'none',
+                              }}
+                            >
+                              View in Jira
+                            </a>
+                          </Flex>
+                        </Card>
+                      );
+                    })}
                   </Flex>
                 )}
               </Box>
