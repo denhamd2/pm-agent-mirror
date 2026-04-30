@@ -45,8 +45,8 @@ If this is your first time using `@xo-developer` or the xo-builder skill, try th
 3. **Rename a method** (small guarded write, single field):
    `@xo-developer rename the BA method Candidate@getActiveJobApplications to getActiveApplications`
    - Uses: [method-edit](modes/method-edit.md) mode.
-   - What you get: a diff showing the current and proposed display name, a `HITL approve` gate, the XO MCP patch, then the `@xo-code-reviewer` pass, then a plain-English recap of what changed.
-   - Why end here: teaches you the full three-stage loop (implement -> review -> triage-and-apply) on the smallest safe write. If anything goes wrong, it's a name change on a dev method - trivial to revert.
+   - What you get: a diff showing the current and proposed display name, a `HITL approve` gate, the XO MCP patch, then `@xo-code-reviewer` and `@qa-engineer` running **in parallel** (artefact review + UI smoke), then a plain-English combined recap of what changed.
+   - Why end here: teaches you the full four-stage loop (implement -> reviewer + QA in parallel -> triage-and-apply -> PM recap) on the smallest safe write. If anything goes wrong, it's a name change on a dev method - trivial to revert.
 
 After these three, you'll have a working feel for read-only vs write modes, the HITL gate pattern, and the reviewer loop. From there, more ambitious prompts (REST scaffolding, ModulR layouts, validation creation) are safe to try.
 

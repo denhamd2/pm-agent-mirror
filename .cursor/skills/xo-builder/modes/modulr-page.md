@@ -107,6 +107,8 @@ When Maestro finishes (or the user aborts), switch the agent root back:
 
 Call `cursor-app-control.move_agent_to_root` with this argument. Confirm to the user: *"Back in product-manager-agent workspace. ModulR run tracked in `~/contexto/wip/<slug>/events.jsonl` - nothing written to MISSION_LOG."*
 
+**Post-write handoff (UI-observable Tier 2)**: per the orchestrator routing in [000-master-orchestrator.mdc](../../../rules/000-master-orchestrator.mdc), `@xo-code-reviewer` (artefact review on the persisted layout JSON) and `@qa-engineer` (UI smoke via [`suv-smoke-test`](../../suv-smoke-test/SKILL.md), typically `page-smoke` against the post-Persist URL `https://<SUV_HOST>/d/xoUi/<WID>`) are auto-invoked **in parallel** after this mode completes (standalone, out-of-E2E). Both streams feed back to `@xo-developer` for combined triage per [Advisory Behaviour #17](../../../agents/xo-developer-refs/advisory-playbook.md). Iteration cap: 2 cycles. PM never sees raw findings - `@xo-developer` produces one combined plain-English recap that includes the post-Persist URL ([Advisory #8](../../../agents/xo-developer-refs/advisory-playbook.md)).
+
 ## Public Workday APIs as layout-shape references
 
 Three pinned OAS2 specs live in [`research/workday-public-apis/`](../../../../research/workday-public-apis/). Any of them can seed a Sub-mode B run.

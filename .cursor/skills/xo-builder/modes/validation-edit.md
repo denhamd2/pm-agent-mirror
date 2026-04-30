@@ -144,3 +144,4 @@ Mode:
 - Do not switch workspace (none was used).
 - Do not write to `MISSION_LOG.md`.
 - Ask the user if they want to run another mode. Do not assume.
+- **Post-write handoff (UI-observable Tier 2)**: per the orchestrator routing in [000-master-orchestrator.mdc](../../../rules/000-master-orchestrator.mdc), `@xo-code-reviewer` (artefact review) and `@qa-engineer` (UI smoke via [`suv-smoke-test`](../../suv-smoke-test/SKILL.md), typically `validation-fire` mode) are auto-invoked **in parallel** after this mode completes (standalone, out-of-E2E). Both streams feed back to `@xo-developer` for combined triage per [Advisory Behaviour #17](../../../agents/xo-developer-refs/advisory-playbook.md). Iteration cap: 2 cycles. PM never sees raw findings - `@xo-developer` produces one combined plain-English recap.

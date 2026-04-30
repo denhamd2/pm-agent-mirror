@@ -113,3 +113,4 @@ Both sub-modes switch workspace to `~/contexto` and hand off to the relevant Con
 - Workspace must be switched **back** to `product-manager-agent`. Confirm with the user.
 - Do not write to `MISSION_LOG.md`.
 - Ask the user if they want to run another mode. Do not assume.
+- **Post-write handoff (artefact-generation, NOT UI-observable)**: per the orchestrator routing in [000-master-orchestrator.mdc](../../../rules/000-master-orchestrator.mdc), `@xo-code-reviewer` is auto-invoked on any WATS test artefacts created (test sub-mode) after this mode completes. `@qa-engineer` does **NOT** run in parallel - this mode is OpenAPI document generation or WATS test scaffolding, not a UI-observable change. Reviewer findings feed back to `@xo-developer` for triage per [Advisory Behaviour #17](../../../agents/xo-developer-refs/advisory-playbook.md). Iteration cap: 2 cycles.

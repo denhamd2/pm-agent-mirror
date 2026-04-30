@@ -156,3 +156,4 @@
 - Workspace must be switched **back** to `product-manager-agent`. Confirm with the user.
 - Do not write to `MISSION_LOG.md`.
 - Ask the user if they want to run another mode. Do not assume.
+- **Post-write handoff (artefact-generation, NOT UI-observable)**: per the orchestrator routing in [000-master-orchestrator.mdc](../../../rules/000-master-orchestrator.mdc), `@xo-code-reviewer` is auto-invoked on the WATS scenario / suite / system test artefacts created after this mode completes. `@qa-engineer` does **NOT** run in parallel - this mode creates **persistent** test scenarios; it is the WATS lane, not the smoke lane. (If the PM wants quick UI verification of the underlying SUV change, route to a separate `suv-smoke-test` invocation.) Reviewer findings feed back to `@xo-developer` for triage per [Advisory Behaviour #17](../../../agents/xo-developer-refs/advisory-playbook.md). Iteration cap: 2 cycles.

@@ -41,6 +41,30 @@ This skill activates ONLY when the user says one of the triggers below, **or** w
 
 If the user asks about a capability without a trigger, answer the question but do **not** invoke the skill. Browser modes have side effects (they drive a real browser session) and must never run unannounced.
 
+## First 5 Minutes (onboarding walkthrough)
+
+If this is your first time running `@qa-engineer` or the `suv-smoke-test` skill, work through these three prompts in order. Each builds your mental model before any verification flow that needs to be trustworthy. If any response is too technical, type `/teachable-moment` to get a plain-English version with a diagram.
+
+1. **Bootstrap auth, once** (one-time setup, no SUV writes):
+   `/suv-smoke-test auth-handshake`
+   - Uses: [auth-handshake](modes/auth-handshake.md) mode.
+   - What you get: a Playwright browser opens, you SSO into your dev SUV via Workday's normal login flow, the mode captures the session into `.playwright/storageState.json`, and you're done. Lasts 8-12 hours.
+   - Why start here: every subsequent smoke mode assumes an authenticated session. Skip this and the next two prompts will both fail at the session-presence probe.
+
+2. **Smoke a page that already works** (read-only sanity, no SUV writes):
+   `@qa-engineer page-smoke <SUV_URL>` (paste any task URL from your dev SUV)
+   - Uses: [page-smoke](modes/page-smoke.md) mode.
+   - What you get: the mode navigates to the URL, captures an accessibility-tree snapshot, tails the console and network calls, and returns a `pass` / `pass with warnings` / `fail` verdict in 30-60 seconds.
+   - Why next: cheapest way to confirm Playwright + auth + your dev SUV all talk to each other before you trust the verdicts on a real change. If `page-smoke` returns clean, the rest of the smoke modes will work.
+
+3. **Verify a known recent edit** (tied to a Tier 2 write, no SUV writes):
+   `@qa-engineer label-check on <SUV_URL>, expect "Required By"` (use a label you already changed via `copy-edit` or `method-edit`)
+   - Uses: [label-check](modes/label-check.md) mode.
+   - What you get: the mode confirms the new label is rendering as expected, runs the noise allowlist over the console / network tail, and returns a verdict with one sentence on what the test did NOT prove (the honest-about-proof rule).
+   - Why end here: teaches you the post-write parallel-review loop on the smallest safe verification. From here, `validation-fire` and `method-regression` are natural next steps when you have rules or methods to verify.
+
+After these three, you have working auth, a known-good baseline, and one real verification under your belt. From there, more ambitious flows (validation triggers, multi-step method regressions, ModulR layout smokes) are safe to try.
+
 ## Isolation Contract
 
 This skill is deliberately isolated from the PM agent workflow. Invariants across every mode:

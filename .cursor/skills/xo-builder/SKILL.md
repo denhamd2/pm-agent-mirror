@@ -79,6 +79,19 @@ Any mode in this skill can be invoked via the `@xo-developer` subagent (`.cursor
 
 The skill is authoritative for **workflow** (mode selection, pre-flight, HITL gates, SUV writes, workspace switches, isolation contract). The subagent is authoritative for **advisory framing** only. If the two conflict, the skill wins. The subagent MUST NOT skip HITL gates, reinterpret mode mechanics, invent new modes, or pre-empt the mode's pre-flight.
 
+## Post-write four-stage parallel-review loop (Tier 2 modes)
+
+When a Tier 2 write or build mode completes (any of `copy-edit`, `validation-edit`, `prompt-edit`, `method-edit`, `modulr-page`, `rest-from-task`, `rest-scaffold`, `wats-scenario`), the orchestrator (`000-master-orchestrator.mdc`) runs a four-stage parallel-review loop. This is part of the skill's documented behaviour, not an external add-on:
+
+1. **Stage 1**: `@xo-developer` (or the direct skill trigger) implements the mode with HITL gates as specified in the mode file.
+2. **Stage 2 (parallel)**: `@xo-code-reviewer` reviews the artefact diff AND `@qa-engineer` runs the matching `suv-smoke-test` mode against the rendered UI. Both legs produce severity-tagged findings against the shared output contract.
+   - **UI-observable Tier 2 modes** (reviewer + QA in parallel): `copy-edit`, `validation-edit`, `prompt-edit`, `method-edit`, `modulr-page`.
+   - **Artefact-generation Tier 2 modes** (reviewer only; QA leg is skipped): `rest-from-task`, `rest-scaffold`, `wats-scenario`. The REST equivalent of QA is the round-trip smoke + drift table from [Advisory #21](../../agents/xo-developer-refs/advisory-playbook.md#21-rest-from-task-post-build-reality-check).
+3. **Stage 3**: `@xo-developer` triages the combined findings per [Advisory #17](../../agents/xo-developer-refs/advisory-playbook.md), auto-applying safe patches and escalating risky ones.
+4. **Stage 4**: `@xo-developer` produces ONE plain-English combined recap to the PM. Iteration cap: 2 cycles.
+
+The PM never sees raw reviewer or QA output. Direct skill triggers (e.g. `/xo-builder copy-edit`) inherit this loop because the orchestrator wires it up regardless of how the mode was entered. The loop is **out of the E2E PM pipeline** and never writes to `MISSION_LOG.md`.
+
 ## Mode Catalogue
 
 | Tier | Mode | Workspace switch? | Writes to SUV? | Primary tools |

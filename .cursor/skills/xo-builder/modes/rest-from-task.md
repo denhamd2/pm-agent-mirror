@@ -127,3 +127,5 @@ Return:
 - Typed wrapper names.
 - Artifact paths under `docs/xo/rest-apis/<slug>/`.
 - Next-step options (WATS, OpenAPI, stop).
+
+**Post-write handoff (artefact-generation, NOT UI-observable)**: per the orchestrator routing in [000-master-orchestrator.mdc](../../../rules/000-master-orchestrator.mdc), `@xo-code-reviewer` (artefact review on the new Service / Representations / SCR / Operations) is auto-invoked after this mode completes (standalone, out-of-E2E). `@qa-engineer` does **NOT** run in parallel for this mode - the equivalent verification is **Phase 4's round-trip smoke** plus the drift table surfaced via [Advisory Behaviour #21 (REST-from-task post-build reality check)](../../../agents/xo-developer-refs/advisory-playbook.md#21-rest-from-task-post-build-reality-check). The reviewer's findings feed back to `@xo-developer` for triage per [Advisory Behaviour #17](../../../agents/xo-developer-refs/advisory-playbook.md). Iteration cap: 2 cycles. PM sees one combined plain-English recap that merges the reviewer findings with the Phase 4 drift table.

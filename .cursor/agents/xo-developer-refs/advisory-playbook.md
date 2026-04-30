@@ -6,7 +6,28 @@ Worked examples of how the Principal Engineer layer adds value on top of a mode.
 
 All templates below are framed as "Engineering note:" so the user can see what is mode mechanics vs what is the Principal Engineer's judgement. Never skip, compress, or batch the skill's HITL gates to apply one of these advisories.
 
-**Translation layer**: these templates are written in engineering register for accuracy. When surfacing them to the PM, translate per the Communication Style rules in [`../xo-developer-agent.md`](../xo-developer-agent.md#communication-style) - keep the mechanics, drop the jargon, add a 5-word gloss for unavoidable XO terms, and offer `/teachable-moment` if the response uses 3+ technical terms. The PM is non-technical; the templates below are for you, not for them.
+**Translation layer**: these templates are written in engineering register for accuracy. When surfacing them to the PM, translate per the Communication Style rules in [`../xo-developer-agent.md`](../xo-developer-agent.md#communication-style) - keep the mechanics, drop the jargon, add a 5-word gloss for unavoidable XO terms, and offer `/teachable-moment` if the response uses 3+ technical terms.
+
+## Playbook retrospective process
+
+Behaviours accumulate additively as new SUV scar tissue lands. Without a documented retrospective, the playbook bloats and frequently-firing patterns stay buried in advisory text instead of being promoted to first-class skill features. Run a retrospective every 4-6 weeks (or when the playbook grows by 3+ behaviours since the last retro), driven by `/090-agent-improvement-advisor` or as a standalone `/workspace-audit` follow-up.
+
+**Three actions per behaviour, one of:**
+
+- **Keep** - behaviour fires regularly, the template is landing, the trade-off is non-obvious enough that documenting it adds value. No change.
+- **Sunset** - behaviour has not fired in the lookback window (or fires zero captures, like Advisory #23 as of 2026-04-30). Either the trigger criteria are wrong, the template doesn't land, or the underlying problem went away (e.g. a Workday platform fix made the workaround obsolete). Mark for removal in the next playbook commit; capture the rationale in the commit message.
+- **Promote** - behaviour fires every other run (or more), and the underlying logic is mechanical enough to live in the skill itself rather than as advisory framing. Examples: Advisory #6 (WID shape trap) is currently a flag - if it fires every `modulr-page` run, the pre-flight in `modes/modulr-page.md` should auto-verify the WID before workspace switch. Promotion moves the check from "agent reminder" to "skill mechanic"; the playbook entry can then be removed or kept as a thin pointer.
+
+**Inputs to the retrospective:**
+
+- Git log of `advisory-playbook.md` since the last retro (counts new behaviours added).
+- `.cursor/skills/xo-corrections/_offers-log.md` (Advisory #23 instrumentation).
+- PM session memory or transcripts (which advisories did the PM cite or push back on?).
+- Workspace audit dashboard if available (`/workspace-audit`).
+
+**Output of the retrospective**: a short markdown commit message naming each behaviour's verdict (keep / sunset / promote) with one-line rationale. The next commit applies the verdicts; the playbook stays curated.
+
+**Anti-pattern to avoid**: keeping a behaviour "just in case it might fire someday". If it has not fired in 4-6 weeks of active use, sunset it. The cost of re-deriving a never-fired pattern when needed is lower than the cost of carrying it as cognitive load on every triage. The PM is non-technical; the templates below are for you, not for them.
 
 ---
 
@@ -81,6 +102,8 @@ When the orchestrator hands back findings after a standalone xo-builder run, you
 - **`@xo-code-reviewer`** - artefact-level findings on the XO metadata diff (always invoked after Tier 2 writes; the authoritative check on structural correctness).
 - **`@qa-engineer`** - UI-level findings from a `suv-smoke-test` mode run against the rendered SUV (invoked in parallel with the reviewer for UI-observable Tier 2 modes: `copy-edit`, `validation-edit`, `prompt-edit`, `method-edit`, `modulr-page`; not invoked for pure artefact-generation modes like `rest-from-task`'s schema-implementation).
 
+**REST verification asymmetry**: artefact-generation modes (`rest-from-task`, `rest-scaffold`, `wats-scenario`) skip the QA leg by design - there is no rendered UI to smoke. This is **not** a verification gap. The REST equivalent of QA's UI smoke is the round-trip CRUD smoke + drift table that `rest-from-task` Phase 4 produces, surfaced via [Advisory #21 (REST-from-task post-build reality check)](#21-rest-from-task-post-build-reality-check). When triaging a `rest-from-task` run, treat the Phase 4 status-line recap (toggle attach, POST singleton-doc clear, XO Agent Tool registration, `mapsToClass` verify, GET shape match, POST/PATCH return body) as the second stream alongside `@xo-code-reviewer`. `DRIFT` rows in Phase 4 carry the same triage weight as a QA `WARNING` finding; `BLOCKED` rows carry the same weight as a QA `ERROR`. The verdict quick-reference below applies the same way - just substitute "Phase 4 status line" for "QA finding" when triaging REST builds.
+
 Both streams share the same severity-tagged, field-scoped output contract, so you triage them the same way. Do NOT dump either raw stream to the PM. The PM is non-technical and has explicitly delegated the judgement call on which findings are valid. Run the triage-and-apply protocol below.
 
 **Context you have that neither stream does:**
@@ -90,9 +113,23 @@ Both streams share the same severity-tagged, field-scoped output contract, so yo
 - Module-level conventions that informed the implementation choice.
 - The storageState / session state context for QA (e.g. a `[WARNING]` about a stale session is a user action, not a code fix).
 
-**Step 1 - Triage every finding from both streams.** Merge findings across streams (de-duplicate where both streams flagged the same underlying issue - e.g. reviewer flagged the label string typo on the artefact AND QA observed the old label rendering). For each surviving finding, assign one of five verdicts with a one-sentence rationale:
-- `valid-auto-apply` - finding is correct AND the fix meets every auto-apply criterion below.
-- `valid-needs-PM` - finding is correct BUT the fix breaches one of the auto-apply criteria; escalate to PM with stakes framed in plain English.
+**Step 1 - Triage every finding from both streams.** Merge findings across streams (de-duplicate where both streams flagged the same underlying issue - e.g. reviewer flagged the label string typo on the artefact AND QA observed the old label rendering). For each surviving finding, assign one of five verdicts with a one-sentence rationale.
+
+**Verdict quick-reference** (pattern-match this first; full criteria below):
+
+| Verdict | When to use | Action | PM sees? |
+|---|---|---|---|
+| `valid-auto-apply` | Correct + meets ALL Step 2 criteria (severity ≤ WARNING, same-field scope, PATCH only, HIGH confidence, iter < 2) | Patch silently | Recap line only |
+| `valid-needs-PM` | Correct but breaches a Step 2 criterion (creates/deletes, cross-mode, ambiguous, ERROR-severity) | Escalate as **A/B question** with stakes framed | Yes - decision question |
+| `valid-needs-PM-action` | Correct but fix is a PM action, NOT a code change (cache refresh, re-handshake, role change, SUV admin request) | Escalate as **direct instruction** ("you need to X") | Yes - instruction, no choice |
+| `invalid-context-missed` | Stream didn't have context you have (saw the diff but not the original ask, the HITL trade-off, the deliberate scope-out) | Dismiss with one-line rationale | No |
+| `out-of-scope` | Valid in principle but falls outside the original ask ("whole class should be refactored", "rename every method") | Dismiss + suggest a follow-up mode if useful | No |
+
+**Why five verdicts and not four**: a Black Hat pass on collapsing `valid-needs-PM-action` into `valid-needs-PM` was rejected on 2026-04-30. The escalation templates for the two are qualitatively different (decision question vs direct instruction), and merging them would force the model to re-derive the distinction every triage. Keep them separate.
+
+**Full verdict criteria:**
+- `valid-auto-apply` - finding is correct AND the fix meets every auto-apply criterion in Step 2 below.
+- `valid-needs-PM` - finding is correct BUT the fix breaches one of the auto-apply criteria; escalate to PM with stakes framed in plain English as a decision question.
 - `valid-needs-PM-action` - finding is correct but the fix is a PM action, not a code change (e.g. QA flagged a stale session; the fix is the PM re-running `auth-handshake`, not you patching code). Surface as a direct instruction, not as an escalation question.
 - `invalid-context-missed` - stream didn't have context you have; record the rationale and dismiss.
 - `out-of-scope` - finding is valid in principle but falls outside the original ask (e.g. "the whole class should be refactored"); record and dismiss with a note suggesting a follow-up mode.
@@ -120,11 +157,22 @@ PM escalation template: "Engineering note: the [reviewer / QA smoke / both] flag
 - For the QA smoke result: one sentence on what the smoke actually verified (e.g. "'Priority Offer' label confirmed rendering on `<URL>`, console clean, all XHRs 2xx") and one sentence on what it did NOT verify (the honest-about-proof rule from `@qa-engineer`'s playbook).
 - Audit record: mode name, fields touched, WIDs, iteration number, QA mode(s) run. Keep it brief and scannable.
 
-**Step 5 - Loop exit conditions:**
-- Reviewer returns `approve` AND QA smoke returns `pass` or `pass with warnings` with no `ERROR` findings (we're done).
-- Iteration cap (2) reached across the combined streams (stop even if findings remain; surface what's left).
-- Any PM escalation is pending (stop until PM responds).
-- Triage produces zero auto-applicable findings (nothing to loop on).
+**Step 5 - Loop exit conditions and iteration accounting:**
+
+**Counter ownership.** YOU (`@xo-developer`) own the iteration counter. Track it in your working state for the duration of the loop; do not delegate to the orchestrator. The orchestrator triggers the parallel review/QA legs but does not count cycles - that is your job because you are the only agent that sees both streams and the triage decisions.
+
+**What counts as one cycle.** A cycle is: parallel review/QA run -> your triage pass -> any auto-applies. Whether one stream or both produced findings does not matter; one parallel-run-plus-triage = one cycle. The cycle increments **after** you finish triage, not when the streams return.
+
+**What re-runs in cycle 2 (deterministic rule):** If you auto-applied **at least one fix** in cycle 1, cycle 2 re-runs **both streams** that were originally invoked (reviewer + QA for UI-observable Tier 2; reviewer-only for artefact-generation modes). This is non-negotiable - re-running only the stream that flagged the issue risks missing collateral damage your fix introduced elsewhere. If you auto-applied zero fixes in cycle 1 (everything was either dismissed, escalated to PM, or QA-only PM-action), there is no cycle 2 to run; the loop is at exit condition "zero auto-applicable findings" below.
+
+**Tie-break for cross-stream mismatches.** A `reviewer-clean / QA-failing` (or vice versa) parallel return counts as **one cycle**, not two. The triage pass that follows handles both verdicts together.
+
+**Loop exit conditions (any one stops the loop):**
+- Reviewer returns `approve` AND QA smoke returns `pass` or `pass with warnings` with no `ERROR` findings (we're done; happy path).
+- Iteration cap (**2**) reached across the combined streams (stop even if findings remain; surface what's left in the recap).
+- Any PM escalation is pending (stop until PM responds; do not advance the counter while waiting).
+- Triage produces zero auto-applicable findings (nothing left to loop on - everything was dismissed, escalated, or routed as a PM action).
+- Workspace switch required to apply a fix (always a PM decision; stop and escalate).
 
 **Do NOT:**
 - Re-run the reviewer or QA on fixes they themselves suggested (avoid infinite-approval loops).
@@ -351,14 +399,26 @@ Run `rest-from-task` with this design once approved.
 
 When the PM manually corrects an xo-builder output during a HITL gate (e.g. edits the proposed diff, fixes a naming convention, adjusts a validation expression), offer to capture that correction as a reusable skill stub. This creates a flywheel where PM corrections become persistent guidance for future runs.
 
-**Trigger conditions:**
-- PM responds to a Tier 2 HITL gate with edits (not just `approve` or `reject`).
-- PM says "that's wrong, it should be [X]" or "always do it this way".
-- PM corrects the same pattern twice in one session (signals a systematic gap).
+**Status (2026-04-30 audit)**: zero captures on file under `.cursor/skills/xo-corrections/`. The folder now exists with a `README.md` and an `_offers-log.md` so future captures land coherently. The trigger criteria below were tightened on 2026-04-30 - if the advisory continues to fire zero captures over the next 4-6 weeks of active use, escalate to `/090-agent-improvement-advisor` for a remove-vs-refine call.
+
+**Trigger conditions** (any one is sufficient; no longer "seems systematic" hand-wavy):
+- PM responds to a Tier 2 HITL gate with **a literal edit to the proposed value** (not `approve`, not `reject`, not "skip that field"). Pattern-match: their reply contains `"X" -> "Y"` or `change X to Y` or paste-edits the diff body itself.
+- PM says one of: *"always do it this way"*, *"that's the convention"*, *"never use X"*, *"every time you see Y"*, *"team standard is Z"*.
+- The **same correction shape** fires twice in one session (e.g. two consecutive `displayName` edits both stripping the `(BA)*P*S*NT` suffix). One-shot edits don't qualify; pattern-level corrections do.
+
+**Bias check before offering**: if the correction was a one-off typo fix or a stylistic preference the PM might not want frozen ("change `customerEmail` to `email` for this one CRF"), do NOT offer. Only offer when the trigger above is met cleanly.
 
 **Template:**
 
-> Engineering note: you just corrected [specific correction, e.g. "the CRF naming from `candidateRole` to `role`"]. Want me to capture this as a skill stub so future runs get it right automatically? I'll save it to `.cursor/skills/xo-corrections/<pattern-name>.md` - you can refine it later or share it with the team.
+> Engineering note: you just corrected [specific correction, e.g. "the CRF naming from `candidateRole` to `role`"]. That looks systematic - want me to capture it as a reusable skill stub so future runs get it right automatically? I'll save it to `.cursor/skills/xo-corrections/<pattern-name>.md`. You can refine it later or share with the team.
+
+**Always log the offer**, regardless of PM response. After making the offer, append one line to `.cursor/skills/xo-corrections/_offers-log.md` in this shape:
+
+```markdown
+- 2026-04-30 | mode=copy-edit | trigger=literal-edit | accepted=no | pattern="overrideLabel CRF naming, candidateRole -> role"
+```
+
+Logging the *offer* (not just the *capture*) is the only way `/090-agent-improvement-advisor` and `/workspace-audit` can tell whether this advisory fires often enough to keep, or whether it should be removed in a future retro. Do not skip the log line even if the PM declines.
 
 **Skill stub template** (write to `.cursor/skills/xo-corrections/<pattern-name>.md`):
 
