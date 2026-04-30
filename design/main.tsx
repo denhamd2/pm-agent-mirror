@@ -24,6 +24,7 @@ import { CanvasKitTest } from './components/CanvasKitTest';
 import PMAgentDashboard from './pm-agent-dashboard';
 import OffersDashboardV01 from './offers-dashboard-v01';
 import OffersPlaygroundV01 from './offers-playground-v01';
+import AgencyPipelineCardV01 from './agency-pipeline-card-v01';
 const AvgTimeToHireDashboard = React.lazy(() => import('./avg-time-to-hire-dashboard').then((m) => ({ default: m.AvgTimeToHireDashboard })));
 const PositionsOpenVsFilledDashboard = React.lazy(() => import('./positions-open-vs-filled-dashboard').then((m) => ({ default: m.PositionsOpenVsFilledDashboard })));
 const ValueRealizationMetrics = React.lazy(() => import('./value-realization-metrics').then((m) => ({ default: m.ValueRealizationMetrics })));
@@ -100,6 +101,7 @@ const PROTOTYPE_SLUGS = [
   'view-dashboard',
   'recruiting-agency-user',
   'customer-scorecard',
+  'agency-pipeline-card-v01',
 ] as const;
 
 type PrototypeSlug = (typeof PROTOTYPE_SLUGS)[number];
@@ -189,6 +191,9 @@ function AppRoot() {
   }
   if (route === 'offers-playground-v01') {
     return <OffersPlaygroundV01 />;
+  }
+  if (route === 'agency-pipeline-card-v01') {
+    return <AgencyPipelineCardV01 />;
   }
   if (route === 'ai-system-of-record-v97') {
     return <AISystemOfRecordV97 />;

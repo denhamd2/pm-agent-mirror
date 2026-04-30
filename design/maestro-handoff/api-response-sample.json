@@ -1,0 +1,185 @@
+{
+  "_comment": "Synthetic stage-grouped pipeline shape for Recruiting Agency User. Field names align to Recruiting v4 OAS (jobApplication, candidate, jobRequisition) and to the workData of the My Candidate Pipeline Tasks Convenience Task (Recruiting Stage, Count, UI Task, Job Application).",
+  "agencyContext": {
+    "recruitingAgency": {
+      "id": "956ae131863310000d31d0b719d6574f",
+      "descriptor": "Acme Talent Partners"
+    },
+    "agencyUser": {
+      "id": "ba15ec368afb100015e67fa003030082",
+      "descriptor": "Nora Halawi"
+    },
+    "scopeNote": "Only pipeline items submitted by this agency are returned, scoped via Manage: Recruiting Agency security domain."
+  },
+  "totals": {
+    "activeCandidates": 36,
+    "needsAttention": 3,
+    "submittedThisWeek": 5,
+    "hiredThisQuarter": 2
+  },
+  "stages": [
+    {
+      "stage": {
+        "id": "ed2a2a98da7f427686bd614bab1a588e",
+        "descriptor": "Submitted",
+        "order": 100
+      },
+      "count": 14,
+      "averageDaysInStage": 2,
+      "trend": "flat",
+      "needsAttentionCount": 0,
+      "uiTask": {
+        "id": "5b385a4d2a65100015fb0c9b035e0111",
+        "descriptor": "Review submitted candidates",
+        "href": "/d/task/2998$39808"
+      }
+    },
+    {
+      "stage": {
+        "id": "ed2a2a98da7f427686bd614bab1a588e",
+        "descriptor": "Screen",
+        "order": 200
+      },
+      "count": 9,
+      "averageDaysInStage": 4,
+      "trend": "down",
+      "needsAttentionCount": 1,
+      "uiTask": {
+        "id": "c0d2fdc44555100013646af36bf30235",
+        "descriptor": "Review Recruiting Agency Candidate (Screen)",
+        "href": "/d/task/2997$10395"
+      }
+    },
+    {
+      "stage": {
+        "id": "ed2a2a98da7f427686bd614bab1a588e",
+        "descriptor": "HM review",
+        "order": 300
+      },
+      "count": 6,
+      "averageDaysInStage": 7,
+      "trend": "up",
+      "needsAttentionCount": 2,
+      "uiTask": {
+        "id": "c0d2fdc44555100013646af36bf30235",
+        "descriptor": "Review Recruiting Agency Candidate (HM review)",
+        "href": "/d/task/2997$10395"
+      }
+    },
+    {
+      "stage": {
+        "id": "ed2a2a98da7f427686bd614bab1a588e",
+        "descriptor": "Interview",
+        "order": 400
+      },
+      "count": 4,
+      "averageDaysInStage": 9,
+      "trend": "flat",
+      "needsAttentionCount": 0,
+      "uiTask": {
+        "id": "c0d2fdc44555100013646af36bf30235",
+        "descriptor": "Review Recruiting Agency Candidate (Interview)",
+        "href": "/d/task/2997$10395"
+      }
+    },
+    {
+      "stage": {
+        "id": "ed2a2a98da7f427686bd614bab1a588e",
+        "descriptor": "Offer",
+        "order": 500
+      },
+      "count": 2,
+      "averageDaysInStage": 5,
+      "trend": "flat",
+      "needsAttentionCount": 0,
+      "uiTask": {
+        "id": "c0d2fdc44555100013646af36bf30235",
+        "descriptor": "Review Recruiting Agency Candidate (Offer)",
+        "href": "/d/task/2997$10395"
+      }
+    },
+    {
+      "stage": {
+        "id": "ed2a2a98da7f427686bd614bab1a588e",
+        "descriptor": "Hired",
+        "order": 600
+      },
+      "count": 1,
+      "averageDaysInStage": 0,
+      "trend": "up",
+      "needsAttentionCount": 0,
+      "uiTask": null
+    }
+  ],
+  "attentionItems": [
+    {
+      "jobApplication": {
+        "id": "8e1b7c10d74f1000174d943a6393008e",
+        "displayId": "JA-2026-00114"
+      },
+      "candidate": {
+        "id": "c33718e274c2100007717b1409ea0030",
+        "name": "Layla Osman",
+        "instanceReferenceDescriptor": "Layla Osman"
+      },
+      "jobRequisition": {
+        "id": "433e49bb55191000160e04950226010e",
+        "displayId": "REQ-2026-001",
+        "title": "Senior Software Engineer"
+      },
+      "currentStage": {
+        "id": "ed2a2a98da7f427686bd614bab1a588e",
+        "descriptor": "HM review"
+      },
+      "daysInStage": 11,
+      "lastActivityAt": "2026-04-19T09:00:00Z",
+      "lastActivityDescriptor": "Awaiting hiring manager feedback"
+    },
+    {
+      "jobApplication": {
+        "id": "8e1b7c10d74f1000174d943a6393009f",
+        "displayId": "JA-2026-00138"
+      },
+      "candidate": {
+        "id": "c33718e274c2100007717b1409ea0041",
+        "name": "Omar Khouri",
+        "instanceReferenceDescriptor": "Omar Khouri"
+      },
+      "jobRequisition": {
+        "id": "433e49bb55191000160e04950226011f",
+        "displayId": "REQ-2026-014",
+        "title": "Product Designer"
+      },
+      "currentStage": {
+        "id": "ed2a2a98da7f427686bd614bab1a588e",
+        "descriptor": "HM review"
+      },
+      "daysInStage": 8,
+      "lastActivityAt": "2026-04-22T14:30:00Z",
+      "lastActivityDescriptor": "Hiring manager assigned"
+    },
+    {
+      "jobApplication": {
+        "id": "8e1b7c10d74f1000174d943a6393010a",
+        "displayId": "JA-2026-00152"
+      },
+      "candidate": {
+        "id": "c33718e274c2100007717b1409ea0052",
+        "name": "Aisha Patel",
+        "instanceReferenceDescriptor": "Aisha Patel"
+      },
+      "jobRequisition": {
+        "id": "433e49bb55191000160e04950226013a",
+        "displayId": "REQ-2026-027",
+        "title": "Data Analyst"
+      },
+      "currentStage": {
+        "id": "ed2a2a98da7f427686bd614bab1a588e",
+        "descriptor": "Screen"
+      },
+      "daysInStage": 6,
+      "lastActivityAt": "2026-04-24T11:15:00Z",
+      "lastActivityDescriptor": "Recruiter screening complete"
+    }
+  ]
+}

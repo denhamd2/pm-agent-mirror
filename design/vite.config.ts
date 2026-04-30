@@ -54,6 +54,7 @@ function prototypeSpaSlugFallback(): Plugin {
       'view-dashboard',
       'recruiting-agency-user',
       'customer-scorecard',
+      'agency-pipeline-card-v01',
     ]);
   return {
     name: 'prototype-spa-slug-fallback',

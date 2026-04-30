@@ -1,0 +1,70 @@
+Run /buildModulrLayout with these inputs (Sub-mode B - API-shape driven, no SUV write):
+
+Goal:
+  Show a Recruiting Agency User their active candidate pipeline as a grid
+  of stage tiles (stage name, count, average days in stage, attention indicator),
+  followed by a "needs attention" section listing candidates stuck more than
+  five days, with a per-row drill-down link.
+
+Operation: create
+Slug: agency-pipeline-card
+Target element WID: null
+  Reason: Convenience Task `My Candidate Pipeline Tasks`
+  (WID d13e56720a1c10000d0242aae8c10070, instanceId 2998$38323) is the
+  conceptual target, but its task WID and all element_content_wid values
+  return 404 against /ors/super/services/xoUi/v1/elements/{ID}. The runtime
+  UI is SSO-gated and the live xoUi WID could not be resolved from the
+  agent side. Engineer attaches the persisted layout to the live element
+  manually after a SUV browser navigation captures the WID.
+
+API response sample (layout-shape reference):
+  /Users/david.denham/product-manager-agent/design/maestro-handoff/api-response-sample.json
+  (synthetic stage-grouped JSON, field names aligned to Recruiting v4 OAS
+  schemas - jobApplication, candidate, jobRequisition - and to the workData
+  of My Candidate Pipeline Tasks per ui_task_analysis_get)
+
+Reference image:
+  /Users/david.denham/product-manager-agent/design/agency-pipeline-card-v01-reference.png
+  (74KB, 2x3 stage grid, 6 stages, "needs attention" rail with 3 stuck
+  candidates, Sana-style Canvas Kit surface)
+
+Full intent doc (read this for persona, JTBD, functional regions, workData hints):
+  /Users/david.denham/product-manager-agent/design/maestro-handoff/intent.md
+
+Persona: Recruiting Agency User (external agency staff, scoped via Manage:
+  Recruiting Agency security domain to their own agency's submissions).
+
+JTBD: "Track in-flight candidates and stage progression (status/visibility)"
+  so I can prioritise follow-ups, escalate stuck candidates with the
+  customer's recruiter, and demonstrate pipeline health to my agency leadership.
+
+Functional regions Maestro should produce:
+  1. Header strip - title "My active pipeline" + subtitle + tertiary "View
+     all candidates" action.
+  2. Stage grid - 6 tiles (Submitted, Screen, HM review, Interview, Offer,
+     Hired). Each tile: stage name (uppercase micro caps), count + "candidates"
+     suffix, average-days-in-stage with clock icon (red when >= 7 days),
+     optional orange "needs attention" pill.
+  3. "Needs attention" rail - heading + summary count, list of attention rows
+     (warning icon + candidate name bold + req title and stage and days inline
+     metadata + "Follow up" tertiary action).
+
+HITL gates expected (do NOT bypass):
+  - plan_approval after Discover stage (cleared in CLI rehearsal — Composer run may re-evaluate)
+  - pre_suv_write after Review stage
+    Note: persist.sh does NOT auto-skip when target_element_wid is null — avoid running
+    persist / POST until a live element WID is set (or you deliberately dry-run with documented tooling only).
+
+Constraints:
+  - Days-in-stage and "stuck > 5 days" thresholds are derived calculations.
+    If Maestro flags them as `inferred` at plan_approval, surface that and
+    accept it - the engineer will provide a calculated field on Recruiting
+    Stage post-attachment.
+  - Do NOT attempt to persist to a real SUV element when target_element_wid
+    is null. Produce the layout JSON in wip/agency-pipeline-card/ for review
+    and manual attachment.
+
+Status note (30 Apr 2026):
+  - plan_approval cleared; discover stage completed (validate-contract discover OK).
+  - Build blocked: MCP_AGENT_REQUIRED — need Maestro Composer + export_suv_layout for structure-snapshot.json.
+  - Next: ~/contexto + /buildModulrLayout (or Composer MCP replay), then Review; resolve live xoUi WID before persist.sh.
