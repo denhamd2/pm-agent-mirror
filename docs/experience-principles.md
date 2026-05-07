@@ -14,6 +14,8 @@ These principles guide every design decision toward elevating humans, supercharg
 
 Humans stay in control while the tool provides a balance of flexibility and power.
 
+For AI surfaces, map the feature to the pattern decision guide in `design/references/ai-experience-guidance.md` section 6, then validate against live recruiting references in `design/references/ssa-create-req-flow-best-practices.md` and `design/references/talent-acq-demo-best-practices.md`.
+
 #### Outcome-Focused
 - ✅ **We must** focus on achieving the user's desired outcome.
 - ❌ **We don't** force users to work through the system's functional model.
@@ -34,6 +36,8 @@ Humans stay in control while the tool provides a balance of flexibility and powe
 
 All users should feel informed, capable, and enthusiastic when they use Workday software - clear previews, transparency, easy iteration, and feedback that builds reliability.
 
+For AI surfaces, require pattern-level transparency (why this pattern, what was ruled out) from `design/references/ai-experience-guidance.md` section 6 and apply the same trust checks to split-pane recruiting flows in the SSA and Talent Acquisition reference docs.
+
 #### Transparency
 - ✅ **We ensure** users understand what the system is doing.
 - ❌ **We don't** leave users guessing at how or why the system acts.
@@ -53,6 +57,8 @@ All users should feel informed, capable, and enthusiastic when they use Workday 
 > Always evolving, never rigid.
 
 The system grows with the user and the business – flexible, resilient, with low friction for change. Revisions are easy and updates are smooth.
+
+For AI surfaces, design for continuity across channels and sessions using the pattern guidance in `design/references/ai-experience-guidance.md` section 6 and the cross-surface recruiting examples in the SSA/Talent Acquisition reference docs.
 
 #### Easy Change
 - ✅ **We enable** easy revision and iterative improvement through self-service.
@@ -160,14 +166,22 @@ When building prototypes:
 ### Empower (Recruiter Control)
 - ✅ **Good**: Recruiter can bulk-update req status with preview before applying
 - ❌ **Bad**: System auto-moves candidates through pipeline without recruiter approval
+- ✅ **AI Good**: "I've drafted an outreach email for Sarah Chen. Review and edit before I send it." — recruiter retains the send decision
+- ❌ **AI Bad**: AI auto-sends candidate outreach without a human confirmation step
 
 ### Trust (Transparency & Clarity)
 - ✅ **Good**: "3 candidates will be notified via email. Preview →"
 - ❌ **Bad**: "Processing..." (no indication of what's happening or to whom)
+- ✅ **AI Good**: "Based on the résumé and the job description, this candidate is a strong match on Python and AWS. I can't verify the 2024 gap — you may want to confirm." — AI acknowledges confidence and gaps; three-part structure applied
+- ❌ **AI Bad**: "Top candidate" with no rationale, no confidence signal, and no disclosure that the ranking came from AI
 
 ### Grow (Easy Change)
 - ✅ **Good**: Edit campaign message after sending (affects future sends, history preserved)
 - ❌ **Bad**: Must recreate entire campaign to fix one typo in message template
+- ✅ **AI Good**: Recruiter overrides an AI-suggested ranking, system learns the preference for the next requisition, and the override is auditable
+- ❌ **AI Bad**: AI-ranked list is read-only — recruiter cannot override, reasoning is opaque, and future rankings don't reflect their feedback
+
+> **Cross-reference**: For the full AI pattern / surface / disclosure taxonomy, see [`design/references/ai-experience-guidance.md`](../design/references/ai-experience-guidance.md). Applies in 315 (PASS 1 step 10), 319 (AI-Specific Copy Guidance), 318 (AI Experience Review lens), and 321 (AI Experience Visual Review).
 
 ---
 

@@ -1,0 +1,152 @@
+[
+  {
+    "object_type": "Service Representation (Workday Owned)",
+    "descriptor": "candidateCommunicationItemTimelineView (v1 - superseded Option A)",
+    "wid": "f19cefa311a510001bda1d3381c40000",
+    "operation": "create",
+    "note": "Option A rollback candidate; abstract CCI rep. Orphan RCs below still reference this rep in forRepresentation — optional Instance Edit cleanup."
+  },
+  {
+    "object_type": "Representation Content (Workday Owned)",
+    "descriptor": "candidateCommunicationItemTimelineView/Message Body +TG (orphan Option A)",
+    "wid": "f19cefa311a510001bdc763ef4500000",
+    "operation": "create",
+    "superseded_by": "option_b"
+  },
+  {
+    "object_type": "Representation Content (Workday Owned)",
+    "descriptor": "candidateCommunicationItemTimelineView/Notification Subject (orphan Option A)",
+    "wid": "f19cefa311a510001be1198f2e470000",
+    "operation": "create",
+    "superseded_by": "option_b"
+  },
+  {
+    "object_type": "Representation Content (Workday Owned)",
+    "descriptor": "candidateCommunicationItemTimelineView/Notification Message +TG (orphan Option A)",
+    "wid": "f19cefa311a510001be13296f8c30000",
+    "operation": "create",
+    "superseded_by": "option_b"
+  },
+  {
+    "object_type": "Representation Content (Workday Owned)",
+    "descriptor": "candidateCommunicationItemTimelineView/Push Notification Message +TG (orphan Option A)",
+    "wid": "f19cefa311a510001be0fd45a2a40000",
+    "operation": "create",
+    "superseded_by": "option_b"
+  },
+  {
+    "object_type": "Service Representation (Workday Owned)",
+    "descriptor": "candidateNotificationEventTimelineView",
+    "wid": "f19cefa311a510001cbcf9af62400000",
+    "operation": "create",
+    "note": "representsClass=Recruiting Notification Event (1ea0e2bfef1c100004ac5df9c51e009b)"
+  },
+  {
+    "object_type": "Representation Content (Workday Owned)",
+    "descriptor": "candidateNotificationEventTimelineView/Notification Subject",
+    "wid": "f19cefa311a510001cd094ec6e420000",
+    "operation": "create",
+    "field_crf_wid": "2a52188e4951484ca8a736cca8f5478f",
+    "alias": "notificationSubject"
+  },
+  {
+    "object_type": "Representation Content (Workday Owned)",
+    "descriptor": "candidateNotificationEventTimelineView/Notification Message +TG",
+    "wid": "f19cefa311a510001cd0d6890d220000",
+    "operation": "create",
+    "field_crf_wid": "28c5c5f607f91000125e50d6e0970000",
+    "alias": "notificationMessageBody"
+  },
+  {
+    "object_type": "Representation Content (Workday Owned)",
+    "descriptor": "candidateNotificationEventTimelineView/Push Notification Message +TG (orphan — not wired into rep contents)",
+    "wid": "f19cefa311a510001cd0eb7446da0000",
+    "operation": "create",
+    "field_crf_wid": "577111d591ba1000aa11d94922e0a01a",
+    "alias": "pushNotificationMessage",
+    "drift_warning": "PATCH contents omits this RC; likely RNE whitelist exclusion — consider Instance Edit delete."
+  },
+  {
+    "object_type": "Representation Content (Workday Owned)",
+    "descriptor": "candidateNotificationEventTimelineView/Notification Event Attachments",
+    "wid": "f19cefa311a510001cd12f8ce3390000",
+    "operation": "create",
+    "field_crf_wid": "1f24472df25a100024071e14c4f60000",
+    "alias": "notificationAttachments"
+  },
+  {
+    "object_type": "Service Representation (Workday Owned)",
+    "descriptor": "candidateConversationMessageTimelineView",
+    "wid": "f19cefa311a510001cbd0eb6b3790000",
+    "operation": "create",
+    "note": "representsClass=Conversation Message (92a4c7f0567610002806553fba310000)"
+  },
+  {
+    "object_type": "Representation Content (Workday Owned)",
+    "descriptor": "candidateConversationMessageTimelineView/Message Body +TG",
+    "wid": "f19cefa311a510001cd1189bbd3d0000",
+    "operation": "create",
+    "field_crf_wid": "799649e1101610000deba901c8810000",
+    "alias": "messageBody"
+  },
+  {
+    "object_type": "Representation Content (Workday Owned)",
+    "descriptor": "candidateConversationMessageTimelineView/Message Creation Date",
+    "wid": "f19cefa311a510001cd29eb4e7120000",
+    "operation": "create",
+    "field_crf_wid": "722da80be44310000d71072e85620000",
+    "alias": "messageCreatedMoment"
+  },
+  {
+    "object_type": "Representation Content (Workday Owned)",
+    "descriptor": "candidateConversationMessageTimelineView/Conversation Message Body Type +TG",
+    "wid": "f19cefa311a510001cd159c0cff40000",
+    "operation": "create",
+    "field_crf_wid": "2b13d835ad8a1000137f1ac3b14b0000",
+    "alias": "messageBodyType"
+  },
+  {
+    "object_type": "Service Sub-Collection Resource",
+    "descriptor": "hrrecruiting/candidates/candidateNotificationEvents",
+    "wid": "f19cefa311a510001cd897b1f9980000",
+    "operation": "create",
+    "rsmb_wid": "c319923a5645100006edd79ef1020687",
+    "resource_class_wid": "1ea0e2bfef1c100004ac5df9c51e009b"
+  },
+  {
+    "object_type": "Service Sub-Collection Resource",
+    "descriptor": "hrrecruiting/candidates/candidateConversationMessages",
+    "wid": "f19cefa311a510001cd8bc8d4f540000",
+    "operation": "create",
+    "rsmb_wid": "e7fc5a22aba610000e746da6fcf60000",
+    "resource_class_wid": "92a4c7f0567610002806553fba310000"
+  },
+  {
+    "object_type": "Service Operation",
+    "descriptor": "hrrecruiting/candidates/candidateNotificationEvents/GET",
+    "wid": "f19cefa311a510001cda4364c76a0000",
+    "operation": "create",
+    "security_provider_domain_wid": "a2abd8cc2c58100006708e96adc6001c"
+  },
+  {
+    "object_type": "Service Operation",
+    "descriptor": "hrrecruiting/candidates/candidateConversationMessages/GET",
+    "wid": "f19cefa311a510001cda5fa623780000",
+    "operation": "create",
+    "security_provider_domain_wid": "a2abd8cc2c58100006708e96adc6001c"
+  },
+  {
+    "object_type": "XO Agent Tool Registration",
+    "descriptor": "hr_rec_candidates_notification_events_get",
+    "wid": "f19cefa311a510001ce2ac669bac0000",
+    "operation": "create",
+    "service_operation_wid": "f19cefa311a510001cda4364c76a0000"
+  },
+  {
+    "object_type": "XO Agent Tool Registration",
+    "descriptor": "hr_rec_candidates_conv_messages_get",
+    "wid": "f19cefa311a510001ce2b99b7acc0000",
+    "operation": "create",
+    "service_operation_wid": "f19cefa311a510001cda5fa623780000"
+  }
+]

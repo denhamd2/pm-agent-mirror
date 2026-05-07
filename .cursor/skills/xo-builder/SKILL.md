@@ -7,8 +7,8 @@ description: >-
   REST API documentation/testing, and WATS test scenarios. Lives entirely
   outside the PM agent workflow: does NOT participate in E2E pipelines, does
   NOT chain into 315/320/330/400 or any rule, and does NOT write to
-  MISSION_LOG. Eleven modes across three tiers (read-only, guarded write,
-  guarded build). Eight modes run directly from the PM workspace using XO MCP
+  MISSION_LOG. Twelve modes across three tiers (read-only, guarded write,
+  guarded build). Nine modes run directly from the PM workspace using XO MCP
   tools; three modes switch workspace to ~/contexto and hand off to Contexto
   workflows or slash commands. Every write mode enforces a
   diff-approve-apply-verify HITL checkpoint. Activate ONLY on explicit trigger
@@ -18,7 +18,7 @@ description: >-
 
 # XO Builder (Standalone Umbrella Skill)
 
-Vibe-code XO artefacts on your Workday SUV. One dispatcher skill, eleven modes, three tiers. Each mode is self-contained in `modes/<name>.md`; this file is the router + shared contract.
+Vibe-code XO artefacts on your Workday SUV. One dispatcher skill, twelve modes, three tiers. Each mode is self-contained in `modes/<name>.md`; this file is the router + shared contract.
 
 ## Trigger phrases
 
@@ -42,6 +42,7 @@ This skill activates ONLY when the user says one of the triggers listed below, *
 - `/xo-builder rest-from-task` or "convert this task to REST" / "build REST API from this task" / "create REST endpoints for this task" / "convert this UI task to a REST API"
 - `/xo-builder rest-scaffold` or "document this REST API" / "generate OpenAPI spec for X" / "build a REST test for X"
 - `/xo-builder wats-scenario` or "build a WATS scenario for X" / "create a test scenario for this flow"
+- `/xo-builder validation-analysis` or "compare validations between task and REST" / "what validations are missing from the REST API" / "validation gap analysis" / "which UI validations should I port" / "are all validations covered"
 
 **Legacy (still work, route into modulr-page):**
 - `/modulr-prototype`
@@ -99,6 +100,7 @@ The PM never sees raw reviewer or QA output. Direct skill triggers (e.g. `/xo-bu
 | 1 read-only | [`page-discovery`](modes/page-discovery.md) | No | No | XO MCP: `ui_task_analysis_get`, `xo_search`, `class_get`, `service_description_get` |
 | 1 read-only | [`api-catalogue`](modes/api-catalogue.md) | No | No | Pinned OAS files + XO MCP `suv_rest_metadata_api_call`, `service_description_get` |
 | 1 read-only | [`wql-query`](modes/wql-query.md) | No | No | Pinned `wql_v1` spec + XO MCP `suv_rest_metadata_api_call` (`POST /wql/v1/data`) |
+| 1 read-only | [`validation-analysis`](modes/validation-analysis.md) | No | No | XO MCP `ui_task_analysis_get` (validations_only), `service_operation_get`, `validation_get` |
 | 1 guarded build | [`modulr-page`](modes/modulr-page.md) | **Yes** (`~/contexto`) | Yes (via Maestro HITL) | Contexto `/buildModulrLayout` |
 | 2 guarded write | [`copy-edit`](modes/copy-edit.md) | No | Yes (tight HITL) | XO MCP `element_content_get` -> diff -> `element_content_patch` |
 | 2 guarded write | [`validation-edit`](modes/validation-edit.md) | No | Yes (tight HITL) | XO MCP `validation_create`, `validation_patch`, `reusable_validation_implementation_create`, `ui_reusable_validation_bindings_create` |
@@ -131,7 +133,9 @@ Before executing any mode's own pre-flight, confirm:
 - [ ] **XO MCP has the full dynamic-tool surface**: the `xo-mcp` entry in `~/.cursor/mcp.json` must include `"ENABLE_DYNAMIC_TOOLS": "true"` in its `headers` block, and Cursor's MCP panel for `xo-mcp` must report **> 350 tools** (as of April 2026; the count grows monthly - check #xo-agents-mcp for current baseline). If it reports ~72, either the header is missing or the active SUV is down; stop and tell the user which one to fix (add the header and reconnect the MCP, or provision/switch to an available SUV). Do NOT assume "tool not found" means the capability is missing until this check passes.
 - [ ] **cursor-app-control is reachable** (modes that switch workspace): if `move_agent_to_root` is not available, fall back to telling the user to open `~/contexto` manually in Cursor.
 - [ ] **Contexto credentials** (modes that switch workspace): `~/contexto/.env` must contain `SUV_HOST`, `SUV_USERNAME`, `SUV_PASSWORD`. If unsure, instruct the user to run `~/contexto/xo-agents/skills/maestro-modulr-crud/scripts/load-env.sh` after the switch.
-- [ ] **Contexto freshness** (modes that switch workspace): run `git -C ~/contexto log -1 --format=%cI` from a `bash -c` subshell. If the last commit is older than **7 days**, tell the user to `git -C ~/contexto pull` before proceeding. Contexto's tool names and slash commands change with SUV XORC revisions (e.g. revision 899312 on 17 Apr 2026 renamed several tools); a stale local Contexto against a fresh SUV produces "unknown tool" errors that look like MCP outages but are actually drift. Do NOT switch workspace until either the pull is done or the user accepts the risk.
+- [ ] **Contexto freshness** (modes that switch workspace): run `git -C ~/contexto log -1 --format=%cI` from a `bash -c` subshell. If the last commit is older than **24 hours**, tell the user to pull before proceeding:
+  > Your local Contexto hasn't been updated since [date]. The XO team ships updates frequently - running `git -C ~/contexto pull` takes 10 seconds and avoids "unknown tool" errors from version drift. Want me to wait while you pull?
+  Contexto's tool names and slash commands change with SUV XORC revisions (e.g. revision 899312 on 17 Apr 2026 renamed several tools); a stale local Contexto against a fresh SUV produces errors that look like MCP outages but are actually version mismatch. Do NOT switch workspace until either the pull is done or the user accepts the risk.
 - [ ] **Contexto documentation**: For installation guides, tutorials, and demos, see the Contexto docs site (internal - ask in #xo-agents-mcp for the current URL, or run `/help` in a Contexto workspace chat for capability discovery).
 
 If any pre-flight item is missing, stop and ask the user before proceeding.

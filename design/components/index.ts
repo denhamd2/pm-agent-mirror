@@ -3,6 +3,7 @@ export {
   WorkdayWMark,
   WORKDAY_TOP_NAV_HEIGHT_PX,
   type WorkdayTopNavProps,
+  type WorkdayTopNavVariant,
 } from './WorkdayTopNav';
 export {
   WorkdayLeftTabBar,
@@ -15,12 +16,16 @@ export {
 export {
   SANA_PAGE_CANVAS,
   SANA_TOP_NAV_BG,
+  SANA_SHELL_COLUMN_BG,
   SANA_PRIMARY_RAIL_BG,
   SANA_SECONDARY_NAV_BG,
   SANA_SECONDARY_TAB_ACTIVE_BG,
   SANA_SECONDARY_TAB_INACTIVE_FG,
   SANA_SECONDARY_TAB_ACTIVE_FG,
   SANA_SEARCH_FIELD_BG,
+  SANA_TOP_NAV_DIVIDER,
+  SANA_HOMEPAGE_GRADIENT,
+  SANA_HOMEPAGE_GRADIENT_HEIGHT_PX,
   SANA_LINK_ACCENT,
   SANA_BADGE_RED,
   SANA_CARD_RADIUS_LG,
@@ -51,7 +56,32 @@ export {
   sanaCommFormControlFocusStyle,
   SanaCommMessageBubble,
   SanaCommComposer,
+  SsaAgentTurn,
+  SsaUserPromptPill,
+  type SsaAgentTurnProps,
+  type SsaUserPromptPillProps,
 } from './SanaCommPanelPatterns';
+export {
+  SsaShell,
+  SsaTitleStrip,
+  SsaStarterSuggestions,
+  SparkleMark,
+  SSA_TITLE_STRIP_HEIGHT_PX,
+  SSA_CHAT_PANE_WIDTH_PX,
+  SSA_COLD_START_MAX_WIDTH_PX,
+  type SsaShellProps,
+  type SsaTitleStripProps,
+  type SsaStarterSuggestionsProps,
+} from './SsaShell';
+export {
+  TeamsChatCard,
+  type TeamsChatCardProps,
+  type TeamsChatCardPayload,
+  type TeamsChatCardVariant,
+  TeamsApprovalCard,
+  type TeamsApprovalCardProps,
+  type TeamsApprovalCardOffer,
+} from './TeamsApprovalCard';
 export { RichTextEditor, RECRUITING_EMAIL_TEMPLATES, type RichTextEditorProps, type EmailTemplate } from './RichTextEditor';
 export { EmailComposer, type EmailComposerProps } from './EmailComposer';
 export { ThreadExpansion, type ThreadExpansionProps } from './ThreadExpansion';

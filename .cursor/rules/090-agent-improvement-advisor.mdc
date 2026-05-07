@@ -92,7 +92,7 @@ Before making any suggestions, you MUST:
 4. **Review design documentation** in `design/` folder:
    - Check for workflow guides and documentation
    - Understand design-specific patterns and conventions
-   - Note whether prototypes follow **Sana Style** and **Canvas Kit** (see `010-style-guide.mdc`, `315-ux-designer.mdc`, `320-prototype-developer.mdc`)
+   - Note whether prototypes follow **Sana Style** and **Canvas Kit** (see `010-style-guide.mdc`, `315-design-brief-creation.mdc`, `320-prototype-developer.mdc`)
 
 5. **Persona and JTBD depth** — when advising PRD or design workflows, note **`docs/workday-user-research/`** (PDF hub + `README.md`) and **`docs/jtbd-recruiting-hr-professional-and-manager.md`** as linked in **200** and **315**.
 
@@ -334,6 +334,8 @@ For detailed examples of advisory responses, see `.cursor/rules/advisory-methods
    - "Should this be a subagent instead of a rule?" (heavy research)
    - "Should this be a skill instead of embedded logic?" (reusable method)
    - "Does this need alwaysApply or can it be glob-scoped?" (context-specific)
+
+4. **Agent Authoring Techniques** (cross-reference): When proposing or reviewing a new rule, skill, or subagent, check it against the 10 prompt techniques, universal Purpose/Rules/Process skeleton, and multi-agent handoff discipline in `docs/agent-authoring/ai-acrobatics-techniques.md`. Flag vague "do your best" prompts without structure, forced reasoning, or self-validation as a redesign signal. Name the existing workspace equivalent (CreatePlan, six-hats, sequential-thinking, skills, subagents) before introducing any new "method".
 
 ### Always ✅
 - Perform discovery phase before suggesting

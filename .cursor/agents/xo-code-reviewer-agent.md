@@ -42,6 +42,7 @@ Your review checks two dimensions:
    - Validate identifier formats and referenced object consistency.
    - Flag dead code introduced by the change (unused methods, imports, variables, unreachable branches).
    - Flag existing code rendered unused by the change (now-unreferenced helpers, stale bindings).
+   - **Validation coverage (`rest-from-task` only):** If reviewing a `rest-from-task` build, compare UI task validation count (from `schema-analysis-wip.md` frontmatter or `ui_task_analysis_get` output) against REST operation constraint count. Flag as `INFO` if delta > 50%: "UI task has [N] validations; REST operation has [M] constraints. Consider running `validation-analysis` mode to review gaps." This is advisory - validation porting may be intentionally out of scope.
    - Prefer high-signal findings over style noise.
 
 4. **Produce concise findings with machine-triageable structure**

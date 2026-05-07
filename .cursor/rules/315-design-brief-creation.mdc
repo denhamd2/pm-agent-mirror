@@ -41,6 +41,14 @@ This rule is invoked via two paths:
 
 Define the experience **before** UI.
 
+**Design Thinking / Double Diamond lens (lightweight phase check):**
+- Use Double Diamond as a quality lens, not a separate process or extra artifact factory.
+- **Discover**: understand user context, JTBD, research, references, constraints, and current workflow break-points.
+- **Define**: converge on the job statement, shell pattern, layout regions, hierarchy, interaction model, and flow visuals.
+- **Develop**: explore viable UI/component patterns, name at least one plausible pattern you ruled out, then map the selected pattern to Canvas Kit and Sana Style in PASS 2.
+- **Deliver**: prepare a design brief that can pass 319 copy review, 318 peer review, 320 implementation, and 321 visual validation.
+- For complex, agentic, approval-heavy, or multi-surface work, show the divergence/convergence explicitly through the screen sequence map, flow chart, decision tree, or journey map. Do not add this ceremony to simple single-screen refinements.
+
 1. **Define JTBD** (MANDATORY - READ BEFORE DRAFTING):
    - **First**, read `docs/jtbd-recruiting-hr-professional-and-manager.md` to understand the recruiter/hiring manager worksheet jobs
    - Match the feature to an existing JTBD from the worksheet, OR synthesize a new job based on research
@@ -54,6 +62,12 @@ Define the experience **before** UI.
 3. **Reference real layouts & pattern libraries**:
    - Identify 1–2 screens from:
      `design/references/recruiter-flow/`
+   - If the feature is an agentic Recruiting workflow or is grounded in a demo recording / screenshots, **READ** `design/references/recruiting-agentic-workflow-patterns.md` and apply its acceptance criteria.
+   - **Reference-fidelity pass (MANDATORY when video / PNG references exist)**:
+     - Cite exact frame IDs or image filenames and state what each proves (layout, density, visible controls, transition, or copy structure).
+     - Separate product UI from presenter/stage context; do not promote stagecraft to product canon.
+     - Preserve the observed screen sequence unless the PM explicitly asks to change it.
+     - Mark every visible control as interactive, disabled, or visual-only; default to interactive for prototype work.
    - **MANDATORY**: If designing a data grid or list view, READ `design/references/pattern-hired-score-grid.md`. This pattern is CANONICAL (Figma node 490-62877) for:
      - Candidate grids under Job Req Detail
      - Dashboard candidate lists
@@ -78,6 +92,29 @@ Define the experience **before** UI.
 
 6. **Define interaction model**:
    - Tabs / modals / inline expansion / split panels
+   - For agentic Recruiting flows, include a **screen sequence map** (for example: workbench -> profile review -> collaboration handoff -> candidate channel). Do not design isolated screens if the reference demonstrates a journey.
+   - **Flow visual requirement**: For multi-screen, multi-surface, decision-heavy, approval-heavy, or agentic flows, include at least one lightweight visual artifact in the Design Brief:
+     - **Flow chart** for screen-to-screen sequence and handoffs.
+     - **Decision tree** for branching logic, policy gates, approval rules, or candidate/offer outcomes.
+     - **Journey map** for cross-surface experiences such as workbench -> collaboration -> candidate channel.
+     - Use Mermaid in markdown by default. Do not require a diagram for a simple single-screen refinement.
+   - Answer these checks explicitly:
+     - What surface owns the next action?
+     - What visible system-of-record state changes when the agent acts?
+     - Where is evidence shown relative to the decision control?
+     - Which plausible pattern was ruled out, and why?
+
+6a. **Recent prototype pattern learning (MANDATORY when similar examples exist)**:
+   - Review 2-3 recent prototypes that resemble the proposed use case before finalising layout. Preferred examples:
+     - `design/e2e-recruiting-talent-acq-v01.tsx` for recruiter workbench, candidate profile review, and collaboration handoff.
+     - `design/create-offer-ssa-v01.tsx` for document-first generated artifacts and progressive disclosure of CRFs / QA / RTE.
+     - `design/create-jr-ssa-v01.tsx` for SSA split-pane, reference-grounded generated content, and task canvas behaviour.
+   - Classify each reusable pattern by:
+     - When to use it.
+     - When not to use it.
+     - Density and surface expectations.
+     - Component or design-system candidates to reuse.
+   - If the lesson is durable beyond the current brief, update or cite `design/references/recruiting-agentic-workflow-patterns.md` rather than burying the learning in one prototype.
 
 7. **Apply Layout Framework (A–F)**:
    - A: JTBD
@@ -86,6 +123,41 @@ Define the experience **before** UI.
    - D: Density
    - E: Accessibility
    - F: Canvas coverage (high-level only)
+
+8. **Extreme Scenarios & Unhappy Paths** (MANDATORY quality gate):
+   - **Stress-test the design at the edges**:
+     - Zero vs infinity (no candidates vs 10,000 candidates)
+     - 10 uploads vs 1 million applications
+     - 1 attachment vs 1,000 attachments
+     - Especially relevant for Recruiting: fraudulent bot applications, mass purges, high-volume requisitions
+   - **Explore misuse and the unhappy path**: how could this feature be abused? By candidates? Internal users? A bad actor with admin access?
+   - **Data-against-the-person check**: who can see the data the user enters, how is it stored, what if it leaks?
+   - Full prompts: see `design/references/ux-quality-checklist.md` → Concepts phase (Accessibility + Equity & Inclusion sections).
+
+9. **Global & Inclusive Users** (MANDATORY quality gate):
+   - Workday Recruiting ships globally; default to "will this work in French / German / Japanese / Arabic?" during concepting, not at the end.
+   - **Text-expansion allowance**: reserve +35% horizontal and +15% vertical for translations (German, Finnish, Russian routinely expand).
+   - **Avoid gesture-based imagery** (thumbs-up, OK sign — culturally loaded).
+   - **Avoid embedding text in images** (can't be translated, can't be read by screen readers).
+   - **Apply Microsoft Inclusive Design Spectrum**: physical / cognitive / developmental × permanent / temporary / situational.
+   - **Authentic representation** where relevant (relationship status, gender expression, nationality — don't default US-only).
+   - Full checklist: `design/references/ux-quality-checklist.md` → Globalisation and Equity & Inclusion topic lists.
+
+10. **AI Experience Framing** (CONDITIONAL — only if the feature involves AI, an agent, HiredScore, Paradox, or any automated generation/decision):
+
+   Pick upstream-first, then cascade downward. Full pattern catalog, surface matrix, and decision trees live in `design/references/ai-experience-guidance.md` — cite it; do not restate it.
+
+   - **Interaction Mode (primary)** — pick one: Analyzing / Reviewing / Monitoring / Configuring / Creating (see knowledge doc section 3).
+   - **Secondary modes (if any)** — single screens often span more than one; name them.
+   - **Phases in scope** — tick at least one, ideally all three: [ ] Before Interaction  [ ] During Interaction  [ ] Over Time. If you omit a phase, state why in one line (knowledge doc section 4).
+   - **Stance** — Anticipate / Amplify / Empower (knowledge doc section 2). If none fit, cut the AI.
+   - **Agent classification** — Conversational / Ambient.
+   - **Skill mode** — User-Triggered Delegate / System-Triggered Ambient.
+   - **Pattern** — Embedded Content / Contextual Ingress / Content Generation / Partial Panel Chat / Full-Screen Chat / Split-pane Agent + Task (knowledge doc section 6). Chat is the fallback, not the first choice.
+   - **Pattern justification** — state which section 6 pattern fits best for this job, and name at least one pattern you explicitly ruled out with a one-line why-not.
+   - **Surface** — Workday Web / Workday Everywhere (Slack/Teams/Agentforce/Agentspace) / Mobile / Sana Labs (knowledge doc section 7). Pick where the user actually does the job.
+
+   Output: copy the "Quick framing checklist" block from the knowledge doc (section 11) into the Design Brief and fill it in.
 
 **Constraints**:
 - **DO NOT** use Canvas Kit yet
@@ -115,7 +187,7 @@ Translate layout into UI.
 2. **Apply Sana Style** (MANDATORY - READ BEFORE FINALIZING):
    - **READ** `010-style-guide.mdc` → Sana Style UI section:
      - Page canvas: Light grey `SANA_PAGE_CANVAS` (~#F3F5F7), not white
-     - Top nav: Grey bar with white pill search
+     - Top nav: **White bar** (`SANA_TOP_NAV_BG` `#FFFFFF`) with a **grey pill search** (`SANA_SEARCH_FIELD_BG` `#F3F4F6`). Homepage surfaces use `WorkdayTopNav variant="home"` (adds `SANA_HOMEPAGE_GRADIENT` 8px brand accent bar); every other page uses `variant="app"` (default — adds a 1px `SANA_TOP_NAV_DIVIDER` hairline). Never both.
      - Primary rail: Stacked icon + uppercase micro-label
      - Cards: White on grey canvas with thin `soap300` borders
      - Radii: ~16-20px for cards (`SANA_CARD_RADIUS_LG`), ~12px for compact elements
@@ -138,6 +210,20 @@ Translate layout into UI.
    - **Profile layouts**: `ProfilePageLayout` from `design/components/ProfilePageLayout.tsx` for hub-style profile pages (candidate/worker profiles)
    - **Communication panels**: `EmailPanel`, `EmailComposer`, `RichTextEditor`, `ThreadExpansion` for email features; `SanaCommMessageBubble`, `SanaCommComposer` for WhatsApp/SMS
    - **Full-page conversational assistant**: Use the same `SanaComm*` + Canvas Kit `Avatar` + disclosure surfaces.
+   - **Self-Service Agent (SSA) flows**: Use `SsaShell`, `SsaTitleStrip`, `SsaStarterSuggestions`, `SparkleMark` from `design/components/SsaShell.tsx`. Mandatory for any prototype that brands as the Self-Service Agent or a named agent surface with a task canvas. See `.cursor/rules/design-specific/016-ssa-canvas-pattern.md` for the behavioural contract (cold-start → split-pane transition, Gen UI canvas convention, forbidden patterns).
+
+4a. **SSA Canvas checklist (MANDATORY if the brief is for an SSA-type flow)**:
+   - ✅ **Cold-start entry copy**: What does the generic SSA home show before the user interacts? (Greeting, capability line, AI disclosure.)
+   - ✅ **Starter set**: Which 3–5 prompts appear below the greeting in cold-start? At least one MUST trigger the canvas; include at least one out-of-scope prompt that the agent honestly declines.
+   - ✅ **Chat anatomy**: Specify whether the split-pane thread uses bubble mode (`SanaCommMessageBubble`) or Summit plain-agent mode (agent plain text, user grey pill, feedback / Sources under agent turns, no feedback chrome on the cold-start greeting).
+   - ✅ **Canvas-triggering intents**: Which user intents flip `mode` to `'in-task'` and materialise the right pane? (e.g. "create offer", "draft offer for {candidate}", "create an offer for JR-{id}"). Spell them out as regex-matchable patterns.
+   - ✅ **Per-intent canvas surface**: For each canvas-triggering intent, define the right-pane structure (header card + stepper + steps, or alternative). Confirm the commit gate is canvas-side, not chat-side.
+   - ✅ **Reference-frame fidelity**: If a video / PNG reference exists (for example `design/references/ssa-create-req-videos/frames-overlap/ov-5400.png` or `ov-7200.png`), cite the frame IDs and match visible density, content length, and copy structure in the brief. Do not reduce long-form panels such as job descriptions to placeholders unless explicitly scoped.
+   - ✅ **Chat-only intents**: List the out-of-scope prompts the agent will decline (three-part shape: problem / reason / next step).
+   - ✅ **Chat-to-canvas write-through**: Identify which chat intents mutate canvas state (e.g. "switch country to Germany") and confirm a "review" dot appears on affected non-current steps.
+   - ✅ **AI refinement auditability**: For NL edits to regulated or high-consequence content (job descriptions, offer copy, approvals), specify whether the agent shows `Show Steps` / bullet evidence explaining what changed and why.
+   - ✅ **First in-task agent response**: Draft the contextualising opener (*"Sure — I'll help you [task] for [entity]. I've pre-filled [fields] from [source]…"*).
+   - Full behavioural contract: `.cursor/rules/design-specific/016-ssa-canvas-pattern.md`.
 
 5. **Validate against Experience Principles** (MANDATORY):
    - **READ** `docs/experience-principles.md` before finalizing PASS 2
@@ -166,7 +252,33 @@ Translate layout into UI.
      - Clear Page Titles (`<Heading size="large">` at the top of main content)
      - Bottom-placed disclaimers (legal/mock notices at bottom of page)
 
-6. **Copy Inventory (for 319 review)**
+6. **Quality Non-Negotiables** (MANDATORY - Accessibility, Globalisation, Equity & Inclusion):
+
+These are the items that must be explicitly addressed in the Design Brief before handoff to 319/318. Full guidance (per phase and topic) lives in `design/references/ux-quality-checklist.md`.
+
+   **Accessibility Non-Negotiables:**
+   - Greyscale test: removing all colour, does the design still convey the same information?
+   - Text contrast ≥ 4.5:1; interactive-element boundaries ≥ 3:1; focus-state contrast ≥ 3:1 (vs background and unfocused state)
+   - Exactly one H1 per page; headings sequential and meaningful; modals have H2 describing their content
+   - All icon-only buttons have a persistent label or tooltip visible on hover and focus
+   - Tap targets ≥ 24px × 24px on web/desktop (≥ 48px × 48px on mobile)
+   - Font-scaling resilience: text doesn't truncate or break layout at 200% zoom or increased browser font size
+   - Keyboard equivalents for all hover, drag-and-drop, and mouse-based interactions
+
+   **Globalisation Non-Negotiables:**
+   - Pseudo-translation test performed (catches hard-coded strings and expansion issues early)
+   - No gesture-based imagery (thumbs-up, OK sign, culturally loaded hand icons)
+   - No text embedded in images (breaks translation and screen readers)
+   - +35% horizontal and +15% vertical text expansion room allowed
+
+   **Equity & Inclusion Non-Negotiables:**
+   - Reviewed against Harm Less UX principles (biased defaults, jargon, lack of consent, unchangeable actions)
+   - Users can correct mistakes (save draft, edit submission, clear error messaging; destructive actions reversible or explicitly confirmed)
+   - Data-use analysis documented if the feature collects or exposes sensitive candidate/worker data
+
+   **Output**: Document how each Non-Negotiable is addressed (one-line rationale per bullet is sufficient) in the Design Brief. 318 will verify these explicitly.
+
+7. **Copy Inventory (for 319 review)**
 
 After defining all UI components, extract ALL user-facing text:
 
@@ -194,6 +306,13 @@ After defining all UI components, extract ALL user-facing text:
 - Assistant identity: [text]
 - Automation disclosure: [text]
 - Privacy / footer: [text]
+- **AI error copy — three-part structure** (from `design/references/ai-experience-guidance.md` section 9):
+  - Problem: [plain-language, no error codes]
+  - Reason: [specific cause or known limit]
+  - Next steps + actions: [what the user does next + button label]
+- **Fallback message** (AI unavailable / low confidence): [short string; must offer a human alternative or retry]
+- **Disclosure placement**: [inline / header / footer] — short string at the chosen location
+- **Brand-voice check**: contractions (I'm, can't, it's), first-person from the agent, specific (numbers over "several"), acknowledges uncertainty. Link to canonical [Canvas AI Persona](https://canvas.workdaydesign.com/guidelines/ai-guidance/ai-persona). DO/DON'T list in the knowledge doc section 9.
 
 **Legal/Consent (if applicable):**
 - Consent text: [text]
@@ -202,7 +321,7 @@ After defining all UI components, extract ALL user-facing text:
 
 **Output**: This copy inventory is handed to 319 for review before PASS 3.
 
-7. **Visual Indicators Specification (Canvas Kit Components for 320)**
+8. **Visual Indicators Specification (Canvas Kit Components for 320)**
 
 After defining the copy inventory, specify visual patterns using **explicit Canvas Kit components** (not generic descriptions):
 
@@ -335,6 +454,8 @@ Use these **alongside** the passes above (especially when grounding placement an
 - **Experience principles**: `docs/experience-principles.md`
 - **Canvas Kit MCP** (`user-canvas-kit-mcp`): Call `get-canvas-kit-tokens` (and MCP resources as needed) before asserting non-obvious component or token names in PASS 2
 - **Visual and shell references**: `design/references/recruiter-flow/`, `design/references/sana/`, `design/components/` (`WorkdayTopNav`, `WorkdayLeftTabBar`, `CommunicationDock`, `sanaShellTheme`, `SanaCommPanelPatterns`)
+- **UX Quality Checklist** (RAD-aligned): `design/references/ux-quality-checklist.md` — Accessibility, Equity & Inclusion, Globalisation, Content & Structure, and UX Process checks organised by phase (Concepts / Low Fidelity / High Fidelity) and by topic. Feeds PASS 1 steps 8–9 and PASS 2 step 6.
+- **AI Experience Guidance** (Canvas + Workday internal): `design/references/ai-experience-guidance.md` — Interaction Modes, 3-phase framework (Before / During / Over Time), pattern catalog with decision tree, surface selection, notification routing, three-part AI error structure, Ask Workday Brand Voice. Feeds PASS 1 step 10 and PASS 2 Conversational Assistant copy inventory. Read only when the feature involves AI, an agent, HiredScore, Paradox, or automated generation/decision.
 
 ---
 

@@ -24,6 +24,8 @@ Write under `docs/xo/rest-apis/<resource-slug>/artifacts/`:
      - `xo_search` (service/resource lookup when name-based fallback is needed)
      - `metadata_instance_get` (when type ambiguity exists)
    - Confirm task type is supported: Convenience Task, Sequence Task, Web Service Task.
+   - **Safe Harbour warning** (display before HITL):
+     > The XO MCP schema toolchain is under active development. Objects created in this workflow may contain incomplete processing or missing bindings. If this API is destined for production check-in, you must run Instance Edit on each created object to catch code exceptions before CRS.
    - HITL: confirm task identity + API scope.
 
 2. **Investigate**

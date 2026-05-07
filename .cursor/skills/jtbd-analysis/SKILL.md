@@ -138,7 +138,7 @@ Structure problem statement as JTBD:
 
 **Desired Outcome**: Complete bulk updates in <5 minutes, reducing manual effort by 95% and eliminating error risk."
 
-### UX Design (315-ux-designer)
+### UX Design (315-design-brief-creation)
 
 Frame design briefs around jobs:
 

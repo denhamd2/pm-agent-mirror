@@ -296,6 +296,7 @@ The `rest-from-task` Phase 4 already runs the mechanical checks (toggle attach, 
 > - Edit rep `mapsToClass`                `<OK | FIXED | BLOCKED>`    `<outcome A/B/C + one-line rationale>`
 > - GET shape matches View rep            `<OK | DRIFT>`              `<if DRIFT, which fields are missing from runtime>`
 > - POST/PATCH return body                `<OK | DRIFT>`              `<if DRIFT, status codes returned + "body empty">`
+> - Total changes                         **`<N>`** objects across `<M>` types `<e.g. "3 CRFs, 2 Representations, 4 Operations">`
 >
 > `<If any DRIFT rows: one sentence naming the follow-up. e.g. "Two drift items need a follow-up edit task on created objects per Safe Harbour.">`
 >
@@ -313,6 +314,7 @@ The `rest-from-task` Phase 4 already runs the mechanical checks (toggle attach, 
 > - Edit rep `mapsToClass`                `FIXED`    generateClassBasedProcessing auto-generated Offer Event (Derived)
 > - GET shape matches View rep            `DRIFT`    runtime returned id, descriptor only; role, job, photo missing
 > - POST/PATCH return body                `DRIFT`    201 / 200 returned but body is `{}`
+> - Total changes                         **87** objects across 6 types (12 CRFs, 4 Representations, 8 RCs, 1 SCR, 4 Operations, 58 Processing)
 >
 > Two drift items need a follow-up edit task on created objects per Safe Harbour. Happy to draft the edit-task spec if you want.
 >
@@ -486,3 +488,33 @@ After a successful `rest-from-task`, `modulr-page`, or other build mode complete
 **Do NOT:**
 - Auto-create Jiras without asking - the PM may not want a ticket.
 - Block the build on Jira linkage - it's an optional post-completion step.
+
+### 25. Validation gap analysis prompt after REST build
+
+After any `rest-from-task` completion, proactively suggest a validation gap check. The UI task you based the API on likely has validations that the REST operation does not yet enforce server-side. Surfacing this gap early prevents "why doesn't my POST reject bad data?" surprises downstream.
+
+**Trigger conditions:**
+- `rest-from-task` completes (any phase).
+- PM asks "are all validations covered?" or "what's missing from the REST API?".
+- PM retro-fits an older REST API with new UI validations.
+
+**Template:**
+
+> Engineering note: the UI task you based this API on has **[N] validations** (from `ui_task_analysis_get` with `validations_only: true`). The new REST operation may not enforce all of them server-side - some are UI-only display constraints, others are genuine business rules that should port. Want me to run a quick gap analysis? I'll produce a matrix showing which UI validations have REST equivalents vs which would need to be ported. Takes about 2 minutes.
+
+**Gap matrix columns:**
+- **Validation Source** - the UI validation WID + error message text
+- **REST Constraint Status** - one of:
+  - `NATIVE` - REST operation already enforces this (e.g. required field, format constraint)
+  - `PORT_NEEDED` - UI validates this but REST does not; recommend porting
+  - `SKIP` - UI-specific (e.g. display-only conditional visibility); not applicable to REST
+- **Recommendation** - one-line action (e.g. "port via `validation-edit`", "no action", "requires custom processing")
+
+**Follow-up offer:**
+
+> If there are `PORT_NEEDED` rows, want me to batch-create the missing REST-side validations? I'll run `validation-edit` for each one with your approval per row.
+
+**Do NOT:**
+- Auto-run the gap analysis without asking. The PM may intentionally skip UI validations for the REST surface.
+- Treat this as a gate. The offer is advisory, not a blocker.
+- Port validations without HITL approval per row. Each validation port is a Tier 2 write.

@@ -303,7 +303,7 @@ const handleNext = () => {
 **Surfaces**:
 - Page canvas: `SANA_PAGE_CANVAS` (~`#F3F5F7`)
 - Cards: White (`#FFFFFF`) with `SANA_CARD_SHADOW`
-- Top nav: `SANA_TOP_NAV_BG` (grey bar)
+- Top nav: `WorkdayTopNav` with `variant="app"` — **white bar** (`SANA_TOP_NAV_BG`) + **grey pill search** (`SANA_SEARCH_FIELD_BG`) + 1px `SANA_TOP_NAV_DIVIDER` hairline. The Workday brand gradient (`SANA_HOMEPAGE_GRADIENT`) is homepage-only and must not appear on this surface.
 
 **Radii**:
 - Header card: `SANA_CARD_RADIUS_LG` (~20px)

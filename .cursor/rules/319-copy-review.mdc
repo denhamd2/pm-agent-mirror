@@ -81,7 +81,9 @@ Align strings with JTBD and persona intent already validated in the **315** brie
 **Location**: `/Users/david.denham/product-manager-agent/design/guidelines/EMEA-Editorial-Guidelines-February-2026.pdf`
 
 ### Core Principles
-- **Sentence case**: All UI text (not Title Case)
+- **Sentence case everywhere**: page titles, section headings, buttons, field labels, body text, error messages, empty states — all follow Sentence case. **Only exceptions**: proper nouns (personal names, place names), product names ("Workday", "Workday Recruiting", "HiredScore", "Paradox", "Ask Workday", "Canvas Kit"), acronyms ("GDPR", "SSO", "API"), and the first word of a sentence / standalone label. Full policy and examples in the [`/editorial`](../skills/editorial-guidelines/SKILL.md) skill → Capitalisation Standards.
+  - Correct: "Save changes", "Move to screen", "Candidate profile", "Requisition title", "Rank with HiredScore"
+  - Incorrect: "Save Changes", "Move to Screen", "Candidate Profile", "Requisition Title"
 - **Concise**: Remove unnecessary words
 - **Action-oriented**: Lead with verbs
 - **Active voice**: "Save changes" not "Changes will be saved"
@@ -128,6 +130,67 @@ For the complete editorial checklist, patterns, and review process, load the `/e
 | Help text | Brief guidance | "Enter your work email address" |
 | Loading state | Present continuous | "Loading candidates..." |
 | Confirmation | Question + options | "Delete this requisition? This action cannot be undone." |
+
+## AI-Specific Copy Guidance (CONDITIONAL)
+
+Apply this section **in addition to** the standard Editorial Guidelines when the copy is user-facing text from an AI feature, agent, chat surface, HiredScore explanation, Paradox flow, or any automated draft/suggestion/error.
+
+**Authoritative sources:**
+- **Live Canvas AI Persona** (Ask Workday Brand Voice): `https://canvas.workdaydesign.com/guidelines/ai-guidance/ai-persona` — evolves; WebFetch for canonical copy rules.
+- **Workspace knowledge doc**: `design/references/ai-experience-guidance.md` → section 9 (Error Handling and Ask Workday Brand Voice) for the structure, DO/DON'T list, and fallback templates.
+- **SSA product patterns (visual-first)**: `design/references/ssa-create-req-flow-best-practices.md` — split-pane Self-Service Agent demos (overlap / backfill / transfer): smart-default rationale, payroll-safe corrections, dual-pane success + side-effect copy. **Status**: `visual-only; narration TBC` until PM fills open questions in that doc.
+
+### Three-part AI error structure (MANDATORY)
+
+Every AI-surfaced error message must be rewritten to match this shape before it ships:
+
+1. **Problem** — plain language, no error codes. *"I couldn't generate a draft for this role."*
+2. **Reason** — specific cause or known limit. *"The requisition is missing a job description field."*
+3. **Next steps + actions** — what the user does right now. *"Add a short description and try again."* + actionable button.
+
+Flag any AI error copy that's only 1 or 2 parts as NEEDS REVISION.
+
+### Fallback copy
+
+When AI is unavailable or confidence is too low: *"I can't help with that right now. You can [human alternative] or try again in a moment."*
+
+Every AI surface must have an explicit fallback string. Missing fallback = NEEDS REVISION.
+
+### Disclosure copy
+
+Every AI-generated artefact carries a short automation notice. Location options:
+- Inline (under a draft): *"Drafted with Workday AI — review before sending."*
+- Header (on a chat): *"Ask Workday is an automated assistant — a human reviews every candidate decision."*
+- Footer (candidate apply): *"You're chatting with an automated assistant. To speak to a recruiter, type 'talk to a human'."*
+
+Missing or buried disclosure on an AI surface = NEEDS REVISION. For candidate-facing disclosure and any consent/privacy/AI-disclosure text, **invoke 060-legal-advisor**.
+
+### Ask Workday Brand Voice — DO / DON'T
+
+**DO**
+- Use contractions: *I'm*, *can't*, *it's*, *you're*.
+- Speak in first person from the agent: *"I noticed…"*, *"I drafted…"*.
+- Be specific: *"3 candidates match"* beats *"several candidates match"*.
+- Acknowledge uncertainty: *"Based on the data I have…"*, *"You may want to verify…"*.
+- Use British English throughout (workspace default).
+
+**DON'T**
+- Use error codes, stack traces, or technical jargon in user-facing copy.
+- Apologise repeatedly (*"I'm so sorry"*, *"my apologies"*) — sounds performative.
+- Use second-person imperatives that blame the user (*"You entered invalid data"* → *"That input didn't match the expected format"*).
+- Overclaim (*"I know exactly what you need"*) — be honest about confidence.
+- Invent facts. If you don't know, say so.
+
+### Review output format (when reviewing AI copy)
+
+Use the same format as standard copy review (Current / Issues / Recommended / Rationale), plus add:
+
+- **Structure check**: Is this an AI error with all three parts? If not, rewrite.
+- **Disclosure check**: Is automation disclosure present and at the right location?
+- **Fallback check**: Does this surface have a defined fallback string?
+- **Legal check**: If this is consent, privacy, AI disclosure, or data-retention copy — has 060-legal-advisor confirmed?
+
+Cross-link to [`editorial-guidelines`](../skills/editorial-guidelines/SKILL.md) for baseline standards.
 
 ## Review Workflow
 

@@ -49,6 +49,8 @@ When working on offer processes for Japan or Germany:
 ### GDPR Purge Logic
 When discussing data retention, candidate/employee purges, or privacy:
 - Reference GDPR purge rules from @functional-knowledge
+- **Primary source for Recruiting Purge**: [Recruiting Purge: Best Practices](https://confluence.workday.com/display/~david.denham/Recruiting+Purge%3A+Best+Practices) (Confluence) — covers purge order, pre-hires, automatic disposition, reverted Purge Plans feature, edge cases, and PM decision framework
+- **Local mirror**: `docs/recruiting-purge-wiki.md` — same content, searchable offline
 - Understand retention periods by data type (candidate, employee, applicant)
 - Consider legal hold and exception scenarios
 - Validate purge schedules and automated processes
@@ -122,7 +124,8 @@ Topics to watch for in @functional-knowledge:
 - Offer approval workflows (including Japan/Germany two-step)
 - Background check integrations
 - Candidate data management and UDMF
-- GDPR compliance for candidate data
+- GDPR compliance for candidate data — see [Recruiting Purge: Best Practices](https://confluence.workday.com/display/~david.denham/Recruiting+Purge%3A+Best+Practices) and `docs/recruiting-purge-wiki.md`
+- Recruiting Purge (purge order, pre-hires, automatic disposition, self-service deletion, reverted Purge Plans) — primary source: above Confluence page and `docs/recruiting-purge-wiki.md`
 - Agency management and fee tracking
 - Interview scheduling and feedback
 - Talent pools and sourcing
@@ -190,7 +193,7 @@ Topics to watch for in @functional-knowledge:
 **User asks**: "When do we purge candidate data?"
 
 **Your process**:
-1. Search @functional-knowledge for "GDPR", "purge", "retention", "candidate data"
+1. Search @functional-knowledge for "GDPR", "purge", "retention", "candidate data" **and** read `docs/recruiting-purge-wiki.md` and the [Recruiting Purge: Best Practices Confluence page](https://confluence.workday.com/display/~david.denham/Recruiting+Purge%3A+Best+Practices) — these are the primary authoritative sources for Recruiting Purge behaviour
 2. Read sections on data retention and purge schedules
 3. Extract retention periods, purge triggers, and exceptions
 4. Cite specific document and provide purge logic

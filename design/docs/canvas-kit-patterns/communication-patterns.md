@@ -197,6 +197,8 @@ For full-page conversational AI experiences (like candidate self-scheduling or P
 
 **Candidate Navigation**: For external candidates, replace the internal `WorkdayTopNav` with a simplified career site header (e.g., Brand Logo + "Candidate Home" link).
 
+**Workday top-nav spec (internal full-page assistants)**: All internal full-page agent prototypes that use `WorkdayTopNav` MUST follow the current spec — **white bar** (`SANA_TOP_NAV_BG`) + **grey pill search** (`SANA_SEARCH_FIELD_BG`), with a 1px `SANA_TOP_NAV_DIVIDER` hairline underneath (`variant="app"`). The Workday **brand gradient** (`SANA_HOMEPAGE_GRADIENT` via `variant="home"`) is reserved for **homepage / welcome** surfaces only and must not appear above a full-page agent flow. See `.cursor/rules/design-specific/015-sana-style-ui.md` → Colour → Top navigation bar for the full rule and reference frames.
+
 **Scroll Behavior**: Implement auto-scrolling that focuses on the *start* of the latest assistant response (e.g., using `scrollIntoView({ block: 'start' })`), rather than just scrolling to the absolute bottom, to ensure long messages are readable from the top.
 
 **Components**:
@@ -307,6 +309,86 @@ For full-page conversational AI interfaces (like scheduling assistants, screenin
 - Bottom-docked composer
 - Auto-scrolling to the *start* of new assistant messages
 - Support for rich embedded UI (GenUI) via A2UI JSON payloads
+
+**Product reference (SSA split-pane)**: Keyframe-derived patterns for **conversational pane + adjacent structured task** (Self-Service Agent demos: overlap backfill, transfer, JD refinement) — [`design/references/ssa-create-req-flow-best-practices.md`](../../references/ssa-create-req-flow-best-practices.md). Status: **`visual-only; narration TBC`** until PM annotates open questions there.
+
+### Split-pane agentic assistant (chat + structured task)
+
+Use when the assistant must reason conversationally while users complete validated multi-step work in parallel.
+
+**DO**
+- Keep the system-of-record pane persistent while the user chats (no hidden transactional state).
+- Use chat for intent capture, rationale, and summaries; keep confirmations and commits in structured controls.
+- Show smart-default rationale and rule corrections inline (before/after + why + override path).
+- End with dual confirmation: conversational summary plus structured success state with identifiers.
+- Keep disambiguation in-form for people/positions/objects when precision matters.
+
+**DON'T**
+- Don't use split-pane for lightweight informational Q&A or one-field edits.
+- Don't let chat-only messages silently mutate critical fields without visible write-through.
+- Don't hide scheduling/approval conflicts; expose them where users make final decisions.
+- Don't treat keynote stagecraft as product guidance; only use tagged Demo UI evidence.
+
+**Product references**: [`design/references/ssa-create-req-flow-best-practices.md`](../../references/ssa-create-req-flow-best-practices.md), [`design/references/talent-acq-demo-best-practices.md`](../../references/talent-acq-demo-best-practices.md)
+
+### SSA Canvas pattern (cold-start → chat left + canvas right)
+
+The canonical shape for **named agent surfaces** (Self-Service Agent, Create Offer SSA, Create Job Req SSA, Transfer Position SSA). Extends the plain split-pane above by adding the mandatory **cold-start home** that precedes the canvas. See behavioural contract in [`.cursor/rules/design-specific/016-ssa-canvas-pattern.md`](../../../.cursor/rules/design-specific/016-ssa-canvas-pattern.md).
+
+**Components**: `SsaShell`, `SsaTitleStrip`, `SsaStarterSuggestions`, `SparkleMark` — all from `design/components/SsaShell.tsx`. Do not re-implement inline.
+
+**Two states**:
+1. `mode === 'cold-start'` — single centred 720px column. `SparkleMark` + greeting + `SsaStarterSuggestions` (variant `'cold-start'`) + `SanaCommComposer` + AI disclosure. No right pane.
+2. `mode === 'in-task'` — split-pane (520px chat left, flex canvas right). Chat narrates; canvas commits.
+
+**Minimal usage**:
+```tsx
+import {
+  SsaShell,
+  SsaStarterSuggestions,
+  SparkleMark,
+  SanaCommMessageBubble,
+  SanaCommComposer,
+} from './components';
+
+const [mode, setMode] = useState<'cold-start' | 'in-task'>('cold-start');
+
+const coldStartContent = (
+  <>
+    <SparkleMark size={20} />
+    <Box marginBottom="s">
+      <BodyText style={{ fontWeight: 600 }}>Hi, I'm Self-Service Agent!</BodyText>
+      <BodyText>I can help answer general policy questions and help get things done.</BodyText>
+      <BodyText>Explore suggestions below or ask me anything.</BodyText>
+    </Box>
+    <SsaStarterSuggestions
+      variant="cold-start"
+      suggestionSets={COLD_START_SETS}
+      setIndex={setIdx}
+      onPick={submitUserText}
+      onRotate={rotate}
+    />
+    <SanaCommComposer placeholder="Ask me anything." {...composerProps} />
+  </>
+);
+
+const chatPaneContent = (/* thread + in-task composer */);
+const canvasContent = (/* header card + stepper + step content */);
+
+return (
+  <SsaShell
+    mode={mode}
+    tenantLabel="acme-prod"
+    coldStart={coldStartContent}
+    chat={chatPaneContent}
+    canvas={canvasContent}
+  />
+);
+```
+
+**On intent**: the parent's intent handler returns `enterTaskMode: true` when a canvas-triggering prompt fires (e.g. `/\bcreate\s+an\s+offer\b/`). The parent calls `setMode('in-task')` and the shell re-renders into the split-pane. Chat history survives.
+
+**Worked example**: [`design/create-offer-ssa-v01.tsx`](../../create-offer-ssa-v01.tsx).
 
 **Usage**:
 ```tsx

@@ -1,9 +1,9 @@
 import React, { useState, type ReactNode } from 'react';
-import { ToolbarIconButton } from '@workday/canvas-kit-react/button';
+import { TertiaryButton, ToolbarIconButton } from '@workday/canvas-kit-react/button';
 import { Box, Flex } from '@workday/canvas-kit-react/layout';
 import { colors, space } from '@workday/canvas-kit-react/tokens';
 import { BodyText } from '@workday/canvas-kit-react/text';
-import { sendIcon } from '@workday/canvas-system-icons-web';
+import { arrowDownIcon, arrowUpIcon, sendIcon } from '@workday/canvas-system-icons-web';
 import {
   SANA_COMM_BUBBLE_BG,
   SANA_COMM_COMPOSER_RADIUS_PX,
@@ -84,6 +84,104 @@ export const SanaCommMessageBubble: React.FC<SanaCommMessageBubbleProps> = ({
         {timestamp}
       </BodyText>
     ) : null}
+  </Flex>
+);
+
+export interface SsaAgentTurnProps {
+  text?: string;
+  children?: ReactNode;
+  sources?: string[];
+  showSteps?: boolean;
+  stepLines?: string[];
+  hideFeedback?: boolean;
+  onHelpful?: () => void;
+  onNotHelpful?: () => void;
+}
+
+/**
+ * Summit-style SSA assistant turn: plain text, optional "Show Steps", then grounding / feedback actions.
+ * Use when the brief references the Innovation Summit Create Job Req / Transfer Position demos.
+ */
+export const SsaAgentTurn: React.FC<SsaAgentTurnProps> = ({
+  text,
+  children,
+  sources,
+  showSteps,
+  stepLines,
+  hideFeedback,
+  onHelpful,
+  onNotHelpful,
+}) => {
+  const lines = text?.split('\n').filter(Boolean) ?? [];
+
+  return (
+    <Box marginBottom="m">
+      <Box>
+        {children ??
+          lines.map((line, i) => (
+            <BodyText key={i} size="small" style={{ marginTop: i ? 6 : 0 }}>
+              {line}
+            </BodyText>
+          ))}
+      </Box>
+      {showSteps && stepLines && stepLines.length > 0 && (
+        <Box marginTop="xs">
+          <details>
+            <summary style={{ cursor: 'pointer', fontSize: 12, color: SANA_LINK_ACCENT, fontWeight: 600 }}>
+              Show Steps
+            </summary>
+            <Box as="ul" style={{ margin: '8px 0 0 18px', padding: 0 }}>
+              {stepLines.map((step, i) => (
+                <BodyText as="li" key={i} size="small" style={{ marginTop: 4 }}>
+                  {step}
+                </BodyText>
+              ))}
+            </Box>
+          </details>
+        </Box>
+      )}
+      {!hideFeedback && (
+        <Flex alignItems="center" gap="xxs" marginTop="s" style={{ flexWrap: 'wrap' }}>
+          <ToolbarIconButton
+            icon={arrowUpIcon}
+            aria-label="Mark response as helpful"
+            onClick={onHelpful ?? (() => undefined)}
+          />
+          <ToolbarIconButton
+            icon={arrowDownIcon}
+            aria-label="Mark response as not helpful"
+            onClick={onNotHelpful ?? (() => undefined)}
+          />
+          <TertiaryButton size="small">Sources</TertiaryButton>
+          {sources && sources.length > 0 && (
+            <BodyText as="span" size="small" color={SANA_COMM_META_FG} style={{ fontSize: 11 }}>
+              {sources.length} cited
+            </BodyText>
+          )}
+        </Flex>
+      )}
+    </Box>
+  );
+};
+
+export interface SsaUserPromptPillProps {
+  text: string;
+  maxWidth?: string | number;
+}
+
+/** Summit-style SSA user turn: right-aligned grey prompt pill. */
+export const SsaUserPromptPill: React.FC<SsaUserPromptPillProps> = ({ text, maxWidth = '85%' }) => (
+  <Flex justifyContent="flex-end" marginBottom="m">
+    <Box
+      style={{
+        maxWidth,
+        backgroundColor: '#E8EAEF',
+        borderRadius: 16,
+        padding: '10px 14px',
+      }}
+    >
+      <BodyText size="small">{text}</BodyText>
+    </Box>
   </Flex>
 );
 

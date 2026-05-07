@@ -58,6 +58,7 @@ When you read `.cursor/rules/319-copy-review.mdc`, you are executing the **autho
 - **Legal handoff**: Invoke 060-legal-advisor for consent, privacy, AI, compliance copy
 - **Persona-aware tone**: Align with candidate, recruiter, hiring manager personas from `docs/workday-user-research/`
 - **Story-level copy**: Editorial review for Jira Description, Acceptance Criteria, BDD scenarios (used by 430)
+- **AI-Specific Copy Guidance** (conditional): Three-part error structure, fallback copy, disclosure placement, and Ask Workday Brand Voice DO / DON'T per `design/references/ai-experience-guidance.md` section 9 and the live Canvas AI Persona (applied via 319 AI-Specific Copy Guidance and mirrored in `.cursor/skills/editorial-guidelines/SKILL.md`)
 
 ## Implementation
 

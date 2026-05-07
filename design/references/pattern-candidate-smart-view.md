@@ -79,7 +79,7 @@ Horizontal action bar for carousel navigation and quick actions, positioned betw
 
 **Note:** The three-column Candidate Smart View pattern does NOT use `WorkdayLeftTabBar` secondary column. It uses a flat three-column grid instead, prioritizing data density over hub-style navigation.
 
-*   **Global Header:** Use `WorkdayTopNav` (grey bar, white pill search, trailing utilities).
+*   **Global Header:** Use `WorkdayTopNav` (`variant="app"`) — **white bar**, **grey pill search**, 1px `SANA_TOP_NAV_DIVIDER` hairline, trailing utilities. See `design/TOP-NAV-UPDATE.md`.
 *   **No Left Tab Bar:** Unlike hub-style layouts, this pattern omits the secondary navigation column to maximize content space.
 
 ## Content Panels & Interaction Patterns

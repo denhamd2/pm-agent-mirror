@@ -47,6 +47,19 @@ Every mode below can be invoked two ways: via the direct skill trigger (as liste
   - "fixture from WQL"
   - "what does the data look like for X"
 
+### `modes/validation-analysis.md`
+- **Workspace switch:** No
+- **Writes to SUV:** No (read-only gap analysis; writes go through `validation-edit`)
+- **Primary tools:** `ui_task_analysis_get` (with `validations_only: true`), `service_operation_get`, `service_representation_workday_owned_get`, `representation_content_workday_owned_get`, `validation_get`, `xo_search`
+- **Output:** Gap matrix table (UI validation vs REST constraint status)
+- **Triggers:**
+  - `/xo-builder validation-analysis`
+  - "compare validations between task and REST"
+  - "what validations are missing from the REST API"
+  - "validation gap analysis"
+  - "which UI validations should I port"
+  - "are all validations covered"
+
 ---
 
 ## Tier 1 - Guarded build (workspace switch, Maestro HITL)

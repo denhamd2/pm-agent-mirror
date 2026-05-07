@@ -98,246 +98,53 @@ body { background: var(--paper); color: var(--ink); }
 <script id="prototypes-data" type="application/json">{
   "prototypes": [
     {
-      "slug": "gcc-recruiter-dashboard",
-      "name": "GCC Recruiter Dashboard",
-      "description": "GCC-localised recruiter home with regional compliance and workflow surfaces.",
-      "category": "Prototype"
-    },
-    {
-      "slug": "aadhaar-adobe-sign-v01",
-      "name": "Aadhaar + Adobe Sign Offer v01",
-      "description": "India offer flow with Aadhaar verification and Adobe Sign signature integration.",
+      "slug": "create-offer-ssa-v01",
+      "name": "Create Offer SSA v01",
+      "description": "Self-Service Agent offer flow with compensation validation, country-aware approvals, document QA, and Teams approval preview.",
       "category": "Prototype",
-      "prd": "docs/prds/india-aadhaar-adobe-sign-offer-prd.md"
-    },
-    {
-      "slug": "candidate-grid-v84",
-      "name": "Candidate Grid v84",
-      "description": "Redesigned candidate grid for high-volume sourcing and screening.",
-      "category": "Prototype",
-      "brief": "design/candidate-grid-redesign-v84-design-brief.md"
-    },
-    {
-      "slug": "recruiter-home-v85",
-      "name": "Recruiter Home v85",
-      "description": "Recruiter home dashboard pattern with priority workspace.",
-      "category": "Prototype",
-      "brief": "design/recruiter-home-v85-design-brief.md"
-    },
-    {
-      "slug": "candidate-smart-view-v86",
-      "name": "Candidate Smart View v86",
-      "description": "Smart-view candidate detail with grouped insights and actions.",
-      "category": "Prototype",
-      "brief": "design/candidate-smart-view-v86-design-brief.md"
-    },
-    {
-      "slug": "india-whatsapp-candidate-messaging-v88",
-      "name": "India WhatsApp Candidate Messaging v88",
-      "description": "WhatsApp two-way candidate messaging surface for India recruiters.",
-      "category": "Prototype",
-      "prd": "docs/prds/india-whatsapp-sms-candidate-messaging-prd.md",
-      "brief": "design/india-whatsapp-candidate-messaging-design-brief.md"
-    },
-    {
-      "slug": "gcc-interview-scheduling-v90",
-      "name": "GCC Interview Scheduling v90",
-      "description": "GCC-aware interview scheduling with compliance nudges.",
-      "category": "Prototype",
-      "prd": "docs/prds/gcc-interview-scheduling-compliance-nudges-prd.md",
-      "brief": "design/gcc-interview-scheduling-compliance-nudges-design-brief.md",
-      "deck": "docs/downloads/GCC_Recruiting_PMF_Roadmap_v90.pptx",
+      "brief": "design/create-offer-ssa-design-brief.md",
       "files": [
-        "design/gcc-interview-scheduling-v90.tsx",
-        "docs/prds/gcc-interview-scheduling-compliance-nudges-prd.md",
-        "design/gcc-interview-scheduling-compliance-nudges-design-brief.md"
+        "design/create-offer-ssa-v01.tsx",
+        "design/create-offer-ssa-design-brief.md",
+        "design/create-offer-ssa-v01-ai-ux-review.md",
+        "design/create-offer-ssa-v01-copy-review.md",
+        "design/create-offer-ssa-v01-visual-review.md"
       ]
     },
     {
-      "slug": "recruiter-hub-genui-v95",
-      "name": "Recruiter Hub GenUI",
-      "description": "Generative UI dashboard for recruiters.",
+      "slug": "create-jr-ssa-v01",
+      "name": "Create Job Req SSA v01",
+      "description": "Self-Service Agent create-job-requisition flow with overlap backfill, transfer position, and reference-grounded job description refinement.",
       "category": "Prototype",
       "files": [
-        "design/recruiter-hub-genui-v95.tsx"
+        "design/create-jr-ssa-v01.tsx"
       ]
     },
     {
-      "slug": "interview-intelligence-agent-v96",
-      "name": "Interview Intelligence Agent",
-      "description": "AI-powered interview transcription and scoring agent.",
-      "category": "Prototype",
-      "prd": "docs/prds/interview-intelligence-agent-prd.md",
-      "brief": "design/interview-intelligence-agent-design-brief.md",
-      "files": [
-        "design/interview-intelligence-agent-v96.tsx",
-        "docs/prds/interview-intelligence-agent-prd.md",
-        "design/interview-intelligence-agent-design-brief.md"
-      ]
-    },
-    {
-      "slug": "ai-system-of-record-v97",
-      "name": "AI System of Record",
-      "description": "Central hub for managing an organisation's AI ecosystem.",
+      "slug": "e2e-recruiting-talent-acq-v01",
+      "name": "E2E Recruiting Talent Acquisition v01",
+      "description": "Unified Talent Acquisition demo refit covering recruiter home, requisition review, candidate insight, scheduling, and outreach handoff.",
       "category": "Prototype",
       "files": [
-        "design/ai-system-of-record-v97.tsx"
+        "design/e2e-recruiting-talent-acq-v01.tsx"
       ]
-    },
-    {
-      "slug": "recruiter-hub-conversational-v98",
-      "name": "Recruiter Hub Conversational v98",
-      "description": "Prior conversational recruiter hub variant for comparison.",
-      "category": "Prototype"
     },
     {
       "slug": "recruiter-hub-conversational-v99",
       "name": "Recruiter Hub Conversational v99",
-      "description": "Latest conversational recruiter hub iteration.",
+      "description": "Conversational recruiter hub with natural-language task orchestration and pipeline Q&A.",
       "category": "Prototype"
     },
     {
-      "slug": "india-native-whatsapp-v91",
-      "name": "India Native WhatsApp v91",
-      "description": "Native WhatsApp candidate experience for India recruiting.",
-      "category": "Prototype",
-      "prd": "docs/prds/india-native-whatsapp-recruiting-prd.md",
-      "brief": "design/india-native-whatsapp-recruiting-design-brief.md",
-      "deck": "docs/downloads/India_Recruiting_PMF_Roadmap_v91.pptx",
-      "files": [
-        "design/india-native-whatsapp-v91.tsx",
-        "docs/prds/india-native-whatsapp-recruiting-prd.md",
-        "design/india-native-whatsapp-recruiting-design-brief.md",
-        "docs/downloads/India_Recruiting_PMF_Roadmap_v91.pptx"
-      ]
-    },
-    {
-      "slug": "universal-profile-eudi-wallet-v1",
-      "name": "Universal Profile EUDI Wallet v1",
-      "description": "Universal candidate profile with EUDI Wallet credential exchange.",
-      "category": "Prototype",
-      "prd": "docs/prds/universal-profile-eudi-wallet-prd.md",
-      "brief": "design/universal-profile-eudi-wallet-design-brief.md"
-    },
-    {
-      "slug": "offers-dashboard-v01",
-      "name": "Offers Dashboard v01",
-      "description": "Offers operational dashboard with status, exceptions, and compliance.",
+      "slug": "recruiter-hub-conversational-v98",
+      "name": "Recruiter Hub Conversational v98",
+      "description": "Conversational recruiter hub iteration - enhanced pipeline visibility and recruiter co-pilot surfaces.",
       "category": "Prototype"
     },
     {
-      "slug": "offers-playground-v01",
-      "name": "Offers Playground v01",
-      "description": "Sandbox for exploring offers UI variants and components.",
-      "category": "Prototype"
-    },
-    {
-      "slug": "agency-pipeline-card-v01",
-      "name": "Agency Pipeline Card v01",
-      "description": "Recruiting agency pipeline summary: stage funnel, average time in stage, and needs-attention list (Maestro layout handoff).",
-      "category": "Prototype",
-      "files": [
-        "design/agency-pipeline-card-v01.tsx",
-        "design/agency-pipeline-card-v01-reference.png",
-        "design/maestro-handoff/intent.md",
-        "design/maestro-handoff/maestro-prompt.txt",
-        "design/maestro-handoff/api-response-sample.json"
-      ]
-    },
-    {
-      "slug": "customer-scorecard",
-      "name": "Customer Scorecard",
-      "description": "PCA Talent Acquisition feature adoption, IUM TTH/TTF, correlation scoring, peer benchmarks, and bottleneck flow.",
-      "category": "Metrics dashboard",
-      "route": "customer-scorecard",
-      "files": [
-        "design/customer-scorecard-dashboard.tsx",
-        "design/data-customer-scorecard.ts",
-        "design/components/BottleneckFlowStrip.tsx",
-        "design/components/DashboardGlobalNav.tsx"
-      ]
-    },
-    {
-      "slug": "avg-time-to-hire",
-      "name": "Average Time to Hire",
-      "description": "IUM-backed recruiting KPI dashboard for average time to hire trends and cuts.",
-      "category": "Metrics dashboard",
-      "route": "avg-time-to-hire",
-      "files": [
-        "design/avg-time-to-hire-dashboard.tsx"
-      ]
-    },
-    {
-      "slug": "add-documents-impact",
-      "name": "Add Documents Impact",
-      "description": "Impact dashboard for the Add Documents step in the offer business process.",
-      "category": "Metrics dashboard"
-    },
-    {
-      "slug": "positions-open-vs-filled",
-      "name": "Positions Open vs Filled",
-      "description": "IUM dashboard comparing open requisitions with positions filled across recruiting tenants.",
-      "category": "Metrics dashboard",
-      "route": "positions-open-vs-filled",
-      "files": [
-        "design/positions-open-vs-filled-dashboard.tsx"
-      ]
-    },
-    {
-      "slug": "value-realization-metrics",
-      "name": "Value Realisation Metrics",
-      "description": "Executive summary dashboard linking recruiting outcomes and core value metrics.",
-      "category": "Metrics dashboard",
-      "route": "value-realization-metrics",
-      "files": [
-        "design/value-realization-metrics.tsx"
-      ]
-    },
-    {
-      "slug": "recruiter-capacity",
-      "name": "Recruiter Capacity",
-      "description": "Capacity dashboard tracking recruiter workload, requisition load, and bandwidth.",
-      "category": "Metrics dashboard"
-    },
-    {
-      "slug": "recruiting-metric-tree",
-      "name": "Recruiting Metric Tree",
-      "description": "Driver tree visualising recruiting outcome metrics and their contributing inputs.",
-      "category": "Metrics dashboard"
-    },
-    {
-      "slug": "interview-metrics",
-      "name": "Interview Metrics",
-      "description": "Operational dashboard for interview rounds, scheduling, MISST, and interviewer activity.",
-      "category": "Metrics dashboard",
-      "route": "interview-metrics",
-      "files": [
-        "design/interview-metrics-dashboard.tsx",
-        "design/data-interview-metrics.ts",
-        "design/data-interview-filters.ts"
-      ]
-    },
-    {
-      "slug": "bp-durations",
-      "name": "Job App Sub-BPs",
-      "description": "Business-process dashboard for recruiting sub-BP duration, completion, quality, and status metrics.",
-      "category": "Metrics dashboard",
-      "route": "bp-durations",
-      "files": [
-        "design/bp-duration-dashboard.tsx",
-        "design/data-bp-durations.ts"
-      ]
-    },
-    {
-      "slug": "view-dashboard",
-      "name": "View Dashboard",
-      "description": "Composable view-builder pattern for recruiting dashboards.",
-      "category": "Prototype"
-    },
-    {
-      "slug": "recruiting-agency-user",
-      "name": "Recruiting Agency User",
-      "description": "Recruiting agency portal experience and surface review.",
+      "slug": "ai-system-of-record-v97",
+      "name": "AI System of Record v97",
+      "description": "AI-native system of record for recruiting - surfaces decisions, rationale, and audit trail across the hiring process.",
       "category": "Prototype"
     }
   ]
@@ -352,6 +159,27 @@ body { background: var(--paper); color: var(--ink); }
   var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
   var tbody = document.getElementById('proto-body');
   var savedSlugs = {};
+  var storageKey = 'pm-agent-saved-prototypes';
+
+  function persistLocalSavedState() {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(Object.keys(savedSlugs).filter(function(slug) {
+        return savedSlugs[slug];
+      })));
+    } catch (err) {
+      console.warn('Unable to persist saved prototypes locally:', err);
+    }
+  }
+
+  function loadLocalSavedState() {
+    try {
+      var raw = localStorage.getItem(storageKey);
+      if (!raw) return;
+      JSON.parse(raw).forEach(function(slug) { savedSlugs[slug] = true; });
+    } catch (err) {
+      console.warn('Unable to load saved prototypes locally:', err);
+    }
+  }
 
   function fixPath(path) {
     if (!path) return '#';
@@ -400,15 +228,14 @@ body { background: var(--paper); color: var(--ink); }
 
     savedSlugs[slug] = nowSaved;
     applySavedState();
+    persistLocalSavedState();
 
     fetch('/api/save-prototype', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ slug: slug, files: filesForProto(proto), saved: nowSaved })
     }).catch(function(err) {
-      console.error('Save failed:', err);
-      savedSlugs[slug] = !nowSaved;
-      applySavedState();
+      console.warn('Server save unavailable; local saved state was kept:', err);
     });
   }
 
@@ -441,11 +268,15 @@ body { background: var(--paper); color: var(--ink); }
     tr.querySelector('.btn-save').addEventListener('click', function() { toggleSave(p.slug); });
   });
 
+  loadLocalSavedState();
+  applySavedState();
+
   fetch('/api/saved-prototypes')
     .then(function(r) { return r.json(); })
     .then(function(resp) {
       (resp.saved || []).forEach(function(e) { savedSlugs[e.slug] = true; });
       applySavedState();
+      persistLocalSavedState();
     })
     .catch(function() { applySavedState(); });
 })();

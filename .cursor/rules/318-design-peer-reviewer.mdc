@@ -55,6 +55,22 @@ Evaluate the design draft harshly:
     - [ ] Layout applies to correct contexts (Job Req Detail, Dashboard, All Candidates, All Actions)
   - If profile/detail: Does it follow `design/references/pattern-candidate-smart-view.md`?
 
+### Agentic Recruiting Workflow Validation
+If the brief includes a recruiting agent, candidate review, scheduling, outreach, HiredScore/AI recommendation, or generated recruiting artifact, read `design/references/recruiting-agentic-workflow-patterns.md` and verify:
+- **Reference-frame fidelity**: exact video/screenshot frames are cited; product UI is separated from presenter/stage context; the observed screen sequence is preserved or the deviation is justified.
+- **Surface ownership**: structured filtering stays in the workbench, review decisions stay on the profile, panel negotiation moves to collaboration surfaces, candidate confirmation moves to candidate channels, and generated documents open artifact-first.
+- **AI write-through**: every agent claim that changes workflow state has a visible target in filters, tables, forms, step state, profile state, collaboration thread, or document checks.
+- **Evidence-adjacent decisions**: AI assessments, fit/gap evidence, generated-copy QA, approval logic, and citations appear beside the related decision control.
+- **Interaction completeness**: visible arrows, toggles, tabs, CTAs, and reference controls are specified as interactive unless explicitly marked visual-only.
+- **Pattern discipline**: the brief names at least one plausible pattern that was ruled out and why.
+
+Mark as **NEEDS REVISION** if:
+- A chat panel appears on a profile or task surface where the reference shows a profile/task-only decision surface.
+- Agentic state remains chat-only with no visible write-through.
+- The design skips an observed reference transition, such as profile review -> collaboration handoff -> candidate channel, without PM-approved rationale.
+- A dense recruiter grid is treated as a spacious rounded dashboard card without reference justification.
+- Visible candidate navigation, send, edit, filter, or handoff controls are decorative only.
+
 ### Design System Validation (Canvas Kit Component Correctness)
 - Are all components valid Canvas Kit?
 - **Verify component claims** (if any are non-obvious):
@@ -108,6 +124,63 @@ Evaluate the design draft harshly:
 - How the design upholds it (or fails to)
 - Specific examples from the brief
 - Any concerns or improvements needed
+
+### Accessibility Review (MANDATORY)
+
+315 PASS 2 step 6 documents a set of **Accessibility Non-Negotiables**. Verify each is actually addressed in the brief (not just asserted):
+
+- [ ] Greyscale test: does the design convey the same information without colour?
+- [ ] Text contrast ≥ 4.5:1; interactive boundaries ≥ 3:1; focus ≥ 3:1
+- [ ] One H1 per page; headings sequential; modals have H2
+- [ ] Icon-only buttons have persistent labels or tooltips
+- [ ] Tap targets ≥ 24px (web) / 48px (mobile)
+- [ ] Font-scaling doesn't break layout at 200% zoom
+- [ ] Keyboard equivalents for all hover / drag / mouse-only interactions
+
+If any are missing or hand-waved, flag for revision. Full list: `design/references/ux-quality-checklist.md` → Accessibility topic appendix.
+
+### Equity & Inclusion Review (MANDATORY)
+
+315 PASS 1 step 8 and PASS 2 step 6 address extreme scenarios, unhappy paths, and E&I Non-Negotiables. Verify:
+
+- [ ] Unhappy path and misuse considered (bot activity, coercion, abuse by admin)
+- [ ] Harm Less UX principles applied (no biased defaults, no jargon, consent where relevant, no unchangeable actions)
+- [ ] Users can correct mistakes (save draft, edit submission, reversible destructive actions)
+- [ ] Authentic representation where applicable (no US-only defaults for relationship status, gender, nationality)
+- [ ] If AI/ML feature (HiredScore, Paradox, etc.), is the AI Risk Evaluation referenced?
+
+If the brief feels "happy-path only" or misses edge-case users, mark as NEEDS REVISION. Full list: `design/references/ux-quality-checklist.md` → Equity & Inclusion topic appendix.
+
+### Globalisation Review (MANDATORY)
+
+315 PASS 1 step 9 and PASS 2 step 6 address global users. Verify:
+
+- [ ] Text-expansion room reserved (+35% horizontal, +15% vertical)
+- [ ] No gesture-based imagery (thumbs-up, OK sign, culturally loaded icons)
+- [ ] No text embedded in images
+- [ ] Pseudo-translation test noted (even if only conceptually at brief stage)
+- [ ] Dates, times, numbers not hard-coded to US formats
+
+Workday Recruiting ships globally — a brief that only works in English is a revision trigger. Full list: `design/references/ux-quality-checklist.md` → Globalisation topic appendix.
+
+### AI Experience Review (CONDITIONAL — only if feature involves AI, an agent, HiredScore, Paradox, or any automated generation/decision)
+
+315 PASS 1 step 10 produces an AI Experience Framing block. Verify each item is explicitly addressed, not hand-waved. Full guidance: `design/references/ai-experience-guidance.md` (section 12 lists this lens in full).
+
+- [ ] **Interaction Mode** is explicitly tagged (Analyzing / Reviewing / Monitoring / Configuring / Creating), and it's the right one for the user's actual job
+- [ ] **All three phases** (Before Interaction / During Interaction / Over Time) are addressed, or absence of any phase is justified in one line
+- [ ] **Stance** is named (Anticipate / Amplify / Empower) — if none fit, the AI probably shouldn't be there
+- [ ] **Pattern** choice is justified via the decision tree (Embedded / Contextual Ingress / Content Generation / Partial Panel Chat / Full-Screen Chat / Split-pane Agent + Task) — not defaulting to chat
+- [ ] Pattern choice cites at least one **ruled-out pattern** (anti-pattern check) with a brief reason
+- [ ] **Surface** choice (Workday Web / Everywhere / Mobile / Sana Labs) matches where the user actually does this job
+- [ ] **Disclosure** copy is present at the right location (inline / header / footer) with a short string
+- [ ] **Error messages** follow the three-part structure (Problem + Reason + Next steps + Actions) — not generic "Something went wrong"
+- [ ] **Fallback** is defined for "AI unavailable" / "low confidence" scenarios, with a human alternative
+- [ ] **Brand voice** follows Ask Workday Brand Voice (contractions, first-person from the agent, specific, acknowledges uncertainty, no error codes, no excessive apologies). Cross-check against Canvas AI Persona (`https://canvas.workdaydesign.com/guidelines/ai-guidance/ai-persona`)
+- [ ] **If Ambient**: opt-out affordance present at the appropriate scope (per-req, per-user, global)
+- [ ] **If legal-sensitive** (consent, privacy, data retention, AI disclosure): 060-legal-advisor was invoked
+
+If any item is missing or asserted without evidence, mark as NEEDS REVISION and cite the specific section of `design/references/ai-experience-guidance.md` that applies.
 
 ---
 
@@ -188,6 +261,8 @@ Use these **alongside** your review (especially when validating options):
 - **Canvas Kit MCP** (`user-canvas-kit-mcp`): Call `get-canvas-kit-tokens` (and MCP resources as needed) to validate component or token names
 - **Visual and shell references**: `design/references/recruiter-flow/`, `design/references/sana/`, `design/components/` (`WorkdayTopNav`, `WorkdayLeftTabBar`, `CommunicationDock`, `sanaShellTheme`, `SanaCommPanelPatterns`)
 - **Pattern Libraries**: `design/references/pattern-hired-score-grid.md`, `design/references/pattern-candidate-smart-view.md`
+- **UX Quality Checklist** (RAD-aligned): `design/references/ux-quality-checklist.md` — use for Accessibility / Equity & Inclusion / Globalisation review lenses. Verify 315's Non-Negotiables are addressed, not hand-waved.
+- **AI Experience Guidance** (Canvas + Workday internal): `design/references/ai-experience-guidance.md` — use for the AI Experience Review lens. Verify 315's AI framing (Interaction Mode, phases, pattern, surface, disclosure, errors, brand voice) is justified, not hand-waved. Only applies when the feature involves AI, an agent, HiredScore, Paradox, or automated generation/decision.
 
 ---
 
@@ -217,7 +292,7 @@ Your review is a **single-pass evaluation**. You provide feedback once:
 
 ## Integration
 
-- **From**: **315-ux-designer** (via **319-doc-writer** copy review)
+- **From**: **315-design-brief-creation** (via **319-copy-review**)
 - **To**: **320-prototype-developer** (only after **Final Verdict: APPROVED**) or back to **315** (if **NEEDS REVISION**)
 
 ---

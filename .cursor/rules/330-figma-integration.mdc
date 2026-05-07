@@ -110,100 +110,19 @@ When analysing or capturing flows aimed at **external candidates** or **frontlin
 - `docs://tokens/color-tokens` - Token naming and usage
 - `docs://tokens/color-roles` - Semantic color roles
 - `docs://tokens/color-contrast` - Accessibility contrast guidelines
-- `docs://upgrade-guides/11.0-UPGRADE-GUIDE` - Canvas Kit v11 guide
+- `docs://upgrade-guides/14.0-UPGRADE-GUIDE` - Current version patterns (or the latest guide available from the MCP; Canvas Kit version evolves)
 
 **How to use:**
 1. Call `CallMcpTool` with server `user-canvas-kit-mcp` and tool name
 2. Use `FetchMcpResource` to read specific documentation
 
-**Common Canvas Kit Components (v11):**
-- Layout: `Box`, `Flex`, `Card`
-- Buttons: `PrimaryButton`, `SecondaryButton`, `TertiaryButton`, `ToolbarIconButton`
-- Inputs: `TextInput`, `Select`, `Radio`, `Checkbox`
-- Display: `Table` (with `.Head`, `.Body`, `.Row`, `.Header`, `.Cell`)
-- Navigation: `Tabs` (with `.List`, `.Item`, `.Panel` - requires `data-id` props), `Menu`
-- Text: `Heading`, `BodyText`, `Text`
-- Icons: `SystemIcon`, `Avatar`
-- Popups: `Modal`, `Popup`, `Toast`
+**Component and token details — do NOT duplicate here.** Canvas Kit component lists, APIs, token names, and version-specific requirements are the authoritative concern of:
 
-**Design Tokens (from Canvas Kit v11):**
-- `colors` - Color palette (blueberry, cinnamon, soap, blackPepper, greenApple, cantaloupe, etc.)
-- `space` - Spacing scale (xxxs, xxs, xs, s, m, l, xl, xxl, xxxl)
-- `type` - Typography scale
+- [`320-prototype-developer.mdc`](320-prototype-developer.mdc) — current Canvas Kit version, component catalog, critical API patterns (Tabs, Table, etc.)
+- [`095-design-advisory-standards.md`](advisory-methods/095-design-advisory-standards.md) → Canvas Kit MCP section — authoritative expectations for MCP usage
+- `user-canvas-kit-mcp` — live source of truth via `get-canvas-kit-tokens` and `get-canvas-kit-upgrade-guides`
 
-**CRITICAL Canvas Kit v11 Requirements:**
-⚠️ **Canvas Kit v11 REQUIRES `@workday/canvas-tokens-web` to be installed**
-- Components use CSS variables that are ONLY defined by Canvas Tokens Web
-- Without this package, components will have NO STYLING (no colors, spacing, borders, etc.)
-- Must import token CSS files in the app entry point (main.tsx/index.tsx):
-  ```tsx
-  import '@workday/canvas-tokens-web/css/base/_variables.css';
-  import '@workday/canvas-tokens-web/css/system/_variables.css';
-  import '@workday/canvas-tokens-web/css/brand/_variables.css';
-  ```
-
-**Component-Specific Requirements:**
-
-**Tabs Component:**
-- Requires `initialTab` prop to set which tab loads by default
-- Use `data-id` prop (NOT `name` or `id`) on both `Tabs.Item` and `Tabs.Panel` to link them
-- Example:
-  ```tsx
-  <Tabs initialTab="overview">
-    <Tabs.List>
-      <Tabs.Item data-id="overview">Overview</Tabs.Item>
-    </Tabs.List>
-    <Tabs.Panel data-id="overview">Content</Tabs.Panel>
-  </Tabs>
-  ```
-
-**Table Component:**
-- Must use compound component pattern with `.Head`, `.Body`, `.Row`, `.Header`, `.Cell`
-- NOT the old `<thead>`, `<tbody>` pattern
-- Example:
-  ```tsx
-  <Table>
-    <Table.Head>
-      <Table.Row>
-        <Table.Header>Name</Table.Header>
-      </Table.Row>
-    </Table.Head>
-    <Table.Body>
-      <Table.Row>
-        <Table.Cell>Value</Table.Cell>
-      </Table.Row>
-    </Table.Body>
-  </Table>
-  ```
-
-**TextInput Component:**
-- Style props go directly on the component, NOT via an `inputProps` object
-- Use `style={{}}` prop for custom styling
-
-**Standard Workday Top Navigation Pattern:**
-- Left: Hamburger menu (`ToolbarIconButton` with `justifyIcon`) + Workday logo
-- Center: Search bar (`TextInput` with search icon positioned absolutely)
-- Right: User avatar
-- White background with bottom border
-- Use responsive flexbox layout
-
-**DO NOT:**
-- Reference canvas.workday.com or external design system docs
-- Forget to install and import Canvas Tokens Web CSS files
-- Use old pre-v11 component patterns (like `<thead>` in tables)
-- Add custom animations or micro-interactions
-- Over-engineer with complex styling patterns
-- Use `name` or `id` for Tabs - must use `data-id`
-
-**DO:**
-- ALWAYS verify Canvas Tokens Web is installed and imported
-- Use Canvas Kit components as-is with their built-in styling
-- Use Canvas Kit's margin/padding props (marginBottom="m", padding="l")
-- Use `data-id` for Tabs component linking
-- Use compound components (Table, Tabs) correctly
-- Keep implementations simple and straightforward
-- Trust Canvas Kit's default behaviors
-- Check Canvas Kit v11 upgrade guide for breaking changes
+330's job is **Figma extraction and capture**, not Canvas Kit education. When analysing or capturing designs, call the MCP for current component availability and token definitions — never assert a specific Canvas Kit version from this rule. If analysis or capture output needs to reference a component, call `get-canvas-kit-tokens` first.
 
 ### Workday Design Reference File
 **Source File**: 2-Way Email Recruiting (https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/)
@@ -226,17 +145,18 @@ This is the **canonical Workday Recruiting design reference** used across protot
 3. Link to this reference file in capture documentation
 4. Prototypes under `design/` must **not** show **`Breadcrumbs`** or chevron **path strips** (workspace rule — see **`010-style-guide.mdc`**). If feedback suggests adding them, refuse for prototypes and use **`Heading`** + tabs + metadata instead.
 
-**Common Workday UI Patterns** (from reference file):
-- **Top Navigation**: White background, hamburger + logo + search + avatar, 1px bottom border
-- **Card Design**: White, 8px radius, subtle shadow, consistent padding
-- **Form Layout**: Vertical stack, clear labels, 16px field spacing
-- **Tables**: Clean headers, subtle row borders, hover states
-- **Action Buttons**: Blue primary, outlined secondary, clear hierarchy
+**Visual standard for Workday Recruiting** — do NOT define chrome here. The workspace standard for surfaces, top nav, cards, radii, typography, and blue usage is **Sana Style**, and the single source of truth is:
+
+- [`.cursor/rules/design-specific/015-sana-style-ui.md`](design-specific/015-sana-style-ui.md) — Sana Style UI (workspace default: **white top nav** with a **grey pill search**; underlined by the Workday brand gradient on homepage surfaces or a 1px hairline on every other page; white cards on grey canvas with ~16-20px radii; minimal blue chrome)
+- [`010-style-guide.mdc`](010-style-guide.mdc) — overall style guide
+- `design/references/sana/` — versioned PNG benchmarks
+
+When analysing or capturing designs against Workday standards, validate against Sana (not the legacy reference file's chrome). Legacy patterns in the 2-Way Email Recruiting Figma (white top nav, 8px cards, heavy blue chrome) **predate Sana** and must not be treated as the default for new work. Reference the 2-Way Email file for component vocabulary (tables, forms, buttons) — not for visual chrome.
 
 **Cross-reference with 320-prototype-developer**:
-- 320 uses this same file as design reference for prototypes
-- Ensure consistency: if 320 extracts tokens, use the same mappings
-- Coordinate on design token updates in `/design/workday-design-tokens.md`
+- 320 uses Sana Style + `design/components/sanaShellTheme.ts` as the implementation standard
+- If 330 flags a captured design as "matches 2-Way Email reference" but the prototype was built to Sana, that is expected — Sana is the current target
+- Coordinate on design token updates in `/design/workday-design-tokens.md` against Sana, not legacy
 
 ## URL Parsing
 

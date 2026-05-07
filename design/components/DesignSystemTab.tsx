@@ -17,6 +17,7 @@ import {
   SANA_SECONDARY_NAV_WIDTH_PX,
   SANA_PANEL_SHADOW,
   SANA_TOP_NAV_BG,
+  SANA_SHELL_COLUMN_BG,
   SANA_LINK_ACCENT,
   SANA_BADGE_RED,
   SANA_SECONDARY_TAB_ACTIVE_BG,
@@ -119,13 +120,13 @@ export const DesignSystemTab: React.FC = () => {
 
       <ComponentCard
         title="WorkdayTopNav"
-        description="Top navigation bar with W mark, search pill, notification icons, and user avatar. Sana-aligned neutral grey surface."
+        description="Top navigation bar with W mark, grey pill search, notification icons, and user avatar. White bar with a bottom-edge treatment that depends on variant: 'home' renders the Workday brand gradient (8px) beneath; 'app' (default) renders a 1px grey hairline."
         source="design/components/WorkdayTopNav.tsx"
-        props="userName notificationCount avatarInitials onSearch"
+        props="variant userName notificationCount avatarInitials onSearch"
       >
-        <Box style={{ width: '100%', height: 48, backgroundColor: SANA_TOP_NAV_BG, borderRadius: 8, display: 'flex', alignItems: 'center', padding: '0 16px', gap: 16 }}>
+        <Box style={{ width: '100%', height: 48, backgroundColor: SANA_TOP_NAV_BG, borderRadius: 8, display: 'flex', alignItems: 'center', padding: '0 16px', gap: 16, border: `1px solid ${colors.soap300}` }}>
           <Box style={{ width: 32, height: 32, backgroundColor: SANA_LINK_ACCENT, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 14 }}>W</Box>
-          <Box style={{ flex: 1, maxWidth: 400, height: 32, backgroundColor: '#fff', borderRadius: 16, display: 'flex', alignItems: 'center', padding: '0 14px', fontSize: 13, color: '#999' }}>Search or ask anything...</Box>
+          <Box style={{ flex: 1, maxWidth: 400, height: 32, backgroundColor: '#F3F4F6', borderRadius: 16, display: 'flex', alignItems: 'center', padding: '0 14px', fontSize: 13, color: '#999', border: `1px solid ${colors.soap300}` }}>Search or ask anything...</Box>
           <Flex style={{ marginLeft: 'auto' }} gap="s" alignItems="center">
             <Box style={{ width: 20, height: 20, backgroundColor: colors.licorice200, borderRadius: 4, opacity: 0.5 }} />
             <Box style={{ width: 20, height: 20, backgroundColor: colors.licorice200, borderRadius: 4, opacity: 0.5 }} />
@@ -145,7 +146,7 @@ export const DesignSystemTab: React.FC = () => {
         props="primaryItems[] secondaryTabs[] activeSection activeTab"
       >
         <Flex style={{ height: 200, borderRadius: 8, overflow: 'hidden', width: '100%' }}>
-          <Flex flexDirection="column" alignItems="center" paddingY="s" gap="s" style={{ width: 64, backgroundColor: SANA_TOP_NAV_BG, borderRight: `1px solid ${colors.soap300}` }}>
+          <Flex flexDirection="column" alignItems="center" paddingY="s" gap="s" style={{ width: 64, backgroundColor: SANA_SHELL_COLUMN_BG, borderRight: `1px solid ${colors.soap300}` }}>
             {['Home', 'Recruit', 'HCM'].map((label, i) => (
               <Flex key={label} flexDirection="column" alignItems="center" gap="xxs" style={{ opacity: i === 1 ? 1 : 0.7 }}>
                 <Box style={{ width: 20, height: 20, backgroundColor: i === 1 ? SANA_LINK_ACCENT : colors.licorice200, borderRadius: 4 }} />
@@ -153,7 +154,7 @@ export const DesignSystemTab: React.FC = () => {
               </Flex>
             ))}
           </Flex>
-          <Flex flexDirection="column" gap="xxs" padding="s" style={{ width: 232, backgroundColor: SANA_TOP_NAV_BG }}>
+          <Flex flexDirection="column" gap="xxs" padding="s" style={{ width: 232, backgroundColor: SANA_SHELL_COLUMN_BG }}>
             {['Candidates', 'Requisitions', 'Interviews', 'Reports'].map((tab, i) => (
               <Box key={tab} padding="xs" style={{ borderRadius: 999, backgroundColor: i === 0 ? SANA_SECONDARY_TAB_ACTIVE_BG : 'transparent', fontSize: 13, fontWeight: i === 0 ? 600 : 400, color: i === 0 ? '#1D1D1D' : '#6B6B6B', paddingLeft: 12 }}>
                 {tab}
@@ -462,7 +463,7 @@ export const DesignSystemTab: React.FC = () => {
         props="channels[] activeChannel messages[] onSend"
       >
         <Flex style={{ height: 200, borderRadius: 8, overflow: 'hidden', width: '100%' }}>
-          <Flex flexDirection="column" alignItems="center" paddingY="s" gap="s" style={{ width: 48, backgroundColor: SANA_TOP_NAV_BG, borderRight: `1px solid ${colors.soap300}` }}>
+          <Flex flexDirection="column" alignItems="center" paddingY="s" gap="s" style={{ width: 48, backgroundColor: SANA_SHELL_COLUMN_BG, borderRight: `1px solid ${colors.soap300}` }}>
             <Box style={{ width: 32, height: 32, borderRadius: 8, backgroundColor: SANA_COMM_RAIL_ACTIVE_BG, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>&#9993;</Box>
             <Box style={{ width: 32, height: 32, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, opacity: 0.5 }}>&#128172;</Box>
             <Box style={{ width: 32, height: 32, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, opacity: 0.5 }}>&#128221;</Box>
@@ -495,7 +496,7 @@ export const DesignSystemTab: React.FC = () => {
       >
         <Flex flexDirection="column" gap="zero" style={{ width: '100%' }}>
           <Swatch color={SANA_PAGE_CANVAS} hex="#F3F5F7" label="SANA_PAGE_CANVAS - Page canvas behind cards" />
-          <Swatch color={SANA_TOP_NAV_BG} hex="#F3F4F6" label="SANA_TOP_NAV_BG - Top nav / primary rail" />
+          <Swatch color={SANA_TOP_NAV_BG} hex="#FFFFFF" label="SANA_TOP_NAV_BG - Top nav (white bar)" />
           <Swatch color={SANA_SECONDARY_TAB_ACTIVE_BG} hex="#E5E7EB" label="SANA_SECONDARY_TAB_ACTIVE_BG - Active tab pill" />
           <Swatch color={SANA_LINK_ACCENT} hex="#005CB9" label="SANA_LINK_ACCENT - Links, primary actions" />
           <Swatch color={SANA_BADGE_RED} hex="#D73B3E" label="SANA_BADGE_RED - Notification badge" />

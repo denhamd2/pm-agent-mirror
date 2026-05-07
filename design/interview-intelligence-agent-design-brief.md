@@ -19,7 +19,7 @@ End-to-end interview intelligence flow across three connected views, demonstrati
 ## PASS 1: Layout Strategy
 
 ### Shell Pattern (Pattern A: Recruiting Hub)
-- **WorkdayTopNav**: Standard Sana grey bar with pill search, notifications, avatar
+- **WorkdayTopNav**: Standard Sana **white bar** with **grey pill search**, notifications, avatar. Use `variant="app"` (1px `SANA_TOP_NAV_DIVIDER` hairline under the nav).
 - **WorkdayLeftTabBar**: Recruiting hub with secondary tabs. Active tab: "Interviews"
 - **Main content area**: White card(s) on SANA_PAGE_CANVAS grey canvas
 - **No CommunicationDock**: This prototype focuses on the interview intelligence surface, not messaging

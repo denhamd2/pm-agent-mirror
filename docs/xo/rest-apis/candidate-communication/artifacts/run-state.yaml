@@ -1,0 +1,69 @@
+run_id: "2026-05-01-option-b-candidate-communication-rest"
+task_wid: e8482681f86a10000d7ea68cdaa54745
+task_name: Candidate Communication
+api_design: option_b_split_sub_resources
+api_scope:
+  - GET
+resource_slug: candidate-communication
+phase_status:
+  phase_1_schema_analysis: complete
+  phase_2_schema_implementation: complete
+  phase_3_processing_creation: complete
+  phase_4_post_build: complete
+
+# Superseded Option A artefacts (rollback optional)
+legacy_cci_rep_wid: f19cefa311a510001bda1d3381c40000
+
+hrrecruiting:
+  service_wid: a93ff6ca921610001fc9548bf018100f
+  service_version_v1_wid: a93ff6ca921610001fc68a3c7cfc100d
+  candidates_scr_wid: 53902ad9948f10000d60a1b15e420049
+
+option_b_surfaces:
+  notification_events_ssc_wid: f19cefa311a510001cd897b1f9980000
+  notification_events_get_op_wid: f19cefa311a510001cda4364c76a0000
+  notification_events_view_rep_wid: f19cefa311a510001cbcf9af62400000
+  conversation_messages_ssc_wid: f19cefa311a510001cd8bc8d4f540000
+  conversation_messages_get_op_wid: f19cefa311a510001cda5fa623780000
+  conversation_messages_view_rep_wid: f19cefa311a510001cbd0eb6b3790000
+
+xo_agent_tool_registrations:
+  notification_events_tool_wid: f19cefa311a510001ce2ac669bac0000
+  conversation_messages_tool_wid: f19cefa311a510001ce2b99b7acc0000
+
+rsmb_wids:
+  recruiting_notification_events_for_person: c319923a5645100006edd79ef1020687
+  conversation_messages_for_candidate: e7fc5a22aba610000e746da6fcf60000
+
+maps_to_class_decision: not_applicable_get_only_no_edit_rep
+
+created_object_counts:
+  business_objects: 0
+  class_report_fields: 0
+  representations: 2
+  representation_content: 8
+  service_sub_collection_resources: 2
+  service_operations: 2
+  processing_options: 0
+  xo_agent_tool_registrations: 2
+
+smoke_summary:
+  collection_get_notification_events: blocked_http_403
+  collection_get_conversation_messages: blocked_http_403
+  singleton_get: not_implemented
+
+phase_23_resolved:
+  - id: UNION_RSMB
+    resolution: "Split into two SSCs (RNE vs Conversation Message), each with one RSMB."
+  - id: CCI_FIELD_WHITELIST
+    resolution: "Abandoned abstract CCI view rep for API surface; concrete class representations per sub-resource."
+
+known_drift:
+  - id: PUSH_FIELD_WHITELIST
+    detail: "Representation Content for Push Notification Message +TG was created (WID f19cefa311a510001cd0eb7446da0000) but Service Representation PATCH/GET contents omits it — platform whitelist likely excludes this CRF from RNE WO rep graph."
+  - id: ORPHAN_OPTION_A_RC
+    detail: "Four RC objects on superseded candidateCommunicationItemTimelineView remain in tenant; optional Instance Edit cleanup."
+  - id: INVITE_TO_APPLY
+    detail: "Job Postings for Invite to Apply CRF is on Recruiting Email subclass, not RNE; not included in this v1 surface."
+  - id: SECURITY_PROVIDER
+    detail: "GET operations use Self-Service: Candidate (a2abd8cc2c58100006708e96adc6001c) to align with hrrecruiting/candidates/Get Candidate — not Candidate Communication domain."

@@ -17,9 +17,30 @@ import {
   gridViewIcon,
   rotateIcon,
 } from '@workday/canvas-system-icons-web';
-import { SANA_LINK_ACCENT, SANA_TOP_NAV_BG, SANA_SEARCH_FIELD_BG } from './sanaShellTheme';
+import {
+  SANA_LINK_ACCENT,
+  SANA_TOP_NAV_BG,
+  SANA_SEARCH_FIELD_BG,
+  SANA_TOP_NAV_DIVIDER,
+  SANA_HOMEPAGE_GRADIENT,
+  SANA_HOMEPAGE_GRADIENT_HEIGHT_PX,
+} from './sanaShellTheme';
 
 export const WORKDAY_TOP_NAV_HEIGHT_PX = 56;
+
+/**
+ * Which underline treatment the top nav should render.
+ *
+ * - `'home'`: homepage / welcome surfaces — renders the Workday brand gradient
+ *   accent bar (`SANA_HOMEPAGE_GRADIENT`) as a thick band under the nav.
+ * - `'app'` (default): every other page (SSA, hub pages, task flows, dashboards)
+ *   — renders a 1px `SANA_TOP_NAV_DIVIDER` hairline under the nav.
+ *
+ * Reference frames:
+ * - `design/references/ssa-create-req-videos/frames-overlap/ov-5400.png` → homepage variant
+ * - `design/references/ssa-create-req-videos/frames-overlap/ov-2700.png` → app variant
+ */
+export type WorkdayTopNavVariant = 'home' | 'app';
 
 /**
  * Workday W-mark: White circle with bold W and signature orange swoosh
@@ -110,6 +131,11 @@ export interface WorkdayTopNavProps {
   trailingActions?: ReactNode;
   /** Max width of the pill search field */
   searchMaxWidthPx?: number;
+  /**
+   * Underline treatment below the nav. `'home'` renders the brand gradient accent bar;
+   * `'app'` (default) renders a thin grey divider. See `WorkdayTopNavVariant` for details.
+   */
+  variant?: WorkdayTopNavVariant;
 }
 
 /**
@@ -129,6 +155,7 @@ export const WorkdayTopNav: React.FC<WorkdayTopNavProps> = ({
   compactTrailing = true,
   trailingActions,
   searchMaxWidthPx = 560,
+  variant = 'app',
 }) => {
   const defaultTrailing = (
     <>
@@ -150,21 +177,24 @@ export const WorkdayTopNav: React.FC<WorkdayTopNavProps> = ({
     </>
   );
 
+  const isHome = variant === 'home';
+
   return (
-    <Box
-      paddingX="l"
-      paddingY="xs"
-      style={{
-        boxSizing: 'border-box',
-        display: 'flex',
-        alignItems: 'center',
-        backgroundColor: SANA_TOP_NAV_BG,
-        borderBottom: `1px solid ${colors.soap300}`,
-        minHeight: `${WORKDAY_TOP_NAV_HEIGHT_PX}px`,
-        maxWidth: '100%',
-        overflowX: 'hidden',
-      }}
-    >
+    <Box style={{ maxWidth: '100%', overflowX: 'hidden' }}>
+      <Box
+        paddingX="l"
+        paddingY="xs"
+        style={{
+          boxSizing: 'border-box',
+          display: 'flex',
+          alignItems: 'center',
+          backgroundColor: SANA_TOP_NAV_BG,
+          borderBottom: isHome ? 'none' : `1px solid ${SANA_TOP_NAV_DIVIDER}`,
+          minHeight: `${WORKDAY_TOP_NAV_HEIGHT_PX}px`,
+          maxWidth: '100%',
+          overflowX: 'hidden',
+        }}
+      >
       <Flex
         justifyContent="space-between"
         alignItems="center"
@@ -231,6 +261,17 @@ export const WorkdayTopNav: React.FC<WorkdayTopNavProps> = ({
           {trailingActions ?? defaultTrailing}
         </Flex>
       </Flex>
+      </Box>
+      {isHome ? (
+        <Box
+          aria-hidden
+          style={{
+            height: `${SANA_HOMEPAGE_GRADIENT_HEIGHT_PX}px`,
+            width: '100%',
+            background: SANA_HOMEPAGE_GRADIENT,
+          }}
+        />
+      ) : null}
     </Box>
   );
 };

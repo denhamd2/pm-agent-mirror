@@ -55,7 +55,7 @@ When I am managing India candidates through active recruiting steps, I want to *
 
 **Candidate profile**
 
-- **Top:** `WorkdayTopNav` (grey bar, white pill search, utilities).  
+- **Top:** `WorkdayTopNav` `variant="app"` — **white bar**, **grey pill search**, 1px `SANA_TOP_NAV_DIVIDER` hairline, utilities.  
 - **Left:** `WorkdayLeftTabBar` (Recruiter Hub sections + profile tabs: Overview, Activity, Documents, Questionnaire, **Messaging**).  
 - **Center:** Tab workspace; **Messaging** tab = consent strip, optional **Banner** for degraded queue, thread (`SanaCommMessageBubble` list), template selector, composer area, metadata (delivery, recruiter attribution).  
 - **Right:** `CommunicationDock` rail icon **WhatsApp**; expanded panel = compact thread + composer mirroring tab content.

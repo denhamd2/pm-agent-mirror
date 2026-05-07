@@ -1,0 +1,65 @@
+{
+  "run_id": "2026-05-01-phase4-option-b-candidate-communication",
+  "environment_note": "SUV REST calls executed via XO MCP suv_rest_call; tenant returns HTTP 403 for hrrecruiting candidates collection without elevated integration principal.",
+  "calls": [
+    {
+      "name": "list_candidates_probe",
+      "service": "hrrecruiting",
+      "version": "v1",
+      "resource": "candidates",
+      "method": "GET",
+      "params": { "limit": 1 },
+      "proxy_user": null,
+      "status": "blocked",
+      "http_status": 403,
+      "detail": "permission denied — could not obtain parent candidate WID for nested sub-resource smoke."
+    },
+    {
+      "name": "list_candidates_probe_proxied",
+      "service": "hrrecruiting",
+      "version": "v1",
+      "resource": "candidates",
+      "method": "GET",
+      "params": { "limit": 1 },
+      "proxy_user": "wd-implementer",
+      "status": "blocked",
+      "http_status": 403,
+      "detail": "permission denied — same outcome with oms-proxy-user-name."
+    },
+    {
+      "name": "get_candidate_notification_events",
+      "relative_path": "/hrrecruiting/v1/candidates/{candidateWID}/candidateNotificationEvents",
+      "method": "GET",
+      "status": "not_run",
+      "detail": "blocked on parent list 403; metadata wiring present (SSC + GET operation)."
+    },
+    {
+      "name": "get_candidate_conversation_messages",
+      "relative_path": "/hrrecruiting/v1/candidates/{candidateWID}/candidateConversationMessages",
+      "method": "GET",
+      "status": "not_run",
+      "detail": "blocked on parent list 403; metadata wiring present (SSC + GET operation)."
+    },
+    {
+      "name": "singleton_get_by_subresource_instance_id",
+      "status": "not_implemented",
+      "detail": "Only default collection GET operations were authored (mirrors incumbent patterns like governmentID). separate named-entry singleton op not created."
+    }
+  ],
+  "phase_4_substeps": {
+    "toggle_new_crf_attach": {
+      "status": "skipped",
+      "reason": "No net-new Class Report Fields; reused existing CRF WIDs."
+    },
+    "post_singleton_doc_clear": {
+      "status": "skipped",
+      "reason": "No suv_rest_call / XOAgents MCP descriptor found for singleton-doc clear in this workspace."
+    },
+    "xo_agent_tool_registration": { "status": "ok", "registrations_created": 2 },
+    "edit_rep_maps_to_class_verify": {
+      "status": "skipped",
+      "reason": "GET-only; no Edit representation authored."
+    },
+    "openapi_read_smoke": { "status": "blocked", "reason": "HTTP 403 on candidate collection probe." }
+  }
+}

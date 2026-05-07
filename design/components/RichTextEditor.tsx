@@ -218,6 +218,14 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     }
   }, [templatesOpen]);
 
+  useEffect(() => {
+    if (!editorRef.current) return;
+    const nextHtml = value.includes('<') ? value : value.replace(/\n/g, '<br>');
+    if (editorRef.current.innerHTML !== nextHtml && document.activeElement !== editorRef.current) {
+      editorRef.current.innerHTML = nextHtml;
+    }
+  }, [value]);
+
   // Replace tokens in template with candidate data
   const replaceTokens = (text: string): string => {
     const tokens = {

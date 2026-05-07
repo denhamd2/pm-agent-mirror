@@ -18,7 +18,7 @@ This pattern defines the standard layout and Canvas Kit component mapping for da
 The layout follows a standard shell with a main content area containing context headers, pipeline visualization, and a complex data grid with filtering.
 
 ### 1. Global Shell
-*   **Global Header:** Use `WorkdayTopNav` (grey bar, white pill search, trailing utilities).
+*   **Global Header:** Use `WorkdayTopNav` (`variant="app"`) — **white bar**, **grey pill search**, 1px `SANA_TOP_NAV_DIVIDER` hairline, trailing utilities. See `design/TOP-NAV-UPDATE.md`.
 *   **Primary Left Rail:** Use `WorkdayLeftTabBar` (primary rail with stacked icon + uppercase micro-label).
 *   **Secondary Nav Menu (Hub):** Use the secondary column of `WorkdayLeftTabBar` (e.g., "Recruiting Hub" title, vertical sub-nav pills for sections).
 

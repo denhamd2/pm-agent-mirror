@@ -64,7 +64,7 @@ When I am moving India candidates through screening, interview, and offer steps,
 
 **Candidate profile (Messaging tab):**
 
-- **Top:** `WorkdayTopNav` (grey bar, pill search).  
+- **Top:** `WorkdayTopNav` `variant="app"` — **white bar**, **grey pill search**, 1px `SANA_TOP_NAV_DIVIDER` hairline.  
 - **Left:** `WorkdayLeftTabBar` hub: recruit sections + **profile tabs** including **Messaging**.  
 - **Center (primary):** Messaging workspace: consent strip, channel toggle, thread, composer, template picker.  
 - **Right (optional):** `CommunicationDock` collapsed; if expanded, WhatsApp/SMS panels reuse same bubble/composer patterns.

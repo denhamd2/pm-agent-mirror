@@ -1,50 +1,61 @@
-# Top Navigation Update
+# Top Navigation Spec
 
-## Changes Made
+**Canonical component:** `design/components/WorkdayTopNav.tsx`
+**Canonical tokens:** `design/components/sanaShellTheme.ts`
+**Canonical rule:** `.cursor/rules/design-specific/015-sana-style-ui.md` → Colour → Top navigation bar
+**Reviewer checklist:** `.cursor/rules/321-prototype-visual-reviewer.mdc` → Sana Style Adherence
 
-Updated the top navigation bar to match Workday's standard header design:
+Any prototype under `design/*.tsx` MUST use `WorkdayTopNav` for internal Workday surfaces. Do not reimplement the top chrome inline.
 
-### Left Section
-- **Hamburger Menu**: Added `ToolbarIconButton` with `justifyIcon` (the hamburger/menu icon)
-- **Workday Logo**: Created a styled text logo with:
-  - Workday blue color (`colors.blueberry500`)
-  - Bold weight (700)
-  - 24px font size
-  - Roboto font family
+## Colour spec
 
-### Center Section
-- **Search Bar**: Added full-width search input with:
-  - Canvas Kit `TextInput` component
-  - Search icon positioned on the left inside the input
-  - Light gray background (`colors.soap100`)
-  - Border styling matching Canvas Kit design
-  - Proper padding to accommodate the icon
-  - Max width of 600px for optimal layout
-  - Responsive flex layout
+| Element | Token | Hex | Notes |
+|---------|-------|-----|-------|
+| Top nav background | `SANA_TOP_NAV_BG` | `#FFFFFF` | White bar |
+| Centre pill search | `SANA_SEARCH_FIELD_BG` | `#F3F4F6` | Grey pill with `soap300` hairline border; reads as a recessed affordance on the white bar |
+| Left icon rail + secondary hub column | `SANA_SHELL_COLUMN_BG` (= `SANA_PRIMARY_RAIL_BG` = `SANA_SECONDARY_NAV_BG`) | `#F3F4F6` | Decoupled from the top nav — stays cool grey so the left shell columns still read as one band |
+| Hairline divider under nav (all non-homepage) | `SANA_TOP_NAV_DIVIDER` | `#E5E7EB` | 1px |
+| Homepage brand accent bar | `SANA_HOMEPAGE_GRADIENT` | `linear-gradient(90deg, #1E3A8A 0%, #2E6BC6 18%, #6E6BC2 38%, #B67BB6 58%, #E8B8AE 78%, #F3A160 90%, #EC7A2F 100%)` | Thick (`SANA_HOMEPAGE_GRADIENT_HEIGHT_PX` = 8px) multi-stop band; **homepage / welcome surfaces only** |
 
-### Right Section
-- **User Avatar**: Maintained the existing avatar component
+## Variant — chosen from page role, not look-of-the-week
 
-## Canvas Kit Components Used
+```tsx
+<WorkdayTopNav variant="home" … />   // Homepage / "Welcome back" surfaces
+<WorkdayTopNav variant="app"  … />   // Default — SSA, hub, task, dashboard, search, list pages
+```
 
-1. **ToolbarIconButton**: Specialized icon button for toolbars/headers
-2. **TextInput**: Standard text input with Canvas Kit styling
-3. **SystemIcon**: For the search icon overlay
-4. **Flex & Box**: Layout components for responsive positioning
-5. **Canvas Kit tokens**: For colors, spacing, and consistent design
+- `variant="home"` → renders `SANA_HOMEPAGE_GRADIENT` as an 8px accent bar directly under the nav. No 1px divider.
+- `variant="app"` (default) → renders a 1px `SANA_TOP_NAV_DIVIDER` hairline under the nav. No gradient.
+- **Never render both at once.** Gradient on a non-homepage page, or a hairline on the homepage, is a Critical visual bug and must return to 320 for fix.
 
-## Layout Structure
+## Reference frames
 
-The navigation uses a three-section flexbox layout:
-- Left: `flex: 0 0 auto` (fixed width)
-- Center: `flex: 1 1 auto` (grows to fill space, max 600px)
-- Right: `flex: 0 0 auto` (fixed width)
+| Variant | Reference frame (repo-native) |
+|---------|-------------------------------|
+| `home`  | `design/references/ssa-create-req-videos/frames-overlap/ov-5400.png` ("Welcome back, Harry") |
+| `app`   | `design/references/ssa-create-req-videos/frames-overlap/ov-2700.png` (SSA Position Confirmation), `ov-1800.png` (SSA cold start) |
 
-This ensures the search bar takes up available space while keeping the logo and avatar fixed.
+## Anatomy (left → right)
 
-## Build Results
+1. **Menu / W mark** — `WorkdayWMark` (orange swoosh + navy W, no white circle) on the white bar. `showMenuWordmark` optionally adds a hamburger + "MENU" wordmark before a tenant label.
+2. **Centre pill search** — Canvas Kit `InputGroup` + `InputGroup.Input`; grey fill with `soap300` hairline border and subtle shadow; icon inset uses `searchIcon` from `@workday/canvas-system-icons-web`.
+3. **Trailing utility cluster** — `ToolbarIconButton` icons (refresh, apps/reports, inbox, notifications, help, chat depending on `compactTrailing` / `showLayoutUtilities`), `CountBadge` on inbox / notifications, then `Avatar`.
 
-- Build successful
-- All TypeScript types correct
-- Components properly styled with Canvas Kit defaults
-- Dev server running at http://localhost:5199/
+## Props summary
+
+| Prop | Purpose |
+|------|---------|
+| `variant` | `'home' \| 'app'` — decides underline treatment (gradient vs hairline). Default `'app'`. |
+| `tenantLabel`, `showMenuWordmark`, `showWMark` | Left-cluster identity options |
+| `searchPlaceholder`, `searchValue`, `onSearchChange`, `searchMaxWidthPx` | Pill search wiring |
+| `notificationBadge`, `inboxBadge` | `CountBadge` counts on the trailing cluster |
+| `showLayoutUtilities`, `compactTrailing`, `trailingActions` | Trailing cluster composition |
+
+## Knock-on changes when this spec was introduced
+
+- Flipped `SANA_TOP_NAV_BG` (was `#F3F4F6` grey) and `SANA_SEARCH_FIELD_BG` (was `#FFFFFF`).
+- Introduced `SANA_SHELL_COLUMN_BG` so `SANA_PRIMARY_RAIL_BG` / `SANA_SECONDARY_NAV_BG` no longer follow the top nav to white — the rail / secondary column stay cool grey.
+- Added `SANA_TOP_NAV_DIVIDER`, `SANA_HOMEPAGE_GRADIENT`, `SANA_HOMEPAGE_GRADIENT_HEIGHT_PX`.
+- `WorkdayTopNav` gained the `variant` prop and renders the accent bar when `variant="home"`.
+- Reviewer checklist (`321`) now flags both the colour flip and the variant mismatch.
+- Design briefs (`candidate-smart-view-v86`, `create-offer-ssa`) updated to describe the new spec.
