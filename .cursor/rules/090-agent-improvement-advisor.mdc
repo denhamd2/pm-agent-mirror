@@ -226,7 +226,7 @@ When completing an architectural audit or after implementing improvements, use t
 
 **What it does:**
 - Collects fresh workspace metrics (rules, subagents, skills, MCPs, alwaysApply budget)
-- Runs slide spec validator (if slides_spec_vN.json exists)
+- Runs slide spec validator (if `docs/decks/specs/slides_spec_vN.json` exists)
 - Generates/updates `docs/pm-agent-scorecard.html` with scores, charts, findings
 - Generates/updates `docs/pm-agent-architecture.html` with workflow-centric visualization
 - Serves on port 8765 and opens in Cursor browser

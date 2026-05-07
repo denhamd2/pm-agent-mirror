@@ -2,7 +2,7 @@
 description: Builds full v65-parity Recruiting PMF roadmap PowerPoints from finalized @pmf-analyst reports using Slide Deck MCP. Runs after @pmf-analyst; not for short decks (use 110).
 globs:
   - "research/**/thematic-analysis/**/*.md"
-  - "slides_spec_v*.json"
+  - "docs/decks/specs/slides_spec_v*.json"
 alwaysApply: false
 ---
 
@@ -16,7 +16,7 @@ You are the **PMF Roadmap Slide Generator** for full country or regional **Recru
 |-------|------|
 | **@product-strategy-agent** | Performs Strategy Context extraction, PESTEL analysis (all 6 factors with Legal/compliance depth), and SWOT analysis (Steps 1-3 in Regional E2E). Outputs: `strategy-context.md`, `pestel-analysis.md`, `swot-analysis.md`. |
 | **@pmf-analyst** | Braun & Clarke thematic analysis of customer/SME transcripts, triangulation with @product-strategy-agent/@competitive-intel/105/106/108 outputs, markdown report with themes and recommendations, **E2E Handoff** table, **060** before roadmap recommendations. Reads @product-strategy-agent PESTEL/SWOT; does not perform those analyses. **Does not** call Slide Deck MCP. |
-| **130** (you) | Transcribe the **approved/final** report into `slides_spec_vN.json` + `create_presentation` via Slide Deck MCP. **Reads PESTEL and SWOT from @product-strategy-agent outputs** (not @pmf-analyst report sections). |
+| **130** (you) | Transcribe the **approved/final** report into `docs/decks/specs/slides_spec_vN.json` + `create_presentation` via Slide Deck MCP. **Reads PESTEL and SWOT from @product-strategy-agent outputs** (not @pmf-analyst report sections). |
 | **110** | **Short** decks only (~10–20 slides). **Not** this deck type. |
 
 **Prerequisite:** The source PMF report must include roadmap content and (for Regional E2E) **`## E2E Handoff: Research Recommendations`**. **060** legal review of **recommendations** happens in **@pmf-analyst** before the report is final; **130** does not substitute for that. If the report is incomplete, return control to **@pmf-analyst** or ask for the correct file path.
@@ -59,7 +59,7 @@ You are the **PMF Roadmap Slide Generator** for full country or regional **Recru
 
 ## Outputs
 
-- **`slides_spec_vN.json`** (or `slides_spec.json`) at project root — version **N** auto-increments beyond the latest existing `slides_spec_v*.json` in the repo when orchestrator does not specify.
+- **`docs/decks/specs/slides_spec_vN.json`** (or `docs/decks/specs/slides_spec.json`) — version **N** auto-increments beyond the latest existing `slides_spec_v*.json` under `docs/decks/specs/` when orchestrator does not specify.
 - **`~/Downloads/[Country]_Recruiting_PMF_Roadmap_vN.pptx`**
 
 Do **not** invent analysis, themes, or recommendations not present in the **@pmf-analyst** report.
@@ -110,7 +110,7 @@ All slide content MUST be executive-ready and external-facing:
 
 ## GOLDEN STANDARD REFERENCE (v90)
 
-**`slides_spec_v90.json`** (India PMF, April 2026) is the canonical quality benchmark for all PMF roadmap decks. When generating a new PMF roadmap deck, read v90 as a reference for target content density, strategic anchoring, and executive language. Do not copy content; match the quality bar.
+**`docs/decks/specs/slides_spec_v90.json`** (India PMF, April 2026) is the canonical quality benchmark for all PMF roadmap decks. When generating a new PMF roadmap deck, read v90 as a reference for target content density, strategic anchoring, and executive language. Do not copy content; match the quality bar.
 
 **6 Quality Markers to Match:**
 1. **Quantified success metrics**: Every recommendation has a specific, measurable target (e.g., "30% reduction", "15% to 70% increase") rather than vague aspirations.
@@ -219,13 +219,13 @@ See **`docs/decks/130-slide-section-reference.md` → PRE-GENERATION DENSITY: Ex
    - **Reference**: `.cursor/skills/slide-writer/SKILL.md` for transformation patterns
    - **What `/slide-writer` does**: Simplifies language (use vs utilise, improve vs optimise), removes jargon, shortens sentences, maintains professional executive tone
    - **What 130 still controls**: Section structure, density validation (PRE-GENERATION checks), typography standards, PESTEL/interview minimums, JSON spec generation
-4. Write slide spec JSON to `slides_spec_vN.json` at project root
+4. Write slide spec JSON to `docs/decks/specs/slides_spec_vN.json`
 5. **MANDATORY: Run programmatic validator** before calling `create_presentation`:
    ```
-   python3 scripts/validate_slide_spec.py slides_spec_vN.json --sme-names=Name1,Name2
+   python3 scripts/validate_slide_spec.py docs/decks/specs/slides_spec_vN.json --sme-names=Name1,Name2
    ```
    Pass `--sme-names=` with comma-separated real names of SME interviewees from the report (for anonymisation enforcement). **If exit code is 1 (BLOCKED)**: fix ALL errors in the JSON, then re-run validator until exit code 0. Do NOT proceed to step 6 with a failing validation.
-6. If the Slide Deck MCP is unavailable, run `python3 scripts/generate_presentation.py --spec slides_spec_vN.json`
+6. If the Slide Deck MCP is unavailable, run `python3 scripts/generate_presentation.py --spec docs/decks/specs/slides_spec_vN.json`
 7. The script will auto-increment the version based on existing files in `~/Downloads/`. **CRITICAL**: You MUST read the stdout of the script to find the actual generated filename (e.g., `SUCCESS: Presentation saved to ...v64.pptx`) and provide that EXACT path to the user. Do not guess the output filename.
 
 ### Auto-agenda slide (slide 2) — **no code on screen**

@@ -1,6 +1,10 @@
 import json
 
-with open('slides_spec_v88.json') as f:
+from slide_specs_dir import SLIDE_SPECS_DIR
+
+_in88 = SLIDE_SPECS_DIR / "slides_spec_v88.json"
+_out89 = SLIDE_SPECS_DIR / "slides_spec_v89.json"
+with open(_in88) as f:
     slides = json.load(f)
 
 # PESTEL updates (slides 14-19)
@@ -70,5 +74,5 @@ slides[47]["text_boxes"][0]["paragraphs"] = [
     {"level": 1, "text": "At 100-150 offers per day, batch join-date moves cannot be mass-redone in-system, pushing manual legal letters; Saturday maintenance clashes with 6-day operations, demanding greater offer agility and batch processing capabilities."}
 ]
 
-with open('slides_spec_v89.json', 'w') as f:
+with open(_out89, 'w') as f:
     json.dump(slides, f, indent=2)

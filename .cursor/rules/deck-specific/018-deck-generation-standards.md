@@ -1,7 +1,7 @@
 ---
 description: Deck Generation standards for Slide Deck MCP (typography, layout, formatting)
 globs:
-  - "slides_spec*.json"
+  - "docs/decks/specs/slides_spec*.json"
   - ".cursor/rules/110-slide-generator.mdc"
   - ".cursor/rules/130-pmf-slide-generator.mdc"
 alwaysApply: false

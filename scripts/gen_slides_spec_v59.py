@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """One-off generator for slides_spec_v59.json (GCC PMF v59). Run from repo root."""
 import json
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "slides_spec_v59.json"
+from slide_specs_dir import SLIDE_SPECS_DIR
+
+OUT = SLIDE_SPECS_DIR / "slides_spec_v59.json"
 
 MI = 1
 BODY = dict(

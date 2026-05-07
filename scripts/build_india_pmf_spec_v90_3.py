@@ -1,6 +1,10 @@
 import json
 
-with open('slides_spec_v89.json') as f:
+from slide_specs_dir import SLIDE_SPECS_DIR
+
+_in89 = SLIDE_SPECS_DIR / "slides_spec_v89.json"
+_out90 = SLIDE_SPECS_DIR / "slides_spec_v90.json"
+with open(_in89) as f:
     slides = json.load(f)
 
 # Fix Slide 32 (Ideation Hub: Key Themes) - classified as "themes"
@@ -28,5 +32,5 @@ for i in range(35, 40):
         "text": "The triangulation of these SME insights with direct customer feedback from Teleperformance and Genpact strongly validates the proposed roadmap priorities."
     })
 
-with open('slides_spec_v90.json', 'w') as f:
+with open(_out90, 'w') as f:
     json.dump(slides, f, indent=2)

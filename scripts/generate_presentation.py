@@ -11,6 +11,8 @@ import re
 import sys
 from pathlib import Path
 
+from slide_specs_dir import SLIDE_SPECS_DIR
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 # Add wday-slidemcp to path (override with WDAY_SLIDEMCP_ROOT)
@@ -170,12 +172,12 @@ def get_next_version(downloads_dir: str, base_name: str) -> int:
 
 def main():
     import argparse
-    default_spec = str(REPO_ROOT / "slides_spec.json")
+    default_spec = str(SLIDE_SPECS_DIR / "slides_spec.json")
     parser = argparse.ArgumentParser(description="Generate presentation from slides_spec.json")
     parser.add_argument(
         "--spec",
         default=default_spec,
-        help="Path to the slides spec JSON file (default: repo root slides_spec.json)",
+        help="Path to the slides spec JSON file (default: docs/decks/specs/slides_spec.json)",
     )
     args = parser.parse_args()
 

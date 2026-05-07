@@ -2,7 +2,7 @@
 """Generate slides_spec_v86.json for India INDIA-PMF-004 PMF roadmap deck."""
 import json
 
-ROOT = "/Users/david.denham/product-manager-agent"
+from slide_specs_dir import SLIDE_SPECS_DIR
 
 
 def section(n: str, subtitle: str) -> dict:
@@ -693,7 +693,7 @@ slides.append({
     "layout_name": "Bumper Slide",
 })
 
-out = f"{ROOT}/slides_spec_v86.json"
+out = str(SLIDE_SPECS_DIR / "slides_spec_v86.json")
 with open(out, "w", encoding="utf-8") as f:
     json.dump(slides, f, indent=2, ensure_ascii=False)
 

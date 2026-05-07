@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """One-off builder for GCC PMF slides_spec_v32.json (GCC-E2E-032). Run from repo root."""
 import json
-import os
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "slides_spec_v32.json")
+from slide_specs_dir import SLIDE_SPECS_DIR
+
+OUT = str(SLIDE_SPECS_DIR / "slides_spec_v32.json")
 
 TB = lambda left, top, w, h, paras, fs=14, notes="": {
     "left_inches": left,

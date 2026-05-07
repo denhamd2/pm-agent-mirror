@@ -1,7 +1,11 @@
 import json
 import re
 
-with open('slides_spec_v87.json') as f:
+from slide_specs_dir import SLIDE_SPECS_DIR
+
+_in87 = SLIDE_SPECS_DIR / "slides_spec_v87.json"
+_temp = SLIDE_SPECS_DIR / "slides_spec_v88_temp.json"
+with open(_in87) as f:
     slides = json.load(f)
 
 # We will build a new list of slides
@@ -82,5 +86,5 @@ for s in slides:
 
     new_slides.append(s)
 
-with open('slides_spec_v88_temp.json', 'w') as f:
+with open(_temp, 'w') as f:
     json.dump(new_slides, f, indent=2)

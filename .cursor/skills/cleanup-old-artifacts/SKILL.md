@@ -41,7 +41,7 @@ python3 scripts/cleanup-old-artifacts.py --dry-run
 - Design briefs: `design/*-design-brief.md`
 - Decks: `docs/downloads/*_Roadmap_v*.pptx`
 - Story maps: `docs/story-maps/*-story-map.md`
-- Slide specs: `slides_spec*.json`
+- Slide specs: `docs/decks/specs/slides_spec*.json`
 - Epic drafts: `docs/epics/*-epic-draft.md`
 - Regional research analyses (strategy, PESTEL, SWOT, PMF, brainstorm, gap)
 - Competitive intelligence scans and briefs

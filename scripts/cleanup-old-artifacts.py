@@ -98,7 +98,7 @@ def main():
     targets = [
         (repo_root / "docs" / "prds", "*-prd.md"),
         (repo_root / "docs" / "story-maps", "*-story-map.md"),
-        (repo_root, "slides_spec*.json"),
+        (repo_root / "docs" / "decks" / "specs", "slides_spec*.json"),
         (repo_root / "design", "*-v[0-9]*.tsx"),
         (repo_root / "docs" / "downloads", "*_Roadmap_v*.pptx"),
     ]

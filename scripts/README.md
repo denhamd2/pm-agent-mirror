@@ -4,12 +4,12 @@ Utility scripts for this workspace. Deck-related Python generators that used to 
 
 ## Repo-root helpers (run from repository root)
 
-**Slide specs:** `slides_spec*.json` stay at the **repository root** by convention — [`.cursor/rules/130-pmf-slide-generator.mdc`](../.cursor/rules/130-pmf-slide-generator.mdc) and [`cleanup-old-artifacts.py`](cleanup-old-artifacts.py) glob there. Relocating them requires coordinated updates to those paths plus this README.
+**Slide specs:** versioned JSON lives under [`docs/decks/specs/`](docs/decks/specs/). [`scripts/slide_specs_dir.py`](slide_specs_dir.py) exports `SLIDE_SPECS_DIR` for Python scripts. [`.cursor/rules/130-pmf-slide-generator.mdc`](../.cursor/rules/130-pmf-slide-generator.mdc) and [`cleanup-old-artifacts.py`](cleanup-old-artifacts.py) target that directory.
 
 | Script | Purpose |
 |--------|---------|
-| [`generate_presentation.py`](generate_presentation.py) | Fallback when Slide Deck MCP is unavailable: reads `--spec` JSON (default: repo `slides_spec.json`), writes PPTX under `~/Downloads` (or `PM_DECK_OUTPUT_DIR`). Requires clone at `~/mcp-servers/wday-slidemcp` or set `WDAY_SLIDEMCP_ROOT`. |
-| [`apply_style_guide.py`](apply_style_guide.py) | Post-process repo-root `slides_spec.json` (British English, em-dash, HiredScore wording). |
+| [`generate_presentation.py`](generate_presentation.py) | Fallback when Slide Deck MCP is unavailable: reads `--spec` JSON (default: `docs/decks/specs/slides_spec.json`), writes PPTX under `~/Downloads` (or `PM_DECK_OUTPUT_DIR`). Requires clone at `~/mcp-servers/wday-slidemcp` or set `WDAY_SLIDEMCP_ROOT`. |
+| [`apply_style_guide.py`](apply_style_guide.py) | Post-process `docs/decks/specs/slides_spec.json` (British English, em-dash, HiredScore wording). |
 | [`convert_pdfs.py`](convert_pdfs.py), [`run_morning_roundup.py`](run_morning_roundup.py) | Small utilities. |
 | [`update_mission_log.py`](update_mission_log.py) | One-off MISSION_LOG line replace; edit in-script before running. |
 | [`test_pptx.py`](test_pptx.py) | Quick PPTX sanity check. |
@@ -33,7 +33,7 @@ Open any file under `scripts/archive/`. Typical structure:
 
 - Small helpers: section dividers (`Section Title` layout), body text boxes (`Title Only` / `Title Only_Alt`), optional `pestel_slide`-style builders, product-implication paragraphs with yellow highlight.
 - A `slides` list of dicts in Slide Deck MCP shape.
-- `json.dump(...)` to a repo-root `slides_spec_vN.json` (scripts that used `Path(__file__).resolve().parents[...]` were updated to `parents[2]` so the repo root stays correct from `scripts/archive/`).
+- `json.dump(...)` to `docs/decks/specs/slides_spec_vN.json` (older archive scripts may still target repo root — prefer the specs directory for new work).
 
 **Examples to copy patterns from:** `build_gcc_slides_spec_v57.py`, `build_india_pmf_v82_spec.py`, `build_france_pmf_slides_v74.py`.
 

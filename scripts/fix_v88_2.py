@@ -1,6 +1,9 @@
 import json
 
-with open('slides_spec_v88.json') as f:
+from slide_specs_dir import SLIDE_SPECS_DIR
+
+_spec88 = SLIDE_SPECS_DIR / "slides_spec_v88.json"
+with open(_spec88) as f:
     slides = json.load(f)
 
 # Slide 61 (Recommendation 3)
@@ -31,5 +34,5 @@ slides[62]["text_boxes"][0]["paragraphs"] = [
     {"level": 1, "text": "Offer Renegotiation Time: Reduce manual processing delays by 40% on governed pilots, improving the candidate onboarding experience and reducing overall time-to-hire."}
 ]
 
-with open('slides_spec_v88.json', 'w') as f:
+with open(_spec88, 'w') as f:
     json.dump(slides, f, indent=2)

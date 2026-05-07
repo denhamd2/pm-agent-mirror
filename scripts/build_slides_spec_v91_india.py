@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """One-off builder: India INDIA-E2E-005 PMF roadmap slides_spec_v91.json"""
 import json
-from pathlib import Path
+
+from slide_specs_dir import SLIDE_SPECS_DIR
 
 MI = 1
-ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "slides_spec_v91.json"
+OUT = SLIDE_SPECS_DIR / "slides_spec_v91.json"
 
 TB = lambda lo, fs=14: {
     "left_inches": 0.7,

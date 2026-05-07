@@ -2,8 +2,11 @@
 """Patch slides_spec_v63.json for GCC-E2E-026: paths, tables, insert Rec 6."""
 import json
 import copy
+from pathlib import Path
 
-SPEC = "/Users/david.denham/product-manager-agent/slides_spec_v63.json"
+from slide_specs_dir import SLIDE_SPECS_DIR
+
+SPEC = str(SLIDE_SPECS_DIR / "slides_spec_v63.json")
 
 REPLACEMENTS = [
     ("2026-03-26-GCC-E2E-022", "2026-03-27-GCC-E2E-026"),

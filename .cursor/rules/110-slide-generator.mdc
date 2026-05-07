@@ -28,11 +28,11 @@ When the user mentions "create slides", "make a presentation", or "deck", you:
 
 **Workflow** (FOLLOW EXACTLY):
 1. Call `parse_template` (no args) to learn available layouts, colors, icons
-2. Write slide spec JSON to `slides_spec.json` at project root
-3. **Run validator**: `python3 scripts/validate_slide_spec.py slides_spec.json` — if exit code 1, fix errors and re-run until pass
+2. Write slide spec JSON to `docs/decks/specs/slides_spec.json`
+3. **Run validator**: `python3 scripts/validate_slide_spec.py docs/decks/specs/slides_spec.json` — if exit code 1, fix errors and re-run until pass
 4. Call `create_presentation` with:
    - `template_path`: from parse_template output
-   - `slides_json`: absolute path to slides_spec.json
+   - `slides_json`: absolute path to `docs/decks/specs/slides_spec.json` (or pass-through path)
    - `output_path`: `~/Downloads/[descriptive-name].pptx`
 
 **Available Layouts:**
@@ -374,7 +374,7 @@ After HITL, announce framework choice (naturally, not by letter/name):
 
 **Purpose:** Ensure slide content matches **structured** competitive intelligence (matrices, E2E CI briefs, gap reports), not only high-level PMF narrative from **@pmf-analyst**.
 
-**Paths to read when present and in scope** (use `read_file` / repo paths before drafting `slides_spec.json`):
+**Paths to read when present and in scope** (use `read_file` / repo paths before drafting `docs/decks/specs/slides_spec.json`):
 
 | Artifact | Path pattern | When to use |
 |----------|--------------|-------------|
@@ -668,7 +668,7 @@ Based on HITL responses, apply the appropriate framework from "Presentation Fram
 **Reference**: `.cursor/skills/slide-writer/SKILL.md` for transformation patterns and examples
 
 ### Step 4: Create Slide Spec
-- Write JSON array to `slides_spec.json` at project root
+- Write JSON array to `docs/decks/specs/slides_spec.json`
 - Use appropriate layouts with visual variety
 - **Apply typography standards from `010-style-guide.mdc` → Deck Generation**
 - Include icons where appropriate with `center_in_width`
@@ -682,7 +682,7 @@ Based on HITL responses, apply the appropriate framework from "Presentation Fram
 1. Read parse_template output for template_path
 2. Call create_presentation with:
    - template_path from parse_template
-   - slides_json: absolute path to slides_spec.json
+   - slides_json: absolute path to docs/decks/specs/slides_spec.json
    - output_path: ~/Downloads/[descriptive-name].pptx
 3. Confirm file created
 
@@ -757,7 +757,7 @@ You activate when user says:
 1. Ask: "Who's the audience and what are the key topics?"
 2. User provides context
 3. Structure 12 slides using Executive Briefing template
-4. Write slides_spec.json with proper layout variety
+4. Write docs/decks/specs/slides_spec.json with proper layout variety
 5. Call parse_template
 6. Call create_presentation with output to ~/Downloads/Q2-Roadmap-Executive-Briefing.pptx
 7. Confirm: "Created 12-slide executive briefing at ~/Downloads/Q2-Roadmap-Executive-Briefing.pptx"

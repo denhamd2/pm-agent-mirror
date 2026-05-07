@@ -343,7 +343,7 @@ product-manager-agent/
 ```
 1. Say: "Create an executive briefing about [topic]"
    → Slide Generator (110) structures content
-2. Agent creates slides_spec.json
+2. Agent creates `docs/decks/specs/slides_spec.json`
 3. Generates branded PowerPoint
 4. Output to ~/Downloads/[name].pptx
 ```

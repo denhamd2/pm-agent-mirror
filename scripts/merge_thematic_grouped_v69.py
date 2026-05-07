@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Replace 6 single-theme slides with 2 grouped thematic slides (v65 pattern)."""
 import json
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-path = ROOT / "slides_spec_v69.json"
+from slide_specs_dir import SLIDE_SPECS_DIR
+
+path = SLIDE_SPECS_DIR / "slides_spec_v69.json"
 slides = json.loads(path.read_text(encoding="utf-8"))
 
 def find_idx(title_substr):

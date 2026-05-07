@@ -81,7 +81,7 @@ Store results in variables for HTML generation.
 
 ```bash
 # Find latest slides_spec_vN.json
-latest_spec=$(ls -t slides_spec_v*.json 2>/dev/null | head -1)
+latest_spec=$(ls -t docs/decks/specs/slides_spec_v*.json 2>/dev/null | head -1)
 
 if [ -n "$latest_spec" ]; then
   echo "Found spec: $latest_spec"

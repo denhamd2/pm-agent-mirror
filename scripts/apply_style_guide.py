@@ -9,9 +9,8 @@ Apply style guide transformations to slide deck JSON:
 
 import json
 import re
-from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+from slide_specs_dir import SLIDE_SPECS_DIR
 
 # British English spelling mappings
 AMERICAN_TO_BRITISH = {
@@ -109,7 +108,7 @@ def process_slide(slide):
     return slide
 
 def main():
-    spec = REPO_ROOT / "slides_spec.json"
+    spec = SLIDE_SPECS_DIR / "slides_spec.json"
     input_path = str(spec)
     output_path = str(spec)
     

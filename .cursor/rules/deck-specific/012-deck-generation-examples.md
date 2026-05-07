@@ -1,7 +1,7 @@
 ---
 description: Deck generation examples - Agenda slides, Section Title patterns, Slide Title standards, SWOT tables
 globs:
-  - "slides_spec*.json"
+  - "docs/decks/specs/slides_spec*.json"
   - "scripts/build_*_pmf_slides*.py"
 alwaysApply: false
 ---

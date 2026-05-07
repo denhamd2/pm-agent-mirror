@@ -6,8 +6,8 @@ Parses slides_spec_vN.json and validates every slide against 130 density rules
 and 010 style guide constraints. BLOCKS generation if any slide fails.
 
 Usage:
-    python3 scripts/validate_slide_spec.py slides_spec_v84.json
-    python3 scripts/validate_slide_spec.py slides_spec_v84.json --fix-titles
+    python3 scripts/validate_slide_spec.py docs/decks/specs/slides_spec_v84.json
+    python3 scripts/validate_slide_spec.py docs/decks/specs/slides_spec_v84.json --fix-titles
 
 Exit codes:
     0 = all slides pass
@@ -298,7 +298,7 @@ def validate(spec_path: str, sme_names: list[str] | None = None) -> tuple[bool, 
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python3 scripts/validate_slide_spec.py <slides_spec_vN.json> [--sme-names Name1,Name2]")
+        print("Usage: python3 scripts/validate_slide_spec.py <path-to-slides_spec_vN.json> [--sme-names Name1,Name2]")
         sys.exit(1)
 
     spec_file = sys.argv[1]

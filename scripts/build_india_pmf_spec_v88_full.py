@@ -1,6 +1,10 @@
 import json
 
-with open('slides_spec_v88_temp.json') as f:
+from slide_specs_dir import SLIDE_SPECS_DIR
+
+_temp = SLIDE_SPECS_DIR / "slides_spec_v88_temp.json"
+_out88 = SLIDE_SPECS_DIR / "slides_spec_v88.json"
+with open(_temp) as f:
     slides = json.load(f)
 
 new_slides = []
@@ -575,5 +579,5 @@ for s in new_slides:
     if "speaker_notes" in s and isinstance(s["speaker_notes"], str):
         s["speaker_notes"] = replace_text(s["speaker_notes"])
 
-with open('slides_spec_v88.json', 'w') as f:
+with open(_out88, 'w') as f:
     json.dump(new_slides, f, indent=2)

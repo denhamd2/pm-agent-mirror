@@ -112,7 +112,7 @@ Skills are increasingly acting as a "smarter" alternative to "Apply Intelligentl
 
 **Use for:**
 - Design-specific standards (Sana UI details, Canvas Kit patterns) → `globs: ["design/**/*", "**/*.tsx"]`
-- Deck generation standards (typography, layout) → `globs: ["slides_spec*.json", ".cursor/rules/110*.mdc", ".cursor/rules/130*.mdc"]`
+- Deck generation standards (typography, layout) → `globs: ["docs/decks/specs/slides_spec*.json", ".cursor/rules/110*.mdc", ".cursor/rules/130*.mdc"]`
 - Framework-specific reference (PM methods) → `globs: [".cursor/rules/090*.mdc", ".cursor/rules/200*.mdc"]`
 - File-type specific rules (prototype developer guidance) → `globs: ["design/**/*.tsx"]`
 
@@ -128,7 +128,7 @@ Skills are increasingly acting as a "smarter" alternative to "Apply Intelligentl
 
 **Example extraction:**
 - Before: `010-style-guide.mdc` (556 lines, alwaysApply) with full Sana + Deck sections
-- After: `010-style-guide.mdc` (482 lines, alwaysApply) references → `015-sana-style-ui.mdc` (glob: design/**) + `018-deck-generation-standards.mdc` (glob: slides_spec*)
+- After: `010-style-guide.mdc` (482 lines, alwaysApply) references → `015-sana-style-ui.mdc` (glob: design/**) + `018-deck-generation-standards.mdc` (glob: docs/decks/specs/slides_spec*)
 
 ### Pattern 3: Skills (`.cursor/skills/*/SKILL.md`)
 **Purpose**: Reusable, procedural methods invoked dynamically via `/skillname`.
@@ -505,7 +505,7 @@ Output: Design Brief
 
 **Phase 3: Trim Oversized AlwaysApply**
 - Extracted Sana UI details (79 lines) → `015-sana-style-ui.mdc` (glob: design/**)
-- Extracted Deck Generation (383 lines) → `018-deck-generation-standards.mdc` (glob: slides_spec*)
+- Extracted Deck Generation (383 lines) → `018-deck-generation-standards.mdc` (glob: docs/decks/specs/slides_spec*)
 - Extracted PM Frameworks (172 lines) → `092-pm-frameworks-reference.mdc` (glob: 090/200/315)
 - Extracted Advisory Examples (113 lines) → `093-advisory-examples.md` (reference doc)
 - **Result**: Reduced 010 from 556→482 lines, 090 from 812→541 lines

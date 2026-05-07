@@ -335,7 +335,7 @@ Gap severity themes are presales-reported; competitive claims validated via 101.
 - Path to finalized report: `research/[Country]/thematic-analysis/[YYYY-MM-DD]-[Country]-PMF-Analysis.md`
 - [Country] / region string for title and filename
 
-**130 outputs:** `slides_spec_vN.json` at project root; `~/Downloads/[Country]_Recruiting_PMF_Roadmap_vN.pptx`
+**130 outputs:** `docs/decks/specs/slides_spec_vN.json`; `~/Downloads/[Country]_Recruiting_PMF_Roadmap_vN.pptx`
 
 ---
 
