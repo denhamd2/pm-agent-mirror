@@ -225,7 +225,7 @@ See **`docs/decks/130-slide-section-reference.md` → PRE-GENERATION DENSITY: Ex
    python3 scripts/validate_slide_spec.py slides_spec_vN.json --sme-names=Name1,Name2
    ```
    Pass `--sme-names=` with comma-separated real names of SME interviewees from the report (for anonymisation enforcement). **If exit code is 1 (BLOCKED)**: fix ALL errors in the JSON, then re-run validator until exit code 0. Do NOT proceed to step 6 with a failing validation.
-6. If the Slide Deck MCP is unavailable, run `python3 generate_presentation.py --spec slides_spec_vN.json`
+6. If the Slide Deck MCP is unavailable, run `python3 scripts/generate_presentation.py --spec slides_spec_vN.json`
 7. The script will auto-increment the version based on existing files in `~/Downloads/`. **CRITICAL**: You MUST read the stdout of the script to find the actual generated filename (e.g., `SUCCESS: Presentation saved to ...v64.pptx`) and provide that EXACT path to the user. Do not guess the output filename.
 
 ### Auto-agenda slide (slide 2) — **no code on screen**

@@ -9,9 +9,12 @@ import json
 import os
 import re
 import sys
+from pathlib import Path
 
-# Add wday-slidemcp to path
-WDAY_ROOT = "/Users/david.denham/mcp-servers/wday-slidemcp"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
+# Add wday-slidemcp to path (override with WDAY_SLIDEMCP_ROOT)
+WDAY_ROOT = os.environ.get("WDAY_SLIDEMCP_ROOT", str(Path.home() / "mcp-servers" / "wday-slidemcp"))
 sys.path.insert(0, WDAY_ROOT)
 
 from engine.slide_engine import create_presentation as _create_presentation
@@ -167,30 +170,21 @@ def get_next_version(downloads_dir: str, base_name: str) -> int:
 
 def main():
     import argparse
+    default_spec = str(REPO_ROOT / "slides_spec.json")
     parser = argparse.ArgumentParser(description="Generate presentation from slides_spec.json")
-    parser.add_argument("--spec", default="/Users/david.denham/product-manager-agent/slides_spec.json", help="Path to the slides spec JSON file")
+    parser.add_argument(
+        "--spec",
+        default=default_spec,
+        help="Path to the slides spec JSON file (default: repo root slides_spec.json)",
+    )
     args = parser.parse_args()
 
-    template_path = "/Users/david.denham/mcp-servers/wday-slidemcp/Workday Corporate Google Slides Template.pptx"
+    template_path = os.path.join(WDAY_ROOT, "Workday Corporate Google Slides Template.pptx")
     slides_json_path = args.spec
-    downloads_dir = "/Users/david.denham/Downloads"
+    downloads_dir = os.environ.get("PM_DECK_OUTPUT_DIR", str(Path.home() / "Downloads"))
     base_name = "GCC_Recruiting_PMF_Roadmap"
     version = get_next_version(downloads_dir, base_name)
     output_path = os.path.join(downloads_dir, f"{base_name}_v{version}.pptx")
-    # Debug logging
-    import json as _json
-    with open("/Users/david.denham/product-manager-agent/.cursor/debug-1c35df.log", "a") as _log_f:
-        _log_f.write(_json.dumps({
-            "sessionId": "1c35df",
-            "id": "log_gen_pres",
-            "timestamp": 123456789,
-            "location": "generate_presentation.py:main",
-            "message": "Generating presentation",
-            "data": {"spec_path": slides_json_path, "output_path": output_path},
-            "runId": "run1",
-            "hypothesisId": "H1"
-        }) + "\n")
-
 
     if not os.path.exists(template_path):
         print(f"ERROR: Template not found: {template_path}")

@@ -37,8 +37,12 @@ Thumbs.db
 **/__pycache__/
 *.pyc
 
+# Temporary / local-only scratch (never commit personal dumps)
+scratchpad.md
+tmp_prd_invocation.txt
+!scratchpad.example.md
+
 # Temporary files
-*.tmp
 *.swp
 *~
 

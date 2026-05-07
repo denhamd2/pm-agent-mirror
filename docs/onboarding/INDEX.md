@@ -1,8 +1,8 @@
 # 📚 Product Manager Agent - Complete Index
 
-**Workspace**: `/Users/david.denham/product-manager-agent`  
+**Workspace**: Repository root (open this folder in Cursor)  
 **Version**: 1.0  
-**Status**: ✅ Ready for Mission  
+**Status**: Ready for Mission  
 **Initialized**: Tuesday Mar 17, 2026 at 21:57 PST
 
 ---
@@ -12,7 +12,7 @@
 Read these files in order to understand and use the PM Agent workspace:
 
 ### 1. Start Here
-- **README.md** (3.1KB) - Overview of capabilities and MCP integration
+- **[README.md](../README.md)** (repository root) — Overview of capabilities and MCP integration
   - What this workspace does
   - List of 12 active MCPs
   - Folder structure explanation

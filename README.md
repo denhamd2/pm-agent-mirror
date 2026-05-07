@@ -29,23 +29,35 @@ This is a modular, agentic workspace for Senior Product Managers built for Curso
 
 ## Folder Structure
 
+Handbooks and setup guides live under **[docs/onboarding/](docs/onboarding/README.md)** (start there after this README).
+
 ```
 .
-├── .cursor/rules/       # MDC rule files
-├── research/            # Market analysis and competitive intel
-├── docs/prds/          # Product requirements documents
-├── design/             # Figma links and Canvas Kit work
-├── inbox/              # Slack messages for triage
-├── MISSION_LOG.md      # Project state tracking
-├── scratchpad.md       # Sequential thinking workspace
-└── README.md           # This file
+├── .cursor/rules/          # MDC rule files (agent behaviour)
+├── docs/
+│   ├── onboarding/         # QUICK_REFERENCE, INSTALLATION_NOTES, INDEX, setup docs
+│   ├── prds/               # Product requirements
+│   └── ...
+├── scripts/                # Automation, generate_presentation, cleanup, hooks
+├── research/               # Market analysis and competitive intel
+├── strategy/               # Strategy PDFs and context
+├── functional-knowledge/   # Admin-guide PDF reference library
+├── design/                 # Canvas Kit / Vite prototypes
+├── inbox/                  # Slack triage samples
+├── MISSION_LOG.md          # Project state tracking
+├── scratchpad.example.md   # Copy to scratchpad.md (gitignored) for local notes
+└── README.md               # This file
 ```
 
 ## Sharing with colleagues (MCP and secrets)
 
 - **MCP passwords and tokens** belong in your user-level Cursor config (`~/.cursor/mcp.json`), not in this repository. The file [`.cursor/mcp.json`](.cursor/mcp.json) is gitignored so it is never pushed if you add a project-local copy.
 - Use [`.cursor/mcp.json.example`](.cursor/mcp.json.example) as a shape reference; copy to `~/.cursor/mcp.json`, fill in real values locally, and **never commit** secrets.
-- See [INSTALLATION_NOTES.md](INSTALLATION_NOTES.md) and [docs/figma-official-mcp-setup.md](docs/figma-official-mcp-setup.md) for server-specific setup.
+- See [docs/onboarding/INSTALLATION_NOTES.md](docs/onboarding/INSTALLATION_NOTES.md) and [docs/figma-official-mcp-setup.md](docs/figma-official-mcp-setup.md) for server-specific setup.
+
+## Onboarding handbooks
+
+Setup guides, quick reference, architecture, and validation live under **[docs/onboarding/](docs/onboarding/README.md)**. Start there after this README if you are onboarding a new machine or colleague.
 
 ## Getting Started
 
@@ -95,6 +107,7 @@ Check `MISSION_LOG.md` for current project status, decisions, and handoffs.
 ## Tips
 - Use `@sequential-thinking` for complex analysis
 - Reference `@MISSION_LOG.md` to see current state
+- Copy `scratchpad.example.md` to `scratchpad.md` for a local-only thinking space (not committed)
 - The Master Orchestrator coordinates all agents automatically
 - Each rule has specific triggers and globs for automatic activation
 

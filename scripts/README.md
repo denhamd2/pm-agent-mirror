@@ -2,6 +2,16 @@
 
 Utility scripts for this workspace. Deck-related Python generators that used to live here are archived (see below).
 
+## Repo-root helpers (run from repository root)
+
+| Script | Purpose |
+|--------|---------|
+| [`generate_presentation.py`](generate_presentation.py) | Fallback when Slide Deck MCP is unavailable: reads `--spec` JSON (default: repo `slides_spec.json`), writes PPTX under `~/Downloads` (or `PM_DECK_OUTPUT_DIR`). Requires clone at `~/mcp-servers/wday-slidemcp` or set `WDAY_SLIDEMCP_ROOT`. |
+| [`apply_style_guide.py`](apply_style_guide.py) | Post-process repo-root `slides_spec.json` (British English, em-dash, HiredScore wording). |
+| [`convert_pdfs.py`](convert_pdfs.py), [`run_morning_roundup.py`](run_morning_roundup.py) | Small utilities. |
+| [`update_mission_log.py`](update_mission_log.py) | One-off MISSION_LOG line replace; edit in-script before running. |
+| [`test_pptx.py`](test_pptx.py) | Quick PPTX sanity check. |
+
 ## Archived slide spec builders (`archive/`)
 
 Nineteen one-off Python scripts were used to emit Slide Deck MCP JSON (`slides_spec_v*.json`) for specific missions (GCC v30 typography passes, E2E runs, France PMF v74, India PMF v75–v82, and related iterations). They were **not** a maintained product: each file hard-coded slide dicts for that engagement.
