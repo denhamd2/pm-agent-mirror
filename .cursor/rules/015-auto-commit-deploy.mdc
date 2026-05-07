@@ -81,12 +81,12 @@ Example recent commits from this repo (mirror this style):
 After `git push origin main`:
 
 1. GHE stores the commit.
-2. If the diff touches any file in the public-build chain (the path filter in `.github/workflows/deploy-dashboard-public.yml`), Actions builds the catalogue + 13 prototypes, runs the forbidden-imports plugin and the Python belt-and-braces grep, then publishes the bundle to the `gh-pages` branch root via `peaceiris/actions-gh-pages@v3`. Anything else (data-`*.ts` files, full dashboard, internal docs) does **not** trigger the workflow because it isn't in the path filter.
+2. If the diff touches any file in the public-build chain (the path filter in `.github/workflows/deploy-dashboard-public.yml`), Actions builds the public prototype catalogue (allowlist in `design/public-catalogue.ts`), runs the forbidden-imports plugin and the Python belt-and-braces grep, then publishes the bundle to the `gh-pages` branch root via `peaceiris/actions-gh-pages@v3`. Anything else (data-`*.ts` files, full dashboard, internal docs) does **not** trigger the workflow because it isn't in the path filter.
 3. The dashboard's full canonical experience is served locally only. Run `cd design && npm run dev` and open `http://localhost:5199/`.
 4. Pages must be re-enabled in repo Settings -> Pages (source = `gh-pages` branch / root) for the workflow output to actually serve. The PM is responsible for that one-time manual step.
 
-If you need to share a data-backed dashboard (anything beyond the 13 catalogue prototypes), hand the PM a path / file / screenshot. The forbidden-imports plugin will block any attempt to ship data-backed surfaces via the public bundle.
+If you need to share a data-backed dashboard (anything beyond the public catalogue allowlist in `design/public-catalogue.ts`), hand the PM a path / file / screenshot. The forbidden-imports plugin will block any attempt to ship data-backed surfaces via the public bundle.
 
 ## One-line summary
 
-**Complete the work -> secret-scan -> stage explicitly -> commit with a meaningful message -> push to main. Localhost is canonical; Pages serves catalogue + 13 prototypes only via `deploy-dashboard-public.yml` and the forbidden-imports guardrail.**
+**Complete the work -> secret-scan -> stage explicitly -> commit with a meaningful message -> push to main. Localhost is canonical; Pages serves the public prototype catalogue only via `deploy-dashboard-public.yml` and the forbidden-imports guardrail.**

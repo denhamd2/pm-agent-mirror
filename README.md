@@ -41,6 +41,12 @@ This is a modular, agentic workspace for Senior Product Managers built for Curso
 └── README.md           # This file
 ```
 
+## Sharing with colleagues (MCP and secrets)
+
+- **MCP passwords and tokens** belong in your user-level Cursor config (`~/.cursor/mcp.json`), not in this repository. The file [`.cursor/mcp.json`](.cursor/mcp.json) is gitignored so it is never pushed if you add a project-local copy.
+- Use [`.cursor/mcp.json.example`](.cursor/mcp.json.example) as a shape reference; copy to `~/.cursor/mcp.json`, fill in real values locally, and **never commit** secrets.
+- See [INSTALLATION_NOTES.md](INSTALLATION_NOTES.md) and [docs/figma-official-mcp-setup.md](docs/figma-official-mcp-setup.md) for server-specific setup.
+
 ## Getting Started
 
 ### For New Initiatives

@@ -7,24 +7,16 @@ import '@workday/canvas-tokens-web/css/base/_variables.css';
 import '@workday/canvas-tokens-web/css/system/_variables.css';
 import '@workday/canvas-tokens-web/css/brand/_variables.css';
 import { GccRecruiterDashboard } from './gcc-recruiter-dashboard';
-import AadhaarAdobeSignV01 from './aadhaar-adobe-sign-v01';
 import { GccCandidateGridSearch } from './gcc-candidate-grid-search';
-import { RecruiterHomeV85 } from './recruiter-home-v85';
-import { CandidateSmartViewV86 } from './candidate-smart-view-v86';
-import { IndiaWhatsappCandidateMessagingV88 } from './india-whatsapp-candidate-messaging-v88';
-import { GccInterviewSchedulingComplianceNudgesV90 } from './gcc-interview-scheduling-compliance-nudges-v90';
 import { RecruiterHubGenUIV95 } from './recruiter-hub-genui-v95';
-import { RecruiterHubConversationalV98 } from './recruiter-hub-conversational-v98';
-import { RecruiterHubConversationalV99 } from './recruiter-hub-conversational-v99';
 import { IndiaNativeWhatsappV91 } from './india-native-whatsapp-v91';
 import { InterviewIntelligenceAgentV96 } from './interview-intelligence-agent-v96';
 import AISystemOfRecordV97 from './ai-system-of-record-v97';
-import UniversalProfilePrototype from './universal-profile-eudi-wallet-v1';
 import { CanvasKitTest } from './components/CanvasKitTest';
 import PMAgentDashboard from './pm-agent-dashboard';
-import OffersDashboardV01 from './offers-dashboard-v01';
-import OffersPlaygroundV01 from './offers-playground-v01';
-import AgencyPipelineCardV01 from './agency-pipeline-card-v01';
+import CreateOfferSsaV01 from './create-offer-ssa-v01';
+import CreateJrSsaV01 from './create-jr-ssa-v01';
+import E2eRecruitingTalentAcqV01 from './e2e-recruiting-talent-acq-v01';
 const AvgTimeToHireDashboard = React.lazy(() => import('./avg-time-to-hire-dashboard').then((m) => ({ default: m.AvgTimeToHireDashboard })));
 const PositionsOpenVsFilledDashboard = React.lazy(() => import('./positions-open-vs-filled-dashboard').then((m) => ({ default: m.PositionsOpenVsFilledDashboard })));
 const ValueRealizationMetrics = React.lazy(() => import('./value-realization-metrics').then((m) => ({ default: m.ValueRealizationMetrics })));
@@ -73,23 +65,13 @@ function LoadingPlaceholder() {
  */
 const PROTOTYPE_SLUGS = [
   'gcc-recruiter-dashboard',
-  'aadhaar-adobe-sign-v01',
   'candidate-grid-v84',
-  'recruiter-home-v85',
-  'candidate-smart-view-v86',
-  'india-whatsapp-candidate-messaging-v88',
-  'gcc-interview-scheduling-v90',
   'recruiter-hub-genui-v95',
-  'recruiter-hub-conversational-v98',
-  'recruiter-hub-conversational-v99',
   'india-native-whatsapp-v91',
   'interview-intelligence-agent-v96',
   'ai-system-of-record-v97',
-  'universal-profile-eudi-wallet-v1',
   'canvas-kit-test',
   'pm-agent-dashboard',
-  'offers-dashboard-v01',
-  'offers-playground-v01',
   'avg-time-to-hire',
   'add-documents-impact',
   'positions-open-vs-filled',
@@ -101,7 +83,9 @@ const PROTOTYPE_SLUGS = [
   'view-dashboard',
   'recruiting-agency-user',
   'customer-scorecard',
-  'agency-pipeline-card-v01',
+  'create-offer-ssa-v01',
+  'create-jr-ssa-v01',
+  'e2e-recruiting-talent-acq-v01',
 ] as const;
 
 type PrototypeSlug = (typeof PROTOTYPE_SLUGS)[number];
@@ -129,7 +113,7 @@ function prototypeFromLocation(): PrototypeSlug {
     if (pathname.endsWith(slug)) return slug;
   }
 
-  return 'recruiter-home-v85';
+  return 'gcc-recruiter-dashboard';
 }
 
 function AppRoot() {
@@ -186,54 +170,32 @@ function AppRoot() {
   if (route === 'pm-agent-dashboard') {
     return <PMAgentDashboard />;
   }
-  if (route === 'offers-dashboard-v01') {
-    return <OffersDashboardV01 />;
+  if (route === 'create-offer-ssa-v01') {
+    return <CreateOfferSsaV01 />;
   }
-  if (route === 'offers-playground-v01') {
-    return <OffersPlaygroundV01 />;
+  if (route === 'create-jr-ssa-v01') {
+    return <CreateJrSsaV01 />;
   }
-  if (route === 'agency-pipeline-card-v01') {
-    return <AgencyPipelineCardV01 />;
+  if (route === 'e2e-recruiting-talent-acq-v01') {
+    return <E2eRecruitingTalentAcqV01 />;
   }
   if (route === 'ai-system-of-record-v97') {
     return <AISystemOfRecordV97 />;
   }
-  if (route === 'universal-profile-eudi-wallet-v1') {
-    return <UniversalProfilePrototype />;
-  }
   if (route === 'interview-intelligence-agent-v96') {
     return <InterviewIntelligenceAgentV96 />;
-  }
-  if (route === 'gcc-interview-scheduling-v90') {
-    return <GccInterviewSchedulingComplianceNudgesV90 />;
   }
   if (route === 'recruiter-hub-genui-v95') {
     return <RecruiterHubGenUIV95 />;
   }
-  if (route === 'recruiter-hub-conversational-v98') {
-    return <RecruiterHubConversationalV98 />;
-  }
-  if (route === 'recruiter-hub-conversational-v99') {
-    return <RecruiterHubConversationalV99 />;
-  }
   if (route === 'india-native-whatsapp-v91') {
     return <IndiaNativeWhatsappV91 />;
-  }
-  if (route === 'india-whatsapp-candidate-messaging-v88') {
-    return <IndiaWhatsappCandidateMessagingV88 />;
-  }
-  if (route === 'candidate-smart-view-v86') {
-    return <CandidateSmartViewV86 />;
-  }
-  if (route === 'recruiter-home-v85') {
-    return <RecruiterHomeV85 />;
   }
   if (route === 'candidate-grid-v84') {
     return <GccCandidateGridSearch />;
   }
-  if (route === 'aadhaar-adobe-sign-v01') return <AadhaarAdobeSignV01 />;
   if (route === 'gcc-recruiter-dashboard') return <GccRecruiterDashboard />;
-  return <RecruiterHomeV85 />;
+  return <GccRecruiterDashboard />;
 }
 
 const FIGMA_CAPTURE_SCRIPT_SRC =

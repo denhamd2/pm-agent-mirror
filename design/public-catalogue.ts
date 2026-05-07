@@ -21,40 +21,9 @@ export type PublicPrototype = {
 
 export const PUBLIC_PROTOTYPES: readonly PublicPrototype[] = [
   {
-    slug: 'aadhaar-adobe-sign-v01',
-    name: 'Aadhaar + Adobe Sign Offer v01',
-    description:
-      'India offer flow with Aadhaar verification and Adobe Sign signature integration.',
-    category: 'Prototype',
-  },
-  {
     slug: 'candidate-grid-v84',
     name: 'Candidate Grid v84',
     description: 'Redesigned candidate grid for high-volume sourcing and screening.',
-    category: 'Prototype',
-  },
-  {
-    slug: 'recruiter-home-v85',
-    name: 'Recruiter Home v85',
-    description: 'Recruiter home dashboard pattern with priority workspace.',
-    category: 'Prototype',
-  },
-  {
-    slug: 'candidate-smart-view-v86',
-    name: 'Candidate Smart View v86',
-    description: 'Smart-view candidate detail with grouped insights and actions.',
-    category: 'Prototype',
-  },
-  {
-    slug: 'india-whatsapp-candidate-messaging-v88',
-    name: 'India WhatsApp Candidate Messaging v88',
-    description: 'WhatsApp two-way candidate messaging surface for India recruiters.',
-    category: 'Prototype',
-  },
-  {
-    slug: 'gcc-interview-scheduling-v90',
-    name: 'GCC Interview Scheduling v90',
-    description: 'GCC-aware interview scheduling with compliance nudges.',
     category: 'Prototype',
   },
   {
@@ -79,24 +48,6 @@ export const PUBLIC_PROTOTYPES: readonly PublicPrototype[] = [
     slug: 'ai-system-of-record-v97',
     name: 'AI System of Record',
     description: "Central hub for managing an organisation's AI ecosystem.",
-    category: 'Prototype',
-  },
-  {
-    slug: 'recruiter-hub-conversational-v98',
-    name: 'Recruiter Hub Conversational v98',
-    description: 'Prior conversational recruiter hub variant for comparison.',
-    category: 'Prototype',
-  },
-  {
-    slug: 'recruiter-hub-conversational-v99',
-    name: 'Recruiter Hub Conversational v99',
-    description: 'Latest conversational recruiter hub iteration.',
-    category: 'Prototype',
-  },
-  {
-    slug: 'universal-profile-eudi-wallet-v1',
-    name: 'Universal Profile EUDI Wallet v1',
-    description: 'Universal candidate profile with EUDI Wallet credential exchange.',
     category: 'Prototype',
   },
 ] as const;

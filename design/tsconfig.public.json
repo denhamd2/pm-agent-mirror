@@ -11,19 +11,11 @@
     "vite-env.d.ts",
     "components/**/*.ts",
     "components/**/*.tsx",
-    "aadhaar-adobe-sign-v01.tsx",
     "gcc-candidate-grid-search.tsx",
-    "recruiter-home-v85.tsx",
-    "candidate-smart-view-v86.tsx",
-    "india-whatsapp-candidate-messaging-v88.tsx",
-    "gcc-interview-scheduling-compliance-nudges-v90.tsx",
     "india-native-whatsapp-v91.tsx",
     "recruiter-hub-genui-v95.tsx",
     "interview-intelligence-agent-v96.tsx",
-    "ai-system-of-record-v97.tsx",
-    "recruiter-hub-conversational-v98.tsx",
-    "recruiter-hub-conversational-v99.tsx",
-    "universal-profile-eudi-wallet-v1.tsx"
+    "ai-system-of-record-v97.tsx"
   ],
   "exclude": [
     "main.tsx",

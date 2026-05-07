@@ -6,8 +6,8 @@ This folder contains prototypes, design documentation, and reference materials f
 
 With **`npm run dev`** (port **5199**):
 
-- **`http://localhost:5199/`** — default shell loads **Recruiter Homepage v85** (AI-native homepage).
-- **`http://localhost:5199/#/recruiter-home-v85`** — **Recruiter Homepage v85** (AI Daily Briefing, smart candidate recommendations, pipeline health, personalized metrics).
+- **`http://localhost:5199/`** — default shell loads **GCC Recruiter Dashboard** (`#/gcc-recruiter-dashboard`).
+- **`http://localhost:5199/#/gcc-recruiter-dashboard`** — GCC recruiter dashboard shell.
 - **`http://localhost:5199/#/candidate-grid-v84`** — **Candidate grid redesign v84** (enhanced tabs: Dashboard, Job Requisitions, Candidates, Reports with full functionality and HiredScore integration).
 - **`http://localhost:5199/gcc-candidate-grid-redesign-v52`** — **Candidate grid redesign v52** (GCC-E2E-011; copy from **319**; unified modal, hub tabs).
 - **`http://localhost:5199/gcc-candidate-grid-v46`** — **Candidate grid redesign v46** (unified modal, hub tabs Requisitions / Candidates / Offers / Analytics).
@@ -64,7 +64,7 @@ This message comes from **Figma’s html-to-design service**, not from a broken 
 ## Reusable Component Library
 
 ### Shell Components
-- **`WorkdayTopNav`** - Global navigation: grey bar, pill search, utilities, avatar, tenant heading
+- **`WorkdayTopNav`** - Global navigation: **white bar**, **grey pill search**, utilities, avatar, tenant heading. Supports `variant="home"` (homepage — adds Workday brand gradient accent bar underneath) and `variant="app"` (default — adds 1px grey hairline). See `design/TOP-NAV-UPDATE.md` for the full spec.
 - **`WorkdayLeftTabBar`** - Primary icon rail + secondary vertical tabs (grey columns, pill active state)
 - **`CommunicationDock`** - Sliding panel wrapper: rail buttons, animated panel, shadow depth
 - **`ProfilePageLayout`** - Hub-style page layout: header card (avatar/title/actions) + tab navigation + optional communication dock (for candidate profiles, worker profiles, requisition details, hiring manager views)
@@ -93,6 +93,18 @@ This message comes from **Figma’s html-to-design service**, not from a broken 
 - **`CandidateGrid`** / **`JobReqGrid`** - Tabular data displays using Canvas Kit `Table` (`GenUIPatterns.tsx`)
 - **`CandidateCarousel`** - Side-by-side comparison of `StructuredResume` profiles (`GenUIPatterns.tsx`)
 - **`ChartCard`** - Data visualization wrapper using `react-chartjs-2` and Canvas Kit `Card` (`GenUIPatterns.tsx`)
+
+### Recruiting Agentic Workflow Pattern Candidates
+
+These are documented recommendations from `design/references/recruiting-agentic-workflow-patterns.md`. They are **documentation-only in this pass**; extract code components when the same pattern appears in a second prototype, when implementation drift appears in visual review, or when a design brief names the pattern directly.
+
+- **`RecruitingCandidateGrid`** - Compact requisition candidate table with stage count strip, filter toolbar, selectable rows, candidate links, grade/status cells, and visible write-through from NL filters.
+- **`RecruitingCountStrip`** - Compact stage-count row with active underline, small metadata, and low vertical padding for recruiter scanning.
+- **`CandidateProfileActionBar`** - Profile decision controls (move/decline/star/more), candidate previous/next navigation, count text, and resume toggle.
+- **`CandidateEvidencePanel`** - Candidate insights and fit/gap cards that keep source-adjacent evidence beside decision controls.
+- **`ExternalCollaborationHandoff`** - Teams/Slack-style Workday Everywhere handoff for scheduling conflicts, panel replies, and human-confirmed commits.
+- **`GeneratedDocumentPreview`** - Branded, document-first preview for offer letters and other AI-generated recruiting documents.
+- **`AiDiagnosticsPanel`** - Progressive-disclosure checks for CRFs, QA, citations, template eligibility, approval routing, and approval advisories.
 
 ### Usage Patterns
 

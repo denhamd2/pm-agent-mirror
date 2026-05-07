@@ -23,8 +23,8 @@ import { PublicPrototypesCatalogue } from './public-prototypes-catalogue';
  *   - `/<slug>` where slug ∈ PUBLIC_PROTOTYPE_SLUGS → lazy-loaded prototype
  *   - anything else → "this content is localhost-only" placeholder
  *
- * Localhost is the canonical full dashboard. This entry point only ships the 13
- * UI-exploration prototypes; data-backed dashboards (IUM metrics, customer
+ * Localhost is the canonical full dashboard. This entry point only ships the
+ * UI-exploration prototypes in `public-catalogue.ts`; data-backed dashboards (IUM metrics, customer
  * scorecards, BP durations, value realisation) remain on localhost only and
  * are not reachable from this bundle. The build-time guardrail in
  * `vite-plugin-forbidden-imports.ts` enforces that constraint.
@@ -37,21 +37,8 @@ type AnyComponent = React.ComponentType<any>;
 type Loader = () => Promise<{ default: AnyComponent }>;
 
 const PROTOTYPE_LOADERS: Record<PublicPrototypeSlug, Loader> = {
-  'aadhaar-adobe-sign-v01': () => import('./aadhaar-adobe-sign-v01'),
   'candidate-grid-v84': () =>
     import('./gcc-candidate-grid-search').then((m) => ({ default: m.GccCandidateGridSearch })),
-  'recruiter-home-v85': () =>
-    import('./recruiter-home-v85').then((m) => ({ default: m.RecruiterHomeV85 })),
-  'candidate-smart-view-v86': () =>
-    import('./candidate-smart-view-v86').then((m) => ({ default: m.CandidateSmartViewV86 })),
-  'india-whatsapp-candidate-messaging-v88': () =>
-    import('./india-whatsapp-candidate-messaging-v88').then((m) => ({
-      default: m.IndiaWhatsappCandidateMessagingV88,
-    })),
-  'gcc-interview-scheduling-v90': () =>
-    import('./gcc-interview-scheduling-compliance-nudges-v90').then((m) => ({
-      default: m.GccInterviewSchedulingComplianceNudgesV90,
-    })),
   'india-native-whatsapp-v91': () =>
     import('./india-native-whatsapp-v91').then((m) => ({ default: m.IndiaNativeWhatsappV91 })),
   'recruiter-hub-genui-v95': () =>
@@ -61,15 +48,6 @@ const PROTOTYPE_LOADERS: Record<PublicPrototypeSlug, Loader> = {
       default: m.InterviewIntelligenceAgentV96,
     })),
   'ai-system-of-record-v97': () => import('./ai-system-of-record-v97'),
-  'recruiter-hub-conversational-v98': () =>
-    import('./recruiter-hub-conversational-v98').then((m) => ({
-      default: m.RecruiterHubConversationalV98,
-    })),
-  'recruiter-hub-conversational-v99': () =>
-    import('./recruiter-hub-conversational-v99').then((m) => ({
-      default: m.RecruiterHubConversationalV99,
-    })),
-  'universal-profile-eudi-wallet-v1': () => import('./universal-profile-eudi-wallet-v1'),
 };
 
 const LAZY_PROTOTYPES: Record<PublicPrototypeSlug, React.LazyExoticComponent<AnyComponent>> =

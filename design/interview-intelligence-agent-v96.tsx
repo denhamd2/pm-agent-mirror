@@ -60,7 +60,7 @@ const PRIMARY_RAIL: WorkdayLeftTabBarPrimaryItem[] = [
     icon: homeIcon,
     ariaLabel: 'Home',
     railLabel: 'Home',
-    onClick: () => { window.location.hash = '/recruiter-home-v85'; },
+    onClick: () => { window.location.hash = '/gcc-recruiter-dashboard'; },
   },
   { icon: userIcon, ariaLabel: 'Recruiting', railLabel: 'Recruit' },
   { icon: homeBuildingIcon, ariaLabel: 'Organisation', railLabel: 'Org' },

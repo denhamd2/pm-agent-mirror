@@ -21,7 +21,6 @@
     {
       "slug": "gcc-interview-scheduling-v90",
       "files": [
-        "design/gcc-interview-scheduling-v90.tsx",
         "docs/prds/gcc-interview-scheduling-compliance-nudges-prd.md",
         "design/gcc-interview-scheduling-compliance-nudges-design-brief.md"
       ]

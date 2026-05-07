@@ -29,6 +29,14 @@ Thumbs.db
 .vscode/
 .idea/
 
+# Cursor MCP project config (secrets); keep ~/.cursor/mcp.json or local copy only
+.cursor/mcp.json
+!.cursor/mcp.json.example
+
+# Python bytecode (never commit)
+**/__pycache__/
+*.pyc
+
 # Temporary files
 *.tmp
 *.swp
@@ -40,6 +48,8 @@ Thumbs.db
 
 # Slide deck outputs (optional - these are generated)
 *.pptx
+# Keep large PMF decks local only (not in Git); see docs/downloads/README.md
+docs/downloads/*.pptx
 
 # Local development
 design/dist/
@@ -48,7 +58,7 @@ design/dist/
 dashboard-dist/
 assets/
 
-# Public dashboard build output (catalogue + 13 prototypes published to GHE Pages
+# Public dashboard build output (catalogue + public prototype allowlist published to GHE Pages
 # by .github/workflows/deploy-dashboard-public.yml; built into gh-pages branch
 # at deploy time, never tracked on main). Build is gated by
 # design/vite-plugin-forbidden-imports.ts which blocks Pharos-derived data.
@@ -60,3 +70,16 @@ design/data-bp-durations.ts
 # 106/107 scratch dumps (regenerated each run; optional to track)
 research/**/brainstorm-analysis/_scratch*.md
 research/**/win-loss-analysis/_scratch*.md
+
+# SSA demo video analysis scratch (raw .mov sources + extracted keyframe PNGs;
+# the synthesized best-practices markdown in design/references/ IS committed).
+design/references/ssa-create-req-videos/source/
+design/references/ssa-create-req-videos/frames-location-move/
+design/references/ssa-create-req-videos/frames-overlap/
+
+# Talent Acquisition keynote demo scratch (raw .mp4 + extracted keyframe PNGs;
+# the synthesized best-practices markdown in design/references/ IS committed).
+design/references/talent-acq-videos/source/
+design/references/talent-acq-videos/frames/
+design/references/talent-acq-videos/frames-*/
+

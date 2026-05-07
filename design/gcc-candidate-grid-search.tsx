@@ -88,7 +88,7 @@ const PRIMARY_RAIL: WorkdayLeftTabBarPrimaryItem[] = [
     ariaLabel: 'Home', 
     railLabel: 'Home',
     onClick: () => {
-      window.location.hash = '/recruiter-home-v85';
+      window.location.hash = '/gcc-recruiter-dashboard';
     },
   },
   { icon: userIcon, ariaLabel: 'Recruiting', railLabel: 'Recruit' },
