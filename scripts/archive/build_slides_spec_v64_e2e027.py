@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Emit slides_spec_v64.json for GCC PMF roadmap from 2026-03-27-GCC-PMF-Analysis-GCC-E2E-027.md"""
 import json
+from pathlib import Path
 
-OUT = "/Users/david.denham/product-manager-agent/slides_spec_v64.json"
+OUT = str(Path(__file__).resolve().parents[2] / "docs" / "decks" / "specs" / "slides_spec_v64.json")
 
 TB = lambda top=1.2: {
     "left_inches": 0.7,

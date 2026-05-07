@@ -5,8 +5,8 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-V60 = ROOT / "slides_spec_v60.json"
-OUT = ROOT / "slides_spec_v61.json"
+V60 = ROOT / "docs" / "decks" / "specs" / "slides_spec_v60.json"
+OUT = ROOT / "docs" / "decks" / "specs" / "slides_spec_v61.json"
 
 
 def main():

@@ -13,7 +13,7 @@
 - **CI Matrix:** [`research/competitive/matrices/gcc-competitive-matrix.md`](file:///Users/david.denham/product-manager-agent/research/competitive/matrices/gcc-competitive-matrix.md) (v1.6) ✓
 - **Research (105):** [`research/GCC/105-user-research-findings.md`](file:///Users/david.denham/product-manager-agent/research/GCC/105-user-research-findings.md) (v56, attestation) ✓
 - **Research (120 PMF):** [`research/GCC/thematic-analysis/2026-03-24-GCC-PMF-Analysis-v56.md`](file:///Users/david.denham/product-manager-agent/research/GCC/thematic-analysis/2026-03-24-GCC-PMF-Analysis-v56.md) ✓
-- **Slide spec (130):** [`slides_spec_v56.json`](file:///Users/david.denham/product-manager-agent/slides_spec_v56.json) ✓
+- **Slide spec (130):** [`docs/decks/specs/slides_spec_v56.json`](file:///Users/david.denham/product-manager-agent/docs/decks/specs/slides_spec_v56.json) ✓
 - **Slide deck (130):** [`~/Downloads/GCC_Recruiting_PMF_Roadmap_v56.pptx`](file:///Users/david.denham/Downloads/GCC_Recruiting_PMF_Roadmap_v56.pptx) ⚠️ (9 slides - see Bug #1)
 - **PRD (200):** [`docs/prds/gcc-nationalization-oob-fields-prd.md`](file:///Users/david.denham/product-manager-agent/docs/prds/gcc-nationalization-oob-fields-prd.md) ✓
 - **Red Team PRD Review (080):** [`docs/prds/gcc-nationalization-oob-fields-prd-red-team.md`](file:///Users/david.denham/product-manager-agent/docs/prds/gcc-nationalization-oob-fields-prd-red-team.md) ✓

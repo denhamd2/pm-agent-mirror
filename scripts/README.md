@@ -29,7 +29,7 @@ There is **no** consolidated parameterised Python builder in `scripts/`. New ful
 
 ### If you need the old Python helper pattern
 
-Open any file under `scripts/archive/`. Typical structure:
+See **[`scripts/archive/README.md`](archive/README.md)** (output paths, how to run). Open any file under `scripts/archive/`. Typical structure:
 
 - Small helpers: section dividers (`Section Title` layout), body text boxes (`Title Only` / `Title Only_Alt`), optional `pestel_slide`-style builders, product-implication paragraphs with yellow highlight.
 - A `slides` list of dicts in Slide Deck MCP shape.

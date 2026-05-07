@@ -38,7 +38,7 @@
 - **User Research (Steps 7-8):** `research/India/105-sme-research-findings.md` (5 SMEs: Bernie, Fabiola, Santosh, Lodola, Phillips; fresh attestation IN-PMF-002); `research/India/105-user-research-findings.md` (5 TP customers: P1-P5; fresh attestation IN-PMF-002)
 - **PMF Analysis (Step 9):** `research/India/thematic-analysis/2026-03-31-India-PMF-Analysis-IN-PMF-002.md` (6 themes, 13 recommendations with E2E Handoff table)
 - **Legal Review (Step 10):** Compliance assessment completed by 060; findings incorporated into recommendations
-- **Slide Deck (Step 11):** `India_Recruiting_PMF_Roadmap_v81.pptx` (57 slides) + `slides_spec_v81.json`
+- **Slide Deck (Step 11):** `India_Recruiting_PMF_Roadmap_v81.pptx` (57 slides) + `docs/decks/specs/slides_spec_v81.json`
 - **Cleanup (Step 12):** Deleted 22 old artifacts; retained 3 most recent per directory
 
 **E2E Handoff Table:** 13 prioritized recommendations in PMF report ready for Workflow 2 (PRD Writing) if needed

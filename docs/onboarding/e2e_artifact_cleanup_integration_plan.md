@@ -10,7 +10,7 @@
 ## Problem
 
 Old artifact files accumulate during E2E pipeline runs:
-- Slide spec JSON files (`slides_spec_v*.json`) from deck generation
+- Slide spec JSON files (`docs/decks/specs/slides_spec_v*.json`) from deck generation
 - PRD markdown files (`docs/prds/*-prd.md`) from PRD writing
 - Story map files (`docs/story-maps/*-story-map.md`) from story mapping
 - Prototype files (`design/*-v*.tsx`) from prototype development
@@ -65,18 +65,18 @@ Integrate automatic cleanup into the **Regional E2E Pipeline** in `000-master-or
 
 **E2E Pipeline Step 3 (in orchestrator)**:
 ```markdown
-3. Invoke **130** with Task description **"Generating PMF Roadmap Deck"**: "Build full PMF roadmap deck from the **120** report path from step **2b**. Target **~50-60 slides** (v65 parity). Write `slides_spec_vN.json` and `~/Downloads/[REGION]_Recruiting_PMF_Roadmap_vN.pptx` (auto-increment N). Output: **Provide direct link to the generated .pptx file.** Part of [REGION] e2e pipeline."
+3. Invoke **130** with Task description **"Generating PMF Roadmap Deck"**: "Build full PMF roadmap deck from the **120** report path from step **2b**. Target **~50-60 slides** (v65 parity). Write `docs/decks/specs/slides_spec_vN.json` and `~/Downloads/[REGION]_Recruiting_PMF_Roadmap_vN.pptx` (auto-increment N). Output: **Provide direct link to the generated .pptx file.** Part of [REGION] e2e pipeline."
 3. **Update todo**: Mark Step 3 as completed, Step 4 as in_progress: `TodoWrite({ merge: true, todos: [{ id: "[region-code]-e2e-step-3", status: "completed" }, { id: "[region-code]-e2e-step-4", status: "in_progress" }] })`
 4. HUMAN-IN-THE-LOOP: Parse **120** output for the E2E Handoff table...
 ```
 
-**Result**: Old `slides_spec_v58.json`, `slides_spec_v59.json`, `design/gcc-nationalisation-v58.tsx`, `design/gcc-nationalisation-v59.tsx`, etc. accumulate forever.
+**Result**: Old `docs/decks/specs/slides_spec_v58.json`, `docs/decks/specs/slides_spec_v59.json`, `design/gcc-nationalisation-v58.tsx`, `design/gcc-nationalisation-v59.tsx`, etc. accumulate forever.
 
 ### After (Automatic Cleanup)
 
 **E2E Pipeline Step 3 (in orchestrator)**:
 ```markdown
-3. Invoke **130** with Task description **"Generating PMF Roadmap Deck"**: "Build full PMF roadmap deck from the **120** report path from step **2b**. Target **~50-60 slides** (v65 parity). Write `slides_spec_vN.json` and `~/Downloads/[REGION]_Recruiting_PMF_Roadmap_vN.pptx` (auto-increment N). Output: **Provide direct link to the generated .pptx file.** Part of [REGION] e2e pipeline."
+3. Invoke **130** with Task description **"Generating PMF Roadmap Deck"**: "Build full PMF roadmap deck from the **120** report path from step **2b**. Target **~50-60 slides** (v65 parity). Write `docs/decks/specs/slides_spec_vN.json` and `~/Downloads/[REGION]_Recruiting_PMF_Roadmap_vN.pptx` (auto-increment N). Output: **Provide direct link to the generated .pptx file.** Part of [REGION] e2e pipeline."
 3a. **Cleanup old slide specs**: Run `python3 scripts/cleanup-old-artifacts.py --keep 3` to retain only 3 most recent slide spec JSON files and PRD/story map files (non-blocking, fast execution)
 3. **Update todo**: Mark Step 3 as completed, Step 4 as in_progress: `TodoWrite({ merge: true, todos: [{ id: "[region-code]-e2e-step-3", status: "completed" }, { id: "[region-code]-e2e-step-4", status: "in_progress" }] })`
 4. HUMAN-IN-THE-LOOP: Parse **120** output for the E2E Handoff table...
@@ -107,9 +107,9 @@ Integrate automatic cleanup into the **Regional E2E Pipeline** in `000-master-or
 ### Step 2: Verification
 
 After updating orchestrator:
-1. Manually create 5+ test slide spec files: `touch slides_spec_v{70..75}.json`
+1. Manually create 5+ test slide spec files under `docs/decks/specs/`: `touch docs/decks/specs/slides_spec_v{70..75}.json`
 2. Run cleanup script: `python3 scripts/cleanup-old-artifacts.py --keep 3`
-3. Verify only 3 most recent remain: `ls -1 slides_spec*.json`
+3. Verify only 3 most recent remain: `ls -1 docs/decks/specs/slides_spec*.json`
 4. Confirm cleanup script works as expected before integration
 
 ### Step 3: Documentation
@@ -155,7 +155,7 @@ python3 scripts/cleanup-old-artifacts.py --keep 3
 
 **Expected output**:
 ```
-Deleting 2 files from /Users/david.denham/product-manager-agent:
+Deleting 2 files from /Users/david.denham/product-manager-agent/docs/decks/specs:
   - slides_spec_v58.json
   - slides_spec_v59.json
 

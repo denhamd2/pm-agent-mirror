@@ -778,9 +778,9 @@ The PESTEL subsection below references different bullet-count targets in places 
 
 12. **Bumper Slide**
 
-**Canonical baseline enforcement:** `slides_spec.json` MUST implement the **content classes** above and match **`docs/decks/gcc-pmf-roadmap-v65-slide-inventory.md`** for GCC full PMF decks. When generating versioned decks, the agent MUST:
+**Canonical baseline enforcement:** `docs/decks/specs/slides_spec.json` (or versioned `docs/decks/specs/slides_spec_v*.json`) MUST implement the **content classes** above and match **`docs/decks/gcc-pmf-roadmap-v65-slide-inventory.md`** for GCC full PMF decks. When generating versioned decks, the agent MUST:
 
-1. Prefer **v65 inventory** as skeleton, not only the previous **`slides_spec_v*.json`**
+1. Prefer **v65 inventory** as skeleton, not only the previous **`docs/decks/specs/slides_spec_v*.json`**
 2. Populate with content from **@product-strategy-agent outputs** (PESTEL, SWOT) and the **@pmf-analyst** report (themes, customer evidence, recommendations)
 3. Add version-specific deep-dive slides **only** after standard sections (or with PM approval to trade depth vs length)
 4. Never skip or compress **SWOT, 4× Win/Loss, Ideation block (or DATA GAP), Full Funnel** unless user says **focus deck only**

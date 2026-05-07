@@ -93,7 +93,7 @@
    ────────────────────────
    "Create slides"  →  Slide Generator (110)  →  parse_template
                            ↓
-                      slides_spec.json  →  create_presentation
+                      docs/decks/specs/slides_spec.json  →  create_presentation
                            ↓
                       ~/Downloads/deck.pptx
 

@@ -38,7 +38,7 @@
 **Related Artifacts:**
 - Updated rules: `130-pmf-slide-generator.mdc` (lines 698-716, 925-977, 1139, 1140-1150, 1201-1220), `010-style-guide.mdc` (line 59)
 - v84 deck: `~/Downloads/India_Recruiting_PMF_Roadmap_v84.pptx` (64 slides)
-- v84 spec: `slides_spec_v84.json`
+- v84 spec: `docs/decks/specs/slides_spec_v84.json`
 - Previous versions for comparison: v81 (correct density), v82 (too sparse), v83 (too sparse)
 
 ---

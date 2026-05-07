@@ -14,7 +14,7 @@
 - **CI Matrix:** [`research/competitive/matrices/gcc-competitive-matrix.md`](file:///Users/david.denham/product-manager-agent/research/competitive/matrices/gcc-competitive-matrix.md) (v1.7, changelog GCC-E2E-017) ✅
 - **Research (105):** [`research/GCC/105-user-research-findings.md`](file:///Users/david.denham/product-manager-agent/research/GCC/105-user-research-findings.md) (v57, attestation GCC-E2E-017) ✅
 - **Research (120 PMF):** [`research/GCC/thematic-analysis/2026-03-24-GCC-PMF-Analysis-v57.md`](file:///Users/david.denham/product-manager-agent/research/GCC/thematic-analysis/2026-03-24-GCC-PMF-Analysis-v57.md) ✅
-- **Slide spec (130):** [`slides_spec_v57.json`](file:///Users/david.denham/product-manager-agent/slides_spec_v57.json) (52 slides; v30 parity) ✅
+- **Slide spec (130):** [`docs/decks/specs/slides_spec_v57.json`](file:///Users/david.denham/product-manager-agent/docs/decks/specs/slides_spec_v57.json) (52 slides; v30 parity) ✅
 - **Slide deck (130):** 🎯 **[GCC_Recruiting_PMF_Roadmap_v57.pptx](file:///Users/david.denham/Downloads/GCC_Recruiting_PMF_Roadmap_v57.pptx)** (52 slides ✅ **Bug #1 FIXED**)
 - **PRD (200, markdown only):** [`docs/prds/gcc-unified-candidate-review-prd.md`](file:///Users/david.denham/product-manager-agent/docs/prds/gcc-unified-candidate-review-prd.md) ✅ (**Bug #2 FIXED** - Enhanced PM Framing)
 - **Red Team PRD Review (080):** 2 critical risks, 5 important issues identified ✅

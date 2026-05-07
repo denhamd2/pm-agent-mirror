@@ -110,7 +110,9 @@ All slide content MUST be executive-ready and external-facing:
 
 ## GOLDEN STANDARD REFERENCE (v90)
 
-**`docs/decks/specs/slides_spec_v90.json`** (India PMF, April 2026) is the canonical quality benchmark for all PMF roadmap decks. When generating a new PMF roadmap deck, read v90 as a reference for target content density, strategic anchoring, and executive language. Do not copy content; match the quality bar.
+**Canonical benchmark:** **`docs/decks/specs/slides_spec_v90.json`** (India PMF, April 2026) — the target quality bar when that file is present in the repo.
+
+**If `slides_spec_v90.json` is not checked in:** use the **newest** `docs/decks/specs/slides_spec_v*.json` by version number (or the mission’s current spec) as the live density and language reference. Do not copy content; match the **quality bar** below.
 
 **6 Quality Markers to Match:**
 1. **Quantified success metrics**: Every recommendation has a specific, measurable target (e.g., "30% reduction", "15% to 70% increase") rather than vague aspirations.

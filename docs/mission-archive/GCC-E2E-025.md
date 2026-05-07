@@ -61,7 +61,7 @@
 - **Step 2.5 (106):** `research/GCC/brainstorm-analysis/2026-03-27-brainstorm-analysis-GCC-E2E-025.md`
 - **Step 2.75 (107):** `research/GCC/win-loss-analysis/2026-03-27-win-loss-analysis-GCC-E2E-025.md`
 - **Step 2b (120):** `research/GCC/thematic-analysis/2026-03-27-GCC-PMF-Analysis-GCC-E2E-025.md`
-- **Step 3 (130 — Deck):** `~/Downloads/GCC_Recruiting_PMF_Roadmap_v64.pptx` (49 slides, spec: `slides_spec_v64.json`)
+- **Step 3 (130 — Deck):** `~/Downloads/GCC_Recruiting_PMF_Roadmap_v64.pptx` (49 slides, spec: `docs/decks/specs/slides_spec_v64.json`)
 - **Step 6 (200 — PRD):** `docs/prds/gcc-nationalisation-local-compliance-reporting-prd.md` (revised post-Red Team with audit scenario matrix)
 - **Step 6a (080 — Red Team PRD):** Moderate complexity; recommended audit matrix, adoption assumptions, competitive messaging refinements (applied)
 - **Step 7 (315 — Discovery):** `design/gcc-nationalisation-local-compliance-reporting-discovery-brief.md`

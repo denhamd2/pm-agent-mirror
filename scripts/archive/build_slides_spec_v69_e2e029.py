@@ -5,8 +5,8 @@ import copy
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-V68 = ROOT / "slides_spec_v68.json"
-OUT = ROOT / "slides_spec_v69.json"
+V68 = ROOT / "docs" / "decks" / "specs" / "slides_spec_v68.json"
+OUT = ROOT / "docs" / "decks" / "specs" / "slides_spec_v69.json"
 
 REPORT = "research/GCC/thematic-analysis/2026-03-27-GCC-PMF-Analysis-GCC-E2E-029.md"
 STRAT = "research/GCC/strategy-context-2026-03-27-GCC-E2E-029.md"

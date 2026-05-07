@@ -2,10 +2,12 @@
 """Build slides_spec_v70.json from v69: GCC-E2E-030 content, remove forbidden Win/Loss slide, reorder recommendations."""
 import json
 from copy import deepcopy
+from pathlib import Path
 
-ROOT = "/Users/david.denham/product-manager-agent"
-SRC = f"{ROOT}/slides_spec_v69.json"
-OUT = f"{ROOT}/slides_spec_v70.json"
+ROOT = Path(__file__).resolve().parents[2]
+SPECS = ROOT / "docs" / "decks" / "specs"
+SRC = str(SPECS / "slides_spec_v69.json")
+OUT = str(SPECS / "slides_spec_v70.json")
 
 THEMATIC = "research/GCC/thematic-analysis/2026-03-27-GCC-PMF-Analysis-GCC-E2E-030.md"
 

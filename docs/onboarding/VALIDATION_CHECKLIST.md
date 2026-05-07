@@ -126,7 +126,7 @@ Use this checklist to validate that the PM Agent workspace is functioning correc
 1. Say: "Create an executive briefing about [topic]"
 2. Verify Slide Generator (110) activates
 3. Check for parse_template call
-4. Verify slides_spec.json created
+4. Verify `docs/decks/specs/slides_spec.json` created
 5. Check for create_presentation call
 6. Verify .pptx in ~/Downloads/
 

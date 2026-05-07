@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "slides_spec_v54.json"
+OUT = ROOT / "docs" / "decks" / "specs" / "slides_spec_v54.json"
 
 BODY = {"left_inches": 0.7, "top_inches": 1.2, "width_inches": 8.6, "height_inches": 2.8}
 REPORT = "research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v54.md"

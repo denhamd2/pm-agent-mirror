@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """One-off generator for France PMF slides_spec_v74.json."""
 import json
+from pathlib import Path
 
 
 def tb(x, y, w, h, **kwargs):
@@ -627,7 +628,7 @@ def main():
 
     slides.append({"master_index": 1, "layout_name": "Bumper Slide"})
 
-    out = "/Users/david.denham/product-manager-agent/slides_spec_v74.json"
+    out = str(Path(__file__).resolve().parents[2] / "docs" / "decks" / "specs" / "slides_spec_v74.json")
     with open(out, "w", encoding="utf-8") as f:
         json.dump(slides, f, indent=2, ensure_ascii=False)
 

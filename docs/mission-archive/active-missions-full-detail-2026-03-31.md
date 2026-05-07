@@ -72,7 +72,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Artifacts:**
 - Research: `research/GCC/thematic-analysis/2026-03-20-GCC-PMF-Analysis-v41.md`
 - Slide Deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v41.pptx` (37 content slides + auto agenda; full PESTEL / competitive / Win-Loss / interviews / matrix + v41 theme deep-dives, RICE, E2E handoff)
-- Slide spec: `slides_spec_v41.json`
+- Slide spec: `docs/decks/specs/slides_spec_v41.json`
 - PRD: `docs/prds/gcc-recruiter-dashboard-prd.md`
 - Design Brief: `design/gcc-recruiter-dashboard-design-brief.md`
 - Prototype: `design/gcc-recruiter-dashboard.tsx` — dev server **`http://localhost:5199/`**; `design/main.tsx` mounts **GccRecruiterDashboard** for this mission
@@ -98,7 +98,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Artifacts:**
 - Research: `research/GCC/thematic-analysis/2026-03-20-GCC-PMF-Analysis-v40.md`
 - Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v40.pptx` (36 slides + auto agenda)
-- Slide spec: `slides_spec.json` (subtitle v40)
+- Slide spec: `docs/decks/specs/slides_spec.json` (subtitle v40)
 - PRD: `docs/prds/gcc-candidate-grid-search-prd.md`
 - Design Brief: `design/gcc-candidate-grid-search-design-brief.md`
 - Prototype: `design/gcc-candidate-grid-search.tsx` — **profile modal** (key details left, resume right), **prev/next carousel** + keyboard arrows, **HiredScore-style fit** column; `design/main.tsx` currently mounts **GccRecruiterDashboard** (GCC-E2E-002) — switch import to **GccCandidateGridSearch** to demo or recapture this prototype
@@ -330,7 +330,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Artifacts:**
 - Research: `research/GCC/thematic-analysis/2026-03-20-GCC-PMF-Analysis-v42.md`
 - Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v42.pptx`
-- Slide spec: `slides_spec_v42.json`
+- Slide spec: `docs/decks/specs/slides_spec_v42.json`
 - PRD: `docs/prds/gcc-candidate-grid-redesign-v42-prd.md`
 - Design Brief: `design/gcc-candidate-grid-redesign-v42-design-brief.md`
 - Prototype: `design/gcc-candidate-grid-search.tsx` — dev **`http://localhost:5199/`**; `design/main.tsx` mounts **GccCandidateGridSearch**
@@ -359,7 +359,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Artifacts:**
 - Research: `research/GCC/thematic-analysis/2026-03-20-GCC-PMF-Analysis-v43.md`
 - Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v43.pptx` (37 slides)
-- Slide spec: `slides_spec_v43.json`
+- Slide spec: `docs/decks/specs/slides_spec_v43.json`
 - PRD (markdown): `docs/prds/gcc-whatsapp-2way-communication-prd.md`
 - Confluence (summary): https://confluence.workday.com/pages/viewpage.action?pageId=4349332625
 - Notion (full PRD): *pending — Notion MCP requires interactive `mcp_auth` in Cursor; publish from markdown after auth*
@@ -399,7 +399,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Artifacts:**
 - Research (105): `research/GCC/105-user-research-findings.md`
 - Research (120 PMF): `research/GCC/thematic-analysis/2026-03-21-GCC-PMF-Analysis-v44.md`
-- Slide spec: `slides_spec_v44.json`
+- Slide spec: `docs/decks/specs/slides_spec_v44.json`
 - Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v44.pptx` (40 slides + auto agenda)
 - PRD (markdown): `docs/prds/gcc-nationalisation-workforce-compliance-prd.md`
 - Red Team PRD Review: `docs/prds/gcc-nationalisation-workforce-compliance-prd-red-team-review.md` (5 critical risks, 5 important issues found)
@@ -436,7 +436,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Artifacts:**
 - Research (105): `research/GCC/105-user-research-findings.md`
 - Research (120 PMF): `research/GCC/thematic-analysis/2026-03-21-GCC-PMF-Analysis-v45.md`
-- Slide spec: `slides_spec_v45.json`
+- Slide spec: `docs/decks/specs/slides_spec_v45.json`
 - Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v45.pptx` (40 slides incl. auto-agenda)
 - PRD (Git): `docs/prds/gcc-whatsapp-omnichannel-candidate-engagement-prd.md`
 - PRD (Notion): **Not published in agent session** – `plugin-notion-workspace-notion` exposed no callable page-create tool in MCP filesystem (auth-only descriptor). **Action:** Publish full PRD to Notion from the Git markdown via Cursor Notion MCP when connected; paste URL here.
@@ -483,7 +483,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Artifacts:**
 - Research (105): `research/GCC/105-user-research-findings.md`
 - Research (120 PMF): `research/GCC/thematic-analysis/2026-03-21-GCC-PMF-Analysis-v46.md`
-- Slide spec: `slides_spec_v46.json`
+- Slide spec: `docs/decks/specs/slides_spec_v46.json`
 - Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v46.pptx` (48 content slides)
 - PRD (Git): `docs/prds/gcc-candidate-grid-redesign-v46-prd.md`
 - PRD (Confluence summary): https://confluence.workday.com/display/~david.denham/Candidate+Grid+Redesign+2026R2+PRD+Summary
@@ -527,11 +527,11 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Artifacts (Step 1 complete):**
 - Research (105): `research/GCC/105-user-research-findings.md` (header v47)
 - Research (120 PMF): `research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v47.md`
-- Slide spec: `slides_spec_v49.json` (v30 inventory + **v30 typography**: `paragraphs`, 2.8in body, 12pt section lines, PESTEL `FFFF00` highlight)
+- Slide spec: `docs/decks/specs/slides_spec_v49.json` (v30 inventory + **v30 typography**: `paragraphs`, 2.8in body, 12pt section lines, PESTEL `FFFF00` highlight)
 - Generator: `scripts/build_gcc_slides_spec_v49_v30_typography.py`
 - Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v49.pptx` (51 slides with MCP auto-agenda per `python-pptx`; 50 spec slides)
 - Typography brief: `docs/decks/gcc-pmf-roadmap-v30-typography.md`
-- Legacy: `slides_spec_v48.json` / `GCC_Recruiting_PMF_Roadmap_v48.pptx`; `slides_spec_v47.json` / `GCC_Recruiting_PMF_Roadmap_v47.pptx`
+- Legacy: `docs/decks/specs/slides_spec_v48.json` / `GCC_Recruiting_PMF_Roadmap_v48.pptx`; `docs/decks/specs/slides_spec_v47.json` / `GCC_Recruiting_PMF_Roadmap_v47.pptx`
 - **CI Brief / matrix delta:** pending after HITL (historically Step 5; now **Step 6** per **120→130** split)
 - **Selected Recommendation:** [pending HITL]
 
@@ -557,7 +557,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Artifacts (Steps 1–8 through Red Team PRD):**
 - Research (105): `research/GCC/105-user-research-findings.md` (header v50)
 - Research (120 PMF): `research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v50.md`
-- Slide spec (**130**): `slides_spec_v50.json` (50 spec slides; auto-agenda from MCP)
+- Slide spec (**130**): `docs/decks/specs/slides_spec_v50.json` (50 spec slides; auto-agenda from MCP)
 - Slide deck (**130**): `~/Downloads/GCC_Recruiting_PMF_Roadmap_v50.pptx`
 - Generator: `scripts/build_gcc_slides_spec_v50_v30_typography.py`
 - **CI Brief:** `research/competitive/gcc/e2e-ci-brief-candidate-grid-redesign-2026-03-22.md` (refreshed for v50 / E2E-009)
@@ -568,7 +568,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 
 **Next Actions:**
 - [x] Step 1: **@pmf-analyst** — Fresh PMF v50 report
-- [x] Step 2: **130** — PMF roadmap `.pptx` + `slides_spec_v50.json`
+- [x] Step 2: **130** — PMF roadmap `.pptx` + `docs/decks/specs/slides_spec_v50.json`
 - [x] Step 4: **HITL** — Recommendation **#5** (candidate grid redesign)
 - [x] Step 6: **@competitive-intel** — Scoped CI brief + matrix (existing artefact aligned to v50)
 - [x] Step 7: **200** — v50 PRD (`docs/prds/gcc-candidate-grid-redesign-v50-prd.md`)
@@ -592,7 +592,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Artifacts:**
 - Research (105): `research/GCC/105-user-research-findings.md` (header **v52**)
 - Research (120 PMF): `research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v52.md`
-- Slide spec (**130**): `slides_spec_v52.json` (50 spec slides + MCP auto-agenda)
+- Slide spec (**130**): `docs/decks/specs/slides_spec_v52.json` (50 spec slides + MCP auto-agenda)
 - Slide deck (**130**): `~/Downloads/GCC_Recruiting_PMF_Roadmap_v52.pptx`
 - Generator: `scripts/build_gcc_slides_spec_v52_v30_typography.py`
 - **CI Brief (101, E2E-011):** `research/competitive/gcc/e2e-ci-brief-candidate-grid-redesign-2026-03-22.md` (Deployment Agent thread `eb984a05-f81e-44f5-8c59-f7cf1575f0fc`)
@@ -628,7 +628,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Artifacts:**
 - Research (105): `research/GCC/105-user-research-findings.md` ✓ (v53 header, GCC-E2E-012 attestation)
 - Research (120 PMF): `research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v53.md` (in progress)
-- Slide spec (**130**): `slides_spec_v53.json` (pending)
+- Slide spec (**130**): `docs/decks/specs/slides_spec_v53.json` (pending)
 - Slide deck (**130**): `~/Downloads/GCC_Recruiting_PMF_Roadmap_v53.pptx` (pending)
 
 **Next Actions:**
@@ -658,7 +658,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 - Brainstorm (106): `research/GCC/brainstorm-analysis/2026-03-22-brainstorm-analysis.md` ✓ (scratch: `_scratch-brainstorm-sources.md`)
 - Win-Loss (107): `research/GCC/win-loss-analysis/2026-03-22-win-loss-analysis.md` ✓ (scratch: `_scratch-winloss-sources.md`, Mission ID: GCC-E2E-014)
 - Research (120 PMF): `research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v54.md` ✓
-- Slide spec (**130**): `slides_spec_v54.json` ✓
+- Slide spec (**130**): `docs/decks/specs/slides_spec_v54.json` ✓
 - Slide deck (**130**): `~/Downloads/GCC_Recruiting_PMF_Roadmap_v54.pptx` ✓
 - **PRD (200, markdown only):** `docs/prds/gcc-candidate-review-experience-v54-prd.md` ✓ (22 March 2026, includes CV carousel enhancement)
 - **Design Brief (315):** `design/gcc-candidate-review-cv-carousel-v54-design-brief.md` ✓ (APPROVED)
@@ -684,7 +684,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
   - Top themes: Nationalisation compliance (4/4), Omnichannel communications (3/4), Candidate review density + mobile (4/4)
   - E2E Handoff table: 10 recommendations ready for HITL
 - [x] Step 3: **130** — PMF roadmap deck from **@pmf-analyst** report ✓
-  - Spec: `slides_spec_v54.json` (55 slide objects)
+  - Spec: `docs/decks/specs/slides_spec_v54.json` (55 slide objects)
   - Deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v54.pptx` (56 slides with auto-agenda)
   - Script: `scripts/build_gcc_slides_spec_v54_v30_typography.py`
 - [x] Step 4: HITL — PM selects recommendation ✓
@@ -725,7 +725,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 - CI Matrix: `research/competitive/matrices/gcc-competitive-matrix.md` (v1.5, GCC-E2E-015 delta) ✓
 - Research (105): `research/GCC/105-user-research-findings.md` (v55, GCC-E2E-015 attestation) ✓
 - Research (120 PMF): `research/GCC/thematic-analysis/2026-03-22-GCC-PMF-Analysis-v55.md` ✓
-- Slide spec (**130**): `slides_spec_v55.json` ✓
+- Slide spec (**130**): `docs/decks/specs/slides_spec_v55.json` ✓
 - Slide deck (**130**): `~/Downloads/GCC_Recruiting_PMF_Roadmap_v55.pptx` (56 slides with auto-agenda) ✓
 - **PRD (200, markdown only):** [pending]
 - **Design Brief (315):** [pending]
@@ -752,7 +752,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
   - E2E handoff: 9 recommendations (Interview scheduling, Nationalisation, Candidate review, Omnichannel, RTL docs, Offer/visa, Dashboards, Mobile-first apply, Gov portals)
   - Top 3 themes: End-to-end workflow rigidity, Recruiter efficiency at scale, Compliance/nationalisation/reporting
 - [x] Step 3: **130** — PMF roadmap deck from **@pmf-analyst** report
-  - Spec: `slides_spec_v55.json`
+  - Spec: `docs/decks/specs/slides_spec_v55.json`
   - Deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v55.pptx` (56 slides)
   - Generator: `scripts/build_gcc_slides_spec_v55_v30_typography.py`
 - [ ] Step 4: HITL — PM selects recommendation
@@ -779,7 +779,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 - **Top 3 Themes (120):** (1) Candidate review density, (2) Search/matching/AI, (3) Reporting/dashboards/BI ✅
 - **E2E Handoff Recommendations:** 10 total (Priority 1 + Priority 2) ✅
 - **Legal Validation (060):** Completed (EU AI Act, GDPR, PDPL, UAE PDPA, KSA interview regs) ✅
-- **Slide spec (130 Step 3):** [`slides_spec_v58.json`](file:///Users/david.denham/product-manager-agent/slides_spec_v58.json) (53 slides) ✅
+- **Slide spec (130 Step 3):** [`docs/decks/specs/slides_spec_v58.json`](file:///Users/david.denham/product-manager-agent/docs/decks/specs/slides_spec_v58.json) (53 slides) ✅
 - **Slide deck (130):** [`~/Downloads/GCC_Recruiting_PMF_Roadmap_v58.pptx`](file:///Users/david.denham/Downloads/GCC_Recruiting_PMF_Roadmap_v58.pptx) (54 slides with auto-agenda, v30 parity) ✅
 - **Selected Recommendation (HITL Step 4):** **#3 - Nationalisation and local compliance reporting** | Move from ad hoc custom fields toward reference dimensions and audit-ready reports for UAE, KSA, and Kuwait; maintain honest Qiwa / Mudad recruiting exchange roadmap (True Gap) ✅
 - **PRD (200 Step 6):** [`docs/prds/gcc-nationalisation-local-compliance-reporting-prd.md`](file:///Users/david.denham/product-manager-agent/docs/prds/gcc-nationalisation-local-compliance-reporting-prd.md) (PM Framing: "GCC is a tier 1 growth region for Workday Recruiting"; integrates 101 CI v1.8 Native/Workaround/True Gap) ✅
@@ -827,7 +827,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 - **Brainstorm (106 Step 2.5):** [`research/GCC/brainstorm-analysis/2026-03-25-brainstorm-analysis.md`](file:///Users/david.denham/product-manager-agent/research/GCC/brainstorm-analysis/2026-03-25-brainstorm-analysis.md) (scratch: `research/GCC/brainstorm-analysis/_scratch-brainstorm-sources.md`) ✅
 - **Win-Loss (107 Step 2.75):** [`research/GCC/win-loss-analysis/2026-03-25-win-loss-analysis.md`](file:///Users/david.denham/product-manager-agent/research/GCC/win-loss-analysis/2026-03-25-win-loss-analysis.md) (scratch: `research/GCC/win-loss-analysis/_scratch-winloss-sources.md`) ✅ *File path reused; **GCC-E2E-020** regenerated this artefact (fresh attestation); v59 **@pmf-analyst** used the E2E-019-era analysis.*
 - **Research (120 PMF Step 2b):** [`research/GCC/thematic-analysis/2026-03-25-GCC-PMF-Analysis-v59.md`](file:///Users/david.denham/product-manager-agent/research/GCC/thematic-analysis/2026-03-25-GCC-PMF-Analysis-v59.md) ✅
-- **Slide spec (130 Step 3):** [`slides_spec_v59.json`](file:///Users/david.denham/product-manager-agent/slides_spec_v59.json) ✅
+- **Slide spec (130 Step 3):** [`docs/decks/specs/slides_spec_v59.json`](file:///Users/david.denham/product-manager-agent/docs/decks/specs/slides_spec_v59.json) ✅
 - **Slide deck (130):** [`~/Downloads/GCC_Recruiting_PMF_Roadmap_v59.pptx`](file:///Users/david.denham/Downloads/GCC_Recruiting_PMF_Roadmap_v59.pptx) ✅
 - **PRD (200 Step 6):** [`docs/prds/gcc-nationalisation-local-compliance-reporting-prd.md`](file:///Users/david.denham/product-manager-agent/docs/prds/gcc-nationalisation-local-compliance-reporting-prd.md) (PM framing: *GCC is part of Workday's tier 1 region growth*; **@pmf-analyst** `2026-03-25-GCC-PMF-Analysis-v59.md` rec **#3**; **@competitive-intel** matrix **v1.9** + `gcc-competitive-scan-2026-03-25-GCC-E2E-019.md`; **@competitive-intel** DA thread `5087cfa2-4dec-4834-b052-54cfe75d66de`; **200** standalone DA revalidation **pending** when MCP available) ✅
 - **Red Team PRD (080 Step 6a):** Completed (Thread: `c9553c71-e11c-48fb-af7d-ccdb26119129`). **3 critical risks**: (1) Run metadata vs Workday audit reality, (2) "Country packs" vs DA GCC pattern, (3) 320 gate vs interim RACI. **5 important issues**: (1) Thin PM framing, (2) Baseline-free targets, (3) Manual monthly vs journey, (4) HCM join scope creep, (5) AI/match drift in GTM. Competitive claims align with 101. ✅
@@ -875,7 +875,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 - **Brainstorm (106 Step 2.5):** [`research/GCC/brainstorm-analysis/2026-03-25-brainstorm-analysis.md`](file:///Users/david.denham/product-manager-agent/research/GCC/brainstorm-analysis/2026-03-25-brainstorm-analysis.md) (scratch: `research/GCC/brainstorm-analysis/_scratch-brainstorm-sources.md`, Mission **GCC-E2E-020**) ✅
 - **Win-Loss (107 Step 2.75):** [`research/GCC/win-loss-analysis/2026-03-25-win-loss-analysis.md`](file:///Users/david.denham/product-manager-agent/research/GCC/win-loss-analysis/2026-03-25-win-loss-analysis.md) (scratch: `research/GCC/win-loss-analysis/_scratch-winloss-sources.md`, Mission **GCC-E2E-020**) ✅
 - **Research (120 PMF Step 2b):** [`research/GCC/thematic-analysis/2026-03-25-GCC-PMF-Analysis-v60.md`](file:///Users/david.denham/product-manager-agent/research/GCC/thematic-analysis/2026-03-25-GCC-PMF-Analysis-v60.md) ✅
-- **Slide spec (130 Step 3):** [`slides_spec_v60.json`](file:///Users/david.denham/product-manager-agent/slides_spec_v60.json) ✅
+- **Slide spec (130 Step 3):** [`docs/decks/specs/slides_spec_v60.json`](file:///Users/david.denham/product-manager-agent/docs/decks/specs/slides_spec_v60.json) ✅
 - **Slide deck (130):** [`~/Downloads/GCC_Recruiting_PMF_Roadmap_v60.pptx`](file:///Users/david.denham/Downloads/GCC_Recruiting_PMF_Roadmap_v60.pptx) ✅
 - **Selected Recommendation:** #3 - Nationalization and local compliance reporting
 
@@ -944,7 +944,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 
 **Update - Step 3 Complete (2026-03-26):**
 - **130 PMF Deck**: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v62.pptx` (49 slides)
-- **Spec**: `slides_spec_v62.json`
+- **Spec**: `docs/decks/specs/slides_spec_v62.json`
 - **Typography validation**: All titles ≤45 chars (longest: 44), 12pt default properly enforced (51x12pt vs 48x11pt), density-based sizing working
 - **Status**: Ready for Step 4 (HITL)
 
@@ -994,7 +994,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Artifacts (Step 2b — 120):**
 - **PMF thematic analysis:** `research/GCC/thematic-analysis/2026-03-26-GCC-PMF-Analysis-GCC-E2E-024.md` (Braun & Clarke; **105** Phase 1 transcript re-read; **@competitive-intel** Step 1 only for Competitive Landscape; **106**/**107** sections; **E2E Handoff** table with 10 recommendations) ✅
 **Artifacts (Step 3 — 130):**
-- **Slides spec:** `slides_spec_v24.json` (v30 parity structure; 51 slides in spec array) ✅
+- **Slides spec:** `docs/decks/specs/slides_spec_v24.json` (v30 parity structure; 51 slides in spec array) ✅
 - **PMF roadmap deck:** `~/Downloads/GCC_Recruiting_PMF_Roadmap_v24.pptx` (source: `2026-03-26-GCC-PMF-Analysis-GCC-E2E-024.md`) ✅
 **Next:** HITL — PM selects recommendation from Priority Recommendations table → **PM Framing** → PRD → …
 
@@ -1051,5 +1051,5 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Status:** In Progress
 **Pipeline Step:** 25 of 30 (**330** ✓ 30 March 2026 — Figma capture three surfaces; **410 Epic** next)
 **Selected Recommendation:** Aadhaar–Adobe Sign integration for digital offer e-signature (PM framing: offer OTP friction, statutory ID task complexity; success metrics and scope boundaries per Step 14)
-**Artifacts:** **CI (Step 4 — 101 Pattern 1a):** `research/competitive/matrices/in-competitive-matrix.md` (**v1.3**, changelog **INDIA-E2E-004**) + `research/competitive/in/in-competitive-scan-2026-03-30-INDIA-E2E-004.md` | **Deployment Agent:** thread `dac6739f-1c6e-49cf-a587-a06d6a8ababc` (**DA-IN004**; triangulate **DA-IN001** / **DA-IN003** for SMS and historical rows) | **Step 9 PMF:** `research/India/thematic-analysis/2026-03-30-India-PMF-Analysis-INDIA-E2E-004.md` | **130:** `slides_spec_v75.json` + `~/Downloads/India_Recruiting_PMF_Roadmap_v75.pptx` (58 slides in spec; MCP reported slide_count 58) | **PRD:** `docs/prds/india-aadhaar-adobe-sign-offer-prd.md` (Step 15 + Step 17 legal + **Step 18 post-Red Team** revision: full PRD on disk; Technical Architecture (a)/(b), observability funnel Adobe→Workday OK, BP Review Document conditionality, Measurement Appendix, CI-aligned positioning, multi-country toggle / JP-DE exclusion, metrics split) | **Deployment Agent (PRD grounding):** thread `28947023-aeb7-4e0a-a769-bbc5619a7dfc` (Offer / Adobe Sign flow; no native Aadhaar in standard integration) | **Design Brief (315 + 319 PASS 2.5):** `design/aadhaar-adobe-sign-design-brief.md` | **320 prototype:** `design/aadhaar-adobe-sign-v01.tsx` (`http://localhost:5199/aadhaar-adobe-sign-v01`; optional `?surface=recruiter|candidate|admin` for deep links) | **Deployment Agent (315 placement):** thread `22d01307-d483-4b43-a5fd-53f6df838364` | **Figma (330 Step 25):** https://www.figma.com/design/FJOaU5u3HamqKRS6iBGJEw (`fileKey` `FJOaU5u3HamqKRS6iBGJEw`; new file *India Aadhaar Adobe Sign v01 — INDIA-E2E-004 — 30 Mar 2026*; captures: recruiter Review document, Candidate task, Tenant admin; `figmadelay` 8000 ms)
+**Artifacts:** **CI (Step 4 — 101 Pattern 1a):** `research/competitive/matrices/in-competitive-matrix.md` (**v1.3**, changelog **INDIA-E2E-004**) + `research/competitive/in/in-competitive-scan-2026-03-30-INDIA-E2E-004.md` | **Deployment Agent:** thread `dac6739f-1c6e-49cf-a587-a06d6a8ababc` (**DA-IN004**; triangulate **DA-IN001** / **DA-IN003** for SMS and historical rows) | **Step 9 PMF:** `research/India/thematic-analysis/2026-03-30-India-PMF-Analysis-INDIA-E2E-004.md` | **130:** `docs/decks/specs/slides_spec_v75.json` + `~/Downloads/India_Recruiting_PMF_Roadmap_v75.pptx` (58 slides in spec; MCP reported slide_count 58) | **PRD:** `docs/prds/india-aadhaar-adobe-sign-offer-prd.md` (Step 15 + Step 17 legal + **Step 18 post-Red Team** revision: full PRD on disk; Technical Architecture (a)/(b), observability funnel Adobe→Workday OK, BP Review Document conditionality, Measurement Appendix, CI-aligned positioning, multi-country toggle / JP-DE exclusion, metrics split) | **Deployment Agent (PRD grounding):** thread `28947023-aeb7-4e0a-a769-bbc5619a7dfc` (Offer / Adobe Sign flow; no native Aadhaar in standard integration) | **Design Brief (315 + 319 PASS 2.5):** `design/aadhaar-adobe-sign-design-brief.md` | **320 prototype:** `design/aadhaar-adobe-sign-v01.tsx` (`http://localhost:5199/aadhaar-adobe-sign-v01`; optional `?surface=recruiter|candidate|admin` for deep links) | **Deployment Agent (315 placement):** thread `22d01307-d483-4b43-a5fd-53f6df838364` | **Figma (330 Step 25):** https://www.figma.com/design/FJOaU5u3HamqKRS6iBGJEw (`fileKey` `FJOaU5u3HamqKRS6iBGJEw`; new file *India Aadhaar Adobe Sign v01 — INDIA-E2E-004 — 30 Mar 2026*; captures: recruiter Review document, Candidate task, Tenant admin; `figmadelay` 8000 ms)
 **Notes:** **060 (post-330 design compliance):** Candidate surface shows layered consent (Aadhaar e-authentication + e-sign), privacy block attributing controller (employer) vs processors (Workday hosts task; Adobe presents docs), retention footer; align final strings with DPDP 2023 consent granularity and cross-border / UIDAI-adjacent obligations before GA. Recruiter/admin surfaces are internal; still document data flows in DPIA. Prototype strip labels surfaces for demo (not production chrome). Strategy files for this mission include `research/India/strategy-context-2026-03-30-INDIA-E2E-004.md`, `research/India/pestel-analysis-India-2026-03-30-INDIA-E2E-004.md`, `research/India/swot-analysis-India-2026-03-30-INDIA-E2E-004.md` (Steps 1–3). **130 validation:** Win-loss single no-data slide (no 108 rows); ideation DATA GAP (no 106); SME section (5 SMEs); P1–P5 customer slides; PESTEL six factors from Step 2 file; SWOT from Step 3; legal callouts for handoff rows 3, 8, 12 in Priority Recommendations speaker notes and Rec 3 slide notes. **Gap Analysis:** severities noted in speaker notes; full per-gap Deployment Agent re-query not executed in this pass (thread cited for parity context). **PRD Step 17:** Single revision pass applied; unresolved items captured under **Open questions** (five blockers: legal opinion / Section 8, Requesting Entity, Adobe ASP licence, data minimisation sign-off, hosting / cross-border transfers). **PRD Step 18:** Second revision pass applied 30 March 2026 (Red Team findings); prior on-disk PRD was empty so content was authored end-to-end with Red Team and legal themes merged.

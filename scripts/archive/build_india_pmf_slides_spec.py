@@ -10,7 +10,7 @@ import glob
 ROOT = Path(__file__).resolve().parents[2]
 
 # Auto-increment version from highest existing spec
-existing_specs = sorted(glob.glob(str(ROOT / "slides_spec_v*.json")))
+existing_specs = sorted(glob.glob(str(ROOT / "docs" / "decks" / "specs" / "slides_spec_v*.json")))
 max_version = 0
 for spec_path in existing_specs:
     match = re.search(r'slides_spec_v(\d+)\.json$', spec_path)
@@ -20,7 +20,7 @@ for spec_path in existing_specs:
             max_version = version_num
 
 next_version = max_version + 1
-OUT = ROOT / f"slides_spec_v{next_version}.json"
+OUT = ROOT / "docs" / "decks" / "specs" / f"slides_spec_v{next_version}.json"
 
 MI = 1
 

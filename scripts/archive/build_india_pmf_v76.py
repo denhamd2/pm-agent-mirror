@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "slides_spec_v76.json"
+OUT = ROOT / "docs" / "decks" / "specs" / "slides_spec_v76.json"
 
 MI = 1
 

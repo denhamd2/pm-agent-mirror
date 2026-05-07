@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "slides_spec_v78.json"
+OUT = ROOT / "docs" / "decks" / "specs" / "slides_spec_v78.json"
 MI = 1
 
 

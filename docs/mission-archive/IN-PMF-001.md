@@ -37,7 +37,7 @@
 - **User Research (Steps 7-8):** `research/India/105-sme-research-findings.md` (5 SMEs, 7 themes); `research/India/105-user-research-findings.md` (4 TP customers: P1-P4, 9 themes)
 - **PMF Analysis (Step 9):** `research/India/thematic-analysis/2026-03-30-India-PMF-Analysis-IN-PMF-001.md` (6 consolidated themes, triangulation matrix, E2E Handoff table with 5 Priority 1 recommendations)
 - **Legal Review (Step 10):** `research/India/legal-compliance-review-2026-03-30-IN-PMF-001.md` (MEDIUM-HIGH risk, Recommendation 5 has 4-5 month timeline due to Aadhaar partner requirements; Recommendations 1 & 3 address urgent financial exposure with 2-3 month timelines)
-- **PMF Deck (Step 11):** `slides_spec_v78.json` + `~/Downloads/India_Recruiting_PMF_Roadmap_v01.pptx` (50 slides)
+- **PMF Deck (Step 11):** `docs/decks/specs/slides_spec_v78.json` + `~/Downloads/India_Recruiting_PMF_Roadmap_v01.pptx` (50 slides)
 
 **Key Findings:**
 - **6 Consolidated Themes:** Trust & identity & record integrity at scale (PM theme); Industrial-scale hiring & offer velocity (PM theme); Government IDs & documents & BGV readiness; Channels & comms policy; JR data, approvals, reporting; BGC flexibility
@@ -105,7 +105,7 @@
 - **Customer Research (Step 8):** `research/India/105-user-research-findings.md` (4 TP customer participants: P1-P4, fresh pass attestation)
 - **PMF Thematic Analysis (Step 9):** `research/India/thematic-analysis/2026-03-30-India-PMF-Analysis-IN-PMF-001.md` (5 themes, triangulation matrix, 10 roadmap recommendations)
 - **Legal Compliance Review (Step 10):** `research/India/legal-compliance-review-2026-03-30-IN-PMF-001.md` (4 CRITICAL-RISK recommendations flagged)
-- **PMF Roadmap Deck (Step 11):** `slides_spec_v76.json` + `~/Downloads/India_Recruiting_PMF_Roadmap_v76.pptx` (57 slides; SME names anonymized to SME1-SME5 format matching customer P1-P4 pattern - 30 March 2026)
+- **PMF Roadmap Deck (Step 11):** `docs/decks/specs/slides_spec_v76.json` + `~/Downloads/India_Recruiting_PMF_Roadmap_v76.pptx` (57 slides; SME names anonymized to SME1-SME5 format matching customer P1-P4 pattern - 30 March 2026)
 
 **Key Findings:**
 - **5 PMF Themes:** Trust/Duplicate/KYC at industrial scale; High-volume throughput and mass operations; Government IDs/offer-path/document orchestration; Omnichannel engagement (WhatsApp/SMS); In-product governance and audit trails

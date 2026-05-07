@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build slides_spec_v67.json for GCC PMF v65-parity deck from 120 report content."""
 import json
+from pathlib import Path
 
 def tb_body(paragraphs, font=14, height=2.8):
     return {
@@ -755,7 +756,7 @@ slides.append({
 
 slides.append({"master_index": 1, "layout_name": "Bumper Slide"})
 
-out = "/Users/david.denham/product-manager-agent/slides_spec_v67.json"
+out = str(Path(__file__).resolve().parents[2] / "docs" / "decks" / "specs" / "slides_spec_v67.json")
 with open(out, "w", encoding="utf-8") as f:
     json.dump(slides, f, indent=2, ensure_ascii=False)
 

@@ -26,7 +26,7 @@ Match **font sizes, body box height (2.8in), native bullets, and Product implica
 | **PESTEL** | **Six** factor slides; titles are **factor name only** (no "PESTEL -" prefix); each ends with **Product implication:** (per **`010-style-guide.mdc`**). **Body depth** must meet **130** v65 minimums (bullet count, anchors, sub-bullets, ~22-word implication) — see **`.cursor/rules/130-pmf-slide-generator.mdc`**. |
 | **Primary research** | Interview strip + table + **one slide per customer**; **130** v65 minimums for intro and per-P slides (quote-led bullets, theme/JTBD, line counts). |
 | **Strategic Context** | **Two separate slides** per v65: "Strategic Context - Why [REGION] Now" + "[REGION] Market Momentum - Key Indicators" (substitute actual region name, e.g., GCC, France, Japan). Do NOT combine unless PM requests compressed format. |
-| **Recommendations** | **MAXIMUM 5 recommendation slides** (select highest-impact from report). Slide titles must be "Recommendation N: [Title]". Each recommendation MUST include quantified Success Metrics and strategy-anchored 'Why Now' per 130 rule. See slides_spec_v90.json for the target quality bar. |
+| **Recommendations** | **MAXIMUM 5 recommendation slides** (select highest-impact from report). Slide titles must be "Recommendation N: [Title]". Each recommendation MUST include quantified Success Metrics and strategy-anchored 'Why Now' per 130 rule. See `docs/decks/specs/slides_spec_v90.json` for the target quality bar (when present in repo). |
 | **Title slide subheader** | **"[Month YYYY]"** only (e.g., "March 2026"). Do NOT include "Thematic analysis and roadmap" prefix or version numbers. |
 
 ---

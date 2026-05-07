@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "slides_spec_v81.json"
+OUT = ROOT / "docs" / "decks" / "specs" / "slides_spec_v81.json"
 
 def tb_body(paragraphs, font_pt=14, h=2.8):
     return {
