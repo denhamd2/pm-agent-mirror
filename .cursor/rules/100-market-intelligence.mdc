@@ -146,7 +146,7 @@ Create a structured output:
 
 ## Strategic Recommendations
 
-**RICE Scoring**: For each recommendation, use enhanced RICE Skill (`~/.cursor/skills-cursor/rice-prioritisation/SKILL.md`) to calculate dual-dimension Impact (Business + Customer).
+**RICE Scoring**: For each recommendation, apply the **RICE Prioritisation** subsection in **`.cursor/rules/advisory-methods/092-pm-frameworks-reference.md`** (dual-dimension Impact: Business + Customer). Optionally use **`/value-metrics`** for outcome metrics that inform Impact; do not depend on a project `/rice` skill (none in this repo).
 
 1. [Actionable recommendation]
    - **Strategic Alignment**: [High / Medium / Low] - [Why: cite strategy doc]

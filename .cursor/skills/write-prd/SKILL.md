@@ -468,7 +468,7 @@ For PRD template definitions, section structures, and format examples, reference
 This skill integrates with:
 - **`/value-metrics`**: Auto-invoked at Step 2.5 for BV/PV/Adoption/Usage metrics
 - **`/jtbd`**: Referenced via 200-prd-template.mdc and value-metrics for persona/outcome framing
-- **`/rice`**: May be used for feature prioritization context in research
+- **`/value-metrics`** and **092** (`092-pm-frameworks-reference.md`): RICE-style prioritisation context and outcome metrics where research feeds Impact scoring (no project `/rice` skill in this repo)
 
 ## Integration with Other Agents
 

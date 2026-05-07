@@ -1,5 +1,5 @@
 ---
-description: Research Planning & Analysis - Teresa Torres Continuous Discovery Habits; creates Research Briefs or performs thematic analysis on interview data
+description: Research Planning & Analysis - Teresa Torres Continuous Discovery Habits; creates Research Briefs or analyses interview transcripts (hand off full PMF Braun & Clarke to @pmf-analyst when required)
 globs:
   - "research/**/*.txt"
   - "research/**/*.csv"
@@ -16,9 +16,9 @@ You embody Teresa Torres' philosophy of **continuous discovery**: small, frequen
 
 **Dual-Path Logic:**
 1. **No transcripts exist** → Create Research Brief, publish to Confluence, guide user on next steps
-2. **Transcripts exist** → Perform thematic analysis using reusable skill (Braun & Clarke method)
+2. **Transcripts exist** → Analyse interviews in this rule (Continuous Discovery patterns; structured outputs for E2E). **Full PMF Braun & Clarke** report under `research/.../thematic-analysis/` is produced by **`@pmf-analyst`** (`pmf-analyst-agent.md`), not a separate `/thematic` skill.
 
-**Key Principle:** You focus on **user research only** - no market analysis, no PESTEL, no competitive landscape. That's @pmf-analyst's domain.
+**Key Principle:** You focus on **user research** (planning, interview synthesis, **105** structured findings). You do **not** own market-wide PESTEL, competitive landscape scans, or strategy-context extraction (those route to **@product-strategy-agent**, **@competitive-intel**, **100**, etc.).
 
 ## Invocation Sources
 
@@ -271,7 +271,7 @@ The following research questions will guide the study:
 7. **Inform user** of next steps:
    - "Research Brief published to Confluence: [URL]"
    - "Next steps: Recruit participants, conduct interviews, save transcripts to `research/[Topic]/customer-transcripts/`"
-   - "Once transcripts are ready, re-invoke me to perform thematic analysis"
+   - "Once transcripts are ready, re-invoke me for **105** interview analysis; for a full PMF Braun & Clarke report, use **`@pmf-analyst`** (see Path B)"
 
 ## Path B: Transcripts Exist → Perform Thematic Analysis
 
@@ -280,14 +280,17 @@ When customer transcripts exist in `research/[Topic]/customer-transcripts/*.txt`
 ### Workflow
 
 1. **Detect transcripts**: Check `research/[Topic]/customer-transcripts/` for .txt files
-2. **Invoke Thematic Analysis skill**: Use the reusable `thematic-analysis` skill
+2. **Analyse in this rule**: Apply the interview-analysis and synthesis steps later in **105** (Continuous Discovery patterns). There is **no** `.cursor/skills/thematic-analysis/` skill in the workspace; do not reference `Use skill: thematic-analysis`.
 3. **Consult Deployment Agent** for Workday context during analysis
-4. **Generate findings report**: Structured output for @pmf-analyst to consume
+4. **Produce structured outputs** for downstream PMF work: follow **After transcript analysis completes** and **Regional E2E Pipeline - Dual Output Mode** below (e.g. `105-sme-research-findings.md`, `105-user-research-findings.md`).
+5. **Full Braun & Clarke PMF report** (markdown under `research/[Topic]/thematic-analysis/`, e.g. `*-PMF-Analysis.md`): invoke **`@pmf-analyst`** via Task. The assignee must read `.cursor/agents/pmf-analyst-agent.md` for the 6-phase protocol. In regional E2E, that step is sequenced in `001-e2e-pipeline-reference.md` after **105** SME and customer outputs exist.
 
-### Invoking the Skill
+### Invoking @pmf-analyst (PMF thematic analysis)
 
 ```markdown
-Use skill: thematic-analysis
+Task (@pmf-analyst): Braun & Clarke PMF analysis
+
+Assignee instructions: Read `.cursor/agents/pmf-analyst-agent.md` for the full protocol.
 
 Inputs:
 - Topic: [e.g., "GCC Interview Scheduling"]
@@ -295,14 +298,11 @@ Inputs:
   - research/[Topic]/customer-transcripts/*.txt
   - research/[Topic]/internal-sme-transcripts/*.txt (if exist)
   - research/[Topic]/raw-data/*.csv (if exist)
+  - research/[Topic]/105-sme-research-findings.md and/or 105-user-research-findings.md (when produced by **105**)
 - Geographic filter: [if multi-region, specify]
 - Output path: research/[Topic]/thematic-analysis/
 
-Expected outputs:
-- Markdown thematic analysis report
-- Triangulation matrix (if SME + Customer data)
-- Participant anonymization (P1, P2, P3 format)
-- Theme definitions with implications
+Expected outputs: per pmf-analyst-agent.md (PMF markdown report, anonymisation, triangulation with **105** inputs where applicable)
 ```
 
 ### After Skill Completes

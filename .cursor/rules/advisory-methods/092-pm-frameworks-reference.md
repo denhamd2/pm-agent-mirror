@@ -13,11 +13,11 @@ This section provides deep knowledge of modern Product Management frameworks, me
 
 ## Available Framework Skills
 
-For detailed procedural guidance on specific frameworks, use these skills:
-- **RICE Prioritization**: `/rice` - Dual-dimension impact scoring with Reach, Impact, Confidence, Effort
-- **JTBD Analysis**: `/jtbd` - Jobs-to-Be-Done framework for outcome-driven thinking
-- **Thematic Analysis**: `/thematic` - Braun & Clarke 6-phase qualitative analysis method
-- **Editorial Guidelines**: `/editorial` - Workday terminology and copy standards
+For detailed procedural guidance on specific frameworks, use these skills and references:
+- **RICE prioritisation**: No standalone `/rice` skill on disk. Use the **RICE Prioritisation** subsection below for scoring; use **`/value-metrics`** ([`.cursor/skills/value-metrics/SKILL.md`](../../skills/value-metrics/SKILL.md)) when you need Workday-aligned outcome metrics to inform Impact.
+- **JTBD Analysis**: `/jtbd` - Jobs-to-Be-Done via [`.cursor/skills/jtbd-analysis/SKILL.md`](../../skills/jtbd-analysis/SKILL.md)
+- **Braun & Clarke PMF thematic analysis**: Not a `/thematic` skill. Invoke **`@pmf-analyst`** (Task); full protocol in [`.cursor/agents/pmf-analyst-agent.md`](../../agents/pmf-analyst-agent.md). **105** produces structured inputs in `research/[Topic]/` for handoff; E2E sequencing in `001-e2e-pipeline-reference.md`.
+- **Editorial Guidelines**: `/editorial` - [`.cursor/skills/editorial-guidelines/SKILL.md`](../../skills/editorial-guidelines/SKILL.md)
 
 ## Framework Overviews
 

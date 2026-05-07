@@ -69,7 +69,7 @@ canvas { max-height: 260px; }
 <div class="flex items-center justify-between mb-8">
   <div>
     <h1 class="text-3xl font-bold" style="color: var(--ink);">PM Agent Health Dashboard</h1>
-    <p class="text-sm mt-1" style="color: var(--laptop);">Post-improvement audit &middot; 1 April 2026 &middot; Workday Recruiting PM Workspace v1.4</p>
+    <p class="text-sm mt-1" style="color: var(--laptop);">Agents, skills &amp; rules audit &middot; 7 May 2026 &middot; Workday Recruiting PM Workspace v1.5</p>
   </div>
   <div class="flex items-center gap-3">
     <div class="card px-4 py-2 text-center">
@@ -87,34 +87,34 @@ canvas { max-height: 260px; }
 <!-- KPI Cards Row -->
 <div class="grid grid-cols-6 gap-4 mb-6">
   <div class="card p-4 text-center">
-    <div class="text-2xl font-bold" style="color: var(--ink);">38</div>
+    <div class="text-2xl font-bold" style="color: var(--ink);">41</div>
     <div class="text-xs" style="color: var(--laptop);">Rule Files</div>
-    <div class="delta delta-down">&minus;4 orphans removed</div>
+    <div class="delta delta-flat">.mdc + .md under .cursor/rules</div>
   </div>
   <div class="card p-4 text-center">
-    <div class="text-2xl font-bold" style="color: var(--ink);">6</div>
+    <div class="text-2xl font-bold" style="color: var(--ink);">10</div>
     <div class="text-xs" style="color: var(--laptop);">Subagents</div>
-    <div class="delta delta-flat">no change</div>
+    <div class="delta delta-flat">.cursor/agents/*.md</div>
   </div>
   <div class="card p-4 text-center">
-    <div class="text-2xl font-bold" style="color: var(--ink);">5</div>
+    <div class="text-2xl font-bold" style="color: var(--ink);">18</div>
     <div class="text-xs" style="color: var(--laptop);">Workspace Skills</div>
-    <div class="delta delta-flat">no change</div>
+    <div class="delta delta-up">SKILL.md trees</div>
   </div>
   <div class="card p-4 text-center">
-    <div class="text-2xl font-bold" style="color: var(--ink);">11</div>
-    <div class="text-xs" style="color: var(--laptop);">MCPs (10 active)</div>
-    <div class="delta delta-down">jira-ghe still errored</div>
+    <div class="text-2xl font-bold" style="color: var(--ink);">21</div>
+    <div class="text-xs" style="color: var(--laptop);">MCP servers (000 roster)</div>
+    <div class="delta delta-flat">dirs under mcps/</div>
   </div>
   <div class="card p-4 text-center" style="border: 2px solid #22c55e;">
-    <div class="text-2xl font-bold" style="color: var(--pass);">662</div>
+    <div class="text-2xl font-bold" style="color: var(--warn);">791</div>
     <div class="text-xs" style="color: var(--laptop);">AlwaysApply Lines</div>
-    <div class="delta delta-up">&darr; 33% from 982</div>
+    <div class="delta delta-flat">000 + 010 + 015 (top-level .mdc)</div>
   </div>
   <div class="card p-4 text-center">
-    <div class="text-2xl font-bold" style="color: var(--ink);">13,106</div>
+    <div class="text-2xl font-bold" style="color: var(--ink);">14,181</div>
     <div class="text-xs" style="color: var(--laptop);">Total Rule Lines</div>
-    <div class="delta delta-up">&darr; 7% from 14,152</div>
+    <div class="delta delta-flat">all .mdc/.md under .cursor/rules</div>
   </div>
 </div>
 
@@ -134,7 +134,7 @@ canvas { max-height: 260px; }
       <div class="section-title mb-3">AlwaysApply Token Budget</div>
       <canvas id="budgetChart"></canvas>
       <div class="mt-3 text-xs" style="color: var(--laptop);">
-        <span class="dot" style="background: var(--warn);"></span>662 lines / 500 recommended (132%) <span class="delta delta-up">&darr; from 196%</span>
+        <span class="dot" style="background: var(--warn);"></span>791 lines / 500 recommended (158%) <span class="delta delta-flat">3 alwaysApply files</span>
       </div>
     </div>
   </div>
@@ -244,6 +244,13 @@ canvas { max-height: 260px; }
     <div class="p-4 rounded-lg border-l-4" style="background: #f0fdf4; border-color: var(--pass);">
       <div class="flex items-center gap-2 mb-1">
         <span class="badge grade-a">P0</span>
+        <span class="font-semibold text-sm">Orchestrator + doc drift fixed</span>
+      </div>
+      <div class="text-xs" style="color: var(--laptop);"><code class="mono text-xs">000-master-orchestrator.mdc</code>: aligned intro with 21 MCP roster. Removed ghost <code class="mono text-xs">/rice</code> and <code class="mono text-xs">/thematic</code> skill paths across <strong>105</strong>, <strong>090</strong>, <strong>092</strong>, <strong>094</strong>, <code class="mono text-xs">.cursor/skills/README.md</code>; PMF Braun &amp; Clarke → <strong>@pmf-analyst</strong>; RICE overview → <strong>092</strong> + <code class="mono text-xs">/value-metrics</code>.</div>
+    </div>
+    <div class="p-4 rounded-lg border-l-4" style="background: #f0fdf4; border-color: var(--pass);">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="badge grade-a">P0</span>
         <span class="font-semibold text-sm">Density validator created</span>
       </div>
       <div class="text-xs" style="color: var(--laptop);"><code class="mono text-xs">scripts/validate_slide_spec.py</code> - programmatic density, title, and language validation. BLOCKS generation on failure. Wired into both 130 (step 5) and 110 (step 3).</div>
@@ -303,11 +310,12 @@ canvas { max-height: 260px; }
           </tr>
         </thead>
         <tbody>
-          <tr class="table-row"><td class="py-2 px-3">AlwaysApply lines</td><td class="text-right py-2 px-3 mono text-xs">982</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">662</td><td class="text-right py-2 px-3 delta delta-up">&darr; 33%</td></tr>
-          <tr class="table-row"><td class="py-2 px-3">AlwaysApply rules</td><td class="text-right py-2 px-3 mono text-xs">3</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">2</td><td class="text-right py-2 px-3 delta delta-up">&darr; 1</td></tr>
+          <tr class="table-row"><td class="py-2 px-3">AlwaysApply lines</td><td class="text-right py-2 px-3 mono text-xs">662</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--warn);">791</td><td class="text-right py-2 px-3 delta delta-flat">+129 (015 counted)</td></tr>
+          <tr class="table-row"><td class="py-2 px-3">AlwaysApply rules</td><td class="text-right py-2 px-3 mono text-xs">2</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--laptop);">3</td><td class="text-right py-2 px-3 delta delta-flat">+015-auto-commit</td></tr>
+          <tr class="table-row"><td class="py-2 px-3">Workspace skills (SKILL.md)</td><td class="text-right py-2 px-3 mono text-xs">5</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">18</td><td class="text-right py-2 px-3 delta delta-up">inventory sync</td></tr>
           <tr class="table-row"><td class="py-2 px-3">Orphan docs in rules/</td><td class="text-right py-2 px-3 mono text-xs">4</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">0</td><td class="text-right py-2 px-3 delta delta-up">&darr; 4</td></tr>
-          <tr class="table-row"><td class="py-2 px-3">Active missions</td><td class="text-right py-2 px-3 mono text-xs">36</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">6</td><td class="text-right py-2 px-3 delta delta-up">&darr; 30 archived</td></tr>
-          <tr class="table-row"><td class="py-2 px-3">Total rule lines</td><td class="text-right py-2 px-3 mono text-xs">14,152</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">13,106</td><td class="text-right py-2 px-3 delta delta-up">&darr; 7%</td></tr>
+          <tr class="table-row"><td class="py-2 px-3">Active missions</td><td class="text-right py-2 px-3 mono text-xs">6</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--laptop);">10</td><td class="text-right py-2 px-3 delta delta-flat">current MISSION_LOG</td></tr>
+          <tr class="table-row"><td class="py-2 px-3">Total rule lines</td><td class="text-right py-2 px-3 mono text-xs">13,106</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--laptop);">14,181</td><td class="text-right py-2 px-3 delta delta-flat">re-measured</td></tr>
           <tr class="table-row"><td class="py-2 px-3">Slide density validator</td><td class="text-right py-2 px-3 mono text-xs" style="color: var(--fail);">None</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">Active</td><td class="text-right py-2 px-3 delta delta-up">NEW</td></tr>
           <tr class="table-row"><td class="py-2 px-3">Prohibited-term regex</td><td class="text-right py-2 px-3 mono text-xs" style="color: var(--fail);">Prose only</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">7 patterns</td><td class="text-right py-2 px-3 delta delta-up">NEW</td></tr>
           <tr class="table-row"><td class="py-2 px-3">Jira MCP health</td><td class="text-right py-2 px-3 mono text-xs" style="color: var(--fail);">Errored</td><td class="text-right py-2 px-3 mono text-xs" style="color: var(--warn);">Errored</td><td class="text-right py-2 px-3 delta delta-flat">manual fix</td></tr>
@@ -330,8 +338,8 @@ canvas { max-height: 260px; }
       <div class="table-row flex items-start gap-3 p-2 rounded">
         <span class="badge grade-d mt-0.5" style="white-space: nowrap;">WARN</span>
         <div>
-          <div class="font-semibold">AlwaysApply still 32% over target (662/500)</div>
-          <div class="text-xs" style="color: var(--laptop);">000-orchestrator (427) is the largest. Hard to reduce further without splitting routing logic. Acceptable for now.</div>
+          <div class="font-semibold">AlwaysApply 58% over target (791/500)</div>
+          <div class="text-xs" style="color: var(--laptop);">Three files: 000-orchestrator, 010-style-guide, 015-auto-commit-deploy. Splitting routing further is deferred.</div>
         </div>
       </div>
       <div class="table-row flex items-start gap-3 p-2 rounded">
@@ -378,7 +386,7 @@ canvas { max-height: 260px; }
         <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">001-e2e-pipeline-reference.md</td><td class="text-right py-1.5 px-3">455</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Pipeline implementation reference</td></tr>
         <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">320-prototype-developer.mdc</td><td class="text-right py-1.5 px-3">443</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Canvas Kit implementation</td></tr>
         <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">200-prd-template.mdc</td><td class="text-right py-1.5 px-3">435</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Invokes /write-prd skill</td></tr>
-        <tr class="table-row" style="background: #fef2f2;"><td class="py-1.5 px-3 mono text-xs">000-master-orchestrator.mdc</td><td class="text-right py-1.5 px-3 font-bold">427</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #fecaca; color: #991b1b;">always</span></td><td class="py-1.5 px-3 text-xs" style="color: #991b1b;">Core routing; hard to reduce further</td></tr>
+        <tr class="table-row" style="background: #fef2f2;"><td class="py-1.5 px-3 mono text-xs">000-master-orchestrator.mdc</td><td class="text-right py-1.5 px-3 font-bold">456</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #fecaca; color: #991b1b;">always</span></td><td class="py-1.5 px-3 text-xs" style="color: #991b1b;">Core routing; MCP count aligned May 2026</td></tr>
         <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">130-pmf-slide-generator.mdc</td><td class="text-right py-1.5 px-3">413</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #e0f2fe; color: #0369a1;">glob</span></td><td class="py-1.5 px-3 text-xs" style="color: var(--laptop);">Now references validator (step 5)</td></tr>
         <tr class="table-row"><td class="py-1.5 px-3 mono text-xs">050-functional-knowledge.mdc</td><td class="text-right py-1.5 px-3">329</td><td class="text-center py-1.5 px-3"><span class="badge" style="background: #dcfce7; color: #166534;">glob &#x2713;</span></td><td class="py-1.5 px-3 text-xs" style="color: #166534;">Demoted from alwaysApply this session</td></tr>
       </tbody>
@@ -388,7 +396,7 @@ canvas { max-height: 260px; }
 
 <!-- Footer -->
 <div class="text-center py-4 text-xs" style="color: var(--desk);">
-  Generated by 090-agent-improvement-advisor &middot; 1 April 2026 &middot; Workday Recruiting PM Workspace v1.4
+  Generated by workspace audit &middot; 7 May 2026 &middot; Workday Recruiting PM Workspace v1.5
 </div>
 
 </div>
@@ -415,7 +423,7 @@ new Chart(document.getElementById('radarChart'), {
     labels: ['Rule Architecture', 'Subagent Design', 'Skill Reuse', 'MCP Coverage', 'Deck Quality', 'Naming', 'E2E Pipeline', 'Hygiene'],
     datasets: [{
       label: 'After (current)',
-      data: [85, 95, 92, 70, 78, 88, 95, 90],
+      data: [85, 95, 96, 70, 78, 88, 95, 90],
       borderColor: PASS,
       backgroundColor: 'rgba(34,197,94,0.12)',
       borderWidth: 2.5,
@@ -449,9 +457,9 @@ new Chart(document.getElementById('radarChart'), {
 new Chart(document.getElementById('budgetChart'), {
   type: 'doughnut',
   data: {
-    labels: ['000-orchestrator (427)', '010-style-guide (235)', 'Remaining budget (0)'],
+    labels: ['000-orchestrator (456)', '010-style-guide (243)', '015-auto-commit (92)'],
     datasets: [{
-      data: [427, 235, 0],
+      data: [456, 243, 92],
       backgroundColor: [WATER, PENCIL, '#e2ddd7'],
       borderWidth: 0
     }]
@@ -493,13 +501,13 @@ new Chart(document.getElementById('improvementChart'), {
   data: {
     labels: ['AlwaysApply\nlines', 'Active\nmissions', 'Orphan\ndocs', 'Rule\nfiles', 'Total rule\nlines (K)'],
     datasets: [{
-      label: 'Before',
-      data: [982, 36, 4, 42, 14.2],
+      label: 'Before (Apr 2026 dashboard)',
+      data: [662, 6, 0, 38, 13.1],
       backgroundColor: '#fecaca',
       borderRadius: 3
     }, {
-      label: 'After',
-      data: [662, 6, 0, 38, 13.1],
+      label: 'After (May 2026 refresh)',
+      data: [791, 10, 0, 41, 14.2],
       backgroundColor: PASS,
       borderRadius: 3
     }]

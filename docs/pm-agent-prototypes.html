@@ -79,7 +79,8 @@ body { background: var(--paper); color: var(--ink); }
 <div class="container">
   <div class="page-header">
     <div class="page-title">Prototypes and Dashboards</div>
-    <div class="page-sub">Canvas Kit prototypes and metrics dashboards. Saved entries are excluded from <code style="font-size:12px;background:var(--staple);padding:2px 6px;border-radius:4px;">/cleanup</code> when the local dashboard server is running.</div>
+    <div class="page-sub">Canvas Kit prototypes and metrics dashboards. <strong>Save / Unsave</strong> updates <code style="font-size:12px;background:var(--staple);padding:2px 6px;border-radius:4px;">docs/saved-prototypes.json</code> when this page is opened from <code style="font-size:12px;background:var(--staple);padding:2px 6px;border-radius:4px;">http://localhost:8765/docs/pm-agent-prototypes.html</code> (dashboard server). Without port 8765, only browser localStorage is used. Saved entries are excluded from <code style="font-size:12px;background:var(--staple);padding:2px 6px;border-radius:4px;">/cleanup</code> when the JSON file lists them.</div>
+    <p id="save-api-banner" class="page-sub" style="display:none;margin-top:12px;padding:10px 14px;border-radius:8px;background:#fef9c3;color:#854d0e;font-size:13px;">Save is using local storage only — start <code class="mono" style="font-size:12px;">python3 scripts/dashboard-server.py</code> and open this page on port <strong>8765</strong> to persist saves to the repo.</p>
   </div>
 
   <table class="proto-table">
@@ -98,54 +99,91 @@ body { background: var(--paper); color: var(--ink); }
 <script id="prototypes-data" type="application/json">{
   "prototypes": [
     {
+      "slug": "gcc-recruiter-dashboard",
+      "name": "GCC Recruiter Dashboard",
+      "description": "Default landing experience — recruiter home and pipeline overview for GCC.",
+      "category": "Prototype",
+      "files": ["design/gcc-recruiter-dashboard.tsx"]
+    },
+    {
+      "slug": "candidate-grid-v84",
+      "name": "Candidate grid v84",
+      "description": "HiredScore-style candidate grid search and smart view exploration.",
+      "category": "Prototype",
+      "files": ["design/gcc-candidate-grid-search.tsx"]
+    },
+    {
+      "slug": "recruiter-hub-genui-v95",
+      "name": "Recruiter Hub GenUI v95",
+      "description": "Conversational recruiter hub with pipeline visibility and co-pilot surfaces.",
+      "category": "Prototype",
+      "files": ["design/recruiter-hub-genui-v95.tsx"]
+    },
+    {
+      "slug": "india-native-whatsapp-v91",
+      "name": "India native WhatsApp v91",
+      "description": "Native WhatsApp messaging in core recruiting UI (DPDP-aware patterns).",
+      "category": "Prototype",
+      "files": ["design/india-native-whatsapp-v91.tsx", "docs/prds/india-native-whatsapp-recruiting-prd.md", "design/india-native-whatsapp-recruiting-design-brief.md"]
+    },
+    {
+      "slug": "interview-intelligence-agent-v96",
+      "name": "Interview intelligence agent v96",
+      "description": "Prep card, panel feedback, and debrief views for interview intelligence.",
+      "category": "Prototype",
+      "prd": "docs/prds/interview-intelligence-agent-prd.md",
+      "brief": "design/interview-intelligence-agent-design-brief.md",
+      "files": ["design/interview-intelligence-agent-v96.tsx", "docs/prds/interview-intelligence-agent-prd.md", "design/interview-intelligence-agent-design-brief.md"]
+    },
+    {
+      "slug": "ai-system-of-record-v97",
+      "name": "AI system of record v97",
+      "description": "AI-native recruiting system of record — decisions, rationale, and audit trail.",
+      "category": "Prototype",
+      "files": ["design/ai-system-of-record-v97.tsx"]
+    },
+    {
       "slug": "create-offer-ssa-v01",
       "name": "Create Offer SSA v01",
-      "description": "Self-Service Agent offer flow with compensation validation, country-aware approvals, document QA, and Teams approval preview.",
+      "description": "Self-Service Agent offer flow with compensation validation, approvals, and document QA.",
       "category": "Prototype",
       "brief": "design/create-offer-ssa-design-brief.md",
-      "files": [
-        "design/create-offer-ssa-v01.tsx",
-        "design/create-offer-ssa-design-brief.md",
-        "design/create-offer-ssa-v01-ai-ux-review.md",
-        "design/create-offer-ssa-v01-copy-review.md",
-        "design/create-offer-ssa-v01-visual-review.md"
-      ]
+      "files": ["design/create-offer-ssa-v01.tsx", "design/create-offer-ssa-design-brief.md", "design/create-offer-ssa-v01-ai-ux-review.md", "design/create-offer-ssa-v01-copy-review.md", "design/create-offer-ssa-v01-visual-review.md"]
     },
     {
       "slug": "create-jr-ssa-v01",
       "name": "Create Job Req SSA v01",
-      "description": "Self-Service Agent create-job-requisition flow with overlap backfill, transfer position, and reference-grounded job description refinement.",
+      "description": "Self-Service Agent create-job-requisition flow with overlap backfill and JD refinement.",
       "category": "Prototype",
-      "files": [
-        "design/create-jr-ssa-v01.tsx"
-      ]
+      "files": ["design/create-jr-ssa-v01.tsx"]
     },
     {
       "slug": "e2e-recruiting-talent-acq-v01",
       "name": "E2E Recruiting Talent Acquisition v01",
-      "description": "Unified Talent Acquisition demo refit covering recruiter home, requisition review, candidate insight, scheduling, and outreach handoff.",
+      "description": "Unified Talent Acquisition demo — requisition review, candidate insight, scheduling, outreach.",
       "category": "Prototype",
-      "files": [
-        "design/e2e-recruiting-talent-acq-v01.tsx"
-      ]
+      "files": ["design/e2e-recruiting-talent-acq-v01.tsx"]
     },
     {
-      "slug": "recruiter-hub-conversational-v99",
-      "name": "Recruiter Hub Conversational v99",
-      "description": "Conversational recruiter hub with natural-language task orchestration and pipeline Q&A.",
-      "category": "Prototype"
+      "slug": "pm-agent-dashboard",
+      "name": "PM Agent dashboard (Canvas)",
+      "description": "Embedded PM dashboard shell inside the design app (Canvas Kit).",
+      "category": "Dashboard",
+      "files": ["design/pm-agent-dashboard.tsx"]
     },
     {
-      "slug": "recruiter-hub-conversational-v98",
-      "name": "Recruiter Hub Conversational v98",
-      "description": "Conversational recruiter hub iteration - enhanced pipeline visibility and recruiter co-pilot surfaces.",
-      "category": "Prototype"
+      "slug": "customer-scorecard",
+      "name": "Customer scorecard",
+      "description": "Recruiting customer health scorecard and bottleneck flow.",
+      "category": "Dashboard",
+      "files": ["design/customer-scorecard-dashboard.tsx", "design/data-customer-scorecard.ts"]
     },
     {
-      "slug": "ai-system-of-record-v97",
-      "name": "AI System of Record v97",
-      "description": "AI-native system of record for recruiting - surfaces decisions, rationale, and audit trail across the hiring process.",
-      "category": "Prototype"
+      "slug": "avg-time-to-hire",
+      "name": "Avg time to hire",
+      "description": "Time-to-hire distribution and trend dashboard.",
+      "category": "Dashboard",
+      "files": ["design/avg-time-to-hire-dashboard.tsx"]
     }
   ]
 }</script>
@@ -157,9 +195,12 @@ body { background: var(--paper); color: var(--ink); }
 
   var data = JSON.parse(el.textContent);
   var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
+  /** Repo-backed save API is only same-origin on the dashboard server (port 8765). */
+  var useServerSave = window.location.port === '8765';
   var tbody = document.getElementById('proto-body');
   var savedSlugs = {};
   var storageKey = 'pm-agent-saved-prototypes';
+  var banner = document.getElementById('save-api-banner');
 
   function persistLocalSavedState() {
     try {
@@ -179,6 +220,13 @@ body { background: var(--paper); color: var(--ink); }
     } catch (err) {
       console.warn('Unable to load saved prototypes locally:', err);
     }
+  }
+
+  function applyServerSaved(resp) {
+    savedSlugs = {};
+    (resp.saved || []).forEach(function(e) { savedSlugs[e.slug] = true; });
+    persistLocalSavedState();
+    applySavedState();
   }
 
   function fixPath(path) {
@@ -212,19 +260,31 @@ body { background: var(--paper); color: var(--ink); }
         btn.classList.add('saved');
         btn.innerHTML = '&#9733;';
         btn.title = 'Saved — protected from /cleanup. Click to unsave.';
+        btn.setAttribute('aria-pressed', 'true');
       } else {
         tr.classList.remove('saved-row');
         btn.classList.remove('saved');
         btn.innerHTML = '&#9734;';
         btn.title = 'Click to save — protects this prototype from /cleanup';
+        btn.setAttribute('aria-pressed', 'false');
       }
     });
   }
 
   function toggleSave(slug) {
-    var nowSaved = !savedSlugs[slug];
     var proto = data.prototypes.find(function(p) { return p.slug === slug; });
     if (!proto) return;
+
+    var prev = !!savedSlugs[slug];
+    var nowSaved = !prev;
+
+    if (!useServerSave) {
+      savedSlugs[slug] = nowSaved;
+      applySavedState();
+      persistLocalSavedState();
+      if (banner) banner.style.display = 'block';
+      return;
+    }
 
     savedSlugs[slug] = nowSaved;
     applySavedState();
@@ -234,9 +294,20 @@ body { background: var(--paper); color: var(--ink); }
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ slug: slug, files: filesForProto(proto), saved: nowSaved })
-    }).catch(function(err) {
-      console.warn('Server save unavailable; local saved state was kept:', err);
-    });
+    })
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function(resp) {
+        applyServerSaved(resp);
+      })
+      .catch(function(err) {
+        savedSlugs[slug] = prev;
+        applySavedState();
+        persistLocalSavedState();
+        console.warn('Server save failed; reverted UI state:', err);
+      });
   }
 
   data.prototypes.forEach(function(p) {
@@ -245,15 +316,15 @@ body { background: var(--paper); color: var(--ink); }
       ? 'http://localhost:5199/' + route
       : '../preview/latest/#/' + route;
 
-    var btns = '<a href="' + protoHref + '" target="_blank" class="btn-pill btn-pill-primary">Open</a>';
+    var btns = '<a href="' + protoHref + '" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-primary">Open</a>';
     if (p.prd) {
-      btns += ' <a href="pm-agent-viewer.html?file=' + p.prd + '" target="_blank" class="btn-pill btn-pill-outline">PRD</a>';
+      btns += ' <a href="pm-agent-viewer.html?file=' + encodeURIComponent(p.prd) + '" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-outline">PRD</a>';
     }
     if (p.brief) {
-      btns += ' <a href="pm-agent-viewer.html?file=' + p.brief + '" target="_blank" class="btn-pill btn-pill-outline">Brief</a>';
+      btns += ' <a href="pm-agent-viewer.html?file=' + encodeURIComponent(p.brief) + '" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-outline">Brief</a>';
     }
     if (p.deck) {
-      btns += ' <a href="' + fixPath(p.deck) + '" target="_blank" class="btn-pill btn-pill-outline">Deck</a>';
+      btns += ' <a href="' + fixPath(p.deck) + '" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-outline">Deck</a>';
     }
 
     var tr = document.createElement('tr');
@@ -262,23 +333,32 @@ body { background: var(--paper); color: var(--ink); }
       '<td><div class="proto-name">' + p.name + '</div>' + (p.category ? '<div class="proto-meta">' + p.category + '</div>' : '') + '</td>' +
       '<td class="proto-desc">' + p.description + '</td>' +
       '<td><div class="actions-cell">' + btns + '</div></td>' +
-      '<td class="save-cell"><button class="btn-save" title="Loading...">&#9734;</button></td>';
+      '<td class="save-cell"><button type="button" class="btn-save" aria-pressed="false" aria-label="Save or unsave prototype" title="Loading...">&#9734;</button></td>';
     tbody.appendChild(tr);
 
     tr.querySelector('.btn-save').addEventListener('click', function() { toggleSave(p.slug); });
   });
 
+  if (banner && !useServerSave) {
+    banner.style.display = 'block';
+  }
+
   loadLocalSavedState();
   applySavedState();
 
-  fetch('/api/saved-prototypes')
-    .then(function(r) { return r.json(); })
-    .then(function(resp) {
-      (resp.saved || []).forEach(function(e) { savedSlugs[e.slug] = true; });
-      applySavedState();
-      persistLocalSavedState();
-    })
-    .catch(function() { applySavedState(); });
+  if (useServerSave) {
+    fetch('/api/saved-prototypes')
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function(resp) {
+        applyServerSaved(resp);
+      })
+      .catch(function() {
+        applySavedState();
+      });
+  }
 })();
 </script>
 </body>

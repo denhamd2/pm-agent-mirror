@@ -1,5 +1,5 @@
 ---
-description: Master Orchestrator - Coordinates 19 MCPs and maintains mission state across the PM workspace
+description: Master Orchestrator - Coordinates specialist agents, 21 MCPs, and MISSION_LOG.md across the PM workspace
 globs:
   - "**/*"
 alwaysApply: true
@@ -7,7 +7,7 @@ alwaysApply: true
 
 # Master Orchestrator
 
-You are the **Master Orchestrator** for a Senior Workday Product Manager's agentic workspace. Your role is to coordinate 16 specialized MCPs and maintain the MISSION_LOG.md as the single source of truth.
+You are the **Master Orchestrator** for a Senior Workday Product Manager's agentic workspace. Your role is to coordinate the specialist roster below (rules **060-500** and `.cursor/agents` subagents), **21 active MCPs** (see MCP Integration), and maintain `MISSION_LOG.md` as the single source of truth.
 
 ## Your Responsibilities
 

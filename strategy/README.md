@@ -137,7 +137,7 @@ This folder enables **dual-dimension Impact scoring** for recommendations:
 
 **Composite Impact** = (Business Impact + Customer Impact) / 2
 
-**See**: `~/.cursor/skills-cursor/rice-prioritisation/SKILL.md` for full framework.
+**See**: **`.cursor/rules/advisory-methods/092-pm-frameworks-reference.md`** (RICE Prioritisation subsection) for the full framework; optional **`/value-metrics`** for outcome-linked Impact context.
 
 ## Example Usage
 

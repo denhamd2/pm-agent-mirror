@@ -1,6 +1,6 @@
 # Cursor Skills: Creation, Management & Best Practices
 
-**Last Updated**: 31 March 2026  
+**Last Updated**: 7 May 2026  
 **Source**: Cursor PM presentation (Noah) + workspace experience
 
 ## Overview
@@ -28,7 +28,7 @@ Is this workflow reusable (needed 2+ times)?
 
 ### ✅ Good Candidates for Skills
 
-- **PM frameworks**: RICE prioritisation, JTBD analysis, thematic analysis
+- **PM frameworks**: JTBD analysis, Value Realization metrics (`/value-metrics`), PRD writing; **RICE** framing lives in **092** (glob rule), not a standalone `/rice` skill; **Braun & Clarke PMF** runs via **`@pmf-analyst`** (subagent file), not a `/thematic` skill
 - **Repeated workflows**: "Generate PRD from research", "Create PESTEL analysis"
 - **Data visualisations**: Graphs, charts, dashboards with specific data queries
 - **Template generation**: Slide decks, design briefs, test scripts
@@ -142,10 +142,9 @@ Some skills use YAML frontmatter for metadata:
 
 ```yaml
 ---
-name: rice-prioritization
-description: "RICE scoring for product initiatives"
-triggers: ["/rice", "prioritize", "score features"]
-requires: ["strategic context", "customer research"]
+name: jtbd-analysis
+description: "Jobs-to-Be-Done for Workday Recruiting personas"
+triggers: ["/jtbd", "jobs to be done", "customer job"]
 ---
 ```
 
@@ -245,11 +244,8 @@ Skills are files → version in git.
 
 **Location**: `/Users/david.denham/product-manager-agent/.cursor/skills/skill-name/`
 
-**Examples**:
-- `/rice` (RICE prioritisation for Workday context)
-- `/jtbd` (Jobs-to-Be-Done for Recruiting personas)
-- `/thematic` (Braun & Clarke analysis for PMF research)
-- `/editorial` (UX copy guidelines for Workday UI)
+**Examples** (see **Canonical inventory** below for the full list):
+- `/jtbd`, `/write-prd`, `/value-metrics`, `/editorial`, `/xo-builder`, `/workspace-audit`, `/morning-roundup`, `/cleanup`, …
 
 **Pro Tip**: Project skills can reference project files:
 ```markdown
@@ -284,9 +280,9 @@ workday-pm-skills/ (GitHub repo)
 ├── README.md
 ├── .cursor/
 │   ├── skills/
-│   │   ├── rice-prioritization/
 │   │   ├── jtbd-analysis/
-│   │   └── thematic-analysis/
+│   │   ├── value-metrics/
+│   │   └── write-prd/
 │   └── rules/
 │       └── 010-pm-standards.mdc
 └── scripts/
@@ -332,13 +328,13 @@ workday-pm-skills/ (GitHub repo)
 - "All prototypes use Canvas Kit, never custom components"
 
 **Skills define methods** (invoked explicitly):
-- `/pestel` (how to run PESTEL analysis)
-- `/rice` (how to score with RICE framework)
 - `/jtbd` (how to extract jobs from interviews)
+- `/value-metrics` (how to pick BV/PV/adoption metrics)
+- `/write-prd` (how to draft a PRD from research)
 
 **Use both**:
-- **Rule** `.cursor/rules/010-style-guide.mdc` says "Use RICE scoring for roadmap recs"
-- **Skill** `.cursor/skills/rice-prioritization/` shows *how* to apply RICE
+- **Rule** `.cursor/rules/010-style-guide.mdc` sets tone and artefact standards
+- **Skill** `.cursor/skills/jtbd-analysis/SKILL.md` shows *how* to run JTBD; **092** holds RICE narrative when you need Reach/Impact/Confidence/Effort without a dedicated skill folder
 
 ### Skills vs. Sub-agents
 
@@ -359,65 +355,35 @@ workday-pm-skills/ (GitHub repo)
 > "Sub-agents will be really powerful for, like, encapsulating some of those personas... But then skills and rules are also really important here... I think skills and rules, like, go hand-in-hand in tandem, so, like, you know, you don't have to work bottom-up here. But, like, sub-agents can invoke those skills, they can, like, respect those rules, and so it's, like, really important to have those skills and rules be kind of predefined before you start to crack open this idea of sub-agents."
 
 **Sub-agents can invoke skills**:
-- `@product-strategy-agent` invokes `/pestel` skill
-- `@pmf-analyst` invokes `/thematic` skill
-- `@ux-researcher` invokes `/jtbd` skill
+- `@product-strategy-agent` may load project skills when the task matches their descriptions (e.g. research-heavy steps)
+- `@pmf-analyst` follows **`.cursor/agents/pmf-analyst-agent.md`** (Braun & Clarke); there is no `/thematic` skill in this repo
+- Thin wrappers (e.g. `@ux-researcher`) delegate to glob rules such as **105**, which can point agents at **`/jtbd`**
 
 ## Examples from This Workspace
 
-### Example 1: RICE Prioritisation (`/rice`)
+### Example 1: RICE, metrics, and PMF thematic (split across rule, skill, subagent)
 
-**Location**: `.cursor/skills/rice-prioritization/SKILL.md`
-
-**What it does**: Scores product initiatives with RICE framework (dual-dimension Impact: Business + Customer)
-
-**Key features**:
-- 239 lines (comprehensive framework + examples)
-- Integrates with strategic context (099-product-strategist)
-- Used by: 100-market-intelligence, 105-user-researcher, 120-pmf-analyst, 200-prd-writer, 400-backlog-refinement
-- Output format specified (table with all RICE components)
-
-**Why it's a good skill**:
-- ✅ Reusable across all roadmap decisions
-- ✅ Clear trigger: `/rice` or "score features"
-- ✅ Well-documented with Workday Recruiting examples
-- ✅ Integration points specified (which agents use it)
+- **RICE (Reach, Impact, Confidence, Effort)**: Use **`.cursor/rules/advisory-methods/092-pm-frameworks-reference.md`** (loaded with **090** / **200** / **315** globs). There is **no** `.cursor/skills/rice-prioritization/` folder.
+- **Outcome metrics**: **`.cursor/skills/value-metrics/SKILL.md`** → `/value-metrics suggest …` (often pairs with `/jtbd`).
+- **Braun & Clarke PMF**: **`.cursor/agents/pmf-analyst-agent.md`** invoked as **`@pmf-analyst`** via Task; **not** a `/thematic` skill.
 
 ### Example 2: JTBD Analysis (`/jtbd`)
 
 **Location**: `.cursor/skills/jtbd-analysis/SKILL.md`
 
-**What it does**: Applies Jobs-to-Be-Done framework to structure requirements around customer jobs
+**What it does**: Applies Jobs-to-Be-Done framework to structure requirements around customer jobs.
 
 **Key features**:
-- 247 lines (framework + examples + library of Workday jobs)
 - JTBD statement format: "When [situation], I want to [motivation], so I can [outcome]"
-- Integration with thematic analysis, PRD writing, UX design
+- Integration with PRD writing, UX design, and `/value-metrics` for Product Value metrics
 - Persona-specific JTBD library (Recruiter, Hiring Manager, Candidate)
 
 **Why it's a good skill**:
 - ✅ Reusable across research, PRDs, design
-- ✅ Prevents feature-focused thinking ("I want bulk actions" → "When budget changes require updates to 50+ reqs...")
+- ✅ Prevents feature-focused thinking
 - ✅ Library of pre-defined jobs for Workday Recruiting personas
 
-### Example 3: Thematic Analysis (`/thematic`)
-
-**Location**: `.cursor/skills/thematic-analysis/SKILL.md`
-
-**What it does**: Applies Braun & Clarke 6-phase method to analyse interview transcripts
-
-**Key features**:
-- 307 lines (full methodology + examples + quality standards)
-- 6-phase workflow (familiarisation → coding → themes → review → define → report)
-- Triangulation matrix format (SME vs. Customer views)
-- Integration with JTBD (code for jobs, not features)
-
-**Why it's a good skill**:
-- ✅ Complex methodology (can't just "wing it")
-- ✅ Reusable for all PMF research (GCC, India, Japan, etc.)
-- ✅ Enforces quality standards (rigor, validity, actionability)
-
-### Example 4: Value Realization Metrics (`/value-metrics`)
+### Example 3: Value Realization Metrics (`/value-metrics`)
 
 **Location**: `.cursor/skills/value-metrics/SKILL.md`
 
@@ -425,21 +391,22 @@ workday-pm-skills/ (GitHub repo)
 
 **Key features**:
 - **3-tier metrics hierarchy**: BV metrics (from CSV) + PV metrics (JTBD-derived) + Adoption/Usage metrics (feature-specific)
-- **JTBD integration**: Automatically invokes `/jtbd` to derive Product Value metrics from customer jobs
-- **Auto-linking**: PV→BV relationships generated using causality logic (Direct/Indirect/Weak confidence)
-- **3 capabilities**: suggest (primary, returns complete package), list (by category), show (metric details)
-- **Auto-invoked** by 200-prd-writer during Step 2.5 (after Feature Solution draft)
-- **Reference files**: 
-  - CSV: `docs/metrics/talent-acquisition-value-metrics.csv` (BV metrics, maintained by Jamie Moore)
-  - PV patterns: `.cursor/skills/value-metrics/pv-derivation-guide.md`
-  - Linkage rules: `.cursor/skills/value-metrics/pv-bv-linkage-map.md`
+- **JTBD integration**: Uses `/jtbd` to derive Product Value metrics from customer jobs where needed
+- **Reference files**: `docs/metrics/talent-acquisition-value-metrics.csv`, `.cursor/skills/value-metrics/pv-derivation-guide.md`, `pv-bv-linkage-map.md`
 
 **Why it's a good skill**:
 - ✅ Reusable across PRDs, slide decks, research analysis, backlog refinement
 - ✅ Separates data (CSV) from logic (skill) for easy updates
-- ✅ Dual-mode: Ad-hoc (`/value-metrics suggest [feature]`) AND auto-invoked (200-prd-writer)
-- ✅ Complete metrics package in <30 seconds: 1-3 BV, 3 PV (linked), 1 Adoption, 1 Usage
-- ✅ Reduces metric selection time from 15-20 min → 30 seconds (3x more comprehensive than BV-only)
+
+### Example 4: XO Builder (`xo-builder` umbrella)
+
+**Location**: `.cursor/skills/xo-builder/SKILL.md`
+
+**What it does**: Standalone XO / ModulR / REST workflows on your SUV with explicit triggers and isolation from E2E pipelines.
+
+**Why it's a good skill**:
+- ✅ Heavy procedural content stays out of alwaysApply rules
+- ✅ Thin **`@xo-developer`** agent delegates here for implementation + advisory
 
 ## Best Practices
 
@@ -467,18 +434,18 @@ workday-pm-skills/ (GitHub repo)
 
 ### Pitfall 1: Skill Too Narrow
 
-❌ **Bad**: Separate skills for "RICE scoring GCC features" and "RICE scoring India features"  
-✅ **Good**: One `/rice` skill with regional context handled dynamically
+❌ **Bad**: Separate skills for "JTBD for GCC" and "JTBD for India" that duplicate the same SKILL.md  
+✅ **Good**: One `/jtbd` skill with regional context handled in prompts and inputs
 
 ### Pitfall 2: Skill Too Broad
 
 ❌ **Bad**: "PM workflow skill" that does research + PRD + design + backlog  
-✅ **Good**: Separate skills: `/pestel`, `/rice`, `/jtbd` - each focused on one framework
+✅ **Good**: Separate skills: `/jtbd`, `/write-prd`, `/value-metrics` - each focused on one method
 
 ### Pitfall 3: Poor Description
 
-❌ **Bad**: "RICE scoring skill"  
-✅ **Good**: "Applies RICE (Reach, Impact, Confidence, Effort) scoring framework with dual-dimension Impact scoring for Workday Recruiting product prioritization. Use when scoring product initiatives, prioritizing backlog items, or comparing feature options."
+❌ **Bad**: "JTBD skill"  
+✅ **Good**: "Applies Jobs-to-Be-Done for Workday Recruiting personas. Use when structuring PRDs, interview synthesis, or design briefs from customer evidence."
 
 ### Pitfall 4: Not Iterating
 
@@ -487,7 +454,7 @@ workday-pm-skills/ (GitHub repo)
 
 ### Pitfall 5: Forgetting Team Deployment
 
-❌ **Bad**: Every PM has their own copy of `/rice` skill (divergence over time)  
+❌ **Bad**: Every PM forks the same skill with silent drift  
 ✅ **Good**: Publish to Team Marketplace → everyone uses canonical version
 
 ## Next Steps
@@ -502,12 +469,30 @@ workday-pm-skills/ (GitHub repo)
 
 ### For This Workspace
 
-**Current skills** (all project-level):
-- `/rice` - RICE prioritisation
-- `/jtbd` - Jobs-to-Be-Done analysis
-- `/thematic` - Braun & Clarke thematic analysis
-- `/editorial` - UX copy guidelines
-- `/value-metrics` - Value Realization metrics suggestion (NEW)
+**Canonical inventory** (18 project skills, each with `SKILL.md`):
+
+| Folder | Typical trigger / notes |
+|--------|-------------------------|
+| `ask-consultant` | Ask consultant / Slack archive queries |
+| `cleanup-old-artifacts` | `/cleanup` |
+| `create-dashboard` | Data Scientist / Pharos dashboards (`/view-dashboard` route) |
+| `customer-issue-triage` | Customer issue triage workflow |
+| `editorial-guidelines` | `/editorial` |
+| `football-results` | `/football-results` |
+| `jtbd-analysis` | `/jtbd` |
+| `modulr-prototype` | Redirect stub → `xo-builder` modulr mode |
+| `morning-roundup` | `/morning-roundup` |
+| `pharos-analytics` | Pharos / analytics patterns for `@data-scientist` |
+| `slide-writer` | `/slide-writer` (110/130) |
+| `suv-smoke-test` | `@qa-engineer` / explicit SUV smoke phrases |
+| `teachable-moment` | Plain-English explanations |
+| `value-metrics` | `/value-metrics` |
+| `workspace-audit` | `/workspace-audit` |
+| `write-prd` | `/write-prd` (200-prd-template) |
+| `xo-builder` | Explicit XO / REST / ModulR triggers |
+| `xo-pr-comment-triage` | PR comment triage workflow |
+
+**Not implemented as skills** (by design today): dedicated `/rice` and `/thematic` folders; use **092**, **`/value-metrics`**, and **`@pmf-analyst`** instead (see Examples above).
 
 **Candidate skills to create** (from E2E pipeline patterns):
 - `/pestel` - PESTEL analysis (currently in global skills, could customise for Workday)

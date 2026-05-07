@@ -124,24 +124,24 @@ Skills are increasingly acting as a "smarter" alternative to "Apply Intelligentl
 **Design principle:**
 - Extract detailed "how-to" content from alwaysApply rules to glob-scoped rules
 - Keep only routing logic and agent roster in alwaysApply
-- Reference glob-scoped rules from alwaysApply (e.g., "See `015-sana-style-ui.mdc` for details")
+- Reference glob-scoped rules from alwaysApply (e.g., "See `.cursor/rules/design-specific/015-sana-style-ui.md` for details")
 
 **Example extraction:**
 - Before: `010-style-guide.mdc` (556 lines, alwaysApply) with full Sana + Deck sections
-- After: `010-style-guide.mdc` (482 lines, alwaysApply) references → `015-sana-style-ui.mdc` (glob: design/**) + `018-deck-generation-standards.mdc` (glob: docs/decks/specs/slides_spec*)
+- After: `010-style-guide.mdc` (482 lines, alwaysApply) references → `.cursor/rules/design-specific/015-sana-style-ui.md` + `.cursor/rules/deck-specific/018-deck-generation-standards.md` (deck JSON specs glob: `docs/decks/specs/slides_spec*`)
 
 ### Pattern 3: Skills (`.cursor/skills/*/SKILL.md`)
 **Purpose**: Reusable, procedural methods invoked dynamically via `/skillname`.
 
 **Use for:**
-- Step-by-step frameworks (RICE scoring, JTBD analysis, thematic analysis)
+- Step-by-step frameworks (JTBD analysis, value metrics, editorial checklists)
 - Editorial checklists (Workday Editorial Guidelines, copy review protocol)
-- Repeatable processes used by multiple agents (PRD Writer uses `/jtbd`, UX Designer uses `/jtbd`, Advisory uses `/rice`)
-- Multi-agent shared methods (avoid duplicating RICE logic in 3 different rules)
+- Repeatable processes used by multiple agents (PRD Writer uses `/jtbd`, UX Designer uses `/jtbd`, Advisory uses **`/value-metrics`** and **092** for RICE framing)
+- Multi-agent shared methods (avoid duplicating long procedural logic across rules)
 
 **Benefits:**
 - Zero token cost until invoked (not loaded by default)
-- User can invoke directly (`/rice`) or agents can invoke programmatically
+- User can invoke directly (`/jtbd`, `/value-metrics`, `/editorial`, …) or agents can invoke programmatically
 - Single source of truth for shared methods (update once, affects all consumers)
 - Clean separation: rules coordinate, skills execute procedural logic
 
@@ -152,13 +152,13 @@ Skills are increasingly acting as a "smarter" alternative to "Apply Intelligentl
 4. Method is self-contained (clear inputs → outputs, no complex orchestration)
 
 **Example extractions:**
-- RICE prioritization (dual-dimension Impact scoring) → `.cursor/skills/rice-prioritization/SKILL.md`
 - Jobs-to-Be-Done analysis → `.cursor/skills/jtbd-analysis/SKILL.md`
+- Value Realization / outcome metrics → `.cursor/skills/value-metrics/SKILL.md`
 - Editorial Guidelines checklist → `.cursor/skills/editorial-guidelines/SKILL.md`
-- Braun & Clarke thematic analysis → `.cursor/skills/thematic-analysis/SKILL.md`
+- **Braun & Clarke PMF thematic analysis** lives in **`.cursor/agents/pmf-analyst-agent.md`** (subagent), not a standalone `/thematic` skill; **RICE** overview lives in **`.cursor/rules/advisory-methods/092-pm-frameworks-reference.md`** (glob-scoped to advisory/PRD/design), not `rice-prioritization/SKILL.md`
 
 **Design principle:**
-- Skills should be **standalone-invocable** (user types `/rice` and it works without E2E pipeline)
+- Skills should be **standalone-invocable** (e.g. user types `/jtbd` and it works without E2E pipeline)
 - Skills should also be **agent-invocable** (200-write-prd loads `/jtbd` during PRD creation)
 - Skills document prerequisites clearly (what inputs needed, what context required)
 
@@ -185,10 +185,10 @@ Skills are increasingly acting as a "smarter" alternative to "Apply Intelligentl
 4. Agent needs isolated context (doesn't need to see previous conversation)
 5. Logic was previously a >800 line glob-scoped rule
 
-**Example subagents (from recent optimization):**
-- **@product-strategy-agent** (from 099-product-strategist.mdc, 861 lines): Strategy Context extraction, PESTEL (35-55 web searches), SWOT analysis
-- **@competitive-intel** (from 101-competitive-intelligence.mdc, 1,177 lines): Exhaustive competitive research, matrix updates, battle cards
-- **@pmf-analyst** (from 120-pmf-thematic-analysis.mdc, 464 lines): Braun & Clarke 6-phase thematic analysis protocol
+**Example subagents (canonical sources today):**
+- **@product-strategy-agent** (`.cursor/agents/product-strategy-agent.md`): Strategy Context extraction, PESTEL (35-55 web searches), SWOT analysis
+- **@competitive-intel** (`.cursor/agents/competitive-intel-agent.md`): Exhaustive competitive research, matrix updates, battle cards
+- **@pmf-analyst** (`.cursor/agents/pmf-analyst-agent.md`): Braun & Clarke 6-phase thematic analysis protocol
 
 **Invocation pattern:**
 ```markdown
@@ -497,16 +497,16 @@ Output: Design Brief
 - **Result**: 2,502 lines isolated to subagent contexts (only loaded when invoked)
 
 **Phase 2: Reusable Methods → Skills**
-- Extracted RICE scoring → `.cursor/skills/rice-prioritization/SKILL.md`
-- Extracted JTBD analysis → `.cursor/skills/jtbd-analysis/SKILL.md`
-- Extracted Editorial Guidelines → `.cursor/skills/editorial-guidelines/SKILL.md`
-- Extracted Thematic Analysis → `.cursor/skills/thematic-analysis/SKILL.md`
-- **Result**: Single source of truth, zero token cost until invoked, user can invoke via `/rice`, `/jtbd`, etc.
+- JTBD analysis → `.cursor/skills/jtbd-analysis/SKILL.md`
+- Value Realization metrics → `.cursor/skills/value-metrics/SKILL.md`
+- Editorial Guidelines → `.cursor/skills/editorial-guidelines/SKILL.md`
+- **Note (current repo)**: There is no `rice-prioritization` or `thematic-analysis` skill folder; RICE narrative sits in **092**; PMF Braun & Clarke sits in **`@pmf-analyst`** agent file.
+- **Result**: Single source of truth for extracted skills, zero token cost until invoked; user invokes `/jtbd`, `/value-metrics`, `/editorial`, etc.
 
 **Phase 3: Trim Oversized AlwaysApply**
-- Extracted Sana UI details (79 lines) → `015-sana-style-ui.mdc` (glob: design/**)
-- Extracted Deck Generation (383 lines) → `018-deck-generation-standards.mdc` (glob: docs/decks/specs/slides_spec*)
-- Extracted PM Frameworks (172 lines) → `092-pm-frameworks-reference.mdc` (glob: 090/200/315)
+- Extracted Sana UI details → `.cursor/rules/design-specific/015-sana-style-ui.md` (referenced from **010**; glob: `design/**` where applicable)
+- Extracted Deck Generation → `.cursor/rules/deck-specific/018-deck-generation-standards.md` (slide JSON under `docs/decks/specs/`)
+- Extracted PM Frameworks → `.cursor/rules/advisory-methods/092-pm-frameworks-reference.md` (glob: 090/200/315)
 - Extracted Advisory Examples (113 lines) → `093-advisory-examples.md` (reference doc)
 - **Result**: Reduced 010 from 556→482 lines, 090 from 812→541 lines
 
@@ -531,8 +531,8 @@ Output: Design Brief
 **Every skill and subagent MUST support both modes:**
 
 **Standalone Invocation:**
-- User directly triggers: "Run competitive scan for France", "Perform RICE scoring", "Analyze these interviews"
-- Skill: User types `/rice` or `/jtbd` and it runs independently
+- User directly triggers: "Run competitive scan for France", "Score these initiatives with RICE", "Analyse these interviews"
+- Skill: User types `/jtbd`, `/value-metrics`, `/editorial`, etc. and it runs independently
 - Subagent: Orchestrator detects trigger phrase and invokes without E2E pipeline context
 
 **E2E Pipeline Invocation:**
@@ -551,9 +551,13 @@ Output: Design Brief
 - Standalone: "Scan UK competitors" → runs Pattern 2 (On-Demand Regional Deep Dive)
 - E2E: Regional E2E Pipeline Step 4 → runs Pattern 1a (Regional E2E Baseline Scan) with mission ID
 
-**Example: /rice skill supports both modes**
-- Standalone: User types `/rice` → prompts for features, performs scoring interactively
-- E2E: @pmf-analyst invokes `/rice` programmatically → scores recommendations automatically from research data
+**Example: `/jtbd` skill supports both modes**
+- Standalone: User types `/jtbd` → structured job statements for a feature or problem
+- E2E: **200** or research agents load `/jtbd` during PRD or discovery synthesis
+
+**Example: `@pmf-analyst` supports both modes**
+- Standalone: "Run PMF thematic analysis for [region]" → Task loads `pmf-analyst-agent.md`
+- E2E: Regional pipeline Step 9 after **105** outputs → chained PMF markdown report
 
 ## Rule Naming Conventions
 

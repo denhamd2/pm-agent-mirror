@@ -8,32 +8,29 @@ This log tracks the state of all active product initiatives, decisions, and hand
 **106 two-tier sources:** **Global** `research/brainstorm-sessions/` (multi-region data, content-filtered) + **Region-specific** `research/[Country]/brainstorm-sessions/` (folder-filtered). P&T Idea Results Dashboard lives in global folder; 106 extracts region-relevant rows via Tier 3 content filtering.
 
 ## Current Status
-**Status:** ✅ OPERATIONAL - PMF Research Reorganized (Country-Based Structure)
-**Last Updated:** 1 April 2026 (stale missions archived to `docs/mission-archive/stale-missions-2026-03-31.md`)
-**Workspace Version:** 1.4
+**Status:** OPERATIONAL — agents, skills, and rules catalogue aligned (May 2026 doc pass)
+**Last Updated:** 7 May 2026 (dashboard scorecard v1.5; prototypes save/unsave + route catalogue)
+**Workspace Version:** 1.5
 **Active Agents:** 10+ (Orchestrator + specialists incl. **@pmf-analyst** report + **130** PMF deck + Functional Knowledge Authority)
 
 **NOTE (27 March 2026):** Recent Step 2.75 runs in missions GCC-E2E-024 through GCC-E2E-028 analyzed presales gap data (Opportunity Detail.xlsx containing Gap ID, Severity, Product Capability columns) using agent 108-tableau-gap-analyser (legacy 107 deprecated). This data should have been analyzed by 108-tableau-gap-analyser per orchestrator specification. Agent 107 has been deprecated and removed. The data file has been moved from `research/GCC/win-loss-interviews/` to `research/GCC/gap-data/` for correct routing to 108 in future E2E runs.
 
 ## System Health
-- ✅ Folder structure reorganized (Country-based PMF research)
-  - research/Japan/{raw-data,internal-sme-transcripts,customer-transcripts,thematic-analysis}
-  - research/India/{raw-data,internal-sme-transcripts,customer-transcripts,thematic-analysis}
-  - research/GCC/{raw-data,internal-sme-transcripts,customer-transcripts,thematic-analysis}
-  - Legacy: research/raw-data/ (contains existing data files - 287KB)
-- ✅ MDC rules in `.cursor/rules/` (incl. 050-functional-knowledge, **@pmf-analyst** PMF thematic analysis, **130** PMF slide generator)
-- ✅ 11 MCPs integrated (10 active; user-jira-ghe errored - fix in Cursor Settings > MCP Servers)
-- ✅ Documentation updated (research/README.md - comprehensive guide)
-- ✅ Sequential thinking verification complete
-- ✅ Functional Knowledge RAG layer OPERATIONAL (6/6 PDFs ingested, 49.4MB)
+- Folder structure reorganised (Country-based PMF research)
+- MDC rules in `.cursor/rules/` (incl. 050-functional-knowledge, **@pmf-analyst** PMF thematic analysis, **130** PMF slide generator)
+- **21 MCP server folders** configured under Cursor (`mcps/`); see **`000-master-orchestrator.mdc`** for the active roster. **`user-jira-ghe`** may still require manual auth in Cursor Settings if stories or Jira automation fail.
+- Documentation updated (research/README.md - comprehensive guide)
+- Sequential thinking verification complete
+- Functional Knowledge RAG layer OPERATIONAL (6/6 PDFs ingested, 49.4MB)
   - Admin-Guide-Authentication-and-Security.pdf (1.5MB)
   - Admin-Guide-Human-Capital-Management.pdf (12MB)
   - Admin-Guide-Manage-Workday.pdf (5.2MB)
   - Offer & Employment Agreement - Functional Overview (7.4MB)
   - Recruiting Data Purge - Functional Overview (19MB)
   - Recruiting Duplicate Management - Functional Overview (375KB)
-- ✅ PMF Thematic Analysis: Country-based Braun & Clarke with Triangulation
-- ✅ Total workspace size: 200MB+
+- PMF Thematic Analysis: Country-based Braun & Clarke with Triangulation (**@pmf-analyst**)
+- Prototypes: open from Vite dev server (`design/`, port **5199**). **Save/Unsave** on `docs/pm-agent-prototypes.html` persists to `docs/saved-prototypes.json` when served via **`python3 scripts/dashboard-server.py`** on port **8765** (same-origin `/api/save-prototype`).
+- **Compliance lens (060):** MCPs touching Jira, Slack, or Confluence may surface **personal or customer-identifying data** — share minimum necessary excerpts, respect customer DPAs and regional privacy law, and keep **human review** on AI-influenced candidate decisions (GDPR Art. 22; EU AI Act high-risk recruiting context). **Playwright / SUV smoke** remains **dev SUV only**; do not aim automation at production tenants.
 
 ## Copy Review Timing Change (March 2026)
 

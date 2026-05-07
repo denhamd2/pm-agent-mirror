@@ -138,8 +138,7 @@ research/
    - Read `research/[REGION]/strategy-context-[YYYY-MM-DD]-[MISSION-ID].md` (from 099 Step 1)
    - Extract: Strategic priorities, OKRs, regional focus, RICE Business Impact guidance
 
-2. **Invoke enhanced RICE Skill** (`~/.cursor/skills-cursor/rice-prioritisation/SKILL.md`):
-   - Read the skill file for dual-dimension Impact scoring framework
+2. **Apply RICE scoring (dual-dimension Impact)** using **`.cursor/rules/advisory-methods/092-pm-frameworks-reference.md`** (RICE Prioritisation subsection). There is no project `rice-prioritization` skill; optional user-level `~/.cursor/skills-cursor/` RICE skill may exist on your machine, but **do not require it** for PMF output.
    - Score each recommendation: **Business Impact** (strategy alignment) + **Customer Impact** (pain severity)
    - Calculate Composite Impact = (Business + Customer) / 2
    - Generate full RICE scores: (Reach × Composite Impact × Confidence%) / Effort
