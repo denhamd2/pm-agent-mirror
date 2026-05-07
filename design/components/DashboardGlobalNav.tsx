@@ -27,6 +27,7 @@ const CHILD_TO_PARENT: Record<string, string> = {
   'positions-open-vs-filled': 'value-realization-metrics',
   'add-documents-impact': 'value-realization-metrics',
   'recruiting-agency-user': 'value-realization-metrics',
+  'time-to-fill-recruiter': 'value-realization-metrics',
   'interview-metrics': 'bp-durations',
   'view-dashboard': 'bp-durations',
 };

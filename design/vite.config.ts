@@ -47,6 +47,7 @@ function prototypeSpaSlugFallback(): Plugin {
       'create-offer-ssa-v01',
       'create-jr-ssa-v01',
       'e2e-recruiting-talent-acq-v01',
+      'time-to-fill-recruiter',
     ]);
   return {
     name: 'prototype-spa-slug-fallback',

@@ -30,6 +30,9 @@ const InterviewMetricsDashboard = React.lazy(() => import('./interview-metrics-d
 const BpDurationDashboard = React.lazy(() => import('./bp-duration-dashboard').then((m) => ({ default: m.BpDurationDashboard })));
 const CustomerScorecardDashboard = React.lazy(() => import('./customer-scorecard-dashboard').then((m) => ({ default: m.CustomerScorecardDashboard })));
 const RecruitingMetricTreePage = React.lazy(() => import('./recruiting-metric-tree').then((m) => ({ default: m.RecruitingMetricTreePage })));
+const TimeToFillRecruiterDashboard = React.lazy(() =>
+  import('./time-to-fill-recruiter-dashboard').then((m) => ({ default: m.TimeToFillRecruiterDashboard }))
+);
 import { SANA_PAGE_CANVAS } from './components';
 
 function LoadingPlaceholder() {
@@ -86,6 +89,7 @@ const PROTOTYPE_SLUGS = [
   'create-offer-ssa-v01',
   'create-jr-ssa-v01',
   'e2e-recruiting-talent-acq-v01',
+  'time-to-fill-recruiter',
 ] as const;
 
 type PrototypeSlug = (typeof PROTOTYPE_SLUGS)[number];
@@ -166,6 +170,13 @@ function AppRoot() {
   }
   if (route === 'avg-time-to-hire') {
     return <React.Suspense fallback={<LoadingPlaceholder />}><AvgTimeToHireDashboard /></React.Suspense>;
+  }
+  if (route === 'time-to-fill-recruiter') {
+    return (
+      <React.Suspense fallback={<LoadingPlaceholder />}>
+        <TimeToFillRecruiterDashboard />
+      </React.Suspense>
+    );
   }
   if (route === 'pm-agent-dashboard') {
     return <PMAgentDashboard />;

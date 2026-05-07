@@ -41,7 +41,8 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
-        if self.path == "/api/saved-prototypes":
+        path_only = self.path.split("?", 1)[0]
+        if path_only == "/api/saved-prototypes":
             body = json.dumps(_read_saved()).encode()
             self.send_response(200)
             self._cors_headers()
@@ -53,7 +54,8 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         super().do_GET()
 
     def do_POST(self):
-        if self.path == "/api/save-prototype":
+        path_only = self.path.split("?", 1)[0]
+        if path_only == "/api/save-prototype":
             length = int(self.headers.get("Content-Length", 0))
             payload = json.loads(self.rfile.read(length)) if length else {}
             slug = payload.get("slug")
