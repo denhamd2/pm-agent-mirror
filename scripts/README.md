@@ -4,6 +4,8 @@ Utility scripts for this workspace. Deck-related Python generators that used to 
 
 ## Repo-root helpers (run from repository root)
 
+**Slide specs:** `slides_spec*.json` stay at the **repository root** by convention — [`.cursor/rules/130-pmf-slide-generator.mdc`](../.cursor/rules/130-pmf-slide-generator.mdc) and [`cleanup-old-artifacts.py`](cleanup-old-artifacts.py) glob there. Relocating them requires coordinated updates to those paths plus this README.
+
 | Script | Purpose |
 |--------|---------|
 | [`generate_presentation.py`](generate_presentation.py) | Fallback when Slide Deck MCP is unavailable: reads `--spec` JSON (default: repo `slides_spec.json`), writes PPTX under `~/Downloads` (or `PM_DECK_OUTPUT_DIR`). Requires clone at `~/mcp-servers/wday-slidemcp` or set `WDAY_SLIDEMCP_ROOT`. |

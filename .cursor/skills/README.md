@@ -528,7 +528,7 @@ workday-pm-skills/ (GitHub repo)
 - **`090-agent-improvement-advisor.mdc`** → Architectural patterns (skills vs. rules vs. sub-agents)
 - **`000-master-orchestrator.mdc`** → How skills are invoked in E2E pipeline
 - **`.cursor/rules/010-style-guide.mdc`** → British English, formatting standards
-- **`.cursor/docs/figma-design-system-rules.md`** → Auto-generating rules (parallel concept to skills)
+- **`design/docs/figma-design-system-rules.md`** → Auto-generating rules (parallel concept to skills)
 
 ## Cursor PM Insights Summary
 

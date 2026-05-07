@@ -7,7 +7,7 @@
 **Source**: Presentation transcript from Cursor PM (Noah), Strategic Learning Session  
 **Participants**: David (PM), Workday Design/PM team  
 **Transcript**: `/Users/david.denham/Downloads/Cursor discussion.rtfd/TXT.rtf`  
-**Documentation**: `.cursor/docs/figma-design-system-rules.md`, `.cursor/skills/README.md`
+**Documentation**: `design/docs/figma-design-system-rules.md`, `.cursor/skills/README.md`
 
 #### Model Selection Best Practices
 
@@ -222,7 +222,7 @@ Workday (org level - provisioning, skim groups)
 **`create_design_system_rules` Reality** (Noah):
 > "They have, like, a create design systems rule, so you can run this, like, a couple times, and it'll go and, like, look at your files, and then create an actual rule and cursor that tries to, like, encapsulate some of that design system. It's kind of like what we talked about earlier, like... it's alright. It's not perfect by any means."
 
-**Takeaway**: Use as **timesaver** for bootstrapping rules, but expect to refine manually. See `.cursor/docs/figma-design-system-rules.md` for usage guide.
+**Takeaway**: Use as **timesaver** for bootstrapping rules, but expect to refine manually. See `design/docs/figma-design-system-rules.md` for usage guide.
 
 #### Automations Use Cases
 
