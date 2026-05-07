@@ -5,6 +5,7 @@ design/node_modules/
 # Build outputs
 dist/
 build/
+# Log files (includes ad-hoc Cursor / extension traces under .cursor/*.log)
 *.log
 
 # Environment files
