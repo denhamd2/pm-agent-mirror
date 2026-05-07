@@ -36,6 +36,7 @@ Handbooks and setup guides live under **[docs/onboarding/](docs/onboarding/READM
 ├── .cursor/rules/          # MDC rule files (agent behaviour)
 ├── docs/
 │   ├── onboarding/         # QUICK_REFERENCE, INSTALLATION_NOTES, INDEX, setup docs
+│   ├── templates/prd/     # Optional PRD template PDFs (see docs/templates/README.md)
 │   ├── prds/               # Product requirements
 │   └── ...
 ├── scripts/                # Automation, generate_presentation, cleanup, hooks

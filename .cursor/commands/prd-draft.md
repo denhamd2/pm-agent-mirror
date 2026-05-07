@@ -94,11 +94,11 @@ Before proceeding with the interview, you MUST be aware of and reference the fou
 - Build an Upsell eCommerce Engine
 - Key Focus: Marketing capabilities, analytics infrastructure, A/B testing, e-commerce, GTM
 
-The FY27 Community Strategy PDF should be available at `.prd-to-jira/resources/FY27_Community Strategy.pdf` in the workspace for additional reference.
+The FY27 Community Strategy PDF (if used) should be at **`docs/templates/prd/FY27_Community Strategy.pdf`**. If missing, ask the user to add it there or attach an equivalent reference.
 
 ### IMPORTANT INSTRUCTIONS ###
 
-1. **Template Compliance:** Use the PRD Template PDF as the primary reference for the exact structure, formatting, and section organization. The template should be available at `.prd-to-jira/resources/[WIP] PRD Template - Functional Requirements & Design Doc.pdf` in the workspace. If it's not there, ask the user to provide it or check if the installation completed successfully.
+1. **Template Compliance:** Use the PRD Template PDF as the primary reference for the exact structure, formatting, and section organization. Default path: **`docs/templates/prd/[WIP] PRD Template - Functional Requirements & Design Doc.pdf`**. If it is not in the repo, ask the user to provide the template (path, upload, or Confluence link) or add it under `docs/templates/prd/`.
 
 2. **FY27 Strategic Alignment (MANDATORY):** Every feature/product MUST be mapped to at least one FY27 Strategic Objective. During the interview:
    - Explicitly present the 4 pillars to the user
