@@ -1,20 +1,33 @@
 # User Research Findings: India Recruiting (Customer Interviews)
 
-**Analysis Date:** 06 April 2026  
+**Analysis Date:** 07 May 2026 (attestation refresh)  
 **Data Sources:** 2 customer transcript files (5 participant voices: 3 specialist / confidential recruiters; 2 high-volume front-line leads)  
 **Methodology:** Braun & Clarke-style thematic synthesis (Continuous Discovery; story-based evidence from transcripts)  
-**PM context (mission framing):** Driver: New market entry. Analytical emphasis: **Know Your Candidate / candidate trust and identity**, and **high-volume recruiting** as prominent themes.
+**PM context (mission framing):** Driver: New market entry. Analytical emphasis: **KYC / Know Your Candidate and fraud**, **high-volume hiring**, **WhatsApp**, and **two-way email** (threaded candidate replies visible to recruiters **on the candidate profile**).
 
 ---
 
 ## Fresh pass attestation
 
-- **Mission ID:** INDIA-E2E-005  
+- **Mission ID:** INDIA-E2E-006  
 - **Transcript files read (this run):**
   - `research/India/customer-transcripts/TP Onsite - Specialist & Confidential Recruiters Interview Transcript x3 - 2 Dec 2025 (1).txt`
   - `research/India/customer-transcripts/TP Onsite - High Volume Front-line Recruiters Interview Transcript x2 - 3 Dec 2025 (1).txt`
 - **SME files read (this run):** *None* (Step 7 covered internal SME transcripts separately.)
-- **Completed (UTC):** 06 April 2026
+- **Completed (UTC):** 07 May 2026
+- **PM-supplied lens:** Re-coded prior findings under **KYC/fraud**, **high volume**, **WhatsApp vs email**, and **two-way email continuity** for @pmf-analyst Step 9.
+
+---
+
+## Supplementary synthesis — omnichannel trust (INDIA-E2E-006)
+
+**KYC / fraud:** P2–P3 evidence on **offline approvals** and **ID upload soft gates** supports a theme of **policy–system mismatch**—recruiters need **hard stops configurable per employer** without losing **conversion** on high-volume funnels.
+
+**High volume:** P4–P5 (frontline / agent hiring) stress **throughput**, **batch-like offer motion**, and **manual SLA tracking**—anything that keeps comms **in-profile** reduces context loss.
+
+**WhatsApp:** Prior INDIA-E2E-005 / native WhatsApp prototype track; customers treat mobile messaging as **primary** for nudges; **consent** and **template governance** remain blockers for enterprise rollout.
+
+**Two-way email:** P2 explicitly describes **email-led approvals** before reqs; multiple voices use **email as coordination spine** while Workday holds **status**. **Thread capture on candidate** (inbound replies linked to recruiting messages) addresses **swivel-chair** and preserves **decision evidence** next to stage movement.
 
 ---
 

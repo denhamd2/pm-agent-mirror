@@ -10,6 +10,7 @@ import { GccRecruiterDashboard } from './gcc-recruiter-dashboard';
 import { GccCandidateGridSearch } from './gcc-candidate-grid-search';
 import { RecruiterHubGenUIV95 } from './recruiter-hub-genui-v95';
 import { IndiaNativeWhatsappV91 } from './india-native-whatsapp-v91';
+import { IndiaCandidateProfileEmailV92 } from './india-candidate-profile-email-v92';
 import { InterviewIntelligenceAgentV96 } from './interview-intelligence-agent-v96';
 import AISystemOfRecordV97 from './ai-system-of-record-v97';
 import { CanvasKitTest } from './components/CanvasKitTest';
@@ -71,6 +72,7 @@ const PROTOTYPE_SLUGS = [
   'candidate-grid-v84',
   'recruiter-hub-genui-v95',
   'india-native-whatsapp-v91',
+  'india-candidate-profile-email-v92',
   'interview-intelligence-agent-v96',
   'ai-system-of-record-v97',
   'canvas-kit-test',
@@ -201,6 +203,9 @@ function AppRoot() {
   }
   if (route === 'india-native-whatsapp-v91') {
     return <IndiaNativeWhatsappV91 />;
+  }
+  if (route === 'india-candidate-profile-email-v92') {
+    return <IndiaCandidateProfileEmailV92 />;
   }
   if (route === 'candidate-grid-v84') {
     return <GccCandidateGridSearch />;

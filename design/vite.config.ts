@@ -28,6 +28,7 @@ function prototypeSpaSlugFallback(): Plugin {
       'candidate-grid-v84',
       'recruiter-hub-genui-v95',
       'india-native-whatsapp-v91',
+      'india-candidate-profile-email-v92',
       'interview-intelligence-agent-v96',
       'ai-system-of-record-v97',
       'canvas-kit-test',

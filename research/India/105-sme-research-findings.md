@@ -1,15 +1,15 @@
 # Internal SME Research Findings: India Recruiting PMF
 
-**Analysis Date:** 06 April 2026  
+**Analysis Date:** 07 May 2026 (attestation refresh)  
 **Data Sources:** 5 internal SME interview / meeting note transcripts  
 **Methodology:** Structured synthesis of internal expert perspectives (Teresa Torres-aligned opportunity framing; evidence-led coding from source text)  
-**PM context (pipeline):** New market entry; **Know Your Candidate** / candidate fraud and **high volume** are priority lenses for India.
+**PM context (pipeline):** New market entry; **KYC / fraud**, **high volume**, **WhatsApp**, and **two-way email on profile** are explicit lenses for INDIA-E2E-006.
 
 ---
 
 ## Fresh pass attestation
 
-- **Mission ID:** INDIA-E2E-005
+- **Mission ID:** INDIA-E2E-006
 - **Transcript files read (this run):** *None (Step 8 customer transcripts out of scope for this Step 7 artefact)*
 - **SME files read (this run):**
   - `research/India/internal-sme-transcripts/s- Meeting Notes with Santosh Gulia, Sr. Functional Consultant, Global Services - India Research - 9th July 2025.txt`
@@ -17,7 +17,7 @@
   - `research/India/internal-sme-transcripts/s- Meeting Notes with David Lodola, Workday Services Enterprise Architect in India - India Research - 13th June 2025.txt`
   - `research/India/internal-sme-transcripts/Meeting Notes with David Phillips_ Director for Strategic Customer Engagement (Accenture), Workday - India PMF research (9 Jan 2025).txt`
   - `research/India/internal-sme-transcripts/Meeting Notes for India Research with Bernie (VP of Talent Product Management) - 25th Nov.txt`
-- **Completed (UTC):** 2026-04-06
+- **Completed (UTC):** 2026-05-07
 
 ---
 
