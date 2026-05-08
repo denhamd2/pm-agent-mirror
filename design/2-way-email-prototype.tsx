@@ -141,16 +141,15 @@ const dockSheetComposePx = (vw: number) => Math.min(1200, Math.max(COLLAB_SHEET_
 const DECISION_ACTION_BAR_Z = 205;
 const DECISION_ACTION_BAR_HEIGHT_PX = 72;
 
-/** Recruiting chrome accent / solid fallback under gradient (`#0077D4`). */
+/** Recruiting chrome accent / candidate pane fill (`#0077D4`). */
 const OVERVIEW_NAV_BLUE = '#0077D4';
 
-/** Candidate profile blue pane — vertical gradient (`Screenshot_2026-05-08_at_16.12.11`). */
-const CANDIDATE_MENU_GRADIENT =
-  'linear-gradient(180deg, #004080 0%, #0077D4 40%, #006EC4 68%, #003058 100%)';
-/** Quick-action icon discs — solid darker blue between gradient mid-tone and selected band. */
+/** Candidate profile blue pane — flat brand blue (Canvas Kit–aligned link blue). */
+const CANDIDATE_MENU_BG = OVERVIEW_NAV_BLUE;
+/** Quick-action icon discs — darker blue contrast on flat pane. */
 const CANDIDATE_MENU_QUICK_ACTION_CIRCLE = '#0B5599';
-/** Selected Summary/nav row — full-width dark navy rectangle. */
-const CANDIDATE_NAV_ROW_SELECTED_BG = '#001E3F';
+/** Selected Summary/nav row — slightly darker than flat pane (`CANDIDATE_MENU_BG`), not high-contrast navy. */
+const CANDIDATE_NAV_ROW_SELECTED_BG = '#0070CC';
 
 /** Profile cards — label/value hierarchy vs canonical mock (bold labels, regular values). */
 const PROFILE_FIELD_LABEL: CSSProperties = {
@@ -947,8 +946,7 @@ function CandidateMenu({
         minWidth: CANDIDATE_MENU_W,
         minHeight: '100%',
         borderRight: `1px solid ${TWEMAIL_DIVIDER}`,
-        backgroundImage: CANDIDATE_MENU_GRADIENT,
-        backgroundColor: OVERVIEW_NAV_BLUE,
+        backgroundColor: CANDIDATE_MENU_BG,
         paddingTop: SPACE.s,
         color: TW.frenchVanilla100,
       }}
@@ -2265,15 +2263,17 @@ function MailCollaborationSurface({
   };
 
   const splitView = Boolean(selectedId && filtered.some((t) => t.id === selectedId));
+  /** Matches thread list column width — header panes use the same split. */
+  const mailListColumnWidthPx = dockWide ? 300 : 272;
 
   const threadListColumn = (
     <Box
       key={threadsResetKey}
       flex={splitView ? undefined : 1}
       style={{
-        width: splitView ? (dockWide ? 300 : 272) : undefined,
+        width: splitView ? mailListColumnWidthPx : undefined,
         flexShrink: splitView ? 0 : undefined,
-        minWidth: splitView ? (dockWide ? 300 : 272) : undefined,
+        minWidth: splitView ? mailListColumnWidthPx : undefined,
         overflowY: 'auto',
         backgroundColor: TWEMAIL_THREAD_LIST_CANVAS_BG,
         borderRight: splitView ? `1px solid ${TWEMAIL_DIVIDER}` : undefined,
@@ -2294,65 +2294,18 @@ function MailCollaborationSurface({
 
   return (
     <Flex flexDirection="column" style={{ flex: 1, minHeight: 0, minWidth: 0, width: '100%' }}>
-      <Box paddingX="s" paddingTop="s" style={{ position: 'relative', borderBottom: `1px solid ${TWEMAIL_DIVIDER}`, flexShrink: 0 }}>
-        <Flex alignItems="center" justifyContent="space-between" gap="s" flexWrap="nowrap">
-          <Heading
-            size="medium"
-            style={{
-              margin: 0,
-              fontSize: 18,
-              fontWeight: 700,
-              color: TW.blackPepper600,
-              lineHeight: 1.25,
-              letterSpacing: -0.01,
-            }}
-          >
-            Conversational Email
-          </Heading>
-          <Flex alignItems="center" gap="xs" flexShrink={0}>
-            <button
-              type="button"
-              aria-label={dockWide ? 'Collapse panel' : 'Expand panel'}
-              title={dockWide ? 'Collapse panel' : 'Expand panel'}
-              onClick={onToggleDockWide}
-              style={protoDockIconButtonStyle(40)}
-            >
-              <TwIcon icon={arrowDiagonalSmallIcon} size={24} />
-            </button>
-            <button
-              type="button"
-              aria-label="Create new email"
-              title="Create new email"
-              onClick={() => {
-                setCreateEmailPopoverOpen(true);
-              }}
-              style={protoDockPrimaryButtonStyle()}
-            >
-              + New
-            </button>
-          </Flex>
-        </Flex>
-        <Box style={{ marginTop: 10 }}>
-          <Subtext
-            size="small"
-            style={{ margin: 0, display: 'block', color: TW.blackPepper400, fontWeight: 600 }}
-          >
-            Job Requisition
-          </Subtext>
-          <BodyText
-            size="small"
-            style={{ margin: '6px 0 0', fontWeight: 600, color: TW.blackPepper600, display: 'block' }}
-          >
-            JR-00073 Marketing Coordinator
-          </BodyText>
-        </Box>
-        <Flex marginTop="s" paddingTop="xs" style={{ borderBottom: `1px solid ${TWEMAIL_DIVIDER}` }}>
-          {audienceTab('all', 'All')}
-          {audienceTab('candidate', 'Candidate')}
-          {audienceTab('agency', 'Agency')}
-        </Flex>
-        {createEmailPopoverOpen ? (
-          <>
+      {splitView ? (
+        <Box
+          paddingX="s"
+          paddingTop="s"
+          style={{
+            position: 'relative',
+            flexShrink: 0,
+            borderBottom: `1px solid ${TWEMAIL_DIVIDER}`,
+            backgroundColor: TWEMAIL_THREAD_LIST_CANVAS_BG,
+          }}
+        >
+          {createEmailPopoverOpen ? (
             <button
               type="button"
               aria-label="Dismiss create email menu"
@@ -2366,48 +2319,268 @@ function MailCollaborationSurface({
                 cursor: 'default',
               }}
             />
-            <Box
-              style={{
-                position: 'absolute',
-                top: 44,
-                right: 8,
-                zIndex: 9,
-                width: 292,
-                filter: 'drop-shadow(0 8px 24px rgba(11,31,66,0.18))',
-              }}
-            >
-              <Card
-                padding="m"
+          ) : null}
+          <Flex flexDirection="column">
+            <Flex flexDirection="row" alignItems="center" style={{ gap: 12 }}>
+              <Box
                 style={{
-                  borderRadius: 8,
-                  border: `1px solid ${TWEMAIL_DIVIDER}`,
-                  backgroundColor: TW.frenchVanilla100,
+                  width: mailListColumnWidthPx,
+                  flexShrink: 0,
+                  boxSizing: 'border-box',
+                  paddingRight: SPACE.s,
+                  borderRight: `1px solid ${TWEMAIL_DIVIDER}`,
                 }}
               >
-                <Flex justifyContent="space-between" alignItems="flex-start" marginBottom="s">
-                  <Heading size="small" style={{ margin: 0, fontSize: 16, fontWeight: 700, color: TW.blackPepper600 }}>
-                    Create a New Email
-                  </Heading>
+                <Heading
+                  size="medium"
+                  style={{
+                    margin: 0,
+                    fontSize: 18,
+                    fontWeight: 700,
+                    color: TW.blackPepper600,
+                    lineHeight: 1.25,
+                    letterSpacing: -0.01,
+                  }}
+                >
+                  Conversational Email
+                </Heading>
+              </Box>
+              <Box
+                flex={1}
+                style={{
+                  minWidth: 0,
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                  position: 'relative',
+                }}
+              >
+                <Flex alignItems="center" gap="xs" flexShrink={0}>
                   <button
                     type="button"
-                    aria-label="Close"
-                    onClick={() => setCreateEmailPopoverOpen(false)}
-                    style={protoDockPopoverCloseButtonStyle()}
+                    aria-label={dockWide ? 'Collapse panel' : 'Expand panel'}
+                    title={dockWide ? 'Collapse panel' : 'Expand panel'}
+                    onClick={onToggleDockWide}
+                    style={protoDockIconButtonStyle(40)}
                   >
-                    <TwIcon icon={xIcon} size={18} />
+                    <TwIcon icon={arrowDiagonalSmallIcon} size={24} />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Create new email"
+                    title="Create new email"
+                    onClick={() => {
+                      setCreateEmailPopoverOpen(true);
+                    }}
+                    style={protoDockPrimaryButtonStyle()}
+                  >
+                    + New
                   </button>
                 </Flex>
-                <BodyText size="small" style={{ margin: '0 0 16px', lineHeight: 1.5, color: TW.blackPepper500 }}>
-                  Send a new email to this candidate.
+                {createEmailPopoverOpen ? (
+                  <Box
+                    style={{
+                      position: 'absolute',
+                      top: 'calc(100% + 8px)',
+                      right: 0,
+                      zIndex: 10,
+                      width: 292,
+                      filter: 'drop-shadow(0 8px 24px rgba(11,31,66,0.18))',
+                    }}
+                  >
+                    <Card
+                      padding="m"
+                      style={{
+                        borderRadius: 8,
+                        border: `1px solid ${TWEMAIL_DIVIDER}`,
+                        backgroundColor: TW.frenchVanilla100,
+                      }}
+                    >
+                      <Flex justifyContent="space-between" alignItems="flex-start" marginBottom="s">
+                        <Heading size="small" style={{ margin: 0, fontSize: 16, fontWeight: 700, color: TW.blackPepper600 }}>
+                          Create a New Email
+                        </Heading>
+                        <button
+                          type="button"
+                          aria-label="Close"
+                          onClick={() => setCreateEmailPopoverOpen(false)}
+                          style={protoDockPopoverCloseButtonStyle()}
+                        >
+                          <TwIcon icon={xIcon} size={18} />
+                        </button>
+                      </Flex>
+                      <BodyText size="small" style={{ margin: '0 0 16px', lineHeight: 1.5, color: TW.blackPepper500 }}>
+                        Send a new email to this candidate.
+                      </BodyText>
+                      <button type="button" style={protoDockPrimaryButtonStyle(true)} onClick={launchCompose}>
+                        Send New Email
+                      </button>
+                    </Card>
+                  </Box>
+                ) : null}
+              </Box>
+            </Flex>
+            <Flex flexDirection="row" style={{ gap: 12, marginTop: 10 }}>
+              <Box
+                style={{
+                  width: mailListColumnWidthPx,
+                  flexShrink: 0,
+                  boxSizing: 'border-box',
+                  paddingRight: SPACE.s,
+                  borderRight: `1px solid ${TWEMAIL_DIVIDER}`,
+                }}
+              >
+                <Subtext
+                  size="small"
+                  style={{ margin: 0, display: 'block', color: TW.blackPepper400, fontWeight: 600 }}
+                >
+                  Job Requisition
+                </Subtext>
+                <BodyText
+                  size="small"
+                  style={{ margin: '6px 0 0', fontWeight: 600, color: TW.blackPepper600, display: 'block' }}
+                >
+                  JR-00073 Marketing Coordinator
                 </BodyText>
-                <button type="button" style={protoDockPrimaryButtonStyle(true)} onClick={launchCompose}>
-                  Send New Email
-                </button>
-              </Card>
-            </Box>
-          </>
-        ) : null}
-      </Box>
+              </Box>
+              <Box flex={1} style={{ minWidth: 0 }} aria-hidden />
+            </Flex>
+            <Flex flexDirection="row" style={{ gap: 12, marginTop: SPACE.s, paddingTop: SPACE.xs }}>
+              <Box
+                style={{
+                  width: mailListColumnWidthPx,
+                  flexShrink: 0,
+                  boxSizing: 'border-box',
+                  paddingRight: SPACE.s,
+                  borderRight: `1px solid ${TWEMAIL_DIVIDER}`,
+                }}
+              >
+                <Flex paddingTop="xs" style={{ flexWrap: 'wrap' }}>
+                  {audienceTab('all', 'All')}
+                  {audienceTab('candidate', 'Candidate')}
+                  {audienceTab('agency', 'Agency')}
+                </Flex>
+              </Box>
+              <Box flex={1} style={{ minWidth: 0 }} aria-hidden />
+            </Flex>
+          </Flex>
+        </Box>
+      ) : (
+        <Box paddingX="s" paddingTop="s" style={{ position: 'relative', borderBottom: `1px solid ${TWEMAIL_DIVIDER}`, flexShrink: 0 }}>
+          <Flex alignItems="center" justifyContent="space-between" gap="s" flexWrap="nowrap">
+            <Heading
+              size="medium"
+              style={{
+                margin: 0,
+                fontSize: 18,
+                fontWeight: 700,
+                color: TW.blackPepper600,
+                lineHeight: 1.25,
+                letterSpacing: -0.01,
+              }}
+            >
+              Conversational Email
+            </Heading>
+            <Flex alignItems="center" gap="xs" flexShrink={0}>
+              <button
+                type="button"
+                aria-label={dockWide ? 'Collapse panel' : 'Expand panel'}
+                title={dockWide ? 'Collapse panel' : 'Expand panel'}
+                onClick={onToggleDockWide}
+                style={protoDockIconButtonStyle(40)}
+              >
+                <TwIcon icon={arrowDiagonalSmallIcon} size={24} />
+              </button>
+              <button
+                type="button"
+                aria-label="Create new email"
+                title="Create new email"
+                onClick={() => {
+                  setCreateEmailPopoverOpen(true);
+                }}
+                style={protoDockPrimaryButtonStyle()}
+              >
+                + New
+              </button>
+            </Flex>
+          </Flex>
+          <Box style={{ marginTop: 10 }}>
+            <Subtext
+              size="small"
+              style={{ margin: 0, display: 'block', color: TW.blackPepper400, fontWeight: 600 }}
+            >
+              Job Requisition
+            </Subtext>
+            <BodyText
+              size="small"
+              style={{ margin: '6px 0 0', fontWeight: 600, color: TW.blackPepper600, display: 'block' }}
+            >
+              JR-00073 Marketing Coordinator
+            </BodyText>
+          </Box>
+          <Flex marginTop="s" paddingTop="xs" style={{ borderBottom: `1px solid ${TWEMAIL_DIVIDER}` }}>
+            {audienceTab('all', 'All')}
+            {audienceTab('candidate', 'Candidate')}
+            {audienceTab('agency', 'Agency')}
+          </Flex>
+          {createEmailPopoverOpen ? (
+            <>
+              <button
+                type="button"
+                aria-label="Dismiss create email menu"
+                onClick={() => setCreateEmailPopoverOpen(false)}
+                style={{
+                  position: 'fixed',
+                  inset: 0,
+                  zIndex: 8,
+                  border: 'none',
+                  background: 'transparent',
+                  cursor: 'default',
+                }}
+              />
+              <Box
+                style={{
+                  position: 'absolute',
+                  top: 44,
+                  right: 8,
+                  zIndex: 9,
+                  width: 292,
+                  filter: 'drop-shadow(0 8px 24px rgba(11,31,66,0.18))',
+                }}
+              >
+                <Card
+                  padding="m"
+                  style={{
+                    borderRadius: 8,
+                    border: `1px solid ${TWEMAIL_DIVIDER}`,
+                    backgroundColor: TW.frenchVanilla100,
+                  }}
+                >
+                  <Flex justifyContent="space-between" alignItems="flex-start" marginBottom="s">
+                    <Heading size="small" style={{ margin: 0, fontSize: 16, fontWeight: 700, color: TW.blackPepper600 }}>
+                      Create a New Email
+                    </Heading>
+                    <button
+                      type="button"
+                      aria-label="Close"
+                      onClick={() => setCreateEmailPopoverOpen(false)}
+                      style={protoDockPopoverCloseButtonStyle()}
+                    >
+                      <TwIcon icon={xIcon} size={18} />
+                    </button>
+                  </Flex>
+                  <BodyText size="small" style={{ margin: '0 0 16px', lineHeight: 1.5, color: TW.blackPepper500 }}>
+                    Send a new email to this candidate.
+                  </BodyText>
+                  <button type="button" style={protoDockPrimaryButtonStyle(true)} onClick={launchCompose}>
+                    Send New Email
+                  </button>
+                </Card>
+              </Box>
+            </>
+          ) : null}
+        </Box>
+      )}
 
       <Flex flex={1} style={{ minHeight: 0, overflow: 'hidden' }}>
         {demoEmptyInbox ? (
@@ -2443,16 +2616,19 @@ function MailCollaborationSurface({
               flex={1}
               style={{
                 minWidth: 0,
+                minHeight: 0,
+                alignSelf: 'stretch',
                 display: 'flex',
                 flexDirection: 'column',
-                padding: '12px 12px 12px 0',
+                padding: '0 12px 12px 0',
                 boxSizing: 'border-box',
               }}
             >
               <Box
                 style={{
-                  flex: 1,
+                  flex: '1 1 0%',
                   minHeight: 0,
+                  width: '100%',
                   display: 'flex',
                   flexDirection: 'column',
                   backgroundColor: TW.frenchVanilla100,
@@ -3624,10 +3800,8 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
             position: 'relative',
             display: 'flex',
             flexDirection: 'column',
-            /** Fixed `CommunicationDock` does not consume flex width — inset profile so cards clear rail + gutter. */
-            paddingRight: panelOpen
-              ? expandedMailPanelPx + COLLAB_RAIL_W + COLLAB_DOCK_CONTENT_GUTTER_PX
-              : COLLAB_RAIL_W + COLLAB_DOCK_CONTENT_GUTTER_PX,
+            /** Collapsed: inset for narrow rail + gutter. Expanded: no inset — `CommunicationDock` overlays cards. */
+            paddingRight: panelOpen ? 0 : COLLAB_RAIL_W + COLLAB_DOCK_CONTENT_GUTTER_PX,
             backgroundColor: PROFILE_COLUMN_CANVAS_BG,
             transition: 'padding-right 0.32s cubic-bezier(0.2, 0.8, 0.2, 1)',
             boxSizing: 'border-box',
