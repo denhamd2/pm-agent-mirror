@@ -1,0 +1,27 @@
+{
+  "fileKey": "HpAOHGAeXBORpHnyhsCMja",
+  "instructions": "Call Figma MCP get_design_context for each nodeId when quota allows.",
+  "nodeIds": [
+    "208:10116",
+    "6887:20294",
+    "6887:11499",
+    "6887:11657",
+    "6887:13469",
+    "6887:14115",
+    "6887:15086",
+    "6887:15547",
+    "6887:16008",
+    "6887:18369",
+    "6887:18849",
+    "6887:19329",
+    "6887:20380",
+    "6887:20754",
+    "6887:21131",
+    "6887:21505",
+    "6913:20249",
+    "6971:21750",
+    "7063:28486",
+    "7064:12437"
+  ],
+  "mcpStatus": "Rate-limited (Figma View seat) during extraction run \u2014 no design-context payloads committed."
+}

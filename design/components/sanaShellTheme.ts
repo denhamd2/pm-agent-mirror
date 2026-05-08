@@ -107,8 +107,8 @@ export const SANA_COMM_COMPOSER_RADIUS_PX = 999;
 /** Sliding panel inner surface (white card field) */
 export const SANA_COMM_PANEL_SURFACE = '#FFFFFF';
 
-/** Active channel tile on the narrow rail — light blue square (Sana reference) */
-export const SANA_COMM_RAIL_ACTIVE_BG = '#E3F2FD';
+/** Active channel tile on the narrow rail — light blue square (Figma Overview ~#D6E7FF) */
+export const SANA_COMM_RAIL_ACTIVE_BG = '#D6E7FD';
 
 /** Rail active tile icon / focus accent */
 export const SANA_COMM_RAIL_ACTIVE_ICON = SANA_LINK_ACCENT;

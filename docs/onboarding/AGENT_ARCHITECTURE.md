@@ -48,10 +48,10 @@
 ═══════════════════════════════════════════════════════════════════════════
 
 ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-│    Notion    │  │    Figma     │  │    Slack     │  │   Jira/GHE   │
-│              │  │              │  │              │  │              │
-│ Search, KB,  │  │ get_design_  │  │ Send, React, │  │ Create epics,│
-│ Tasks, Docs  │  │ context, Code│  │ Search msgs  │  │ stories, PRs │
+│   Salomon /  │  │    Figma     │  │    Slack     │  │   Jira/GHE   │
+│ internal KB  │  │              │  │              │  │              │
+│ (when conf.) │  │ get_design_  │  │ Send, React, │  │ Create epics,│
+│              │  │ context, Code│  │ Search msgs  │  │ stories, PRs │
 └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘
 
 ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
@@ -101,7 +101,7 @@
    ───────────────────
    /inbox/message.txt  →  Slack Responder (500)  →  Auto-activates
                               ↓
-                         Search Notion/Confluence/Jira
+                         Search Confluence / Jira / internal knowledge (when configured)
                               ↓
                          Draft contextual reply
 

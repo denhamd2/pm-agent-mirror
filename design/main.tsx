@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Global, css } from '@emotion/react';
 import { CanvasProvider } from '@workday/canvas-kit-react/common';
@@ -10,7 +10,7 @@ import { GccRecruiterDashboard } from './gcc-recruiter-dashboard';
 import { GccCandidateGridSearch } from './gcc-candidate-grid-search';
 import { RecruiterHubGenUIV95 } from './recruiter-hub-genui-v95';
 import { IndiaNativeWhatsappV91 } from './india-native-whatsapp-v91';
-import { IndiaCandidateProfileEmailV92 } from './india-candidate-profile-email-v92';
+import { TwoWayEmailPrototype } from './2-way-email-prototype';
 import { InterviewIntelligenceAgentV96 } from './interview-intelligence-agent-v96';
 import AISystemOfRecordV97 from './ai-system-of-record-v97';
 import { CanvasKitTest } from './components/CanvasKitTest';
@@ -18,6 +18,7 @@ import PMAgentDashboard from './pm-agent-dashboard';
 import CreateOfferSsaV01 from './create-offer-ssa-v01';
 import CreateJrSsaV01 from './create-jr-ssa-v01';
 import E2eRecruitingTalentAcqV01 from './e2e-recruiting-talent-acq-v01';
+import E2eTwoWayEmailRecruitingV01 from './e2e-2way-email-recruiting-v01';
 const AvgTimeToHireDashboard = React.lazy(() => import('./avg-time-to-hire-dashboard').then((m) => ({ default: m.AvgTimeToHireDashboard })));
 const PositionsOpenVsFilledDashboard = React.lazy(() => import('./positions-open-vs-filled-dashboard').then((m) => ({ default: m.PositionsOpenVsFilledDashboard })));
 const ValueRealizationMetrics = React.lazy(() => import('./value-realization-metrics').then((m) => ({ default: m.ValueRealizationMetrics })));
@@ -72,6 +73,8 @@ const PROTOTYPE_SLUGS = [
   'candidate-grid-v84',
   'recruiter-hub-genui-v95',
   'india-native-whatsapp-v91',
+  '2-way-email-prototype',
+  'conversational-email-prototype',
   'india-candidate-profile-email-v92',
   'interview-intelligence-agent-v96',
   'ai-system-of-record-v97',
@@ -91,12 +94,16 @@ const PROTOTYPE_SLUGS = [
   'create-offer-ssa-v01',
   'create-jr-ssa-v01',
   'e2e-recruiting-talent-acq-v01',
+  'e2e-2way-email-recruiting-v01',
   'time-to-fill-recruiter',
 ] as const;
 
 type PrototypeSlug = (typeof PROTOTYPE_SLUGS)[number];
 
 const SLUG_SET: ReadonlySet<string> = new Set(PROTOTYPE_SLUGS);
+
+/** Opening `/` with no hash lands here (bookmark + PM demos). */
+const DEFAULT_PROTOTYPE_SLUG = '2-way-email-prototype' satisfies PrototypeSlug;
 
 /**
  * Resolve the active prototype from the current URL.
@@ -119,11 +126,23 @@ function prototypeFromLocation(): PrototypeSlug {
     if (pathname.endsWith(slug)) return slug;
   }
 
-  return 'gcc-recruiter-dashboard';
+  return DEFAULT_PROTOTYPE_SLUG;
 }
 
 function AppRoot() {
   const [route, setRoute] = useState(prototypeFromLocation);
+
+  useLayoutEffect(() => {
+    const raw = window.location.hash.replace(/^#\/?/, '').split('?')[0];
+    if (!raw) {
+      window.history.replaceState(
+        null,
+        '',
+        `${window.location.pathname}${window.location.search}#${DEFAULT_PROTOTYPE_SLUG}`
+      );
+    }
+  }, []);
+
   useEffect(() => {
     const sync = () => setRoute(prototypeFromLocation());
     window.addEventListener('popstate', sync);
@@ -192,6 +211,9 @@ function AppRoot() {
   if (route === 'e2e-recruiting-talent-acq-v01') {
     return <E2eRecruitingTalentAcqV01 />;
   }
+  if (route === 'e2e-2way-email-recruiting-v01') {
+    return <E2eTwoWayEmailRecruitingV01 />;
+  }
   if (route === 'ai-system-of-record-v97') {
     return <AISystemOfRecordV97 />;
   }
@@ -204,14 +226,17 @@ function AppRoot() {
   if (route === 'india-native-whatsapp-v91') {
     return <IndiaNativeWhatsappV91 />;
   }
-  if (route === 'india-candidate-profile-email-v92') {
-    return <IndiaCandidateProfileEmailV92 />;
+  if (route === 'conversational-email-prototype') {
+    return <TwoWayEmailPrototype alwaysStartWithOnboarding />;
+  }
+  if (route === '2-way-email-prototype' || route === 'india-candidate-profile-email-v92') {
+    return <TwoWayEmailPrototype />;
   }
   if (route === 'candidate-grid-v84') {
     return <GccCandidateGridSearch />;
   }
   if (route === 'gcc-recruiter-dashboard') return <GccRecruiterDashboard />;
-  return <GccRecruiterDashboard />;
+  return <TwoWayEmailPrototype />;
 }
 
 const FIGMA_CAPTURE_SCRIPT_SRC =

@@ -38,8 +38,7 @@ Status: 🚀 OPERATIONAL AND READY FOR MISSION ASSIGNMENTS
    scratchpad.md              (268B)  - Thinking workspace
    COMPLETION_SUMMARY.txt     (this file)
 
-✅ MCP INTEGRATION (12 MCPs fully mapped)
-   ✓ Notion           - Knowledge base, tasks, roadmaps
+✅ MCP INTEGRATION (see `000-master-orchestrator.mdc` for canonical roster)
    ✓ Figma            - Design integration, Code Connect
    ✓ Slack            - Team communication
    ✓ Jira/GHE         - Issue tracking, version control
@@ -61,7 +60,7 @@ Status: 🚀 OPERATIONAL AND READY FOR MISSION ASSIGNMENTS
 
 📊 Market Intelligence (Agent 100)
    • Six-Hats thinking framework for comprehensive analysis
-   • Notion knowledge search for context
+   • Repo files and internal knowledge search for context (when MCPs enabled)
    • Structured reports with strategic recommendations
 
 📝 Requirements Management (Agent 200)
@@ -101,7 +100,7 @@ Status: 🚀 OPERATIONAL AND READY FOR MISSION ASSIGNMENTS
 ✅ Sequential Thinking Verification (5 thoughts completed)
    Thought 1: Folder structure and files verified
    Thought 2: MDC rule architecture confirmed
-   Thought 3: All 12 MCPs integration validated
+   Thought 3: MCP roster validated against `000-master-orchestrator.mdc`
    Thought 4: Workflow coherence checked
    Thought 5: System ready for mission
 
@@ -120,7 +119,7 @@ Status: 🚀 OPERATIONAL AND READY FOR MISSION ASSIGNMENTS
    • Total lines: 2,244+ lines
    • Total size: 140KB
    • Agent count: 7 specialized agents
-   • MCP coverage: 12/12 (100%)
+   • MCP coverage: see orchestrator roster (not a fixed “12”)
    • Lifecycle coverage: 100%
 
 ═══════════════════════════════════════════════════════════════════════════
@@ -256,7 +255,7 @@ Week 2:
    • Always-on vs. triggered agents
 
 ✨ Comprehensive MCP Integration
-   • All 12 MCPs mapped and ready
+   • Configured MCPs mapped per orchestrator
    • Workday-specific validation and standards
    • Knowledge base search across platforms
    • Design-to-code automation
@@ -284,8 +283,8 @@ Week 2:
 ═══════════════════════════════════════════════════════════════════════════
 
 The Product Manager Agent workspace is fully operational. All 7 agents are
-standing by, ready to coordinate your product management workflows across
-12 integrated MCPs.
+standing by, ready to coordinate your product management workflows with the
+MCP roster configured in **000-master-orchestrator.mdc**.
 
 Start with: "What's the status?"
 

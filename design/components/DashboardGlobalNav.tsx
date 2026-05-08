@@ -5,7 +5,7 @@ import { colors } from '@workday/canvas-kit-react/tokens';
 const PRIMARY_NAV_ITEMS = [
   { id: 'morning-roundup', label: 'Morning Roundup', hrefType: 'pm-tab' },
   { id: 'metrics', label: 'Value Realization Metrics', hrefType: 'metrics-home' },
-  { id: 'prototypes', label: 'My Saved Prototypes', hrefType: 'pm-tab' },
+  { id: 'prototypes', label: 'Prototypes', hrefType: 'pm-tab' },
   { id: 'agent-flow', label: 'Agent Flow', hrefType: 'pm-tab' },
   { id: 'data-sources', label: 'Data Sources', hrefType: 'pm-tab' },
   { id: 'design-system', label: 'Design System', hrefType: 'pm-tab' },

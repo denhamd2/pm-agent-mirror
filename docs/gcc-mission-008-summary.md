@@ -36,7 +36,6 @@ Successfully executed the complete GCC E2E pipeline from fresh PMF research thro
 
 ### Step 3: PRD Generation (200-prd-writer)
 - **PRD Document:** `docs/prds/gcc-nationalization-compliance-prd.md`
-- **Notion:** https://www.notion.so/32708e245ade8178be79d61cb8537854
 - **Confluence:** https://confluence.workday.com/pages/viewpage.action?pageId=4328094293
 
 **Feature Scope:**
@@ -146,7 +145,6 @@ Successfully executed the complete GCC E2E pipeline from fresh PMF research thro
 | **Research** | research/GCC/thematic-analysis/2026-03-18-GCC-PMF-Analysis-v2.md | ✅ Complete |
 | **Slide Deck** | ~/Downloads/GCC_Recruiting_PMF_Roadmap_v32.pptx | ✅ Complete |
 | **PRD (Markdown)** | docs/prds/gcc-nationalization-compliance-prd.md | ✅ Complete |
-| **PRD (Notion)** | https://www.notion.so/32708e245ade8178be79d61cb8537854 | ✅ Published |
 | **PRD (Confluence)** | https://confluence.workday.com/pages/viewpage.action?pageId=4328094293 | ✅ Published |
 | **Prototype** | design/gcc-nationalization-compliance.tsx (localhost:5177) | ✅ Complete |
 | **Copy Review** | design/gcc-nationalization-compliance-copy.md | ⚠️ Legal review required |
@@ -160,7 +158,7 @@ Successfully executed the complete GCC E2E pipeline from fresh PMF research thro
 
 ✅ **Full E2E pipeline executed:** 120 → HITL → 200 → 320 → 319 → 330 → 400  
 ✅ **Fresh research:** New recommendation different from MISSION-006 (Interview Scheduling) and MISSION-007 (WhatsApp)  
-✅ **PRD published:** Both Notion and Confluence  
+✅ **PRD published:** Confluence summary (canonical PRD in repo markdown)  
 ✅ **High-fidelity prototype:** Canvas Kit v11 with Workday design patterns  
 ✅ **Figma capture:** Design collaboration enabled  
 ✅ **Complete backlog:** Story map + 13 Jira stories with BDD scenarios  
@@ -172,7 +170,7 @@ Successfully executed the complete GCC E2E pipeline from fresh PMF research thro
 
 ### Immediate (Required)
 - [ ] **060-legal-advisor:** Review flagged compliance copy (status labels, government submission language, tooltip copy)
-- [ ] **Stakeholder review:** PRD in Notion/Confluence
+- [ ] **Stakeholder review:** PRD in Confluence / git markdown
 - [ ] **Design review:** Figma file review and collaboration
 
 ### Sprint Planning

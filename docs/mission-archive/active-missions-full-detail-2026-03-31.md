@@ -267,7 +267,6 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 - Slide Deck: ~/Downloads/GCC_Recruiting_PMF_Roadmap_v34.pptx (36 slides)
 - PRD: docs/prds/gcc-whatsapp-integration-prd.md
 - Design Brief: design/gcc-whatsapp-integration-design-brief.md
-- Notion: https://www.notion.so/32708e245ade8195a116d6ba10e8b36f
 - Confluence: https://confluence.workday.com/pages/viewpage.action?pageId=4327734254
 - Prototype: design/gcc-whatsapp-campaign.tsx (localhost:5184)
 - Compliance Review: design/gcc-whatsapp-integration-compliance-review.md (060-legal-advisor)
@@ -277,7 +276,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Pipeline Steps:**
 - [x] 1. 120: Fresh PMF analysis + slide deck (v34 complete)
 - [x] 2. HITL: PM selected #5 - WhatsApp Integration
-- [x] 3. 200: PRD + Notion + Confluence
+- [x] 3. 200: PRD (markdown) + Confluence
 - [x] 4. 315: Design Brief
 - [x] 5. 320: Prototype (channel selector, recipient table, consent warning, template selector, send flow)
 - [x] 6. 319: Copy review (design/gcc-whatsapp-integration-copy-review.md)
@@ -299,7 +298,6 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 - Research: research/GCC/thematic-analysis/2026-03-18-GCC-PMF-Analysis-v3.md
 - Slide Deck: ~/Downloads/GCC_Recruiting_PMF_Roadmap_v33.pptx (39 slides)
 - PRD: docs/prds/gcc-whatsapp-integration-prd.md
-- Notion: https://www.notion.so/32708e245ade818cbacdc39c56a0d189
 - Confluence: https://confluence.workday.com/display/~david.denham/WhatsApp+Candidate+Communication+for+GCC+%282026R2%29+-+PRD+Summary
 - Prototype: design/gcc-whatsapp-campaign.tsx (localhost:5183)
 - Figma: https://www.figma.com/design/k07y8Gfy0YbRxm30p4xJbO (GCC WhatsApp Campaign - MISSION-009)
@@ -309,7 +307,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Pipeline Steps:**
 - [x] 1. 120: Fresh PMF analysis + slide deck (v33 complete)
 - [x] 2. HITL: PM selected #5 - WhatsApp Integration
-- [x] 3. 200: PRD + Notion + Confluence (complete)
+- [x] 3. 200: PRD (markdown) + Confluence (complete)
 - [x] 4. 320: Prototype (complete - localhost:5183, legal review by 060 complete)
 - [x] 5. 319: Copy review (complete - 12 issues found)
 - [x] 6. 330: Figma capture (complete - https://www.figma.com/design/k07y8Gfy0YbRxm30p4xJbO)
@@ -362,7 +360,6 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 - Slide spec: `docs/decks/specs/slides_spec_v43.json`
 - PRD (markdown): `docs/prds/gcc-whatsapp-2way-communication-prd.md`
 - Confluence (summary): https://confluence.workday.com/pages/viewpage.action?pageId=4349332625
-- Notion (full PRD): *pending — Notion MCP requires interactive `mcp_auth` in Cursor; publish from markdown after auth*
 - Design Brief: `design/gcc-whatsapp-2way-communication-design-brief.md`
 - Prototype: `design/gcc-whatsapp-2way-communication.tsx` — dev server **`http://localhost:5199/`**
 - Compliance (060 pre-review): Medium risk; Legal sign-off required for production copy
@@ -376,7 +373,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Next Actions:**
 - [x] Step 1: 120 - Fresh PMF analysis + slide deck v43
 - [x] Step 2: HITL - PM selected #4 (WhatsApp 2-way communication from candidate profile)
-- [x] Step 3: 200 - PRD saved + Confluence summary published (Notion blocked on MCP auth)
+- [x] Step 3: 200 - PRD saved + Confluence summary published (canonical markdown in repo)
 - [x] Step 4: 315 - Design Brief complete (Pattern B + CommunicationDock + 1-on-1 scope)
 - [x] Step 5: 320 - Prototype built (1-on-1 messaging with templates, consent, session window)
 - [x] Step 6: 319 - Copy review complete (18 issues flagged; 6 legal-sensitive items for 060)
@@ -439,7 +436,6 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 - Slide spec: `docs/decks/specs/slides_spec_v45.json`
 - Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v45.pptx` (40 slides incl. auto-agenda)
 - PRD (Git): `docs/prds/gcc-whatsapp-omnichannel-candidate-engagement-prd.md`
-- PRD (Notion): **Not published in agent session** – `plugin-notion-workspace-notion` exposed no callable page-create tool in MCP filesystem (auth-only descriptor). **Action:** Publish full PRD to Notion from the Git markdown via Cursor Notion MCP when connected; paste URL here.
 - PRD (Confluence summary): https://confluence.workday.com/pages/viewpage.action?pageId=4349989128
 - Red Team PRD Review: `docs/prds/gcc-whatsapp-omnichannel-engagement-prd-red-team-review.md` (3 critical risks, 5 important issues found)
 - Design Brief: `design/gcc-whatsapp-omnichannel-engagement-v45-design-brief.md` (**Final Verdict: APPROVED**)
@@ -458,7 +454,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Next Actions:**
 - [x] Step 1: 120 - Fresh PMF analysis + 105 user research + slide deck v45
 - [x] Step 2: HITL - PM selected #3 (WhatsApp and omnichannel candidate engagement)
-- [x] Step 3: 200 - Create PRD for selected recommendation (Git + Confluence summary; Notion pending MCP)
+- [x] Step 3: 200 - Create PRD for selected recommendation (Git + Confluence summary)
 - [x] Step 3a: 080 - Red Team review PRD (3 critical risks, 5 important issues)
 - [x] Step 3b: 200 revision to address Red Team feedback (SMS geography, 2025R1 campaigns, portfolio relationship, data classification, phone resolution)
 - [x] Step 4: 315 - Design Brief (multi-pass PASS 1-2 → 319 copy review → PASS 3-4 → **Final Verdict: APPROVED**)
@@ -487,7 +483,6 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 - Slide deck: `~/Downloads/GCC_Recruiting_PMF_Roadmap_v46.pptx` (48 content slides)
 - PRD (Git): `docs/prds/gcc-candidate-grid-redesign-v46-prd.md`
 - PRD (Confluence summary): https://confluence.workday.com/display/~david.denham/Candidate+Grid+Redesign+2026R2+PRD+Summary
-- PRD (Notion): **Not published** – `plugin-notion-workspace-notion` MCP requires auth; publish from Git markdown when connected
 - Red Team PRD Review: `docs/prds/gcc-candidate-grid-redesign-v46-prd-red-team-review.md` (5 critical risks, 5 important issues; 200 revision completed)
 - Design Brief: `design/gcc-candidate-grid-redesign-v46-design-brief.md` (Final Verdict: APPROVED)
 - Prototype: `design/gcc-candidate-grid-v46.tsx` (http://localhost:5199/#/gcc-candidate-grid-v46; fixed: import mismatch + FormSelect uses native HTML select for Canvas Kit v14 compatibility)
@@ -502,7 +497,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 **Next Actions:**
 - [x] Step 1: 120 - Fresh PMF analysis + 105 user research + slide deck v46
 - [x] Step 2: HITL - PM selected #5 (Candidate grid redesign)
-- [x] Step 3: 200 - Create PRD for selected recommendation (Git + Confluence summary; Notion pending MCP)
+- [x] Step 3: 200 - Create PRD for selected recommendation (Git + Confluence summary)
 - [x] Step 3a: 080 - Red Team review PRD
 - [x] Step 3b: 200 revision to address Red Team feedback (12 critical fixes applied)
 - [x] Step 4: 315 - Design Brief (Final Verdict: APPROVED)
@@ -1014,7 +1009,7 @@ Extracted from `MISSION_LOG.md` on **31 March 2026** so the live log stays under
 - **Brainstorm analysis:** `research/GCC/brainstorm-analysis/2026-03-27-brainstorm-analysis-GCC-E2E-027.md` (Fresh pass attestation; **GCC-E2E-027**; scratch: `research/GCC/brainstorm-analysis/_scratch-brainstorm-sources-GCC-E2E-027.md`; source: `research/GCC/brainstorm-sessions/P&T Idea Results Dashboard_03_11_2026 9_59 AM.xlsx`) ✅
 **Artifacts (Step 2.75 — 107):**
 - **Win-loss analysis:** `research/GCC/win-loss-analysis/2026-03-27-win-loss-analysis-GCC-E2E-027.md` (Fresh pass attestation; **GCC-E2E-027**; scratch: `research/GCC/win-loss-analysis/_scratch-winloss-sources-GCC-E2E-027.md`; source: `research/GCC/win-loss-interviews/Opportunity Detail.xlsx` — 598 rows; **Gulf GCC row count after filter: 0**; Microsoft **GCC High** row noted as non-Gulf) ✅
-**Artifacts (remaining pipeline):** **105 (Step 2a):** Pending | **106 (Step 2.5, optional):** Complete | **107 (Step 2.75, optional):** Complete | Research **@pmf-analyst**: Pending | Slide Deck: Pending | **PRD (markdown only):** Pending | Red Team PRD Review: Pending | Design Brief (incl. Final Verdict): Pending | Notion (optional): Pending | Prototype: Pending | Figma: Pending | Red Team Story Map Review: Pending | Jira Epic: Pending
+**Artifacts (remaining pipeline):** **105 (Step 2a):** Pending | **106 (Step 2.5, optional):** Complete | **107 (Step 2.75, optional):** Complete | Research **@pmf-analyst**: Pending | Slide Deck: Pending | **PRD (markdown only):** Pending | Red Team PRD Review: Pending | Design Brief (incl. Final Verdict): Pending | Prototype: Pending | Figma: Pending | Red Team Story Map Review: Pending | Jira Epic: Pending
 
 ## Mission: GCC-E2E-032 - GCC Research to Design Pipeline
 **Status:** In Progress

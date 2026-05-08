@@ -1,31 +1,20 @@
 # Product Manager Agent Workspace
 
 ## Overview
-This is a modular, agentic workspace for Senior Product Managers built for Cursor v2.6. It orchestrates 12 active MCPs to automate and enhance product management workflows.
+This is a modular, agentic workspace for Senior Product Managers built for Cursor v2.6. It orchestrates multiple MCPs (see `.cursor/rules/000-master-orchestrator.mdc` for the canonical roster) to automate and enhance product management workflows.
 
 ## Capabilities
 
 ### 🎯 Core Functions
-- **Market Intelligence**: Analyze research using Notion search and Six-Hats thinking
-- **PRD Creation**: Generate and publish product requirements to Confluence
+- **Market Intelligence**: Analyze research using Six-Hats thinking, workspace files, and internal knowledge search where configured
+- **PRD Creation**: Generate product requirements as markdown in `docs/prds/` and publish summaries to Confluence when applicable
 - **Execution Planning**: Create Jira tickets and GitHub PRs using Jeff Patton story mapping
 - **Design Integration**: Leverage Figma and Canvas Kit for UI work
 - **Presentation Generation**: Create branded Workday slide decks automatically
 - **Communication**: Draft Slack responses and triage messages
 
-### 🔌 Active MCPs (12)
-1. **Notion** - Knowledge base and task management
-2. **Figma** - Design integration and Code Connect
-3. **Slack** - Team communication
-4. **Jira/GHE** - Issue tracking and version control
-5. **Confluence** - Documentation
-6. **Deployment Agent** - Workday-specific validations
-7. **Canvas Kit** - Workday UI component library
-8. **Slide Deck** - Branded presentation generation
-9. **Tableau** - Data visualization
-10. **Sequential Thinking** - Structured analysis
-11. **Six Hats Thinking** - Decision frameworks
-12. **Lightdash** - Metrics and analytics
+### 🔌 MCPs
+The **Master Orchestrator** lists the active MCP roster (currently **21** integrated servers). Unsupported or optional plugins are not documented here—refer to `000-master-orchestrator.mdc` for names, purposes, and routing.
 
 ## Folder Structure
 
@@ -114,4 +103,4 @@ Check `MISSION_LOG.md` for current project status, decisions, and handoffs.
 
 ---
 
-**Built for Cursor v2.6** | **Powered by 12 MCPs** | **Optimized for Workday PMs**
+**Built for Cursor v2.6** | **MCP roster: see `000-master-orchestrator.mdc`** | **Optimized for Workday PMs**

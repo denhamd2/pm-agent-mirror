@@ -81,7 +81,7 @@ Your 21 active MCPs:
 20. **X2 MCP** (`x2-mcp`) - Local MCP bridging Cursor and X2 Chrome extension for SUV DevOps lifecycle: branch management (`createSuvBranch`, `pushChanges`, `getBranches`), audits (`runAudits`, `checkBranchAudits`), impact analysis (`runImpactAnalysis`, `getImpactAnalysis`), code reviews (`createCodeReview`), SUV visibility (`get_all_active_suvs_for_user`, `get_active_suv_tabs_for_user`), and Jira linking (`linkJirasToBranch`). Complements XO MCP: X2 handles DevOps (branch/audit/push/IA), XO MCP handles code generation. Requires X2 Chrome extension with Workbench Sidecar enabled; server at `http://localhost:12050/mcp`; repo at `~/code/x2-mcp`.
 21. **Playwright MCP** (`user-playwright-mcp`) - Browser automation (22 tools): navigation, accessibility-tree snapshots (`browser_snapshot`), form fills, clicks, console and network inspection, screenshots. Driven exclusively by the `@qa-engineer` subagent via the `suv-smoke-test` skill for post-write UI smoke checks on SUV Tier 2 writes. Authentication via a one-time storageState handshake (`.playwright/storageState.json`; gitignored). Dev SUV only; never used for production writes or persist-button clicks.
 
-**Not integrated** (available but no workflow wiring): `plugin-linear-linear`, `plugin-notion-workspace-notion`, `lightdash-docs` (public docs only)
+**Not integrated** (available but no workflow wiring): `lightdash-docs` (public docs only)
 
 ## Workflow Patterns
 

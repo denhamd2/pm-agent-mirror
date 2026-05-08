@@ -46,7 +46,7 @@ Job boards: verify **Broadbean** coverage before recommending native build (**01
 
 ## Battle card quick reference (UK)
 
-**To be expanded** after Notion objection mining + matrix validation.
+**To be expanded** after internal objection mining (Slack/CRM/Salomon) + matrix validation.
 
 ---
 

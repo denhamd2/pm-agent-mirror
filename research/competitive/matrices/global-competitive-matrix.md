@@ -250,7 +250,7 @@ Workday competes as a unified HCM platform with strength in enterprise complianc
 - **Case Study**: Shell migrated from SAP SuccessFactors to Workday, achieved 30% faster time-to-hire, 20% cost reduction (Workday customer story)
 - **Analyst Quote**: "Workday's modern architecture and unified platform approach position it ahead of SAP's legacy SuccessFactors in ease of use and agility" - Josh Bersin, HR analyst (2026 report)
 
-*[Agent 101: After generating battle cards from matrix data + Notion customer objection search, expand battle card sections for all 6 competitors]*
+*[Agent 101: After generating battle cards from matrix data and validating customer objection intel from internal sources, expand battle card sections for all 6 competitors]*
 
 ---
 

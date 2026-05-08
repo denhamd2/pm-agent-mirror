@@ -234,7 +234,7 @@ Workday (org level - provisioning, skim groups)
    - Monitor #bug-report channel
    - Spin up virtual environment
    - Test and validate if it's a bug
-   - Create Linear issue
+   - Create Jira issue (or backlog item) for follow-up
    - Attempt fix automatically
    - Engineering validates fix
 

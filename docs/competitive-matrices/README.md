@@ -144,7 +144,7 @@ No native support or viable workaround exists.
 ### Battle Cards (Pattern 2)
 Agent 101 generates battle cards from matrix data:
 - Read competitive matrix markdown file for competitor overview
-- Search Notion for recent customer objections vs. this competitor
+- Search Salomon Internal Knowledge, Slack archives, or CRM notes for recent customer objections vs. this competitor (when available)
 - Extract Battle Card Quick Reference section from matrix
 - Generate slide deck with positioning and objection handling
 
@@ -206,7 +206,7 @@ Regional matrices inform local go-to-market:
 ### Collaboration
 - Matrices are version-controlled markdown files in git (accessible to all with repo access)
 - Sales, implementation, and product teams all reference matrices
-- Share matrix file paths in Slack/Notion for team awareness
+- Share matrix file paths in Slack or Confluence for team awareness
 - Generate battle card slide decks from matrices for sales enablement
 - Link to matrices from PRDs and roadmap documents for competitive context
 

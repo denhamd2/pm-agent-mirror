@@ -15,7 +15,8 @@
     "india-native-whatsapp-v91.tsx",
     "recruiter-hub-genui-v95.tsx",
     "interview-intelligence-agent-v96.tsx",
-    "ai-system-of-record-v97.tsx"
+    "ai-system-of-record-v97.tsx",
+    "2-way-email-prototype.tsx"
   ],
   "exclude": [
     "main.tsx",

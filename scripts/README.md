@@ -1,6 +1,6 @@
 # Scripts
 
-Utility scripts for this workspace. Deck-related Python generators that used to live here are archived (see below).
+Utility scripts for this workspace.
 
 ## Repo-root helpers (run from repository root)
 
@@ -13,30 +13,10 @@ Utility scripts for this workspace. Deck-related Python generators that used to 
 | [`convert_pdfs.py`](convert_pdfs.py), [`run_morning_roundup.py`](run_morning_roundup.py) | Small utilities. |
 | [`update_mission_log.py`](update_mission_log.py) | One-off MISSION_LOG line replace; edit in-script before running. |
 | [`test_pptx.py`](test_pptx.py) | Quick PPTX sanity check. |
+| [`figma_screen_inventory.py`](figma_screen_inventory.py) | Parses Figma MCP `get_metadata` XML (plain or `.gz`), deduplicates direct-child artboards by name + size, writes `screen-inventory.md`, JSON, and per-screen stubs. Used by [`docs/figma-extraction-2way-email-2024/`](../docs/figma-extraction-2way-email-2024/README.md). |
 
-## Archived slide spec builders (`archive/`)
+## Historical one-off slide generators (removed)
 
-Nineteen one-off Python scripts were used to emit Slide Deck MCP JSON (`slides_spec_v*.json`) for specific missions (GCC v30 typography passes, E2E runs, France PMF v74, India PMF v75–v82, and related iterations). They were **not** a maintained product: each file hard-coded slide dicts for that engagement.
+One-off Python builders that emitted mission-specific `slides_spec_v*.json` files lived under **`scripts/archive/`** until removed during a repo spring clean. They were never maintained product code. Restore from **git history** if you need to rerun an exact legacy generator; otherwise use **`130-pmf-slide-generator`**, write JSON under [`docs/decks/specs/`](docs/decks/specs/), and invoke the **Slide Deck MCP** (`create_presentation`, etc.).
 
-**Archived files** (historical reference only):
-
-- GCC v30 typography: `build_gcc_slides_spec_v49_v30_typography.py`, `v50`, `v51`, `v52`, `v54`, `v55`, `v57`
-- `build_slides_spec_v61.py`, `build_slides_spec_v64_e2e027.py`, `build_slides_spec_v67.py`, `build_slides_spec_v69_e2e029.py`, `build_slides_spec_v70.py`
-- `build_france_pmf_slides_v74.py`
-- `build_india_pmf_v75.py`, `build_india_pmf_v76.py`, `build_india_pmf_v78.py`, `build_india_pmf_v81.py`, `build_india_pmf_v82_spec.py`, `build_india_pmf_slides_spec.py`
-
-There is **no** consolidated parameterised Python builder in `scripts/`. New full PMF roadmap decks should follow **`.cursor/rules/130-pmf-slide-generator.mdc`**, with the agent writing slide spec JSON and calling the **Slide Deck MCP** (`create_presentation`, etc.). That matches how deck work is done now.
-
-### If you need the old Python helper pattern
-
-See **[`scripts/archive/README.md`](archive/README.md)** (output paths, how to run). Open any file under `scripts/archive/`. Typical structure:
-
-- Small helpers: section dividers (`Section Title` layout), body text boxes (`Title Only` / `Title Only_Alt`), optional `pestel_slide`-style builders, product-implication paragraphs with yellow highlight.
-- A `slides` list of dicts in Slide Deck MCP shape.
-- `json.dump(...)` to `docs/decks/specs/slides_spec_vN.json` (older archive scripts may still target repo root — prefer the specs directory for new work).
-
-**Examples to copy patterns from:** `build_gcc_slides_spec_v57.py`, `build_india_pmf_v82_spec.py`, `build_france_pmf_slides_v74.py`.
-
-### Other scripts (unchanged)
-
-Non-deck utilities remain in `scripts/` (for example cleanup, research export, git hooks, design preview helpers). Only `build_*.py` deck generators were moved to `archive/`.
+Non-deck utilities remain in `scripts/` (cleanup, research export, git hooks, design preview helpers).

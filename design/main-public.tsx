@@ -48,6 +48,7 @@ const PROTOTYPE_LOADERS: Record<PublicPrototypeSlug, Loader> = {
       default: m.InterviewIntelligenceAgentV96,
     })),
   'ai-system-of-record-v97': () => import('./ai-system-of-record-v97'),
+  '2-way-email-prototype': () => import('./2-way-email-prototype'),
 };
 
 const LAZY_PROTOTYPES: Record<PublicPrototypeSlug, React.LazyExoticComponent<AnyComponent>> =

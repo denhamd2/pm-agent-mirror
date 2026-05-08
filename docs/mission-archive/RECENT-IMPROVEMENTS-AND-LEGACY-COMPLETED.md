@@ -100,7 +100,6 @@
 - Research: research/GCC/thematic-analysis/2026-03-19-GCC-PMF-Analysis-v36.md
 - Slide Deck: ~/Downloads/GCC_Recruiting_PMF_Roadmap_v36.pptx (36 slides)
 - PRD: docs/prds/gcc-whatsapp-integration-prd.md
-- Notion: https://www.notion.so/32808e245ade81d2bc68e37258637628
 - Confluence: https://confluence.workday.com/pages/viewpage.action?pageId=4349854233
 - Design Brief: design/gcc-whatsapp-integration-design-brief.md
 - Prototype: design/gcc-whatsapp-integration.tsx (localhost:5186)
@@ -115,7 +114,7 @@
 - ✅ Full E2E pipeline executed (@pmf-analyst → HITL → 200 → 315 → 320 → 319 → 330 → 400)
 - ✅ Fresh research with PM selection from 6 recommendations
 - ✅ Design Brief grounded feature in Workday workflows (collaboration panel, consent status, campaigns)
-- ✅ PRD published to both Notion and Confluence
+- ✅ PRD published to Confluence (canonical PRD in repo markdown)
 - ✅ High-fidelity prototype with Canvas Kit v11
 - ✅ Copy review (12 issues found, recommendations provided)
 - ✅ Figma capture for design collaboration
@@ -126,7 +125,7 @@
 
 ### MISSION-005: GCC E2E Pipeline - Research to Design (Fresh Run) ✅
 **Completed:** Tuesday Mar 18, 2026  
-**Result:** Full pipeline @pmf-analyst → 200 → 420 → 410 → 430 executed. E2E handoff block added to PMF analysis. New slide deck v29, PRD published to Notion + Confluence, prototype running, Figma capture complete.
+**Result:** Full pipeline @pmf-analyst → 200 → 420 → 410 → 430 executed. E2E handoff block added to PMF analysis. New slide deck v29, PRD published to Confluence (canonical PRD in repo markdown), prototype running, Figma capture complete.
 
 ### MISSION-001: Functional Knowledge RAG Initialization ✅
 **Completed:** Tuesday Mar 17, 2026 22:09 PST  

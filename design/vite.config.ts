@@ -28,6 +28,8 @@ function prototypeSpaSlugFallback(): Plugin {
       'candidate-grid-v84',
       'recruiter-hub-genui-v95',
       'india-native-whatsapp-v91',
+      '2-way-email-prototype',
+      'conversational-email-prototype',
       'india-candidate-profile-email-v92',
       'interview-intelligence-agent-v96',
       'ai-system-of-record-v97',
@@ -48,6 +50,7 @@ function prototypeSpaSlugFallback(): Plugin {
       'create-offer-ssa-v01',
       'create-jr-ssa-v01',
       'e2e-recruiting-talent-acq-v01',
+      'e2e-2way-email-recruiting-v01',
       'time-to-fill-recruiter',
     ]);
   return {

@@ -33,7 +33,7 @@ product-manager-agent/
 #### 100-market-intelligence.mdc (5.5KB)
 - **Trigger**: Files in `/research/`, "analyze research"
 - **Method**: Six-Hats thinking framework
-- **MCPs**: Six-Hats, Notion, Sequential Thinking
+- **MCPs**: Six-Hats, Sequential Thinking
 - **Output**: Analysis reports to `/research/`
 
 #### 110-slide-generator.mdc (9.2KB)
@@ -45,13 +45,13 @@ product-manager-agent/
 #### 200-prd-specialist.mdc (11KB)
 - **Trigger**: "create PRD", "write requirements", files in `/docs/prds/`
 - **Method**: Workday PRD template with validation
-- **MCPs**: Deployment Agent, Confluence, Notion
+- **MCPs**: Deployment Agent, Confluence
 - **Output**: PRDs to `/docs/prds/` and Confluence
 
 #### 300-execution-planner.mdc (10KB)
 - **Trigger**: "plan execution", "create tickets", "story mapping"
 - **Method**: Jeff Patton Story Mapping
-- **MCPs**: Jira/GHE, Notion, Confluence
+- **MCPs**: Jira/GHE, Confluence
 - **Output**: Jira epics/stories, story maps to `/docs/prds/`
 
 #### 400-canvas-designer.mdc (10KB)
@@ -63,14 +63,14 @@ product-manager-agent/
 #### 500-slack-responder.mdc (8.3KB)
 - **Always Active**: Auto-responds to files in `/inbox/`
 - **Method**: Contextual reply generation with knowledge search
-- **MCPs**: Slack, Notion, Confluence, Jira/GHE, Deployment Agent
+- **MCPs**: Slack, Confluence, Jira/GHE, Deployment Agent
 - **Output**: Drafted Slack messages
 
 ### 3. MCP Integration (12 MCPs) ✅
 
 | # | MCP | Integrated In | Purpose |
 |---|-----|---------------|---------|
-| 1 | Notion | 100, 200, 300, 500 | Knowledge base, tasks, roadmaps |
+| 1 | Salomon Internal Knowledge | 100, 500 (optional) | Search internal Workday KB when configured |
 | 2 | Figma | 400 | Design integration, Code Connect |
 | 3 | Slack | 500 | Team communication |
 | 4 | Jira/GHE | 300, 500 | Issue tracking, repos |
@@ -106,7 +106,7 @@ product-manager-agent/
 6. **Communication** → Slack Responder (auto-triage)
 
 #### Knowledge Integration
-- Search across Notion, Confluence, Jira
+- Search across Confluence, Jira, and internal knowledge (when MCPs are enabled)
 - Link to existing documentation
 - Validate against Workday standards
 - Code Connect for design-code mappings

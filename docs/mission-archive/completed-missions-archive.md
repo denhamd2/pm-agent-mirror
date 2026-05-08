@@ -27,14 +27,14 @@ Source slice: `git show HEAD:MISSION_LOG.md` lines 1447–1821 (pre-cleanup repo
 **Completed:** Tuesday Mar 18, 2026
 **Pipeline Step:** 8 of 8 (Research → HITL → PRD → Prototype → Copy → Figma → Backlog → Complete)
 **Selected Recommendation:** #1 - Nationalization & Compliance
-**Artifacts:** Research: research/GCC/thematic-analysis/2026-03-18-GCC-PMF-Analysis-v2.md | Slide Deck: ~/Downloads/GCC_Recruiting_PMF_Roadmap_v72.pptx | PRD: docs/prds/gcc-nationalization-compliance-prd.md | Notion: https://www.notion.so/32708e245ade8178be79d61cb8537854 | Confluence: https://confluence.workday.com/pages/viewpage.action?pageId=4328094293 | Prototype: design/gcc-nationalization-compliance.tsx (localhost:5177) | Copy Review: design/gcc-nationalization-compliance-copy.md | Figma: https://www.figma.com/design/xNmMG73Ic5BN20BvFQEF2K | Story Map: docs/story-maps/gcc-nationalization-compliance-story-map.md | Jira Epic: https://jira2.workday.com/browse/HRREC-90883 (13 stories: HRREC-90884 through HRREC-90896)
+**Artifacts:** Research: research/GCC/thematic-analysis/2026-03-18-GCC-PMF-Analysis-v2.md | Slide Deck: ~/Downloads/GCC_Recruiting_PMF_Roadmap_v72.pptx | PRD: docs/prds/gcc-nationalization-compliance-prd.md  | Confluence: https://confluence.workday.com/pages/viewpage.action?pageId=4328094293 | Prototype: design/gcc-nationalization-compliance.tsx (localhost:5177) | Copy Review: design/gcc-nationalization-compliance-copy.md | Figma: https://www.figma.com/design/xNmMG73Ic5BN20BvFQEF2K | Story Map: docs/story-maps/gcc-nationalization-compliance-story-map.md | Jira Epic: https://jira2.workday.com/browse/HRREC-90883 (13 stories: HRREC-90884 through HRREC-90896)
 
 **Objective:** Execute full GCC E2E pipeline with FRESH research from scratch through backlog refinement and Jira story creation.
 
 **Pipeline Steps:**
 - [x] 1. 120: Fresh PMF analysis + slide deck (v32)
 - [x] 2. HITL: PM selected #1 - Nationalization & Compliance
-- [x] 3. 200: PRD + Notion + Confluence
+- [x] 3. 200: PRD (markdown) + Confluence
 - [x] 4. 320: Prototype (design/gcc-nationalization-compliance.tsx)
 - [x] 5. 319: Copy review (flagged legal issues for 060-legal-advisor)
 - [x] 6. 330: Figma capture
@@ -51,7 +51,7 @@ Source slice: `git show HEAD:MISSION_LOG.md` lines 1447–1821 (pre-cleanup repo
 **Success Metrics:**
 - ✅ Full E2E pipeline executed (120 → HITL → 200 → 320 → 319 → 330 → 400)
 - ✅ Fresh research with new recommendation (different from MISSION-006/007)
-- ✅ PRD published to both Notion and Confluence
+- ✅ PRD published to Confluence (canonical PRD in repo markdown)
 - ✅ High-fidelity prototype with Canvas Kit v11
 - ✅ Figma capture for design collaboration
 - ✅ Complete story map with 13 Jira stories
@@ -59,7 +59,7 @@ Source slice: `git show HEAD:MISSION_LOG.md` lines 1447–1821 (pre-cleanup repo
 
 **Next Actions:**
 - [ ] 060-legal-advisor to review flagged compliance copy
-- [ ] Stakeholder review of PRD in Notion/Confluence
+- [ ] Stakeholder review of PRD in Confluence / repo markdown
 - [ ] Design review in Figma
 - [ ] Epic prioritization and sprint planning
 
@@ -72,7 +72,7 @@ Source slice: `git show HEAD:MISSION_LOG.md` lines 1447–1821 (pre-cleanup repo
 **Completed:** Tuesday Mar 18, 2026
 **Pipeline Step:** 9 of 9 (Research → HITL → Extract → PRD → Prototype → Copy → Figma → Backlog → Publish)
 **Selected Recommendation:** WhatsApp Integration – GA WhatsApp for GCC; extend campaigns beyond email
-**Artifacts:** Research: research/GCC/thematic-analysis/2026-03-18-GCC-PMF-Analysis.md | Slide Deck: ~/Downloads/GCC_Recruiting_PMF_Roadmap_v31.pptx | PRD: docs/prds/gcc-whatsapp-integration-prd.md | Notion: https://www.notion.so/32708e245ade816a8208f1d81f6774d0 | Confluence: https://confluence.workday.com/display/~david.denham/WhatsApp+Candidate+Communication+for+GCC+%282026R2%29+-+Summary | Prototype: design/gcc-whatsapp-campaign.tsx | Copy Review: design/gcc-whatsapp-campaign-copy.md | Figma: https://www.figma.com/design/inRBCInF7QUoCyIPUzXKqd | Story Map: docs/story-maps/gcc-whatsapp-campaign-story-map.md | Jira Epic: https://jira2.workday.com/browse/HRREC-90871
+**Artifacts:** Research: research/GCC/thematic-analysis/2026-03-18-GCC-PMF-Analysis.md | Slide Deck: ~/Downloads/GCC_Recruiting_PMF_Roadmap_v31.pptx | PRD: docs/prds/gcc-whatsapp-integration-prd.md  | Confluence: https://confluence.workday.com/display/~david.denham/WhatsApp+Candidate+Communication+for+GCC+%282026R2%29+-+Summary | Prototype: design/gcc-whatsapp-campaign.tsx | Copy Review: design/gcc-whatsapp-campaign-copy.md | Figma: https://www.figma.com/design/inRBCInF7QUoCyIPUzXKqd | Story Map: docs/story-maps/gcc-whatsapp-campaign-story-map.md | Jira Epic: https://jira2.workday.com/browse/HRREC-90871
 
 **Objective:** Execute full GCC E2E pipeline with FRESH research from scratch through design capture and backlog refinement.
 
@@ -85,14 +85,14 @@ Source slice: `git show HEAD:MISSION_LOG.md` lines 1447–1821 (pre-cleanup repo
 **Completed:** Tuesday Mar 17, 2026
 **Pipeline Step:** 9 of 9 (Research → HITL → Extract → PRD → Prototype → Copy → Figma → Backlog → Publish)
 **Selected Recommendation:** Interview Scheduling – Integrate Paradox with GCC compliance (KSA panel, Kuwait notice)
-**Artifacts:** Research: research/GCC/thematic-analysis/2026-03-17-GCC-PMF-Analysis.md | Slide Deck: ~/Downloads/GCC_Recruiting_PMF_Roadmap_v30.pptx | PRD: docs/prds/gcc-interview-scheduling-prd.md | Notion: https://www.notion.so/32708e245ade81b39dd3f5eb46286cf2 | Confluence: https://confluence.workday.com/display/~david.denham/GCC-Compliant+Interview+Scheduling+PRD+%282026R2%29+-+Summary | Prototype: design/gcc-interview-scheduling.tsx | Figma: https://www.figma.com/design/mZMbMF2yZBQKixVm3YsoYl | Story Map: docs/story-maps/gcc-interview-scheduling-story-map.md | Jira Epic: (manual creation required - HRRREC project, Recruiting Purge component)
+**Artifacts:** Research: research/GCC/thematic-analysis/2026-03-17-GCC-PMF-Analysis.md | Slide Deck: ~/Downloads/GCC_Recruiting_PMF_Roadmap_v30.pptx | PRD: docs/prds/gcc-interview-scheduling-prd.md  | Confluence: https://confluence.workday.com/display/~david.denham/GCC-Compliant+Interview+Scheduling+PRD+%282026R2%29+-+Summary | Prototype: design/gcc-interview-scheduling.tsx | Figma: https://www.figma.com/design/mZMbMF2yZBQKixVm3YsoYl | Story Map: docs/story-maps/gcc-interview-scheduling-story-map.md | Jira Epic: (manual creation required - HRRREC project, Recruiting Purge component)
 
 **Objective:** Execute full GCC E2E pipeline with FRESH research through design capture and backlog refinement.
 
 **Pipeline Steps Completed:**
 1. ✅ 120: Fresh PMF analysis + slide deck (v30)
 2. ✅ HITL: Selected #1 - Interview Scheduling
-3. ✅ 200: PRD (existing, published to Notion + Confluence)
+3. ✅ 200: PRD (existing, published to Confluence (canonical PRD in repo markdown))
 4. ✅ 320: Prototype (design/gcc-interview-scheduling.tsx)
 5. ✅ 319: Copy review (design/gcc-interview-scheduling-copy.md)
 6. ✅ 330: Figma capture
@@ -114,13 +114,13 @@ Source slice: `git show HEAD:MISSION_LOG.md` lines 1447–1821 (pre-cleanup repo
 
 **Pipeline Steps:**
 1. ✅ 120: Fresh Braun & Clarke 6-phase analysis + NEW slide deck
-2. ✅ 200: PRD + Notion + Confluence publishing
+2. ✅ 200: PRD (markdown) + Confluence publishing
 3. ✅ 420: Build prototype (design/gcc-interview-scheduling.tsx, localhost:5174)
 4. ✅ 410: Copy review (design/gcc-interview-scheduling-copy.md)
 5. ✅ 430: Figma capture
 
 **#1 Recommendation:** Interview Scheduling – Integrate Paradox with GCC compliance (KSA panel, Kuwait notice)
-**Artifacts:** Research: research/GCC/thematic-analysis/2026-03-17-GCC-PMF-Analysis.md | Slide Deck: ~/Downloads/GCC_Recruiting_PMF_Roadmap_v29.pptx | PRD: docs/prds/gcc-interview-scheduling-prd.md | Notion: https://www.notion.so/32708e245ade81b39dd3f5eb46286cf2 | Confluence: https://confluence.workday.com/display/~david.denham/GCC-Compliant+Interview+Scheduling+PRD+%282026R2%29+-+Summary | Prototype: design/gcc-interview-scheduling.tsx | Figma: https://www.figma.com/design/hfBuuzwh2upxVAoJ1GNheX
+**Artifacts:** Research: research/GCC/thematic-analysis/2026-03-17-GCC-PMF-Analysis.md | Slide Deck: ~/Downloads/GCC_Recruiting_PMF_Roadmap_v29.pptx | PRD: docs/prds/gcc-interview-scheduling-prd.md  | Confluence: https://confluence.workday.com/display/~david.denham/GCC-Compliant+Interview+Scheduling+PRD+%282026R2%29+-+Summary | Prototype: design/gcc-interview-scheduling.tsx | Figma: https://www.figma.com/design/hfBuuzwh2upxVAoJ1GNheX
 
 ---
 
@@ -362,7 +362,6 @@ research/
 - Research: research/GCC/thematic-analysis/2026-03-19-GCC-PMF-Analysis-v36.md
 - Slide Deck: ~/Downloads/GCC_Recruiting_PMF_Roadmap_v36.pptx (36 slides)
 - PRD: docs/prds/gcc-whatsapp-integration-prd.md
-- Notion: https://www.notion.so/32808e245ade81d2bc68e37258637628
 - Confluence: https://confluence.workday.com/pages/viewpage.action?pageId=4349854233
 - Design Brief: design/gcc-whatsapp-integration-design-brief.md
 - Prototype: design/gcc-whatsapp-integration.tsx (localhost:5186)
@@ -377,7 +376,7 @@ research/
 - ✅ Full E2E pipeline executed (120 → HITL → 200 → 315 → 320 → 319 → 330 → 400)
 - ✅ Fresh research with PM selection from 6 recommendations
 - ✅ Design Brief grounded feature in Workday workflows (collaboration panel, consent status, campaigns)
-- ✅ PRD published to both Notion and Confluence
+- ✅ PRD published to Confluence (canonical PRD in repo markdown)
 - ✅ High-fidelity prototype with Canvas Kit v11
 - ✅ Copy review (12 issues found, recommendations provided)
 - ✅ Figma capture for design collaboration
@@ -388,7 +387,7 @@ research/
 
 ### MISSION-005: GCC E2E Pipeline - Research to Design (Fresh Run) ✅
 **Completed:** Tuesday Mar 18, 2026  
-**Result:** Full pipeline 120 → 200 → 420 → 410 → 430 executed. E2E handoff block added to PMF analysis. New slide deck v29, PRD published to Notion + Confluence, prototype running, Figma capture complete.
+**Result:** Full pipeline 120 → 200 → 420 → 410 → 430 executed. E2E handoff block added to PMF analysis. New slide deck v29, PRD published to Confluence (canonical PRD in repo markdown), prototype running, Figma capture complete.
 
 ### MISSION-001: Functional Knowledge RAG Initialization ✅
 **Completed:** Tuesday Mar 17, 2026 22:09 PST  

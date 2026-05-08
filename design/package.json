@@ -13,7 +13,9 @@
     "build": "NODE_OPTIONS='--max-old-space-size=8192' tsc && NODE_OPTIONS='--max-old-space-size=16384' vite build",
     "build:public": "NODE_OPTIONS='--max-old-space-size=8192' tsc -p tsconfig.public.json && NODE_OPTIONS='--max-old-space-size=16384' vite build --config vite.config.public.ts",
     "preview": "vite preview",
-    "preview:public": "vite preview --config vite.config.public.ts"
+    "preview:public": "vite preview --config vite.config.public.ts",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -27,6 +29,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@types/node": "20.19.37",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",

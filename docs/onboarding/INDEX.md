@@ -14,7 +14,7 @@ Read these files in order to understand and use the PM Agent workspace:
 ### 1. Start Here
 - **[README.md](../README.md)** (repository root) — Overview of capabilities and MCP integration
   - What this workspace does
-  - List of 12 active MCPs
+  - Canonical MCP roster in **`000-master-orchestrator.mdc`**
   - Folder structure explanation
   - Getting started guide
 
@@ -81,7 +81,7 @@ Read these files in order to understand and use the PM Agent workspace:
 - Maintains mission state
 - Logs decisions and handoffs
 
-**MCPs Used:** All 12 (via delegation)
+**MCPs Used:** Delegates per **`000-master-orchestrator.mdc`** roster (21 integrated MCPs)
 
 **Triggers:** Always on
 
@@ -92,13 +92,12 @@ Read these files in order to understand and use the PM Agent workspace:
 
 **Responsibilities:**
 - Analyzes research files using Six-Hats thinking
-- Searches Notion for related context
+- May use Salomon Internal Knowledge when configured for related context
 - Synthesizes findings into reports
 - Provides strategic recommendations
 
 **MCPs Used:**
 - Six-Hats Thinking
-- Notion (search)
 - Sequential Thinking
 
 **Triggers:**
@@ -150,7 +149,6 @@ Read these files in order to understand and use the PM Agent workspace:
 **MCPs Used:**
 - Deployment Agent (validation)
 - Confluence (publishing)
-- Notion (context search)
 
 **Triggers:**
 - "create PRD"
@@ -176,7 +174,6 @@ Read these files in order to understand and use the PM Agent workspace:
 
 **MCPs Used:**
 - Jira/GHE (tickets, PRs)
-- Notion (linking)
 - Confluence (documentation)
 
 **Triggers:**
@@ -236,7 +233,6 @@ Read these files in order to understand and use the PM Agent workspace:
 
 **MCPs Used:**
 - Slack (send, search)
-- Notion (context)
 - Confluence (documentation)
 - Jira/GHE (status)
 - Deployment Agent (Workday knowledge)
@@ -301,7 +297,6 @@ product-manager-agent/
 
 | MCP | Server Name | Used By | Purpose |
 |-----|-------------|---------|---------|
-| **Notion** | `plugin-notion-workspace-notion` | 100, 200, 300, 500 | Knowledge base, tasks, roadmaps, search |
 | **Figma** | `plugin-figma-figma` | 400 | Design extraction, Code Connect |
 | **Slack** | `plugin-slack-slack` | 500 | Team communication, message triage |
 | **Jira/GHE** | `user-jira-ghe` | 300, 500 | Issue tracking, GitHub repos, PRs |
@@ -352,7 +347,7 @@ product-manager-agent/
 ```
 1. Drop Slack message file in /inbox/
    → Slack Responder (500) auto-activates
-2. Agent searches Notion, Confluence, Jira for context
+2. Agent searches Confluence, Jira, and internal knowledge (when configured) for context
 3. Drafts professional reply
 4. Presents draft with send options
 ```
@@ -367,7 +362,7 @@ product-manager-agent/
 **Rules Size:** 76KB  
 **Docs Size:** 36KB  
 **Agent Count:** 7 specialized agents  
-**MCP Integration:** 12 MCPs fully mapped  
+**MCP Integration:** See **`000-master-orchestrator.mdc`** for canonical MCP roster  
 **Workflow Coverage:** 100% PM lifecycle
 
 ---

@@ -91,7 +91,6 @@ The Agent Improvement Advisor (090-agent-improvement-advisor.mdc) has been succe
 
 ### ✅ MCP Coverage
 All 12 MCPs documented with their capabilities:
-- [x] Notion (plugin-notion-workspace-notion)
 - [x] Figma (plugin-figma-figma)
 - [x] Slack (plugin-slack-slack)
 - [x] Jira/GHE (user-jira-ghe)

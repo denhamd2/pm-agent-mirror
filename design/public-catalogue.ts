@@ -50,6 +50,13 @@ export const PUBLIC_PROTOTYPES: readonly PublicPrototype[] = [
     description: "Central hub for managing an organisation's AI ecosystem.",
     category: 'Prototype',
   },
+  {
+    slug: '2-way-email-prototype',
+    name: '2-Way Email Recruiting',
+    description:
+      'Conversational Email on the candidate profile — thread list, reading pane, compose, collaboration dock.',
+    category: 'Prototype',
+  },
 ] as const;
 
 export type PublicPrototypeSlug = (typeof PUBLIC_PROTOTYPES)[number]['slug'];

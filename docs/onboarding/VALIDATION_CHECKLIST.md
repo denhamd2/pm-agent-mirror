@@ -27,12 +27,12 @@ Use this checklist to validate that the PM Agent workspace is functioning correc
   - Frontmatter: description, globs, alwaysApply: true ✅
   - Mission state management documented ✅
   - Agent coordination defined ✅
-  - All 12 MCPs listed ✅
+  - Canonical MCP roster documented ✅
   
 - [x] `100-market-intelligence.mdc` (176 lines, 5.5KB)
   - Frontmatter: globs include `research/**/*` ✅
   - Six-Hats integration documented ✅
-  - Notion search integration ✅
+  - Internal / Confluence context gathering documented ✅
   - Analysis workflow defined ✅
 
 - [x] `110-slide-generator.mdc` (298 lines, 9.2KB)
@@ -65,8 +65,7 @@ Use this checklist to validate that the PM Agent workspace is functioning correc
   - Response templates provided ✅
   - Knowledge base search integration ✅
 
-### ✅ MCP Integration (12 Total)
-- [x] Notion - Integrated in rules 100, 200, 300, 500
+### ✅ MCP Integration (see orchestrator roster)
 - [x] Figma - Integrated in rule 400
 - [x] Slack - Integrated in rule 500
 - [x] Jira/GHE - Integrated in rules 300, 500
@@ -111,7 +110,7 @@ Use this checklist to validate that the PM Agent workspace is functioning correc
 
 **Expected Output**:
 - Analysis report with all six hats
-- Notion search for related docs
+- Internal knowledge / Confluence / Jira context where applicable
 - Mission logged in MISSION_LOG.md
 - Recommendations provided
 
@@ -146,7 +145,7 @@ Use this checklist to validate that the PM Agent workspace is functioning correc
 **Steps**:
 1. Say: "Create a PRD for [feature]"
 2. Verify PRD Specialist (200) activates
-3. Check for context gathering (Notion search)
+3. Check for context gathering (repo files, Confluence as applicable)
 4. Verify Deployment Agent validation
 5. Check PRD created in `docs/prds/`
 6. Verify Confluence publish attempt
@@ -216,7 +215,7 @@ Use this checklist to validate that the PM Agent workspace is functioning correc
 1. Create file: `inbox/test-message.txt`
 2. Add sample Slack message content
 3. Verify Slack Responder (500) auto-activates
-4. Check for knowledge base searches (Notion, Confluence, Jira)
+4. Check for knowledge base searches (Confluence, Jira, Salomon when enabled)
 5. Verify drafted response presented
 6. Check response quality and links
 

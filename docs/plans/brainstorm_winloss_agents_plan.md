@@ -21,7 +21,7 @@ These data sources provide distinct perspectives that complement customer resear
 - **Win-Loss**: Competitive positioning, buying criteria, decision-making process, deal blockers
 
 Right now, this data either:
-- Gets lost in Notion/Slack with no systematic analysis
+- Gets lost in wikis or Slack with no systematic analysis
 - Gets manually synthesized by the PM (time-consuming, inconsistent)
 - Doesn't get triangulated with customer research in 120's PMF reports
 

@@ -44,7 +44,7 @@ type StatsWarehouseSource = (typeof statsWarehouseData.sources)[number];
 const TAB_LABELS: Record<DashboardTab, string> = {
   'morning-roundup': 'Morning Roundup',
   'agent-health': 'Agent Health Scorecard',
-  prototypes: 'Saved Prototypes',
+  prototypes: 'Prototypes',
   'data-sources': 'Data Sources',
   'design-system': 'Design System',
   'agent-flow': 'Agent Flow',

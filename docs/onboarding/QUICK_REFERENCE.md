@@ -8,7 +8,7 @@
 
 ### Market Intelligence (100)
 - **Triggers**: Files in `/research/`, "analyze research", "competitive analysis"
-- **MCPs**: Six-Hats, Notion, Sequential Thinking
+- **MCPs**: Six-Hats, Sequential Thinking
 - **Outputs**: Analysis reports to `/research/`
 
 ### Slide Generator (110)
@@ -18,12 +18,12 @@
 
 ### PRD Specialist (200)
 - **Triggers**: "create PRD", "write requirements", files in `/docs/prds/`
-- **MCPs**: Deployment Agent, Confluence, Notion
+- **MCPs**: Deployment Agent, Confluence
 - **Outputs**: PRDs to `/docs/prds/` and Confluence
 
 ### Execution Planner (300)
 - **Triggers**: "plan execution", "create tickets", "story mapping"
-- **MCPs**: Jira/GHE, Notion, Confluence
+- **MCPs**: Jira/GHE, Confluence
 - **Outputs**: Jira epics/stories, story maps to `/docs/prds/`
 
 ### Canvas Designer (400)
@@ -33,7 +33,7 @@
 
 ### Slack Responder (500)
 - **Always Active**: Auto-responds to files in `/inbox/`
-- **MCPs**: Slack, Notion, Confluence, Jira/GHE
+- **MCPs**: Slack, Confluence, Jira/GHE
 - **Outputs**: Drafted Slack messages
 
 ## Common Workflows
@@ -79,7 +79,6 @@
 
 | MCP | Server Name | Primary Use |
 |-----|-------------|-------------|
-| Notion | `plugin-notion-workspace-notion` | Knowledge base, tasks |
 | Figma | `plugin-figma-figma` | Design integration |
 | Slack | `plugin-slack-slack` | Communication |
 | Jira/GHE | `user-jira-ghe` | Tickets, repos |

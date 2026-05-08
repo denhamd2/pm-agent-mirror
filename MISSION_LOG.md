@@ -9,7 +9,7 @@ This log tracks the state of all active product initiatives, decisions, and hand
 
 ## Current Status
 **Status:** OPERATIONAL — agents, skills, and rules catalogue aligned (May 2026 doc pass)
-**Last Updated:** 7 May 2026 (dashboard scorecard v1.5; prototypes save/unsave + route catalogue)
+**Last Updated:** 7 May 2026 (repo spring clean: removed `scripts/archive/`, stale docs; scorecard updated)
 **Workspace Version:** 1.5
 **Active Agents:** 10+ (Orchestrator + specialists incl. **@pmf-analyst** report + **130** PMF deck + Functional Knowledge Authority)
 
@@ -288,7 +288,6 @@ Archived: MISSION-009, MISSION-010, MISSION-011, MISSION-014, MISSION-015, MISSI
 - ✅ WhatsApp GCC: 3 BV + 3 PV (regional adaptation) + 1 Adoption + 1 Usage
 - ✅ Interview scheduling: 2 BV + 3 PV (negative metric) + 1 Adoption + 1 Usage
 - All tests PASS (100% success rate)
-- Test report: `.cursor/skills/value-metrics/test-report-2026-03-31.md`
 
 **Production Status:** ✅ Ready for production use in next PRD workflow
 

@@ -1,0 +1,305 @@
+{
+  "fileKey": "HpAOHGAeXBORpHnyhsCMja",
+  "pageName": "\u21aa MVP 26R2+ Designs",
+  "kept": [
+    {
+      "nodeId": "208:10116",
+      "name": "Cover Page",
+      "width": 1920.0,
+      "height": 1080.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=208-10116",
+      "pageCanvas": "0:1"
+    },
+    {
+      "nodeId": "6887:20294",
+      "name": "Overview_01_long page",
+      "width": 1280.0,
+      "height": 1005.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-20294",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "6887:11499",
+      "name": "MyConversations",
+      "width": 1440.0,
+      "height": 900.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-11499",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "6887:11657",
+      "name": "Overview",
+      "width": 1440.0,
+      "height": 900.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-11657",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "6887:13469",
+      "name": "Recipient's View - Threads",
+      "width": 1440.0,
+      "height": 900.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-13469",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "6887:14115",
+      "name": "Compose",
+      "width": 1440.0,
+      "height": 900.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-14115",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "6887:15086",
+      "name": "Discard",
+      "width": 1440.0,
+      "height": 900.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-15086",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "6887:15547",
+      "name": "Reply",
+      "width": 1440.0,
+      "height": 900.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-15547",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "6887:16008",
+      "name": "Forward",
+      "width": 1440.0,
+      "height": 900.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-16008",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "6887:18369",
+      "name": "Error - Invalid Email",
+      "width": 1440.0,
+      "height": 900.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-18369",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "6887:18849",
+      "name": "Error - No Recipient",
+      "width": 1440.0,
+      "height": 900.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-18849",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "6887:19329",
+      "name": "Error - Multiple",
+      "width": 1440.0,
+      "height": 900.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-19329",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "6887:20380",
+      "name": "Empty State (Agency)",
+      "width": 1440.0,
+      "height": 900.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-20380",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "6887:20754",
+      "name": "Empty State (No Agency)",
+      "width": 1440.0,
+      "height": 900.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-20754",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "6887:21131",
+      "name": "Empty State (Expanded)",
+      "width": 1440.0,
+      "height": 900.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-21131",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "6887:21505",
+      "name": "Action Bar",
+      "width": 1440.0,
+      "height": 900.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-21505",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "6913:20249",
+      "name": "Overview",
+      "width": 1440.0,
+      "height": 1033.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6913-20249",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "6971:21750",
+      "name": "Overview",
+      "width": 1440.0,
+      "height": 1089.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6971-21750",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "7063:28486",
+      "name": "Threads - (Stepper/Reddit) ",
+      "width": 1440.0,
+      "height": 1435.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=7063-28486",
+      "pageCanvas": "4:7577"
+    },
+    {
+      "nodeId": "7064:12437",
+      "name": "Threads - Linear ",
+      "width": 1440.0,
+      "height": 1435.0,
+      "figmaUrl": "https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=7064-12437",
+      "pageCanvas": "4:7577"
+    }
+  ],
+  "skipped": [
+    {
+      "nodeId": "6887:12040",
+      "name": "Overview",
+      "width": 1440.0,
+      "height": 900.0,
+      "reason": "duplicate_of:6887:11657"
+    },
+    {
+      "nodeId": "6887:12419",
+      "name": "Overview",
+      "width": 1440.0,
+      "height": 900.0,
+      "reason": "duplicate_of:6887:11657"
+    },
+    {
+      "nodeId": "6887:12795",
+      "name": "Overview",
+      "width": 1440.0,
+      "height": 900.0,
+      "reason": "duplicate_of:6887:11657"
+    },
+    {
+      "nodeId": "6887:13504",
+      "name": "Overview",
+      "width": 1440.0,
+      "height": 900.0,
+      "reason": "duplicate_of:6887:11657"
+    },
+    {
+      "nodeId": "6887:22338",
+      "name": "Overview",
+      "width": 1440.0,
+      "height": 900.0,
+      "reason": "duplicate_of:6887:11657"
+    },
+    {
+      "nodeId": "6887:23176",
+      "name": "Overview",
+      "width": 1440.0,
+      "height": 900.0,
+      "reason": "duplicate_of:6887:11657"
+    },
+    {
+      "nodeId": "7063:15829",
+      "name": "Overview",
+      "width": 1440.0,
+      "height": 900.0,
+      "reason": "duplicate_of:6887:11657"
+    },
+    {
+      "nodeId": "7032:25434",
+      "name": "Overview",
+      "width": 1440.0,
+      "height": 1089.0,
+      "reason": "duplicate_of:6971:21750"
+    },
+    {
+      "nodeId": "7032:26176",
+      "name": "Overview",
+      "width": 1440.0,
+      "height": 1089.0,
+      "reason": "duplicate_of:6971:21750"
+    },
+    {
+      "nodeId": "7032:26918",
+      "name": "Overview",
+      "width": 1440.0,
+      "height": 1089.0,
+      "reason": "duplicate_of:6971:21750"
+    },
+    {
+      "nodeId": "7032:27660",
+      "name": "Overview",
+      "width": 1440.0,
+      "height": 1089.0,
+      "reason": "duplicate_of:6971:21750"
+    },
+    {
+      "nodeId": "7032:28402",
+      "name": "Overview",
+      "width": 1440.0,
+      "height": 1089.0,
+      "reason": "duplicate_of:6971:21750"
+    },
+    {
+      "nodeId": "7032:29144",
+      "name": "Overview",
+      "width": 1440.0,
+      "height": 1089.0,
+      "reason": "duplicate_of:6971:21750"
+    },
+    {
+      "nodeId": "6887:14629",
+      "name": "Compose",
+      "width": 1440.0,
+      "height": 900.0,
+      "reason": "duplicate_of:6887:14115"
+    },
+    {
+      "nodeId": "7063:12138",
+      "name": "Compose",
+      "width": 1440.0,
+      "height": 900.0,
+      "reason": "duplicate_of:6887:14115"
+    },
+    {
+      "nodeId": "7063:13016",
+      "name": "Compose",
+      "width": 1440.0,
+      "height": 900.0,
+      "reason": "duplicate_of:6887:14115"
+    },
+    {
+      "nodeId": "7063:14824",
+      "name": "Compose",
+      "width": 1440.0,
+      "height": 900.0,
+      "reason": "duplicate_of:6887:14115"
+    },
+    {
+      "nodeId": "6887:23551",
+      "name": "Empty State (No Agency)",
+      "width": 1440.0,
+      "height": 900.0,
+      "reason": "duplicate_of:6887:20754"
+    },
+    {
+      "nodeId": "6887:21881",
+      "name": "Action Bar",
+      "width": 1440.0,
+      "height": 900.0,
+      "reason": "duplicate_of:6887:21505"
+    }
+  ],
+  "pagesCrawled": [
+    "0:1 Cover Page",
+    "4:7577 \u21aa MVP 26R2+ Designs"
+  ]
+}

@@ -1,0 +1,26 @@
+%% Optional stakeholder map — edit freely. Not extracted from Figma links automatically.
+flowchart LR
+  cover[Cover Page]
+  myc[MyConversations]
+  ov[Overview variants]
+  recv[Recipient Threads view]
+  comp[Compose]
+  discard[Discard]
+  reply[Reply]
+  fwd[Forward]
+  err[Error states]
+  empty[Empty states]
+  act[Action Bar]
+  thr[Threads layouts]
+
+  cover --> myc
+  myc --> ov
+  ov --> recv
+  recv --> comp
+  comp --> discard
+  comp --> reply
+  comp --> fwd
+  comp --> err
+  ov --> empty
+  empty --> act
+  recv --> thr

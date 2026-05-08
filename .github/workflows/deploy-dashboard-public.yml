@@ -31,6 +31,7 @@ on:
       - 'design/ai-system-of-record-v97.tsx'
       - 'design/recruiter-hub-conversational-v98.tsx'
       - 'design/recruiter-hub-conversational-v99.tsx'
+      - 'design/2-way-email-prototype.tsx'
       - 'design/universal-profile-eudi-wallet-v1.tsx'
       - 'design/package.json'
       - 'design/package-lock.json'

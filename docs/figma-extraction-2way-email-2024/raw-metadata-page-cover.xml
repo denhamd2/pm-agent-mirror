@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Snapshot from Figma MCP get_metadata(fileKey=HpAOHGAeXBORpHnyhsCMja, nodeId=0:1) -->
+<canvas id="0:1" name="     ↪ Cover Page" x="0" y="0" width="0" height="0">
+  <frame id="208:10116" name="Cover Page" x="-2497" y="927" width="1920" height="1080">
+    <frame id="208:10169" name="Project Name, Description &amp; Author" x="100" y="100" width="1720" height="880">
+      <frame id="208:10170" name="Project Name, Description &amp; Author" x="0" y="0" width="1720" height="666.2916870117188">
+        <text id="208:10175" name="2022 R2" x="563.9323120117188" y="9" width="540.0676879882812" height="25" hidden="true" />
+        <frame id="4835:44744" name="Frame 22" x="0" y="0" width="1720" height="25">
+          <frame id="208:10172" name="Frame 14" x="0" y="0" width="832" height="25">
+            <text id="208:10173" name="Recruiting" x="0" y="0" width="233" height="25" />
+            <text id="208:10174" name="2022 R1" x="563.9322509765625" y="0" width="435.2604064941406" height="58" hidden="true" />
+          </frame>
+          <text id="4835:44742" name="25R2+" x="888" y="0" width="832" height="25" />
+        </frame>
+        <text id="208:10176" name="2-Way Conversational Email" x="0" y="81" width="1720" height="456.29168701171875" />
+        <frame id="4835:44750" name="Frame 23" x="0" y="593.2916870117188" width="306" height="73">
+          <text id="4835:44748" name="In PRogress" x="24" y="24" width="258" height="25" />
+        </frame>
+      </frame>
+      <frame id="208:10178" name="Designer/Researcher/PM/Dev" x="0" y="726.2916870117188" width="1720" height="153.7083282470703">
+        <frame id="208:10179" name="Contacts" x="0" y="0" width="1720" height="153.7083282470703">
+          <frame id="208:10180" name="Frame 15" x="0" y="0" width="430" height="102.70833587646484">
+            <text id="208:10181" name="Design" x="0" y="0" width="370.1302185058594" height="39" />
+            <text id="208:10182" name="Sunny Choi" x="0" y="51.70833206176758" width="370.1302185058594" height="51" />
+          </frame>
+          <frame id="208:10183" name="Frame 17" x="430" y="0" width="430" height="102.70833587646484">
+            <text id="208:10184" name="Design" x="0" y="0" width="370.1302185058594" height="39" />
+            <text id="4835:44726" name="-" x="0" y="51.7083740234375" width="370.1302185058594" height="51" />
+          </frame>
+          <frame id="208:10186" name="Frame 18" x="860" y="0" width="430" height="102.70833587646484">
+            <text id="208:10187" name="Design" x="0" y="0" width="370.1302185058594" height="39" />
+            <text id="208:10188" name="David Denham" x="0" y="51.70833206176758" width="250" height="51" />
+          </frame>
+          <frame id="208:10189" name="Frame 19" x="1290" y="0" width="430" height="153.7083282470703">
+            <text id="208:10190" name="Design" x="0" y="0" width="370.1302185058594" height="39" />
+            <text id="208:10191" name="Benjamin Isnard Emily O’Regan" x="0" y="51.70833206176758" width="275" height="102" />
+          </frame>
+        </frame>
+      </frame>
+    </frame>
+  </frame>
+</canvas>

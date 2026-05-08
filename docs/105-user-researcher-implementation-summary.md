@@ -172,7 +172,6 @@ User: "Analyze GCC" (triggers 120)
 ### 105 Uses:
 - **Deployment Agent MCP** (`user-deployment-agent`): Workday Recruiting context
 - **Confluence MCP** (`user-confluence-mcp`): Publishing Research Briefs
-- **Notion MCP** (`plugin-notion-workspace-notion`): Optional alternative for briefs
 
 ### 120 Uses:
 - **105's output**: Structured markdown findings
