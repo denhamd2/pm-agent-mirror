@@ -19,7 +19,8 @@ import { PUBLIC_PROTOTYPES, type PublicPrototype } from './public-catalogue';
  */
 
 function PrototypeCard({ prototype }: { prototype: PublicPrototype }) {
-  const href = `./${prototype.slug}`;
+  /** Hash routes — static GHE Pages often returns a real 404 for `./slug` paths (no 404.html SPA fallback). */
+  const href = `#${prototype.slug}`;
   return (
     <a
       href={href}
