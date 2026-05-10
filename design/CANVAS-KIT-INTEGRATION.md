@@ -33,6 +33,8 @@ This prototype actively uses Workday's Canvas Kit design system with proper styl
 
 ### Card Patterns
 All cards follow consistent structure:
+
+{% raw %}
 ```tsx
 <Card style={{ padding: 0, overflow: 'hidden' }}>
   {/* Header with border */}
@@ -46,6 +48,7 @@ All cards follow consistent structure:
   </Box>
 </Card>
 ```
+{% endraw %}
 
 ### Interactive States
 - **Hover**: Background color transitions (150ms ease-in-out)

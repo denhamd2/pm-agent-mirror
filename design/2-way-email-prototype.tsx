@@ -101,7 +101,6 @@ import {
   protoDockPopoverCloseButtonStyle,
   protoDockPrimaryButtonStyle,
 } from './components/conversationalEmailPrototypeTheme';
-import { WhatsAppBrandGlyph } from './components/WhatsAppBrandGlyph';
 
 /** Figma: global header height */
 const HEADER_H = 64;
@@ -124,6 +123,73 @@ const COLLAB_SHEET_W = COLLAB_PANEL_W - COLLAB_RAIL_W;
 const dockSheetNarrowPx = (vw: number) => Math.min(480, Math.max(320, Math.round(vw * 0.28)));
 /** Compose dock sheet — ~72% viewport minus rail (Figma Compose family). */
 const dockSheetComposePx = (vw: number) => Math.min(1200, Math.max(COLLAB_SHEET_W, Math.round(vw * 0.72)));
+
+/** PM capture: panel contract control — chevron toward viewport edge + vertical bar (outline rail). */
+function RailPanelContractGlyph({ color }: { color: string }) {
+  return (
+    <Flex
+      alignItems="center"
+      justifyContent="center"
+      style={{ width: 24, height: 24, gap: 2, flexShrink: 0 }}
+    >
+      <TwIcon icon={chevronRightSmallIcon} size={18} color={color} />
+      <Box
+        style={{
+          width: 2,
+          height: 16,
+          flexShrink: 0,
+          backgroundColor: color,
+          borderRadius: 0,
+        }}
+      />
+    </Flex>
+  );
+}
+
+/** Two overlapping speech-bubble outlines (Messaging channel). */
+function RailDualSpeechBubbleGlyph({ color }: { color: string }) {
+  return (
+    <Box style={{ position: 'relative', width: 24, height: 24, flexShrink: 0 }}>
+      <Box style={{ position: 'absolute', left: 0, top: 6, opacity: 0.45, pointerEvents: 'none' }}>
+        <TwIcon icon={speechBubbleIcon} size={17} color={color} />
+      </Box>
+      <Box style={{ position: 'absolute', left: 6, top: 1, pointerEvents: 'none' }}>
+        <TwIcon icon={speechBubbleIcon} size={17} color={color} />
+      </Box>
+    </Box>
+  );
+}
+
+/** Closed envelope — outline body + V flap (collaboration rail); matches simple line-art mail glyphs. */
+function RailClassicEnvelopeGlyph({ color }: { color: string }) {
+  const sw = 1.65;
+  return (
+    <svg
+      width={22}
+      height={22}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+      style={{ display: 'block', flexShrink: 0, color }}
+    >
+      <path
+        d="M5.25 8v8.75h13.5V8"
+        stroke="currentColor"
+        strokeWidth={sw}
+        strokeLinecap="square"
+        strokeLinejoin="miter"
+      />
+      <path
+        d="M5.25 8 12 13.5 18.75 8"
+        stroke="currentColor"
+        strokeWidth={sw}
+        strokeLinecap="square"
+        strokeLinejoin="miter"
+      />
+    </svg>
+  );
+}
 
 /** Full-viewport dim behind mail dock — above page chrome, below {@link COMMUNICATION_DOCK_Z} — Figma Overview modal scrim. */
 const WORKSPACE_DIM_SCRIM_Z = 200;
@@ -250,8 +316,8 @@ const READING_REPLY_PILL: CSSProperties = {
   boxSizing: 'border-box',
 };
 
-/** Initial compose subject — matches reference Compose PNG; reset on discard confirmation. */
-const DEFAULT_COMPOSE_SUBJECT = 'Interview Request';
+/** Initial compose subject for new mail; reset on discard confirmation. */
+const DEFAULT_COMPOSE_SUBJECT = '';
 
 /** Reference empty-state artwork — 3D paper plane (transparent PNG). */
 const REF_EMPTY_STATE_PNG = new URL(
@@ -568,9 +634,9 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
   {
     id: '5',
     audience: 'agency',
-    subject: 'Candidate referral — Jordan Ellis',
+    subject: 'Candidate submission — Chloe Clarkson (JR-00073)',
     preview:
-      'BrightPath Staffing is pleased to submit Jordan Ellis for JR-00073. Resume and rate card attached for your review.',
+      'BrightPath Staffing is submitting Chloe Clarkson for the Marketing Coordinator role on JR-00073. Agency packet and rate card attached.',
     when: 'Today',
     sentAt: '11/14/2025, 2:18 PM',
     readingTimestamp: '11/14/2025, 2:18 PM',
@@ -582,18 +648,18 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
     readingTo: 'Rachel Vaccaro',
     fromLine: 'Alex Rivera <alex.rivera@brightpathstaffing.com>',
     body:
-      'Hi Rachel,\n\nBrightPath Staffing is pleased to submit Jordan Ellis for the Marketing Coordinator role (JR-00073). Jordan has four years of campaign coordination experience and is available to start in two weeks.\n\nPlease find the resume and our standard rate card attached. Let me know if you would like to schedule a screening call.\n\nBest,\nAlex Rivera\nBrightPath Staffing',
+      'Hi Rachel,\n\nBrightPath Staffing is pleased to formally submit Chloe Clarkson for the Marketing Coordinator role (JR-00073). Chloe has four years of campaign coordination experience and is available to start in two weeks.\n\nPlease find our agency submission summary and standard rate card attached. Let me know if you would like to schedule a screening call or need any additional compliance documentation.\n\nBest,\nAlex Rivera\nBrightPath Staffing',
     readingAttachments: [
-      { name: 'Jordan-Ellis-resume.pdf', meta: '312 KB' },
+      { name: 'Chloe-Clarkson-agency-submission.pdf', meta: '312 KB' },
       { name: 'BrightPath-rate-card.pdf', meta: '89 KB' },
     ],
   },
   {
     id: '6',
     audience: 'agency',
-    subject: 'Re: Shortlist for JR-00073',
+    subject: 'Re: Chloe Clarkson — JR-00073',
     preview:
-      'Following up on the three candidates we shared last week — happy to coordinate interviews once you confirm availability.',
+      'Following up on Chloe for the Marketing Coordinator role — happy to coordinate references or interview times once you confirm next steps.',
     when: 'Wed',
     sentAt: '11/12/2025, 10:05 AM',
     readingTimestamp: '11/12/2025, 10:05 AM',
@@ -604,7 +670,7 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
     readingTo: 'Rachel Vaccaro',
     fromLine: 'Priya Nair <priya.nair@apexrecruit.co>',
     body:
-      'Hi Rachel,\n\nFollowing up on the shortlist we sent for JR-00073 — happy to coordinate interviews or provide references once you confirm which candidates you would like to move forward.\n\nThanks,\nPriya\nApex Recruit Partners',
+      'Hi Rachel,\n\nFollowing up on Chloe Clarkson for JR-00073 — happy to coordinate interviews, share references, or align on timeline whenever you are ready to move her forward.\n\nThanks,\nPriya\nApex Recruit Partners',
   },
 ];
 
@@ -671,10 +737,17 @@ function collabRailTile(
   icon: typeof mailIcon,
   label: string,
   onClick: () => void,
-  options?: { badgeCount?: number; showOnboardingDot?: boolean; customIcon?: ReactNode },
+  options?: {
+    badgeCount?: number;
+    showOnboardingDot?: boolean;
+    customIcon?: ReactNode;
+    /** Red circular alert with “!” (PM rail capture) instead of numeric unread pill. */
+    mailAlertBadge?: boolean;
+  },
 ) {
   const badge = options?.badgeCount;
   const showDot = options?.showOnboardingDot;
+  const mailAlert = options?.mailAlertBadge;
   /** Full-bleed in the rail column — no inset (Figma: active wash edge-to-edge in the 64px rail). */
   const tileInnerStyle: CSSProperties = {
     position: 'absolute',
@@ -691,6 +764,7 @@ function collabRailTile(
     alignItems: 'center',
     justifyContent: 'center',
     padding: 0,
+    lineHeight: 0,
   };
   return (
     <button
@@ -705,6 +779,8 @@ function collabRailTile(
         alignItems: 'center',
         justifyContent: 'center',
         border: 'none',
+        margin: 0,
+        padding: 0,
         background: 'transparent',
         cursor: 'pointer',
         position: 'relative',
@@ -712,11 +788,13 @@ function collabRailTile(
         flexShrink: 0,
         boxSizing: 'border-box',
         outline: 'none',
+        appearance: 'none',
+        WebkitAppearance: 'none',
       }}
     >
       <span style={tileInnerStyle}>
         {options?.customIcon ?? (
-          <TwIcon icon={icon} size={24} color={active ? CONV_EMAIL_RAIL_ICON_ACTIVE : CONV_EMAIL_RAIL_ICON_IDLE} />
+          <TwIcon icon={icon} size={22} color={active ? CONV_EMAIL_RAIL_ICON_ACTIVE : CONV_EMAIL_RAIL_ICON_IDLE} />
         )}
       </span>
       {showDot ? (
@@ -736,7 +814,30 @@ function collabRailTile(
           }}
         />
       ) : null}
-      {badge !== undefined && badge > 0 ? (
+      {badge !== undefined && badge > 0 && mailAlert ? (
+        <span
+          aria-hidden
+          style={{
+            position: 'absolute',
+            top: 5,
+            right: 5,
+            width: 16,
+            height: 16,
+            borderRadius: '50%',
+            backgroundColor: TW.cinnamon500,
+            color: TW.frenchVanilla100,
+            fontSize: 11,
+            fontWeight: 800,
+            lineHeight: '16px',
+            textAlign: 'center',
+            zIndex: 3,
+            pointerEvents: 'none',
+          }}
+        >
+          !
+        </span>
+      ) : null}
+      {badge !== undefined && badge > 0 && !mailAlert ? (
         <span
           style={{
             position: 'absolute',
@@ -1987,15 +2088,10 @@ function MailThreadListRow({
   );
 }
 
-/** From / To lines — shared by reading pane body and Overview-10 split header row 2. */
+/** To line only — sender is shown in the card header (`senderLabel`); **From** is omitted as redundant. */
 function ReadingPaneEnvelopeLines({ msg }: { msg: MailThreadMessage }) {
   return (
     <Box style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-      {msg.fromLine ? (
-        <BodyText size="small" style={READING_META_ROW}>
-          <strong style={{ color: TW.blackPepper600 }}>From</strong> {msg.fromLine}
-        </BodyText>
-      ) : null}
       {msg.readingToFull !== undefined ? (
         <BodyText size="small" style={READING_META_ROW}>
           <strong style={{ color: TW.blackPepper600 }}>To</strong> {msg.readingToFull}
@@ -2015,33 +2111,25 @@ function ReadingPaneMessage({
   onReplyToThread,
   onForwardThread,
   onMailSurfaceChange,
-  hideSenderTimestampRow = false,
 }: {
   msg: MailThreadMessage;
   parentRow: MailThreadRow;
   onReplyToThread: (row: MailThreadRow) => void;
   onForwardThread: (row: MailThreadRow) => void;
   onMailSurfaceChange: (s: 'threads' | 'compose') => void;
-  /**
-   * Split view: dock header shows **newest** sender + time only. When this row is that message, hide the
-   * duplicate sender/timestamp here — From/To always stay on the card (header does not repeat From/To).
-   */
-  hideSenderTimestampRow?: boolean;
 }) {
   return (
     <Box>
-      {!hideSenderTimestampRow ? (
-        <Flex justifyContent="space-between" alignItems="flex-start" gap="m" marginBottom="s">
-          <BodyText size="small" style={READING_HEADER_NAME}>
-            {msg.senderLabel}
-          </BodyText>
-          {msg.readingTimestamp ? (
-            <Subtext size="small" style={{ ...READING_HEADER_TIME, flexShrink: 0 }}>
-              {msg.readingTimestamp}
-            </Subtext>
-          ) : null}
-        </Flex>
-      ) : null}
+      <Flex justifyContent="space-between" alignItems="flex-start" gap="m" marginBottom="s">
+        <BodyText size="small" style={READING_HEADER_NAME}>
+          {msg.senderLabel}
+        </BodyText>
+        {msg.readingTimestamp ? (
+          <Subtext size="small" style={{ ...READING_HEADER_TIME, flexShrink: 0 }}>
+            {msg.readingTimestamp}
+          </Subtext>
+        ) : null}
+      </Flex>
       <Box marginBottom={12}>
         <ReadingPaneEnvelopeLines msg={msg} />
       </Box>
@@ -2214,10 +2302,18 @@ function ComposeQuotedOriginalConversation({ row }: { row: MailThreadRow }) {
   );
 }
 
-/** Dock header — shrink arrows + grey circle; collapses entire mail sheet (not list-column width). */
-function ConversationalEmailCollapsePanelButton({ onCollapse }: { onCollapse: () => void }) {
+/** Dock header — shrink control: in split view hides reading pane only; list-only closes the mail sheet. */
+function ConversationalEmailCollapsePanelButton({
+  onCollapse,
+  readingPaneExpanded = false,
+}: {
+  onCollapse: () => void;
+  /** True when list + reading pane are both visible — control collapses the right pane only. */
+  readingPaneExpanded?: boolean;
+}) {
   const tipId = useId();
   const [hover, setHover] = useState(false);
+  const label = readingPaneExpanded ? 'Collapse reading pane' : 'Close panel';
 
   return (
     <Box
@@ -2227,7 +2323,8 @@ function ConversationalEmailCollapsePanelButton({ onCollapse }: { onCollapse: ()
     >
       <button
         type="button"
-        aria-label="Collapse panel"
+        aria-label={label}
+        title={label}
         aria-describedby={hover ? tipId : undefined}
         onClick={onCollapse}
         style={{
@@ -2262,7 +2359,7 @@ function ConversationalEmailCollapsePanelButton({ onCollapse }: { onCollapse: ()
             boxShadow: '0 4px 14px rgba(11, 31, 66, 0.22)',
           }}
         >
-          Collapse Panel
+          {label}
         </Box>
       ) : null}
     </Box>
@@ -2359,11 +2456,6 @@ function MailCollaborationSurface({
     if (!selected) return [];
     return messagesForReadingPane(selected);
   }, [selected]);
-  /** Split header mirrors the **newest** message (PM Overview right panel). */
-  const splitHeaderMsg = useMemo(() => {
-    if (!splitView || readingPaneMessages.length === 0) return null;
-    return readingPaneMessages[readingPaneMessages.length - 1] ?? null;
-  }, [splitView, readingPaneMessages]);
   /** Matches thread list column width — header panes use the same split. */
   const mailListColumnWidthPx = 272;
 
@@ -2401,10 +2493,10 @@ function MailCollaborationSurface({
 
   const emptyFilterCopy =
     audienceFilter === 'candidate'
-      ? 'No candidate threads for this filter. Try All or Agency, or turn off Empty inbox (Prototype controls).'
+      ? 'No candidate threads for this filter. Try the All or Agency tab, or turn off Empty inbox (demo).'
       : audienceFilter === 'agency'
-        ? 'No agency threads for this filter. Try All or Candidate, or turn off Empty inbox (Prototype controls).'
-        : 'No threads match this audience tab. Choose another tab or turn off Empty inbox (Prototype controls).';
+        ? 'No agency threads for this filter. Try the All or Candidate tab, or turn off Empty inbox (demo).'
+        : 'No threads match this audience tab. Choose another tab, or turn off Empty inbox (demo).';
 
   const audienceTab = (id: AudienceFilter, label: string) => {
     const active = audienceFilter === id;
@@ -2536,20 +2628,12 @@ function MailCollaborationSurface({
       >
         {selected ? (
           <Box padding="l">
-            {readingPaneMessages.map((msg, index) => {
-              const isLastMessage = index === readingPaneMessages.length - 1;
-              return (
+            {readingPaneMessages.map((msg, index) => (
               <Box
                 key={msg.id}
                 marginTop={index > 0 ? 'm' : undefined}
                 paddingTop={index > 0 ? 'm' : undefined}
-                style={
-                  index > 0
-                    ? isLastMessage
-                      ? undefined
-                      : { borderTop: `1px solid ${TWEMAIL_DIVIDER}` }
-                    : undefined
-                }
+                style={index > 0 ? { borderTop: `1px solid ${TWEMAIL_DIVIDER}` } : undefined}
               >
                 <ReadingPaneMessage
                   msg={msg}
@@ -2557,11 +2641,9 @@ function MailCollaborationSurface({
                   onReplyToThread={onReplyToThread}
                   onForwardThread={onForwardThread}
                   onMailSurfaceChange={onMailSurfaceChange}
-                  hideSenderTimestampRow={isLastMessage}
                 />
               </Box>
-              );
-            })}
+            ))}
           </Box>
         ) : (
           <Flex flex={1} alignItems="center" justifyContent="center" padding="xl" minHeight={200}>
@@ -2672,7 +2754,10 @@ function MailCollaborationSurface({
                 </Heading>
                 <Box style={{ position: 'relative', flexShrink: 0 }}>
                   <Flex alignItems="center" gap="xs">
-                    <ConversationalEmailCollapsePanelButton onCollapse={onCollapseDock} />
+                    <ConversationalEmailCollapsePanelButton
+                      readingPaneExpanded={splitView}
+                      onCollapse={onCollapseDock}
+                    />
                     <button
                       type="button"
                       aria-label="Create new email"
@@ -2729,37 +2814,6 @@ function MailCollaborationSurface({
               backgroundColor: TW.frenchVanilla100,
             }}
           >
-            <Box
-              paddingX="s"
-              paddingTop="s"
-              paddingBottom="s"
-              style={{
-                flexShrink: 0,
-                backgroundColor: TW.frenchVanilla100,
-                borderBottom: `1px solid ${TWEMAIL_DIVIDER_SUBTLE}`,
-              }}
-            >
-              {splitHeaderMsg ? (
-                <>
-                  <Flex
-                    flexDirection="row"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    gap={16}
-                    style={{ minHeight: 40 }}
-                  >
-                    <BodyText size="small" style={{ ...READING_HEADER_NAME, flex: 1, minWidth: 0 }}>
-                      {splitHeaderMsg.senderLabel}
-                    </BodyText>
-                    {splitHeaderMsg.readingTimestamp ? (
-                      <Subtext size="small" style={{ ...READING_HEADER_TIME, flexShrink: 0 }}>
-                        {splitHeaderMsg.readingTimestamp}
-                      </Subtext>
-                    ) : null}
-                  </Flex>
-                </>
-              ) : null}
-            </Box>
             {splitViewReadingPane}
           </Box>
         </Flex>
@@ -2781,7 +2835,10 @@ function MailCollaborationSurface({
                 Conversational Email
               </Heading>
               <Flex alignItems="center" gap="xs" flexShrink={0}>
-                <ConversationalEmailCollapsePanelButton onCollapse={onCollapseDock} />
+                <ConversationalEmailCollapsePanelButton
+                  readingPaneExpanded={false}
+                  onCollapse={onCollapseDock}
+                />
                 <button
                   type="button"
                   aria-label="Create new email"
@@ -3729,6 +3786,15 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
     tryNavigateAway({ kind: 'close' });
   }, [tryNavigateAway]);
 
+  /** Header shrink: hide reading pane only (narrow list); if already list-only, close the mail sheet. */
+  const collapseMailReadingPaneOrDock = useCallback(() => {
+    if (mailSurface === 'threads' && mailSplitView) {
+      setMailSelectedId(null);
+      return;
+    }
+    closePanel();
+  }, [mailSurface, mailSplitView, closePanel]);
+
   const confirmDiscardAndNavigate = useCallback(() => {
     const p = pendingNavigate;
     setDiscardModalOpen(false);
@@ -3945,9 +4011,24 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
           railPaddingYPx={0}
           rail={
             <>
-              {panelOpen || mailSurface === 'compose'
-                ? collabRailTile(false, chevronLeftSmallIcon, 'Collapse panel', closePanel)
-                : null}
+              {panelOpen || mailSurface === 'compose' ? (
+                <>
+                  {collabRailTile(false, mailIcon, 'Collapse panel', closePanel, {
+                    customIcon: (
+                      <RailPanelContractGlyph color={CONV_EMAIL_RAIL_ICON_IDLE} />
+                    ),
+                  })}
+                  <Box
+                    style={{
+                      width: COLLAB_RAIL_W,
+                      height: 1,
+                      flexShrink: 0,
+                      backgroundColor: TW.soap200,
+                    }}
+                    aria-hidden
+                  />
+                </>
+              ) : null}
               {collabRailTile(false, noteIcon, 'Notes', () => {})}
               {collabRailTile(false, documentIcon, 'Documents', () => {})}
               <Box
@@ -3963,18 +4044,24 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
                 }}
               >
                 {collabRailTile(collabChannel === 'mail', mailIcon, 'Email', () => openCollaboration('mail'), {
+                  customIcon: (
+                    <RailClassicEnvelopeGlyph
+                      color={collabChannel === 'mail' ? CONV_EMAIL_RAIL_ICON_ACTIVE : CONV_EMAIL_RAIL_ICON_IDLE}
+                    />
+                  ),
                   badgeCount: mailRailBadgeCount,
-                  showOnboardingDot: onboardingStep === 'feature',
+                  mailAlertBadge: true,
+                  showOnboardingDot: onboardingStep === 'feature' && mailRailBadgeCount < 1,
                 })}
               </Box>
-              {collabRailTile(collabChannel === 'msg', speechBubbleIcon, 'Messaging', () => openCollaboration('msg'))}
-              {collabRailTile(collabChannel === 'wa', mailIcon, 'WhatsApp', () => openCollaboration('wa'), {
+              {collabRailTile(collabChannel === 'msg', speechBubbleIcon, 'Messaging', () => openCollaboration('msg'), {
                 customIcon: (
-                  <WhatsAppBrandGlyph
-                    color={collabChannel === 'wa' ? CONV_EMAIL_RAIL_ICON_ACTIVE : CONV_EMAIL_RAIL_ICON_IDLE}
+                  <RailDualSpeechBubbleGlyph
+                    color={collabChannel === 'msg' ? CONV_EMAIL_RAIL_ICON_ACTIVE : CONV_EMAIL_RAIL_ICON_IDLE}
                   />
                 ),
               })}
+              {collabRailTile(collabChannel === 'wa', messagingIcon, 'WhatsApp', () => openCollaboration('wa'))}
             </>
           }
           panel={
@@ -4003,7 +4090,7 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
                   onReplyToThread={onReplyToThread}
                   onForwardThread={onForwardThread}
                   threadsResetKey={threadsResetKey}
-                  onCollapseDock={closePanel}
+                  onCollapseDock={collapseMailReadingPaneOrDock}
                   audienceFilter={mailAudienceFilter}
                   onAudienceFilterChange={setMailAudienceFilter}
                   selectedId={mailSelectedId}
@@ -4213,19 +4300,6 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
                 <option value="empty">Empty inbox</option>
               </select>
             </label>
-            <label style={{ color: '#ccc', fontSize: 11 }}>
-              Audience tab
-              <select
-                aria-label="Audience tab"
-                style={{ display: 'block', width: '100%', marginTop: 4 }}
-                value={mailAudienceFilter}
-                onChange={(e) => setMailAudienceFilter(e.target.value as AudienceFilter)}
-              >
-                <option value="all">All</option>
-                <option value="candidate">Candidate</option>
-                <option value="agency">Agency</option>
-              </select>
-            </label>
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#ccc', fontSize: 11 }}>
               <input
                 type="checkbox"
@@ -4270,49 +4344,6 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
               </select>
             </label>
             <label style={{ color: '#ccc', fontSize: 11 }}>
-              Dock width preset
-              <select
-                aria-label="Dock width preset"
-                style={{ display: 'block', width: '100%', marginTop: 4 }}
-                value={dockWidthPreset}
-                onChange={(e) => setDockWidthPreset(e.target.value as DockWidthPreset)}
-              >
-                <option value="auto">auto (from surface)</option>
-                <option value="narrow">narrow (~28% vw)</option>
-                <option value="medium">medium (936px sheet)</option>
-                <option value="wide">wide (~72% vw)</option>
-              </select>
-            </label>
-            <label style={{ color: '#ccc', fontSize: 11 }}>
-              Candidate nav
-              <select
-                aria-label="Candidate nav"
-                style={{ display: 'block', width: '100%', marginTop: 4 }}
-                value={activeNav}
-                onChange={(e) => setActiveNav(e.target.value)}
-              >
-                {CANDIDATE_NAV.map((n) => (
-                  <option key={n.id} value={n.id}>
-                    {n.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label style={{ color: '#ccc', fontSize: 11 }}>
-              Compose placeholder
-              <select
-                aria-label="Compose placeholder"
-                style={{ display: 'block', width: '100%', marginTop: 4 }}
-                value={composePlaceholderVariant}
-                onChange={(e) =>
-                  setComposePlaceholderVariant(e.target.value as 'begin' | 'template')
-                }
-              >
-                <option value="begin">Begin typing…</option>
-                <option value="template">Template-first</option>
-              </select>
-            </label>
-            <label style={{ color: '#ccc', fontSize: 11 }}>
               Figma validation states (prototype)
               <select
                 aria-label="Figma compose validation states"
@@ -4333,32 +4364,6 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
                 onChange={(e) => setSeedComposePdfAttachments(e.target.checked)}
               />
               Sample PDF attachments
-            </label>
-            <label style={{ color: '#ccc', fontSize: 11 }}>
-              Header badges (messages, notifications, inbox)
-              <input
-                aria-label="Header badges comma separated"
-                style={{ display: 'block', width: '100%', marginTop: 4 }}
-                defaultValue={`${utilityBadgeCounts[0]},${utilityBadgeCounts[1]},${utilityBadgeCounts[2]}`}
-                key={`${utilityBadgeCounts.join(',')}`}
-                onBlur={(e) => {
-                  const parts = e.target.value.split(',').map((x) => parseInt(x.trim(), 10));
-                  if (parts.length === 3 && parts.every((n) => !Number.isNaN(n))) {
-                    setUtilityBadgeCounts([parts[0], parts[1], parts[2]]);
-                  }
-                }}
-              />
-            </label>
-            <label style={{ color: '#ccc', fontSize: 11 }}>
-              Mail rail badge
-              <input
-                type="number"
-                min={0}
-                max={99}
-                style={{ display: 'block', width: '100%', marginTop: 4 }}
-                value={mailRailBadgeCount}
-                onChange={(e) => setMailRailBadgeCount(Number(e.target.value) || 0)}
-              />
             </label>
             <Subtext size="small" style={{ color: '#888', marginTop: 4 }}>
               Append <code style={{ color: '#ccc' }}>?proto=1</code> to the hash for controls outside dev. Use the
