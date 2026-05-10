@@ -490,7 +490,7 @@ function messagesForReadingPane(row: MailThreadRow): MailThreadMessage[] {
   return [syntheticMessageFromRow(row)];
 }
 
-/** Stub inbox — Figma-aligned names, timestamps, badges. */
+/** Stub inbox — Figma-aligned names, timestamps, badges. Agency inbound: Alex Rivera (BrightPath). */
 const MOCK_MAIL_THREADS: MailThreadRow[] = [
   {
     id: '1',

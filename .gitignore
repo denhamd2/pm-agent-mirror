@@ -64,6 +64,7 @@ docs/downloads/*.pptx
 
 # Local development
 design/dist/
+design/.vite/
 
 # Dashboard build outputs (no longer published to GHE Pages; localhost-only via `cd design && npm run dev`)
 dashboard-dist/
