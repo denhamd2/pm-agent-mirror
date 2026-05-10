@@ -98,6 +98,10 @@ function spaFallback404Public(): Plugin {
 
 export default defineConfig({
   base: process.env.VITE_BASE_PATH ? normaliseBase(process.env.VITE_BASE_PATH) : './',
+  /** Read in `2-way-email-prototype.tsx` — always show floating prototype controls on this bundle only. */
+  define: {
+    'import.meta.env.VITE_PUBLIC_PROTOTYPE_CATALOGUE': JSON.stringify('1'),
+  },
   plugins: [
     forbiddenImportsPlugin(),
     react(),

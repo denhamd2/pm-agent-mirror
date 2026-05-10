@@ -3547,12 +3547,13 @@ export function buildTwoWayEmailPrototypeHref(
 }
 
 /**
- * Show the floating prototype controls in dev, and in production when the bundle is deployed under a path
- * base (public catalogue on GHE `/pages/…/` or github.io `/<repo>/`). Local `build:public` uses `./` — keep
- * controls opt-in there via `#…?proto=1`. Root `/` production builds stay clean unless `proto=1`.
+ * Show the floating prototype controls in dev; on the public catalogue bundle (`vite.config.public` sets
+ * `VITE_PUBLIC_PROTOTYPE_CATALOGUE`); otherwise in production only when deployed under a non-root path base
+ * (fallback) or when `proto=1` is in the hash query.
  */
 function showPrototypeControlsByDefaultForBuild(): boolean {
   if (import.meta.env.DEV) return true;
+  if (import.meta.env.VITE_PUBLIC_PROTOTYPE_CATALOGUE === '1') return true;
   if (!import.meta.env.PROD) return false;
   const raw = import.meta.env.BASE_URL ?? '/';
   const base = raw.replace(/\/+$/, '') || '/';
