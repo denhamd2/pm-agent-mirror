@@ -1,0 +1,28 @@
+# GitHub Enterprise Pages (Jekyll) — keep the build small and Liquid-safe.
+# This repo is mostly docs; many Markdown files contain JSX `{{ ... }}` or template
+# placeholders that Jekyll interprets as Liquid and can fail or hang the site build.
+#
+# Excluded paths are not published to the site output; they remain in the repo only.
+exclude:
+  - .cursor
+  - .githooks
+  - design/docs
+  - design/references
+  - design/README.md
+  - design/CANVAS-KIT-MCP-APPROACH.md
+  - design/candidate-smart-view-v86-design-brief.md
+  - design/candidate-grid-redesign-v84-design-brief.md
+  - design/create-offer-ssa-design-brief.md
+  - design/gcc-whatsapp-integration-compliance-review.md
+  - design/gcc-whatsapp-integration-copy-review.md
+  - design/recruiter-hub-modern-ux.md
+  - docs/archive
+  - docs/GCC-E2E-016-bug-fixes.md
+  - research
+  - strategy
+  - functional-knowledge
+  - inbox
+  - scripts
+  - __pycache__
+  - node_modules
+  - vendor
