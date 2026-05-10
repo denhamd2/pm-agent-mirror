@@ -3546,6 +3546,20 @@ export function buildTwoWayEmailPrototypeHref(
   return `${base}#${slug}${q ? `?${q}` : ''}`;
 }
 
+/**
+ * Show the floating prototype controls in dev, and in production when the bundle is deployed under a path
+ * base (public catalogue on GHE `/pages/…/` or github.io `/<repo>/`). Local `build:public` uses `./` — keep
+ * controls opt-in there via `#…?proto=1`. Root `/` production builds stay clean unless `proto=1`.
+ */
+function showPrototypeControlsByDefaultForBuild(): boolean {
+  if (import.meta.env.DEV) return true;
+  if (!import.meta.env.PROD) return false;
+  const raw = import.meta.env.BASE_URL ?? '/';
+  const base = raw.replace(/\/+$/, '') || '/';
+  if (base === '/' || base === '.' || base === './') return false;
+  return true;
+}
+
 export type TwoWayEmailPrototypeProps = {
   /**
    * Short bookmark route (`#conversational-email-prototype`): same opening reset as any refresh; hash slug prefers `conversational-email-prototype`.
@@ -3590,7 +3604,7 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
   const [pendingNavigate, setPendingNavigate] = useState<PendingComposeNavigate | null>(null);
 
   const showPrototypeControls =
-    import.meta.env.DEV ||
+    showPrototypeControlsByDefaultForBuild() ||
     (typeof window !== 'undefined' && parseTwoWayEmailPrototypeQuery().get('proto') === '1');
 
   const vw = useViewportWidth();
@@ -3628,7 +3642,7 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
     const mailSplitViewOpening =
       Boolean(opening.mailSelectedId) && MOCK_MAIL_THREADS.some((t) => t.id === opening.mailSelectedId);
     const includeProto =
-      import.meta.env.DEV ||
+      showPrototypeControlsByDefaultForBuild() ||
       parseTwoWayEmailPrototypeQuery().get('proto') === '1';
     const q = mailSnapshotToUrlSearchParams(opening, mailSplitViewOpening, includeProto);
     const base = `${window.location.pathname}${window.location.search}`;
