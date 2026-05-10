@@ -4189,7 +4189,9 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
         <Flex alignItems="center" gap="m" flexWrap="wrap" justifyContent="space-between">
           <Subtext size="small">
             2-way email prototype — Figma 2-Way Email Recruiting 12/2024 (INDIA-E2E-006). Sample data; Legal review for
-            production.
+            production. Agency inbox stub senders: Alex Rivera (BrightPath) only — open{' '}
+            <code style={{ fontSize: '0.92em' }}>mail-stub-version.txt</code> at the site root if you still see other
+            names (cached JS).
           </Subtext>
           {import.meta.env.DEV ? (
             <TertiaryButton
