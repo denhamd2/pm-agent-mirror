@@ -666,14 +666,14 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
     when: 'Wed',
     sentAt: '11/12/2025, 10:05 AM',
     readingTimestamp: '11/12/2025, 10:05 AM',
-    senderLabel: 'Priya Nair',
+    senderLabel: 'Alex Rivera',
     direction: 'in',
     subjectTone: 'default',
     readingToFull: 'Rachel Vaccaro <Rachel.Vaccaro@email.com>',
     readingTo: 'Rachel Vaccaro',
-    fromLine: 'Priya Nair <priya.nair@apexrecruit.co>',
+    fromLine: 'Alex Rivera <alex.rivera@brightpathstaffing.com>',
     body:
-      'Hi Rachel,\n\nFollowing up on Chloe Clarkson for JR-00073 — happy to coordinate interviews, share references, or align on timeline whenever you are ready to move her forward.\n\nThanks,\nPriya\nApex Recruit Partners',
+      'Hi Rachel,\n\nFollowing up on Chloe Clarkson for JR-00073 — happy to coordinate interviews, share references, or align on timeline whenever you are ready to move her forward.\n\nThanks,\nAlex Rivera\nBrightPath Staffing',
   },
 ];
 
