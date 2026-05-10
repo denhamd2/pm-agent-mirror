@@ -72,8 +72,18 @@ jobs:
         id: base
         run: |
           REPO_NAME="${GITHUB_REPOSITORY##*/}"
-          echo "base=/${REPO_NAME}/" >> "$GITHUB_OUTPUT"
-          echo "Using VITE_BASE_PATH=/${REPO_NAME}/"
+          OWNER="${GITHUB_REPOSITORY%%/*}"
+          SERVER_URL="${GITHUB_SERVER_URL:-https://github.com}"
+          SERVER_URL="${SERVER_URL%/}"
+          # github.com Pages: https://<owner>.github.io/<repo>/  →  base /<repo>/
+          # GHE (and most Enterprise hosts): https://<host>/pages/<owner>/<repo>/  →  base /pages/<owner>/<repo>/
+          if [ "$SERVER_URL" = "https://github.com" ]; then
+            echo "base=/${REPO_NAME}/" >> "$GITHUB_OUTPUT"
+            echo "Resolved Vite base for github.com: /${REPO_NAME}/"
+          else
+            echo "base=/pages/${OWNER}/${REPO_NAME}/" >> "$GITHUB_OUTPUT"
+            echo "Resolved Vite base for Enterprise Pages: /pages/${OWNER}/${REPO_NAME}/"
+          fi
 
       - name: Build public bundle (with forbidden-imports guardrail)
         working-directory: design

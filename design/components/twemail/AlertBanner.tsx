@@ -6,7 +6,7 @@ export interface TwAlertBannerProps {
   type?: 'error' | 'warning';
 }
 
-/** Bespoke banner — no Canvas Kit Banner. Error variant aligned to delivery-failure spec (pale red wash, 4px accent, circular alert glyph). */
+/** Bespoke banner — no Canvas Kit Banner. Error: square corners, pale red wash, left accent only, circular alert glyph. */
 export function AlertBanner({ message, type = 'warning' }: TwAlertBannerProps) {
   const parts = message.split('\n\n');
 
@@ -17,10 +17,10 @@ export function AlertBanner({ message, type = 'warning' }: TwAlertBannerProps) {
         style={{
           marginBottom: 16,
           padding: 16,
-          borderRadius: 6,
+          borderRadius: 0,
           backgroundColor: 'rgba(194, 57, 52, 0.06)',
-          border: `1px solid ${TW.soap300}`,
-          borderLeft: `4px solid ${TW.cinnamon600}`,
+          border: 'none',
+          borderLeft: `6px solid ${TW.cinnamon600}`,
           display: 'flex',
           alignItems: 'flex-start',
           gap: 12,

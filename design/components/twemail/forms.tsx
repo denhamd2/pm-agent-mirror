@@ -111,14 +111,16 @@ export function TwFormTextInput({
           padding: '8px 12px',
           fontSize: 14,
           lineHeight: '20px',
-          border: `1px solid ${error ? TW.cinnamon500 : TW.soap400}`,
+          border: `1px solid ${error ? TW.cinnamon600 : TW.soap400}`,
           borderRadius: 4,
-          backgroundColor: readOnly ? TW.soap100 : TW.frenchVanilla100,
+          backgroundColor:
+            error ? TW.frenchVanilla100 : readOnly ? TW.soap100 : TW.frenchVanilla100,
           color: TW.blackPepper600,
           fontFamily: 'inherit',
           boxSizing: 'border-box',
           cursor: readOnly ? 'default' : undefined,
-          opacity: disabled ? 0.55 : 1,
+          /** Keep error state visible (PM compose refs use full-strength red outline). */
+          opacity: disabled && !error ? 0.55 : 1,
         }}
       />
       {error ? <FormField.Hint>{error}</FormField.Hint> : null}

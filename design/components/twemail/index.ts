@@ -13,6 +13,7 @@ export { Table } from './Table';
 export { Avatar } from './Avatar';
 export { StatusIndicator } from './StatusIndicator';
 export { AlertBanner } from './AlertBanner';
+export { ComposeInlineErrorSummary } from './ComposeInlineErrorSummary';
 export { FormField } from './FormField';
 export { TwFormSelect, TwFormTextInput } from './forms';
 export type { TwFormSelectProps, TwFormTextInputProps } from './forms';

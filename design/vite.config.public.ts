@@ -1,4 +1,4 @@
-import { copyFileSync, renameSync } from 'node:fs';
+import { copyFileSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig, type Plugin } from 'vite';
@@ -91,6 +91,7 @@ function spaFallback404Public(): Plugin {
       } catch {
         /* dev server — no dist yet */
       }
+      writeFileSync(path.join(outDir, '.nojekyll'), '');
     },
   };
 }

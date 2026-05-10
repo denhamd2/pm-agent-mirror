@@ -48,6 +48,7 @@ import {
   SPACE,
   twProfileCardStyle,
   AlertBanner,
+  ComposeInlineErrorSummary,
 } from './components/twemail';
 import './two-way-email-reading-pane.css';
 import {
@@ -2157,10 +2158,7 @@ function ReadingPaneMessage({
 function ComposeQuotedOriginalConversation({ row }: { row: MailThreadRow }) {
   const msgs = messagesForReadingPane(row);
   return (
-    <Box>
-      <BodyText size="small" fontWeight={700} style={{ margin: '0 0 12px', color: TW.blackPepper600 }}>
-        Original conversation
-      </BodyText>
+    <>
       {msgs.map((msg, index) => (
         <Box
           key={msg.id}
@@ -2212,7 +2210,7 @@ function ComposeQuotedOriginalConversation({ row }: { row: MailThreadRow }) {
           </BodyText>
         </Box>
       ))}
-    </Box>
+    </>
   );
 }
 
@@ -2946,8 +2944,12 @@ function ComposeEmailPanel({
 
   useEffect(() => {
     if (composeValidationDemo === 'multiple') {
-      setToRecipientError('Enter a valid email address');
-    } else if (composeValidationDemo !== 'invalidTo') {
+      setToRecipientError('Error: Required field.');
+    } else if (composeValidationDemo === 'invalidTo') {
+      setToRecipientError('Error: Invalid email address(s).');
+    } else if (composeValidationDemo === 'noRecipient') {
+      setToRecipientError(null);
+    } else {
       setToRecipientError(null);
     }
   }, [composeValidationDemo]);
@@ -3012,18 +3014,19 @@ function ComposeEmailPanel({
     !!quotedThreadRow && (composeVariant === 'reply' || composeVariant === 'forward');
 
   const handlePrimarySend = () => {
-    setToRecipientError(null);
     if (composeValidationDemo === 'invalidTo') {
-      setToRecipientError('Enter a valid email address');
+      setToRecipientError('Error: Invalid email address(s).');
       return;
     }
     if (composeValidationDemo === 'noRecipient') {
+      setToRecipientError('Error: Required field.');
       return;
     }
     if (composeValidationDemo === 'multiple') {
-      setToRecipientError('Enter a valid email address');
+      setToRecipientError('Error: Required field.');
       return;
     }
+    setToRecipientError(null);
     setSendOutcome('sent');
   };
 
@@ -3049,7 +3052,8 @@ function ComposeEmailPanel({
       />
       <Flex
         alignItems="center"
-        gap="s"
+        justifyContent="space-between"
+        gap="m"
         paddingX="m"
         paddingY="s"
         style={{
@@ -3058,17 +3062,20 @@ function ComposeEmailPanel({
           flexShrink: 0,
         }}
       >
-        <TertiaryButton
-          size="medium"
-          onClick={onRequestDismiss}
-          aria-label="Back to Inbox"
-          title="Back to Inbox"
-        >
-          <TwIcon icon={chevronLeftSmallIcon} size={24} />
-        </TertiaryButton>
-        <Heading size="small" style={{ margin: 0, fontWeight: 700, color: TW.blackPepper600 }}>
-          {composeTitle[composeVariant]}
-        </Heading>
+        <Flex alignItems="center" gap="s" style={{ minWidth: 0 }}>
+          <TertiaryButton
+            size="medium"
+            onClick={onRequestDismiss}
+            aria-label="Back to Inbox"
+            title="Back to Inbox"
+          >
+            <TwIcon icon={chevronLeftSmallIcon} size={24} />
+          </TertiaryButton>
+          <Heading size="small" style={{ margin: 0, fontWeight: 700, color: TW.blackPepper600 }}>
+            {composeTitle[composeVariant]}
+          </Heading>
+        </Flex>
+        <ComposeInlineErrorSummary count={composeValidationDemo === 'multiple' ? 2 : 0} />
       </Flex>
 
       <Flex flexDirection="column" flex={1} style={{ minHeight: 0, overflowY: 'auto' }}>
@@ -3092,7 +3099,6 @@ function ComposeEmailPanel({
                   label="To"
                   required
                   readOnly
-                  disabled
                   type="text"
                   placeholder="Add a recipient"
                   value=""
@@ -3133,25 +3139,9 @@ function ComposeEmailPanel({
               placeholder=""
               value={subject}
               onChange={onSubjectChange}
+              error={composeValidationDemo === 'multiple' ? 'Error: Required field.' : undefined}
             />
           </Box>
-
-          {composeValidationDemo === 'noRecipient' ? (
-            <Box marginTop="m">
-              <AlertBanner
-                type="error"
-                message="Add at least one recipient before sending this message."
-              />
-            </Box>
-          ) : null}
-          {composeValidationDemo === 'multiple' ? (
-            <Box marginTop="m">
-              <AlertBanner
-                type="warning"
-                message="We could not send this message. Fix the highlighted fields and try again."
-              />
-            </Box>
-          ) : null}
         </Box>
 
         <Box

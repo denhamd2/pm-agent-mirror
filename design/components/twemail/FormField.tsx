@@ -26,8 +26,9 @@ FormField.Hint = function Hint(props: React.HTMLAttributes<HTMLParagraphElement>
     <p
       {...props}
       style={{
-        margin: '8px 0 0',
+        margin: '6px 0 0',
         fontSize: 12,
+        fontWeight: 500,
         color: TW.cinnamon600,
         ...props.style,
       }}
