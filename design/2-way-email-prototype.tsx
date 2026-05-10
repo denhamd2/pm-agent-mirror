@@ -26,6 +26,7 @@ import {
   type ChangeEvent,
   type ReactNode,
 } from 'react';
+import { createPortal } from 'react-dom';
 import type { CanvasSystemIcon } from '@workday/design-assets-types';
 import {
   Card,
@@ -203,6 +204,8 @@ const COMMUNICATION_DOCK_Z = 210;
  */
 const DECISION_ACTION_BAR_Z = 230;
 const DECISION_ACTION_BAR_HEIGHT_PX = 72;
+/** Portaled to `document.body` — above all in-app z-index layers; avoids clipping from transformed ancestors. */
+const PROTOTYPE_CONTROLS_LAYER_Z = 5000;
 
 /** Recruiting chrome accent / candidate pane fill (`#0077D4`). */
 const OVERVIEW_NAV_BLUE = '#0077D4';
@@ -4218,80 +4221,81 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
         </Box>
       ) : null}
 
-      {showPrototypeControls ? (
-        <>
-          <button
-            type="button"
-            aria-expanded={prototypeControlsExpanded}
-            aria-controls="two-way-email-prototype-controls"
-            onClick={() => setPrototypeControlsExpanded((v) => !v)}
-            style={{
-              position: 'fixed',
-              left: 8,
-              bottom:
-                8 +
-                (decisionActionBarVisible ? DECISION_ACTION_BAR_HEIGHT_PX : 0) +
-                (import.meta.env.DEV ? 52 : 8),
-              zIndex: 241,
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              minHeight: 44,
-              padding: '12px 20px',
-              margin: 0,
-              cursor: 'pointer',
-              borderRadius: 6,
-              border: '1px solid rgba(255,255,255,0.14)',
-              backgroundColor: '#1a1a1a',
-              boxShadow: '0 4px 12px rgba(11,31,66,0.2)',
-              fontFamily: 'inherit',
-              fontSize: 15,
-              fontWeight: 600,
-              lineHeight: 1.3,
-              color: TW.frenchVanilla100,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#2a2a2a';
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#1a1a1a';
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)';
-            }}
-            onFocus={(e) => {
-              e.currentTarget.style.outline = `2px solid ${TW.blueberry400}`;
-              e.currentTarget.style.outlineOffset = '2px';
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.outline = 'none';
-            }}
-          >
-            {prototypeControlsExpanded ? 'Close controls' : 'Prototype controls'}
-          </button>
-          {prototypeControlsExpanded ? (
-            <Box
-              id="two-way-email-prototype-controls"
-              role="complementary"
-              aria-label="Prototype control panel"
-              style={{
-                position: 'fixed',
-                left: 8,
-                bottom:
-                  8 +
-                  (decisionActionBarVisible ? DECISION_ACTION_BAR_HEIGHT_PX : 0) +
-                  (import.meta.env.DEV ? 52 : 8) +
-                  52,
-                width: 340,
-                maxHeight: '42vh',
-                overflowY: 'auto',
-                zIndex: 240,
-                backgroundColor: '#1a1a1a',
-                borderRadius: 8,
-                padding: 12,
-                boxShadow: '0 8px 24px rgba(0,0,0,0.35)',
-                pointerEvents: 'auto',
-              }}
-            >
+      {showPrototypeControls && typeof document !== 'undefined'
+        ? createPortal(
+            <>
+              <button
+                type="button"
+                aria-expanded={prototypeControlsExpanded}
+                aria-controls="two-way-email-prototype-controls"
+                onClick={() => setPrototypeControlsExpanded((v) => !v)}
+                style={{
+                  position: 'fixed',
+                  left: 8,
+                  bottom:
+                    8 +
+                    (decisionActionBarVisible ? DECISION_ACTION_BAR_HEIGHT_PX : 0) +
+                    (import.meta.env.DEV ? 52 : 8),
+                  zIndex: PROTOTYPE_CONTROLS_LAYER_Z,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minHeight: 44,
+                  padding: '12px 20px',
+                  margin: 0,
+                  cursor: 'pointer',
+                  borderRadius: 6,
+                  border: '1px solid rgba(255,255,255,0.14)',
+                  backgroundColor: '#1a1a1a',
+                  boxShadow: '0 4px 12px rgba(11,31,66,0.2)',
+                  fontFamily: 'inherit',
+                  fontSize: 15,
+                  fontWeight: 600,
+                  lineHeight: 1.3,
+                  color: TW.frenchVanilla100,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#2a2a2a';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#1a1a1a';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)';
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.outline = `2px solid ${TW.blueberry400}`;
+                  e.currentTarget.style.outlineOffset = '2px';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.outline = 'none';
+                }}
+              >
+                {prototypeControlsExpanded ? 'Close controls' : 'Prototype controls'}
+              </button>
+              {prototypeControlsExpanded ? (
+                <Box
+                  id="two-way-email-prototype-controls"
+                  role="complementary"
+                  aria-label="Prototype control panel"
+                  style={{
+                    position: 'fixed',
+                    left: 8,
+                    bottom:
+                      8 +
+                      (decisionActionBarVisible ? DECISION_ACTION_BAR_HEIGHT_PX : 0) +
+                      (import.meta.env.DEV ? 52 : 8) +
+                      52,
+                    width: 340,
+                    maxHeight: '42vh',
+                    overflowY: 'auto',
+                    zIndex: PROTOTYPE_CONTROLS_LAYER_Z - 1,
+                    backgroundColor: '#1a1a1a',
+                    borderRadius: 8,
+                    padding: 12,
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.35)',
+                    pointerEvents: 'auto',
+                  }}
+                >
               <BodyText size="small" style={{ margin: '0 0 10px', color: '#fff', fontWeight: 700 }}>
                 Prototype Control
               </BodyText>
@@ -4381,15 +4385,17 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
               Sample PDF attachments
             </label>
             <Subtext size="small" style={{ color: '#888', marginTop: 4 }}>
-              Append <code style={{ color: '#ccc' }}>?proto=1</code> to the hash for controls outside dev. Use the
-              bottom-left button to expand; URL stays bookmarkable (<code style={{ color: '#ccc' }}>panel=0|1</code>{' '}
-              opens or closes the mail dock).
+              On static hosting the controls render in a layer above the app. Add{' '}
+              <code style={{ color: '#ccc' }}>?proto=1</code> to the hash if they do not appear (older bundles). URL
+              stays bookmarkable (<code style={{ color: '#ccc' }}>panel=0|1</code> opens or closes the mail dock).
             </Subtext>
           </Flex>
-            </Box>
-          ) : null}
-        </>
+        </Box>
       ) : null}
+            </>,
+            document.body,
+          )
+        : null}
     </Flex>
   );
 }

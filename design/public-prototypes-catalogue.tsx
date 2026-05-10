@@ -20,7 +20,9 @@ import { PUBLIC_PROTOTYPES, type PublicPrototype } from './public-catalogue';
 
 function PrototypeCard({ prototype }: { prototype: PublicPrototype }) {
   /** Hash routes — static GHE Pages often returns a real 404 for `./slug` paths (no 404.html SPA fallback). */
-  const href = `#${prototype.slug}`;
+  /** `proto=1` enables the floating reviewer panel on older/cached public builds that lack the catalogue define. */
+  const href =
+    prototype.slug === '2-way-email-prototype' ? `#${prototype.slug}?proto=1` : `#${prototype.slug}`;
   return (
     <a
       href={href}
