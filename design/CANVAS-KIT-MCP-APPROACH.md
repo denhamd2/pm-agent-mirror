@@ -80,6 +80,8 @@ import { Heading, BodyText } from '@workday/canvas-kit-react/text';
 ```
 
 ### What NOT to Do
+
+{% raw %}
 ```tsx
 // ❌ Don't create custom navigation
 <Box style={{ backgroundColor: colors.blueberry600 }}>
@@ -105,6 +107,7 @@ import { Heading, BodyText } from '@workday/canvas-kit-react/text';
   boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
 }}>
 ```
+{% endraw %}
 
 ## Updated Rules
 
