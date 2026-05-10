@@ -656,6 +656,24 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
       { name: 'Chloe-Clarkson-agency-submission.pdf', meta: '312 KB' },
       { name: 'BrightPath-rate-card.pdf', meta: '89 KB' },
     ],
+    threadMessages: [
+      {
+        id: '5-m1',
+        senderLabel: 'Alex Rivera',
+        readingTimestamp: '11/14/2025, 2:18 PM',
+        direction: 'in',
+        fromLine: 'Alex Rivera <alex.rivera@brightpathstaffing.com>',
+        readingToFull: 'Rachel Vaccaro <Rachel.Vaccaro@email.com>',
+        readingTo: 'Rachel Vaccaro',
+        subject: 'Candidate submission — Chloe Clarkson (JR-00073)',
+        body:
+          'Hi Rachel,\n\nBrightPath Staffing is pleased to formally submit Chloe Clarkson for the Marketing Coordinator role (JR-00073). Chloe has four years of campaign coordination experience and is available to start in two weeks.\n\nPlease find our agency submission summary and standard rate card attached. Let me know if you would like to schedule a screening call or need any additional compliance documentation.\n\nBest,\nAlex Rivera\nBrightPath Staffing',
+        readingAttachments: [
+          { name: 'Chloe-Clarkson-agency-submission.pdf', meta: '312 KB' },
+          { name: 'BrightPath-rate-card.pdf', meta: '89 KB' },
+        ],
+      },
+    ],
   },
   {
     id: '6',
@@ -674,6 +692,20 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
     fromLine: 'Alex Rivera <alex.rivera@brightpathstaffing.com>',
     body:
       'Hi Rachel,\n\nFollowing up on Chloe Clarkson for JR-00073 — happy to coordinate interviews, share references, or align on timeline whenever you are ready to move her forward.\n\nThanks,\nAlex Rivera\nBrightPath Staffing',
+    threadMessages: [
+      {
+        id: '6-m1',
+        senderLabel: 'Alex Rivera',
+        readingTimestamp: '11/12/2025, 10:05 AM',
+        direction: 'in',
+        fromLine: 'Alex Rivera <alex.rivera@brightpathstaffing.com>',
+        readingToFull: 'Rachel Vaccaro <Rachel.Vaccaro@email.com>',
+        readingTo: 'Rachel Vaccaro',
+        subject: 'Re: Chloe Clarkson — JR-00073',
+        body:
+          'Hi Rachel,\n\nFollowing up on Chloe Clarkson for JR-00073 — happy to coordinate interviews, share references, or align on timeline whenever you are ready to move her forward.\n\nThanks,\nAlex Rivera\nBrightPath Staffing',
+      },
+    ],
   },
 ];
 
