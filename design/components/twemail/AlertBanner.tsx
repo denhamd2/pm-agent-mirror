@@ -18,9 +18,9 @@ export function AlertBanner({ message, type = 'warning' }: TwAlertBannerProps) {
           marginBottom: 16,
           padding: 16,
           borderRadius: 6,
-          backgroundColor: '#FFF5F5',
-          border: '1px solid #FECACA',
-          borderLeft: '4px solid #D32F2F',
+          backgroundColor: 'rgba(194, 57, 52, 0.06)',
+          border: `1px solid ${TW.soap300}`,
+          borderLeft: `4px solid ${TW.cinnamon600}`,
           display: 'flex',
           alignItems: 'flex-start',
           gap: 12,
@@ -36,8 +36,8 @@ export function AlertBanner({ message, type = 'warning' }: TwAlertBannerProps) {
             width: 24,
             height: 24,
             borderRadius: '50%',
-            backgroundColor: '#D32F2F',
-            color: '#FFFFFF',
+            backgroundColor: TW.cinnamon600,
+            color: TW.frenchVanilla100,
             fontSize: 13,
             fontWeight: 800,
             lineHeight: 1,
@@ -57,7 +57,7 @@ export function AlertBanner({ message, type = 'warning' }: TwAlertBannerProps) {
                 fontWeight: i === 0 ? 700 : 400,
                 fontSize: i === 0 ? 14 : 13,
                 lineHeight: 1.45,
-                color: i === 0 ? '#111827' : '#374151',
+                color: i === 0 ? TW.blackPepper600 : TW.blackPepper500,
               }}
             >
               {p}

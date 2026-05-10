@@ -1,0 +1,18 @@
+/* Overview split reading pane — thin scrollbar vs browser default (PM capture parity). */
+.two-way-email-reading-pane-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #c5c8cc transparent;
+}
+
+.two-way-email-reading-pane-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.two-way-email-reading-pane-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.two-way-email-reading-pane-scroll::-webkit-scrollbar-thumb {
+  background-color: #c5c8cc;
+  border-radius: 4px;
+}

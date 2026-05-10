@@ -3,7 +3,7 @@
  *
  * **Onboarding:** Anchored **Introducing Conversational Email** popover near the mail rail — **every full page refresh** resets to this opening canvas (hash query normalized to defaults); dismissing the popover persists until you refresh. Canonical copy matches Overview-9.
  * **Mail rail:** **Conversational Email** panel — thread list shows **one row per conversation**; **full threading** (stacked messages, Reply/Forward per message) lives in the **reading pane** only when `threadMessages` is set.
- * **Workspace dim:** Semi-transparent overlay on the candidate profile **only** when the dock is wider than narrow list-first preview (split read, compose, medium/wide sheet); narrow preview keeps the profile fully bright.
+ * **Workspace dim:** Full-viewport semi-transparent scrim below the global header (`top: HEADER_H`) over recruiting rail, candidate blue nav, and profile when the dock is wide; top nav stays bright. Collaboration dock stays above the scrim.
  * **Compose:** templates link, rich-text toolbar, body placeholder — parity vs PM Compose PNG (`design/reference-screens/2way-email-refs/Compose-*.png`).
  * **Decision action bar:** [6887:21505](https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-21505).
  *
@@ -20,6 +20,7 @@ import {
   useEffect,
   useMemo,
   useLayoutEffect,
+  useId,
   type CSSProperties,
   type RefObject,
   type ChangeEvent,
@@ -48,50 +49,35 @@ import {
   twProfileCardStyle,
   AlertBanner,
 } from './components/twemail';
+import './two-way-email-reading-pane.css';
 import {
-  boldIcon,
   chevronDownSmallIcon,
   chevronLeftSmallIcon,
   chevronRightSmallIcon,
+  exclamationCircleIcon,
   fileIcon,
-  italicsIcon,
-  linkIcon,
   locationIcon,
   mailIcon,
   phoneIcon,
-  alignCenterIcon,
-  alignLeftIcon,
-  alignRightIcon,
-  arrowDiagonalSmallIcon,
+  shrinkIcon,
   chartIcon,
   clockIcon,
   alarmClockIcon,
-  deviceDesktopIcon,
-  devicePhoneIcon,
   inboxIcon,
   justifyIcon,
   messagingIcon,
-  orderedListIcon,
   pdfIcon,
   notificationsIcon,
   relatedActionsIcon,
   searchIcon,
-  sparkleSingleSmallIcon,
-  strikethroughIcon,
   tagIcon,
-  textColorIcon,
-  undoLIcon,
-  undoRIcon,
-  unorderedListIcon,
   speechBubbleIcon,
-  underlineIcon,
-  uploadClipIcon,
   userIcon,
   noteIcon,
   documentIcon,
   xIcon,
 } from '@workday/canvas-system-icons-web';
-import { CommunicationDock } from './components';
+import { CommunicationDock, RichTextEditor } from './components';
 import {
   TWEMAIL_DIVIDER,
   TWEMAIL_DIVIDER_SUBTLE,
@@ -106,7 +92,6 @@ import {
   CONV_EMAIL_RAIL_ICON_IDLE,
   CONV_EMAIL_RAIL_TILE_ACTIVE_BG,
   CONV_EMAIL_RAIL_TILE_RADIUS_PX,
-  CONV_EMAIL_RAIL_TILE_RING,
   CONV_EMAIL_THREAD_DIVIDER,
   CONV_EMAIL_THREAD_ROW_HOVER_BG,
   CONV_EMAIL_THREAD_SELECTED_BAR,
@@ -119,6 +104,8 @@ import { WhatsAppBrandGlyph } from './components/WhatsAppBrandGlyph';
 
 /** Figma: global header height */
 const HEADER_H = 64;
+/** Sits above workspace dim & mail dock so the global chrome is never covered by modal scrims. */
+const GLOBAL_HEADER_Z = 220;
 /** Figma: recruiting icon rail */
 const RECRUITING_RAIL_W = 65;
 /** Figma: candidate chrome — narrow sidebar (`Screenshot_2026-05-08_at_16.12.11`). */
@@ -137,8 +124,17 @@ const dockSheetNarrowPx = (vw: number) => Math.min(480, Math.max(320, Math.round
 /** Compose dock sheet — ~72% viewport minus rail (Figma Compose family). */
 const dockSheetComposePx = (vw: number) => Math.min(1200, Math.max(COLLAB_SHEET_W, Math.round(vw * 0.72)));
 
-/** Bottom decision bar: above backdrop (200), below collaboration dock (210) — Figma 6887:21505. */
-const DECISION_ACTION_BAR_Z = 205;
+/** Full-viewport dim behind mail dock — above page chrome, below {@link COMMUNICATION_DOCK_Z} — Figma Overview modal scrim. */
+const WORKSPACE_DIM_SCRIM_Z = 200;
+/** Intro popover card — below global header; interactions stay on the card only (no full-screen dismiss scrim — it blocked dock clicks). */
+const FEATURE_ONBOARDING_CARD_Z = 209;
+/** Mail / compose sliding dock — above workspace dim & onboarding backdrop; **below** decision bar so Decline/Move Forward stays on top (6887:21505). */
+const COMMUNICATION_DOCK_Z = 210;
+/**
+ * Bottom candidate decision bar (Decline / Move Forward) — **above** {@link COMMUNICATION_DOCK_Z} so it is not obscured by the 2-way email panel shadow/edge.
+ * Below Prototype controls launcher (~241).
+ */
+const DECISION_ACTION_BAR_Z = 230;
 const DECISION_ACTION_BAR_HEIGHT_PX = 72;
 
 /** Recruiting chrome accent / candidate pane fill (`#0077D4`). */
@@ -197,50 +193,59 @@ const READING_META_ROW: CSSProperties = {
 const READING_SUBJECT: CSSProperties = {
   margin: 0,
   marginBottom: 10,
-  fontSize: 18,
+  fontSize: 16,
   fontWeight: 700,
   color: TW.blackPepper600,
-  lineHeight: 1.25,
+  lineHeight: 1.3,
 };
 const READING_BODY: CSSProperties = {
   margin: 0,
   marginBottom: 16,
   fontSize: 14,
   lineHeight: 1.5,
-  color: TW.blackPepper500,
+  color: TW.blackPepper600,
+  /** Preserve `\n` / `\n\n` from message bodies (HTML collapses them by default). */
+  whiteSpace: 'pre-wrap',
+  wordBreak: 'break-word',
 };
 
-/** Attachment chips — icon + two-line label (`Screenshot_2026-05-08_at_16.08.38`). */
-const READING_ATTACHMENT_GAP_PX = 12;
+/** Attachment chips — compact vs PM capture (`design-sm` parity). */
+const READING_ATTACHMENT_GAP_PX = 8;
+/** Chips size to content and sit side-by-side; do not grow to half row width (Figma reading pane). */
+const ATTACHMENT_CHIP_MAX_WIDTH_PX = 280;
 const READING_ATTACHMENT_CHIP_RADIUS_PX = 8;
 const READING_ATTACHMENT_NAME: CSSProperties = {
   margin: 0,
-  fontSize: 14,
+  fontSize: 13,
   fontWeight: 700,
   color: TW.blackPepper600,
-  lineHeight: 1.3,
+  lineHeight: 1.25,
+  display: 'block',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
 };
 const READING_ATTACHMENT_META: CSSProperties = {
   margin: 0,
-  marginTop: 4,
-  fontSize: 12,
+  marginTop: 2,
+  fontSize: 11,
   fontWeight: 400,
   color: TW.blackPepper400,
-  lineHeight: 1.35,
+  lineHeight: 1.3,
 };
 
-/** Reply / Forward — wide pill outline buttons (`Screenshot_2026-05-08_at_16.08.38`). */
+/** Reply / Forward — compact outline pills (design reference). */
 const READING_REPLY_PILL: CSSProperties = {
-  padding: '11px 28px',
+  padding: '7px 18px',
   borderRadius: 999,
   border: `1px solid ${TW.blackPepper600}`,
   backgroundColor: TW.frenchVanilla100,
   color: TW.blackPepper600,
-  fontSize: 14,
+  fontSize: 13,
   fontWeight: 700,
   fontFamily: 'inherit',
   cursor: 'pointer',
-  lineHeight: 1.25,
+  lineHeight: 1.2,
   boxSizing: 'border-box',
 };
 
@@ -259,9 +264,7 @@ const COMPOSE_BODY_PLACEHOLDER_TEMPLATE = 'Select a template, or begin typing to
 const COMPOSE_BODY_PLACEHOLDER_BEGIN = 'Begin typing to add a message.';
 
 /** Compose shell — parity vs Conversational Email compose capture (`Screenshot_2026-05-08_at_15.36.05`). */
-const COMPOSE_TOOLBAR_BG = TW.soap100;
 const COMPOSE_BODY_CANVAS_BG = '#F3F4F6';
-const COMPOSE_SPARKLE_PURPLE = '#7C3AED';
 
 /** Figma frames: Compose `6887:14115`, Reply `6887:15547`, Forward `6887:16008`. */
 type ComposeVariant = 'compose' | 'reply' | 'forward';
@@ -281,9 +284,9 @@ function threadSentMs(row: MailThreadRow): number {
   return Number.isNaN(ms) ? 0 : ms;
 }
 
-/** MVP: single chronological order (oldest → newest). */
-function applyMailThreadSortOldestFirst(rows: MailThreadRow[]): MailThreadRow[] {
-  return [...rows].sort((a, b) => threadSentMs(a) - threadSentMs(b));
+/** Overview list — newest activity first (design parity vs Conversational Email captures). */
+function applyMailThreadSortNewestFirst(rows: MailThreadRow[]): MailThreadRow[] {
+  return [...rows].sort((a, b) => threadSentMs(b) - threadSentMs(a));
 }
 
 /** Row-level status chips (Figma Conversational Email list). */
@@ -373,7 +376,7 @@ type MailThreadRow = {
   direction: 'in' | 'out';
   /** @deprecated — use threadRowBadge */
   sentBadge?: boolean;
-  /** MVP list chip: Sent | Not delivered. */
+  /** MVP list chip: Sent | Not delivered only (no Delivered state). */
   threadRowBadge?: ThreadRowBadge;
   unread?: boolean;
   /** Inbound subject shown as blue link in reference. */
@@ -422,9 +425,9 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
   {
     id: '1',
     audience: 'candidate',
-    subject: 'Link for the Interview',
+    subject: 'Re: Invitation for an Interview',
     preview:
-      'Hi Rachel, I just noticed a link was sent on the previous message. Plea…',
+      'Hi Rachel, I just noticed a different link was sent on the previous message. Plea…',
     when: 'Today',
     sentAt: '11/15/2025, 9:46 AM',
     readingTimestamp: '11/15/2025, 9:46 AM',
@@ -451,7 +454,7 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
         fromLine: 'Chloe Clarkson <chloe.clarkson@email.com>',
         readingToFull: 'Rachel Vaccaro <Rachel.Vaccaro@email.com>',
         readingTo: 'Rachel Vaccaro',
-        subject: 'Link for the Interview',
+        subject: 'Re: Invitation for an Interview',
         body:
           'Hi Rachel, I just noticed a different link was sent on the previous message. Please send over the updated link. Thank you so much!\n\nChloe Clarkson',
         bodyItalicPhrase: 'different link',
@@ -465,22 +468,22 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
         senderLabel: 'Rachel Vaccaro (You)',
         readingTimestamp: '11/10/2025, 9:03 AM',
         direction: 'out',
-        fromLine: 'Rachel Vaccaro <rachel.vaccaro@workday.com>',
+        fromLine: 'Rachel Vaccaro <rachel.vaccaro@gms.workday.com>',
         readingToFull: 'Chloe Clarkson <chloe.clarkson@email.com>',
         subject: 'Re: Invitation for an Interview',
         body:
-          'Hello, I am sending a Zoom link for the interview scheduled on December 10, 2025. Please join using the details below and confirm your attendance.',
+          'Hello,\n\nI am sending a Zoom link for the interview scheduled on December 10, 2025.\n\nPlease join using the details below and confirm your attendance.',
       },
       {
         id: '1-m3',
         senderLabel: 'Rachel Vaccaro (You)',
         readingTimestamp: '11/10/2025, 10:23 AM',
         direction: 'out',
-        fromLine: 'Rachel Vaccaro <rachel.vaccaro@workday.com>',
+        fromLine: 'Rachel Vaccaro <rachel.vaccaro@gms.workday.com>',
         readingToFull: 'Chloe Clarkson <chloe.clarkson@email.com>',
         subject: 'Interview Request from GMS',
         body:
-          'Hi Chloe, Thank you. James is looking forward to meeting the team on Wednesday.',
+          'Hi Chloe,\n\nThank you. James is looking forward to meeting the team on Wednesday.\n\nLet us know if you need to reschedule or have questions about the role.',
         readingAttachments: [
           { name: 'Resume.pdf', meta: '245 KB' },
           { name: 'Cover-letter.pdf', meta: '245 KB' },
@@ -518,8 +521,9 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
       { name: 'Resume.pdf', meta: '245 KB' },
       { name: 'Cover-letter.pdf', meta: '245 KB' },
     ],
-    body: 'Hi Chloe, Thank you. James is looking forward to meeting the team on Wednesday.',
-    fromLine: 'Rachel Vaccaro <rachel.vaccaro@workday.com>',
+    body:
+      'Hi Chloe,\n\nThank you. James is looking forward to meeting the team on Wednesday.\n\nLet us know if you need to reschedule or have questions about the role.',
+    fromLine: 'Rachel Vaccaro <rachel.vaccaro@gms.workday.com>',
   },
   {
     id: '3',
@@ -536,15 +540,16 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
     subjectTone: 'default',
     readingToFull: 'Chloe Clarkson <chloe.clarkson@email.com>',
     readingAttachments: [],
-    body: 'Hello, I am sending a Zoom link for the interview scheduled on December 10, 2025.',
-    fromLine: 'Rachel Vaccaro <rachel.vaccaro@workday.com>',
+    body:
+      'Hello,\n\nI am sending a Zoom link for the interview scheduled on December 10, 2025.\n\nPlease join using the details below and confirm your attendance.',
+    fromLine: 'Rachel Vaccaro <rachel.vaccaro@gms.workday.com>',
   },
   {
     id: '4',
     audience: 'candidate',
-    subject: 'Interview confirmation',
+    subject: 'Re: Invitation for an Interview',
     preview:
-      'Could not deliver — mailbox unavailable. Try sending again or contact the recipient using another channel if this message is urgent.',
+      'Hello, Thank you for getting back! I just set up some time on calendar. Could not deliver — mailbox unavailable.',
     when: 'Mon',
     sentAt: '01/10/2023, 10:23 AM',
     readingTimestamp: '01/10/2023, 10:23 AM',
@@ -555,18 +560,62 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
     readingToFull: 'Rachel Vaccaro <Rachel.Vaccaro@email.com>',
     readingAttachments: [],
     body:
-      'Hi Rachel, I just noticed a different link was sent on the previous message. Please send over the updated link.',
+      'Hello, Thank you for getting back! I just set up some time on calendar.\n\nHi Rachel, I just noticed a different link was sent on the previous message. Please send over the updated link.',
     fromLine: 'Chloe Clarkson <chloe.clarkson@email.com>',
     deliveryStatus: 'notDelivered',
+  },
+  {
+    id: '5',
+    audience: 'agency',
+    subject: 'Candidate referral — Jordan Ellis',
+    preview:
+      'BrightPath Staffing is pleased to submit Jordan Ellis for JR-00073. Resume and rate card attached for your review.',
+    when: 'Today',
+    sentAt: '11/14/2025, 2:18 PM',
+    readingTimestamp: '11/14/2025, 2:18 PM',
+    senderLabel: 'Alex Rivera',
+    direction: 'in',
+    unread: true,
+    subjectTone: 'link',
+    readingToFull: 'Rachel Vaccaro <Rachel.Vaccaro@email.com>',
+    readingTo: 'Rachel Vaccaro',
+    fromLine: 'Alex Rivera <alex.rivera@brightpathstaffing.com>',
+    body:
+      'Hi Rachel,\n\nBrightPath Staffing is pleased to submit Jordan Ellis for the Marketing Coordinator role (JR-00073). Jordan has four years of campaign coordination experience and is available to start in two weeks.\n\nPlease find the resume and our standard rate card attached. Let me know if you would like to schedule a screening call.\n\nBest,\nAlex Rivera\nBrightPath Staffing',
+    readingAttachments: [
+      { name: 'Jordan-Ellis-resume.pdf', meta: '312 KB' },
+      { name: 'BrightPath-rate-card.pdf', meta: '89 KB' },
+    ],
+  },
+  {
+    id: '6',
+    audience: 'agency',
+    subject: 'Re: Shortlist for JR-00073',
+    preview:
+      'Following up on the three candidates we shared last week — happy to coordinate interviews once you confirm availability.',
+    when: 'Wed',
+    sentAt: '11/12/2025, 10:05 AM',
+    readingTimestamp: '11/12/2025, 10:05 AM',
+    senderLabel: 'Priya Nair',
+    direction: 'in',
+    subjectTone: 'default',
+    readingToFull: 'Rachel Vaccaro <Rachel.Vaccaro@email.com>',
+    readingTo: 'Rachel Vaccaro',
+    fromLine: 'Priya Nair <priya.nair@apexrecruit.co>',
+    body:
+      'Hi Rachel,\n\nFollowing up on the shortlist we sent for JR-00073 — happy to coordinate interviews or provide references once you confirm which candidates you would like to move forward.\n\nThanks,\nPriya\nApex Recruit Partners',
   },
 ];
 
 /** Session: onboarding complete after step 2 (Figma 6887:23551). */
 const TWO_WAY_EMAIL_ONBOARDING_COMPLETE_KEY = 'two_way_email_onboarding_complete_v3';
 
+/** Job requisition line — mail Overview header + candidate hero (design JR-00073). */
+const CANDIDATE_JOB_REQ_DISPLAY = 'JR-00073 Marketing Coordinator';
+
 const CANDIDATE = {
   name: 'Chloe Clarkson',
-  title: 'JR-0073 Marketing Coordinator',
+  title: CANDIDATE_JOB_REQ_DISPLAY,
   phone: '+1 408-977-3477 (Mobile)',
   email: 'Chloe.Clarkson@gmail.com',
   location: '111 Jackson Blvd, Chicago, IL 60604 United States of America',
@@ -625,14 +674,18 @@ function collabRailTile(
 ) {
   const badge = options?.badgeCount;
   const showDot = options?.showOnboardingDot;
-  /** Active channel: light-blue rounded tile + inset ring (Overview family / `Screenshot_2026-05-08_at_16.02.27`). */
-  const tileInnerSize = COLLAB_RAIL_W - 8;
+  /** Full-bleed in the rail column — no inset (Figma: active wash edge-to-edge in the 64px rail). */
   const tileInnerStyle: CSSProperties = {
-    width: tileInnerSize,
-    height: tileInnerSize,
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
     borderRadius: CONV_EMAIL_RAIL_TILE_RADIUS_PX,
+    boxSizing: 'border-box',
+    borderLeft: active ? `4px solid ${CONV_EMAIL_THREAD_SELECTED_BAR}` : 'none',
     backgroundColor: active ? CONV_EMAIL_RAIL_TILE_ACTIVE_BG : 'transparent',
-    boxShadow: active ? `inset 0 0 0 1px ${CONV_EMAIL_RAIL_TILE_RING}` : 'none',
+    boxShadow: 'none',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -657,6 +710,7 @@ function collabRailTile(
         overflow: 'visible',
         flexShrink: 0,
         boxSizing: 'border-box',
+        outline: 'none',
       }}
     >
       <span style={tileInnerStyle}>
@@ -784,12 +838,15 @@ function GlobalHeader({
       justifyContent="space-between"
       paddingX="m"
       style={{
+        position: 'relative',
+        zIndex: GLOBAL_HEADER_Z,
         height: HEADER_H,
         minHeight: HEADER_H,
         backgroundColor: TW.frenchVanilla100,
         flexShrink: 0,
-        borderBottom: `1px solid ${TWEMAIL_DIVIDER}`,
-        boxShadow: '0 2px 8px rgba(15, 46, 102, 0.06)',
+        /** Separation from canvas below — Figma: light drop shadow, not a heavy rule. */
+        borderBottom: 'none',
+        boxShadow: '0 4px 14px rgba(11, 31, 66, 0.09)',
       }}
     >
       <Flex alignItems="center" gap="m">
@@ -1092,9 +1149,12 @@ function CandidateMenu({
 function ProfileMainColumn({
   actionBarVisible,
   onMoveForward,
+  backgroundScrollLocked = false,
 }: {
   actionBarVisible: boolean;
   onMoveForward: () => void;
+  /** When true, profile column does not scroll (mail Overview / Composer is foreground). */
+  backgroundScrollLocked?: boolean;
 }) {
   const cell: CSSProperties = { padding: '8px 12px', borderBottom: `1px solid ${TWEMAIL_DIVIDER_SUBTLE}`, fontSize: 13 };
   return (
@@ -1104,7 +1164,8 @@ function ProfileMainColumn({
       padding="m"
       style={{
         minWidth: 0,
-        overflow: 'auto',
+        overflow: backgroundScrollLocked ? 'hidden' : 'auto',
+        overscrollBehavior: backgroundScrollLocked ? 'none' : undefined,
         backgroundColor: PROFILE_COLUMN_CANVAS_BG,
         paddingBottom: actionBarVisible ? DECISION_ACTION_BAR_HEIGHT_PX : undefined,
       }}
@@ -1565,7 +1626,17 @@ function formatBytes(n: number): string {
 
 type ComposeAttachment = { id: string; name: string; size: number };
 
-type SendOutcome = 'idle' | 'delivered' | 'failed';
+/** Injected on compose toolbar attach; seed control uses same rows — dedupe by stable ids. */
+const MOCK_ATTACH_RESUME: ComposeAttachment = { id: 'compose-att-resume', name: 'Resume.pdf', size: 245 * 1024 };
+const MOCK_ATTACH_COVERLETTER: ComposeAttachment = {
+  id: 'compose-att-coverletter',
+  name: 'Coverletter.pdf',
+  size: 245 * 1024,
+};
+const MOCK_ATTACHMENT_ROWS: ComposeAttachment[] = [MOCK_ATTACH_RESUME, MOCK_ATTACH_COVERLETTER];
+const MOCK_ATTACHMENT_ID_SET = new Set(MOCK_ATTACHMENT_ROWS.map((a) => a.id));
+
+type SendOutcome = 'idle' | 'sent' | 'failed';
 
 /** Anchored popover toward the mail rail — matches reference “Introducing Conversational Email”. */
 function FeatureHighlightPopover({
@@ -1653,31 +1724,21 @@ function FeatureHighlightPopover({
 
   return (
     <>
-      <button
-        type="button"
-        aria-label="Dismiss feature introduction"
-        onClick={onDismiss}
-        style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 329,
-          border: 'none',
-          padding: 0,
-          margin: 0,
-          /* Invisible hit-target only — no dimming (product: anchored spotlight, not modal overlay). */
-          backgroundColor: 'transparent',
-          cursor: 'default',
-        }}
-      />
+      {/*
+       * Do **not** render a full-screen invisible dismiss layer: even when z-index is below the mail dock,
+       * browsers still resolve hit-testing in DOM/stacking order such that Reply / + New on the dock fail.
+       * Dismiss via the card Close button or “Try Conversational Email” only.
+       */}
       {rect ? (
         <Box
           style={{
             position: 'fixed',
-            zIndex: 330,
+            zIndex: FEATURE_ONBOARDING_CARD_Z,
             top: Math.max(16, rect.top + rect.height / 2 - 100),
             left: Math.max(16, rect.left - cardWidth - gap),
             width: cardWidth,
             filter: 'drop-shadow(0 8px 24px rgba(11,31,66,0.18))',
+            pointerEvents: 'auto',
           }}
         >
           <Box
@@ -1773,7 +1834,7 @@ function MailPanelEmptyState({
           lineHeight: 1.5,
         }}
       >
-        There are no email conversations yet. Start a conversation with Chloe Clarkson for JR-00073 Marketing Coordinator.
+        {`There are no email conversations yet. Start a conversation with Chloe Clarkson for ${CANDIDATE_JOB_REQ_DISPLAY}.`}
       </BodyText>
       <button type="button" onClick={onCompose} style={protoDockPrimaryButtonStyle()}>
         + Compose Email
@@ -1803,65 +1864,30 @@ function MailThreadListRow({
       ? TW.blueberry500
       : TW.blackPepper600;
 
+  const pillStyle: CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 4,
+    fontSize: 11,
+    fontWeight: 500,
+    color: TW.blackPepper500,
+    backgroundColor: TW.soap200,
+    border: 'none',
+    borderRadius: 4,
+    padding: '3px 9px',
+    flexShrink: 0,
+  };
+
   const statusRight =
     badge === 'sent' || row.sentBadge ? (
-      <span
-        style={{
-          fontSize: 11,
-          fontWeight: 500,
-          color: TW.blackPepper500,
-          backgroundColor: TW.soap200,
-          border: 'none',
-          borderRadius: 4,
-          padding: '3px 9px',
-          flexShrink: 0,
-        }}
-      >
-        Sent
-      </span>
+      <span style={pillStyle}>Sent</span>
     ) : badge === 'notDelivered' ? (
-      <Flex alignItems="center" gap="xxs" flexShrink={0} aria-label="Not delivered">
-        <span
-          aria-hidden
-          style={{
-            width: 6,
-            height: 6,
-            borderRadius: '50%',
-            backgroundColor: TW.cinnamon600,
-            flexShrink: 0,
-          }}
-        />
+      <Flex alignItems="center" gap="xxs" flexShrink={0} aria-label="Not Delivered">
+        <TwIcon icon={exclamationCircleIcon} size={14} color={TW.cinnamon600} aria-hidden />
         <span style={{ fontSize: 11, fontWeight: 600, color: TW.cinnamon600, whiteSpace: 'nowrap' }}>
-          Not delivered
+          Not Delivered
         </span>
       </Flex>
-    ) : null;
-
-  const threadCountBadge =
-    (row.threadMessages?.length ?? 0) > 1 ? row.threadMessages!.length : 0;
-
-  const greyThreadCountChip =
-    threadCountBadge > 0 ? (
-      <span
-        aria-label={`${threadCountBadge} messages in conversation`}
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minWidth: 22,
-          height: 22,
-          padding: threadCountBadge > 9 ? '0 5px' : 0,
-          borderRadius: 999,
-          backgroundColor: TW.soap200,
-          color: TW.blackPepper600,
-          fontSize: 11,
-          fontWeight: 700,
-          flexShrink: 0,
-          lineHeight: 1,
-        }}
-      >
-        {threadCountBadge > 9 ? '9+' : threadCountBadge}
-      </span>
     ) : null;
 
   return (
@@ -1882,12 +1908,11 @@ function MailThreadListRow({
           : hovered
             ? CONV_EMAIL_THREAD_ROW_HOVER_BG
             : 'transparent',
-        borderLeft: selected ? `4px solid ${CONV_EMAIL_THREAD_SELECTED_BAR}` : '4px solid transparent',
       }}
     >
       <Box style={{ minWidth: 0, width: '100%' }}>
-        {threadCountBadge > 0 ? (
-          <Flex alignItems="flex-start" justifyContent="space-between" gap="s">
+        <Flex alignItems="flex-start" justifyContent="space-between" gap="s">
+          <Box style={{ flex: 1, minWidth: 0 }}>
             <BodyText
               size="small"
               fontWeight={700}
@@ -1895,47 +1920,19 @@ function MailThreadListRow({
                 margin: 0,
                 color: TW.blackPepper600,
                 lineHeight: 1.3,
-                flex: 1,
-                minWidth: 0,
               }}
             >
               {row.senderLabel}
             </BodyText>
-            <Flex flexDirection="column" alignItems="flex-end" gap={6} style={{ flexShrink: 0 }}>
-              {greyThreadCountChip}
-              {statusRight ? <Box style={{ lineHeight: 0 }}>{statusRight}</Box> : null}
-              <Subtext
-                size="small"
-                style={{ margin: 0, color: TW.blackPepper400, lineHeight: 1.3, textAlign: 'right' }}
-              >
-                {row.sentAt}
-              </Subtext>
-            </Flex>
-          </Flex>
-        ) : (
-          <Flex alignItems="flex-start" justifyContent="space-between" gap="s">
-            <Box style={{ flex: 1, minWidth: 0 }}>
-              <BodyText
-                size="small"
-                fontWeight={700}
-                style={{
-                  margin: 0,
-                  color: TW.blackPepper600,
-                  lineHeight: 1.3,
-                }}
-              >
-                {row.senderLabel}
-              </BodyText>
-              <Subtext
-                size="small"
-                style={{ margin: '4px 0 0', display: 'block', color: TW.blackPepper400, lineHeight: 1.3 }}
-              >
-                {row.sentAt}
-              </Subtext>
-            </Box>
-            <Box style={{ flexShrink: 0, paddingTop: 2 }}>{statusRight}</Box>
-          </Flex>
-        )}
+            <Subtext
+              size="small"
+              style={{ margin: '4px 0 0', display: 'block', color: TW.blackPepper400, lineHeight: 1.3 }}
+            >
+              {row.sentAt}
+            </Subtext>
+          </Box>
+          <Box style={{ flexShrink: 0, paddingTop: 2 }}>{statusRight}</Box>
+        </Flex>
 
         <Flex alignItems="flex-start" gap="xxs" style={{ marginTop: 8, minWidth: 0 }}>
           {row.unread ? (
@@ -1989,48 +1986,65 @@ function MailThreadListRow({
   );
 }
 
+/** From / To lines — shared by reading pane body and Overview-10 split header row 2. */
+function ReadingPaneEnvelopeLines({ msg }: { msg: MailThreadMessage }) {
+  return (
+    <Box style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+      {msg.fromLine ? (
+        <BodyText size="small" style={READING_META_ROW}>
+          <strong style={{ color: TW.blackPepper600 }}>From</strong> {msg.fromLine}
+        </BodyText>
+      ) : null}
+      {msg.readingToFull !== undefined ? (
+        <BodyText size="small" style={READING_META_ROW}>
+          <strong style={{ color: TW.blackPepper600 }}>To</strong> {msg.readingToFull}
+        </BodyText>
+      ) : msg.readingTo !== undefined ? (
+        <BodyText size="small" style={READING_META_ROW}>
+          <strong style={{ color: TW.blackPepper600 }}>To</strong> {msg.readingTo}
+        </BodyText>
+      ) : null}
+    </Box>
+  );
+}
+
 function ReadingPaneMessage({
   msg,
   parentRow,
   onReplyToThread,
   onForwardThread,
   onMailSurfaceChange,
+  hideSenderTimestampRow = false,
 }: {
   msg: MailThreadMessage;
   parentRow: MailThreadRow;
   onReplyToThread: (row: MailThreadRow) => void;
   onForwardThread: (row: MailThreadRow) => void;
   onMailSurfaceChange: (s: 'threads' | 'compose') => void;
+  /**
+   * Split view: dock header shows **newest** sender + time only. When this row is that message, hide the
+   * duplicate sender/timestamp here — From/To always stay on the card (header does not repeat From/To).
+   */
+  hideSenderTimestampRow?: boolean;
 }) {
   return (
     <Box>
-      <Flex justifyContent="space-between" alignItems="flex-start" gap="m" marginBottom="s">
-        <BodyText size="small" style={READING_HEADER_NAME}>
-          {msg.senderLabel}
-        </BodyText>
-        {msg.readingTimestamp ? (
-          <Subtext size="small" style={{ ...READING_HEADER_TIME, flexShrink: 0 }}>
-            {msg.readingTimestamp}
-          </Subtext>
-        ) : null}
-      </Flex>
-      <Box marginBottom={12} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {msg.direction === 'out' ? (
-          <BodyText size="small" style={READING_META_ROW}>
-            <strong style={{ color: TW.blackPepper600 }}>From</strong> {msg.fromLine}
+      {!hideSenderTimestampRow ? (
+        <Flex justifyContent="space-between" alignItems="flex-start" gap="m" marginBottom="s">
+          <BodyText size="small" style={READING_HEADER_NAME}>
+            {msg.senderLabel}
           </BodyText>
-        ) : null}
-        {msg.readingToFull !== undefined ? (
-          <BodyText size="small" style={READING_META_ROW}>
-            <strong style={{ color: TW.blackPepper600 }}>To</strong> {msg.readingToFull}
-          </BodyText>
-        ) : msg.readingTo !== undefined ? (
-          <BodyText size="small" style={READING_META_ROW}>
-            <strong style={{ color: TW.blackPepper600 }}>To</strong> {msg.readingTo}
-          </BodyText>
-        ) : null}
+          {msg.readingTimestamp ? (
+            <Subtext size="small" style={{ ...READING_HEADER_TIME, flexShrink: 0 }}>
+              {msg.readingTimestamp}
+            </Subtext>
+          ) : null}
+        </Flex>
+      ) : null}
+      <Box marginBottom={12}>
+        <ReadingPaneEnvelopeLines msg={msg} />
       </Box>
-      <Heading size="medium" style={READING_SUBJECT}>
+      <Heading size="small" style={READING_SUBJECT}>
         {msg.subject}
       </Heading>
       <BodyText size="medium" style={READING_BODY}>
@@ -2042,7 +2056,17 @@ function ReadingPaneMessage({
               return (
                 <>
                   {msg.body.slice(0, i)}
-                  <strong style={{ fontStyle: 'italic', fontWeight: 700 }}>{phrase}</strong>
+                  <em
+                    style={{
+                      fontStyle: 'italic',
+                      fontWeight: 400,
+                      textDecoration: 'underline',
+                      textUnderlineOffset: 2,
+                      color: 'inherit',
+                    }}
+                  >
+                    {phrase}
+                  </em>
                   {msg.body.slice(i + phrase.length)}
                 </>
               );
@@ -2052,8 +2076,11 @@ function ReadingPaneMessage({
         })()}
       </BodyText>
       {msg.readingAttachments && msg.readingAttachments.length > 0 ? (
-        <Flex flexDirection="column" gap="xs" marginTop={24}>
-          <Subtext size="small" style={{ fontWeight: 700, color: TW.blackPepper600 }}>
+        <Flex flexDirection="column" gap="xxs" marginTop={16}>
+          <Subtext
+            size="small"
+            style={{ fontWeight: 700, color: TW.blackPepper500, fontSize: 11, margin: 0, lineHeight: 1.3 }}
+          >
             Attachments
           </Subtext>
           <Flex
@@ -2061,31 +2088,31 @@ function ReadingPaneMessage({
             style={{
               gap: READING_ATTACHMENT_GAP_PX,
               alignItems: 'stretch',
+              justifyContent: 'flex-start',
             }}
           >
             {msg.readingAttachments.map((a) => {
               const lower = a.name.toLowerCase();
               const attIcon = lower.endsWith('.pdf') ? pdfIcon : documentIcon;
-              const halfGap = READING_ATTACHMENT_GAP_PX / 2;
               return (
                 <Box
                   key={`${msg.id}-${a.name}`}
                   style={{
-                    flex: '1 1 200px',
-                    minWidth: 168,
-                    maxWidth: `calc(50% - ${halfGap}px)`,
+                    flex: '0 0 auto',
+                    width: 'fit-content',
+                    maxWidth: `min(${ATTACHMENT_CHIP_MAX_WIDTH_PX}px, 100%)`,
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 12,
-                    padding: '14px 16px',
+                    gap: 8,
+                    padding: '8px 12px',
                     border: `1px solid ${TWEMAIL_DIVIDER}`,
                     borderRadius: READING_ATTACHMENT_CHIP_RADIUS_PX,
                     backgroundColor: TW.frenchVanilla100,
                     boxSizing: 'border-box',
                   }}
                 >
-                  <TwIcon icon={attIcon} size={24} color={TW.blueberry500} style={{ flexShrink: 0 }} />
-                  <Box style={{ minWidth: 0 }}>
+                  <TwIcon icon={attIcon} size={20} color={TW.blueberry500} style={{ flexShrink: 0 }} />
+                  <Box style={{ minWidth: 0, maxWidth: ATTACHMENT_CHIP_MAX_WIDTH_PX - 60 }}>
                     <span style={READING_ATTACHMENT_NAME}>{a.name}</span>
                     {a.meta ? <div style={READING_ATTACHMENT_META}>{a.meta}</div> : null}
                   </Box>
@@ -2096,9 +2123,9 @@ function ReadingPaneMessage({
         </Flex>
       ) : null}
       <Flex
-        gap="s"
-        marginTop={24}
-        paddingTop="m"
+        gap="xs"
+        marginTop={16}
+        paddingTop="s"
         style={{ borderTop: `1px solid ${TWEMAIL_DIVIDER_SUBTLE}` }}
       >
         <button
@@ -2126,13 +2153,130 @@ function ReadingPaneMessage({
   );
 }
 
+/** Reply/Forward: quoted thread inside compose card — grows with content (no inner scroll). */
+function ComposeQuotedOriginalConversation({ row }: { row: MailThreadRow }) {
+  const msgs = messagesForReadingPane(row);
+  return (
+    <Box>
+      <BodyText size="small" fontWeight={700} style={{ margin: '0 0 12px', color: TW.blackPepper600 }}>
+        Original conversation
+      </BodyText>
+      {msgs.map((msg, index) => (
+        <Box
+          key={msg.id}
+          marginTop={index > 0 ? 'm' : undefined}
+          paddingTop={index > 0 ? 'm' : undefined}
+          style={index > 0 ? { borderTop: `1px solid ${TWEMAIL_DIVIDER_SUBTLE}` } : undefined}
+        >
+          <Flex justifyContent="space-between" alignItems="flex-start" gap="m" marginBottom="s">
+            <BodyText size="small" style={READING_HEADER_NAME}>
+              {msg.senderLabel}
+            </BodyText>
+            {msg.readingTimestamp ? (
+              <Subtext size="small" style={{ ...READING_HEADER_TIME, flexShrink: 0 }}>
+                {msg.readingTimestamp}
+              </Subtext>
+            ) : null}
+          </Flex>
+          <ReadingPaneEnvelopeLines msg={msg} />
+          <Heading size="small" style={{ ...READING_SUBJECT, marginTop: 20 }}>
+            {msg.subject}
+          </Heading>
+          <BodyText size="medium" style={{ ...READING_BODY, marginTop: 8 }}>
+            {(() => {
+              const phrase = msg.bodyItalicPhrase;
+              if (phrase) {
+                const i = msg.body.indexOf(phrase);
+                if (i >= 0) {
+                  return (
+                    <>
+                      {msg.body.slice(0, i)}
+                      <em
+                        style={{
+                          fontStyle: 'italic',
+                          fontWeight: 400,
+                          textDecoration: 'underline',
+                          textUnderlineOffset: 2,
+                          color: 'inherit',
+                        }}
+                      >
+                        {phrase}
+                      </em>
+                      {msg.body.slice(i + phrase.length)}
+                    </>
+                  );
+                }
+              }
+              return msg.body;
+            })()}
+          </BodyText>
+        </Box>
+      ))}
+    </Box>
+  );
+}
+
+/** Dock header — shrink arrows + grey circle; collapses entire mail sheet (not list-column width). */
+function ConversationalEmailCollapsePanelButton({ onCollapse }: { onCollapse: () => void }) {
+  const tipId = useId();
+  const [hover, setHover] = useState(false);
+
+  return (
+    <Box
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{ position: 'relative', flexShrink: 0 }}
+    >
+      <button
+        type="button"
+        aria-label="Collapse panel"
+        aria-describedby={hover ? tipId : undefined}
+        onClick={onCollapse}
+        style={{
+          ...protoDockIconButtonStyle(40),
+          borderRadius: 999,
+          backgroundColor: TW.soap100,
+        }}
+      >
+        <TwIcon icon={shrinkIcon} size={20} color={TW.blackPepper600} />
+      </button>
+      {hover ? (
+        <Box
+          id={tipId}
+          role="tooltip"
+          style={{
+            position: 'absolute',
+            top: '100%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            marginTop: 8,
+            padding: '8px 12px',
+            backgroundColor: '#101820',
+            color: TW.frenchVanilla100,
+            borderRadius: 6,
+            fontSize: 12,
+            fontWeight: 500,
+            fontFamily: 'inherit',
+            lineHeight: 1.25,
+            whiteSpace: 'nowrap',
+            zIndex: 200,
+            pointerEvents: 'none',
+            boxShadow: '0 4px 14px rgba(11, 31, 66, 0.22)',
+          }}
+        >
+          Collapse Panel
+        </Box>
+      ) : null}
+    </Box>
+  );
+}
+
 function MailCollaborationSurface({
   mailSurface,
   onMailSurfaceChange,
   onRequestComposeExit,
   onComposeDirtyChange,
-  fromValue,
-  onFromChange,
+  fromLine,
   toLine,
   subject,
   onSubjectChange,
@@ -2142,8 +2286,7 @@ function MailCollaborationSurface({
   onReplyToThread,
   onForwardThread,
   threadsResetKey,
-  dockWide,
-  onToggleDockWide,
+  onCollapseDock,
   audienceFilter,
   onAudienceFilterChange,
   selectedId,
@@ -2155,13 +2298,13 @@ function MailCollaborationSurface({
   composeValidationDemo,
   onComposeValidationDemoChange,
   threads,
+  quotedThreadRow,
 }: {
   mailSurface: 'threads' | 'compose';
   onMailSurfaceChange: (s: 'threads' | 'compose') => void;
   onRequestComposeExit: () => void;
   onComposeDirtyChange?: (dirty: boolean) => void;
-  fromValue: string;
-  onFromChange: (v: string) => void;
+  fromLine: string;
   toLine: string;
   subject: string;
   onSubjectChange: (v: string) => void;
@@ -2172,8 +2315,8 @@ function MailCollaborationSurface({
   onForwardThread: (row: MailThreadRow) => void;
   /** Increment when mail panel closes — remount thread list for list-first UX. */
   threadsResetKey: number;
-  dockWide: boolean;
-  onToggleDockWide: () => void;
+  /** Collapses the collaboration dock (same as rail chevron / backdrop dismiss guards). */
+  onCollapseDock: () => void;
   audienceFilter: AudienceFilter;
   onAudienceFilterChange: (a: AudienceFilter) => void;
   selectedId: string | null;
@@ -2185,6 +2328,8 @@ function MailCollaborationSurface({
   composeValidationDemo: ComposeValidationDemo;
   onComposeValidationDemoChange: (v: ComposeValidationDemo) => void;
   threads: MailThreadRow[];
+  /** Thread shown below the caret for Reply/Forward compose (Outlook-style quote). */
+  quotedThreadRow: MailThreadRow | null;
 }) {
   const [hoveredRowId, setHoveredRowId] = useState<string | null>(null);
   const [createEmailPopoverOpen, setCreateEmailPopoverOpen] = useState(false);
@@ -2210,23 +2355,49 @@ function MailCollaborationSurface({
 
   const openCompose = launchCompose;
 
+  const splitView = Boolean(selectedId && filtered.some((t) => t.id === selectedId));
+  /** Stacked messages for reading pane (chronological oldest → newest). */
+  const readingPaneMessages = useMemo(() => {
+    if (!selected) return [];
+    return messagesForReadingPane(selected);
+  }, [selected]);
+  /** Split header mirrors the **newest** message (PM Overview right panel). */
+  const splitHeaderMsg = useMemo(() => {
+    if (!splitView || readingPaneMessages.length === 0) return null;
+    return readingPaneMessages[readingPaneMessages.length - 1] ?? null;
+  }, [splitView, readingPaneMessages]);
+  /** Matches thread list column width — header panes use the same split. */
+  const mailListColumnWidthPx = 272;
+
   if (mailSurface === 'compose') {
     return (
-      <ComposeEmailPanel
-        key={composeResetKey}
-        composeVariant={composeVariant}
-        onRequestDismiss={onRequestComposeExit}
-        onDirtyChange={onComposeDirtyChange}
-        fromValue={fromValue}
-        onFromChange={onFromChange}
-        toLine={toLine}
-        subject={subject}
-        onSubjectChange={onSubjectChange}
-        placeholderVariant={composePlaceholderVariant}
-        seedSamplePdfAttachments={seedComposePdfAttachments}
-        composeValidationDemo={composeValidationDemo}
-        onComposeValidationDemoChange={onComposeValidationDemoChange}
-      />
+      <Flex
+        flexDirection="column"
+        flex={1}
+        style={{
+          flex: '1 1 auto',
+          minHeight: 0,
+          minWidth: 0,
+          width: '100%',
+          alignSelf: 'stretch',
+        }}
+      >
+        <ComposeEmailPanel
+          key={composeResetKey}
+          composeVariant={composeVariant}
+          onRequestDismiss={onRequestComposeExit}
+          onDirtyChange={onComposeDirtyChange}
+          fromLine={fromLine}
+          toLine={toLine}
+          subject={subject}
+          onSubjectChange={onSubjectChange}
+          placeholderVariant={composePlaceholderVariant}
+          seedSamplePdfAttachments={seedComposePdfAttachments}
+          composeValidationDemo={composeValidationDemo}
+          onComposeValidationDemoChange={onComposeValidationDemoChange}
+          quotedThreadRow={quotedThreadRow}
+        />
+      </Flex>
     );
   }
 
@@ -2262,46 +2433,189 @@ function MailCollaborationSurface({
     );
   };
 
-  const splitView = Boolean(selectedId && filtered.some((t) => t.id === selectedId));
-  /** Matches thread list column width — header panes use the same split. */
-  const mailListColumnWidthPx = dockWide ? 300 : 272;
+  const threadListRows = filtered.map((row) => (
+    <MailThreadListRow
+      key={row.id}
+      row={row}
+      selected={selectedId === row.id}
+      hovered={hoveredRowId === row.id}
+      onSelect={() => onSelectedIdChange(row.id)}
+      onHover={(h) => setHoveredRowId(h ? row.id : null)}
+    />
+  ));
 
+  /** List-first only — full-width list under stacked header. Split view uses {@link threadListRows} in the left column. */
   const threadListColumn = (
     <Box
       key={threadsResetKey}
-      flex={splitView ? undefined : 1}
+      flex={1}
       style={{
-        width: splitView ? mailListColumnWidthPx : undefined,
-        flexShrink: splitView ? 0 : undefined,
-        minWidth: splitView ? mailListColumnWidthPx : undefined,
         overflowY: 'auto',
         backgroundColor: TWEMAIL_THREAD_LIST_CANVAS_BG,
-        borderRight: splitView ? `1px solid ${TWEMAIL_DIVIDER}` : undefined,
+        minHeight: 0,
+        width: '100%',
       }}
     >
-      {filtered.map((row) => (
-        <MailThreadListRow
-          key={row.id}
-          row={row}
-          selected={selectedId === row.id}
-          hovered={hoveredRowId === row.id}
-          onSelect={() => onSelectedIdChange(row.id)}
-          onHover={(h) => setHoveredRowId(h ? row.id : null)}
-        />
-      ))}
+      {threadListRows}
+    </Box>
+  );
+
+  const createEmailPopoverMarkup =
+    createEmailPopoverOpen ? (
+      <Box
+        style={{
+          position: 'absolute',
+          top: 'calc(100% + 8px)',
+          right: 0,
+          zIndex: 10,
+          width: 292,
+          filter: 'drop-shadow(0 8px 24px rgba(11,31,66,0.18))',
+        }}
+      >
+        <Card
+          padding="m"
+          style={{
+            borderRadius: 8,
+            border: `1px solid ${TWEMAIL_DIVIDER}`,
+            backgroundColor: TW.frenchVanilla100,
+          }}
+        >
+          <Flex justifyContent="space-between" alignItems="flex-start" marginBottom="s">
+            <Heading size="small" style={{ margin: 0, fontSize: 16, fontWeight: 700, color: TW.blackPepper600 }}>
+              Create a New Email
+            </Heading>
+            <button
+              type="button"
+              aria-label="Close"
+              onClick={() => setCreateEmailPopoverOpen(false)}
+              style={protoDockPopoverCloseButtonStyle()}
+            >
+              <TwIcon icon={xIcon} size={18} />
+            </button>
+          </Flex>
+          <BodyText size="small" style={{ margin: '0 0 16px', lineHeight: 1.5, color: TW.blackPepper500 }}>
+            Send a new email to this candidate.
+          </BodyText>
+          <button type="button" style={protoDockPrimaryButtonStyle(true)} onClick={launchCompose}>
+            Send New Email
+          </button>
+        </Card>
+      </Box>
+    ) : null;
+
+  /** Split read: single vertical divider — left = chrome + list; right = preview header + messages. */
+  const splitViewReadingPane = (
+    <Box
+      flex={1}
+      style={{
+        minHeight: 0,
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+      }}
+    >
+      {selected && selected.deliveryStatus === 'notDelivered' ? (
+        <Box paddingX="l" paddingTop="m" style={{ flexShrink: 0, backgroundColor: TW.frenchVanilla100 }}>
+          {(() => {
+            const copy =
+              deliveryErrorKey !== 'none' ? DELIVERY_ERROR_COPY[deliveryErrorKey] : DELIVERY_ERROR_COPY.generic;
+            return <AlertBanner type="error" message={`${copy.title}\n\n${copy.body}`} />;
+          })()}
+        </Box>
+      ) : null}
+      <Box
+        flex={1}
+        className="two-way-email-reading-pane-scroll"
+        style={{
+          minHeight: 0,
+          width: '100%',
+          overflowY: 'auto',
+          paddingBottom: 12,
+          backgroundColor: TW.frenchVanilla100,
+        }}
+      >
+        {selected ? (
+          <Box padding="l">
+            {readingPaneMessages.map((msg, index) => {
+              const isLastMessage = index === readingPaneMessages.length - 1;
+              return (
+              <Box
+                key={msg.id}
+                marginTop={index > 0 ? 'm' : undefined}
+                paddingTop={index > 0 ? 'm' : undefined}
+                style={
+                  index > 0
+                    ? isLastMessage
+                      ? undefined
+                      : { borderTop: `1px solid ${TWEMAIL_DIVIDER}` }
+                    : undefined
+                }
+              >
+                <ReadingPaneMessage
+                  msg={msg}
+                  parentRow={selected}
+                  onReplyToThread={onReplyToThread}
+                  onForwardThread={onForwardThread}
+                  onMailSurfaceChange={onMailSurfaceChange}
+                  hideSenderTimestampRow={isLastMessage}
+                />
+              </Box>
+              );
+            })}
+          </Box>
+        ) : (
+          <Flex flex={1} alignItems="center" justifyContent="center" padding="xl" minHeight={200}>
+            <BodyText size="small" style={{ color: TW.blackPepper400, textAlign: 'center' }}>
+              Select an email in the list to view details.
+            </BodyText>
+          </Flex>
+        )}
+      </Box>
     </Box>
   );
 
   return (
-    <Flex flexDirection="column" style={{ flex: 1, minHeight: 0, minWidth: 0, width: '100%' }}>
-      {splitView ? (
-        <Box
-          paddingX="s"
-          paddingTop="s"
+    <Flex
+      flexDirection="column"
+      style={{
+        flex: 1,
+        minHeight: 0,
+        minWidth: 0,
+        width: '100%',
+        height: '100%',
+        alignSelf: 'stretch',
+        /** Full-bleed canvas under header + split panes (dock shell was white; gaps read as “broken”). */
+        backgroundColor: TWEMAIL_THREAD_LIST_CANVAS_BG,
+      }}
+    >
+      {demoEmptyInbox ? (
+        <Flex flex={1} style={{ flex: '1 1 0%', minHeight: 0, minWidth: 0, overflow: 'hidden' }}>
+          <MailPanelEmptyState audienceFilter={audienceFilter} onCompose={openCompose} />
+        </Flex>
+      ) : filtered.length === 0 ? (
+        <Flex
+          flex={1}
+          alignItems="center"
+          justifyContent="center"
+          padding="xl"
+          style={{ backgroundColor: TWEMAIL_THREAD_LIST_CANVAS_BG }}
+        >
+          <BodyText size="small" style={{ margin: 0, textAlign: 'center', color: TW.blackPepper500, maxWidth: 360 }}>
+            {emptyFilterCopy}
+          </BodyText>
+        </Flex>
+      ) : splitView ? (
+        <Flex
+          flex={1}
+          flexDirection="row"
+          alignItems="stretch"
           style={{
-            position: 'relative',
-            flexShrink: 0,
-            borderBottom: `1px solid ${TWEMAIL_DIVIDER}`,
+            flex: '1 1 0%',
+            minHeight: 0,
+            minWidth: 0,
+            overflow: 'hidden',
             backgroundColor: TWEMAIL_THREAD_LIST_CANVAS_BG,
           }}
         >
@@ -2320,17 +2634,29 @@ function MailCollaborationSurface({
               }}
             />
           ) : null}
-          <Flex flexDirection="column">
-            <Flex flexDirection="row" alignItems="center" style={{ gap: 12 }}>
-              <Box
-                style={{
-                  width: mailListColumnWidthPx,
-                  flexShrink: 0,
-                  boxSizing: 'border-box',
-                  paddingRight: SPACE.s,
-                  borderRight: `1px solid ${TWEMAIL_DIVIDER}`,
-                }}
-              >
+          <Box
+            style={{
+              width: mailListColumnWidthPx,
+              flexShrink: 0,
+              minHeight: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignSelf: 'stretch',
+              borderRight: `1px solid ${TWEMAIL_DIVIDER}`,
+              boxSizing: 'border-box',
+            }}
+          >
+            <Box
+              paddingX="s"
+              paddingTop="s"
+              style={{
+                position: 'relative',
+                flexShrink: 0,
+                borderBottom: `1px solid ${TWEMAIL_DIVIDER}`,
+                backgroundColor: TW.frenchVanilla100,
+              }}
+            >
+              <Flex flexDirection="row" alignItems="center" justifyContent="space-between" gap="xs" style={{ minHeight: 40 }}>
                 <Heading
                   size="medium"
                   style={{
@@ -2340,347 +2666,218 @@ function MailCollaborationSurface({
                     color: TW.blackPepper600,
                     lineHeight: 1.25,
                     letterSpacing: -0.01,
+                    flex: 1,
+                    minWidth: 0,
                   }}
                 >
                   Conversational Email
                 </Heading>
-              </Box>
-              <Box
-                flex={1}
-                style={{
-                  minWidth: 0,
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
-                  position: 'relative',
-                }}
-              >
-                <Flex alignItems="center" gap="xs" flexShrink={0}>
-                  <button
-                    type="button"
-                    aria-label={dockWide ? 'Collapse panel' : 'Expand panel'}
-                    title={dockWide ? 'Collapse panel' : 'Expand panel'}
-                    onClick={onToggleDockWide}
-                    style={protoDockIconButtonStyle(40)}
-                  >
-                    <TwIcon icon={arrowDiagonalSmallIcon} size={24} />
-                  </button>
-                  <button
-                    type="button"
-                    aria-label="Create new email"
-                    title="Create new email"
-                    onClick={() => {
-                      setCreateEmailPopoverOpen(true);
-                    }}
-                    style={protoDockPrimaryButtonStyle()}
-                  >
-                    + New
-                  </button>
-                </Flex>
-                {createEmailPopoverOpen ? (
-                  <Box
-                    style={{
-                      position: 'absolute',
-                      top: 'calc(100% + 8px)',
-                      right: 0,
-                      zIndex: 10,
-                      width: 292,
-                      filter: 'drop-shadow(0 8px 24px rgba(11,31,66,0.18))',
-                    }}
-                  >
-                    <Card
-                      padding="m"
-                      style={{
-                        borderRadius: 8,
-                        border: `1px solid ${TWEMAIL_DIVIDER}`,
-                        backgroundColor: TW.frenchVanilla100,
+                <Box style={{ position: 'relative', flexShrink: 0 }}>
+                  <Flex alignItems="center" gap="xs">
+                    <ConversationalEmailCollapsePanelButton onCollapse={onCollapseDock} />
+                    <button
+                      type="button"
+                      aria-label="Create new email"
+                      title="Create new email"
+                      onClick={() => {
+                        setCreateEmailPopoverOpen(true);
                       }}
+                      style={protoDockPrimaryButtonStyle()}
                     >
-                      <Flex justifyContent="space-between" alignItems="flex-start" marginBottom="s">
-                        <Heading size="small" style={{ margin: 0, fontSize: 16, fontWeight: 700, color: TW.blackPepper600 }}>
-                          Create a New Email
-                        </Heading>
-                        <button
-                          type="button"
-                          aria-label="Close"
-                          onClick={() => setCreateEmailPopoverOpen(false)}
-                          style={protoDockPopoverCloseButtonStyle()}
-                        >
-                          <TwIcon icon={xIcon} size={18} />
-                        </button>
-                      </Flex>
-                      <BodyText size="small" style={{ margin: '0 0 16px', lineHeight: 1.5, color: TW.blackPepper500 }}>
-                        Send a new email to this candidate.
-                      </BodyText>
-                      <button type="button" style={protoDockPrimaryButtonStyle(true)} onClick={launchCompose}>
-                        Send New Email
-                      </button>
-                    </Card>
-                  </Box>
-                ) : null}
-              </Box>
-            </Flex>
-            <Flex flexDirection="row" style={{ gap: 12, marginTop: 10 }}>
-              <Box
-                style={{
-                  width: mailListColumnWidthPx,
-                  flexShrink: 0,
-                  boxSizing: 'border-box',
-                  paddingRight: SPACE.s,
-                  borderRight: `1px solid ${TWEMAIL_DIVIDER}`,
-                }}
-              >
-                <Subtext
-                  size="small"
-                  style={{ margin: 0, display: 'block', color: TW.blackPepper400, fontWeight: 600 }}
-                >
+                      + New
+                    </button>
+                  </Flex>
+                  {createEmailPopoverMarkup}
+                </Box>
+              </Flex>
+              <Box style={{ marginTop: 10 }}>
+                <Subtext size="small" style={{ margin: 0, display: 'block', color: TW.blackPepper400, fontWeight: 600 }}>
                   Job Requisition
                 </Subtext>
                 <BodyText
                   size="small"
                   style={{ margin: '6px 0 0', fontWeight: 600, color: TW.blackPepper600, display: 'block' }}
                 >
-                  JR-00073 Marketing Coordinator
+                  {CANDIDATE_JOB_REQ_DISPLAY}
                 </BodyText>
               </Box>
-              <Box flex={1} style={{ minWidth: 0 }} aria-hidden />
-            </Flex>
-            <Flex flexDirection="row" style={{ gap: 12, marginTop: SPACE.s, paddingTop: SPACE.xs }}>
-              <Box
-                style={{
-                  width: mailListColumnWidthPx,
-                  flexShrink: 0,
-                  boxSizing: 'border-box',
-                  paddingRight: SPACE.s,
-                  borderRight: `1px solid ${TWEMAIL_DIVIDER}`,
-                }}
-              >
-                <Flex paddingTop="xs" style={{ flexWrap: 'wrap' }}>
-                  {audienceTab('all', 'All')}
-                  {audienceTab('candidate', 'Candidate')}
-                  {audienceTab('agency', 'Agency')}
-                </Flex>
-              </Box>
-              <Box flex={1} style={{ minWidth: 0 }} aria-hidden />
-            </Flex>
-          </Flex>
-        </Box>
-      ) : (
-        <Box paddingX="s" paddingTop="s" style={{ position: 'relative', borderBottom: `1px solid ${TWEMAIL_DIVIDER}`, flexShrink: 0 }}>
-          <Flex alignItems="center" justifyContent="space-between" gap="s" flexWrap="nowrap">
-            <Heading
-              size="medium"
-              style={{
-                margin: 0,
-                fontSize: 18,
-                fontWeight: 700,
-                color: TW.blackPepper600,
-                lineHeight: 1.25,
-                letterSpacing: -0.01,
-              }}
-            >
-              Conversational Email
-            </Heading>
-            <Flex alignItems="center" gap="xs" flexShrink={0}>
-              <button
-                type="button"
-                aria-label={dockWide ? 'Collapse panel' : 'Expand panel'}
-                title={dockWide ? 'Collapse panel' : 'Expand panel'}
-                onClick={onToggleDockWide}
-                style={protoDockIconButtonStyle(40)}
-              >
-                <TwIcon icon={arrowDiagonalSmallIcon} size={24} />
-              </button>
-              <button
-                type="button"
-                aria-label="Create new email"
-                title="Create new email"
-                onClick={() => {
-                  setCreateEmailPopoverOpen(true);
-                }}
-                style={protoDockPrimaryButtonStyle()}
-              >
-                + New
-              </button>
-            </Flex>
-          </Flex>
-          <Box style={{ marginTop: 10 }}>
-            <Subtext
-              size="small"
-              style={{ margin: 0, display: 'block', color: TW.blackPepper400, fontWeight: 600 }}
-            >
-              Job Requisition
-            </Subtext>
-            <BodyText
-              size="small"
-              style={{ margin: '6px 0 0', fontWeight: 600, color: TW.blackPepper600, display: 'block' }}
-            >
-              JR-00073 Marketing Coordinator
-            </BodyText>
-          </Box>
-          <Flex marginTop="s" paddingTop="xs" style={{ borderBottom: `1px solid ${TWEMAIL_DIVIDER}` }}>
-            {audienceTab('all', 'All')}
-            {audienceTab('candidate', 'Candidate')}
-            {audienceTab('agency', 'Agency')}
-          </Flex>
-          {createEmailPopoverOpen ? (
-            <>
-              <button
-                type="button"
-                aria-label="Dismiss create email menu"
-                onClick={() => setCreateEmailPopoverOpen(false)}
-                style={{
-                  position: 'fixed',
-                  inset: 0,
-                  zIndex: 8,
-                  border: 'none',
-                  background: 'transparent',
-                  cursor: 'default',
-                }}
-              />
-              <Box
-                style={{
-                  position: 'absolute',
-                  top: 44,
-                  right: 8,
-                  zIndex: 9,
-                  width: 292,
-                  filter: 'drop-shadow(0 8px 24px rgba(11,31,66,0.18))',
-                }}
-              >
-                <Card
-                  padding="m"
-                  style={{
-                    borderRadius: 8,
-                    border: `1px solid ${TWEMAIL_DIVIDER}`,
-                    backgroundColor: TW.frenchVanilla100,
-                  }}
-                >
-                  <Flex justifyContent="space-between" alignItems="flex-start" marginBottom="s">
-                    <Heading size="small" style={{ margin: 0, fontSize: 16, fontWeight: 700, color: TW.blackPepper600 }}>
-                      Create a New Email
-                    </Heading>
-                    <button
-                      type="button"
-                      aria-label="Close"
-                      onClick={() => setCreateEmailPopoverOpen(false)}
-                      style={protoDockPopoverCloseButtonStyle()}
-                    >
-                      <TwIcon icon={xIcon} size={18} />
-                    </button>
-                  </Flex>
-                  <BodyText size="small" style={{ margin: '0 0 16px', lineHeight: 1.5, color: TW.blackPepper500 }}>
-                    Send a new email to this candidate.
-                  </BodyText>
-                  <button type="button" style={protoDockPrimaryButtonStyle(true)} onClick={launchCompose}>
-                    Send New Email
-                  </button>
-                </Card>
-              </Box>
-            </>
-          ) : null}
-        </Box>
-      )}
-
-      <Flex flex={1} style={{ minHeight: 0, overflow: 'hidden' }}>
-        {demoEmptyInbox ? (
-          <MailPanelEmptyState audienceFilter={audienceFilter} onCompose={openCompose} />
-        ) : filtered.length === 0 ? (
-          <Flex
-            flex={1}
-            alignItems="center"
-            justifyContent="center"
-            padding="xl"
-            style={{ backgroundColor: TWEMAIL_THREAD_LIST_CANVAS_BG }}
-          >
-            <BodyText size="small" style={{ margin: 0, textAlign: 'center', color: TW.blackPepper500, maxWidth: 360 }}>
-              {emptyFilterCopy}
-            </BodyText>
-          </Flex>
-        ) : !splitView ? (
-          threadListColumn
-        ) : (
-          <Flex
-            flex={1}
-            flexDirection="row"
-            alignItems="stretch"
-            style={{
-              minHeight: 0,
-              overflow: 'hidden',
-              backgroundColor: TWEMAIL_THREAD_LIST_CANVAS_BG,
-              gap: 12,
-            }}
-          >
-            {threadListColumn}
+              <Flex marginTop="s" paddingTop="xs" style={{ flexWrap: 'wrap' }}>
+                {audienceTab('all', 'All')}
+                {audienceTab('candidate', 'Candidate')}
+                {audienceTab('agency', 'Agency')}
+              </Flex>
+            </Box>
             <Box
+              key={threadsResetKey}
               flex={1}
               style={{
-                minWidth: 0,
                 minHeight: 0,
-                alignSelf: 'stretch',
-                display: 'flex',
-                flexDirection: 'column',
-                padding: '0 12px 12px 0',
-                boxSizing: 'border-box',
+                overflowY: 'auto',
+                backgroundColor: TWEMAIL_THREAD_LIST_CANVAS_BG,
               }}
             >
-              <Box
+              {threadListRows}
+            </Box>
+          </Box>
+          <Box
+            flex={1}
+            style={{
+              flex: '1 1 0%',
+              minWidth: 0,
+              minHeight: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+              backgroundColor: TW.frenchVanilla100,
+            }}
+          >
+            <Box
+              paddingX="s"
+              paddingTop="s"
+              paddingBottom="s"
+              style={{
+                flexShrink: 0,
+                backgroundColor: TW.frenchVanilla100,
+                borderBottom: `1px solid ${TWEMAIL_DIVIDER_SUBTLE}`,
+              }}
+            >
+              {splitHeaderMsg ? (
+                <>
+                  <Flex
+                    flexDirection="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    gap={16}
+                    style={{ minHeight: 40 }}
+                  >
+                    <BodyText size="small" style={{ ...READING_HEADER_NAME, flex: 1, minWidth: 0 }}>
+                      {splitHeaderMsg.senderLabel}
+                    </BodyText>
+                    {splitHeaderMsg.readingTimestamp ? (
+                      <Subtext size="small" style={{ ...READING_HEADER_TIME, flexShrink: 0 }}>
+                        {splitHeaderMsg.readingTimestamp}
+                      </Subtext>
+                    ) : null}
+                  </Flex>
+                </>
+              ) : null}
+            </Box>
+            {splitViewReadingPane}
+          </Box>
+        </Flex>
+      ) : (
+        <>
+          <Box paddingX="s" paddingTop="s" style={{ position: 'relative', borderBottom: `1px solid ${TWEMAIL_DIVIDER}`, flexShrink: 0 }}>
+            <Flex alignItems="center" justifyContent="space-between" gap="s" flexWrap="nowrap">
+              <Heading
+                size="medium"
                 style={{
-                  flex: '1 1 0%',
-                  minHeight: 0,
-                  width: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  backgroundColor: TW.frenchVanilla100,
-                  borderRadius: 8,
-                  border: `1px solid ${TWEMAIL_DIVIDER}`,
-                  boxShadow: TWEMAIL_DOC_CARD_SHADOW,
-                  overflow: 'hidden',
+                  margin: 0,
+                  fontSize: 18,
+                  fontWeight: 700,
+                  color: TW.blackPepper600,
+                  lineHeight: 1.25,
+                  letterSpacing: -0.01,
                 }}
               >
-                <Box flex={1} style={{ minHeight: 0, overflowY: 'auto' }}>
-                  {selected ? (
-                    <Box padding="l">
-                      {(() => {
-                        if (selected.deliveryStatus !== 'notDelivered') return null;
-                        const copy =
-                          deliveryErrorKey !== 'none'
-                            ? DELIVERY_ERROR_COPY[deliveryErrorKey]
-                            : DELIVERY_ERROR_COPY.generic;
-                        return (
-                          <AlertBanner type="error" message={`${copy.title}\n\n${copy.body}`} />
-                        );
-                      })()}
-                      {messagesForReadingPane(selected).map((msg, index) => (
-                        <Box
-                          key={msg.id}
-                          marginTop={index > 0 ? 'm' : undefined}
-                          paddingTop={index > 0 ? 'm' : undefined}
-                          style={index > 0 ? { borderTop: `1px solid ${TWEMAIL_DIVIDER}` } : undefined}
-                        >
-                          <ReadingPaneMessage
-                            msg={msg}
-                            parentRow={selected}
-                            onReplyToThread={onReplyToThread}
-                            onForwardThread={onForwardThread}
-                            onMailSurfaceChange={onMailSurfaceChange}
-                          />
-                        </Box>
-                      ))}
-                    </Box>
-                  ) : (
-                    <Flex flex={1} alignItems="center" justifyContent="center" padding="xl" minHeight={200}>
-                      <BodyText size="small" style={{ color: TW.blackPepper400, textAlign: 'center' }}>
-                        Select an email in the list to view details.
-                      </BodyText>
-                    </Flex>
-                  )}
-                </Box>
-              </Box>
+                Conversational Email
+              </Heading>
+              <Flex alignItems="center" gap="xs" flexShrink={0}>
+                <ConversationalEmailCollapsePanelButton onCollapse={onCollapseDock} />
+                <button
+                  type="button"
+                  aria-label="Create new email"
+                  title="Create new email"
+                  onClick={() => {
+                    setCreateEmailPopoverOpen(true);
+                  }}
+                  style={protoDockPrimaryButtonStyle()}
+                >
+                  + New
+                </button>
+              </Flex>
+            </Flex>
+            <Box style={{ marginTop: 10 }}>
+              <Subtext
+                size="small"
+                style={{ margin: 0, display: 'block', color: TW.blackPepper400, fontWeight: 600 }}
+              >
+                Job Requisition
+              </Subtext>
+              <BodyText
+                size="small"
+                style={{ margin: '6px 0 0', fontWeight: 600, color: TW.blackPepper600, display: 'block' }}
+              >
+                {CANDIDATE_JOB_REQ_DISPLAY}
+              </BodyText>
             </Box>
+            <Flex marginTop="s" paddingTop="xs" style={{ borderBottom: `1px solid ${TWEMAIL_DIVIDER}` }}>
+              {audienceTab('all', 'All')}
+              {audienceTab('candidate', 'Candidate')}
+              {audienceTab('agency', 'Agency')}
+            </Flex>
+            {createEmailPopoverOpen ? (
+              <>
+                <button
+                  type="button"
+                  aria-label="Dismiss create email menu"
+                  onClick={() => setCreateEmailPopoverOpen(false)}
+                  style={{
+                    position: 'fixed',
+                    inset: 0,
+                    zIndex: 8,
+                    border: 'none',
+                    background: 'transparent',
+                    cursor: 'default',
+                  }}
+                />
+                <Box
+                  style={{
+                    position: 'absolute',
+                    top: 44,
+                    right: 8,
+                    zIndex: 9,
+                    width: 292,
+                    filter: 'drop-shadow(0 8px 24px rgba(11,31,66,0.18))',
+                  }}
+                >
+                  <Card
+                    padding="m"
+                    style={{
+                      borderRadius: 8,
+                      border: `1px solid ${TWEMAIL_DIVIDER}`,
+                      backgroundColor: TW.frenchVanilla100,
+                    }}
+                  >
+                    <Flex justifyContent="space-between" alignItems="flex-start" marginBottom="s">
+                      <Heading size="small" style={{ margin: 0, fontSize: 16, fontWeight: 700, color: TW.blackPepper600 }}>
+                        Create a New Email
+                      </Heading>
+                      <button
+                        type="button"
+                        aria-label="Close"
+                        onClick={() => setCreateEmailPopoverOpen(false)}
+                        style={protoDockPopoverCloseButtonStyle()}
+                      >
+                        <TwIcon icon={xIcon} size={18} />
+                      </button>
+                    </Flex>
+                    <BodyText size="small" style={{ margin: '0 0 16px', lineHeight: 1.5, color: TW.blackPepper500 }}>
+                      Send a new email to this candidate.
+                    </BodyText>
+                    <button type="button" style={protoDockPrimaryButtonStyle(true)} onClick={launchCompose}>
+                      Send New Email
+                    </button>
+                  </Card>
+                </Box>
+              </>
+            ) : null}
+          </Box>
+          <Flex flex={1} style={{ flex: '1 1 0%', minHeight: 0, minWidth: 0, overflow: 'hidden' }}>
+            {threadListColumn}
           </Flex>
-        )}
-      </Flex>
+        </>
+      )}
     </Flex>
   );
 }
@@ -2689,8 +2886,7 @@ function ComposeEmailPanel({
   composeVariant,
   onRequestDismiss,
   onDirtyChange,
-  fromValue,
-  onFromChange,
+  fromLine,
   toLine,
   subject,
   onSubjectChange,
@@ -2698,12 +2894,12 @@ function ComposeEmailPanel({
   seedSamplePdfAttachments = false,
   composeValidationDemo,
   onComposeValidationDemoChange,
+  quotedThreadRow = null,
 }: {
   composeVariant: ComposeVariant;
   onRequestDismiss: () => void;
   onDirtyChange?: (dirty: boolean) => void;
-  fromValue: string;
-  onFromChange: (v: string) => void;
+  fromLine: string;
   toLine: string;
   subject: string;
   onSubjectChange: (v: string) => void;
@@ -2711,6 +2907,7 @@ function ComposeEmailPanel({
   seedSamplePdfAttachments?: boolean;
   composeValidationDemo: ComposeValidationDemo;
   onComposeValidationDemoChange: (v: ComposeValidationDemo) => void;
+  quotedThreadRow?: MailThreadRow | null;
 }) {
   const composeTitle: Record<ComposeVariant, string> = {
     compose: 'Compose Email',
@@ -2723,29 +2920,26 @@ function ComposeEmailPanel({
 
   const [attachments, setAttachments] = useState<ComposeAttachment[]>([]);
   const [sendOutcome, setSendOutcome] = useState<SendOutcome>('idle');
-  const [messageBody, setMessageBody] = useState('');
+  const [messageBodyHtml, setMessageBodyHtml] = useState('');
+  const [messagePlain, setMessagePlain] = useState('');
   const [toRecipientError, setToRecipientError] = useState<string | null>(null);
-  const [devicePreview, setDevicePreview] = useState<'desktop' | 'mobile'>('desktop');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const initialSubjectRef = useRef(subject);
   const initialBodyRef = useRef('');
 
   useEffect(() => {
     if (seedSamplePdfAttachments) {
-      setAttachments([
-        { id: 'seed-resume', name: 'Resume.pdf', size: 245 * 1024 },
-        { id: 'seed-cover', name: 'Cover-letter.pdf', size: 245 * 1024 },
-      ]);
+      setAttachments([...MOCK_ATTACHMENT_ROWS]);
     } else {
       setAttachments([]);
     }
   }, [seedSamplePdfAttachments]);
 
   const isDirty =
-    sendOutcome === 'delivered'
+    sendOutcome === 'sent'
       ? false
       : subject !== initialSubjectRef.current ||
-        messageBody !== initialBodyRef.current ||
+        messagePlain !== initialBodyRef.current ||
         attachments.length > 0 ||
         sendOutcome === 'failed' ||
         !!toRecipientError;
@@ -2769,10 +2963,6 @@ function ComposeEmailPanel({
     [onDirtyChange],
   );
 
-  const toolbarBtn = (icon: typeof boldIcon, label: string) => (
-    <ToolbarIconButton icon={icon} aria-label={label} onClick={() => {}} />
-  );
-
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (!files?.length) return;
@@ -2791,6 +2981,14 @@ function ComposeEmailPanel({
     e.target.value = '';
   };
 
+  const handleComposeAttachClick = useCallback(() => {
+    fileInputRef.current?.click();
+    setAttachments((prev) => {
+      const rest = prev.filter((a) => !MOCK_ATTACHMENT_ID_SET.has(a.id));
+      return [...rest, ...MOCK_ATTACHMENT_ROWS];
+    });
+  }, []);
+
   const removeAttachment = (id: string) => {
     setAttachments((prev) => prev.filter((a) => a.id !== id));
   };
@@ -2803,11 +3001,15 @@ function ComposeEmailPanel({
     setAttachments([]);
     setSendOutcome('idle');
     setToRecipientError(null);
-    setMessageBody('');
+    setMessageBodyHtml('');
+    setMessagePlain('');
     onComposeValidationDemoChange('none');
     if (fileInputRef.current) fileInputRef.current.value = '';
     onRequestDismiss();
   };
+
+  const hasQuotedInBody =
+    !!quotedThreadRow && (composeVariant === 'reply' || composeVariant === 'forward');
 
   const handlePrimarySend = () => {
     setToRecipientError(null);
@@ -2822,7 +3024,7 @@ function ComposeEmailPanel({
       setToRecipientError('Enter a valid email address');
       return;
     }
-    setSendOutcome('delivered');
+    setSendOutcome('sent');
   };
 
   return (
@@ -2845,12 +3047,6 @@ function ComposeEmailPanel({
         style={{ display: 'none' }}
         onChange={handleFileChange}
       />
-      <style>{`
-        #compose-body::placeholder {
-          color: ${TW.blackPepper400};
-          opacity: 1;
-        }
-      `}</style>
       <Flex
         alignItems="center"
         gap="s"
@@ -2879,13 +3075,14 @@ function ComposeEmailPanel({
         <Box padding="m" style={{ borderBottom: `1px solid ${TWEMAIL_DIVIDER}` }}>
           <Flex gap="m" flexWrap="wrap" alignItems="flex-end">
             <Box style={{ flex: '1 1 220px', minWidth: 0 }}>
-              <TwFormSelect
+              <TwFormTextInput
                 id="compose-from"
                 label="From"
                 required
-                value={fromValue}
-                onChange={onFromChange}
-                options={[{ value: 'noreply', label: 'No-Reply@workday.com' }]}
+                readOnly
+                type="text"
+                value={fromLine}
+                onChange={() => {}}
               />
             </Box>
             <Box style={{ flex: '1 1 260px', minWidth: 0 }}>
@@ -2914,19 +3111,21 @@ function ComposeEmailPanel({
                   error={toRecipientError ?? undefined}
                 />
               ) : (
-                <TwFormSelect
+                <TwFormTextInput
                   id="compose-to"
                   label="To"
                   required
-                  value="recipient"
+                  readOnly
+                  type="text"
+                  value={toLine}
                   onChange={() => {}}
-                  options={[{ value: 'recipient', label: toLine }]}
+                  error={toRecipientError ?? undefined}
                 />
               )}
             </Box>
           </Flex>
 
-          <Box marginTop="m" style={{ borderLeft: `3px solid ${TW.blueberry200}`, paddingLeft: 12 }}>
+          <Box marginTop="m">
             <TwFormTextInput
               id="compose-subject"
               label="Subject"
@@ -2955,230 +3154,9 @@ function ComposeEmailPanel({
           ) : null}
         </Box>
 
-        <Flex
-          alignItems="center"
-          gap="xxs"
-          flexWrap="wrap"
-          paddingY="xs"
-          paddingX="s"
-          style={{
-            borderBottom: `1px solid ${TWEMAIL_DIVIDER}`,
-            backgroundColor: COMPOSE_TOOLBAR_BG,
-            flexShrink: 0,
-          }}
-        >
-          <ToolbarIconButton icon={undoLIcon} aria-label="Undo" onClick={() => {}} />
-          <ToolbarIconButton icon={undoRIcon} aria-label="Redo" onClick={() => {}} />
-          <Box width={1} height={24} style={{ backgroundColor: TWEMAIL_DIVIDER, margin: '0 4px' }} />
-          <select
-            aria-label="Paragraph style"
-            defaultValue="normal"
-            style={{
-              height: 32,
-              minWidth: 108,
-              padding: '0 28px 0 10px',
-              fontSize: 13,
-              fontWeight: 600,
-              borderRadius: 4,
-              border: `1px solid ${TW.soap400}`,
-              backgroundColor: COMPOSE_TOOLBAR_BG,
-              color: TW.blackPepper600,
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-              appearance: 'none',
-              backgroundImage: `linear-gradient(45deg,transparent 50%,${TW.blackPepper400} 50%),linear-gradient(135deg,${TW.blackPepper400} 50%,transparent 50%)`,
-              backgroundPosition: 'calc(100% - 14px) calc(50% - 3px),calc(100% - 9px) calc(50% - 3px)',
-              backgroundSize: '5px 5px,5px 5px',
-              backgroundRepeat: 'no-repeat',
-            }}
-          >
-            <option value="normal">Normal</option>
-            <option value="heading">Heading</option>
-          </select>
-          <Box width={1} height={24} style={{ backgroundColor: TWEMAIL_DIVIDER, margin: '0 4px' }} />
-          {toolbarBtn(boldIcon, 'Bold')}
-          {toolbarBtn(italicsIcon, 'Italic')}
-          {toolbarBtn(underlineIcon, 'Underline')}
-          <ToolbarIconButton icon={strikethroughIcon} aria-label="Strikethrough" onClick={() => {}} />
-          <Box width={1} height={24} style={{ backgroundColor: TWEMAIL_DIVIDER, margin: '0 4px' }} />
-          <ToolbarIconButton icon={textColorIcon} aria-label="Text color" onClick={() => {}} />
-          <Box width={1} height={24} style={{ backgroundColor: TWEMAIL_DIVIDER, margin: '0 4px' }} />
-          <Box
-            style={{
-              display: 'inline-flex',
-              borderRadius: 4,
-              backgroundColor: TW.blueberry100,
-              padding: 2,
-            }}
-          >
-            <ToolbarIconButton icon={alignLeftIcon} aria-label="Align left" onClick={() => {}} />
-          </Box>
-          <ToolbarIconButton icon={alignCenterIcon} aria-label="Align center" onClick={() => {}} />
-          <ToolbarIconButton icon={alignRightIcon} aria-label="Align right" onClick={() => {}} />
-          <ToolbarIconButton icon={justifyIcon} aria-label="Justify" onClick={() => {}} />
-          <Box width={1} height={24} style={{ backgroundColor: TWEMAIL_DIVIDER, margin: '0 4px' }} />
-          {toolbarBtn(unorderedListIcon, 'Bullet list')}
-          <ToolbarIconButton icon={orderedListIcon} aria-label="Numbered list" />
-          <Box width={1} height={24} style={{ backgroundColor: TWEMAIL_DIVIDER, margin: '0 4px' }} />
-          <button
-            type="button"
-            aria-label="Insert link"
-            title="Insert link"
-            onClick={() => {}}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 2,
-              border: 'none',
-              borderRadius: 4,
-              padding: '4px 6px',
-              backgroundColor: 'transparent',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-            }}
-          >
-            <TwIcon icon={linkIcon} size={20} color={TW.blackPepper500} aria-hidden />
-            <TwIcon icon={chevronDownSmallIcon} size={18} color={TW.blackPepper400} aria-hidden />
-          </button>
-          <ToolbarIconButton
-            icon={uploadClipIcon}
-            aria-label="Attach file"
-            onClick={() => fileInputRef.current?.click()}
-          />
-          <Box width={1} height={24} style={{ backgroundColor: TWEMAIL_DIVIDER, margin: '0 4px' }} />
-          <button
-            type="button"
-            aria-label="Writing assistant"
-            title="Writing assistant"
-            onClick={() => {}}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 2,
-              border: 'none',
-              borderRadius: 4,
-              padding: '4px 6px',
-              backgroundColor: 'transparent',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-            }}
-          >
-            <TwIcon icon={sparkleSingleSmallIcon} size={20} color={COMPOSE_SPARKLE_PURPLE} aria-hidden />
-            <TwIcon icon={chevronDownSmallIcon} size={18} color={TW.blackPepper400} aria-hidden />
-          </button>
-          <Box width={1} height={24} style={{ backgroundColor: TWEMAIL_DIVIDER, margin: '0 4px' }} />
-          <Box
-            style={{
-              display: 'inline-flex',
-              borderRadius: 4,
-              backgroundColor: TW.soap200,
-              padding: 2,
-              gap: 2,
-            }}
-          >
-            <Box
-              style={{
-                borderRadius: 4,
-                border:
-                  devicePreview === 'desktop' ? `1px solid ${TW.blueberry500}` : '1px solid transparent',
-                backgroundColor: devicePreview === 'desktop' ? TW.blueberry100 : 'transparent',
-              }}
-            >
-              <ToolbarIconButton
-                icon={deviceDesktopIcon}
-                aria-label="Desktop preview"
-                aria-pressed={devicePreview === 'desktop'}
-                onClick={() => setDevicePreview('desktop')}
-              />
-            </Box>
-            <Box
-              style={{
-                borderRadius: 4,
-                border:
-                  devicePreview === 'mobile' ? `1px solid ${TW.blueberry500}` : '1px solid transparent',
-                backgroundColor: devicePreview === 'mobile' ? TW.blueberry100 : 'transparent',
-              }}
-            >
-              <ToolbarIconButton
-                icon={devicePhoneIcon}
-                aria-label="Mobile preview"
-                aria-pressed={devicePreview === 'mobile'}
-                onClick={() => setDevicePreview('mobile')}
-              />
-            </Box>
-          </Box>
-        </Flex>
-
-        {attachments.length > 0 ? (
-          <Flex
-            gap="xs"
-            flexWrap="wrap"
-            alignItems="stretch"
-            paddingX="m"
-            paddingY="s"
-            style={{
-              borderBottom: `1px solid ${TWEMAIL_DIVIDER}`,
-              backgroundColor: TW.frenchVanilla100,
-              flexShrink: 0,
-            }}
-          >
-            <Subtext size="small" style={{ width: '100%', marginBottom: 4 }}>
-              Attachments
-            </Subtext>
-            {attachments.map((a) => (
-              <Flex
-                key={a.id}
-                alignItems="center"
-                gap="s"
-                paddingX="s"
-                paddingY="xs"
-                style={{
-                  border: `1px solid ${TWEMAIL_DIVIDER}`,
-                  borderRadius: 8,
-                  backgroundColor: TW.frenchVanilla100,
-                  maxWidth: '100%',
-                  flex: '1 1 200px',
-                  minWidth: 0,
-                }}
-              >
-                <TwIcon icon={fileIcon} size={20} color={TW.blueberry500} aria-hidden />
-                <Flex flexDirection="column" flex={1} gap="xxs" style={{ minWidth: 0 }}>
-                  <BodyText
-                    size="small"
-                    fontWeight={700}
-                    style={{
-                      margin: 0,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {a.name}
-                  </BodyText>
-                  <Subtext size="small" style={{ margin: 0, color: TW.blackPepper400 }}>
-                    {formatBytes(a.size)}
-                  </Subtext>
-                </Flex>
-                {sendOutcome === 'idle' ? (
-                  <TertiaryButton
-                    size="small"
-                    aria-label={`Remove ${a.name}`}
-                    onClick={() => removeAttachment(a.id)}
-                    style={{ flexShrink: 0 }}
-                  >
-                    <TwIcon icon={xIcon} size={18} />
-                  </TertiaryButton>
-                ) : null}
-              </Flex>
-            ))}
-          </Flex>
-        ) : null}
-
         <Box
-          flex={1}
-          padding="m"
           style={{
-            flex: '1 1 auto',
+            flex: hasQuotedInBody ? '0 1 auto' : '1 1 auto',
             minHeight: 220,
             borderBottom: `1px solid ${TWEMAIL_DIVIDER}`,
             backgroundColor: COMPOSE_BODY_CANVAS_BG,
@@ -3187,34 +3165,115 @@ function ComposeEmailPanel({
             minWidth: 0,
           }}
         >
-          <textarea
-            id="compose-body"
-            value={messageBody}
-            onChange={(e) => setMessageBody(e.target.value)}
-            placeholder={bodyPlaceholder}
-            aria-label={bodyPlaceholder}
-            rows={12}
+          <Box
             style={{
-              display: 'block',
+              flex: hasQuotedInBody ? '0 1 auto' : 1,
+              minHeight: hasQuotedInBody ? undefined : 0,
               width: '100%',
-              flex: '1 1 auto',
-              minHeight: 260,
-              boxSizing: 'border-box',
-              padding: '16px',
-              fontSize: 14,
-              lineHeight: 1.5,
-              fontFamily: 'inherit',
-              border: `1px solid ${TW.soap300}`,
-              borderRadius: 6,
-              resize: 'vertical',
-              backgroundColor: TW.frenchVanilla100,
-              color: TW.blackPepper600,
-              outline: 'none',
             }}
-          />
+          >
+            <RichTextEditor
+              value={messageBodyHtml}
+              canvasBackgroundColor={COMPOSE_BODY_CANVAS_BG}
+              onChange={(html, text) => {
+                setMessageBodyHtml(html);
+                setMessagePlain(text);
+              }}
+              placeholder={bodyPlaceholder}
+              minHeight={240}
+              maxHeight={560}
+              composeLayout
+              onAttachClick={handleComposeAttachClick}
+              slotBelowToolbar={
+                attachments.length > 0 ? (
+                  <Flex
+                    gap="xs"
+                    flexWrap="wrap"
+                    alignItems="stretch"
+                    paddingX="m"
+                    paddingY="s"
+                    style={{
+                      width: '100%',
+                      boxSizing: 'border-box',
+                      borderBottom: `1px solid ${TWEMAIL_DIVIDER}`,
+                      backgroundColor: TW.soap100,
+                      flexShrink: 0,
+                      justifyContent: 'flex-start',
+                    }}
+                  >
+                    {attachments.map((a) => (
+                      <Flex
+                        key={a.id}
+                        alignItems="center"
+                        gap="s"
+                        paddingX="s"
+                        paddingY="xs"
+                        style={{
+                          border: `1px solid ${TWEMAIL_DIVIDER}`,
+                          borderRadius: 8,
+                          backgroundColor: TW.frenchVanilla100,
+                          flex: '0 0 auto',
+                          width: 'fit-content',
+                          maxWidth: `min(${ATTACHMENT_CHIP_MAX_WIDTH_PX}px, 100%)`,
+                          minWidth: 0,
+                          boxSizing: 'border-box',
+                        }}
+                      >
+                        <TwIcon icon={fileIcon} size={20} color={TW.blueberry500} aria-hidden />
+                        <Flex
+                          flexDirection="column"
+                          gap="xxs"
+                          style={{ minWidth: 0, maxWidth: ATTACHMENT_CHIP_MAX_WIDTH_PX - 88 }}
+                        >
+                          <BodyText
+                            size="small"
+                            fontWeight={700}
+                            style={{
+                              margin: 0,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            {a.name}
+                          </BodyText>
+                          <Subtext size="small" style={{ margin: 0, color: TW.blackPepper400 }}>
+                            {formatBytes(a.size)}
+                          </Subtext>
+                        </Flex>
+                        {sendOutcome === 'idle' ? (
+                          <TertiaryButton
+                            size="small"
+                            aria-label={`Remove ${a.name}`}
+                            onClick={() => removeAttachment(a.id)}
+                            style={{ flexShrink: 0 }}
+                          >
+                            <TwIcon icon={xIcon} size={18} />
+                          </TertiaryButton>
+                        ) : null}
+                      </Flex>
+                    ))}
+                  </Flex>
+                ) : undefined
+              }
+              composeQuotedThread={
+                hasQuotedInBody && quotedThreadRow ? (
+                  <ComposeQuotedOriginalConversation row={quotedThreadRow} />
+                ) : undefined
+              }
+              candidateData={{
+                firstName: 'Chloe',
+                name: 'Chloe Clarkson',
+                jobTitle: 'Marketing Coordinator',
+                requisitionId: 'JR-00073',
+                recruiterName: 'Recruiter',
+                companyName: 'Organization',
+              }}
+            />
+          </Box>
         </Box>
 
-        {sendOutcome === 'delivered' ? (
+        {sendOutcome === 'sent' ? (
           <Box padding="m" style={{ backgroundColor: TW.greenApple100, borderBottom: `1px solid ${TW.greenApple400}` }}>
             <BodyText size="small" fontWeight="bold" style={{ margin: 0 }}>
               Message sent (prototype — no mail server).
@@ -3380,6 +3439,12 @@ function initialMailPrototypeFromSearchParams(q: URLSearchParams): {
     if (!Number.isNaN(n)) mailRailBadgeCount = n;
   }
 
+  /** Reply / Send New Email mount compose inside the dock — `panel=0` would keep the sheet collapsed → blank panel. */
+  if (mailSurface === 'compose') {
+    panelOpen = true;
+    collabChannel = 'mail';
+  }
+
   return {
     panelOpen,
     activeNav,
@@ -3454,14 +3519,23 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
   const [panelOpen, setPanelOpen] = useState(initMail.panelOpen);
   const [collabChannel, setCollabChannel] = useState<'mail' | 'msg' | 'wa'>(initMail.collabChannel);
 
-  const [fromVal] = useState('noreply');
   const [subject, setSubject] = useState(DEFAULT_COMPOSE_SUBJECT);
 
+  const composeFromLine = 'Rachel Vaccaro <rachel.vaccaro@gms.workday.com>';
   const toLine = 'Chloe Clarkson <chloe.clarkson@email.com>';
 
   const [composeVariant, setComposeVariant] = useState<ComposeVariant>('compose');
 
   const [mailSurface, setMailSurface] = useState<'threads' | 'compose'>(initMail.mailSurface);
+
+  /** Opening compose must expand the dock — `CommunicationDock` hides `panel` when `expanded` is false (blank sheet). */
+  const handleMailSurfaceChange = useCallback((surface: 'threads' | 'compose') => {
+    if (surface === 'compose') {
+      setPanelOpen(true);
+      setCollabChannel('mail');
+    }
+    setMailSurface(surface);
+  }, []);
 
   const [composeDirty, setComposeDirty] = useState(false);
   const [composeResetKey, setComposeResetKey] = useState(0);
@@ -3488,8 +3562,18 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
   const [dockWidthPreset, setDockWidthPreset] = useState<DockWidthPreset>(initMail.dockWidthPreset);
   const [utilityBadgeCounts, setUtilityBadgeCounts] = useState<[number, number, number]>(initMail.utilityBadgeCounts);
   const [mailRailBadgeCount, setMailRailBadgeCount] = useState(initMail.mailRailBadgeCount);
-  const [mailDockWide, setMailDockWide] = useState(false);
+
   const [prototypeControlsExpanded, setPrototypeControlsExpanded] = useState(false);
+
+  /**
+   * `CommunicationDock` sets the mail panel to `display: none` when `expanded` (panel open) is false. Any code path
+   * that sets compose without opening the sheet looks like a blank panel — keep dock + mail channel in sync.
+   */
+  useEffect(() => {
+    if (mailSurface !== 'compose') return;
+    setPanelOpen(true);
+    setCollabChannel('mail');
+  }, [mailSurface]);
 
   useLayoutEffect(() => {
     if (typeof window === 'undefined') return;
@@ -3515,19 +3599,30 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
       if (mailAudienceFilter === 'all') return true;
       return t.audience === mailAudienceFilter;
     });
-    return applyMailThreadSortOldestFirst(base);
+    return applyMailThreadSortNewestFirst(base);
   }, [mailAudienceFilter, mailDemoEmpty]);
+
+  const quotedThreadForCompose = useMemo(() => {
+    if (mailSurface !== 'compose') return null;
+    if (composeVariant !== 'reply' && composeVariant !== 'forward') return null;
+    if (!mailSelectedId) return null;
+    return filteredThreadsForDock.find((t) => t.id === mailSelectedId) ?? null;
+  }, [mailSurface, composeVariant, mailSelectedId, filteredThreadsForDock]);
 
   const mailSplitView =
     Boolean(mailSelectedId) && filteredThreadsForDock.some((t) => t.id === mailSelectedId);
+
+  /** Split (list + reading pane) or Compose — freeze profile column scroll so the dock is the focus. */
+  const lockProfileScrollBehindMail =
+    panelOpen && collabChannel === 'mail' && (mailSurface === 'compose' || mailSplitView);
 
   const expandedMailPanelPx = useMemo(() => {
     if (mailSurface === 'compose') {
       return dockSheetComposePx(vw);
     }
-    /** Split read needs the medium sheet — must win over `dock=narrow` (list-first only). */
+    /** 2-column Overview (list + reading pane): same sliding sheet width as Compose (Figma Overview-4 / Compose-4). */
     if (mailSplitView) {
-      return mailDockWide ? Math.min(1200, Math.max(COLLAB_SHEET_W, 1080)) : COLLAB_SHEET_W;
+      return dockSheetComposePx(vw);
     }
     if (dockWidthPreset === 'narrow') {
       return dockSheetNarrowPx(vw);
@@ -3539,7 +3634,7 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
       return dockSheetComposePx(vw);
     }
     return dockSheetNarrowPx(vw);
-  }, [vw, dockWidthPreset, mailSurface, mailSplitView, mailDockWide]);
+  }, [vw, dockWidthPreset, mailSurface, mailSplitView]);
 
   const narrowMailPanelPx = dockSheetNarrowPx(vw);
 
@@ -3698,9 +3793,24 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
   /** Full page load always opens the intro popover; dismissing it does not survive refresh. */
   const [onboardingStep, setOnboardingStep] = useState<OnboardingStep>('feature');
 
-  /** Figma: modal dim on profile only for wider dock (split read, compose, medium/wide preset) — not during feature onboarding (no dark scrim). */
+  /** Figma: full-viewport scrim over rail + blue nav + profile + top nav for wider dock — not during feature onboarding (no dark scrim). */
   const showWorkspaceDimOverlay =
     onboardingStep !== 'feature' && panelOpen && expandedMailPanelPx > narrowMailPanelPx;
+
+  /** Prevent double scrollbars: dock/panel scrolls; viewport must not when modal scrim is shown. */
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    if (!showWorkspaceDimOverlay) return;
+    const html = document.documentElement;
+    const { overflow: prevHtml } = html.style;
+    const { overflow: prevBody } = document.body.style;
+    html.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    return () => {
+      html.style.overflow = prevHtml;
+      document.body.style.overflow = prevBody;
+    };
+  }, [showWorkspaceDimOverlay]);
 
   const finishOnboarding = useCallback(() => {
     try {
@@ -3791,7 +3901,6 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
       <Flex flex={1} style={{ minHeight: 0, position: 'relative', alignItems: 'stretch' }}>
         <RecruitingNavRail />
         <CandidateMenu activeNav={activeNav} onNav={setActiveNav} />
-        {/* Dim only the profile workspace — full-viewport overlay sat above cards + mail dock and hid main content in some browsers */}
         <Box
           flex={1}
           style={{
@@ -3807,39 +3916,46 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
             boxSizing: 'border-box',
           }}
         >
-          {showWorkspaceDimOverlay ? (
-            <Box
-              aria-hidden
-              onClick={closePanel}
-              style={{
-                position: 'absolute',
-                inset: 0,
-                backgroundColor: 'rgba(11, 31, 66, 0.35)',
-                /** Sit above profile cards so the workspace actually dims (was z5 under content at z10). Dock stays clear — it is a sibling with higher z-index. */
-                zIndex: 20,
-              }}
-            />
-          ) : null}
           <Box style={{ position: 'relative', zIndex: 10, flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
             <ProfileMainColumn
               actionBarVisible={decisionActionBarVisible}
               onMoveForward={() => setDecisionActionBarVisible(true)}
+              backgroundScrollLocked={lockProfileScrollBehindMail}
             />
           </Box>
         </Box>
 
+        {showWorkspaceDimOverlay ? (
+          <Box
+            aria-hidden
+            onClick={closePanel}
+            style={{
+              position: 'fixed',
+              top: HEADER_H,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(11, 31, 66, 0.35)',
+              /** Below {@link GLOBAL_HEADER_Z} — dims rail, blue nav, profile only; top nav stays clear (Figma). */
+              zIndex: WORKSPACE_DIM_SCRIM_Z,
+            }}
+          />
+        ) : null}
+
         <CommunicationDock
           headerOffsetPx={HEADER_H}
-          expanded={panelOpen}
+          expanded={panelOpen || mailSurface === 'compose'}
           expandedWidthPx={expandedMailPanelPx}
           railWidthPx={COLLAB_RAIL_W}
           railBackgroundColor={TW.frenchVanilla100}
           expandedPanelBoxShadow={TWEMAIL_PANEL_SHADOW}
-          zIndex={210}
-          unifiedRailElevation={panelOpen}
+          zIndex={COMMUNICATION_DOCK_Z}
+          unifiedRailElevation={panelOpen || mailSurface === 'compose'}
+          railGapPx={0}
+          railPaddingYPx={0}
           rail={
             <>
-              {panelOpen
+              {panelOpen || mailSurface === 'compose'
                 ? collabRailTile(false, chevronLeftSmallIcon, 'Collapse panel', closePanel)
                 : null}
               {collabRailTile(false, noteIcon, 'Notes', () => {})}
@@ -3884,11 +4000,10 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
               {collabChannel === 'mail' ? (
                 <MailCollaborationSurface
                   mailSurface={mailSurface}
-                  onMailSurfaceChange={setMailSurface}
+                  onMailSurfaceChange={handleMailSurfaceChange}
                   onRequestComposeExit={tryComposeExitToThreads}
                   onComposeDirtyChange={setComposeDirty}
-                  fromValue={fromVal}
-                  onFromChange={() => {}}
+                  fromLine={composeFromLine}
                   toLine={toLine}
                   subject={subject}
                   onSubjectChange={setSubject}
@@ -3898,8 +4013,7 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
                   onReplyToThread={onReplyToThread}
                   onForwardThread={onForwardThread}
                   threadsResetKey={threadsResetKey}
-                  dockWide={mailDockWide}
-                  onToggleDockWide={() => setMailDockWide((w) => !w)}
+                  onCollapseDock={closePanel}
                   audienceFilter={mailAudienceFilter}
                   onAudienceFilterChange={setMailAudienceFilter}
                   selectedId={mailSelectedId}
@@ -3911,6 +4025,7 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
                   composeValidationDemo={composeValidationDemo}
                   onComposeValidationDemoChange={setComposeValidationDemo}
                   threads={filteredThreadsForDock}
+                  quotedThreadRow={quotedThreadForCompose}
                 />
               ) : (
                 <Flex
@@ -3928,14 +4043,18 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
           }
         />
         <TwModal
-          title="Discard"
+          variant="destructivePill"
+          title="Discard Email?"
           isOpen={discardModalOpen}
           onClose={cancelDiscardModal}
           primaryActionText="Discard"
           onPrimaryAction={confirmDiscardAndNavigate}
-          secondaryActionText="Keep editing"
+          secondaryActionText="Cancel"
+          width="420px"
         >
-          <BodyText size="small">Discard your changes and close compose?</BodyText>
+          <BodyText size="small" style={{ margin: 0, color: TW.blackPepper600 }}>
+            Are you sure you want to discard this email?
+          </BodyText>
         </TwModal>
       </Flex>
 
@@ -4138,6 +4257,8 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
                 <option value="2">2 — Sent</option>
                 <option value="3">3 — Sent</option>
                 <option value="4">4 — Not delivered</option>
+                <option value="5">5 — Agency referral</option>
+                <option value="6">6 — Agency follow-up</option>
               </select>
             </label>
             <label style={{ color: '#ccc', fontSize: 11 }}>

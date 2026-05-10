@@ -2,11 +2,11 @@ import React, { type ReactNode } from 'react';
 import { Flex, Box } from './twemail/layout';
 import { SPACE } from './twemail/palette';
 import { TW } from './twemail/palette';
-import { TWEMAIL_PANEL_SHADOW } from './twoWayEmailDesignTokens';
+import { TWEMAIL_PANEL_SHADOW, TWEMAIL_THREAD_LIST_CANVAS_BG } from './twoWayEmailDesignTokens';
 import {
   CONV_EMAIL_RAIL_TILE_ACTIVE_BG,
-  CONV_EMAIL_RAIL_TILE_RING,
   CONV_EMAIL_RAIL_TILE_RADIUS_PX,
+  CONV_EMAIL_THREAD_SELECTED_BAR,
 } from './conversationalEmailPrototypeTheme';
 
 export const DEFAULT_COMM_RAIL_PX = 56;
@@ -33,6 +33,10 @@ export interface CommunicationDockProps {
    * When expanded, add subtle elevation on the rail so sheet + rail read as one dock (Figma parity).
    */
   unifiedRailElevation?: boolean;
+  /** Vertical gap between rail icon buttons (default 4px). */
+  railGapPx?: number;
+  /** Top/bottom padding of the rail column (default 12px). */
+  railPaddingYPx?: number;
   /** Sliding panel column (header + body). Hidden when `expanded` is false. */
   panel: ReactNode;
   /** Icon stack — rendered **left** of the panel (Figma: narrow rail then white surface) */
@@ -52,6 +56,8 @@ export const CommunicationDock: React.FC<CommunicationDockProps> = ({
   zIndex = 260,
   unifiedRailElevation = false,
   expandedPanelBoxShadow = TWEMAIL_PANEL_SHADOW,
+  railGapPx = SPACE.xxs,
+  railPaddingYPx = SPACE.s,
   panel,
   rail,
 }) => {
@@ -97,15 +103,14 @@ export const CommunicationDock: React.FC<CommunicationDockProps> = ({
         <Flex
           flexDirection="column"
           alignItems="center"
-          paddingY="xs"
           style={{
             width: w,
             flexShrink: 0,
             backgroundColor: railBackgroundColor ?? TW.frenchVanilla100,
             borderLeft: `1px solid ${TW.soap300}`,
-            paddingTop: SPACE.s,
-            paddingBottom: SPACE.s,
-            gap: SPACE.xxs,
+            paddingTop: railPaddingYPx,
+            paddingBottom: railPaddingYPx,
+            gap: railGapPx,
             position: 'relative',
             overflow: 'visible',
             boxShadow:
@@ -138,7 +143,8 @@ export const CommunicationDock: React.FC<CommunicationDockProps> = ({
               borderRadius: 0,
               border: 'none',
               borderLeft: expanded ? `1px solid ${TW.soap300}` : 'none',
-              backgroundColor: TW.frenchVanilla100,
+              /** Match mail split-view canvas so gaps above/beside content are list grey, not stark white. */
+              backgroundColor: TWEMAIL_THREAD_LIST_CANVAS_BG,
             }}
           >
             {expanded ? panel : null}
@@ -151,7 +157,7 @@ export const CommunicationDock: React.FC<CommunicationDockProps> = ({
 
 /**
  * Shared rail tile sizing for recruiting / conversational email prototypes (inactive = transparent;
- * active = light blue rounded tile + blue icon accent).
+ * active = light blue fill `#D6E7FD` + 4px blueberry left stripe — matches Overview dock rail).
  */
 export function communicationRailButtonStyle(
   active: boolean,
@@ -163,8 +169,10 @@ export function communicationRailButtonStyle(
     height: tile,
     borderRadius: CONV_EMAIL_RAIL_TILE_RADIUS_PX,
     border: 'none',
+    boxSizing: 'border-box',
+    borderLeft: active ? `4px solid ${CONV_EMAIL_THREAD_SELECTED_BAR}` : 'none',
     backgroundColor: active ? CONV_EMAIL_RAIL_TILE_ACTIVE_BG : 'transparent',
-    boxShadow: active ? `inset 0 0 0 1px ${CONV_EMAIL_RAIL_TILE_RING}` : undefined,
+    boxShadow: 'none',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

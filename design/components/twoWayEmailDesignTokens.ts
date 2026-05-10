@@ -11,8 +11,11 @@ import { TW } from './twemail/palette';
 
 // --- Dock rail (active mail tile) — literals from Overview family / former recruiting parity ---
 
-/** Light blue rounded rect behind active channel icon (`#D6E7FD`). */
+/** Light blue fill behind active channel icon on the collaboration rail (`#D6E7FD`). */
 export const TWEMAIL_RAIL_TILE_ACTIVE_BG = '#D6E7FD';
+
+/** Active rail tile corners — **square** (0px); no rounded rect on mail/chat/WhatsApp rail selection. */
+export const TWEMAIL_RAIL_TILE_RADIUS_PX = 0;
 
 /** 1px inset ring / primary accent on active tile (`#005CB9`). */
 export const TWEMAIL_RAIL_ACCENT = '#005CB9';
@@ -28,6 +31,10 @@ export const TWEMAIL_THREAD_LIST_CANVAS_BG = '#F4F6F8';
 
 /** Selected thread row background — same light-blue wash as active mail rail tile (`TWEMAIL_RAIL_TILE_ACTIVE_BG`). */
 export const TWEMAIL_THREAD_SELECTED_BG = TWEMAIL_RAIL_TILE_ACTIVE_BG;
+/**
+ * 4px left stripe on the **active** collaboration-rail channel tile (mail / chat / WhatsApp).
+ * Selected thread row uses fill only — no left stripe (Overview family parity).
+ */
 export const TWEMAIL_THREAD_SELECTED_BAR = TW.blueberry500;
 /** Hover wash slightly darker than list canvas (`#EDF0F3`). */
 export const TWEMAIL_THREAD_ROW_HOVER_BG = '#EDF0F3';

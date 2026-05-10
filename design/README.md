@@ -7,6 +7,9 @@ This folder contains prototypes, design documentation, and reference materials f
 With **`npm run dev`** (port **5199**):
 
 - **`http://localhost:5199/`** — default shell loads **GCC Recruiter Dashboard** (`#/gcc-recruiter-dashboard`).
+- **2-Way Email Recruiting (`#2-way-email-prototype`)** — candidate profile + mail dock. **Canonical “Not delivered” reading demo** (matches generic retry copy in design review): open the mail panel, then use hash  
+  `#2-way-email-prototype?thread=4&error=generic&panel=1&surface=split&proto=1`  
+  (thread **4** = *Interview confirmation*; `error=generic` is the short bounce message; override with `error=unsubscribe`, `error=spam`, etc., for other scenarios). E2E step **collapsed-not-delivered** already deep-links `thread=4&error=generic` via `buildTwoWayEmailPrototypeHref`.
 - **`http://localhost:5199/#/gcc-recruiter-dashboard`** — GCC recruiter dashboard shell.
 - **`http://localhost:5199/#/candidate-grid-v84`** — **Candidate grid redesign v84** (enhanced tabs: Dashboard, Job Requisitions, Candidates, Reports with full functionality and HiredScore integration).
 - **`http://localhost:5199/gcc-candidate-grid-redesign-v52`** — **Candidate grid redesign v52** (GCC-E2E-011; copy from **319**; unified modal, hub tabs).
@@ -177,13 +180,13 @@ Uses the same `SanaCommComposer` and `SanaCommMessageBubble` components as simpl
   minHeight={200}
 />
 
-// With templates and GenAI (recruiting email example)
+// With templates and GenAI (offer-letter / EmailComposer-style — Conversational Email `#2-way-email-prototype` compose omits both; see `.cursor/rules/012-conversational-email-compose-mvp.mdc`)
 <RichTextEditor
   value={emailBody}
   onChange={(html, text) => setEmailBody(text)}
   placeholder="Type your email..."
   showTemplates  // Shows 6 recruiting email templates dropdown
-  showGenAI      // Shows sparkle icon for text improvement
+  showGenAI      // Sparkle on compact toolbar only; composeLayout excludes GenAI for 2-way compose MVP
   candidateData={{
     firstName: 'Sarah',
     jobTitle: 'Senior Product Manager',

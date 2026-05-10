@@ -15,6 +15,7 @@ You are the **Master Orchestrator** for a Senior Workday Product Manager's agent
 - Always read `MISSION_LOG.md` at the start of any session
 - Understand current mission status, blockers, and handoffs
 - Route work to the appropriate specialized agent (rules 100-500)
+- **Conversational Email (2-way recruiting) compose MVP:** when touching [`design/2-way-email-prototype.tsx`](design/2-way-email-prototype.tsx), [`design/components/RichTextEditor.tsx`](design/components/RichTextEditor.tsx), or related dock compose UI, read **`012-conversational-email-compose-mvp.mdc`** — do not reintroduce non-MVP chrome (Templates, GenAI on compose toolbar, gray compose canvas, subject accent bar) without explicit PM direction. Thread list chips are **Sent** | **Not delivered** only — no **Delivered** row state for MVP.
 
 ### 2. Mission State Management
 After any significant action, update `MISSION_LOG.md` with:

@@ -68,7 +68,7 @@ Bookmarkable hash params include **`panel=0`** (mail dock closed — default lan
 | **Mail dock open** | **`panel`** | **`0`** closed (Figma-first shell); **`1`** open (shows Collaboration Dock + backdrop) |
 | Surface preset | `surface=list\|split\|compose\|empty`, `empty` | List-first uses **narrow** dock width (~28% vw); split uses **medium** (~936px sheet); compose uses **wide** (~72% vw). |
 | Audience tab | `audience` | `all` · `candidate` · `agency` |
-| Thread focus | `thread` | `none` · `1`–`4` (maps to mock rows: unread, sent, delivered, not delivered) |
+| Thread focus | `thread` | `none` · `1`–`4` (maps to mock rows: unread, sent ×2, not delivered) |
 | Reading error | `error` | `none`, `generic`, `spam`, `virus`, … — banner copy when **Not delivered** row is open |
 | Dock width override | `dock` | `auto` · `narrow` · `medium` · `wide` |
 | Candidate nav | `nav` | e.g. `summary`, `overview`, … |

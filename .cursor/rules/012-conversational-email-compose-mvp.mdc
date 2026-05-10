@@ -1,0 +1,25 @@
+---
+description: Conversational Email (2-way recruiting) compose MVP — UI explicitly deferred; agents must not restore without PM approval
+globs:
+  - "design/**/*"
+alwaysApply: false
+---
+
+# Conversational Email compose MVP boundaries
+
+Applies to **`#2-way-email-prototype`** / India candidate profile mail dock, [`ComposeEmailPanel`](design/2-way-email-prototype.tsx), and [`RichTextEditor`](design/components/RichTextEditor.tsx) when **`composeLayout`** is used for that compose path.
+
+**Reply/Forward layout (do preserve):** For **Reply** and **Forward**, the prior conversation is **quoted inside the compose message body** via **`composeQuotedThread`** on [`RichTextEditor`](design/components/RichTextEditor.tsx) (Outlook-style: one bordered “letter” with the contenteditable above and a **non-editable** quoted block below, same card). Do **not** place the thread in a **separate pane** or scroll region under the whole composer; do **not** restore **`replyThreadSlot`** below the editor — that regresses to a disconnected second surface.
+
+The PM has marked the following as **not MVP**. Do **not** add them back unless the PM explicitly asks (avoid “helpful” regressions when parity-fixing or refactoring):
+
+| Excluded from MVP | Detail |
+|-------------------|--------|
+| **Templates** | **Never** add a **Templates** control on the conversational-email compose path. [`RichTextEditor`](design/components/RichTextEditor.tsx) does **not** render templates when **`composeLayout`** is true (even if **`showTemplates`** were passed — ignored). Do **not** pass **`showTemplates`** from [`ComposeEmailPanel`](design/2-way-email-prototype.tsx). Agents must not “restore” Templates when fixing parity. Non–conversational-email surfaces (e.g. compact toolbar / offer-letter) may still use **`showTemplates`** where appropriate. |
+| **Attach outside toolbar** | Paperclip lives **only** on the main compose toolbar via **`onAttachClick`** on [`RichTextEditor`](design/components/RichTextEditor.tsx). Do **not** add a separate attach row above the editor body in [`ComposeEmailPanel`](design/2-way-email-prototype.tsx). |
+| **GenAI / Writing assistant** | No sparkle/star **Improve with GenAI** control on the **compose** toolbar. Do not pass **`showGenAI`** for the 2-way compose path; **`composeLayout`** toolbar must not render GenAI (handled in `RichTextEditor`). Other prototypes (`EmailComposer`, offer SSA, etc.) may keep **`showGenAI`** where already wired. |
+| **Gray compose body canvas** | MVP compose uses a **white** message surface (`TW.frenchVanilla100` / inner editor white), not a gray slab behind the editor for this dock compose pattern. |
+| **Subject row accent bar** | No left blue accent border on the compose subject field (plain subject row only). |
+| **Delivered vs Sent (thread list)** | MVP shows **Sent** only for successful outbound conversations. Do **not** introduce a separate **Delivered** thread-row chip, badge, or `threadRowBadge: 'delivered'` in [`design/2-way-email-prototype.tsx`](design/2-way-email-prototype.tsx) mocks unless the PM explicitly expands scope. **Not delivered** remains valid for failure / bounce demo rows. |
+
+When extending compose UX, default to **fewer** chrome and **no** AI/templates unless the PM expands MVP scope.

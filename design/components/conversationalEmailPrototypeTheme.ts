@@ -24,6 +24,7 @@ import {
   TWEMAIL_RAIL_ICON_ACTIVE,
   TWEMAIL_RAIL_ICON_IDLE,
   TWEMAIL_RAIL_TILE_ACTIVE_BG,
+  TWEMAIL_RAIL_TILE_RADIUS_PX,
   TWEMAIL_THREAD_DIVIDER,
   TWEMAIL_THREAD_ROW_HOVER_BG,
   TWEMAIL_THREAD_SELECTED_BAR,
@@ -33,14 +34,14 @@ import {
 /** Repo-relative path to committed Overview / Compose reference PNGs (for docs / tooling). */
 export const CONVERSATIONAL_EMAIL_REFERENCE_SCREEN_DIR = 'design/reference-screens/2way-email-refs';
 
-/** Mail channel tile — light blue rounded rect behind envelope when active (Overview family). */
+/** Mail channel tile — light blue rect behind envelope when active (square corners; full-bleed within rail hit target). */
 export const CONV_EMAIL_RAIL_TILE_ACTIVE_BG = TWEMAIL_RAIL_TILE_ACTIVE_BG;
 
 /** 1px inset ring / icon accent on active tile (canonical link blue). */
 export const CONV_EMAIL_RAIL_TILE_RING = TWEMAIL_RAIL_ACCENT;
 
-/** Tile corner radius — Overview screenshots (~8px rounded square). */
-export const CONV_EMAIL_RAIL_TILE_RADIUS_PX = 8;
+/** Tile corner radius — **square** (`TWEMAIL_RAIL_TILE_RADIUS_PX`); collaboration rail has no rounded corners. */
+export const CONV_EMAIL_RAIL_TILE_RADIUS_PX = TWEMAIL_RAIL_TILE_RADIUS_PX;
 
 export const CONV_EMAIL_RAIL_ICON_ACTIVE = TWEMAIL_RAIL_ICON_ACTIVE;
 export const CONV_EMAIL_RAIL_ICON_IDLE = TWEMAIL_RAIL_ICON_IDLE;
@@ -49,8 +50,9 @@ export const CONV_EMAIL_RAIL_ICON_IDLE = TWEMAIL_RAIL_ICON_IDLE;
 export const CONV_EMAIL_RAIL_BADGE_BG = TWEMAIL_RAIL_BADGE_BG;
 export const CONV_EMAIL_RAIL_BADGE_FG = TWEMAIL_RAIL_BADGE_FG;
 
-/** Thread list row — selection chrome (split view list column). */
+/** Thread list row — selected background (no left stripe; stripe is on the rail tile only). */
 export const CONV_EMAIL_THREAD_SELECTED_BG = TWEMAIL_THREAD_SELECTED_BG;
+/** 4px left stripe on the active **collaboration-rail** tile (re-export of `TWEMAIL_THREAD_SELECTED_BAR`). */
 export const CONV_EMAIL_THREAD_SELECTED_BAR = TWEMAIL_THREAD_SELECTED_BAR;
 export const CONV_EMAIL_THREAD_ROW_HOVER_BG = TWEMAIL_THREAD_ROW_HOVER_BG;
 export const CONV_EMAIL_THREAD_DIVIDER = TWEMAIL_THREAD_DIVIDER;
