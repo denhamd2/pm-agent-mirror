@@ -11,7 +11,7 @@ export function FormField({
 }) {
   const hasErr = Boolean(error);
   return (
-    <div style={{ marginBottom: hasErr ? 4 : 0 }} data-field-error={hasErr ? 'true' : undefined}>
+    <div style={{ marginBottom: 4 }} data-field-error={hasErr ? 'true' : undefined}>
       {children}
     </div>
   );

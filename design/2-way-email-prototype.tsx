@@ -3166,7 +3166,7 @@ function ComposeEmailPanel({
 
       <Flex flexDirection="column" flex={1} style={{ minHeight: 0, overflowY: 'auto' }}>
         <Box padding="m" style={{ borderBottom: `1px solid ${TWEMAIL_DIVIDER}` }}>
-          <Flex gap="m" flexWrap="wrap" alignItems="flex-end">
+          <Flex gap="m" flexWrap="wrap" alignItems="flex-start">
             <Box style={{ flex: '1 1 220px', minWidth: 0 }}>
               <TwFormTextInput
                 id="compose-from"

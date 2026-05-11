@@ -122,7 +122,16 @@ export function TwFormTextInput({
           opacity: disabled && !error ? 0.55 : 1,
         }}
       />
-      {error ? <FormField.Hint>{error}</FormField.Hint> : null}
+      <FormField.Hint
+        aria-hidden={error ? undefined : true}
+        style={{
+          visibility: error ? 'visible' : 'hidden',
+          /** Reserve one line so From/To stay aligned when only one field errors. */
+          minHeight: '1.2em',
+        }}
+      >
+        {error ?? '\u00a0'}
+      </FormField.Hint>
     </FormField>
   );
 }
