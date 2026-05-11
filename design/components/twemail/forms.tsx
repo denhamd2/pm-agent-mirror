@@ -113,8 +113,7 @@ export function TwFormTextInput({
           lineHeight: '20px',
           border: `1px solid ${error ? TW.cinnamon600 : TW.soap400}`,
           borderRadius: 4,
-          backgroundColor:
-            error ? TW.frenchVanilla100 : readOnly ? TW.soap100 : TW.frenchVanilla100,
+          backgroundColor: TW.frenchVanilla100,
           color: TW.blackPepper600,
           fontFamily: 'inherit',
           boxSizing: 'border-box',
