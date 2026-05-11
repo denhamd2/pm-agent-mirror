@@ -495,7 +495,7 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
   {
     id: '1',
     audience: 'candidate',
-    subject: 'Re: Link for the interview',
+    subject: 'Schedule for Interview',
     preview:
       'Hi Rachel, I just noticed a different link was sent on the previous message. Plea…',
     when: 'Today',
@@ -524,7 +524,7 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
         fromLine: 'Chloe Clarkson <chloe.clarkson@email.com>',
         readingToFull: 'Rachel Vaccaro <Rachel.Vaccaro@email.com>',
         readingTo: 'Rachel Vaccaro',
-        subject: 'Re: Link for the interview',
+        subject: 'Re: Schedule for Interview',
         body:
           'Hi Rachel, I just noticed a different link was sent on the previous message. Please send over the updated link. Thank you so much!\n\nChloe Clarkson',
         bodyItalicPhrase: 'different link',
@@ -540,7 +540,7 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
         direction: 'out',
         fromLine: 'Rachel Vaccaro <rachel.vaccaro@gms.workday.com>',
         readingToFull: 'Chloe Clarkson <chloe.clarkson@email.com>',
-        subject: 'Re: Link for the interview',
+        subject: 'Re: Schedule for Interview',
         body:
           'Hello,\n\nI am sending a Zoom link for the interview scheduled on December 10, 2025.\n\nPlease join using the details below and confirm your attendance.',
       },
@@ -598,7 +598,7 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
   {
     id: '3',
     audience: 'candidate',
-    subject: 'Re: Link for the interview',
+    subject: 'Re: Schedule for Interview',
     preview:
       'Hello, I am sending a Zoom link for the interview scheduled on December 10, 2025. Please join using the details below and confirm your attendance.',
     when: 'Yesterday',
@@ -617,7 +617,7 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
   {
     id: '4',
     audience: 'candidate',
-    subject: 'Re: Link for the interview',
+    subject: 'Re: Schedule for Interview',
     preview:
       'Hello, Thank you for getting back! I just set up some time on calendar. Could not deliver — mailbox unavailable.',
     when: 'Mon',
