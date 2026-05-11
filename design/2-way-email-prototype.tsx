@@ -567,7 +567,7 @@ const MOCK_MAIL_THREADS: MailThreadRow[] = [
         fromLine: 'Chloe Clarkson <chloe.clarkson@email.com>',
         readingToFull: 'Rachel Vaccaro <Rachel.Vaccaro@email.com>',
         readingTo: 'Rachel Vaccaro',
-        subject: 'Link for the interview',
+        subject: 'Schedule for Interview',
         body:
           'Hi Rachel,\n\nThank you for your interest. We would like to invite you to interview for the Marketing Coordinator role. Please let us know your availability.\n\nBest,\nChloe Clarkson',
       },
