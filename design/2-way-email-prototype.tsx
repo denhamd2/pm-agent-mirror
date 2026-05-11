@@ -1,14 +1,14 @@
 /**
  * 2-way email recruiting — candidate profile prototype
  *
- * **Onboarding:** Anchored **Introducing Conversational Email** popover near the mail rail — **every full page refresh** resets to this opening canvas (hash query normalized to defaults); dismissing the popover persists until you refresh. Canonical copy matches Overview-9.
+ * **Onboarding:** Anchored **Introducing Conversational Email** popover near the mail rail. **Bare hash** (no `?` query) opens the default demo canvas; **any hash query** is honoured for deep links (`thread`, `audience`, `surface`, …). Dismissing the popover persists until you refresh. Canonical copy matches Overview-9.
  * **Mail rail:** **Conversational Email** panel — thread list shows **one row per conversation**; **full threading** (stacked messages, Reply/Forward per message) lives in the **reading pane** only when `threadMessages` is set.
  * **Workspace dim:** Full-viewport semi-transparent scrim below the global header (`top: HEADER_H`) over recruiting rail, candidate blue nav, and profile when the dock is wide; top nav stays bright. Collaboration dock stays above the scrim.
  * **Compose:** templates link, rich-text toolbar, body placeholder — parity vs PM Compose PNG (`design/reference-screens/2way-email-refs/Compose-*.png`).
  * **Decision action bar:** [6887:21505](https://www.figma.com/design/HpAOHGAeXBORpHnyhsCMja/2-Way-Email_Recruiting_12_2024?node-id=6887-21505).
  *
  * Routes:
- *   - **`#conversational-email-prototype`** — bookmark slug only (this hash is preferred when normalizing); **same opening reset on refresh** as `#2-way-email-prototype`.
+ *   - **`#conversational-email-prototype`** — bookmark slug (preferred when normalizing); same bare-hash / deep-link rules as `#2-way-email-prototype`.
  *   - `#2-way-email-prototype` — full prototype (legacy `#india-candidate-profile-email-v92` supported)
  * Mission: INDIA-E2E-006
  * PRD: docs/prds/india-candidate-profile-email-conversation-prd.md
@@ -3417,6 +3417,13 @@ function parseTwoWayEmailPrototypeQuery(): URLSearchParams {
   return new URLSearchParams(q);
 }
 
+/** No `?` on the hash → default demo; otherwise parse thread/audience/surface from the URL (must match mount `useLayoutEffect`). */
+function mailPrototypeSearchParamsForInitialHydration(): URLSearchParams {
+  if (typeof window === 'undefined') return new URLSearchParams();
+  const raw = parseTwoWayEmailPrototypeQuery();
+  return [...raw.keys()].length === 0 ? new URLSearchParams() : raw;
+}
+
 /** Parsed mail/dock URL state — shared by lazy `useState` init and the mount `useEffect` (must stay in sync). */
 function initialMailPrototypeFromSearchParams(q: URLSearchParams): {
   panelOpen: boolean;
@@ -3477,7 +3484,11 @@ function initialMailPrototypeFromSearchParams(q: URLSearchParams): {
     collabChannel = 'mail';
   } else if (surface === 'split') {
     mailDemoEmpty = false;
-    mailSelectedId = thread ?? '1';
+    if (thread && thread !== 'none' && MOCK_MAIL_THREADS.some((t) => t.id === thread)) {
+      mailSelectedId = thread;
+    } else {
+      mailSelectedId = '1';
+    }
     mailSurface = 'threads';
     collabChannel = 'mail';
   } else if (surface === 'list') {
@@ -3606,8 +3617,7 @@ export type TwoWayEmailPrototypeProps = {
 export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoWayEmailPrototypeProps = {}) {
   const initialMailRef = useRef<ReturnType<typeof initialMailPrototypeFromSearchParams> | null>(null);
   if (initialMailRef.current === null) {
-    /** Full page load: ignore persisted hash query so refresh always matches the opening demo canvas. */
-    initialMailRef.current = initialMailPrototypeFromSearchParams(new URLSearchParams());
+    initialMailRef.current = initialMailPrototypeFromSearchParams(mailPrototypeSearchParamsForInitialHydration());
   }
   const initMail = initialMailRef.current;
 
@@ -3674,7 +3684,7 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
 
   useLayoutEffect(() => {
     if (typeof window === 'undefined') return;
-    const opening = initialMailPrototypeFromSearchParams(new URLSearchParams());
+    const opening = initialMailPrototypeFromSearchParams(mailPrototypeSearchParamsForInitialHydration());
     const mailSplitViewOpening =
       Boolean(opening.mailSelectedId) && MOCK_MAIL_THREADS.some((t) => t.id === opening.mailSelectedId);
     const includeProto =

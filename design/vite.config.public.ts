@@ -95,7 +95,7 @@ function spaFallback404Public(): Plugin {
       /** PM sanity check on GHE Pages: open …/mail-stub-version.txt — should mention Alex Rivera, not Priya Nair. */
       writeFileSync(
         path.join(outDir, 'mail-stub-version.txt'),
-        '2-way-email agency senders: Alex Rivera (BrightPath) only. If you still see Priya Nair, the HTML or JS bundle is cached — hard-refresh or clear site data for this host.\n',
+        '2-way-email agency senders: Alex Rivera (BrightPath) only. Deep links: bare #slug → defaults; ?thread=… in hash is honoured. If you still see Priya Nair, clear cache for this host.\n',
         'utf8',
       );
     },
