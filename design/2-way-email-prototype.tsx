@@ -3040,7 +3040,7 @@ function ComposeEmailPanel({
     } else if (composeValidationDemo === 'invalidTo') {
       setToRecipientError('Error: Invalid email address(s).');
     } else if (composeValidationDemo === 'noRecipient') {
-      setToRecipientError(null);
+      setToRecipientError('Error: Required field.');
     } else {
       setToRecipientError(null);
     }
@@ -3375,7 +3375,7 @@ function ComposeEmailPanel({
         }}
       >
         <PrimaryButton
-          disabled={sendOutcome !== 'idle' || composeValidationDemo === 'noRecipient'}
+          disabled={sendOutcome !== 'idle'}
           onClick={handlePrimarySend}
           style={{ borderRadius: 999 }}
         >
