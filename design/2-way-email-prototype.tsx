@@ -339,8 +339,8 @@ const COMPOSE_BODY_CANVAS_BG = '#F3F4F6';
 /** Figma frames: Compose `6887:14115`, Reply `6887:15547`, Forward `6887:16008`. */
 type ComposeVariant = 'compose' | 'reply' | 'forward';
 
-/** Maps India demos to Figma error screens 6887:18369, 6887:18849, 6887:19329. */
-type ComposeValidationDemo = 'none' | 'invalidTo' | 'noRecipient' | 'multiple';
+/** Maps India demos to Figma error screens 6887:18369, 6887:19329. */
+type ComposeValidationDemo = 'none' | 'invalidTo' | 'multiple';
 
 type PendingComposeNavigate =
   | { kind: 'close' }
@@ -3039,8 +3039,6 @@ function ComposeEmailPanel({
       setToRecipientError('Error: Required field.');
     } else if (composeValidationDemo === 'invalidTo') {
       setToRecipientError('Error: Invalid email address(s).');
-    } else if (composeValidationDemo === 'noRecipient') {
-      setToRecipientError('Error: Required field.');
     } else {
       setToRecipientError(null);
     }
@@ -3108,10 +3106,6 @@ function ComposeEmailPanel({
   const handlePrimarySend = () => {
     if (composeValidationDemo === 'invalidTo') {
       setToRecipientError('Error: Invalid email address(s).');
-      return;
-    }
-    if (composeValidationDemo === 'noRecipient') {
-      setToRecipientError('Error: Required field.');
       return;
     }
     if (composeValidationDemo === 'multiple') {
@@ -3185,19 +3179,7 @@ function ComposeEmailPanel({
               />
             </Box>
             <Box style={{ flex: '1 1 260px', minWidth: 0 }}>
-              {composeValidationDemo === 'noRecipient' ? (
-                <TwFormTextInput
-                  id="compose-to"
-                  label="To"
-                  required
-                  readOnly
-                  type="text"
-                  placeholder="Add a recipient"
-                  value=""
-                  onChange={() => {}}
-                  error={toRecipientError ?? undefined}
-                />
-              ) : composeValidationDemo === 'invalidTo' ? (
+              {composeValidationDemo === 'invalidTo' ? (
                 <TwFormTextInput
                   id="compose-to"
                   label="To"
@@ -3510,7 +3492,6 @@ function initialMailPrototypeFromSearchParams(q: URLSearchParams): {
   if (
     composeValid === 'none' ||
     composeValid === 'invalidTo' ||
-    composeValid === 'noRecipient' ||
     composeValid === 'multiple'
   ) {
     composeValidationDemo = composeValid;
@@ -4416,7 +4397,6 @@ export function TwoWayEmailPrototype({ alwaysStartWithOnboarding = false }: TwoW
               >
                 <option value="none">None — default compose (6887:14115)</option>
                 <option value="invalidTo">Invalid To — 6887:18369</option>
-                <option value="noRecipient">No recipient — 6887:18849</option>
                 <option value="multiple">Multiple errors — 6887:19329</option>
               </select>
             </label>
