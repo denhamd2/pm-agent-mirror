@@ -1,0 +1,8 @@
+{
+  "replay_formatter_canonical": "generate_gap_review_page_82977.py",
+  "evidence_file": "gap_review_82977_evidence_2026-05-15.json",
+  "xo_catalog_shared_across_keys": true,
+  "xo_risk_shared_across_keys": true,
+  "salomon_per_key_excerpts": false,
+  "notes": "Formatter shortens repeated XO catalog/risk and REST-parity BDD when the same snapshot appears on consecutive rows. For true per-story Salomon/XO depth, regenerate evidence with per-key MCP pulls (Tier A skill contract)."
+}

@@ -1,0 +1,235 @@
+{
+  "epic": "HRREC-82977",
+  "dedupe_keys_excluded_from_plan_scope": [
+    "HRREC-91974",
+    "HRREC-91975",
+    "HRREC-91978",
+    "HRREC-91979",
+    "HRREC-91980"
+  ],
+  "note_story_000_HRREC_91980": "Excluded per story-jira-mapping dedupe; original wiki still in all_invokes/story_000.json if needed.",
+  "rows": [
+    {
+      "shard": "story_001",
+      "jira_key": "HRREC-91981",
+      "summary_at_create": "PH: HRREC-91946 [Initialisation] Recruiter can see Email Task on SSP (XO Only)",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_002",
+      "jira_key": "HRREC-91983",
+      "summary_at_create": "PH: HRREC-91948 [Initialisation] Enabled SSP Growth/Expansion",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_003",
+      "jira_key": "HRREC-91984",
+      "summary_at_create": "PH: HRREC-91947 [Initialisation] New Conversational Email Domain (XO)",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_004",
+      "jira_key": "HRREC-91985",
+      "summary_at_create": "PH: Recruiter can compose an email if candidate is opted in & has modify access to new domain",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_005",
+      "jira_key": "HRREC-91986",
+      "summary_at_create": "PH: Recruiter expands/collapses the panel to check candidate profile (context stays?)",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_006",
+      "jira_key": "HRREC-91987",
+      "summary_at_create": "PH: Recruiter can compose an email to agency user or candidate & select the appropriate email (To field selection)",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_007",
+      "jira_key": "HRREC-91988",
+      "summary_at_create": "PH: Recruiter attaches documents to send to candidate/agency user",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_008",
+      "jira_key": "HRREC-91989",
+      "summary_at_create": "PH: Recruiter wants to format the message & add subject",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_009",
+      "jira_key": "HRREC-91990",
+      "summary_at_create": "PH: Recruiter can select From address from list of valid email addresses",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_010",
+      "jira_key": "HRREC-91991",
+      "summary_at_create": "PH: Recruiter does not see any tabs for non-agency candidate",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_011",
+      "jira_key": "HRREC-91992",
+      "summary_at_create": "PH: Recruiter attaches non-supported files",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_012",
+      "jira_key": "HRREC-91993",
+      "summary_at_create": "PH: Recruiter sees UI error validations on Send",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_013",
+      "jira_key": "HRREC-91994",
+      "summary_at_create": "PH: Recruiter sends message - recipient receives it and recruiter sees it in the panel",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_014",
+      "jira_key": "HRREC-91995",
+      "summary_at_create": "PH: Recruiter gets discard popup by changing pages",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_015",
+      "jira_key": "HRREC-91996",
+      "summary_at_create": "PH: Recruiter gets discard popup when they click the Discard button",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_016",
+      "jira_key": "HRREC-91997",
+      "summary_at_create": "PH: Recruiter sees list of messages with unread ones marked in blue",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_017",
+      "jira_key": "HRREC-91998",
+      "summary_at_create": "PH: Recruiter can see message threads when clicking on a message",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_018",
+      "jira_key": "HRREC-91999",
+      "summary_at_create": "PH: Recruiter sees blue \"unread marker\" removed after clicking in the view a message in full",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_019",
+      "jira_key": "HRREC-92000",
+      "summary_at_create": "PH: Recruiter opens the message to read and reply",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_020",
+      "jira_key": "HRREC-92001",
+      "summary_at_create": "PH: Recruiter sees the panel expand & views full message when clicking the grow button or clicking a single message",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_021",
+      "jira_key": "HRREC-92002",
+      "summary_at_create": "PH: Style only - Recruiter sees messages showing, styled as per figma",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_022",
+      "jira_key": "HRREC-92003",
+      "summary_at_create": "PH: Recruiter sees error messages if their email has bounced",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_023",
+      "jira_key": "HRREC-92004",
+      "summary_at_create": "PH: Recruiter sees error when sending message (REST error)",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_024",
+      "jira_key": "HRREC-92005",
+      "summary_at_create": "PH: Recruiter sees info message and cannot send email if the candidate changes their email",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_025",
+      "jira_key": "HRREC-92006",
+      "summary_at_create": "PH: Candidates opt-out of receiving emails",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_026",
+      "jira_key": "HRREC-92007",
+      "summary_at_create": "PH: Recruiter can switch between tabs for candidate and agency comms",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_027",
+      "jira_key": "HRREC-92008",
+      "summary_at_create": "PH: Agency cannot see recruiter conversation",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_028",
+      "jira_key": "HRREC-92009",
+      "summary_at_create": "PH: Recruiter can see both closed and non-closed conversation in the same panel if one conversation is still active",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_029",
+      "jira_key": "HRREC-92010",
+      "summary_at_create": "PH: Recruiter sees tags on messages showing updating state (sent, delivered etc.)",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_030",
+      "jira_key": "HRREC-92011",
+      "summary_at_create": "PH: Privacy Admin purges PDTs for 2-way email - Candidate/Job App",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_031",
+      "jira_key": "HRREC-92012",
+      "summary_at_create": "PH: Admin can configure conversation lifecycle tenant setting?",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_032",
+      "jira_key": "HRREC-92013",
+      "summary_at_create": "PH: Existing reporting features are not broken",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_033",
+      "jira_key": "HRREC-92014",
+      "summary_at_create": "PH: Recruiter cannot see reply, forward or Add button when both conversations are closed & sees info message? that convo is closed",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_034",
+      "jira_key": "HRREC-92015",
+      "summary_at_create": "PH: Candidate has 2 applications to the same JR and gets merged",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_035",
+      "jira_key": "HRREC-92016",
+      "summary_at_create": "PH: Candidate attaches non-supported files",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_036",
+      "jira_key": "HRREC-92017",
+      "summary_at_create": "PH: Recruiter can forward messages?",
+      "excluded_by_plan_dedupe": false
+    },
+    {
+      "shard": "story_037",
+      "jira_key": "HRREC-92018",
+      "summary_at_create": "PH: TRANMGMT-2499 Translations for 2-way email for Recruiting",
+      "excluded_by_plan_dedupe": false
+    }
+  ]
+}

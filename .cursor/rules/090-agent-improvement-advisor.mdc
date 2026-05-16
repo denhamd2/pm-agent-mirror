@@ -250,6 +250,7 @@ You activate when the user says:
 - "Audit my agent system"
 - "What PM best practices should I follow for [task]?"
 - "How do I make [process] more efficient?"
+- "Gap review / per-Jira table rows all look the same" (see **Row-wise narrative formatters** under Proactive Advisory Protocol)
 
 ## Decision Framework
 
@@ -303,6 +304,7 @@ For detailed PM frameworks and methodologies, see:
 ❌ **Assuming gaps**: Don't assume something is missing without checking first
 ❌ **Repurposing previous research**: Don't reuse or rely on prior conversation summaries, cached analysis, or stale research—always perform fresh discovery
 ❌ **Generic advice**: Don't give generic PM advice; make it specific to this workspace
+❌ **Tabular narrative boilerplate**: Don't ship generators that reuse one default BDD/Verdict block (or one identical QA lead bullet) for most rows in a per-key table—auditors and stakeholders treat that as missing analysis
 
 ## Example Interactions
 
@@ -336,6 +338,15 @@ For detailed examples of advisory responses, see `.cursor/rules/advisory-methods
    - "Does this need alwaysApply or can it be glob-scoped?" (context-specific)
 
 4. **Agent Authoring Techniques** (cross-reference): When proposing or reviewing a new rule, skill, or subagent, check it against the 10 prompt techniques, universal Purpose/Rules/Process skeleton, and multi-agent handoff discipline in `docs/agent-authoring/ai-acrobatics-techniques.md`. Flag vague "do your best" prompts without structure, forced reasoning, or self-validation as a redesign signal. Name the existing workspace equivalent (CreatePlan, six-hats, sequential-thinking, skills, subagents) before introducing any new "method".
+
+5. **Row-wise narrative formatters (tables, gap reviews, batch story grids)** — When agents or scripts emit **one HTML/Confluence row per Jira key**, duplicated prose across rows reads like low-effort copy-paste and undermines PM credibility. Flag and prevent these structural causes (learned from Tier B gap-review generation, e.g. `docs/initiatives/two-way-email/drafts/build_gap_review_82977_tier_b_*.py`):
+   - **Single default branch**: One fallback BDD block (e.g. generic “Scenario (mail)” Given/When/Then) or one **fat `else`** for Verdict that covers many buckets (`general`, `shell`, `send`, …) forces dozens of rows to share identical text. Prefer **per-bucket** and **summary/keyword** branches first; the default path should still **vary per row** (e.g. embed issue key + truncated title in When, bucket-specific Given/Then).
+   - **Generic first bullet every row**: QA or PM lists that start with the same “mirror scenarios in Jira…” line for every key should be replaced with **story-specific first bullets** driven by title/summary tokens (and optionally bucket), then shared guidance lower in the list.
+   - **Tiny rotating pools**: Deployment-agent or Salomon lines that cycle only 2–3 templates still collide across adjacent keys. Use **larger pools**, **two variants per bucket** with `key`-stable selection (`pick(seq, key)` or `key_num(key) % n`), and bucket-specific fourth bullets where a single sentence was reused for almost all rows.
+   - **Boolean precedence bugs**: Compound `if` conditions (`"a" in s and "b" in s or "c" in s`) silently mis-route rows; require **explicit parentheses** and quick mental test on 2–3 representative titles.
+   - **Verification**: After changing a formatter, run **`python3 -m py_compile`** on the script, regenerate output, **grep for dead boilerplate** (e.g. repeated scenario titles), and run **`docs/initiatives/two-way-email/drafts/check_gap_review_row_dedup.py`** on the Storage HTML (fingerprints **PM, QA, Dev lens, Verdict, Suggested missing BDD**; optional `--threshold N`) so regressions show up before Confluence publish.
+   - **Peanut MCP (gap review):** Default **`collectBugData` off** per **2WE** row unless triggers in [`.cursor/skills/user-story-gap-review/reference.md`](.cursor/skills/user-story-gap-review/reference.md) **When to invoke Peanut (2WE per-row)**; repeated **`Peanut — Unavailable`** across a grid is usually **config/Jira fetch**, not “no dev work”—see **Peanut — taxonomy (gap review)** there. Prefer the **Companion Peanut anchor pass** for bounded WhatsApp git evidence.
+   - **Executive rollup hygiene (tabular reviews):** When a workflow ships a **per-key table** plus a **top-of-page summary**, flag **unstructured** long bullet dumps that mostly repeat row-level prose. **Exact** headings, caps, and narrative contracts belong in that workflow’s **owning skill or rule**—090 only calls out obvious drift (no clear rollup, or rollup that reads like a second copy of the table).
 
 ### Always ✅
 - Perform discovery phase before suggesting

@@ -2,7 +2,9 @@
 name: customer-issue-triage
 description: >-
   Triages customer-reported Jira issues using Salomon for primary classification
-  and XO metadata inspection for code-level evidence. Classifies each issue as
+  and XO metadata inspection for code-level evidence, with optional gated Peanut
+  MCP for Jira/GHE/git signals on non-XO, bespoke UI, integration, or service-led
+  issues. Classifies each issue as
   WAD (Working As Designed), customer configuration issue, or bug with a
   confidence percentage. Provides closure recommendations (CLOSE vs KEEP) based
   on bug age, customer activity, and confidence scores - ideal for bulk triage
@@ -17,7 +19,10 @@ description: >-
   for bugs and customer-facing resolutions for all other types. Generates batch
   summary reports for 10+ Jiras with closure recommendations rollup. Overwrites
   the Confluence triage page with a fresh 7-column table each run (no stale
-  rows from prior batches). After writing, opens the
+  rows from prior batches). Peanut does not read XO metadata; it complements
+  tickets where repo history or similar Jiras matter. Prerequisites for Peanut:
+  see docs/onboarding/INSTALLATION_NOTES.md (Peanut MCP, ~/.peanut/config.json).
+  After writing, opens the
   Confluence triage page in both Google Chrome and the Cursor Simple Browser,
   then prompts the PM via AskQuestion whether to bulk-close high-confidence
   WAD / Config Jiras as "Won't Do" with a detailed comment (Yes / No / Other,
@@ -34,7 +39,9 @@ You are a Senior Product Manager triaging customer-reported issues. Your job is
 to determine whether each issue is **Working As Designed (WAD)**, a **customer
 configuration issue**, or a **genuine bug** - using Salomon for primary
 classification (org knowledge) and XO metadata inspection for code-level
-evidence, with the Deployment Agent providing customer-facing configuration
+evidence on the SUV, optional **Peanut MCP** for Jira/GHE/git-repo signals when
+the ticket is integration-, service-, or bespoke-UI-led (Peanut does **not**
+read XO metadata), with the Deployment Agent providing customer-facing configuration
 guidance for config issues and expected behaviour documentation for bugs - and
 record the outcome on Confluence.
 
@@ -53,13 +60,20 @@ If the user attaches a file instead of typing Jira IDs:
 
 If no valid Jira IDs are found, ask the user to provide them.
 
+### Prerequisites (Peanut MCP)
+
+When `peanut_eligible` is true (see Step 1c), Peanut requires a working
+`user-peanut-mcp` server, valid Jira/GHE credentials, a built `dist/cli.js`, and
+`~/.peanut/config.json` with repo paths. Full setup: [INSTALLATION_NOTES.md](../../../docs/onboarding/INSTALLATION_NOTES.md) (section 2, Peanut Setup).
+
 ---
 
 ## Critical Output Requirement
 
-**EVERY triage row MUST include an actionable resolution in the XO column.**
+**EVERY triage row MUST include an actionable resolution in column 6 (Technical
+evidence (XO + optional repo) / Proposed Fix).**
 
-The XO Metadata Analysis / Proposed Fix column is the most valuable part of the
+The Technical evidence (XO + optional repo) / Proposed Fix column is the most valuable part of the
 triage output. It tells the PM exactly what to do next. NEVER leave this column
 with only technical evidence - always include one of:
 
@@ -79,9 +93,11 @@ Process each Jira through Steps 1-7 below. For multiple Jiras, complete all
 steps for one before moving to the next.
 
 **Execution order:**
-1. Step 1 (Ingest) runs first.
-2. Step 2 (Salomon) and Step 4 (XO Metadata) run **in parallel**.
-   Salomon provides the primary classification; XO inspects live code metadata.
+1. Step 1 (Ingest + Step 1b age metadata + Step 1c Peanut gate) runs first.
+2. Step 2 (Salomon), Step 4 (XO Metadata), and **Step 4p (Peanut MCP, only if
+   `peanut_eligible`)** run **in parallel** with each other.
+   Salomon provides the primary classification; XO inspects live XO metadata on
+   the SUV; Peanut gathers Jira/GHE/git-repo signals (never a substitute for XO).
 3. Step 3 (Deployment Agent) runs **after Step 2 completes**. It fires for
    "Configuration Issue" (provides fix instructions) and "Likely Bug" (provides
    expected behaviour documentation). For WAD or Inconclusive, Step 3 returns
@@ -169,15 +185,64 @@ jira_metadata = {
   "recent_comment_count": int,
   "linked_support_cases": [{status, key}],
   "has_high_engagement": boolean,
-  "engagement_signals": [list of specific tags/labels/mentions]
+  "engagement_signals": [list of specific tags/labels/mentions],
+  "peanut_eligible": boolean
 }
 ```
+
+`peanut_eligible` is set in Step 1c (immediately after this block).
 
 **Usage in subsequent steps:**
 - **Step 2 (Salomon)**: Include age context in explanation ("Open 5 years with no activity suggests...")
 - **Step 5 (Status synthesis)**: Apply age-based confidence adjustments
 - **Step 6 (Recommendation)**: Calculate CLOSE vs KEEP based on age + activity + status
 - **Step 7b (Batch summary)**: Group by recommendation type and activity level
+
+### Step 1c: Peanut MCP eligibility (`peanut_eligible`)
+
+Immediately after Step 1b, set **`peanut_eligible`** (boolean) using **only** Jira
+fields from Step 1: summary, description, comments, labels, components, linked
+issue text. Do **not** wait for Salomon or XO (so Step 4p can run in parallel with
+Steps 2 and 4).
+
+**User override:** If the user explicitly writes `SKIP_PEANUT` in the triage
+prompt, set `peanut_eligible = false` for all Jiras in that run.
+
+**Set `peanut_eligible = true` when ANY of the following holds** (case-insensitive
+matching unless noted):
+
+1. **Code / JVM signals** — Stack trace blocks, `.java`, `Caused by:`,
+   `Exception`, `Error`, `at com.workday`, `NullPointerException`,
+   `IllegalArgumentException`, `ClassNotFoundException`, or similar JVM patterns.
+2. **SCM / PR signals** — Commit-like hex (≥7 contiguous hex chars), explicit
+   branch names in backticks or `refs/`, URLs to **ghe.megaleo.com** or GitHub
+   Enterprise pull requests, `PR #`, `Merge request`, `commit` + hash in comments.
+3. **Component / label allowlist** — Any label or component name contains one of:
+   `integration`, `reporting`, `export`, `mobile`, `microservice`, `bespoke`, `oms`,
+   `api`, `service`, `graphql`, `rest`, `android`, `ios`, `chrome`, `browser`,
+   `extension`, `third-party`, `third party`, `terraform`, `kafka`, `messaging`,
+   `adapter`, `connector`, `sso`, `oauth`, `proxy`.
+4. **Non-SUV / production-only narrative** — Description or comments include
+   phrases such as: `not reproducible on SUV`, `production only`, `prod only`,
+   `customer tenant only`, `cannot reproduce in dev`, `browser extension`,
+   `third-party vendor`, `external system`.
+
+**Set `peanut_eligible = false` when** none of the above apply **and** the issue
+is clearly **XO-metadata-only** (e.g. only BPT/task/element WIDs and Workday task
+names with no service/code/integration narrative).
+
+**Batch preflight (once per batch):** If **any** Jira in the batch has
+`peanut_eligible == true`, run **at most once** before parallel work on the
+first such Jira:
+
+```
+CallMcpTool  server: "user-peanut-mcp"  toolName: "previewConfig"
+```
+
+If `previewConfig` warns about slow or misconfigured repos, still proceed; note
+warnings in the first affected row's Peanut block if material.
+
+Set `jira_metadata.peanut_eligible` to the computed boolean (see Step 1b store).
 
 ### Step 2: Salomon Analysis
 
@@ -346,8 +411,10 @@ The Deployment Agent MCP has strict rate limits (max 10 requests per minute). Wh
 ### Step 4: XO Metadata Inspection
 
 Inspect XO metadata on the SUV to gather technical evidence that supports or
-contradicts the Salomon verdict. This step runs in parallel with Steps 2-3 and
-does NOT depend on Salomon's output.
+contradicts the Salomon verdict. This step runs in parallel with Step 2
+(Salomon). When `peanut_eligible` is true, **Step 4p (Peanut)** also runs in that
+same parallel window. Step 3 (Deployment Agent) may overlap in time but does
+not gate Step 4 or 4p. Steps 4 and 4p do **not** depend on Salomon's output.
 
 Unlike Salomon (which searches org knowledge - Slack, Jira, Confluence, Admin
 Guide), XO metadata tools search the **live codebase**: classes, method
@@ -408,7 +475,7 @@ in three parts:
 Write the PM interpretation first, then technical detail. Do not lead with IDs.
 
 **Mandatory Action/Resolution Section (ALL Status Types):**
-The XO column MUST ALWAYS include an actionable resolution section, regardless of status type. This is the most important part of the triage output - it tells the PM what to do next.
+Column 6 MUST ALWAYS include an actionable resolution section, regardless of status type. This is the most important part of the triage output - it tells the PM what to do next.
 
 **For Bug status:**
 Include a `Proposed Fix:` subsection with:
@@ -437,13 +504,86 @@ Include a `Needs Further Investigation:` subsection with:
 - Which team to escalate to
 - Format as a **numbered list** (`1.`, `2.`, `3.`, `4.`)
 
+### Step 4p: Peanut MCP (conditional, parallel with Steps 2 and 4)
+
+Run **only when** `peanut_eligible` is true (Step 1c). Execute in the **same
+parallel window** as Step 2 (Salomon) and Step 4 (XO). Do not block on Salomon or
+XO completion before starting Step 4p.
+
+**Non-overlap with XO (mandatory framing):** Peanut **does not** inspect XO
+metadata on the SUV and **does not** validate ModulR/XO definitions. It pulls
+**Jira context, similar issues, commit history, and optional `git grep` hits**
+from repos configured in `~/.peanut/config.json`. Never treat Peanut output as a
+substitute for Step 4; never drop Step 4 because Peanut ran.
+
+**Failure handling (continue the batch):**
+- MCP missing, tool error, or timeout → Block B (column 6): `Repository / history (Peanut): Unavailable (<one-line reason>).`
+- `collectBugData` returns `needsConfig` or empty repos → Block B: one line
+  pointing to [INSTALLATION_NOTES.md](../../../docs/onboarding/INSTALLATION_NOTES.md)
+  and `~/.peanut/config.json`; do not retry in a loop.
+
+**Tool sequence (strict caps):**
+
+1. **`collectBugData`** (always when Step 4p runs):
+```
+CallMcpTool  server: "user-peanut-mcp"  toolName: "collectBugData"
+arguments: { "jiraTicket": "<ISSUE_KEY>" }
+```
+
+2. **`searchCode`** — **At most 2–3** invocations per Jira, only if
+   `collectBugData` (or Jira text) suggests concrete search strings (class
+   fragments, error tokens, package segments). Build a minimal `searchPlanJson`
+   per Peanut's tool contract.
+```
+CallMcpTool  server: "user-peanut-mcp"  toolName: "searchCode"
+arguments: { "searchPlanJson": "<JSON string per tool schema>" }
+```
+
+3. **`getCommitSummary` / `getCommitDiff`** — Only when a **specific commit hash**
+   and **repoPath** are known from Jira comments, PR links, or `collectBugData`.
+   Call `getCommitSummary` first. Call `getCommitDiff` **only** if the summary
+   plausibly ties to the symptom; keep diff excerpts **short** (truncate in the
+   cell if needed).
+
+4. **`reportFindings`** — **Default off** for standard Confluence triage tables.
+   Call **only** if the user explicitly asks in the same invocation for a **full
+   RCA**, **Peanut report card**, or **structured findings export** for this Jira.
+
+5. **`analyzeBug` prompt** — Optional; use only when the user explicitly invokes
+   Peanut's full methodology in addition to this skill (do not double-run heavy
+   analysis unless requested).
+
+**Row-wise narrative (anti-boilerplate):** Peanut bullets must be **unique per
+Jira**: cite real similar-issue keys, PR URLs, **short SHAs**, and **repo-relative
+file paths** returned by tools. Do **not** reuse identical Peanut paragraphs across
+rows in a batch.
+
+**Column 6 — Block B text for Step 6 (append after XO Block A):**
+
+After the XO **Technical evidence** + mandatory **Proposed Fix** /
+**Customer Resolution** / **Needs Further Investigation** / etc., append:
+
+- **If Step 4p ran:**  
+  `Repository / history (Peanut):` then **2–5 bullets** max (or fewer if sparse).
+- **If `peanut_eligible` is false:**  
+  `Repository / history (Peanut): Not run — XO/metadata-led ticket (gate: <one-line reason>).`
+- **If Step 4p errored or was skipped due to config:**  
+  Use the failure handling strings above (single line or two).
+
 ### Step 5: Synthesise Status Label
 
-After Salomon (Step 2) and XO Metadata (Step 4) complete, determine a single
+After Salomon (Step 2), XO Metadata (Step 4), and any Peanut MCP work (Step 4p,
+when eligible) complete, determine a single
 status label with confidence percentage. Salomon provides the **primary
 classification**; XO metadata provides **code-level evidence** that raises or
 lowers confidence. The Deployment Agent does NOT factor into the status
 classification or confidence score.
+
+**Peanut (Step 4p) and confidence (v1):** Peanut evidence **does not** change the
+numeric confidence ranges in the table below. Use Peanut output only for **column
+6 narrative** (Block B) and, when helpful, a **non-scoring** clause in the
+Recommendation rationale (e.g. "Repo history suggests validating with engineering
+— see Peanut bullets in column 6.").
 
 **Status label** - exactly ONE of: `WAD`, `Config`, or `Bug`
 
@@ -469,7 +609,9 @@ classification or confidence score.
 **Format**: `Config (90%)` or `WAD (80%)` or `Bug (70%)`
 
 The status label goes in the Status column. It represents the Salomon
-classification adjusted by XO metadata evidence and bug age.
+classification adjusted by XO metadata evidence and bug age. When Step 4p ran,
+Peanut may inform human follow-up in column 6 and Recommendation text only—not
+the percentage formula above.
 
 ### Step 6: Write to Confluence
 
@@ -501,7 +643,7 @@ toolName: "create_confluence_page"
 arguments: {
   "spaceKey": "~david.denham",
   "title": "Customer Issue Triage POC",
-  "content": "<table><thead><tr><th>Jira # &amp; Title</th><th>Short description of issue</th><th>Status</th><th>Salomon Guidance</th><th>Deployment Agent Guidance</th><th>XO Metadata Analysis / Proposed Fix</th><th>Recommendation</th></tr></thead><tbody></tbody></table>"
+  "content": "<table><thead><tr><th>Jira # &amp; Title</th><th>Short description of issue</th><th>Status</th><th>Salomon Guidance</th><th>Deployment Agent Guidance</th><th>Technical evidence (XO + optional repo) / Proposed Fix</th><th>Recommendation</th></tr></thead><tbody></tbody></table>"
 }
 ```
 
@@ -572,6 +714,11 @@ else:
 
 **Step 6b - Build the new row HTML (7 columns):**
 
+**Column 6 structure:** (1) **Technical evidence** (XO SUV metadata) + mandatory
+action subsection (`Proposed Fix`, `Customer Resolution`, etc.); (2) **Repository /
+history (Peanut)** block per Step 4p / Step 1c (always present—either bullets,
+`Not run` with gate reason, or `Unavailable`).
+
 The DA column (column 5) varies by Salomon verdict:
 - **Config:** Configuration steps with source links
 - **Bug:** Expected behaviour documentation with source links
@@ -598,7 +745,7 @@ The DA column (column 5) varies by Salomon verdict:
 - This ensures every source opens in a new window and is clearly separated from the explanation.
 
 **Formatting guardrails (mandatory before write):**
-- Validate every generated row contains valid `<a ...>` tags for every cited source in Salomon, Deployment Agent, and XO columns.
+- Validate every generated row contains valid `<a ...>` tags for every cited source in Salomon, Deployment Agent, and column 6 (XO + Peanut blocks).
 - If any source URL is present as plain text, convert it to the anchor format before final output.
 - If any HTML is malformed (broken `<a>`, missing closing tags, malformed `<br/>`), repair the row before writing to Confluence or posting in chat.
 - Do not compress wording to "make it fit". Split output into additional chunks instead.
@@ -610,7 +757,7 @@ The DA column (column 5) varies by Salomon verdict:
   <td><strong>{Status label, e.g. Config (90%)}</strong></td>
   <td><strong>{Salomon Verdict}</strong><br/>{3-4 concise lines (60-80 words): verdict rationale first, why not Bug/WAD/Config alternatives}<br/><strong>Sources:</strong><ul><li><a href="{url}" target="_blank" rel="noopener noreferrer">{article title}</a></li><li><a href="{url}" target="_blank" rel="noopener noreferrer">{article title 2}</a></li></ul></td>
   <td>{If Config: <strong>Configuration Steps</strong><br/>{bullet-pointed instructions}<br/><strong>Sources:</strong><ul><li><a href="{url}" target="_blank" rel="noopener noreferrer">{doc title}</a></li><li><a href="{url}" target="_blank" rel="noopener noreferrer">{doc title 2}</a></li></ul> | If Bug: <strong>Expected Behaviour</strong><br/>{2-4 bullets describing correct functionality in plain PM language}<br/><strong>Sources:</strong><ul><li><a href="{url}" target="_blank" rel="noopener noreferrer">{doc title}</a></li><li><a href="{url}" target="_blank" rel="noopener noreferrer">{doc title 2}</a></li></ul> | If WAD/Inconclusive: <strong>N/A</strong>}</td>
-  <td><strong>Technical evidence:</strong> {XO findings or "No relevant metadata identified."}<br/><br/>{MANDATORY - Include ONE of the following based on Status:}<br/><br/>{If Bug: <strong>Proposed Fix:</strong><br/>1. {Target object and intended change}<br/>2. {Secondary change or guard condition}<br/>3. {Verification notes}<br/>4. {Regression test scope} OR "Proposed fix unavailable - XO metadata insufficient; escalate for targeted code trace."}<br/><br/>{If Config/WAD: <strong>Customer Resolution:</strong><br/>1. {Navigate to specific Workday task}<br/>2. {Configuration change to make}<br/>3. {Verification step}<br/>4. {Expected outcome after change}}<br/><br/>{If Known Limitation: <strong>Proposed Fix (Enhancement):</strong><br/>{What product change would address this}<br/><strong>Workaround:</strong> {Current alternative for customer}}<br/><br/>{If Inconclusive: <strong>Needs Further Investigation:</strong><br/>1. {What info needed from customer}<br/>2. {Specific questions to ask}<br/>3. {Which team to escalate to}<br/>4. {Recommended next step}}</td>
+  <td><strong>Technical evidence:</strong> {XO findings or "No relevant XO metadata identified."}<br/><br/>{MANDATORY - Include ONE of the following based on Status:}<br/><br/>{If Bug: <strong>Proposed Fix:</strong><br/>1. {Target object and intended change}<br/>2. {Secondary change or guard condition}<br/>3. {Verification notes}<br/>4. {Regression test scope} OR "Proposed fix unavailable - XO metadata insufficient; escalate for targeted code trace."}<br/><br/>{If Config/WAD: <strong>Customer Resolution:</strong><br/>1. {Navigate to specific Workday task}<br/>2. {Configuration change to make}<br/>3. {Verification step}<br/>4. {Expected outcome after change}}<br/><br/>{If Known Limitation: <strong>Proposed Fix (Enhancement):</strong><br/>{What product change would address this}<br/><strong>Workaround:</strong> {Current alternative for customer}}<br/><br/>{If Inconclusive: <strong>Needs Further Investigation:</strong><br/>1. {What info needed from customer}<br/>2. {Specific questions to ask}<br/>3. {Which team to escalate to}<br/>4. {Recommended next step}}<br/><br/><strong>Repository / history (Peanut):</strong><br/>{2-5 ticket-specific bullets from Step 4p, OR single-line gate skip, OR Unavailable/needsConfig message}</td>
   <td><strong>{Recommendation value from Step 6a2}</strong><br/>{Rationale from Step 6a2}<br/><br/>{Age context: "Open {bug_age_years} years, {activity_category}, {days_since_activity} days since last activity"}</td>
 </tr>
 ```
@@ -629,7 +776,7 @@ batch. Do NOT read or merge with previous page content - each run starts clean.
       <th>Status</th>
       <th>Salomon Guidance</th>
       <th>Deployment Agent Guidance</th>
-      <th>XO Metadata Analysis / Proposed Fix</th>
+      <th>Technical evidence (XO + optional repo) / Proposed Fix</th>
       <th>Recommendation</th>
     </tr>
   </thead>
@@ -662,20 +809,24 @@ After processing all Jiras, present chat output using the following batch policy
   - Keep all 7 columns and full text for each row (no summary-only compression).
   - Label each chunk clearly: `Chunk 1 of N`, `Chunk 2 of N`, etc.
   - After the final chunk, include a **Batch Completion** block listing all chunk labels so the reader can confirm coverage of the entire Jira set.
-  - If a chunk is still too large, split again into smaller chunks instead of shortening Salomon/DA/XO content.
+  - If a chunk is still too large, split again into smaller chunks instead of shortening Salomon, Deployment Agent, or column 6 (XO + Peanut) content.
 
 **Chat table format:**
 ```
-| Jira # & Title | Description | Status | Salomon | Deployment Agent | XO Metadata / Proposed Fix | Recommendation |
+| Jira # & Title | Description | Status | Salomon | Deployment Agent | Tech evidence (XO+repo) / Fix | Recommendation |
 |---|---|---|---|---|---|---|
-| <a href="https://jira2.workday.com/browse/HRREC-12345" target="_blank" rel="noopener noreferrer">HRREC-12345</a> - Title | Short desc | Config (90%) | **Configuration Issue**<br>This is a Configuration Issue because a required setup condition is missing, which directly causes the observed failure. This is not a Bug because the product behaves correctly once the missing condition is added. This is not WAD because the current customer outcome is not the intended configured flow.<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a><br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 2</a> | **Configuration Steps**<br>• Step 1...<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Admin guide page</a> | **Technical evidence:** Key task and validation metadata align with required setup pattern.<br><br>**Customer Resolution:**<br>1. Navigate to Edit Tenant Setup - Recruiting<br>2. Enable/disable the specific configuration flag<br>3. Test in Sandbox before applying to Production<br>4. Verify expected behaviour after change | **CLOSE (High Confidence)**<br>Config 90%, open 3.2 years, stale (846 days no activity) - safe to close |
-| <a href="https://jira2.workday.com/browse/HRREC-67890" target="_blank" rel="noopener noreferrer">HRREC-67890</a> - Title | Short desc | Bug (85%) | **Likely Bug**<br>This is likely a Bug because the expected system response fails despite following documented process and persists across repeated tests. This is not WAD because no source describes this as expected behaviour. This is not Config because setup prerequisites were met before failure.<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a><br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 2</a> | **Expected Behaviour**<br>• Feature should...<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Admin guide page</a> | **Technical evidence:** Confirms defect signal in recipient-resolution path.<br><br>**Proposed Fix:**<br>1. Update guard condition on target method binding<br>2. Ensure context resolves from job application object<br>3. Add unit test for edge case<br>4. Verify with end-to-end repro and regression tests | **KEEP (Active)**<br>Bug requires investigation - do not close without fix |
-| <a href="https://jira2.workday.com/browse/HRREC-11111" target="_blank" rel="noopener noreferrer">HRREC-11111</a> - Title | Short desc | WAD (80%) | **WAD**<br>This is WAD because the observed result matches documented logic and system design rules. This is not a Bug because documented sources confirm this behaviour is expected. This is not Config because no missing setup was identified as the trigger.<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a> | **N/A** | **Technical evidence:** No contradictory metadata found. Behaviour follows intended design.<br><br>**Customer Resolution:**<br>1. Explain expected behaviour to customer with documentation link<br>2. Suggest alternative workflow if customer needs different outcome<br>3. Log enhancement request if behaviour change is warranted<br>4. Close as WAD with clear rationale | **CLOSE (Review First)**<br>WAD 80%, open 5.7 years, very stale (2103 days no activity) - review with team before closing |
-| <a href="https://jira2.workday.com/browse/HRREC-22222" target="_blank" rel="noopener noreferrer">HRREC-22222</a> - Title | Short desc | Inconclusive (60%) | **Inconclusive**<br>This is Inconclusive because insufficient evidence exists to classify - could not reproduce and conflicting signals from sources prevent confident determination.<br><br>**Sources:**<br>• No usable Salomon source links found for this verdict. | **N/A** | **Technical evidence:** Insufficient metadata to determine root cause.<br><br>**Needs Further Investigation:**<br>1. Request specific repro steps and tenant details from customer<br>2. Ask which Workday task and configuration settings are in use<br>3. Escalate to #hrrec_prodsupport with gathered context<br>4. Consider SUV reproduction if customer provides sample data | **KEEP (Unclear)**<br>Inconclusive - needs human review before any closure decision |
-| <a href="https://jira2.workday.com/browse/HRREC-33333" target="_blank" rel="noopener noreferrer">HRREC-33333</a> - Title | Short desc | Known Limitation (85%) | **Known Limitation**<br>Feature has documented architectural constraints that prevent the requested behaviour. This is not a Bug because the limitation is by design. This is not Config because no configuration change can enable the behaviour.<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a> | **N/A** | **Technical evidence:** Architectural constraint confirmed in platform documentation.<br><br>**Proposed Fix (Enhancement):**<br>1. Extend platform component to support requested behaviour<br>2. Add feature flag for gradual rollout<br>3. Update documentation when enhancement ships<br><br>**Workaround:**<br>Use alternative approach X until enhancement is available | **KEEP (Unclear)**<br>Known limitation - requires enhancement, not closure |
+| <a href="https://jira2.workday.com/browse/HRREC-12345" target="_blank" rel="noopener noreferrer">HRREC-12345</a> - Title | Short desc | Config (90%) | **Configuration Issue**<br>This is a Configuration Issue because a required setup condition is missing, which directly causes the observed failure. This is not a Bug because the product behaves correctly once the missing condition is added. This is not WAD because the current customer outcome is not the intended configured flow.<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a><br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 2</a> | **Configuration Steps**<br>• Step 1...<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Admin guide page</a> | **Technical evidence:** Key task and validation metadata align with required setup pattern.<br><br>**Customer Resolution:**<br>1. Navigate to Edit Tenant Setup - Recruiting<br>2. Enable/disable the specific configuration flag<br>3. Test in Sandbox before applying to Production<br>4. Verify expected behaviour after change<br/><br/>**Repository / history (Peanut):** Not run — XO/metadata-led ticket (gate: no stack trace, integration label, or PR links in Jira). | **CLOSE (High Confidence)**<br>Config 90%, open 3.2 years, stale (846 days no activity) - safe to close |
+| <a href="https://jira2.workday.com/browse/HRREC-67890" target="_blank" rel="noopener noreferrer">HRREC-67890</a> - Title | Short desc | Bug (85%) | **Likely Bug**<br>This is likely a Bug because the expected system response fails despite following documented process and persists across repeated tests. This is not WAD because no source describes this as expected behaviour. This is not Config because setup prerequisites were met before failure.<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a><br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 2</a> | **Expected Behaviour**<br>• Feature should...<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Admin guide page</a> | **Technical evidence:** Confirms defect signal in recipient-resolution path.<br><br>**Proposed Fix:**<br>1. Update guard condition on target method binding<br>2. Ensure context resolves from job application object<br>3. Add unit test for edge case<br>4. Verify with end-to-end repro and regression tests<br/><br/>**Repository / history (Peanut):**<br/>• Similar Jira HRREC-84000 linked from `collectBugData`<br/>• PR <a href="url" target="_blank" rel="noopener noreferrer">#4521</a> (short SHA `a1b2c3d`) touches `.../RecipientResolutionService.java`<br/>• `git grep` hit: error token from description appears in `NotificationDispatcher` | **KEEP (Active)**<br>Bug requires investigation - do not close without fix. Repo history suggests validating with engineering (see Peanut bullets in column 6). |
+| <a href="https://jira2.workday.com/browse/HRREC-11111" target="_blank" rel="noopener noreferrer">HRREC-11111</a> - Title | Short desc | WAD (80%) | **WAD**<br>This is WAD because the observed result matches documented logic and system design rules. This is not a Bug because documented sources confirm this behaviour is expected. This is not Config because no missing setup was identified as the trigger.<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a> | **N/A** | **Technical evidence:** No contradictory metadata found. Behaviour follows intended design.<br><br>**Customer Resolution:**<br>1. Explain expected behaviour to customer with documentation link<br>2. Suggest alternative workflow if customer needs different outcome<br>3. Log enhancement request if behaviour change is warranted<br>4. Close as WAD with clear rationale<br/><br/>**Repository / history (Peanut):** Not run — XO/metadata-led ticket (gate: pure BP/task narrative). | **CLOSE (Review First)**<br>WAD 80%, open 5.7 years, very stale (2103 days no activity) - review with team before closing |
+| <a href="https://jira2.workday.com/browse/HRREC-22222" target="_blank" rel="noopener noreferrer">HRREC-22222</a> - Title | Short desc | Inconclusive (60%) | **Inconclusive**<br>This is Inconclusive because insufficient evidence exists to classify - could not reproduce and conflicting signals from sources prevent confident determination.<br><br>**Sources:**<br>• No usable Salomon source links found for this verdict. | **N/A** | **Technical evidence:** Insufficient metadata to determine root cause.<br><br>**Needs Further Investigation:**<br>1. Request specific repro steps and tenant details from customer<br>2. Ask which Workday task and configuration settings are in use<br>3. Escalate to #hrrec_prodsupport with gathered context<br>4. Consider SUV reproduction if customer provides sample data<br/><br/>**Repository / history (Peanut):** Not run — XO/metadata-led ticket (gate: no code signals in Jira). | **KEEP (Unclear)**<br>Inconclusive - needs human review before any closure decision |
+| <a href="https://jira2.workday.com/browse/HRREC-33333" target="_blank" rel="noopener noreferrer">HRREC-33333</a> - Title | Short desc | Known Limitation (85%) | **Known Limitation**<br>Feature has documented architectural constraints that prevent the requested behaviour. This is not a Bug because the limitation is by design. This is not Config because no configuration change can enable the behaviour.<br><br>**Sources:**<br>• <a href="url" target="_blank" rel="noopener noreferrer">Article 1</a> | **N/A** | **Technical evidence:** Architectural constraint confirmed in platform documentation.<br><br>**Proposed Fix (Enhancement):**<br>1. Extend platform component to support requested behaviour<br>2. Add feature flag for gradual rollout<br>3. Update documentation when enhancement ships<br><br>**Workaround:**<br>Use alternative approach X until enhancement is available<br/><br/>**Repository / history (Peanut):** Not run — XO/metadata-led ticket (gate: no integration/repo signals). | **KEEP (Unclear)**<br>Known limitation - requires enhancement, not closure |
 ```
 
-Note: The XO column MUST ALWAYS include an actionable section:
+Note: **Column 6** (`Tech evidence (XO+repo) / Fix`) MUST ALWAYS include (1) XO
+**Technical evidence** plus the mandatory actionable subsection for the Status
+type, and (2) a **Repository / history (Peanut)** line or bullets (or explicit
+`Not run` / `Unavailable`) per Step 1c and Step 4p.
+
 - **Bug**: Proposed Fix (numbered steps for code change)
 - **Config**: Customer Resolution (numbered steps for configuration)
 - **WAD**: Customer Resolution (explain behaviour, suggest alternatives)
@@ -702,12 +853,12 @@ Use this pattern in chat:
 
 ```
 Chunk 1 of N (Rows 1-4)
-| Jira # & Title | Description | Status | Salomon | Deployment Agent | XO Metadata / Proposed Fix | Recommendation |
+| Jira # & Title | Description | Status | Salomon | Deployment Agent | Tech evidence (XO+repo) / Fix | Recommendation |
 |---|---|---|---|---|---|---|
 | ...full-detail rows... |
 
 Chunk 2 of N (Rows 5-8)
-| Jira # & Title | Description | Status | Salomon | Deployment Agent | XO Metadata / Proposed Fix | Recommendation |
+| Jira # & Title | Description | Status | Salomon | Deployment Agent | Tech evidence (XO+repo) / Fix | Recommendation |
 |---|---|---|---|---|---|---|
 | ...full-detail rows... |
 ```
@@ -718,7 +869,7 @@ After the last chunk, add:
 Batch Completion:
 - Total Jira processed: <count>
 - Chunks delivered: Chunk 1 of N, Chunk 2 of N, ..., Chunk N of N
-- All rows include full Salomon, Deployment Agent, XO, Recommendation detail and clickable links.
+- All rows include full Salomon, Deployment Agent, column 6 (XO + Peanut), and Recommendation detail and clickable links.
 ```
 
 ### Step 7b: Batch Summary Report (10+ Jiras)
@@ -928,7 +1079,7 @@ Why we're closing:
  and the relevant contrast line.}
 
 What to do instead:
-{Paste the Customer Resolution numbered list from the XO column verbatim.
+{Paste the Customer Resolution numbered list from column 6 (XO resolution subsection) verbatim.
  For WAD: explain behaviour, suggest alternatives, note enhancement request path.
  For Config: step-by-step configuration change with Workday task names and navigation paths.}
 
@@ -1003,6 +1154,13 @@ evidence that raises or lowers confidence.
 3. If metadata points to a defect: propose a fix referencing specific XO objects.
 ```
 
+**Peanut repo/history path (Step 4p, narrative only):**
+```
+1. Peanut never substitutes XO metadata on the SUV.
+2. Use collectBugData → optional capped searchCode → optional commit tools.
+3. Summarise in column 6 Block B; do not alter confidence percentages (v1).
+```
+
 When Salomon and XO metadata align, confidence is high. When XO metadata
 contradicts Salomon, flag the disagreement and present both rationales for the
 PM to adjudicate.
@@ -1022,6 +1180,12 @@ PM to adjudicate.
 | `user-xo-mcp` | `ui_task_analysis_get` | UI task analysis (elements, validations, display options) |
 | `user-xo-mcp` | `business_logic_get` | Business logic inspection (validations, constraints) |
 | `user-xo-mcp` | `element_content_get` | Element content detail (fields, display options, validations) |
+| `user-peanut-mcp` | `previewConfig` | Once per batch when any Jira is `peanut_eligible`; validates `~/.peanut/config.json` |
+| `user-peanut-mcp` | `collectBugData` | Jira + similar issues + commit history bundle (Step 4p) |
+| `user-peanut-mcp` | `searchCode` | `git grep` across configured repos (cap 2–3 calls per Jira) |
+| `user-peanut-mcp` | `getCommitSummary` | Lightweight commit metadata + file list before diffs |
+| `user-peanut-mcp` | `getCommitDiff` | Bounded diff when SHA + repoPath known and relevant |
+| `user-peanut-mcp` | `reportFindings` | Optional structured report card when user requests full RCA / Peanut report card |
 | `user-confluence-mcp` | `search_confluence` | Search for pages by title to discover current page ID |
 | `user-confluence-mcp` | `create_confluence_page` | Create new page if it doesn't exist |
 | `user-confluence-mcp` | `smart_update_confluence_page` | Overwrite Confluence page with fresh triage table |
@@ -1030,13 +1194,15 @@ PM to adjudicate.
 
 ## Adaptive Behaviour
 
-- **No XO metadata identifiable from the Jira**: Record XO column as "No
+- **No XO metadata identifiable from the Jira**: In column 6, record XO **Technical evidence** as "No
   relevant metadata objects identified in Jira. Manual code investigation
   recommended if Salomon verdict is uncertain." Confidence relies on Salomon
-  alone (65-80% range).
-- **SUV unavailable or XO tools fail**: Record XO column as "SUV unreachable -
+  alone (65-80% range). Still include **Repository / history (Peanut)** per Step 1c/4p (may be `Not run` or may add value if `peanut_eligible`).
+- **SUV unavailable or XO tools fail**: In column 6 XO block: "SUV unreachable -
   metadata inspection unavailable. Recommend re-triage when SUV is restored."
-  Confidence relies on Salomon alone (65-80% range).
+  Confidence relies on Salomon alone (65-80% range). Peanut block still follows gate rules.
+- **Peanut MCP unavailable, `needsConfig`, or tool errors**: Column 6 Block B only—do not change Status confidence. Use `Unavailable` / `needsConfig` one-liners from Step 4p; continue the batch.
+- **Peanut returns no grep hits or empty commit history**: Block B must say so honestly (e.g. "No repo hits for queried tokens")—do not fabricate paths.
 - **Salomon returns no relevant articles**: Mark Salomon verdict as
   "Inconclusive - no matching knowledge base articles found." If XO metadata
   found bug evidence, use that (60-75% range). DA column becomes "N/A" (no
@@ -1056,7 +1222,7 @@ PM to adjudicate.
 - **Both Salomon and XO have nothing**: Report honestly and suggest escalation.
   DA column is "N/A". Confidence is 50%.
 - **Batch of 5-9 Jiras**: Process sequentially and present one consolidated full-detail table at the end.
-- **Batch of 10+ Jiras**: Process sequentially and present full-detail output in chunks of 3-4 Jira rows. Never shorten Salomon/DA/XO cells to force a single message.
+- **Batch of 10+ Jiras**: Process sequentially and present full-detail output in chunks of 3-4 Jira rows. Never shorten Salomon, Deployment Agent, or column 6 cells to force a single message.
 - **Output truncation risk**: If a message is near truncation, split into additional chunks immediately. Do not remove source links, line breaks, or resolution detail.
 - **Confluence page not found**: If the search for "Customer Issue Triage POC"
   returns no results, create the page with the initial table structure before
@@ -1077,12 +1243,12 @@ Use these checks to prevent shortened guidance, broken links, or malformed high-
 1. Confirm each Salomon cell is 3-4 lines and approximately 60-80 words.
 2. Confirm each Salomon cell includes explicit contrast rationale (for example, "This is not WAD because...").
 3. Confirm each cited source is clickable with `<a href="..." target="_blank" rel="noopener noreferrer">`.
-4. Confirm all 6 columns are present in chat and Confluence row content.
+4. Confirm all **7** columns are present in chat and Confluence row content (including the Peanut sub-block inside column 6).
 
 ### Validation B - Large Batch (11 Jiras)
 
 1. Confirm output uses high-volume mode with chunks of 3-4 rows.
-2. Confirm each chunk preserves full row detail for Salomon, Deployment Agent, and XO columns.
+2. Confirm each chunk preserves full row detail for Salomon, Deployment Agent, and column 6 (XO + Peanut).
 3. Confirm no chunk drops source links or HTML anchor formatting.
 4. Confirm final Batch Completion block lists all chunk labels and total Jira count.
 5. Confirm Confluence row format remains aligned with the same 7-column schema.

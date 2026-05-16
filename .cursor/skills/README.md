@@ -32,7 +32,7 @@ Is this workflow reusable (needed 2+ times)?
 - **Repeated workflows**: "Generate PRD from research", "Create PESTEL analysis"
 - **Data visualisations**: Graphs, charts, dashboards with specific data queries
 - **Template generation**: Slide decks, design briefs, test scripts
-- **Integration workflows**: "Sync Jira with research findings", "Update PRD from Slack thread"
+- **Integration workflows**: "Sync Jira with research findings", "Update PRD from Slack thread"; **net-new story gap review** → [`user-story-gap-review`](user-story-gap-review/SKILL.md) (Jira + Salomon + DA + **Dev lens** read paths: **XO MCP** read-only + optional **Peanut** → Confluence **seven-column** table; **exec summary:** Top 5 gaps + Top 5 strengths per `reference.md`; **Tier A/B** run modes; **Publish pipeline** for large bodies; Salomon/DA synthesized **into** PM/QA cells; last column **Suggested missing BDD** to close gaps). **013 WhatsApp companion:** default **manifest-only** from [`docs/initiatives/two-way-email/reference/WHATSAPP_COMPANION_CORPUS_SNAPSHOT.md`](../../../docs/initiatives/two-way-email/reference/WHATSAPP_COMPANION_CORPUS_SNAPSHOT.md); opt-in **`WhatsApp live delta`** / **`WhatsApp refresh corpus`** per [`reference-companion-whatsapp.md`](user-story-gap-review/reference-companion-whatsapp.md); optional drift script [`diff_whatsapp_companion_manifest.py`](../../../docs/initiatives/two-way-email/drafts/diff_whatsapp_companion_manifest.py).
 
 ### ❌ **Not** Good Candidates for Skills
 
@@ -245,7 +245,7 @@ Skills are files → version in git.
 **Location**: `/Users/david.denham/product-manager-agent/.cursor/skills/skill-name/`
 
 **Examples** (see **Canonical inventory** below for the full list):
-- `/jtbd`, `/write-prd`, `/value-metrics`, `/editorial`, `/xo-builder`, `/workspace-audit`, `/morning-roundup`, `/cleanup`, …
+- `/jtbd`, `/write-prd`, `/value-metrics`, `/editorial`, `/xo-builder`, `/workspace-audit`, `/morning-roundup`, `/cleanup`, Jira story description (see `jira-recruiting-story-description` skill), …
 
 **Pro Tip**: Project skills can reference project files:
 ```markdown
@@ -469,7 +469,7 @@ workday-pm-skills/ (GitHub repo)
 
 ### For This Workspace
 
-**Canonical inventory** (18 project skills, each with `SKILL.md`):
+**Canonical inventory** (20 project skills, each with `SKILL.md`):
 
 | Folder | Typical trigger / notes |
 |--------|-------------------------|
@@ -477,8 +477,10 @@ workday-pm-skills/ (GitHub repo)
 | `cleanup-old-artifacts` | `/cleanup` |
 | `create-dashboard` | Data Scientist / Pharos dashboards (`/view-dashboard` route) |
 | `customer-issue-triage` | Customer issue triage workflow |
+| `user-story-gap-review` | Net-new Jira story gap analysis → Confluence (`/user-story-gap-review`), **Top 5 gaps / Top 5 strengths** exec summary, seven-column table (**Dev lens** = XO MCP + optional Peanut), **Tier A/B**, **Publish pipeline**, **Suggested missing BDD** |
 | `editorial-guidelines` | `/editorial` |
 | `football-results` | `/football-results` |
+| `jira-recruiting-story-description` | HRREC Jira Story description layout (points to **430** + golden draft) |
 | `jtbd-analysis` | `/jtbd` |
 | `modulr-prototype` | Redirect stub → `xo-builder` modulr mode |
 | `morning-roundup` | `/morning-roundup` |

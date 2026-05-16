@@ -1,0 +1,45 @@
+key,summary
+HRREC-91946,[Initialisation] Recruiter can see Email Task on SSP (XO Only)
+HRREC-91948,[Initialisation] Enabled SSP Growth/Expansion
+HRREC-91974,PH: Recruiter sees Empty state of email task if opened
+HRREC-91975,PH: Recruiter receives a notification
+HRREC-91978,PH: Admin can enable or disable 2-way email as a comms channel
+HRREC-91979,PH: Recruiter does not have access to the compose email task
+HRREC-91980,PH: Recruiter sees the panel expand when clicking Add to compose an email
+HRREC-91982,PH: Recruiter opens the message to read and reply
+HRREC-91985,PH: Recruiter can compose an email to non-agency candidate
+HRREC-91986,PH: Recruiter expands/collapses the panel to check candidate profile (context stays?)
+HRREC-91987,PH: Recruiter can select To From Subject (UI) when composing an email
+HRREC-91988,PH: Recruiter attaches documents (UI only)
+HRREC-91989,PH: Recruiter can use the RTE and see the UI of buttons
+HRREC-91990,PH: Recruiter can select From address from list of valid email addresses
+HRREC-91991,PH: Recruiter does not see any tabs for non-agency candidate
+HRREC-91992,PH: Recruiter attaches non-supported files
+HRREC-91993,PH: Recruiter sees UI error validations on Send
+HRREC-91994,PH: Send Message (No Attachments)
+HRREC-91995,PH: Recruiter gets discard popup by changing pages
+HRREC-91996,PH: Recruiter gets discard popup when they click the Discard button
+HRREC-91997,PH: Recruiter sees list of messages with unread ones marked in blue
+HRREC-91998,PH: Recruiter can see message threads when clicking on a message
+HRREC-91999,PH: Recruiter sees blue unread marker removed after clicking in the view a message in full
+HRREC-92001,PH: Recruiter sees the panel expand and views full message when clicking the grow button or clicking a single message
+HRREC-92002,PH: Style only - Recruiter sees messages showing styled as per figma
+HRREC-92003,PH: Recruiter sees error messages if their email has bounced
+HRREC-92004,PH: Recruiter sees error when sending message (REST error)
+HRREC-92005,PH: Recruiter sees info message and cannot send email if the candidate changes their email
+HRREC-92006,PH: Candidates opt-out of receiving emails
+HRREC-92007,PH: Recruiter can switch between tabs for candidate and agency comms
+HRREC-92008,PH: Agency cannot see recruiter conversation
+HRREC-92009,PH: Recruiter can see both closed and non-closed conversation in the same panel if one conversation is still active
+HRREC-92010,PH: Recruiter sees tags on messages showing updating state (sent not delivered)
+HRREC-92011,PH: Privacy Admin purges PDTs for 2-way email - Candidate Job App
+HRREC-92012,PH: Admin can configure conversation lifecycle tenant setting
+HRREC-92013,PH: Existing reporting features are not broken
+HRREC-92014,PH: Recruiter cannot see reply or Add button when both conversations are closed and sees info message that convo is closed
+HRREC-92015,PH: Candidate has 2 applications to the same JR and gets merged
+HRREC-92016,PH: Candidate attaches non-supported files
+HRREC-92022,PH: My Conversations will require an XO (small) refactor
+HRREC-92029,PH: Recruiter can compose an email to agency user or agency candidate
+HRREC-92030,PH: Recruiter can select To address from list of valid email addresses
+HRREC-92035,PH: Email communications are visible in Activity Stream Timeline and Candidate Communications
+HRREC-92036,PH: Send Message (With Attachments)

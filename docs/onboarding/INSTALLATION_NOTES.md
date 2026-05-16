@@ -103,9 +103,11 @@ If you don't have Artifactory access set up:
 ```bash
 cd ~/mcp-servers/peanut-mcp
 # First, configure Artifactory access (see above)
-npm install
+npm install --legacy-peer-deps
 npm run build
 ```
+
+If `npm install` fails with an `ERESOLVE` peer-dependency error on `@modelcontextprotocol/ext-apps`, use `--legacy-peer-deps` as above.
 
 Then update `~/.cursor/mcp.json` with:
 - Your Jira PAT from https://jira2.workday.com/secure/ViewProfile.jspa?selectedTab=com.atlassian.pats.pats-plugin:jira-user-personal-access-tokens
@@ -124,6 +126,9 @@ This installs to `~/.cursor/skills/bug-triage/` with no server, no tokens, and w
 - Code search during design (315-design-brief-creation)
 - Bug pattern analysis for competitive gaps (100-market-intelligence)
 - Root cause analysis for customer-reported issues
+- **Customer Issue Triage** (`.cursor/skills/customer-issue-triage/SKILL.md`): optional **Step 4p** when Step 1c `peanut_eligible` is true—requires `user-peanut-mcp` connected and `~/.peanut/config.json` with repo roots (`previewConfig` / `collectBugData`). Peanut complements XO; it does not replace SUV metadata inspection.
+
+**Local clones and history:** `git.repos` in `~/.peanut/config.json` must point at **real** `.git` directories on disk. **Shallow clones** (`git clone --depth 1`) hide older commits—run **`git fetch --unshallow`** in each repo root (or re-clone without `--depth`) before relying on Peanut for historical commit windows. For **WhatsApp companion vs 2WE** optional anchor passes (3–8 keys), megaleo roots such as **`UIC/sliding-side-panel`**, **`recruiting/two-way-messaging`**, and **`xo-code-reviews/hrrec`** are typical—see [`.cursor/skills/user-story-gap-review/reference-companion-whatsapp.md`](../../.cursor/skills/user-story-gap-review/reference-companion-whatsapp.md) (**Optional Peanut** + **Operator preflight**).
 
 ---
 
@@ -157,6 +162,7 @@ Ask in Cursor: "Search for CandidateCard component in recruiting-ui repo"
 - Jira/GHE tokens may be expired → Regenerate tokens
 - Check `~/.cursor/mcp.json` paths and env vars are correct
 - Restart Cursor after config changes
+- **Customer Issue Triage skill**: if `collectBugData` returns `needsConfig`, create or fix `~/.peanut/config.json` (see Peanut repo docs) so repo paths resolve
 
 ---
 

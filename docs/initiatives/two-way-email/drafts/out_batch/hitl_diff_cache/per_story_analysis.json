@@ -1,0 +1,704 @@
+[
+  {
+    "jira_key": "HRREC-91981",
+    "shard": "story_001",
+    "summary_at_create": "PH: HRREC-91946 [Initialisation] Recruiter can see Email Task on SSP (XO Only)",
+    "summary_current": "PH: HRREC-91946 [Initialisation] Recruiter can see Email Task on SSP (XO Only)",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1851,
+    "len_current": 1851,
+    "description_equal_normalized": false,
+    "tags": [
+      "Other_copy_edit"
+    ],
+    "plan_taxonomy": [
+      "Wording_Gherkin"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91983",
+    "shard": "story_002",
+    "summary_at_create": "PH: HRREC-91948 [Initialisation] Enabled SSP Growth/Expansion",
+    "summary_current": "PH: HRREC-91948 [Initialisation] Enabled SSP Growth/Expansion",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1819,
+    "len_current": 1819,
+    "description_equal_normalized": true,
+    "tags": [
+      "Unchanged_description"
+    ],
+    "plan_taxonomy": [
+      "Metadata_only"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91984",
+    "shard": "story_003",
+    "summary_at_create": "PH: HRREC-91947 [Initialisation] New Conversational Email Domain (XO)",
+    "summary_current": "PH: HRREC-91947 [Initialisation] New Conversational Email Domain (XO)",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1961,
+    "len_current": 1961,
+    "description_equal_normalized": true,
+    "tags": [
+      "Unchanged_description"
+    ],
+    "plan_taxonomy": [
+      "Metadata_only"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91985",
+    "shard": "story_004",
+    "summary_at_create": "PH: Recruiter can compose an email if candidate is opted in & has modify access to new domain",
+    "summary_current": "PH: Recruiter can compose an email to non-agency candidate",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1898,
+    "len_current": 2678,
+    "description_equal_normalized": false,
+    "tags": [
+      "Substantial_expansion",
+      "Jira_editor_CRLF",
+      "Summary_rewritten",
+      "Summary_agency_scope_clarity"
+    ],
+    "plan_taxonomy": [
+      "Product_decision",
+      "Wording_Gherkin"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91986",
+    "shard": "story_005",
+    "summary_at_create": "PH: Recruiter expands/collapses the panel to check candidate profile (context stays?)",
+    "summary_current": "PH: Recruiter expands/collapses the panel to check candidate profile (context stays?)",
+    "h3_original": 3,
+    "h3_current": 1,
+    "len_original": 1858,
+    "len_current": 1592,
+    "description_equal_normalized": false,
+    "tags": [
+      "Fewer_scenarios",
+      "Jira_editor_CRLF"
+    ],
+    "plan_taxonomy": [
+      "Dedupe_across_stories",
+      "Scope_trim"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91987",
+    "shard": "story_006",
+    "summary_at_create": "PH: Recruiter can compose an email to agency user or candidate & select the appropriate email (To field selection)",
+    "summary_current": "PH: Recruiter can select To, From & Subject (UI) when composing an email",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1731,
+    "len_current": 2234,
+    "description_equal_normalized": false,
+    "tags": [
+      "Substantial_expansion",
+      "Jira_editor_CRLF",
+      "Summary_rewritten"
+    ],
+    "plan_taxonomy": [
+      "Product_decision",
+      "Wording_Gherkin"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91988",
+    "shard": "story_007",
+    "summary_at_create": "PH: Recruiter attaches documents to send to candidate/agency user",
+    "summary_current": "PH: Recruiter attaches documents (UI only)",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1833,
+    "len_current": 2181,
+    "description_equal_normalized": false,
+    "tags": [
+      "Jira_editor_CRLF",
+      "Summary_rewritten"
+    ],
+    "plan_taxonomy": [
+      "Product_decision"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91989",
+    "shard": "story_008",
+    "summary_at_create": "PH: Recruiter wants to format the message & add subject",
+    "summary_current": "PH: Recruiter can use the RTE & see the UI of buttons",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1887,
+    "len_current": 2407,
+    "description_equal_normalized": false,
+    "tags": [
+      "Substantial_expansion",
+      "Jira_editor_CRLF",
+      "Explicit_negative_scope_GenAI",
+      "Summary_rewritten"
+    ],
+    "plan_taxonomy": [
+      "Product_decision",
+      "Wording_Gherkin"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91990",
+    "shard": "story_009",
+    "summary_at_create": "PH: Recruiter can select From address from list of valid email addresses",
+    "summary_current": "PH: Recruiter can select From address from list of valid email addresses",
+    "h3_original": 3,
+    "h3_current": 1,
+    "len_original": 1849,
+    "len_current": 1703,
+    "description_equal_normalized": false,
+    "tags": [
+      "Fewer_scenarios",
+      "Jira_editor_CRLF"
+    ],
+    "plan_taxonomy": [
+      "Dedupe_across_stories",
+      "Scope_trim"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91991",
+    "shard": "story_010",
+    "summary_at_create": "PH: Recruiter does not see any tabs for non-agency candidate",
+    "summary_current": "PH: Recruiter does not see any tabs for non-agency candidate",
+    "h3_original": 3,
+    "h3_current": 1,
+    "len_original": 1809,
+    "len_current": 1723,
+    "description_equal_normalized": false,
+    "tags": [
+      "Fewer_scenarios",
+      "Jira_editor_CRLF"
+    ],
+    "plan_taxonomy": [
+      "Dedupe_across_stories",
+      "Scope_trim"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91992",
+    "shard": "story_011",
+    "summary_at_create": "PH: Recruiter attaches non-supported files",
+    "summary_current": "PH: Recruiter attaches non-supported files",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1742,
+    "len_current": 2605,
+    "description_equal_normalized": false,
+    "tags": [
+      "Substantial_expansion",
+      "Jira_editor_CRLF"
+    ],
+    "plan_taxonomy": [
+      "Wording_Gherkin"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91993",
+    "shard": "story_012",
+    "summary_at_create": "PH: Recruiter sees UI error validations on Send",
+    "summary_current": "PH: Recruiter sees UI error validations on Send",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1800,
+    "len_current": 2357,
+    "description_equal_normalized": false,
+    "tags": [
+      "Substantial_expansion",
+      "Jira_editor_CRLF"
+    ],
+    "plan_taxonomy": [
+      "Wording_Gherkin"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91994",
+    "shard": "story_013",
+    "summary_at_create": "PH: Recruiter sends message - recipient receives it and recruiter sees it in the panel",
+    "summary_current": "PH: Send Message (No Attachments)",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1763,
+    "len_current": 2317,
+    "description_equal_normalized": false,
+    "tags": [
+      "Substantial_expansion",
+      "Jira_editor_CRLF",
+      "Summary_rewritten"
+    ],
+    "plan_taxonomy": [
+      "Product_decision",
+      "Wording_Gherkin",
+      "XO_UI_split"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91995",
+    "shard": "story_014",
+    "summary_at_create": "PH: Recruiter gets discard popup by changing pages",
+    "summary_current": "PH: Recruiter gets discard popup by changing pages",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1711,
+    "len_current": 2319,
+    "description_equal_normalized": false,
+    "tags": [
+      "Substantial_expansion",
+      "Jira_editor_CRLF",
+      "Notes_research_backfill"
+    ],
+    "plan_taxonomy": [
+      "Product_decision",
+      "Wording_Gherkin"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91996",
+    "shard": "story_015",
+    "summary_at_create": "PH: Recruiter gets discard popup when they click the Discard button",
+    "summary_current": "PH: Recruiter gets discard popup when they click the Discard button",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1638,
+    "len_current": 2369,
+    "description_equal_normalized": false,
+    "tags": [
+      "Substantial_expansion",
+      "Jira_editor_CRLF",
+      "Notes_research_backfill"
+    ],
+    "plan_taxonomy": [
+      "Product_decision",
+      "Wording_Gherkin"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91997",
+    "shard": "story_016",
+    "summary_at_create": "PH: Recruiter sees list of messages with unread ones marked in blue",
+    "summary_current": "PH: Recruiter sees list of messages with unread ones marked in blue",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1723,
+    "len_current": 1723,
+    "description_equal_normalized": true,
+    "tags": [
+      "Unchanged_description"
+    ],
+    "plan_taxonomy": [
+      "Metadata_only"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91998",
+    "shard": "story_017",
+    "summary_at_create": "PH: Recruiter can see message threads when clicking on a message",
+    "summary_current": "PH: Recruiter can see message threads when clicking on a message",
+    "h3_original": 3,
+    "h3_current": 2,
+    "len_original": 1713,
+    "len_current": 1937,
+    "description_equal_normalized": false,
+    "tags": [
+      "Fewer_scenarios",
+      "Jira_editor_CRLF"
+    ],
+    "plan_taxonomy": [
+      "Dedupe_across_stories",
+      "Scope_trim"
+    ]
+  },
+  {
+    "jira_key": "HRREC-91999",
+    "shard": "story_018",
+    "summary_at_create": "PH: Recruiter sees blue \"unread marker\" removed after clicking in the view a message in full",
+    "summary_current": "PH: Recruiter sees blue \"unread marker\" removed after clicking in the view a message in full",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1754,
+    "len_current": 1754,
+    "description_equal_normalized": true,
+    "tags": [
+      "Unchanged_description"
+    ],
+    "plan_taxonomy": [
+      "Metadata_only"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92000",
+    "shard": "story_019",
+    "summary_at_create": "PH: Recruiter opens the message to read and reply",
+    "summary_current": "PH: Recruiter opens the message to read and reply",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1701,
+    "len_current": 1701,
+    "description_equal_normalized": true,
+    "tags": [
+      "Unchanged_description"
+    ],
+    "plan_taxonomy": [
+      "Metadata_only"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92001",
+    "shard": "story_020",
+    "summary_at_create": "PH: Recruiter sees the panel expand & views full message when clicking the grow button or clicking a single message",
+    "summary_current": "PH: Recruiter sees the panel expand & views full message when clicking the grow button or clicking a single message",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1694,
+    "len_current": 2480,
+    "description_equal_normalized": false,
+    "tags": [
+      "Substantial_expansion",
+      "Jira_editor_CRLF",
+      "UX_numeric_or_breakpoint",
+      "Push_overlay_refinement"
+    ],
+    "plan_taxonomy": [
+      "UX_numeric",
+      "Wording_Gherkin",
+      "XO_UI_split"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92002",
+    "shard": "story_021",
+    "summary_at_create": "PH: Style only - Recruiter sees messages showing, styled as per figma",
+    "summary_current": "PH: Style only - Recruiter sees messages showing, styled as per figma",
+    "h3_original": 3,
+    "h3_current": 1,
+    "len_original": 1717,
+    "len_current": 1603,
+    "description_equal_normalized": false,
+    "tags": [
+      "Fewer_scenarios",
+      "Jira_editor_CRLF"
+    ],
+    "plan_taxonomy": [
+      "Dedupe_across_stories",
+      "Scope_trim"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92003",
+    "shard": "story_022",
+    "summary_at_create": "PH: Recruiter sees error messages if their email has bounced",
+    "summary_current": "PH: Recruiter sees error messages if their email has bounced",
+    "h3_original": 3,
+    "h3_current": 6,
+    "len_original": 1761,
+    "len_current": 4280,
+    "description_equal_normalized": false,
+    "tags": [
+      "More_scenarios",
+      "Substantial_expansion",
+      "Jira_editor_CRLF",
+      "Notes_external_links"
+    ],
+    "plan_taxonomy": [
+      "Product_decision",
+      "Wording_Gherkin"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92004",
+    "shard": "story_023",
+    "summary_at_create": "PH: Recruiter sees error when sending message (REST error)",
+    "summary_current": "PH: Recruiter sees error when sending message (REST error)",
+    "h3_original": 3,
+    "h3_current": 2,
+    "len_original": 1690,
+    "len_current": 2506,
+    "description_equal_normalized": false,
+    "tags": [
+      "Fewer_scenarios",
+      "Substantial_expansion",
+      "Jira_editor_CRLF"
+    ],
+    "plan_taxonomy": [
+      "Scope_trim",
+      "Wording_Gherkin"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92005",
+    "shard": "story_024",
+    "summary_at_create": "PH: Recruiter sees info message and cannot send email if the candidate changes their email",
+    "summary_current": "PH: Recruiter sees info message and cannot send email if the candidate changes their email",
+    "h3_original": 3,
+    "h3_current": 2,
+    "len_original": 1787,
+    "len_current": 2669,
+    "description_equal_normalized": false,
+    "tags": [
+      "Fewer_scenarios",
+      "Substantial_expansion",
+      "Jira_editor_CRLF"
+    ],
+    "plan_taxonomy": [
+      "Scope_trim",
+      "Wording_Gherkin"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92006",
+    "shard": "story_025",
+    "summary_at_create": "PH: Candidates opt-out of receiving emails",
+    "summary_current": "PH: Candidates opt-out of receiving emails",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1726,
+    "len_current": 1726,
+    "description_equal_normalized": true,
+    "tags": [
+      "Unchanged_description"
+    ],
+    "plan_taxonomy": [
+      "Metadata_only"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92007",
+    "shard": "story_026",
+    "summary_at_create": "PH: Recruiter can switch between tabs for candidate and agency comms",
+    "summary_current": "PH: Recruiter can switch between tabs for candidate and agency comms",
+    "h3_original": 3,
+    "h3_current": 1,
+    "len_original": 1734,
+    "len_current": 1832,
+    "description_equal_normalized": false,
+    "tags": [
+      "Fewer_scenarios",
+      "Jira_editor_CRLF"
+    ],
+    "plan_taxonomy": [
+      "Dedupe_across_stories",
+      "Scope_trim"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92008",
+    "shard": "story_027",
+    "summary_at_create": "PH: Agency cannot see recruiter conversation",
+    "summary_current": "PH: Agency cannot see recruiter conversation",
+    "h3_original": 3,
+    "h3_current": 2,
+    "len_original": 1757,
+    "len_current": 2232,
+    "description_equal_normalized": false,
+    "tags": [
+      "Fewer_scenarios",
+      "Substantial_expansion",
+      "Jira_editor_CRLF"
+    ],
+    "plan_taxonomy": [
+      "Scope_trim",
+      "Wording_Gherkin"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92009",
+    "shard": "story_028",
+    "summary_at_create": "PH: Recruiter can see both closed and non-closed conversation in the same panel if one conversation is still active",
+    "summary_current": "PH: Recruiter can see both closed and non-closed conversation in the same panel if one conversation is still active",
+    "h3_original": 3,
+    "h3_current": 1,
+    "len_original": 1716,
+    "len_current": 2154,
+    "description_equal_normalized": false,
+    "tags": [
+      "Fewer_scenarios",
+      "Substantial_expansion",
+      "Jira_editor_CRLF"
+    ],
+    "plan_taxonomy": [
+      "Scope_trim",
+      "Wording_Gherkin"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92010",
+    "shard": "story_029",
+    "summary_at_create": "PH: Recruiter sees tags on messages showing updating state (sent, delivered etc.)",
+    "summary_current": "PH: Recruiter sees tags on messages showing updating state (sent, not delivered)",
+    "h3_original": 3,
+    "h3_current": 2,
+    "len_original": 1677,
+    "len_current": 1990,
+    "description_equal_normalized": false,
+    "tags": [
+      "Fewer_scenarios",
+      "Jira_editor_CRLF",
+      "Summary_rewritten"
+    ],
+    "plan_taxonomy": [
+      "Dedupe_across_stories",
+      "Product_decision",
+      "Scope_trim"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92011",
+    "shard": "story_030",
+    "summary_at_create": "PH: Privacy Admin purges PDTs for 2-way email - Candidate/Job App",
+    "summary_current": "PH: Privacy Admin purges PDTs for 2-way email - Candidate/Job App",
+    "h3_original": 3,
+    "h3_current": 1,
+    "len_original": 1818,
+    "len_current": 1701,
+    "description_equal_normalized": false,
+    "tags": [
+      "Fewer_scenarios",
+      "Jira_editor_CRLF"
+    ],
+    "plan_taxonomy": [
+      "Dedupe_across_stories",
+      "Scope_trim"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92012",
+    "shard": "story_031",
+    "summary_at_create": "PH: Admin can configure conversation lifecycle tenant setting?",
+    "summary_current": "PH: Admin can configure conversation lifecycle tenant setting?",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1823,
+    "len_current": 1823,
+    "description_equal_normalized": true,
+    "tags": [
+      "Unchanged_description"
+    ],
+    "plan_taxonomy": [
+      "Metadata_only"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92013",
+    "shard": "story_032",
+    "summary_at_create": "PH: Existing reporting features are not broken",
+    "summary_current": "PH: Existing reporting features are not broken",
+    "h3_original": 3,
+    "h3_current": 0,
+    "len_original": 1754,
+    "len_current": 235,
+    "description_equal_normalized": false,
+    "tags": [
+      "Fewer_scenarios",
+      "Major_contraction_or_pivot",
+      "Jira_editor_CRLF",
+      "Testing_exploratory_pivot"
+    ],
+    "plan_taxonomy": [
+      "Product_decision",
+      "Scope_trim"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92014",
+    "shard": "story_033",
+    "summary_at_create": "PH: Recruiter cannot see reply, forward or Add button when both conversations are closed & sees info message? that convo is closed",
+    "summary_current": "PH: Recruiter cannot see reply, or Add button when both conversations are closed & sees info message? that convo is closed",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1804,
+    "len_current": 2717,
+    "description_equal_normalized": false,
+    "tags": [
+      "Substantial_expansion",
+      "Jira_editor_CRLF",
+      "Summary_rewritten"
+    ],
+    "plan_taxonomy": [
+      "Product_decision",
+      "Wording_Gherkin"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92015",
+    "shard": "story_034",
+    "summary_at_create": "PH: Candidate has 2 applications to the same JR and gets merged",
+    "summary_current": "PH: Candidate has 2 applications to the same JR and gets merged",
+    "h3_original": 3,
+    "h3_current": 2,
+    "len_original": 1858,
+    "len_current": 2226,
+    "description_equal_normalized": false,
+    "tags": [
+      "Fewer_scenarios",
+      "Jira_editor_CRLF"
+    ],
+    "plan_taxonomy": [
+      "Dedupe_across_stories",
+      "Scope_trim"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92016",
+    "shard": "story_035",
+    "summary_at_create": "PH: Candidate attaches non-supported files",
+    "summary_current": "PH: Candidate attaches non-supported files",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1769,
+    "len_current": 2882,
+    "description_equal_normalized": false,
+    "tags": [
+      "Substantial_expansion",
+      "Jira_editor_CRLF"
+    ],
+    "plan_taxonomy": [
+      "Wording_Gherkin"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92017",
+    "shard": "story_036",
+    "summary_at_create": "PH: Recruiter can forward messages?",
+    "summary_current": "PH: Recruiter can forward messages?",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1745,
+    "len_current": 1745,
+    "description_equal_normalized": true,
+    "tags": [
+      "Unchanged_description"
+    ],
+    "plan_taxonomy": [
+      "Metadata_only"
+    ]
+  },
+  {
+    "jira_key": "HRREC-92018",
+    "shard": "story_037",
+    "summary_at_create": "PH: TRANMGMT-2499 Translations for 2-way email for Recruiting",
+    "summary_current": "PH: TRANMGMT-2499 Translations for 2-way email for Recruiting",
+    "h3_original": 3,
+    "h3_current": 3,
+    "len_original": 1698,
+    "len_current": 1698,
+    "description_equal_normalized": true,
+    "tags": [
+      "Unchanged_description"
+    ],
+    "plan_taxonomy": [
+      "Metadata_only"
+    ]
+  }
+]

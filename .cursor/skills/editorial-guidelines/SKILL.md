@@ -281,7 +281,7 @@ Output format:
 
 This skill is used by:
 - **319-doc-writer**: Primary user; applies checklist to all UI copy review
-- **430-story-writing**: Validates user-visible strings in Jira stories (Description, Acceptance Criteria, BDD scenarios)
+- **430-story-writing**: Validates user-visible strings in Jira stories (Description, Acceptance Criteria field when populated, BDD scenarios). Description layout is `## User story` / `## Scenarios` (`### Scenario N:` + tight or extended Gherkin) / optional `## Definition of Ready` — see **430** Step 6; **Acceptance Criteria** field uses a **blank** wiki table grid at create (no prefilled AC rows); AC markdown table never goes in Description.
 - **315-design-brief-creation**: References when drafting Copy Inventory in design briefs
 - **320-prototype-developer**: Validates copy during implementation
 

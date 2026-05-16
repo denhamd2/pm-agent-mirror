@@ -2,7 +2,9 @@
 description: Story Mapping - Applies Jeff Patton user story mapping with value slices and HITL approval
 globs:
   - "docs/prds/**/*"
+  - "docs/prds/*"
   - "docs/story-maps/**/*"
+  - "docs/story-maps/*"
 alwaysApply: false
 ---
 
