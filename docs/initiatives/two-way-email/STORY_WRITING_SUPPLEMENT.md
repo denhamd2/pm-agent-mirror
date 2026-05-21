@@ -10,7 +10,7 @@
 | Initiative manifest | [CONTEXT.md](CONTEXT.md) |
 | PRD (requirements SoT) | [India candidate profile two-way recruiting email PRD](../../prds/india-candidate-profile-email-conversation-prd.md) |
 | Decision log | [decisions.md](decisions.md) |
-| Compose MVP exclusions (GenAI toolbar, templates, etc.) | `.cursor/rules/012-conversational-email-compose-mvp.mdc` |
+| Compose MVP exclusions (GenAI toolbar, templates, etc.) | `.cursor/rules/012-two-way-email-prototype-compose-mvp.mdc` |
 | HITL pattern deep dive (why summaries expanded) | [drafts/out_batch/hitl_diff_cache/HRREC-82977_PATTERN_DEEP_DIVE_SUMMARY_AND_EXPANSION.md](drafts/out_batch/hitl_diff_cache/HRREC-82977_PATTERN_DEEP_DIVE_SUMMARY_AND_EXPANSION.md) |
 | Shard → Jira mapping (bulk vs keys) | [drafts/out_batch/story-jira-mapping.json](drafts/out_batch/story-jira-mapping.json) |
 

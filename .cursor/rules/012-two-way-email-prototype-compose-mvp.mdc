@@ -1,11 +1,13 @@
 ---
-description: Conversational Email (2-way recruiting) compose MVP — UI explicitly deferred; agents must not restore without PM approval
+description: Profile-anchored two-way recruiting email — design prototype compose MVP boundaries (design/**/*); lists UI exclusions agents must not restore without PM approval
 globs:
   - "design/**/*"
 alwaysApply: false
 ---
 
-# Conversational Email compose MVP boundaries
+# Two-way email prototype — compose MVP boundaries
+
+This rule governs the **design prototype** under **`design/**/*`** only (compose dock UX). It does **not** define Jira epics, EA programme scope, or shipping acceptance — use [`013-two-way-email-initiative-context.mdc`](013-two-way-email-initiative-context.mdc), [`CONTEXT.md`](../../docs/initiatives/two-way-email/CONTEXT.md), and [`decisions.md`](../../docs/initiatives/two-way-email/decisions.md) for initiative and milestone authority.
 
 Applies to **`#2-way-email-prototype`** / India candidate profile mail dock, [`ComposeEmailPanel`](design/2-way-email-prototype.tsx), and [`RichTextEditor`](design/components/RichTextEditor.tsx) when **`composeLayout`** is used for that compose path.
 

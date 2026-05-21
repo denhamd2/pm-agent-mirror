@@ -226,12 +226,12 @@ export interface RichTextEditorProps {
   maxHeight?: number;
   /**
    * Templates dropdown — **only** when `composeLayout` is false (compact toolbar).
-   * When `composeLayout` is true (Conversational Email dock), templates are **never** shown — MVP rule; prop is ignored (see `.cursor/rules/012-conversational-email-compose-mvp.mdc`).
+   * When `composeLayout` is true (Conversational Email dock), templates are **never** shown — MVP rule; prop is ignored (see `.cursor/rules/012-two-way-email-prototype-compose-mvp.mdc`).
    */
   showTemplates?: boolean;
   /**
    * Shows GenAI “improve” control on the **compact** toolbar (`composeLayout` false), e.g. offer letter.
-   * **Not rendered** when `composeLayout` is true — Conversational Email compose MVP excludes GenAI on the compose toolbar (see `.cursor/rules/012-conversational-email-compose-mvp.mdc`).
+   * **Not rendered** when `composeLayout` is true — Conversational Email compose MVP excludes GenAI on the compose toolbar (see `.cursor/rules/012-two-way-email-prototype-compose-mvp.mdc`).
    */
   showGenAI?: boolean;
   candidateData?: {
@@ -244,7 +244,7 @@ export interface RichTextEditorProps {
     companyName?: string;
   };
   /**
-   * Full compose-dock chrome: Figma-style toolbar (undo → device preview). MVP uses white body surface (see `.cursor/rules/012-conversational-email-compose-mvp.mdc`).
+   * Full compose-dock chrome: Figma-style toolbar (undo → device preview). MVP uses white body surface (see `.cursor/rules/012-two-way-email-prototype-compose-mvp.mdc`).
    * When false, uses compact toolbar for offer-letter and other surfaces.
    */
   composeLayout?: boolean;

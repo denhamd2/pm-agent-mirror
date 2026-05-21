@@ -27,7 +27,7 @@ Single entry point for agent and human sessions about **profile-anchored two-way
 
 - Design brief: [india-candidate-profile-email-v92-design-brief.md](../../../design/india-candidate-profile-email-v92-design-brief.md)
 - Prototype route: `#2-way-email-prototype` (legacy `#india-candidate-profile-email-v92`); flow map [2-way-email-prototype-flow.md](../../../design/2-way-email-prototype-flow.md)
-- Compose MVP UI boundaries: `.cursor/rules/012-conversational-email-compose-mvp.mdc` (applies under `design/**/*` for this compose path)
+- Compose MVP UI boundaries: `.cursor/rules/012-two-way-email-prototype-compose-mvp.mdc` (applies under `design/**/*` for this compose path)
 
 ## Backlog and functional grounding
 
@@ -40,4 +40,4 @@ Single entry point for agent and human sessions about **profile-anchored two-way
 
 ## Non-goals reminder
 
-Compose-path MVP exclusions (templates row, GenAI on compose toolbar, etc.) live in **012** — do not “restore” those without explicit PM approval.
+Compose-path MVP exclusions (templates row, GenAI on compose toolbar, etc.) live in **012** (`012-two-way-email-prototype-compose-mvp.mdc`) — do not “restore” those without explicit PM approval.

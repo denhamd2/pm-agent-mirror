@@ -180,7 +180,7 @@ Uses the same `SanaCommComposer` and `SanaCommMessageBubble` components as simpl
   minHeight={200}
 />
 
-// With templates and GenAI (offer-letter / EmailComposer-style — Conversational Email `#2-way-email-prototype` compose omits both; see `.cursor/rules/012-conversational-email-compose-mvp.mdc`)
+// With templates and GenAI (offer-letter / EmailComposer-style — Conversational Email `#2-way-email-prototype` compose omits both; see `.cursor/rules/012-two-way-email-prototype-compose-mvp.mdc`)
 <RichTextEditor
   value={emailBody}
   onChange={(html, text) => setEmailBody(text)}
