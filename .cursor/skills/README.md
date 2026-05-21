@@ -469,7 +469,7 @@ workday-pm-skills/ (GitHub repo)
 
 ### For This Workspace
 
-**Canonical inventory** (20 project skills, each with `SKILL.md`):
+**Canonical inventory** (19 project skills, each with `SKILL.md`):
 
 | Folder | Typical trigger / notes |
 |--------|-------------------------|
@@ -479,7 +479,6 @@ workday-pm-skills/ (GitHub repo)
 | `customer-issue-triage` | Customer issue triage workflow |
 | `user-story-gap-review` | Net-new Jira story gap analysis → Confluence (`/user-story-gap-review`), **Salomon bundle** (KB + Jira index + Slack archive), **Top 5 gaps / Top 5 strengths** exec summary, seven-column table (**Dev lens** = XO MCP + optional Peanut), **Tier A/B**, **Publish pipeline**, **Suggested missing BDD** |
 | `editorial-guidelines` | `/editorial` |
-| `football-results` | `/football-results` |
 | `jira-recruiting-story-description` | HRREC Jira Story description layout (points to **430** + golden draft) |
 | `jtbd-analysis` | `/jtbd` |
 | `modulr-prototype` | Redirect stub → `xo-builder` modulr mode |
