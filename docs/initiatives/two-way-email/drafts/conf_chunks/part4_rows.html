@@ -1,0 +1,187 @@
+<!-- gap-review HRREC-92011 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92011">HRREC-92011</a><br/>PH: Privacy Admin purges PDTs for 2-way email - Candidate/Job App</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Purge lists recruiting communications broadly; confirm 2-way email objects map cleanly to the PDT bullets to avoid partial purges that leave ghost threads.</p></td>
+<td><p>Partial purge leaving headers without bodies would alarm privacy teams—explicit verification list needed.</p></td>
+<td><p>SUV XO lookup errored in this session; ask engineering which bindings or layout classes own the behaviour described for HRREC-92011 so tests map to real metadata.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Mapping story to exact PDT subcomponents could be clearer.</li>
+<li><strong>Recommended next step:</strong> Ask privacy to sign off mapping matrix vs purge UI.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Post-purge UI</p><p><strong>Given</strong> a purge removed recruiting communications for a candidate<br/><strong>When</strong> a recruiter opens old email panel<br/><strong>Then</strong> they see the same Purged Person behaviour as other channels without partial ghost messages</p></td>
+</tr>
+<!-- gap-review HRREC-92012 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92012">HRREC-92012</a><br/>PH: Admin can configure conversation lifecycle tenant setting?</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">High</ac:parameter>
+<ac:parameter ac:name="colour">Yellow</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Configurable days vs one-year cap math is sketched but validation edge cases are thin—tenant admins will fat-finger values.</p></td>
+<td><p>Scheduler-driven closure must be visible to recruiters on open panels; not described.</p></td>
+<td><p>XO evidence was not retrieved from the SUV for HRREC-92012; confirm with engineering where side-panel messaging hooks live before you freeze story points.</p></td>
+<td><p>🟡 High</p>
+<ul>
+<li><strong>Finding:</strong> Scheduler UX and validation breadth are light for a policy-heavy story.</li>
+<li><strong>Recommended next step:</strong> Add admin validation matrix and recruiter-visible closure surfacing.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Scheduler closes active panel</p><p><strong>Given</strong> I have the panel open past the hard cap moment<br/><strong>When</strong> the scheduler closes the conversation<br/><strong>Then</strong> I see an in-session update that matches HRREC-92014 messaging</p></td>
+</tr>
+<!-- gap-review HRREC-92013 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92013">HRREC-92013</a><br/>PH: Existing reporting features are not broken</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Very High</ac:parameter>
+<ac:parameter ac:name="colour">Red</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Exploratory milestone with no scenarios—cannot size or test systematically.</p></td>
+<td><p>Without AC, QA cannot show regression confidence for mixed-channel reports.</p></td>
+<td><p>HRREC-92013: no XO metadata came back from the dev SUV today; schedule a short walk-through of the conversation and notification XO surfaces this story depends on.</p></td>
+<td><p>🔴 Very High</p>
+<ul>
+<li><strong>Finding:</strong> Thin-spec placeholder blocks milestone confidence.</li>
+<li><strong>Recommended next step:</strong> Replace with explicit report list, sample filters, and pass/fail criteria before sizing.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Blocked until AC exists</p><p><strong>Given</strong> reporting smoke scope is undefined<br/><strong>When</strong> refinement completes<br/><strong>Then</strong> this ticket lists each report or dashboard to run with expected email rows</p></td>
+</tr>
+<!-- gap-review HRREC-92014 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92014">HRREC-92014</a><br/>PH: Recruiter cannot see reply, or Add button when both conversations are closed &amp; sees info message? that convo is closed</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Final closed state plus independent agency/candidate closure ties back to HRREC-92009—copy should stay consistent.</p></td>
+<td><p>Info message when both closed should name whether new threads are allowed elsewhere.</p></td>
+<td><p>For HRREC-92014, SUV XO search failed this run—have engineering name the REST domains and layouts implementing this slice before sizing.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Closure UX is described with three scenarios.</li>
+<li><strong>Recommended next step:</strong> Align copy with HRREC-92012 automated closure.</li>
+</ul></td>
+<td><p>No supplementary BDD drafted here; rely on this ticket’s scenarios unless refinement opens a new gap.</p></td>
+</tr>
+<!-- gap-review HRREC-92015 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92015">HRREC-92015</a><br/>PH: Candidate has 2 applications to the same JR and gets merged</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">High</ac:parameter>
+<ac:parameter ac:name="colour">Yellow</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Merge keeps threads visible; WhatsApp work on merged candidates (HRREC-84389, HRREC-90306) flagged wrong sender display—consider for 2WE if merged identities could show the wrong participant on email headers (translation question only).</p></td>
+<td><p>Salomon Slack archive did not return merge-specific threads for those keys in this pass; still test duplicate JR merges because unread grids previously needed permission-aware counts.</p></td>
+<td><p>Peanut was unavailable this run; ask engineering whether email participant resolution reuses the merge fixes applied to WhatsApp sender bugs (HRREC-90306).</p></td>
+<td><p>🟡 High</p>
+<ul>
+<li><strong>Finding:</strong> Merge plus two threads on same JR is combinatorially risky even though two scenarios exist.</li>
+<li><strong>Recommended next step:</strong> Build a merge test matrix with HRREC-92005 covering email flips and dual-thread visibility.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Merge-adjacent email identity</p><p><strong>Given</strong> Two applications on the same JR merge while both have email threads<br/><strong>When</strong> I open the merged candidate email panel<br/><strong>Then</strong> I can still read both threads and send rules follow HRREC-92005 without wrong To defaults</p></td>
+</tr>
+<!-- gap-review HRREC-92016 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92016">HRREC-92016</a><br/>PH: Candidate attaches non-supported files</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Inbound virus and oversize paths depend on backend messaging; UI must parse error payloads consistently with HRREC-91992 outbound limits.</p></td>
+<td><p>Candidates never see recruiter UI—ensure system messages read neutrally and do not leak internal policy names.</p></td>
+<td><p>For HRREC-92016, SUV XO search failed this run—have engineering name the REST domains and layouts implementing this slice before sizing.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Inbound error payload shapes may vary by provider.</li>
+<li><strong>Recommended next step:</strong> Add fixture-driven test list for each rejection class.</li>
+</ul></td>
+<td><p>No supplementary BDD drafted here; rely on this ticket’s scenarios unless refinement opens a new gap.</p></td>
+</tr>
+<!-- gap-review HRREC-92022 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92022">HRREC-92022</a><br/>PH: My Conversations will require an XO (small) refactor</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Very High</ac:parameter>
+<ac:parameter ac:name="colour">Red</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Placeholder with no scenarios—only a note to talk to OE PM.</p></td>
+<td><p>Cannot be tested or slotted until scope is written.</p></td>
+<td><p>SUV XO lookup errored in this session; ask engineering which bindings or layout classes own the behaviour described for HRREC-92022 so tests map to real metadata.</p></td>
+<td><p>🔴 Very High</p>
+<ul>
+<li><strong>Finding:</strong> No acceptance content—pure placeholder.</li>
+<li><strong>Recommended next step:</strong> Rewrite as a proper story with AC or fold into HRREC-91975 before sprint planning.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Blocked until AC exists</p><p><strong>Given</strong> My Conversations refactor scope is undefined<br/><strong>When</strong> grooming occurs<br/><strong>Then</strong> this ticket lists concrete XO touchpoints and notification impacts</p></td>
+</tr>
+<!-- gap-review HRREC-92029 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92029">HRREC-92029</a><br/>PH: Recruiter can compose an email to agency user or agency candidate</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Opt-in validation deferred to send for agency candidates is intentional but cognitively heavy—recruiters may compose long messages that cannot send.</p></td>
+<td><p>Failed send after compose should return clear opt-in messaging, not a generic REST error.</p></td>
+<td><p>For HRREC-92029, SUV XO search failed this run—have engineering name the REST domains and layouts implementing this slice before sizing.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Late validation UX needs explicit copy and cursor placement.</li>
+<li><strong>Recommended next step:</strong> Add scenario for failed send on opted-out agency candidate after long compose.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Late opt-in failure</p><p><strong>Given</strong> I composed to an opted-out agency candidate<br/><strong>When</strong> send validation fails<br/><strong>Then</strong> I see opt-in specific guidance and my text remains for correction or copy-out</p></td>
+</tr>
+<!-- gap-review HRREC-92030 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92030">HRREC-92030</a><br/>PH: Recruiter can select To address from list of valid email addresses</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Dropdown labels for Candidate vs Agency align with tab model—good cross-story coherence.</p></td>
+<td><p>Long lists of alternates need truncation/search—optional UX note if tenants allow many emails.</p></td>
+<td><p>SUV XO lookup errored in this session; ask engineering which bindings or layout classes own the behaviour described for HRREC-92030 so tests map to real metadata.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Recipient list story is concrete.</li>
+<li><strong>Recommended next step:</strong> Optional long-list UX spike if customer data shows many addresses.</li>
+</ul></td>
+<td><p>No supplementary BDD drafted here; rely on this ticket’s scenarios unless refinement opens a new gap.</p></td>
+</tr>
+<!-- gap-review HRREC-92035 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92035">HRREC-92035</a><br/>PH: Email communications are visible in Activity Stream, Timeline and Candidate Communications</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Reporting slice touches activity stream, timeline, and candidate communications—internal articles remind that activity stream visibility is security-sensitive like goals reports.</p></td>
+<td><p>Attachment metadata in reports must respect masked applications same as profile.</p></td>
+<td><p>For HRREC-92035, SUV XO search failed this run—have engineering name the REST domains and layouts implementing this slice before sizing.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Security of report fields across three surfaces is broad for one story.</li>
+<li><strong>Recommended next step:</strong> Split milestone tests per surface or add sub-scenarios for masked vs unmasked readers.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Masked reader in report</p><p><strong>Given</strong> I lack access to masked job data<br/><strong>When</strong> I open Candidate Communication report<br/><strong>Then</strong> email rows obey the same redaction rules as the profile</p></td>
+</tr>
+<!-- gap-review HRREC-92036 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92036">HRREC-92036</a><br/>PH: Send Message (With Attachments)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Blobatory IDs referenced—ensure happy path ties failure rollback to HRREC-92004 and size limits to HRREC-91992.</p></td>
+<td><p>Partial upload failure should not leave ghost pills in the thread.</p></td>
+<td><p>XO evidence was not retrieved from the SUV for HRREC-92036; confirm with engineering where side-panel messaging hooks live before you freeze story points.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Attachment send failure cleanup not described.</li>
+<li><strong>Recommended next step:</strong> Add scenario for partial failure after REST starts.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Partial attachment failure</p><p><strong>Given</strong> one attachment fails virus scan on send<br/><strong>When</strong> the REST call completes<br/><strong>Then</strong> the thread shows a clear partial-send state without duplicating the message</p></td>
+</tr>

@@ -1,0 +1,187 @@
+<!-- gap-review HRREC-91999 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91999">HRREC-91999</a><br/>PH: Recruiter sees blue &quot;unread marker&quot; removed after clicking in the view a message in full</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">High</ac:parameter>
+<ac:parameter ac:name="colour">Yellow</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Concurrent recruiter model still says “per product decision”—that is a sizing blocker until decided.</p></td>
+<td><p>Two recruiters seeing different unread states confuses handoffs; pick per-user vs shared explicitly.</p></td>
+<td><p>SUV XO lookup errored in this session; ask engineering which bindings or layout classes own the behaviour described for HRREC-91999 so tests map to real metadata.</p></td>
+<td><p>🟡 High</p>
+<ul>
+<li><strong>Finding:</strong> Read-state concurrency model is undecided in Jira.</li>
+<li><strong>Recommended next step:</strong> Run a short PM/engineering decision on per-user vs shared read marks before QA invests.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Concurrent recruiters read model</p><p><strong>Given</strong> two recruiters participate in the same thread<br/><strong>When</strong> one marks read<br/><strong>Then</strong> the second recruiter’s list updates per the agreed shared or per-user model</p><p><strong>Scenario:</strong> Peek vs full read</p><p><strong>Given</strong> policy defines peek thresholds<br/><strong>When</strong> I only peek<br/><strong>Then</strong> unread markers follow the documented rule</p></td>
+</tr>
+<!-- gap-review HRREC-92001 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92001">HRREC-92001</a><br/>PH: Recruiter sees the panel expand &amp; views full message when clicking the grow button or clicking a single message</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Structural grow story overlaps HRREC-91948—ensure shrink when switching channels matches dev note about explicit events.</p></td>
+<td><p>Switching from email to SMS after grow should shrink predictably; already partially in HRREC-91948 Scenario 5.</p></td>
+<td><p>For HRREC-92001, SUV XO search failed this run—have engineering name the REST domains and layouts implementing this slice before sizing.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Overlap is acknowledged in epic, scenarios still coherent.</li>
+<li><strong>Recommended next step:</strong> Keep milestone matrix linking 91948 and 92001.</li>
+</ul></td>
+<td><p>Leaving column 7 empty of new blocks because acceptance criteria already enumerate the critical behaviours.</p></td>
+</tr>
+<!-- gap-review HRREC-92002 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92002">HRREC-92002</a><br/>PH: Style only - Recruiter sees messages showing, styled as per figma</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Very Low</ac:parameter>
+<ac:parameter ac:name="colour">Grey</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Pure styling milestone with single scenario—low risk once design tokens stable.</p></td>
+<td><p>Visual-only means regressions are screenshot-based; low hiring impact if tracked in visual tests.</p></td>
+<td><p>HRREC-92002: no XO metadata came back from the dev SUV today; schedule a short walk-through of the conversation and notification XO surfaces this story depends on.</p></td>
+<td><p>⚪ Very Low</p>
+<ul>
+<li><strong>Finding:</strong> No functional gap surfaced beyond normal visual QA.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this pass—keep Jira scenarios as source of truth unless new risks appear.</li>
+</ul></td>
+<td><p>Column 7 adds nothing new: existing Jira scenarios cover the stated happy and negative paths.</p></td>
+</tr>
+<!-- gap-review HRREC-92003 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92003">HRREC-92003</a><br/>PH: Recruiter sees error messages if their email has bounced</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Six bounce variants align with translation work in TRANMGMT-2499; template-formatting variant intentionally deferred—keep PMs aligned on which variants ship day one.</p></td>
+<td><p>Recruiters need consistent iconography between thread list and expanded pane for the same bounce class.</p></td>
+<td><p>HRREC-92003: no XO metadata came back from the dev SUV today; schedule a short walk-through of the conversation and notification XO surfaces this story depends on.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Rich bounce taxonomy already documented.</li>
+<li><strong>Recommended next step:</strong> Coordinate copy freeze with translations ticket.</li>
+</ul></td>
+<td><p>Leaving column 7 empty of new blocks because acceptance criteria already enumerate the critical behaviours.</p></td>
+</tr>
+<!-- gap-review HRREC-92004 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92004">HRREC-92004</a><br/>PH: Recruiter sees error when sending message (REST error)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Mid-session opt-out or security loss forces refresh and admits draft loss—Jira already flags doc/copy risk; deployment guidance stresses copying text before refresh.</p></td>
+<td><p>Generic 500 path should not wipe compose without an explicit retry affordance where safe.</p></td>
+<td><p>For HRREC-92004, SUV XO search failed this run—have engineering name the REST domains and layouts implementing this slice before sizing.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Draft loss on forced refresh is a visible recruiter pain point.</li>
+<li><strong>Recommended next step:</strong> Prototype copy that tells recruiters to copy content before refresh and validate with doc writer.</li>
+</ul></td>
+<td><p>Column 7 adds nothing new: existing Jira scenarios cover the stated happy and negative paths.</p></td>
+</tr>
+<!-- gap-review HRREC-92005 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92005">HRREC-92005</a><br/>PH: Recruiter sees info message and cannot send email if the candidate changes their email</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Primary-home-email monitoring plus merge note is strong; WhatsApp merge threads showed identity drift after merge (HRREC-84389, HRREC-90306)—use that only as a translation question for how email “From/To” and thread headers stay trustworthy after merge, not as proof email is broken.</p></td>
+<td><p>After merge, recruiters still read history; verify unread markers and sender labels do not flip confusingly when two threads coexist.</p></td>
+<td><p>Peanut code evidence was not available this run; ask engineering whether merge hooks update email participant display the same way SMS/WhatsApp fixes did for WhatsApp merge issues (HRREC-90306).</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Merge plus email-change intersection is complex but mostly captured; cross-channel pattern suggests double-checking display names after merge.</li>
+<li><strong>Recommended next step:</strong> Hold a short merge-matrix test combining HRREC-92015 and this story with candidate email flips.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Merge-adjacent email identity</p><p><strong>Given</strong> A merge changes primary home email while two threads exist<br/><strong>When</strong> I view both threads<br/><strong>Then</strong> sender labels and read-only messaging stay coherent with HRREC-92015</p></td>
+</tr>
+<!-- gap-review HRREC-92006 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92006">HRREC-92006</a><br/>PH: Candidates opt-out of receiving emails</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">High</ac:parameter>
+<ac:parameter ac:name="colour">Yellow</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Opt-out “in-between” state is thin in bullets—needs clearer recruiter-visible copy and analytics treatment.</p></td>
+<td><p>Recruiters need to know if partial closure affects reporting and My Conversations counts.</p></td>
+<td><p>For HRREC-92006, SUV XO search failed this run—have engineering name the REST domains and layouts implementing this slice before sizing.</p></td>
+<td><p>🟡 High</p>
+<ul>
+<li><strong>Finding:</strong> Opt-out intermediate lifecycle is under-specified for reporting side effects.</li>
+<li><strong>Recommended next step:</strong> Expand scenarios for reporting + notifications with PM + OE.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Opt-out and reporting</p><p><strong>Given</strong> a candidate opts out mid-thread<br/><strong>When</strong> I view Candidate Communication report<br/><strong>Then</strong> the row reflects the intermediate state per policy</p></td>
+</tr>
+<!-- gap-review HRREC-92007 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92007">HRREC-92007</a><br/>PH: Recruiter can switch between tabs for candidate and agency comms</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Tab isolation is clear; combine with HRREC-92008/92009 for security review of default tab when one side closes.</p></td>
+<td><p>Defaulting to All must never flash agency-only content before filters apply—timing risk.</p></td>
+<td><p>XO evidence was not retrieved from the SUV for HRREC-92007; confirm with engineering where side-panel messaging hooks live before you freeze story points.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Default tab and loading race underspecified.</li>
+<li><strong>Recommended next step:</strong> Add scenario for initial load tab selection on slow networks.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Initial tab flash</p><p><strong>Given</strong> agency and candidate threads exist<br/><strong>When</strong> the panel loads on a slow network<br/><strong>Then</strong> no disallowed thread content appears before tab filters apply</p></td>
+</tr>
+<!-- gap-review HRREC-92008 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92008">HRREC-92008</a><br/>PH: Agency cannot see recruiter conversation</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Agency-only scope plus 403/404 on direct reference is strong security language—keep penetration-style tests in milestone plan.</p></td>
+<td><p>403 vs 404 choice affects supportability—pick one style for consistency.</p></td>
+<td><p>XO evidence was not retrieved from the SUV for HRREC-92008; confirm with engineering where side-panel messaging hooks live before you freeze story points.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Security story is explicit.</li>
+<li><strong>Recommended next step:</strong> Document chosen error code style for support.</li>
+</ul></td>
+<td><p>Column 7 adds nothing new: existing Jira scenarios cover the stated happy and negative paths.</p></td>
+</tr>
+<!-- gap-review HRREC-92009 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92009">HRREC-92009</a><br/>PH: Recruiter can see both closed and non-closed conversation in the same panel if one conversation is still active</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Independent lifecycles across tabs are described; align info messages with HRREC-92014 so closed copy does not contradict partial closure in HRREC-92006.</p></td>
+<td><p>Tab strip should visibly show which side is closed without extra clicks.</p></td>
+<td><p>SUV XO lookup errored in this session; ask engineering which bindings or layout classes own the behaviour described for HRREC-92009 so tests map to real metadata.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Cross-story lifecycle messaging could conflict.</li>
+<li><strong>Recommended next step:</strong> Refinement session with HRREC-92014 and HRREC-92006 owners.</li>
+</ul></td>
+<td><p>Column 7 adds nothing new: existing Jira scenarios cover the stated happy and negative paths.</p></td>
+</tr>
+<!-- gap-review HRREC-92010 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-92010">HRREC-92010</a><br/>PH: Recruiter sees tags on messages showing updating state (sent, not delivered)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Sent vs not-delivered tags bridge to HRREC-92003; still need timing rules when SES delays vs failures arrive out of order.</p></td>
+<td><p>Recruiters misread delayed delivery as failure if tags flip slowly.</p></td>
+<td><p>SUV XO lookup errored in this session; ask engineering which bindings or layout classes own the behaviour described for HRREC-92010 so tests map to real metadata.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Event ordering for tags not described.</li>
+<li><strong>Recommended next step:</strong> Add scenario for delayed then successful delivery updating tags.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Delayed delivery updates tag</p><p><strong>Given</strong> SES reports delay then success<br/><strong>When</strong> I watch the thread<br/><strong>Then</strong> tags move from delayed indication to Sent without showing a false Not Delivered</p></td>
+</tr>

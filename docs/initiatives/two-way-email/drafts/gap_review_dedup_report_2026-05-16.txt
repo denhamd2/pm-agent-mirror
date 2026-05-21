@@ -1,0 +1,17 @@
+Gap review dedup diagnostics — gap_review_publish_2026-05-16.html (pre-remediation capture)
+
+=== check_gap_review_row_dedup.py ===
+WARN holistic: marker present but no <table> found after <!-- possible-missing-stories-table -->.
+Checked 44 story rows (threshold=5; skipped 7 rows with fewer than seven td cells, 0 rows without HRREC key in col 0).
+
+=== check_gap_review_bdd_duplicates.py ===
+Story rows with BDD column: 44
+Duplicate **scenario GWT** groups (min_keys=2, min_chars=40): 0
+Template-collapsed groups (default unhappy-path BDD; summary in **When** stripped; min_keys=2): 0
+
+Note: holistic WARN is due to marker placement inside tbody before inner table parse; holistic table still renders in Confluence.
+
+=== Post-remediation (emit_gap_review_82977_2026_05_16.py regenerate) ===
+check_gap_review_row_dedup.py: Holistic table checked 3 rows; 44 story rows checked; no WARN at threshold=5 for PM/QA/Dev/BDD fingerprints.
+check_gap_review_bdd_duplicates.py: 0 duplicate GWT groups; 0 template-collapsed groups.
+grep: "Negative path clarity" count = 0; "&amp;amp;" count = 0.

@@ -1,0 +1,463 @@
+<h2>Executive summary (for PM)</h2>
+<ul>
+<li>Run tier: A (full contract). Skipped doc-writer Stories: HRREC-90852 (AG:), HRREC-90853 (RN:).</li>
+<li>Gap Likelihood reflects Verdict + suggested missing BDD only—not a separate PM/QA/Dev score.</li>
+</ul>
+<h3>Top 5 gaps (epic)</h3>
+<ul>
+<li>Panel growth and navigation (HRREC-91948 Scenario 4) still have an explicit &quot;???&quot; on reopen size—align with grow/shrink stories before sizing end-state QA.</li>
+<li>REST send failures and mid-session opt-out/security loss (HRREC-92004) tell recruiters to copy text before refresh because drafts are not server-persisted—confirm copy-first UX and comms with Doc.</li>
+<li>Unread/read model (HRREC-91999 Scenario 3) defers per-user vs shared read—close the product decision before blue-marker stories settle.</li>
+<li>Cross-surface visibility (HRREC-92035) plus My Conversations refactor (HRREC-92022) needs an ordering spike so Activity Stream, Timeline, and in-app notifications stay coherent.</li>
+<li>Agency isolation (HRREC-92008) and dual lifecycles (HRREC-92009) sit next to merge/email-change stories—schedule a short security + identity review so QA does not duplicate scenarios across keys.</li>
+</ul>
+<h3>Top 5 strengths (epic)</h3>
+<ul>
+<li>Bounce taxonomy (HRREC-92003) is unusually concrete—good recruiter-facing copy matrix tied to SES-style events.</li>
+<li>Initialisation pair (HRREC-91946 / HRREC-91948) anchors SSP placement, masking, and responsive grow rules with Figma links.</li>
+<li>Compose gating (HRREC-91985 / HRREC-91979) spells opt-in and domain view vs modify behaviour in recruiter language.</li>
+<li>Send path splits no-attachment vs attachment clones (HRREC-91994 / HRREC-92036) with polling notes—clear sibling boundary.</li>
+<li>Discard flows (HRREC-91995 / HRREC-91996) document no-backend-draft explicitly—reduces hidden QE assumptions.</li>
+</ul>
+<h2>Epic-level notes</h2>
+<ul>
+<li><strong>Overlapping scenarios:</strong> Panel grow/shrink appears across HRREC-91948, HRREC-91980, HRREC-91982, HRREC-92001—keep one breakpoint source of truth.</li>
+<li><strong>Attachment stack:</strong> HRREC-91988, HRREC-91992, HRREC-92016, HRREC-92036 share limits—tenant allowlist and cumulative caps should be stated once then referenced.</li>
+<li><strong>Ordering risk:</strong> HRREC-92022 (My Conversations) should land before or with HRREC-91975 and HRREC-92035 so notification and reporting stories do not churn twice.</li>
+<li><strong>Skipped keys (doc writer):</strong> HRREC-90852, HRREC-90853 excluded from table and per-row MCP per scope rules.</li>
+</ul>
+<h2>Cross-initiative pattern hints (WhatsApp — inspiration only)</h2>
+<p><strong>Hard disclaimers (verbatim):</strong> (1) Same surface, different channel: WhatsApp and email differ on consent, templates, media, delivery, and failure modes.
+(2) Different backend / OE: WhatsApp partner delivery is often Twilio-oriented; two-way email uses Workday’s email path—not the same as Twilio.
+(3) Bugs under WhatsApp epics signal delivery pain, not proof that email is broken.
+(4) Inspiration only—phrase as &quot;Consider for 2WE if…&quot;, never &quot;2WE must match WhatsApp.&quot;</p>
+<p><strong>Corpus line (manifest-only):</strong> Frozen pattern corpus — snapshot_as_of 2026-05-16 in
+<code>docs/initiatives/two-way-email/reference/WHATSAPP_COMPANION_CORPUS_SNAPSHOT.md</code> (manifest_complete: true, 66 Story+Bug keys in manifest, 22 captured excerpt headings).
+<strong>No live Jira pull for WhatsApp companion this run (manifest-only).</strong> Theme bullets below anchor only to <strong>Captured excerpts</strong> keys—no invented live WhatsApp backlog text.</p>
+<ul>
+<li><strong>HRREC-90268 / HRREC-92062 (send in-flight):</strong> Disable input while send is processing to avoid duplicate or trailing text—ask whether the email composer disables RTE/Send the same way during slow REST.</li>
+<li><strong>HRREC-89979 (silent until send):</strong> Failures that only surface on Send, not on open—ask whether email hits resource limits without starving recruiters of early warnings.</li>
+<li><strong>HRREC-84389 / HRREC-90306 (merge &amp; identity):</strong> Merge can mis-attribute sender or survivor identity—ask how email threads and From/To bindings behave after candidate merge (email translation only).</li>
+<li><strong>HRREC-84407 (read vs unread):</strong> OE timing risk on read state—ask what email promises vs receipts for &quot;read&quot; or unread markers in the SSP list.</li>
+<li><strong>HRREC-89899 (consent chrome):</strong> Broken opt-in UI when tenant text missing—ask whether email opt-in surfaces hide broken links the same way.</li>
+</ul>
+<table><thead><tr><th>Story</th><th>Gap Likelihood</th><th>PM lens</th><th>QA lens</th><th>Dev lens</th><th>Verdict</th><th>Suggested missing BDD (Given/When/Then)</th></tr></thead><tbody>
+<tr><!-- gap-review HRREC-91946 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91946">HRREC-91946</a><br/>[Initialisation] Recruiter can see Email Task on SSP (XO Only)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Low</ac:parameter><ac:parameter ac:name="colour">Green</ac:parameter></ac:structured-macro></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91946, confirm [Initialisation] Recruiter can see Email Task on SSP (XO Only) still matches Figma + PRD Notes after the latest SSP decisions.</li>
+
+<li><strong>Salomon —</strong> KB mixed SMS/general messaging—only email-relevant consent/tenant-mail themes kept; Slack had no ticket-specific hit for HRREC-91946.</li>
+<li><strong>Deployment Agent —</strong> Align Edit Tenant Setup - Notifications + domain grants for this slice or recruiters see false negatives.</li>
+
+</ul></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91946, watch wrong affordances, silent blocks, or misleading tags first—tie each to a scenario title.</li>
+
+<li><strong>Salomon —</strong> Slack archive was generic for this id—no new defect class beyond Jira.</li>
+</ul></td>
+<td><ul>
+<li><strong>XO MCP —</strong> SUV keyword search from this summary returned mostly relationship noise—ask engineering for canonical services/classes for HRREC-91946.</li>
+<li><strong>XO MCP —</strong> conversationContextInstance layout + view GET referenced in Jira dev notes—good anchor for SSP task placement.</li>
+<li><strong>Peanut —</strong> Not queried — no per-row trigger.</li>
+</ul></td>
+<td><ul>
+<li><strong>Finding:</strong> Jira for HRREC-91946 covers [Initialisation] Recruiter can see Email Task on SSP (XO Only); lenses found no extra scenario worth adding this pass.</li>
+<li><strong>Recommended next step:</strong> Keep Jira as source of truth unless new dependencies appear in sprint planning.</li>
+</ul></td>
+<td><p>No incremental GWT for HRREC-91946: keep Jira scenarios as written; this pass did not find a new testable gap beyond [Initialisation] Recruiter can see Email Task on SSP (XO Only).</p></td>
+</tr>
+<tr><!-- gap-review HRREC-91948 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91948">HRREC-91948</a><br/>[Initialisation] Enabled SSP Growth/Expansion</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">High</ac:parameter><ac:parameter ac:name="colour">Yellow</ac:parameter></ac:structured-macro></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91948, confirm [Initialisation] Enabled SSP Growth/Expansion still matches Figma + PRD Notes after the latest SSP decisions.</li>
+<li><strong>Jira —</strong> Scenario 4 leaves reopen size ambiguous (&quot;???&quot;)—that is a refinement blocker for every grow/shrink sibling.</li>
+<li><strong>Salomon —</strong> KB mixed SMS/general messaging—only email-relevant consent/tenant-mail themes kept; Slack had no ticket-specific hit for HRREC-91948.</li>
+<li><strong>Deployment Agent —</strong> Align Edit Tenant Setup - Notifications + domain grants for this slice or recruiters see false negatives.</li>
+
+</ul></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91948, watch wrong affordances, silent blocks, or misleading tags first—tie each to a scenario title.</li>
+
+<li><strong>Salomon —</strong> Slack archive was generic for this id—no new defect class beyond Jira.</li>
+</ul></td>
+<td><ul>
+<li><strong>XO MCP —</strong> SUV keyword search from this summary returned mostly relationship noise—ask engineering for canonical services/classes for HRREC-91948.</li>
+
+<li><strong>Peanut —</strong> Not queried — no per-row trigger.</li>
+</ul></td>
+<td><ul>
+<li><strong>Finding:</strong> Primary tension is the Jira gap noted for HRREC-91948—refine before hard commit.</li>
+<li><strong>Recommended next step:</strong> Run a short refinement on the noted scenario gap, then re-size.</li>
+</ul></td>
+<td><p><strong>Scenario: Beyond Jira Scenario 4 — reopen width</strong></p>
+<p><strong>Given</strong> I expanded the SSP email panel to wide view then closed it</p>
+<p><strong>When</strong> I reopen the same task in the same session</p>
+<p><strong>Then</strong> the width matches the agreed default documented in refinement (not an ad hoc QA guess)</p></td>
+</tr>
+<tr><!-- gap-review HRREC-91974 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91974">HRREC-91974</a><br/>PH: Recruiter sees Empty state of email task if opened</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91974, confirm Recruiter sees Empty state of email task if opened still matches Figma + PRD Notes after the latest SSP decisions.</li>
+
+<li><strong>Salomon —</strong> KB mixed SMS/general messaging—only email-relevant consent/tenant-mail themes kept; Slack had no ticket-specific hit for HRREC-91974.</li>
+<li><strong>Deployment Agent —</strong> Align Edit Tenant Setup - Notifications + domain grants for this slice or recruiters see false negatives.</li>
+
+</ul></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91974, watch wrong affordances, silent blocks, or misleading tags first—tie each to a scenario title.</li>
+
+<li><strong>Salomon —</strong> Slack archive was generic for this id—no new defect class beyond Jira.</li>
+</ul></td>
+<td><ul>
+<li><strong>XO MCP —</strong> SUV keyword search from this summary returned mostly relationship noise—ask engineering for canonical services/classes for HRREC-91974.</li>
+
+<li><strong>Peanut —</strong> Not queried — no per-row trigger.</li>
+</ul></td>
+<td><ul>
+<li><strong>Finding:</strong> Jira for HRREC-91974 covers Recruiter sees Empty state of email task if opened; lenses found no extra scenario worth adding this pass.</li>
+<li><strong>Recommended next step:</strong> Keep Jira as source of truth unless new dependencies appear in sprint planning.</li>
+</ul></td>
+<td><p>No incremental GWT for HRREC-91974: keep Jira scenarios as written; this pass did not find a new testable gap beyond Recruiter sees Empty state of email task if opened.</p></td>
+</tr>
+<tr><!-- gap-review HRREC-91975 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91975">HRREC-91975</a><br/>PH: Recruiter receives a notification</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91975, confirm Recruiter receives a notification still matches Figma + PRD Notes after the latest SSP decisions.</li>
+
+<li><strong>Salomon —</strong> KB mixed SMS/general messaging—only email-relevant consent/tenant-mail themes kept; Slack had no ticket-specific hit for HRREC-91975.</li>
+<li><strong>Deployment Agent —</strong> Align Edit Tenant Setup - Notifications + domain grants for this slice or recruiters see false negatives.</li>
+
+</ul></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91975, watch wrong affordances, silent blocks, or misleading tags first—tie each to a scenario title.</li>
+<li><strong>Deployment Agent —</strong> My Conversations vs Bell routing depends on conversational email domain access—test both security postures.</li>
+<li><strong>Salomon —</strong> Slack archive was generic for this id—no new defect class beyond Jira.</li>
+</ul></td>
+<td><ul>
+<li><strong>XO MCP —</strong> SUV keyword search from this summary returned mostly relationship noise—ask engineering for canonical services/classes for HRREC-91975.</li>
+
+<li><strong>Peanut —</strong> Not queried — no per-row trigger.</li>
+</ul></td>
+<td><ul>
+<li><strong>Finding:</strong> Jira for HRREC-91975 covers Recruiter receives a notification; lenses found no extra scenario worth adding this pass.</li>
+<li><strong>Recommended next step:</strong> Keep Jira as source of truth unless new dependencies appear in sprint planning.</li>
+</ul></td>
+<td><p>No incremental GWT for HRREC-91975: keep Jira scenarios as written; this pass did not find a new testable gap beyond Recruiter receives a notification.</p></td>
+</tr>
+<tr><!-- gap-review HRREC-91978 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91978">HRREC-91978</a><br/>PH: Admin can enable or disable 2-way email as a comms channel</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91978, confirm Admin can enable or disable 2-way email as a comms channel still matches Figma + PRD Notes after the latest SSP decisions.</li>
+
+<li><strong>Salomon —</strong> KB mixed SMS/general messaging—only email-relevant consent/tenant-mail themes kept; Slack had no ticket-specific hit for HRREC-91978.</li>
+<li><strong>Deployment Agent —</strong> Align Edit Tenant Setup - Notifications + domain grants for this slice or recruiters see false negatives.</li>
+
+</ul></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91978, watch wrong affordances, silent blocks, or misleading tags first—tie each to a scenario title.</li>
+
+<li><strong>Salomon —</strong> Slack archive was generic for this id—no new defect class beyond Jira.</li>
+</ul></td>
+<td><ul>
+<li><strong>XO MCP —</strong> SUV keyword search from this summary returned mostly relationship noise—ask engineering for canonical services/classes for HRREC-91978.</li>
+
+<li><strong>Peanut —</strong> Not queried — no per-row trigger.</li>
+</ul></td>
+<td><ul>
+<li><strong>Finding:</strong> Jira for HRREC-91978 covers Admin can enable or disable 2-way email as a comms channel; lenses found no extra scenario worth adding this pass.</li>
+<li><strong>Recommended next step:</strong> Keep Jira as source of truth unless new dependencies appear in sprint planning.</li>
+</ul></td>
+<td><p>No incremental GWT for HRREC-91978: keep Jira scenarios as written; this pass did not find a new testable gap beyond Admin can enable or disable 2-way email as a comms channel.</p></td>
+</tr>
+<tr><!-- gap-review HRREC-91979 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91979">HRREC-91979</a><br/>PH: Recruiter does not have access to the compose email task</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Low</ac:parameter><ac:parameter ac:name="colour">Green</ac:parameter></ac:structured-macro></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91979, confirm Recruiter does not have access to the compose email task still matches Figma + PRD Notes after the latest SSP decisions.</li>
+
+<li><strong>Salomon —</strong> KB mixed SMS/general messaging—only email-relevant consent/tenant-mail themes kept; Slack had no ticket-specific hit for HRREC-91979.</li>
+<li><strong>Deployment Agent —</strong> Align Edit Tenant Setup - Notifications + domain grants for this slice or recruiters see false negatives.</li>
+
+</ul></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91979, watch wrong affordances, silent blocks, or misleading tags first—tie each to a scenario title.</li>
+
+<li><strong>Salomon —</strong> Slack archive was generic for this id—no new defect class beyond Jira.</li>
+</ul></td>
+<td><ul>
+<li><strong>XO MCP —</strong> SUV keyword search from this summary returned mostly relationship noise—ask engineering for canonical services/classes for HRREC-91979.</li>
+
+<li><strong>Peanut —</strong> Not queried — no per-row trigger.</li>
+</ul></td>
+<td><ul>
+<li><strong>Finding:</strong> Jira for HRREC-91979 covers Recruiter does not have access to the compose email task; lenses found no extra scenario worth adding this pass.</li>
+<li><strong>Recommended next step:</strong> Keep Jira as source of truth unless new dependencies appear in sprint planning.</li>
+</ul></td>
+<td><p>No incremental GWT for HRREC-91979: keep Jira scenarios as written; this pass did not find a new testable gap beyond Recruiter does not have access to the compose email task.</p></td>
+</tr>
+<tr><!-- gap-review HRREC-91980 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91980">HRREC-91980</a><br/>PH: Recruiter sees the panel expand when clicking Add to compose an email</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91980, confirm Recruiter sees the panel expand when clicking Add to compose an email still matches Figma + PRD Notes after the latest SSP decisions.</li>
+
+<li><strong>Salomon —</strong> KB mixed SMS/general messaging—only email-relevant consent/tenant-mail themes kept; Slack had no ticket-specific hit for HRREC-91980.</li>
+<li><strong>Deployment Agent —</strong> Align Edit Tenant Setup - Notifications + domain grants for this slice or recruiters see false negatives.</li>
+
+</ul></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91980, watch wrong affordances, silent blocks, or misleading tags first—tie each to a scenario title.</li>
+
+<li><strong>Salomon —</strong> Slack archive was generic for this id—no new defect class beyond Jira.</li>
+</ul></td>
+<td><ul>
+<li><strong>XO MCP —</strong> SUV keyword search from this summary returned mostly relationship noise—ask engineering for canonical services/classes for HRREC-91980.</li>
+
+<li><strong>Peanut —</strong> Not queried — no per-row trigger.</li>
+</ul></td>
+<td><ul>
+<li><strong>Finding:</strong> Jira for HRREC-91980 covers Recruiter sees the panel expand when clicking Add to compose an email; lenses found no extra scenario worth adding this pass.</li>
+<li><strong>Recommended next step:</strong> Keep Jira as source of truth unless new dependencies appear in sprint planning.</li>
+</ul></td>
+<td><p>No incremental GWT for HRREC-91980: keep Jira scenarios as written; this pass did not find a new testable gap beyond Recruiter sees the panel expand when clicking Add to compose an email.</p></td>
+</tr>
+<tr><!-- gap-review HRREC-91982 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91982">HRREC-91982</a><br/>PH: Recruiter opens the message to read and reply</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Low</ac:parameter><ac:parameter ac:name="colour">Green</ac:parameter></ac:structured-macro></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91982, confirm Recruiter opens the message to read and reply still matches Figma + PRD Notes after the latest SSP decisions.</li>
+
+<li><strong>Salomon —</strong> KB mixed SMS/general messaging—only email-relevant consent/tenant-mail themes kept; Slack had no ticket-specific hit for HRREC-91982.</li>
+<li><strong>Deployment Agent —</strong> Align Edit Tenant Setup - Notifications + domain grants for this slice or recruiters see false negatives.</li>
+
+</ul></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91982, watch wrong affordances, silent blocks, or misleading tags first—tie each to a scenario title.</li>
+
+<li><strong>Salomon —</strong> Slack archive was generic for this id—no new defect class beyond Jira.</li>
+</ul></td>
+<td><ul>
+<li><strong>XO MCP —</strong> SUV keyword search from this summary returned mostly relationship noise—ask engineering for canonical services/classes for HRREC-91982.</li>
+
+<li><strong>Peanut —</strong> Not queried — no per-row trigger.</li>
+</ul></td>
+<td><ul>
+<li><strong>Finding:</strong> Jira for HRREC-91982 covers Recruiter opens the message to read and reply; lenses found no extra scenario worth adding this pass.</li>
+<li><strong>Recommended next step:</strong> Keep Jira as source of truth unless new dependencies appear in sprint planning.</li>
+</ul></td>
+<td><p>No incremental GWT for HRREC-91982: keep Jira scenarios as written; this pass did not find a new testable gap beyond Recruiter opens the message to read and reply.</p></td>
+</tr>
+<tr><!-- gap-review HRREC-91985 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91985">HRREC-91985</a><br/>PH: Recruiter can compose an email to non-agency candidate</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91985, confirm Recruiter can compose an email to non-agency candidate still matches Figma + PRD Notes after the latest SSP decisions.</li>
+
+<li><strong>Salomon —</strong> KB mixed SMS/general messaging—only email-relevant consent/tenant-mail themes kept; Slack had no ticket-specific hit for HRREC-91985.</li>
+<li><strong>Deployment Agent —</strong> Align Edit Tenant Setup - Notifications + domain grants for this slice or recruiters see false negatives.</li>
+
+</ul></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91985, watch wrong affordances, silent blocks, or misleading tags first—tie each to a scenario title.</li>
+
+<li><strong>Salomon —</strong> Slack archive was generic for this id—no new defect class beyond Jira.</li>
+</ul></td>
+<td><ul>
+<li><strong>XO MCP —</strong> SUV keyword search from this summary returned mostly relationship noise—ask engineering for canonical services/classes for HRREC-91985.</li>
+
+<li><strong>Peanut —</strong> Not queried — no per-row trigger.</li>
+</ul></td>
+<td><ul>
+<li><strong>Finding:</strong> Jira for HRREC-91985 covers Recruiter can compose an email to non-agency candidate; lenses found no extra scenario worth adding this pass.</li>
+<li><strong>Recommended next step:</strong> Keep Jira as source of truth unless new dependencies appear in sprint planning.</li>
+</ul></td>
+<td><p>No incremental GWT for HRREC-91985: keep Jira scenarios as written; this pass did not find a new testable gap beyond Recruiter can compose an email to non-agency candidate.</p></td>
+</tr>
+<tr><!-- gap-review HRREC-91986 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91986">HRREC-91986</a><br/>PH: Recruiter expands/collapses the panel to check candidate profile (context stays?)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91986, confirm Recruiter expands/collapses the panel to check candidate profile (context stays?) still matches Figma + PRD Notes after the latest SSP decisions.</li>
+
+<li><strong>Salomon —</strong> KB mixed SMS/general messaging—only email-relevant consent/tenant-mail themes kept; Slack had no ticket-specific hit for HRREC-91986.</li>
+<li><strong>Deployment Agent —</strong> Align Edit Tenant Setup - Notifications + domain grants for this slice or recruiters see false negatives.</li>
+
+</ul></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91986, watch wrong affordances, silent blocks, or misleading tags first—tie each to a scenario title.</li>
+
+<li><strong>Salomon —</strong> Slack archive was generic for this id—no new defect class beyond Jira.</li>
+</ul></td>
+<td><ul>
+<li><strong>XO MCP —</strong> SUV keyword search from this summary returned mostly relationship noise—ask engineering for canonical services/classes for HRREC-91986.</li>
+
+<li><strong>Peanut —</strong> Not queried — no per-row trigger.</li>
+</ul></td>
+<td><ul>
+<li><strong>Finding:</strong> Jira for HRREC-91986 covers Recruiter expands/collapses the panel to check candidate profile (context stays?); lenses found no extra scenario worth adding this pass.</li>
+<li><strong>Recommended next step:</strong> Keep Jira as source of truth unless new dependencies appear in sprint planning.</li>
+</ul></td>
+<td><p>No incremental GWT for HRREC-91986: keep Jira scenarios as written; this pass did not find a new testable gap beyond Recruiter expands/collapses the panel to check candidate profile (context stays?).</p></td>
+</tr>
+<tr><!-- gap-review HRREC-91987 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91987">HRREC-91987</a><br/>PH: Recruiter can select To From Subject (UI) when composing an email</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91987, confirm Recruiter can select To From Subject (UI) when composing an email still matches Figma + PRD Notes after the latest SSP decisions.</li>
+
+<li><strong>Salomon —</strong> KB mixed SMS/general messaging—only email-relevant consent/tenant-mail themes kept; Slack had no ticket-specific hit for HRREC-91987.</li>
+<li><strong>Deployment Agent —</strong> Align Edit Tenant Setup - Notifications + domain grants for this slice or recruiters see false negatives.</li>
+
+</ul></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91987, watch wrong affordances, silent blocks, or misleading tags first—tie each to a scenario title.</li>
+
+<li><strong>Salomon —</strong> Slack archive was generic for this id—no new defect class beyond Jira.</li>
+</ul></td>
+<td><ul>
+<li><strong>XO MCP —</strong> SUV keyword search from this summary returned mostly relationship noise—ask engineering for canonical services/classes for HRREC-91987.</li>
+
+<li><strong>Peanut —</strong> Not queried — no per-row trigger.</li>
+</ul></td>
+<td><ul>
+<li><strong>Finding:</strong> Jira for HRREC-91987 covers Recruiter can select To From Subject (UI) when composing an email; lenses found no extra scenario worth adding this pass.</li>
+<li><strong>Recommended next step:</strong> Keep Jira as source of truth unless new dependencies appear in sprint planning.</li>
+</ul></td>
+<td><p>No incremental GWT for HRREC-91987: keep Jira scenarios as written; this pass did not find a new testable gap beyond Recruiter can select To From Subject (UI) when composing an email.</p></td>
+</tr>
+<tr><!-- gap-review HRREC-91988 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91988">HRREC-91988</a><br/>PH: Recruiter attaches documents (UI only)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91988, confirm Recruiter attaches documents (UI only) still matches Figma + PRD Notes after the latest SSP decisions.</li>
+
+<li><strong>Salomon —</strong> KB mixed SMS/general messaging—only email-relevant consent/tenant-mail themes kept; Slack had no ticket-specific hit for HRREC-91988.</li>
+<li><strong>Deployment Agent —</strong> Align Edit Tenant Setup - Notifications + domain grants for this slice or recruiters see false negatives.</li>
+
+</ul></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91988, watch wrong affordances, silent blocks, or misleading tags first—tie each to a scenario title.</li>
+<li><strong>Salomon —</strong> Internal attachment widget guidance (size/type allowlists) exists; confirm recruiting-specific caps for this UI slice match tenant system settings.</li>
+<li><strong>Salomon —</strong> Slack archive was generic for this id—no new defect class beyond Jira.</li>
+</ul></td>
+<td><ul>
+<li><strong>XO MCP —</strong> SUV keyword search from this summary returned mostly relationship noise—ask engineering for canonical services/classes for HRREC-91988.</li>
+
+<li><strong>Peanut —</strong> Not queried — no per-row trigger.</li>
+</ul></td>
+<td><ul>
+<li><strong>Finding:</strong> Jira for HRREC-91988 covers Recruiter attaches documents (UI only); lenses found no extra scenario worth adding this pass.</li>
+<li><strong>Recommended next step:</strong> Keep Jira as source of truth unless new dependencies appear in sprint planning.</li>
+</ul></td>
+<td><p>No incremental GWT for HRREC-91988: keep Jira scenarios as written; this pass did not find a new testable gap beyond Recruiter attaches documents (UI only).</p></td>
+</tr>
+<tr><!-- gap-review HRREC-91989 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91989">HRREC-91989</a><br/>PH: Recruiter can use the RTE and see the UI of buttons</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Low</ac:parameter><ac:parameter ac:name="colour">Green</ac:parameter></ac:structured-macro></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91989, confirm Recruiter can use the RTE and see the UI of buttons still matches Figma + PRD Notes after the latest SSP decisions.</li>
+
+<li><strong>Salomon —</strong> KB mixed SMS/general messaging—only email-relevant consent/tenant-mail themes kept; Slack had no ticket-specific hit for HRREC-91989.</li>
+<li><strong>Deployment Agent —</strong> Align Edit Tenant Setup - Notifications + domain grants for this slice or recruiters see false negatives.</li>
+
+</ul></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91989, watch wrong affordances, silent blocks, or misleading tags first—tie each to a scenario title.</li>
+
+<li><strong>Salomon —</strong> Slack archive was generic for this id—no new defect class beyond Jira.</li>
+</ul></td>
+<td><ul>
+<li><strong>XO MCP —</strong> SUV keyword search from this summary returned mostly relationship noise—ask engineering for canonical services/classes for HRREC-91989.</li>
+<li><strong>XO MCP —</strong> Message Builder configuration classes returned—ties RTE chrome to MB stack; confirm which toolbar buttons stay for MVP.</li>
+<li><strong>Peanut —</strong> Not queried — no per-row trigger.</li>
+</ul></td>
+<td><ul>
+<li><strong>Finding:</strong> Jira for HRREC-91989 covers Recruiter can use the RTE and see the UI of buttons; lenses found no extra scenario worth adding this pass.</li>
+<li><strong>Recommended next step:</strong> Keep Jira as source of truth unless new dependencies appear in sprint planning.</li>
+</ul></td>
+<td><p>No incremental GWT for HRREC-91989: keep Jira scenarios as written; this pass did not find a new testable gap beyond Recruiter can use the RTE and see the UI of buttons.</p></td>
+</tr>
+<tr><!-- gap-review HRREC-91990 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91990">HRREC-91990</a><br/>PH: Recruiter can select From address from list of valid email addresses</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91990, confirm Recruiter can select From address from list of valid email addresses still matches Figma + PRD Notes after the latest SSP decisions.</li>
+
+<li><strong>Salomon —</strong> KB mixed SMS/general messaging—only email-relevant consent/tenant-mail themes kept; Slack had no ticket-specific hit for HRREC-91990.</li>
+<li><strong>Deployment Agent —</strong> Align Edit Tenant Setup - Notifications + domain grants for this slice or recruiters see false negatives.</li>
+
+</ul></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91990, watch wrong affordances, silent blocks, or misleading tags first—tie each to a scenario title.</li>
+
+<li><strong>Salomon —</strong> Slack archive was generic for this id—no new defect class beyond Jira.</li>
+</ul></td>
+<td><ul>
+<li><strong>XO MCP —</strong> SUV keyword search from this summary returned mostly relationship noise—ask engineering for canonical services/classes for HRREC-91990.</li>
+
+<li><strong>Peanut —</strong> Not queried — no per-row trigger.</li>
+</ul></td>
+<td><ul>
+<li><strong>Finding:</strong> Jira for HRREC-91990 covers Recruiter can select From address from list of valid email addresses; lenses found no extra scenario worth adding this pass.</li>
+<li><strong>Recommended next step:</strong> Keep Jira as source of truth unless new dependencies appear in sprint planning.</li>
+</ul></td>
+<td><p>No incremental GWT for HRREC-91990: keep Jira scenarios as written; this pass did not find a new testable gap beyond Recruiter can select From address from list of valid email addresses.</p></td>
+</tr>
+<tr><!-- gap-review HRREC-91991 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91991">HRREC-91991</a><br/>PH: Recruiter does not see any tabs for non-agency candidate</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Low</ac:parameter><ac:parameter ac:name="colour">Green</ac:parameter></ac:structured-macro></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91991, confirm Recruiter does not see any tabs for non-agency candidate still matches Figma + PRD Notes after the latest SSP decisions.</li>
+
+<li><strong>Salomon —</strong> KB mixed SMS/general messaging—only email-relevant consent/tenant-mail themes kept; Slack had no ticket-specific hit for HRREC-91991.</li>
+<li><strong>Deployment Agent —</strong> Align Edit Tenant Setup - Notifications + domain grants for this slice or recruiters see false negatives.</li>
+
+</ul></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91991, watch wrong affordances, silent blocks, or misleading tags first—tie each to a scenario title.</li>
+
+<li><strong>Salomon —</strong> Slack archive was generic for this id—no new defect class beyond Jira.</li>
+</ul></td>
+<td><ul>
+<li><strong>XO MCP —</strong> SUV keyword search from this summary returned mostly relationship noise—ask engineering for canonical services/classes for HRREC-91991.</li>
+
+<li><strong>Peanut —</strong> Not queried — no per-row trigger.</li>
+</ul></td>
+<td><ul>
+<li><strong>Finding:</strong> Jira for HRREC-91991 covers Recruiter does not see any tabs for non-agency candidate; lenses found no extra scenario worth adding this pass.</li>
+<li><strong>Recommended next step:</strong> Keep Jira as source of truth unless new dependencies appear in sprint planning.</li>
+</ul></td>
+<td><p>No incremental GWT for HRREC-91991: keep Jira scenarios as written; this pass did not find a new testable gap beyond Recruiter does not see any tabs for non-agency candidate.</p></td>
+</tr>
+<tr><!-- gap-review HRREC-91992 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91992">HRREC-91992</a><br/>PH: Recruiter attaches non-supported files</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91992, confirm Recruiter attaches non-supported files still matches Figma + PRD Notes after the latest SSP decisions.</li>
+
+<li><strong>Salomon —</strong> KB mixed SMS/general messaging—only email-relevant consent/tenant-mail themes kept; Slack had no ticket-specific hit for HRREC-91992.</li>
+<li><strong>Deployment Agent —</strong> Align Edit Tenant Setup - Notifications + domain grants for this slice or recruiters see false negatives.</li>
+
+</ul></td>
+<td><ul>
+<li><strong>Jira —</strong> For HRREC-91992, watch wrong affordances, silent blocks, or misleading tags first—tie each to a scenario title.</li>
+<li><strong>Salomon —</strong> Internal attachment widget guidance (size/type allowlists) exists; confirm recruiting-specific caps for this UI slice match tenant system settings.</li>
+<li><strong>Salomon —</strong> Slack archive was generic for this id—no new defect class beyond Jira.</li>
+</ul></td>
+<td><ul>
+<li><strong>XO MCP —</strong> SUV keyword search from this summary returned mostly relationship noise—ask engineering for canonical services/classes for HRREC-91992.</li>
+
+<li><strong>Peanut —</strong> Not queried — no per-row trigger.</li>
+</ul></td>
+<td><ul>
+<li><strong>Finding:</strong> Jira for HRREC-91992 covers Recruiter attaches non-supported files; lenses found no extra scenario worth adding this pass.</li>
+<li><strong>Recommended next step:</strong> Keep Jira as source of truth unless new dependencies appear in sprint planning.</li>
+</ul></td>
+<td><p>No incremental GWT for HRREC-91992: keep Jira scenarios as written; this pass did not find a new testable gap beyond Recruiter attaches non-supported files.</p></td>
+</tr>

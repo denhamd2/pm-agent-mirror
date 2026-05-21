@@ -5,6 +5,9 @@ Long-form templates, HTML schema, and batching rules. Main workflow lives in `SK
 ## Contents
 
 - [Run tiers](#run-tiers-tier-a-full-contract-vs-tier-b-timeboxed)
+- [Dev lens vs PM lens — Message Builder and channel constraints (operator stance)](#dev-lens-vs-pm-lens--message-builder-and-channel-constraints-operator-stance)
+- [Tier A subset — Message Builder / compose–heavy (HRREC-82977)](#tier-a-subset--message-builder--composeheavy-hrrec-82977)
+- [Dev lens — KB backfill when XO is weak (narrow)](#dev-lens--kb-backfill-when-xo-is-weak-narrow)
 - [From-scratch execution](#from-scratch-execution-mandatory-unless-user-opts-out)
 - [Default Confluence target](#default-confluence-target)
 - [Subset / smoke / local-only runs](#subset--smoke--local-only-runs)
@@ -12,6 +15,7 @@ Long-form templates, HTML schema, and batching rules. Main workflow lives in `SK
 - [Companion channel cross-scan (013 / 2WE)](#companion-channel-cross-scan-013-2we) — stub; full contract: [`reference-companion-whatsapp.md`](reference-companion-whatsapp.md) (includes **Optional Peanut** anchors). **HRREC-82977:** step **2b** **mandatory** unless explicit opt-out—see annex **When to run**.
 - [Page structure](#page-structure-audience-non-technical-sr-recruiting-pm)
 - [Plain-language, story-specific, and source tags](#plain-language-story-specific-and-source-tags-mandatory)
+- [Inline source citations (mandatory for PM / QA / Dev)](#inline-source-citations-mandatory-for-pm--qa--dev)
 - [Salomon and DA — no separate Confluence columns](#salomon-and-da-no-separate-confluence-columns)
 - [Three personas — criticality contract](#three-personas-criticality-contract)
 - [Evidence grounding — no fabrication](#evidence-grounding-no-fabrication)
@@ -43,6 +47,50 @@ Use this so large epics stay **honest** without abandoning the seven-column Conf
 
 **Rules:** Default to **Tier A**. Move to **Tier B** only when the user names it or constraints are stated—**never** silently downgrade. Tier B still produces the same **page shape** (executive summary with **Top 5 gaps** / **Top 5 strengths**, epic notes, seven-column HTML, plus the **Possible missing stories** holistic table when epic-scoped—see **Possible missing stories (holistic suggestions)**); it trades MCP depth for speed **with disclosure**.
 
+**Tier B — Dev lens anchor (mandatory):** When **Dev lens** relies on a shared XO outcome, outage fallback, or thin metadata, each published **Dev** sentence must still open or tightly weave **`KEY` plus a short fragment of that row’s Jira summary** so engineering asks are not identical across sibling rows (pairs with **Story-specificity** below).
+
+## Dev lens vs PM lens — Message Builder and channel constraints (operator stance)
+
+**Explicit decision (for operators and automation):**
+
+1. **Product-level Message Builder behaviour** (what MB tends to do for templates, preview vs send, channel-specific tooling, admin template lifecycle, “what recruiters should expect”) belongs primarily in the **PM lens**, woven from **Salomon Internal Knowledge**, **Deployment Agent**, functional knowledge, and Jira—**not** repeated as ungrounded “the product works like X” inside **Dev** without a traceable source.
+
+2. **Dev lens** stays **implementation-adjacent**: what XO metadata (and gated Peanut) suggest about **where** the slice is built, **patterns/constraints** the scenarios skip, and **what to ask engineering** when metadata is missing. That is why many rows still end with an **engineering confirmation**—XO often returns MB **admin/configuration** hits or cross-channel **WATS** neighbours instead of a crisp answer for **this** Recruiting email slice.
+
+3. **Repetition is a failure mode, not a goal:** When many compose stories share weak XO, do **not** paste the same generic cross-channel question (e.g. email vs SMS embed constraints) on row after row—move the shared theme **once** to **Epic-level notes** or **Top 5 gaps**, then make each **Dev** line **story-keyed** (see **Tier B — Dev lens anchor** and **Story-specificity**).
+
+4. **When you need MB guidance without an engineering meeting:** Prefer **Tier A** (or the **Tier A subset** below) with **narrow** Salomon queries and **Jira-anchored** XO strings—not invented Dev prose.
+
+## Tier A subset — Message Builder / compose–heavy (HRREC-82977)
+
+Use when the full 44-key epic pass was **Tier B** or XO-light and the PM wants **evidence-backed** depth on **Message Builder / SSP compose** slices only (still **fresh Jira** this session for each row in the subset).
+
+**Example JQL (adjust keys to your refinement):** stories whose summaries mention compose chrome, RTE, header, attachment, discard, or sliding side panel—e.g. `(summary ~ "Message Builder" OR summary ~ "compose" OR summary ~ "Rich text" OR summary ~ "sliding side panel" OR summary ~ "attachment" OR summary ~ "discard") AND project = HRREC AND issuetype = Story AND "Epic Link" = HRREC-82977` (validate JQL field names in your Jira). A **manual key band** (e.g. HRREC-91982–91999) is acceptable if the PM names it.
+
+**Salomon Internal Knowledge (per row in subset):** keep future-state framing; add **one** narrowing clause tied to that row’s summary, e.g. *“…for **email** Message Builder embeds in the recruiting sliding side panel (not SMS conversational chrome): preview vs send, CRF/field resolution, or template lifecycle risks.”*
+
+**XO MCP:** run at least **two** attempts per row—first pass uses **summary nouns** from Jira; second pass uses any **class**, **WS**, **REST**, or **task** names visible in the description (`cl:…`, `ws:…`, or plain feature terms per **Net-new preamble (XO MCP)**). If the story names an integration surface, consider **`hopper_search`** / **`service_description_get`** on that surface (read-only).
+
+**Publish target:** follow **Subset / smoke / local-only runs** unless the PM explicitly agrees to **replace** the rolling page with this partial matrix.
+
+## Dev lens — KB backfill when XO is weak (narrow)
+
+**Purpose:** Reduce hollow Dev cells that only repeat a generic “email vs SMS Message Builder” ask when **XO** returned nothing useful, **without** turning **Dev** into a second **PM** column or violating **Evidence grounding — no fabrication**.
+
+**Published Dev lens may include at most one short clause paraphrasing Salomon Internal Knowledge** (same session, same row) **only when all** of the following hold:
+
+1. **XO exhausted:** After the honest search pattern in **Net-new preamble (XO MCP)** (including a second, narrower attempt when the first pass is generic/off-topic), the row’s **implementation-area** outcome is **no substantive hit** for *this* slice **or** hits are **clearly off-topic** (e.g. only unrelated-channel WATS or unrelated convenience tasks)—and internal notes say so honestly.
+
+2. **KB was on-topic for this row:** Salomon Internal Knowledge **already ran** for this key during **PM lens** synthesis and returned at least one hit that **directly** informs implementation risk for *this* story (preview vs send, template hydration / CRF scope, channel-specific MB behaviour, server vs client responsibility—not generic HR marketing pages).
+
+3. **Supplementary only:** The **Dev** sentence still contains a **concrete engineering confirmation** (ownership, binding, class/workset, REST contract, or “where this lands in XO”)—the KB clause explains **why** that confirmation matters for hiring workflows; it does **not** replace the ask.
+
+4. **No PM paste:** Do **not** duplicate the full **PM** sentence or stack multiple KB claims in **Dev**.
+
+5. **No legacy tag starters:** Same **Banned string check** as other cells—no `Salomon (Knowledge) —` (or other em-dash **internal** tag starters) in the published **Dev** cell. **Whitelist** `[Salomon]`, `[XO MCP]`, `[Peanut]`, etc., per **Inline source citations** are **required** when those sources informed the sentence.
+
+**Internal authoring:** You may note `Salomon (Knowledge) → Dev backfill (XO weak)` in scratch notes for traceability; **Evidence grounding** treats the paraphrase as traceable to the **same-run** Salomon hit used for PM on that key.
+
 ## From-scratch execution (mandatory unless user opts out)
 
 **Tier A** runs must satisfy items **1–5** below per in-scope story. **Tier B** runs relax Salomon / Dev lens depth per **Run tiers** but still require fresh Jira (item **1**) and honest per-row source lines.
@@ -56,10 +104,10 @@ When the user says **run** the gap review (e.g. `/user-story-gap-review`, “rer
 **Per story in this run**, before writing that row’s PM/QA/**Dev lens** cells:
 
 1. **Ingest** current Jira text (`getTicketDetails` or `jira_details_tool`) for that key in this session (**skip** keys excluded under **Scope exclusions**, e.g. **AG:** / **RN:** doc-writer tickets).  
-2. **Salomon** — **Tier A:** at least one `search_workday_internal_knowledge` query whose preamble + keywords are tied to **that** story’s summary/AC (theme passes may precede, but do not replace story-level hits). If the first query returns **only off-topic** hits, run a **narrower** second query for **that** key or record a single honest **`Salomon —`** “no on-topic precedent” line—see **Net-new preamble (Salomon)**. **Tier B:** satisfy with **documented theme queries** plus per-row **Salomon —** lines per **Tier B alignment** below. **Skip** if the key is excluded.  
-3. **Dev lens — XO MCP** — at least one `search` (or justified `hopper_search` / `service_description_get`) attempt; the **Dev lens** cell must reflect **this** attempt’s outcome with **`XO MCP —`** bullets. **Skip** if the key is excluded.  
-4. **Dev lens — Peanut MCP (optional, signal-gated)** — **Default: do not call** Peanut for this key. Invoke **`collectBugData`** / **`searchCode`** only when **When to invoke Peanut (2WE per-row)** in **Net-new preamble (Peanut MCP)** applies (**Tier A**: cap **1–2** read-only calls per story when triggered; **Tier B**: default **no** per-row `collectBugData`—honest **`Peanut — Not queried — …`** or one epic-scoped batch if the user explicitly asked). Always include an explicit **`Peanut —`** line (**Peanut — taxonomy (gap review)**)—**no** invented commit or PR detail. **Skip** if the key is excluded.
-5. **DA** — at least one `ask_deployment_agent` question that names the story context (DA may be **batched** across several keys in one message, but each story must receive distinct treatment in synthesis—not a single generic paragraph pasted into every row). **Skip** if the key is excluded.
+2. **Functional knowledge** — Review uploaded functional knowledge files for this story's domain. This is the baseline for both PM and QA synthesis. Always run.
+3. **PM lens sources** — Run in this order: (a) Epic birds-eye scan: review all in-scope story summaries for cross-story patterns and coverage gaps. (b) Salomon Internal Knowledge: 2–3 queries with future-state framing (what might be missing from the proposed scenarios given current functionality). (c) Deployment Agent: one question with future-state framing (what might be risky for typical tenant configurations given the proposed scenarios). (d) WhatsApp Jiras when cross-scan ran. Synthesise into PM sentence. Set WhatsApp match flag.
+4. **Dev lens — XO MCP** — Search for the implementation area of this story. Look for patterns or constraints the current scenarios may not cover. Always run. State findings or honest absence in Dev sentence.
+5. **QA + Dev conditional sources** — Run only when WhatsApp match flag is TRUE: (a) Salomon Jira index: query cited WhatsApp keys. (b) Salomon Slack: query cited WhatsApp keys. (c) Peanut MCP: query cited WhatsApp keys. Skip all three when WhatsApp match flag is FALSE.
 
 Then synthesise PM/QA (with Salomon/DA woven in), **Dev lens**, **Verdict**, and **Suggested missing BDD** **from those fresh inputs**; assign **Gap Likelihood** (column 2) **last**, using **only** **Verdict** + suggested missing BDD per **Gap likelihood — per story (Verdict + BDD)**. Epic-level notes and the PM executive summary must be **re-derived** from the matrix you just produced (and this run’s Jira list), not copied from an older report file.
 
@@ -80,7 +128,7 @@ If **time or token limits** prevent full coverage, state that plainly in chat an
 
 Use when the user reviews a **subset** of an epic (e.g. “first N stories”), asks for a **smoke** pass, or wants output **without** overwriting the default rolling Confluence page.
 
-**Executive-summary preface (mandatory for these runs):** include **≤2** short items that state:
+**Executive-summary preface (mandatory for these runs):** include **≤2** short items that state (or **≤3** when **Global XO MCP outage** item **(3)** from **Page structure** also applies—fold into a run-scope line if you must stay at two):
 
 1. **Run scope** — explicit list or range of **in-scope** `HRREC-…` keys (and note skipped **AG:** / **RN:** keys in chat or here if applicable).
 2. **Publish target** — one of: **Confluence skipped** (local-only), **`pageId` …** (scratch or alternate page—**replace** only that target), or **rolling replace confirmed** (only when the user explicitly agrees to overwrite the default rolling page with this subset—otherwise do **not** `replace` a full-epic rolling page with a partial table).
@@ -116,7 +164,7 @@ For **Run tiers**, **From-scratch execution**, **Page structure**, **Gap likelih
 Order content top-to-bottom:
 
 1. **PM executive summary (portfolio view)** — `h2` **“Executive summary (for PM)”**. This section is the **epic-wide headline for you**: what to worry about and what is already in good shape—**not** a second copy of every row’s lenses.
-   - **Preface (when applicable):** before the two lists, a **short** `<ul>` with **at most two** `<li>` items: **(1)** **Run tier** (Tier **B** disclosure is **mandatory** when applicable—see **Run tiers**); optionally add the **Gap Likelihood** reader note in the same `<li>` when helpful: *“Gap Likelihood reflects **Verdict** + **suggested missing BDD** only—not a separate persona-tension score.”* **(2)** **Scope** (e.g. skipped **AG:** / **RN:** keys) and/or **draft replay** caveat when Status lozenges come from a repo formatter **without** per-row Verdict+BDD rubric (see **Gap column (2)**). Tier **A** may omit the preface if nothing extra needs saying.
+   - **Preface (when applicable):** before the two lists, a **short** `<ul>` with **at most two** `<li>` items, **or up to three** only when **(3)** applies: **(1)** **Run tier** (Tier **B** disclosure is **mandatory** when applicable—see **Run tiers**); optionally add the **Gap Likelihood** reader note in the same `<li>` when helpful: *“Gap Likelihood reflects **Verdict** + **suggested missing BDD** only—not a separate persona-tension score.”* **(2)** **Scope** (e.g. skipped **AG:** / **RN:** keys) and/or **draft replay** caveat when Status lozenges come from a repo formatter **without** per-row Verdict+BDD rubric (see **Gap column (2)**). **(3) Global XO MCP outage (mandatory when applicable):** when **every** in-scope `user-xo-mcp` `search` attempt in this session failed (transport, authentication, or upstream error—not merely empty YAML), add **one** `<li>` stating that **XO MCP did not return SUV metadata this session**, so **Dev lens** is engineering follow-up only and readers must **not** infer per-story SUV metadata gaps. **Omit** the entire preface `<ul>` only when **(1)**–**(2)** add nothing material **and** **(3)** does not apply. If **only (3)** applies, emit a **one-item** preface with that line.
    - **`h3` Top 5 gaps (epic)** — ordered `<ul>`, **at most five** `<li>`. **Default order:** gaps **before** strengths (action-first). Each line: **one sentence**, plain English, **actionable** (what to refine, decide, spike, or align in a session). Optional trailing **story keys** in parentheses when that sharpens ownership (e.g. `(HRREC-91975, HRREC-91997)`). **Do not pad** toward five—use fewer lines when the evidence does not support five distinct epic-level gaps.
    - **`h3` Top 5 strengths (epic)** — ordered `<ul>`, **at most five** `<li>`. Same one-sentence rule. Each strength must tie to **evidence** from this run (e.g. repeated clarity in Jira across keys, consistent Salomon/DA themes, or stable **Dev lens** signals)—**no generic praise** or filler.
    - **Plain language only**—no stack traces, no unexplained acronyms; if you mention a Workday artefact (e.g. “security domain”, “message template”), one short clause on why it matters to recruiters or candidates. **Epic-wide testing themes** (Reply-To staging, bell vs inbox, attachment limits, template health, purge scope) belong **once** in this summary or in **Epic-level notes**—not copy-pasted into every story row (see **Lens column brevity** and **Story-specificity**).
@@ -129,7 +177,9 @@ Order content top-to-bottom:
 
 ## Plain-language, story-specific, and source tags (mandatory)
 
-**Story-specificity (anti–copy-paste):** PM, QA, and **Dev lens** cells **fail the skill** if the same multi-line boilerplate appears unchanged on **multiple** sibling rows. Epic-level reminders (mail redirect, notification types, attachment limits, purge breadth, template override) live in the **Executive summary (Top 5 gaps / Top 5 strengths)** and **Epic-level notes**—each story row must tie advice to **that** story’s summary, scenarios, and tensions. Respect **Lens column brevity** caps so rows stay scannable.
+**Story-specificity (anti–copy-paste):** PM, QA, and **Dev lens** cells **fail the skill** if the same multi-line boilerplate appears unchanged on **multiple** sibling rows. Epic-level reminders (mail redirect, notification types, attachment limits, purge breadth, template override) live in the **Executive summary (Top 5 gaps / Top 5 strengths)** and **Epic-level notes**—each story row must tie advice to **that** story’s summary, scenarios, and tensions. Respect **Lens column brevity** caps so rows stay scannable. **Exception (global XO outage):** when the preface includes **(3) Global XO MCP outage** per **Page structure**, you may still use a **short shared opener** that XO was unavailable—**but** each **Dev lens** must then diverge with **one story-keyed clause** (summary nouns from that row’s Jira) so the engineering ask is not identical across half the grid; do not paste the same long fallback on many rows without that anchor.
+
+**Generic cross-channel Dev ban:** Do **not** publish the **same** generic engineering question (for example, “how Message Builder embed constraints differ for email versus SMS”) verbatim on **more than one** sibling row. State that theme **once** under **Epic-level notes** or **Top 5 gaps**, then vary each **Dev** line with **`KEY` + summary-specific nouns** and the row’s XO/KB outcome (see **Tier B — Dev lens anchor** and **Dev lens — KB backfill when XO is weak (narrow)**).
 
 **Plain language:** prefer recruiter/admin/candidate wording. When a source uses jargon, **translate once** in the same bullet, e.g. “**REST / server contract** → the behind-the-scenes save or send check should match what the screen promises.” Avoid dumping internal class names, WIDs, or tool acronyms unless one short plain-English gloss is included.
 
@@ -137,16 +187,47 @@ Order content top-to-bottom:
 
 Before shipping the Confluence table (and mirrored chat summary), **each story row** must pass this check: *Could I read the **PM** and **QA** lens cells aloud to a hiring manager who does not ship software, in about **90 seconds or less per row**, without stopping to define jargon?*
 
+- Treat **bracket citations** (`[Functional knowledge: …]`, `[Salomon]`, `[DA]`, … on **PM**; `[Jira]` and others on **QA** where applicable) as **skimmable source hints**—they should not dominate the cell or force jargon; if they hurt read-aloud flow, merge sources into fewer bracket groups (still within the **citation budget**).
 - If a bullet **opens** like a test script (**Assert…**, **Prove…**, **Verify…**, **Measure…** as the leading word) or is mostly **acronyms without a one-line “why it matters to hiring” gloss**, rewrite before publish.
-- If the **Jira —** bullet is only the **story title pasted again**, replace it with one sentence on **what is unclear, risky, or missing** for *this* slice in recruiter/admin/candidate terms (still tagged **Jira —**).
+- If the **published** **PM lens** sentence is only the **story title** restated, replace it with one sentence on **what is unclear, risky, or missing** for *this* slice in recruiter/admin/candidate terms (still grounded in Jira—see **Source tags** for internal routing).
+
+### Inline source citations (mandatory for PM / QA / Dev)
+
+Published **PM lens**, **QA lens**, and **Dev lens** Storage HTML cells must make **evidence traceable to a Sr. PM** using **whitelist bracket tokens** placed **after** the clause or sentence they support (never as leading bullets). This is **in addition to** plain-language synthesis—not a paste of MCP dumps.
+
+**PM lens — do not cite `[Jira]`:** Fresh **Jira ingest** for every row is mandatory baseline work (**From-scratch execution**); it is **implied** and must **not** appear as a bracket token in the **PM** column. PM citations call out **non-Jira** evidence only (functional knowledge, Salomon KB, Deployment Agent, epic scan, WhatsApp companion, optional PRD path).
+
+**Whitelist — use these exact bracket forms in published cells** (semicolon inside one bracket group is allowed to combine sources for one sentence):
+
+| Token | When to cite |
+|--------|----------------|
+| `[Jira]` | **QA lens** (and **Dev lens** only when a clause truly rested on this row’s **ingested** Jira text beyond XO/KB/Peanut). **Do not** use `[Jira]` in the **PM lens**. |
+| `[Salomon]` | Any clause grounded in **Salomon Internal Knowledge** hits this run. In **Dev**, cite `[Salomon]` **only** when **Dev lens — KB backfill when XO is weak (narrow)** applies (same-run KB as PM for that key). |
+| `[DA]` | **Deployment Agent** (`ask_deployment_agent`) — `[DA]` is the short form for “Deployment Agent” in citations. |
+| `[Functional knowledge: …]` | When a clause used **uploaded** functional knowledge or an explicitly loaded doc path / **050**-class rule: use the **file name** or short rule label inside the brackets (truncate long file names with `…` in the middle if needed). **Omit** this token only for clauses that did not use functional knowledge. |
+| `[Epic scan]` | Optional — clause is clearly from **epic birds-eye** scan only (cross-story patterns, not ticket-local prose). |
+| `[PRD: …]` | **PM lens** when a **named** PRD or initiative doc path was **actually loaded** for this run (repo path, user attachment, or Jira Notes link you read); use a short label inside the brackets. **Do not** invent PRD claims you did not read (**Evidence grounding**). |
+| `[WhatsApp companion: HRREC-nnnnn]` | When step **2b** companion evidence informed that clause; include **at least one** cited `HRREC-…` key (see [`reference-companion-whatsapp.md`](reference-companion-whatsapp.md) **WhatsApp match flag**). |
+| `[Salomon Jira]` | **QA lens:** clause from **Salomon Jira index** (`jira_search_tool`) against cited WhatsApp keys (WhatsApp match TRUE). |
+| `[Salomon Slack]` | **QA lens:** clause from **Salomon Slack** (`slack_archive_search`) against cited WhatsApp keys (WhatsApp match TRUE). |
+| `[XO MCP]` | **Dev lens:** every row where XO was run (including “no useful hit” or outage-honest wording). |
+| `[Peanut]` | **Dev lens:** when WhatsApp match is TRUE and Peanut was invoked, **or** when you state honest skip/failure in prose **without** using banned `Peanut — …` taxonomy strings. |
+
+**QA — Salomon Jira vs Slack:** When WhatsApp match is TRUE and the sentence blends both, prefer one group `[Salomon Jira; Salomon Slack]`. If only one tool informed a clause, use `[Salomon Jira]` or `[Salomon Slack]` for that clause.
+
+**Citation budget:** **At most four** bracket groups **total** per PM / QA / **Dev** cell (count each `[…]` as one group, including `[Functional knowledge: x]`). Prefer **one trailing group per sentence** when a sentence blends sources, e.g. `… [Functional knowledge: CONTEXT.md; Salomon]` on **PM**, or `… [Jira; Salomon Jira]` on **QA** when applicable, rather than many micro-brackets mid-clause.
+
+**Verdict / BDD / executive summary:** **No** mandatory bracket scheme in this version—keep those sections readable as today.
+
+**Banned string check (mandatory):** Before publishing, confirm **none** of the following **legacy** strings appear in any PM, QA, Dev, or Verdict cell: 'Salomon (Knowledge) —', 'Salomon (Jira index) —', 'Salomon (Slack) —', 'Deployment Agent —', 'Cross-channel (WhatsApp backlog) —', 'Batched NET-NEW', 'jira_search_tool', 'slack_archive_search', 'snapshot_as_of', 'manifest_complete', 'WHATSAPP_COMPANION_CORPUS_SNAPSHOT', 'Peanut — Not queried', 'Peanut — Unavailable', 'Tier B sweep'. **Whitelist** tokens such as `[Salomon]` and `[DA]` are **required** for PM/QA/Dev per this section and are **not** violations. If any **legacy** string appears, rewrite before publish.
 
 ### QA lens — user-visible risk first (mandatory)
 
-The QA column stays **evidence-backed** (Salomon/DA/Jira tags) but must **read like a Sr PM taking questions to refinement**, not an automation script.
+The QA column stays **evidence-backed** (**internal** Salomon/Jira/Slack routing) but must **read like a Sr PM taking questions to refinement**, not an automation script.
 
-1. **Order of thought:** When describing failure hunting, put **what the recruiter or candidate would notice first** (wrong copy, missing task, stuck spinner, misleading “sent” state, blocked send, privacy-unsafe leak), **then** (same or following bullet) how QE could exercise it if needed.
-2. **Banned leading words** on QA bullets (after the source tag): do **not** start the body with **Assert**, **Prove**, **Verify**, **Measure**, or **Trace** as the first word. Prefer **Recruiters see…**, **Candidates experience…**, **Risk:**, **Edge case:**, **Watch for…**.
-3. **At most one** bullet per row may read like a lab step; it must still name the **user-visible** symptom it guards against.
+1. **Order of thought:** When describing failure hunting, put **what the recruiter or candidate would notice first** (wrong copy, missing task, stuck spinner, misleading “sent” state, blocked send, privacy-unsafe leak), **then** (same or following **clause**) how QE could exercise it if needed.
+2. **Banned leading words** on the **published** QA sentence: do **not** start with **Assert**, **Prove**, **Verify**, **Measure**, or **Trace** as the first word. Prefer **Recruiters see…**, **Candidates experience…**, **Risk:**, **Edge case:**, **Watch for…**.
+3. **At most one** **clause** per row may read like a lab step; it must still name the **user-visible** symptom it guards against.
 
 ### Tier B — Salomon / Deployment Agent sentence reuse cap
 
@@ -165,18 +246,27 @@ Tier B allows **theme-batched** Salomon/DA; it does **not** allow **verbatim pas
 
 ### Source tags in PM and QA columns
 
-Structure PM and QA as `<ul>` bullets. **Each bullet must start with a bold source label** so a non-technical PM can see provenance:
+Source tags are **internal authoring labels** that route MCP evidence during synthesis (`Salomon (Knowledge) —`, `XO MCP —`, etc.). They determine which tool output feeds PM, QA, and Dev during **step 6–7** authoring. **Published** PM / QA / **Dev lens** cells must **not** use legacy **em-dash tag starters** as bullets or sentence prefixes (see **Banned string check**). Instead, **append whitelist bracket citations** per **Inline source citations (mandatory for PM / QA / Dev)** after each clause or sentence so a Sr. PM can see what backed the prose. Keep the routing table below as an **authoring** reference; **strip** legacy tag strings and **replace** with bracket tokens before publish.
 
-| Tag | When to use |
-|-----|-------------|
-| **Jira —** | Findings grounded in this ticket’s description, acceptance criteria, or scenarios (including thin-spec). |
-| **Salomon —** | Internal knowledge hits (or explicit “no useful precedent returned”). **Paraphrase** one or two ideas that matter **for this story**—never paste the same long Salomon paragraph on every row. |
-| **Deployment Agent —** | Tenant realism, staging, misconfiguration, or “how customers actually run Recruiting” from DA. **Story-specific** phrasing only. |
-| **Functional knowledge —** | Stable product rules from workspace **050-functional-knowledge** (or equivalent) that apply to this slice—state the rule in plain English, not rule-file jargon. |
-| **Other —** | Synthesis, **Verdict**/BDD tension, or user-prompt context—use sparingly. |
-| **Cross-channel (WhatsApp backlog) —** | **Only** when **Companion channel cross-scan (013 / 2WE)** ran: **≤1** bullet per row in **PM or QA**; theme tied to **this** 2WE slice, grounded in the **companion evidence** used this run—**manifest-only:** snapshot **Captured excerpts** (and manifest scope) only; **live delta with snapshot:** excerpts **plus** `getTicketDetails` for **new** delta keys (and any stable keys you refreshed); **full live:** `getTicketDetails` text per key—naming **which epic(s)** / example keys and **why email may differ**—see [`reference-companion-whatsapp.md`](reference-companion-whatsapp.md). **Never** imply WhatsApp bugs prove email defects. |
+**Authoring reference only — do not emit legacy `Source —` tag starters in published Confluence cells:**
 
-**Dev lens column:** one `<ul>`. Lead with **`XO MCP —`** bullets (plain English: what was searched, what was / was not found). Optional **`XO MCP — risk:`** for risk-from-absence. Add **`Peanut —`** per **Peanut — taxonomy (gap review)** when Peanut ran, was **Not queried**, **Unavailable**, or returned no useful signal—**paraphrase** only what matters for **this** story when there is a signal. Do **not** use the PM/QA tag set inside **Dev lens** unless you are explicitly quoting a cross-source tension.
+| Source | Feeds | Trigger | Query target |
+|--------|-------|---------|--------------|
+| Uploaded functional knowledge | PM + QA | Always | Story domain |
+| PRD (when loaded) | PM | Always when available | Story scope |
+| Epic birds-eye scan | PM | Always | All in-scope stories |
+| Salomon Internal Knowledge | PM | Always | Future-state framing |
+| Salomon Internal Knowledge | Dev | **Optional** — only when **Dev lens — KB backfill when XO is weak (narrow)** gate passes; same-run hit already used for this row’s PM synthesis | Implementation-constraint subset only (e.g. preview vs send, CRF scope)—**at most one** paraphrased clause in the published **Dev** sentence |
+| Deployment Agent | PM | Always | Future-state framing |
+| WhatsApp Jiras (cross-scan) | PM | When cross-scan ran | Cited WhatsApp keys |
+| Salomon Jira index | QA | WhatsApp match flag TRUE | Cited WhatsApp keys only |
+| Salomon Slack | QA | WhatsApp match flag TRUE | Cited WhatsApp keys only |
+| XO MCP | Dev | Always | Implementation area |
+| Peanut MCP | Dev | WhatsApp match flag TRUE | Cited WhatsApp keys only |
+
+**WhatsApp match flag:** Set to TRUE during PM lens synthesis when the **published** PM sentence includes a cited WhatsApp **`HRREC-…`** key **either** in legacy parenthetical form `(HRREC-nnnnn)` **or** in bracket form `[WhatsApp companion: HRREC-nnnnn]` (see [`reference-companion-whatsapp.md`](reference-companion-whatsapp.md)). Gates QA conditional sources (Salomon Jira index, Salomon Slack) and Dev conditional source (Peanut). When FALSE, those three sources do not run — no Salomon Jira/Slack in QA, no Peanut in Dev.
+
+**Dev lens column:** While authoring, one `<ul>` of **`XO MCP —`** bullets for the implementation-area search (plain English: what region was searched, what was / was not found; optional **`XO MCP — risk:`** for risk-from-absence). When WhatsApp match flag is TRUE, add **`Peanut —`** bullets per **Peanut — taxonomy (gap review)**. When the **Dev lens — KB backfill when XO is weak (narrow)** gate passes, you may add **one** internal scratch bullet (not for publish) noting which **on-topic** Salomon excerpt supports a single plain-language clause in the published **Dev** sentence. **Published** cell is **one** or **two** synthesized sentences per **Output format contract** in [`SKILL.md`](SKILL.md), each with **whitelist bracket citations** per **Inline source citations**—no legacy em-dash tag starters and no raw tool-dump lines in publish.
 
 ### Verdict column (replaces “Severity / open questions”)
 
@@ -188,6 +278,8 @@ Structure PM and QA as `<ul>` bullets. **Each bullet must start with a bold sour
 
 **Format:** exactly **two** bullets in one `<ul>`, **one sentence each** (aim ≤ ~140 characters per sentence; slightly over only if unavoidable):
 
+**Verdict label:** Before the two bullets, emit a single coloured label on its own line indicating overall gap severity: 🔴 Very High / 🟡 High / 🔵 Medium / 🟢 Low / ⚪ Very Low. This label matches the Gap Likelihood lozenge assigned in column 2 and gives the PM an instant visual signal when skimming the table.
+
 ```html
 <ul>
   <li><strong>Finding:</strong> …</li>
@@ -198,7 +290,7 @@ Structure PM and QA as `<ul>` bullets. **Each bullet must start with a bold sour
 - **Finding:** one plain-language sentence summarising the **overall** outcome of the row (thin spec, alignment vs tension, or biggest thing to remember)—**only** what evidence supports.
 - **Recommended next step:** one concrete **next** action when a gap exists (refine Jira, short decision meeting, spike, align with sibling story X). When no material gap surfaced, use an honest **no-action** line (see **Evidence grounding — no fabrication**).
 
-**Cross-channel (WhatsApp) synthesis:** When this row includes a **`Cross-channel (WhatsApp backlog) —`** bullet in **PM or QA**, **Finding** may compress that cross-initiative tension **together with** this story’s **2WE** Jira / lens evidence in one sentence—still **no** “WhatsApp bug ⇒ email defect” implication; still obey the **Skimming contract** (no pasted or long paraphrase lists from the lens columns).
+**Cross-channel (WhatsApp) synthesis:** When this row’s **PM sentence** includes a WhatsApp signal via **parenthetical** `(HRREC-…)` **or** bracket `[WhatsApp companion: HRREC-nnnnn]`, **Finding** may compress that cross-initiative tension **together with** this story’s **2WE** Jira / lens evidence in one sentence—still **no** “WhatsApp bug ⇒ email defect” implication; still obey the **Skimming contract** (no pasted or long paraphrase lists from the lens columns).
 
 Avoid severity codes (P1/P2) unless the team already standardises on them; prefer plain phrases like “Worth deciding before build” / “Lower risk once … is clarified”.
 
@@ -211,28 +303,29 @@ Under **Tier A**, run Salomon and DA at the per-story (or row-anchored batched D
 | **Salomon** | Product patterns, constraints, admin/compliance precedents, “what we usually document for customers” | Past bugs, regression patterns, support-heavy failure modes, edge cases called out in internal threads |
 | **DA** | Tenant setup reality, best-practice limits, config vs product boundary, how recruiters/admins typically operate | How to exercise the story in a realistic tenant, misconfiguration gotchas, perf/limit assumptions for test planning |
 
-When Salomon or DA returns **nothing useful**, state that **inside** a PM or QA bullet (e.g. “Internal search did not surface precedent—treat as design risk.”) rather than leaving a whole column empty.
+When Salomon or DA returns **nothing useful**, state that **inside** the **synthesised** PM/QA cell (plain-language absence), not as a silent empty column.
 
 ## Three personas — criticality contract
 
 Each row’s **PM / QA / Dev lens** cells must reflect **deliberate skepticism** (Salomon/DA are **part of** PM/QA, not extra columns):
 
-- **PM lens** — Challenge slice completeness: who is left out, what “done” avoids saying, business / compliance implications, rollout and comms risks—**plus** Salomon product-side precedent and DA tenant/config realism (see table above). **Use source-tagged bullets** as in **Plain-language, story-specific, and source tags**.
-- **QA lens** — Assume brittle UI and messy tenant data; hunt **edge cases, negative paths, state transitions**, accessibility, locale, and “how would we know it failed in prod?”—**plus** Salomon bug/failure patterns and DA operational test realism (see table above). **Use source-tagged bullets**; no copy-pasted epic-wide QA checklist across rows. Follow **QA lens — user-visible risk first** under **Plain-language, story-specific, and source tags** (banned test-script openers; user-visible symptom before lab detail).
-- **Dev lens** — Challenge feasibility and fit: adjacent services/metadata (**XO MCP**), plus **Peanut** only per **When to invoke Peanut (2WE per-row)** (similar issues, narrow repo touchpoints). Lead with **`XO MCP —`**; add **`Peanut —`** per **Peanut — taxonomy (gap review)**. Explicit **risk-from-absence** when XO returns nothing useful—still in plain English for the PM reader (see **Plain-language, story-specific, and source tags**).
+- **PM lens** — Sources: uploaded functional knowledge, PRD when loaded, epic birds-eye scan, Salomon Internal Knowledge (future-state framing), Deployment Agent (future-state framing), WhatsApp Jiras when cross-scan ran. Reads existing scenarios. Asks each source what looks missing from the future state. Salomon and DA are queried as advisors on what current functionality suggests might be risky or underdefined in the proposed scenarios — not as a lookup for current behaviour. Sets WhatsApp match flag when a WhatsApp signal is folded into the PM sentence.
+- **QA lens** — Baseline source: uploaded functional knowledge files (always). Conditional sources: Salomon Jira index and Salomon Slack, triggered only when WhatsApp match flag is TRUE, queried against cited WhatsApp Jira keys only (not the story's own Jira). Asks: what is untestable or missing in the current scenarios? When WhatsApp match: what failure modes from those WhatsApp Jiras might translate here?
+- **Dev lens** — XO MCP (always): searches for the implementation area of this story in the codebase, looking for patterns or constraints the scenarios may not cover. Peanut MCP (conditional): triggered only when WhatsApp match flag is TRUE, queried against cited WhatsApp Jira keys only. **Optional:** one **Salomon-backed** clause in the published **Dev** sentence only under **Dev lens — KB backfill when XO is weak (narrow)**. Synthesises into plain English for engineering (confirmation ask plus any allowed backfill).
 
 If all three read like generic praise, the row **fails** the skill’s intent—rewrite until each lens adds **distinct** pressure **without inventing facts** (see **Evidence grounding — no fabrication** below).
 
 ## Evidence grounding — no fabrication
 
-**General rule:** Every bullet in **PM / QA / Dev lens**, each **Verdict** line, and each **BDD** block must be **traceable** to at least one of:
+**General rule:** Every **published** PM / QA / **Dev lens** cell, each **Verdict** line, and each **BDD** block must be **traceable** to at least one of:
 
 - Jira description, acceptance criteria, or scenarios;  
 - **Salomon** — a paraphrased or quoted excerpt from a hit, or an explicit **“no useful precedent returned”** line;  
 - **Deployment Agent** — paraphrased answer text, or explicit **“no answer / only generic guidance”**;  
 - **XO MCP** — what was searched and what was returned, or explicit **not found** + query terms;  
+- **Salomon Internal Knowledge (Dev backfill only)** — when **Dev lens — KB backfill when XO is weak (narrow)** applies: **one** paraphrased clause in the published **Dev** cell, traceable to the **same-run, same-key** Salomon hit already used for **PM** synthesis on that row—**not** a second PM column and **not** a substitute for the engineering-confirmation part of **Dev**;
 - **Peanut MCP** — when invoked per **When to invoke Peanut (2WE per-row)**: paraphrased similar-issue or code-search signal that matters for **this** row, or **Ran — no useful signal**; when not invoked: **Not queried** per **Peanut — taxonomy (gap review)**; on tool failure: **Unavailable**—**not** “not queried.”  
-- **Companion Jira (WhatsApp epics)** — when **Companion channel cross-scan** ran: themes or failure patterns **paraphrased** from **(a)** **manifest-only:** repo **snapshot** manifest + **Captured excerpts** (`snapshot_as_of`) with **no** WhatsApp Jira pull, **or (b) live delta with snapshot:** same snapshot **plus** **`getTicketDetails`** for **new** live keys and any stable keys you explicitly refreshed, **or (c) full live:** paginated Story+Bug inventory plus **`getTicketDetails`** for keys successfully pulled this run—**primary** surfaces: a **`Cross-channel (WhatsApp backlog) —`** bullet in **PM or QA** (when the row warrants it) and/or the companion **`h2`** section. **On the same row**, **Verdict** and **Suggested missing BDD** may **also** trace to that **`Cross-channel (WhatsApp backlog) —`** bullet when present (**Finding** may compress its translation question alongside **2WE** evidence; **Recommended next step** may name an email-side refinement or spike; **at most one** additional **GWT** block may close the translation question from that bullet—still within the **0–4** BDD cap—see **Verdict column** and **Suggested missing BDD — specificity, uniqueness, follow-on**). Companion evidence is **not** a substitute for **2WE** `getTicketDetails` text; if the companion corpus was **partial**, do **not** over-claim coverage (see **Companion partial corpus / resume**); **never** treat the snapshot as “live Jira” without the corpus line matching the path (**manifest-only** vs **live delta outcome** vs **full live**);  
+- **Companion Jira (WhatsApp epics)** — when **Companion channel cross-scan** ran: themes or failure patterns **paraphrased** from **(a)** **manifest-only:** repo **snapshot** manifest + **Captured excerpts** (`snapshot_as_of`) with **no** WhatsApp Jira pull, **or (b) live delta with snapshot:** same snapshot **plus** **`getTicketDetails`** for **new** live keys and any stable keys you explicitly refreshed, **or (c) full live:** paginated Story+Bug inventory plus **`getTicketDetails`** for keys successfully pulled this run—**primary** surfaces: a **WhatsApp `HRREC-…` citation in the published PM sentence** — parenthetical `(HRREC-nnnnn)` **or** bracket `[WhatsApp companion: HRREC-nnnnn]` (when the row warrants it) — and/or the companion **`h2`** section. **On the same row**, **Verdict** and **Suggested missing BDD** may **also** trace to that **WhatsApp translation question** (**Finding** may compress it alongside **2WE** evidence; **Recommended next step** may name an email-side refinement or spike; **at most one** additional **GWT** block may close it—still within the **0–4** BDD cap—see **Verdict column** and **Suggested missing BDD — specificity, uniqueness, follow-on**). Companion evidence is **not** a substitute for **2WE** `getTicketDetails` text; if the companion corpus was **partial**, do **not** over-claim coverage (see **Companion partial corpus / resume**); **never** treat the snapshot as “live Jira” without the corpus line matching the path (**manifest-only** vs **live delta outcome** vs **full live**);  
 - **Functional knowledge —** only when a **050-functional-knowledge** (or equivalent) rule **clearly** applies—state the rule theme in plain English;  
 - **Other —** at most when naming a **contradiction between two sources above** (say both).
 - **Holistic “Possible missing stories” table** — each suggested row must trace to **(a)** patterns across **this run’s** in-scope Jira Story text (summaries/descriptions), **(b)** **Epic-level notes** / **Top 5 gaps** already written for the page, and/or **(c)** PRD/initiative scope **only** when the PM made it available without treating an external doc as auto-fetched SoT (Jira **Notes** PRD link, user attachment, or repo PRD path named in the prompt—see [`SKILL.md`](SKILL.md) “Do **not** auto-resolve external PRDs”). **Do not** invent PRD requirements you did not read.
@@ -241,7 +334,7 @@ If all three read like generic praise, the row **fails** the skill’s intent—
 
 **Verdict:** **Finding** must restate only what the row’s evidence actually showed. **Recommended next step** must be a **real** next action when a gap exists; when lenses align and Jira is already strong, the second bullet may honestly say e.g. **“No material gap surfaced in this pass—keep Jira scenarios as source of truth unless new risks appear.”** Do not invent a meeting or spike “for show.”
 
-**BDD:** Prefer **fewer** scenarios when Jira coverage is already strong and lenses agree (**0–2** blocks, or a single `<p>` stating **no suggested missing BDD** for this pass). **Never pad** toward the hard cap of **4**. Each block still traces to a row-level gap when present (see **Suggested missing BDD — specificity, uniqueness, follow-on**). When a **`Cross-channel (WhatsApp backlog) —`** bullet exists on the row, **at most one** scenario block may **primarily** close that bullet’s **email translation question** (still recruiter/admin/candidate language; no channel-parity assumptions). **Prioritisation while drafting column 7:** use PM / QA / **Dev lens** tension and Jira parse to decide **which** missing scenarios to write; **Gap Likelihood** is still assigned **only** from **Verdict + BDD** after column 7 exists (**Gap likelihood — per story (Verdict + BDD)**).
+**BDD:** Prefer **fewer** scenarios when Jira coverage is already strong and lenses agree (**0–2** blocks, or a single `<p>` stating **no suggested missing BDD** for this pass). **Never pad** toward the hard cap of **4**. Each block still traces to a row-level gap when present (see **Suggested missing BDD — specificity, uniqueness, follow-on**). When the **published** **PM sentence** includes a WhatsApp signal via **parenthetical** (`HRREC-…`) **or** `[WhatsApp companion: HRREC-nnnnn]`, **at most one** scenario block may **primarily** close that **email translation question** (still recruiter/admin/candidate language; no channel-parity assumptions). **Prioritisation while drafting column 7:** use PM / QA / **Dev lens** tension and Jira parse to decide **which** missing scenarios to write; **Gap Likelihood** is still assigned **only** from **Verdict + BDD** after column 7 exists (**Gap likelihood — per story (Verdict + BDD)**).
 
 ## Gap column (2) — Gap Likelihood (live and draft HTML)
 
@@ -320,21 +413,23 @@ When **thin-spec** triggers, **Verdict** and column **7** usually surface high r
 |--------|---------|
 | **Story** | Prefer `<tr><!-- gap-review KEY --><td>…` so chunk retries can use `dedupeMarker`. `<a href="https://jira2.workday.com/browse/KEY">KEY</a>` + `<br/>` + one-line summary (escape `&` as `&amp;` in HTML if not using Markdown). |
 | **Gap Likelihood** (Tier A / Tier B **live** and draft HTML) | Confluence **Status** macro per **Gap column (2)** (**title** + **colour**). Optional one short `<p>` summarising **Verdict + BDD posture only**. See **Gap likelihood — per story (Verdict + BDD)**. |
-| **PM lens** | One `<ul>` of **story-specific** bullets. **Every bullet starts with a source tag** (see **Plain-language, story-specific, and source tags**): **Jira —**, **Salomon —**, **Deployment Agent —**, **Functional knowledge —**, **Other —** as applicable. Plain English; translate jargon. **Do not** paste identical Salomon/DA paragraphs across rows—paraphrase only what matters for **this** summary. **Jira —** must not be only the title echo—state gap, ambiguity, or missing journey in PM language (see **PM read-aloud gate**). Prefix thin-spec rows with `<strong>Insufficient spec</strong> —` on the first **Jira —** bullet, then high-level questions only. |
-| **QA lens** | One `<ul>`; **same source-tag rule** as PM. Edge cases and “how would we notice a defect?” **only when tied to this story** (not a generic epic QA checklist). Salomon/DA: one focused sentence each where those tools ran, or explicit absence. Follow **QA lens — user-visible risk first** (no Assert/Prove/Verify/Measure/Trace as sentence openers after the tag). |
-| **Dev lens** | **`XO MCP —`** lead-in: what was searched and what was found or not found, in **plain English** (avoid raw metadata soup; at most one translated example in parentheses). Optional **`XO MCP — risk:`** for risk-from-absence. **`Peanut —`** per **Peanut — taxonomy (gap review)** (signal, **Not queried**, **Unavailable**, or **Ran — no useful signal**). Story-specific link to what this ticket assumes about platform behaviour. |
-| **Verdict** | Exactly **two** bullets: `<li><strong>Finding:</strong> …</li><li><strong>Recommended next step:</strong> …</li>` — **one sentence each**, TL;DR for a non-technical PM (see **Verdict column** above). |
-| **Suggested missing BDD (Given/When/Then)** | **0–4** scenario blocks per story (**hard cap 4**; **do not pad**—use **0–2** or a single “no additional BDD suggested” line when Jira is already strong and lenses agree; see **Evidence grounding — no fabrication**). When present, each block: short title (`<p><strong>Scenario: …</strong></p>`) then **labelled** steps: `<strong>Given</strong> …<br/><strong>When</strong> …<br/><strong>Then</strong> …` (Storage HTML). **Compact / chunked publish:** still use those three bold labels when scenarios exist—do not replace with “add GWT” prose bullets. Every scenario must **trace** to something in the **same row** (PM/QA/**Dev lens** text, **Verdict**, a **`Cross-channel (WhatsApp backlog) —`** bullet when present, or the same tension captured in **Verdict** / PM–QA)—**no** generic boilerplate. Prefer recruiter- or admin-facing actors in plain English. **Prioritisation:** address contradictions or open questions named in **Verdict** first, then the strongest lens-backed gap not yet covered. **Coverage hooks** (only when they appear in that row’s merged evidence): negative paths, tenancy (admin toggle, purge, template override), notification vs **My Conversations**, agency vs non-agency, attachment/size limits and server parity—not a laundry list copied from the epic. For **parse-first**, **banned placeholders**, **row uniqueness**, **actor/When precision**, and **dry-run** checks, see **Suggested missing BDD — specificity, uniqueness, follow-on** below. |
+| **PM lens** | One sentence (two maximum). Synthesized conclusion from ingested story text **plus** KB + DA + functional knowledge + epic scan + optional PRD + optional companion evidence; **do not** append `[Jira]` (ingest is implied). **After each sentence (or clause),** append whitelist bracket citations per **Inline source citations** (e.g. `[Functional knowledge: …; Salomon; DA]`). If a WhatsApp cross-channel signal applies, include `[WhatsApp companion: HRREC-nnnnn]` and/or legacy parenthetical prose **only** if the row still reads cleanly—**never** legacy `Cross-channel (WhatsApp backlog) —` starters. Plain English — recruiter/admin/candidate wording. |
+| **QA lens** | One sentence (two maximum). What could break or is untestable for this specific story. Synthesized from Jira + functional knowledge + conditional Salomon Jira / Slack. **Bracket citations** per **Inline source citations** (e.g. `[Jira]`, `[Salomon Jira; Salomon Slack]` when WhatsApp match TRUE). No legacy em-dash tag starters. Lead with what a recruiter or candidate would notice. |
+| **Dev lens** | One sentence (two maximum). What to ask engineering before sizing or building. Include **`[XO MCP]`** for every row where XO ran; add **`[Peanut]`** when WhatsApp match TRUE (invoked or honest skip/failure in prose without banned `Peanut —` strings); add **`[Salomon]`** only when **Dev lens — KB backfill when XO is weak (narrow)** applies. Other sources (`[DA]`, `[Jira]`) only when that clause truly rested on them—usually omit from Dev. No legacy em-dash tag starters. |
+| **Verdict** | **Severity label** on its own line (per **Verdict column**), then exactly **two** bullets: `<li><strong>Finding:</strong> …</li><li><strong>Recommended next step:</strong> …</li>` — **one sentence each**, TL;DR for a non-technical PM. |
+| **Suggested missing BDD (Given/When/Then)** | **0–4** scenario blocks per story (**hard cap 4**; **do not pad**—use **0–2** or a single “no additional BDD suggested” line when Jira is already strong and lenses agree; see **Evidence grounding — no fabrication**). When present, each block: short title (`<p><strong>Scenario: …</strong></p>`) then **labelled** steps: `<strong>Given</strong> …<br/><strong>When</strong> …<br/><strong>Then</strong> …` (Storage HTML). **Compact / chunked publish:** still use those three bold labels when scenarios exist—do not replace with “add GWT” prose bullets. Every scenario must **trace** to something in the **same row** (PM/QA/**Dev lens** text, **Verdict**, a WhatsApp **parenthetical** or `[WhatsApp companion: HRREC-nnnnn]` citation in the **published** PM sentence when present, or the same tension captured in **Verdict** / PM–QA)—**no** generic boilerplate. Prefer recruiter- or admin-facing actors in plain English. **Prioritisation:** address contradictions or open questions named in **Verdict** first, then the strongest lens-backed gap not yet covered. **Coverage hooks** (only when they appear in that row’s merged evidence): negative paths, tenancy (admin toggle, purge, template override), notification vs **My Conversations**, agency vs non-agency, attachment/size limits and server parity—not a laundry list copied from the epic. For **parse-first**, **banned placeholders**, **row uniqueness**, **actor/When precision**, and **dry-run** checks, see **Suggested missing BDD — specificity, uniqueness, follow-on** below. |
 
 ### Lens column brevity (mandatory)
 
 Keep each row’s PM / QA / **Dev lens** cells short enough that a non-technical PM can skim the table. Caps are **per story row** (Storage `<li>` count); they do **not** relax evidence rules—merge weak bullets rather than inventing extra ones. Epic-wide themes belong in **Executive summary** / **Epic-level notes**, not repeated as long lists in every row.
 
-| Mode | PM lens | QA lens | Dev lens (`XO MCP —` / `Peanut —` lines combined) |
-|------|---------|---------|-----------------------------------------------------|
-| **Tier A** | ≤4 bullets | ≤4 bullets | ≤4 tagged lines total |
-| **Tier B** | ≤3 bullets | ≤3 bullets | ≤3 tagged lines total |
-| **Thin-spec rows** | ≤2 bullets (after the required **Insufficient spec** lead on the first **Jira —** line, per **Thin-spec gate**) | ≤2 bullets | ≤2 tagged lines total |
+| Mode | PM lens | QA lens | Dev lens |
+|------|---------|---------|----------|
+| **Tier A** | 1 sentence (2 max for complex stories) | 1 sentence (2 max) | 1 sentence (2 max) |
+| **Tier B** | 1 sentence | 1 sentence | 1 sentence |
+| **Thin-spec rows** | 1 sentence — state spec is insufficient and name the top open question | 1 sentence — state what is untestable until spec exists | 1 sentence — state what engineering cannot confirm without AC |
+
+**Single-sentence discipline:** The published prose is a synthesized conclusion for a non-technical PM, not a log of tool calls. **Bracket citations** (on **PM:** `[Functional knowledge: …]`, `[Salomon]`, `[DA]`, …; on **QA:** `[Jira]` when applicable, `[Salomon Jira]`, …) are **short traceability suffixes**, not pasted MCP output—keep them within the **citation budget** in **Inline source citations**. If a lens cell reads like raw tool output (lists of hits, JQL, corpus metadata, or legacy `Tag —` lines), rewrite before publish.
 
 **Do not** use these caps to justify **identical** short text on many sibling keys—that still violates **Story-specificity** and **Tier B — Salomon / Deployment Agent sentence reuse cap**. If a lens has nothing material to add after honest evidence, use fewer bullets.
 
@@ -415,10 +510,10 @@ Column 7 is **additive** to Jira: it extends, sharpens, or names **missing** pat
 | **When clause** | Must name a **single** trigger: a concrete user action or system event implied by the **summary** or an existing scenario title (e.g. “I click **Send** on a draft at the 7MB boundary,” “I open the 2-way email task when no thread exists”) — not “I perform the action described in Jira.” |
 | **Then clause** | Observable outcome: UI state, message or error copy, absence of a control, notification routing — not vague “matches intent” without pointing to what a recruiter or admin **sees**. |
 | **Uniqueness (epic sweeps)** | **No** identical **Given + When** pair on two different story keys; if two siblings would converge, differentiate by **surface + trigger** from each summary (compose vs send vs purge vs notification). |
-| **Second+ scenarios** | Each additional block maps to **one** of: **Verdict** (Finding / recommended gap), PM–QA disagreement, **Dev lens** gap (e.g. XO not found, Peanut signals misaligned with Jira), DA misconfiguration theme, or—when the companion step ran—a **`Cross-channel (WhatsApp backlog) —`** bullet’s **email translation question** (**at most one** such companion-led block per row). **State that mapping** in the scenario title or first **Given** line. |
+| **Second+ scenarios** | Each additional block maps to **one** of: **Verdict** (Finding / recommended gap), PM–QA disagreement, **Dev lens** gap (e.g. XO not found, Peanut signals misaligned with Jira), DA misconfiguration theme, or—when the companion step ran—a WhatsApp **parenthetical** or `[WhatsApp companion: …]` citation in the **published** PM sentence’s **email translation question** (**at most one** such companion-led block per row). **State that mapping** in the scenario title or first **Given** line. |
 | **No padding** | If Jira scenarios and lenses already cover the risk, output **no** extra BDD or a single explicit “none suggested this pass” line—do **not** add scenarios to fill white space. |
 
-**Cross-channel companion (column 7, when step 2b ran):** If this row’s PM or QA includes **`Cross-channel (WhatsApp backlog) —`**, you may add **up to one** **GWT** block whose scenario title or first **Given** names the **email-side** behaviour that closes the **translation question** in that bullet (e.g. “Cross-channel follow-on (email): …”). Do **not** paste or lightly reword the companion **`h2`** theme list on every row; skip this block when Jira + lenses already cover the same gap.
+**Cross-channel companion (column 7, when step 2b ran):** If the **published** **PM sentence** includes a WhatsApp **parenthetical** (`HRREC-…`) **or** `[WhatsApp companion: HRREC-nnnnn]`, you may add **up to one** **GWT** block whose scenario title or first **Given** names the **email-side** behaviour that closes the **translation question** (e.g. “Cross-channel follow-on (email): …”). Do **not** paste or lightly reword the companion **`h2`** theme list on every row; skip this block when Jira + lenses already cover the same gap.
 
 **Initiative vocabulary (HRREC-82977 and similar):** keep surfaces and actors aligned with [`docs/initiatives/two-way-email/STORY_WRITING_SUPPLEMENT.md`](../../../docs/initiatives/two-way-email/STORY_WRITING_SUPPLEMENT.md) (e.g. **SSP**, **2-way email task**, **Message Builder**, **privacy admin**) so **When** clauses stay product-accurate.
 
@@ -426,9 +521,11 @@ Column 7 is **additive** to Jira: it extends, sharpens, or names **missing** pat
 
 ## Net-new preamble (Salomon)
 
-Every `search_workday_internal_knowledge` `message` must start with a scope line, for example:
+**Salomon Internal Knowledge — future-state framing (mandatory):** All `search_workday_internal_knowledge` queries for this skill must be framed as future-state gap-finding, not current-state lookup. Salomon knows current Workday functionality. Its value in this skill is as an advisor: given what it knows about how things work today, what might be missing, risky, or underdefined in the proposed future scenarios?
 
-> `NET-NEW / PRE-BUILD GAP REVIEW (not production defect triage). Story KEY: … Summary: … We need adjacent precedents, compliance/admin-guide constraints, and related product patterns before implementation.`
+Query preamble pattern:
+
+> `NET-NEW / PRE-BUILD GAP REVIEW. Story KEY: [key]. Summary: [summary]. These are the proposed future-state scenarios: [scenario titles or AC]. Given how [this feature area] currently works in Workday, what aspects of these scenarios might be underdefined, missing, or risky? We are not asking what currently exists — we are asking what the future state might be getting wrong.`
 
 Then the actual keywords. Run **2–3** queries per story:
 
@@ -436,52 +533,57 @@ Then the actual keywords. Run **2–3** queries per story:
 2. Compliance / privacy / retention / email / notification patterns if the story touches outbound comms or candidate data.
 3. One query merged from **user prompt extras** (similar epic, URLs, “like HRREC-nnnn”).
 
-**Output contract:** Salomon results are **not** a separate Confluence column. Write product-side precedent into **PM** bullets; write bug/failure/support patterns into **QA** bullets (see **Salomon and DA — no separate Confluence columns** above).
+**Salomon Jira index — conditional, WhatsApp keys only:** `jira_search_tool` runs ONLY when WhatsApp match flag is TRUE. Query target: the WhatsApp Jira keys cited in the PM sentence (e.g. `key in (HRREC-nnnnn, HRREC-mmmmm)`). Purpose: find failure modes from those WhatsApp issues that might translate to this email story. Do NOT run a general JQL against the story's own summary terms in this lens.
 
-**Empty hits:** record as absence of precedent — **not** “low risk”—fold that honest absence into a **PM or QA** bullet, not a separate column.
+**Salomon Slack — conditional, WhatsApp keys only:** `slack_archive_search` runs ONLY when WhatsApp match flag is TRUE. Query using quoted WhatsApp Jira keys cited in the PM sentence. Purpose: surface discussion threads about those WhatsApp issues that might reveal relevant failure patterns. Do NOT search against the story's own summary terms here.
 
-**Off-topic hits:** if retrieved articles are clearly **not** about this story’s slice (wrong product area, generic tooling, unrelated workflows), do **not** weave them in for colour—either run **one** additional **narrower** query with the same net-new preamble and tighter keywords tied to **that** `KEY`, or write **`Salomon —`** Internal search did not return on-topic precedent for this slice (and one short clause on what you still watch for in QA). **Tier A** still needs traceable Salomon use per **From-scratch** item 2; “noise pasted as precedent” violates **Evidence grounding — no fabrication**.
+**Output contract:** Salomon Internal Knowledge results are **not** a separate Confluence column. Write product-side precedent into **PM** bullets as **Salomon (Knowledge) —**. Conditional Jira index / Slack hits (when the flag is TRUE) weave into **QA** as **Salomon (Jira index) —** / **Salomon (Slack) —** (see **Salomon and DA — no separate Confluence columns** above).
+
+**Empty hits:** record as absence of precedent — **not** “low risk”—fold that honest absence into **PM** for Internal Knowledge, or into **QA** only when conditional tools ran and returned nothing useful.
+
+**Off-topic hits:** if retrieved articles are clearly **not** about this story’s slice (wrong product area, generic tooling, unrelated workflows), do **not** weave them in for colour—either run **one** additional **narrower** query with the same future-state preamble and tighter keywords tied to **that** `KEY`, or write **`Salomon —`** Internal search did not return on-topic precedent for this slice (and one short clause on what you still watch for in QA). **Tier A** still needs traceable Internal Knowledge use per **From-scratch** item 3(b); “noise pasted as precedent” violates **Evidence grounding — no fabrication**.
 
 ## Net-new preamble (Deployment Agent)
 
-`ask_deployment_agent` `question` should frame **product and tenant behaviour**, not customer break-fix, for example:
+`ask_deployment_agent` questions must use future-state framing. Deployment Agent knows current tenant configuration and product behaviour. Its value in this skill is advisory: given how tenants currently configure and operate this area, what might be missing or risky in the proposed future scenarios?
 
-> `NET-NEW story review for Recruiting. How does this area typically behave in tenant config vs delivered product? What are common misconfigurations or limits we should design around? Story summary: … Acceptance hints: …`
+Query pattern:
+
+> `NET-NEW story review for Recruiting. Story summary: [summary]. These are the proposed future-state scenarios: [scenario titles or AC]. Given how tenants currently configure [this area] in Workday Recruiting, what might be underdefined, missing, or risky in these scenarios? We are not asking how this currently works — we are asking what the future state might be getting wrong or leaving unaddressed for typical tenant configurations.`
 
 Ask one consolidated question per story unless the answer is unusably short; then one short follow-up with `threadId` is allowed. **Synthesize answers into PM/QA cells** (product/config → PM; operational test realism → QA)—no separate DA column.
 
-**Deployment Agent — batched answers, row-anchored synthesis:** A **single** `ask_deployment_agent` call covering many stories is allowed (especially under **Tier B**). **Each** row’s **Deployment Agent —** bullet must still **anchor to that key**: start with **For KEY (*summary phrase*):** or weave the story’s summary noun phrase in the **first clause**, then apply **one** concrete implication from the batch answer (tenant setup, staging, misconfiguration, limits, “how customers run Recruiting”). **Do not** paste the **same** unmodified DA paragraph on every row—that violates **distinct treatment in synthesis** (From-scratch item 4).
+**Deployment Agent — batched answers, row-anchored synthesis:** A **single** `ask_deployment_agent` call covering many stories is allowed (especially under **Tier B**). **Each** row’s **Deployment Agent —** bullet must still **anchor to that key**: start with **For KEY (*summary phrase*):** or weave the story’s summary noun phrase in the **first clause**, then apply **one** concrete implication from the batch answer (tenant setup, staging, misconfiguration, limits, “how customers run Recruiting”). **Do not** paste the **same** unmodified DA paragraph on every row—that violates **distinct treatment in synthesis** (From-scratch item 3(c)).
 
 ## Net-new preamble (XO MCP)
 
-Read-only. Use `search` with prefixes from story text (`cl:`, `ws:`, or general name). Optionally `hopper_search` or `service_description_get` when the story names a REST/integration surface — **read paths only**; no `suv_rest_call`, `method_binding_execute`, patches, or writes.
+**XO MCP — implementation area search (always run):** For each story, search XO for the area of the codebase where this story is likely to be implemented. Use summary nouns, feature area terms, and any class/service names visible in the Jira description to locate the relevant code region.
 
-Opening line in the agent’s internal notes (not necessarily in Confluence):
+Goal: identify existing patterns, hooks, constraints, or service boundaries in that implementation area that the current story scenarios may not account for. This is not generic adjacency checking — it is targeted implementation context to inform what might be missing from the scenarios.
 
-> `XO ADJACENCY ONLY — no SUV writes. Looking for tasks/services/BPTs related to: …`
+Opening framing for XO search (internal notes):
 
-If nothing relevant: Confluence cell **must** state no metadata found and name what was searched.
+> `XO IMPLEMENTATION AREA SEARCH — read only. Story KEY: [key]. Looking for the implementation region for: [summary nouns]. Goal: find existing patterns or constraints in that area that current scenarios may not cover.`
+
+If the implementation area cannot be located after 2 search attempts, state that honestly in the Dev sentence: "Could not locate the implementation area in XO for [search terms] — engineering should confirm where this will be built and whether existing patterns apply."
+
+Read-only: use `search` with prefixes from story text (`cl:`, `ws:`, or general name). Optionally `hopper_search` or `service_description_get` when the story names a REST/integration surface — **read paths only**; no `suv_rest_call`, `method_binding_execute`, patches, or writes.
+
+**Global XO MCP outage (session-wide):** If **every** `search` call for in-scope rows fails with the **same class of error** (e.g. MCP transport, HTTP 401/403/5xx, “Request error” from the client), treat that as **one infrastructure incident**, not evidence that each story’s implementation area is missing from the SUV. **Mandatory:** add preface item **(3)** per **Page structure** so PMs do not misread uniform Dev-lens fallbacks as per-key XO negatives. In **Epic-level notes**, you may add one bullet naming suspected causes (JWT/SUV host/VPN/upstream) **only** if you verified them in-session—otherwise keep the preface factual (“XO MCP did not return metadata this session”). Per-row **Dev lens** must still follow **Story-specificity** (global-outage exception): short shared “XO unavailable” clause + **distinct** story-keyed question for engineering.
 
 ## Net-new preamble (Peanut MCP)
 
 Read-only (`user-peanut-mcp`). Frame **pre-build product risk**, not production break-fix triage—same spirit as Salomon/XO preambles.
 
-**Per-row 2WE Peanut is not required for Tier A completeness** when no trigger below applies: an honest **`Peanut — Not queried — …`** line satisfies the contract. **High-value Peanut** for cross-initiative / git-level comparison stays the **Companion Peanut anchor pass** (opt-in, **3–8** WhatsApp keys)—see **Companion Peanut anchor pass** below and [`reference-companion-whatsapp.md`](reference-companion-whatsapp.md) **Optional Peanut**.
+**Per-row 2WE Peanut is not required for Tier A completeness** when WhatsApp match flag is FALSE for this row: an honest **`Peanut — Not queried — …`** line satisfies the contract. **High-value Peanut** for cross-initiative / git-level comparison stays the **Companion Peanut anchor pass** (opt-in, **3–8** WhatsApp keys)—see **Companion Peanut anchor pass** below and [`reference-companion-whatsapp.md`](reference-companion-whatsapp.md) **Optional Peanut**.
 
 ### When to invoke Peanut (2WE per-row)
 
 **Default:** do **not** call **`collectBugData`** or **`searchCode`** for that story row. **`collectBugData`** pulls Jira context + similar issues + commit history; it needs a **successful Jira fetch** for the ticket you pass. A **Jira fetch error** / **`needsConfig`** means **MCP integration or credentials** (`~/.peanut/config.json`, **`JIRA_TOKEN`**, host, permissions)—**not** “engineering has not started yet” or “no commits exist.” Fix config once; do **not** paste the same **Unavailable** boilerplate on every row after a known outage.
 
-**Invoke** (any one is enough; still cap **1–2** calls per row under **Tier A** unless the user widens scope):
+**Invoke Peanut when (and only when):** WhatsApp match flag is TRUE for this row (PM lens identified a relevant WhatsApp pattern and included a cited `HRREC-…` key in **parenthetical** or **`[WhatsApp companion: …]`** form). When triggered, run **`collectBugData`** against the WhatsApp Jira keys cited in the PM sentence — NOT the story's own Jira key. Cap: **1–2** read-only calls per row. Paraphrase findings into the Dev sentence as a plain-English question for engineering.
 
-- The user asks for **repo / similar issues / commit** signals, or names **anchor bug keys** to compare.
-- Jira description/summary shows **integration, regression, stack trace, PR, megaleo**, or other hooks where **XO MCP —** alone cannot bound risk.
-- **`XO MCP — risk:`** (or equivalent) is real and you need **“has code moved here recently?”**—then a **narrow** Peanut pass, not a blanket **`collectBugData`** on every greenfield story.
-
-**Do not invoke** (use **`Peanut — Not queried — <one-line reason>`** instead):
-
-- Greenfield story with **no** repo/bug/regression language and XO already answers adjacency for the PM question.
-- **Tier B** unless the user explicitly widens scope—default per-row **not queried** (or one documented epic-scoped batch if agreed in chat).
+**Do not invoke Peanut when:** WhatsApp match flag is FALSE for this row, regardless of other signals. Under **Tier B**, default no Peanut unless the user explicitly widens scope.
 
 ### Peanut — taxonomy (gap review)
 
@@ -489,7 +591,7 @@ Every in-scope **2WE** row must include **exactly one** readable pattern inside 
 
 | Pattern | When |
 |--------|------|
-| **`Peanut — Not queried — …`** | Triggers above did not apply; or **Tier B** default skip. |
+| **`Peanut — Not queried — …`** | WhatsApp match flag FALSE for this row; or **Tier B** default skip. |
 | **`Peanut — Unavailable (<one line>)`** | Tool ran or MCP returned **`needsConfig`**, Jira fetch error, timeout—**not** the same as “not queried.” Note once in **chat** how to fix (see [`reference-companion-whatsapp.md`](reference-companion-whatsapp.md) **Operator preflight**). |
 | **`Peanut — Ran — no useful signal …`** | Peanut returned empty / no similar issues / no relevant commits after an honest attempt. |
 | **`Peanut —`** (narrative signal) | Paraphrase similar issues or code-area risk **for this row**—see **`SKILL.md`** **Dev lens evidence**. |
@@ -498,9 +600,9 @@ Every in-scope **2WE** row must include **exactly one** readable pattern inside 
 
 Opening line pattern (internal notes or tool framing, **only when invoking**):
 
-> `NET-NEW / PRE-BUILD GAP REVIEW — PEANUT (read-only). Story KEY: … We need whether similar Jiras or recent code changes touch this slice—not full RCA.`
+> `NET-NEW / PRE-BUILD GAP REVIEW — PEANUT (read-only). Cited WhatsApp KEY(s): … We need whether similar Jiras or recent code changes touch those issues—not full RCA.`
 
-When invoking, prefer **`collectBugData`** with the **in-scope `jiraTicket`** and/or **`searchCode`** with a **small `searchPlanJson`** derived from the story summary.
+When invoking, prefer **`collectBugData`** with each **cited WhatsApp `jiraTicket`** from the PM parenthetical or **`[WhatsApp companion: …]`** bracket (cap **1–2** calls per row) and/or **`searchCode`** with a **small `searchPlanJson`** derived from those issues if justified.
 
 **Companion Peanut anchor pass (WhatsApp only):** Use a distinct opener so outputs land in **`h3` Code evidence (WhatsApp anchors—Peanut)** per [`reference-companion-whatsapp.md`](reference-companion-whatsapp.md) (**Optional Peanut** + **Forbidden** lists there), not inside **2WE** **Dev lens** rows unless the user also asked for per-row 2WE Peanut:
 
@@ -545,16 +647,16 @@ Only when the user **attaches** a PRD, story map, or detailed spec **in addition
 
 1. Pick one child story under a known epic (e.g. HRREC epic from team backlog).
 2. Run the skill from chat with that key; confirm `getTicketDetails` returns description.
-3. Confirm Salomon returns either usable precedent/bug hints **or** explicit absence—and that absence appears **inside** a PM/QA bullet.
-4. Confirm DA was asked and useful realism appears **inside** PM/QA (not an empty column).
-5. Confirm XO `search` was attempted and the **Dev lens** cell’s **`XO MCP —`** lines state results or none; confirm **`Peanut —`** follows **Peanut — taxonomy (gap review)** (**Not queried** vs **Unavailable** vs **Ran**)—**most** rows should **not** be **`collectBugData`** unless triggers in **When to invoke Peanut (2WE per-row)** applied; repeated **Unavailable** across the grid usually means fix Peanut/Jira config, not rerun blindly.
+3. Confirm Salomon returns either usable precedent/bug hints **or** explicit absence—and that absence appears in the **synthesised** PM/QA **published** sentences (or is honestly folded into narrative per **Evidence grounding**).
+4. Confirm DA was asked and useful realism appears in **PM** (not an empty column).
+5. Confirm XO `search` was attempted and **internal** **`XO MCP —`** notes support the **published** **Dev lens** sentence; when **every** in-scope `search` failed, confirm **Page structure** preface item **(3) Global XO MCP outage** is present. confirm **`Peanut —`** follows **Peanut — taxonomy (gap review)** (**Not queried** vs **Unavailable** vs **Ran**) while authoring—**most** rows should **not** be **`collectBugData`** unless triggers in **When to invoke Peanut (2WE per-row)** applied; repeated **Unavailable** across the grid usually means fix Peanut/Jira config, not rerun blindly. **Published** Dev cells must **not** surface banned taxonomy strings (see **Output format contract** in [`SKILL.md`](SKILL.md)).
 6. Confirm Confluence page exists or updated; open via `scripts/open-url-chrome-and-cursor-browser.sh` with the final URL.
-7. Spot-check HTML: **Executive summary** follows [`reference.md`](reference.md) **Page structure**—`h2` **Executive summary (for PM)** with optional **preface** (≤2 items), then **`h3` Top 5 gaps (epic)** and **`h3` Top 5 strengths (epic)** (≤5 bullets each; gaps before strengths; no padding); then **`h2` Epic-level notes** when applicable; then **when the companion cross-scan ran**, **`h2` Cross-initiative pattern hints (WhatsApp — inspiration only)** before the main table (see [`reference-companion-whatsapp.md`](reference-companion-whatsapp.md)). Then the **seven-column** gap table; then **`h2` Possible missing stories (suggestions only)** with a **three-column** holistic table when epic-scoped (or the omission `<p>` when loose JQL—see **Possible missing stories (holistic suggestions)**). **Seven** columns in the main gap table (Story; column **2** = **Gap Likelihood**—see **Gap column (2)**; PM; QA; **Dev lens**; **Verdict**; **Suggested missing BDD**); holistic table has **User Story**, **Reason Why This May Be Missing**, **BDD scenarios**—**no** fake `HRREC-` keys in the User Story column; **AG:** / **RN:** keys absent from the main table; no placeholder-only prose where thin-spec did not trigger; confirm the agent **did not** skip per-story MCP without disclosure when the user asked for a full from-scratch run. On **2–3** sample main rows, confirm **Lens column brevity** caps (PM/QA/Dev bullet counts). Spot-check that each row’s BDD scenarios **map** to that row’s PM/QA/**Dev lens**/**Verdict** themes (not generic epic boilerplate). On **2–3** holistic rows, confirm **Reason** + BDD are distinct from each other and from main column-7 duplicates. Confirm **Verdict** is exactly two one-line bullets (**Finding** / **Recommended next step**), does **not** duplicate long lens lists, and PM/QA bullets carry **source tags**. On **2–3** sample rows, apply **PM read-aloud gate** and confirm QA bullets follow **QA lens — user-visible risk first** (no **Assert** / **Prove** / **Verify** / **Measure** / **Trace** as the first word after the tag; **Jira —** is not only the story title pasted).
+7. Spot-check HTML: **Executive summary** follows [`reference.md`](reference.md) **Page structure**—`h2` **Executive summary (for PM)** with optional **preface** (≤2 items, or ≤3 when **Global XO MCP outage** item **(3)** applies—see **Page structure**), then **`h3` Top 5 gaps (epic)** and **`h3` Top 5 strengths (epic)** (≤5 bullets each; gaps before strengths; no padding); then **`h2` Epic-level notes** when applicable; then **when the companion cross-scan ran**, **`h2` Cross-initiative pattern hints (WhatsApp — inspiration only)** before the main table (see [`reference-companion-whatsapp.md`](reference-companion-whatsapp.md)). Then the **seven-column** gap table; then **`h2` Possible missing stories (suggestions only)** with a **three-column** holistic table when epic-scoped (or the omission `<p>` when loose JQL—see **Possible missing stories (holistic suggestions)**). **Seven** columns in the main gap table (Story; column **2** = **Gap Likelihood**—see **Gap column (2)**; PM; QA; **Dev lens**; **Verdict**; **Suggested missing BDD**); holistic table has **User Story**, **Reason Why This May Be Missing**, **BDD scenarios**—**no** fake `HRREC-` keys in the User Story column; **AG:** / **RN:** keys absent from the main table; no placeholder-only prose where thin-spec did not trigger; confirm the agent **did not** skip per-story MCP without disclosure when the user asked for a full from-scratch run. On **2–3** sample main rows, confirm **Lens column brevity** caps (**Output format contract** in [`SKILL.md`](SKILL.md): one synthesized sentence per lens per tier; **Verdict** label + two bullets). Spot-check that each row’s BDD scenarios **map** to that row’s PM/QA/**Dev lens**/**Verdict** themes (not generic epic boilerplate). On **2–3** holistic rows, confirm **Reason** + BDD are distinct from each other and from main column-7 duplicates. Confirm **Verdict** uses a **severity label** plus exactly two one-line bullets (**Finding** / **Recommended next step**), does **not** duplicate long lens lists, and **published** PM/QA/Dev cells have **no** visible source-tag starters or **banned strings** from that contract. On **2–3** sample rows, apply **PM read-aloud gate** and confirm the **published** QA sentence follows **QA lens — user-visible risk first** (no **Assert** / **Prove** / **Verify** / **Measure** / **Trace** as the first words of that sentence).
 8. **BDD specificity dry-run:** across a sample of sibling keys, **no** two rows share the same **Given + When** verbatim; each **When** uses at least one **concrete** verb, control, or surface from that row’s summary, an extracted Jira scenario title, or the gap text — not banned placeholders from **Suggested missing BDD — specificity, uniqueness, follow-on** above. Where Jira already lists scenarios, confirm the first suggested block is a **follow-on** or explicitly **additional**, not a duplicate Scenario 1.
-9. **Optional script — row dedup (repo):** `python3 docs/initiatives/two-way-email/drafts/check_gap_review_row_dedup.py path/to/gap_review.html` fingerprints **PM lens, QA lens, Dev lens, Verdict,** and **Suggested missing BDD** on the **main** seven-column table (truncated tag-stripped text per column); warns when **≥5** rows share the same fingerprint (override with `--threshold N`). When the file contains `<!-- possible-missing-stories-table -->`, the script also fingerprints **Reason** + **BDD scenarios** on holistic rows (see script docstring). Exit 0; use before Confluence publish or after editing a **Tier B** HTML generator. Legitimate duplicates (e.g. several keys sharing one verdict theme) still merit a quick eye—tighten the table or accept the risk explicitly.
-10. **Evidence grounding:** confirm **no** PM/QA/**Dev lens** bullet, **Verdict** line, or BDD block asserts facts that are not traceable to Jira, Salomon, DA, XO MCP, Peanut (when invoked), **Companion Jira (WhatsApp epics)** when that cross-scan ran (**manifest-only:** snapshot manifest + **Captured excerpts** only; **live delta with snapshot:** snapshot + **`getTicketDetails`** for delta keys as documented; **full live:** paginated Story+Bug + **`getTicketDetails` bodies**; if **partial**, do **not** claim full ingestion—see [`reference-companion-whatsapp.md`](reference-companion-whatsapp.md) **Companion partial corpus / resume**; **no** “current WhatsApp backlog” claims from **manifest-only** or incomplete **live delta**), functional knowledge, or a named cross-source contradiction (**Other —**). Empty MCP tools are stated as empty—not invented precedent.
+9. **Optional script — row dedup (repo):** `python3 docs/initiatives/two-way-email/drafts/check_gap_review_row_dedup.py path/to/gap_review.html` fingerprints **PM lens, QA lens, Dev lens, Verdict,** and **Suggested missing BDD** on the **main** seven-column table (truncated tag-stripped text per column); warns when **≥5** rows share the same fingerprint (override with `--threshold N`). When the file contains `<!-- possible-missing-stories-table -->`, the script also fingerprints **Reason** + **BDD scenarios** on holistic rows (see script docstring). Exit 0; use before Confluence publish or after editing a **Tier B** HTML generator. Legitimate duplicates (e.g. several keys sharing one verdict theme) still merit a quick eye—tighten the table or accept the risk explicitly. On large matrices, also run `python3 docs/initiatives/two-way-email/drafts/check_gap_review_bdd_duplicates.py path/to/gap_review.html` to flag exact duplicate **Given/When/Then** bodies and template-collapsed clusters across sibling keys.
+10. **Evidence grounding:** confirm **no** **published** PM/QA/**Dev lens** cell, **Verdict** line, or BDD block asserts facts that are not traceable to Jira, Salomon, DA, XO MCP, Peanut (when invoked), **Companion Jira (WhatsApp epics)** when that cross-scan ran (**manifest-only:** snapshot manifest + **Captured excerpts** only; **live delta with snapshot:** snapshot + **`getTicketDetails`** for delta keys as documented; **full live:** paginated Story+Bug + **`getTicketDetails` bodies**; if **partial**, do **not** claim full ingestion—see [`reference-companion-whatsapp.md`](reference-companion-whatsapp.md) **Companion partial corpus / resume**; **no** “current WhatsApp backlog” claims from **manifest-only** or incomplete **live delta**), functional knowledge, or a named cross-source contradiction (**Other —**). Empty MCP tools are stated as empty—not invented precedent.
 11. **Run tier:** confirm **Tier B** runs include the **mandatory first executive-summary bullet** (see **Run tiers**); **Tier A** runs did not silently skip per-story Salomon depth unless the user opted into diff-only mode.
 12. **Publish path:** confirm **Publish pipeline** was followed—pre-flight size, **sequential** Confluence chunks if used, **no** parallel `smart_update`, **no** placeholder `replace` on the live rolling page.
-13. **WhatsApp companion (when step 2b ran):** Rules live in [`reference-companion-whatsapp.md`](reference-companion-whatsapp.md). Corpus line matches the path used: **manifest-only** — **`snapshot_as_of` + no live Jira for WhatsApp**; **live delta with snapshot** — **`snapshot_as_of` + live delta outcome** (and **PARTIAL** if live-delta rules say so); **full live** — complete only if every inventory key had `getTicketDetails`, else **PARTIAL** with epics/pending keys; chat mirrors partial status for resume. **Cross-initiative** theme `<li>`s each include a **key or paraphrase** anchor from **held evidence**; **`Cross-channel (WhatsApp backlog) —`** bullets cite only keys backed by **snapshot excerpts** (manifest-only) and/or **`getTicketDetails` this run** when that path ran (no pending keys, no staleness-only removed manifest keys as current proof). When the manifest lists **AG:** / **RN:** Story keys, confirm **Cross-channel** / companion **`h2`** bullets do **not** treat them as primary product pattern anchors unless the user widened scope—see the annex **AG: / RN:** subsection. If a **Companion Peanut anchor pass** ran, confirm **`h3` Code evidence (WhatsApp anchors—Peanut)** exists with **≤8** anchors, **one unique narrative unit per key**, no duplicate commit blurbs, and **full-history** clones / honest tool failure documented per the annex **Optional Peanut** section.
+13. **WhatsApp companion (when step 2b ran):** Rules live in [`reference-companion-whatsapp.md`](reference-companion-whatsapp.md). Corpus line matches the path used: **manifest-only** — **`snapshot_as_of` + no live Jira for WhatsApp**; **live delta with snapshot** — **`snapshot_as_of` + live delta outcome** (and **PARTIAL** if live-delta rules say so); **full live** — complete only if every inventory key had `getTicketDetails`, else **PARTIAL** with epics/pending keys; chat mirrors partial status for resume. **Cross-initiative** theme `<li>`s each include a **key or paraphrase** anchor from **held evidence**. **Main-table** **published** PM cells cite WhatsApp via **parenthetical** `(HRREC-…)` and/or **`[WhatsApp companion: HRREC-nnnnn]`** (no standalone **`Cross-channel (WhatsApp backlog) —`** cell starters—see companion annex). When the manifest lists **AG:** / **RN:** Story keys, confirm **Cross-initiative** / companion **`h2`** bullets do **not** treat them as primary product pattern anchors unless the user widened scope—see the annex **AG: / RN:** subsection. If a **Companion Peanut anchor pass** ran, confirm **`h3` Code evidence (WhatsApp anchors—Peanut)** exists with **≤8** anchors, **one unique narrative unit per key**, no duplicate commit blurbs, and **full-history** clones / honest tool failure documented per the annex **Optional Peanut** section.
 14. **Skill markdown contract (after editing skill docs):** From repo root, run `python3 scripts/verify_user_story_gap_review_skill_contract.py` — must exit **0** (validates critical headings and anchors in [`reference.md`](reference.md) + [`reference-companion-whatsapp.md`](reference-companion-whatsapp.md) + [`SKILL.md`](SKILL.md)).
 15. **Manifest maintenance (optional):** After refreshing the frozen snapshot, run `python3 docs/initiatives/two-way-email/drafts/diff_whatsapp_companion_manifest.py --snapshot docs/initiatives/two-way-email/reference/WHATSAPP_COMPANION_CORPUS_SNAPSHOT.md --live-keys <export.txt>` (or `--live-json`) and resolve **added/removed** keys before setting **`manifest_complete: true`**.

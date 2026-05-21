@@ -1,0 +1,187 @@
+<!-- gap-review HRREC-91946 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91946">HRREC-91946</a><br/>[Initialisation] Recruiter can see Email Task on SSP (XO Only)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Task order and masking align with other conversation channels, but internal guidance still stresses composite header security for “other jobs” drill-downs—confirm email task respects the same masked-job rules without duplicating unread affordances.</p></td>
+<td><p>Recruiters should see one masked affordance across SMS, WhatsApp, and email when a job application is masked; watch for double icons or mismatched tooltips if new-item counts lag.</p></td>
+<td><p>For HRREC-91946, SUV XO search failed this run—have engineering name the REST domains and layouts implementing this slice before sizing.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Scenarios already cover visibility and masking coalescence for three channels.</li>
+<li><strong>Recommended next step:</strong> Run a single milestone script that walks masking config end-to-end for email plus sibling tasks.</li>
+</ul></td>
+<td><p>Column 7 adds nothing new: existing Jira scenarios cover the stated happy and negative paths.</p></td>
+</tr>
+<!-- gap-review HRREC-91948 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91948">HRREC-91948</a><br/>[Initialisation] Enabled SSP Growth/Expansion</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Grow/shrink behaviour is spelled out for breakpoints, but Scenario 4 still has an explicit “???” on reopening after close—decide UX before recruiters build muscle memory on email.</p></td>
+<td><p>Recruiters who draft a long email, close the panel to peek at the profile, and reopen expect predictable width; inconsistent restore feels like data loss even when the draft survives.</p></td>
+<td><p>XO evidence was not retrieved from the SUV for HRREC-91948; confirm with engineering where side-panel messaging hooks live before you freeze story points.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Open Scenario 4 question on reopen width after close risks inconsistent email compose ergonomics.</li>
+<li><strong>Recommended next step:</strong> Resolve reopen vs reset with UX and encode the outcome in Jira before dev complete.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Panel reopen after close</p><p><strong>Given</strong> I grew the panel while composing an email<br/><strong>When</strong> I close the side panel completely and reopen the email task<br/><strong>Then</strong> the panel width matches the agreed UX decision (restored wide or reset narrow) and matches My Tasks behaviour</p></td>
+</tr>
+<!-- gap-review HRREC-91974 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91974">HRREC-91974</a><br/>PH: Recruiter sees Empty state of email task if opened</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Empty state copy still asks whether agency vs non-agency needs different chrome—pair that with tenant comms guidance so broken-consent patterns never appear.</p></td>
+<td><p>Recruiters opening a brand-new thread should see consistent header labels and buttons; mismatched agency copy reads as a product defect.</p></td>
+<td><p>For HRREC-91974, SUV XO search failed this run—have engineering name the REST domains and layouts implementing this slice before sizing.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Agency-specific empty copy is still an open dev note inside Jira.</li>
+<li><strong>Recommended next step:</strong> Confirm final strings for agency vs direct hires and align with translations scope.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Agency vs non-agency empty state</p><p><strong>Given</strong> I am on an agency-submitted application<br/><strong>When</strong> I open the email empty state<br/><strong>Then</strong> the header and helper text match the agreed agency vs non-agency wording</p></td>
+</tr>
+<!-- gap-review HRREC-91975 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91975">HRREC-91975</a><br/>PH: Recruiter receives a notification</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Routing to My Conversations vs bell is delegated to the framework, but tenant notification rules and digest vs immediate behaviour still interact with “Candidate SMS/Email Messages”—spell out what happens when both UI and email alerts fire.</p></td>
+<td><p>Recruiters may get duplicate signals (in-app plus routed email); candidates see nothing, so clarify expected noise level in pilot guidance.</p></td>
+<td><p>SUV XO lookup errored in this session; ask engineering which bindings or layout classes own the behaviour described for HRREC-91975 so tests map to real metadata.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Optional email alert path can double-notify depending on tenant routing.</li>
+<li><strong>Recommended next step:</strong> Add one refinement scenario for tenants with digest routing enabled.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Digest routing coexists with My Conversations</p><p><strong>Given</strong> routing rules send Candidate SMS/Email Messages as a digest<br/><strong>When</strong> an inbound email reply arrives<br/><strong>Then</strong> the in-app notification still appears immediately and the email digest behaviour matches the documented expectation</p></td>
+</tr>
+<!-- gap-review HRREC-91978 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91978">HRREC-91978</a><br/>PH: Admin can enable or disable 2-way email as a comms channel</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Toggle plus audit is sketched; internal admin guidance on notification routing and COI still matters so disabling mid-flight does not surprise recruiters who rely on routed email alerts.</p></td>
+<td><p>When admins flip the channel off, recruiters with drafts open need a clear, simultaneous story for in-app vs email notifications already queued.</p></td>
+<td><p>SUV XO lookup errored in this session; ask engineering which bindings or layout classes own the behaviour described for HRREC-91978 so tests map to real metadata.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Mid-flight disable affects drafts and queued notifications more than the three bullets cover.</li>
+<li><strong>Recommended next step:</strong> Align HRREC-91978 scenarios with HRREC-91975 on pending notifications when the channel is disabled mid-session.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Admin disables channel with draft open</p><p><strong>Given</strong> a recruiter has an unsent draft in the email panel<br/><strong>When</strong> a tenant admin disables the 2-way email channel before the recruiter sends<br/><strong>Then</strong> send is blocked with the same policy messaging as HRREC-91979 and any in-flight notifications behave per the agreed framework rules</p></td>
+</tr>
+<!-- gap-review HRREC-91979 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91979">HRREC-91979</a><br/>PH: Recruiter does not have access to the compose email task</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>View vs send split references REST write-access on conversation context—matches how other channels hide compose; confirm parity with agency flows in sibling stories.</p></td>
+<td><p>Read-only recruiters should never see disabled grey buttons that still imply clickability—fully hidden controls match the AC.</p></td>
+<td><p>HRREC-91979: no XO metadata came back from the dev SUV today; schedule a short walk-through of the conversation and notification XO surfaces this story depends on.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Security split is explicit and mirrored to REST endpoint notes.</li>
+<li><strong>Recommended next step:</strong> Milestone-test alongside HRREC-91985 to ensure agency paths do not leak compose chrome.</li>
+</ul></td>
+<td><p>No supplementary BDD drafted here; rely on this ticket’s scenarios unless refinement opens a new gap.</p></td>
+</tr>
+<!-- gap-review HRREC-91980 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91980">HRREC-91980</a><br/>PH: Recruiter sees the panel expand when clicking Add to compose an email</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Adds explicit tie from Add button to grow events and modal shadow—depends on HRREC-91948 decisions for reopen and shrink consistency.</p></td>
+<td><p>If grow events race with navigation discard prompts, recruiters may see odd panel width; exercise combined HRREC-91995 path.</p></td>
+<td><p>XO evidence was not retrieved from the SUV for HRREC-91980; confirm with engineering where side-panel messaging hooks live before you freeze story points.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Story is narrow UI wiring with clear Given/When/Then.</li>
+<li><strong>Recommended next step:</strong> Joint test with HRREC-91948 reopen answer.</li>
+</ul></td>
+<td><p>Leaving column 7 empty of new blocks because acceptance criteria already enumerate the critical behaviours.</p></td>
+</tr>
+<!-- gap-review HRREC-91982 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91982">HRREC-91982</a><br/>PH: Recruiter opens the message to read and reply</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Wide read plus reply hand-off to compose is clear; disabled conversation states tie to opt-out and email-change stories—keep messaging consistent across those sibling keys.</p></td>
+<td><p>Recruiters should not see Reply enabled for a split second after a state flip; watch UI flicker when REST marks thread closed.</p></td>
+<td><p>HRREC-91982: no XO metadata came back from the dev SUV today; schedule a short walk-through of the conversation and notification XO surfaces this story depends on.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Core read/reply loop is well covered.</li>
+<li><strong>Recommended next step:</strong> Add a quick visual regression for disabled-state button visibility.</li>
+</ul></td>
+<td><p>No additive Given/When/Then drafted—Jira already lists the primary flows for this slice.</p></td>
+</tr>
+<!-- gap-review HRREC-91985 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91985">HRREC-91985</a><br/>PH: Recruiter can compose an email to non-agency candidate</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Opt-in gating for non-agency candidates matches compliance framing; deployment guidance still highlights internal vs external email routing differences worth a pilot checklist item.</p></td>
+<td><p>If opt-in flips between compose open and send, recruiters need an immediate inline explanation—not only a hidden button.</p></td>
+<td><p>HRREC-91985: no XO metadata came back from the dev SUV today; schedule a short walk-through of the conversation and notification XO surfaces this story depends on.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Compose gating scenarios are explicit for opt-in and security.</li>
+<li><strong>Recommended next step:</strong> Pair with HRREC-92029 for agency contrast in milestone testing.</li>
+</ul></td>
+<td><p>Leaving column 7 empty of new blocks because acceptance criteria already enumerate the critical behaviours.</p></td>
+</tr>
+<!-- gap-review HRREC-91986 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91986">HRREC-91986</a><br/>PH: Recruiter expands/collapses the panel to check candidate profile (context stays?)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Draft preservation is stated; Message Builder notes elsewhere say there is no server-side draft—align expectations when refresh or session loss happens.</p></td>
+<td><p>Recruiters equate collapse with safety; a hard refresh still loses text, which feels harsher than navigation discard.</p></td>
+<td><p>XO evidence was not retrieved from the SUV for HRREC-91986; confirm with engineering where side-panel messaging hooks live before you freeze story points.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Local-only drafts mean collapse vs refresh semantics are not spelled out together.</li>
+<li><strong>Recommended next step:</strong> Add a lightweight scenario or doc note on refresh vs navigation for the same draft.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Browser refresh with draft</p><p><strong>Given</strong> I have unsent email text in local UI state<br/><strong>When</strong> I refresh the browser window<br/><strong>Then</strong> the behaviour matches an explicitly stated policy (loss vs warn) consistent with discard stories</p></td>
+</tr>
+<!-- gap-review HRREC-91987 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91987">HRREC-91987</a><br/>PH: Recruiter can select To, From &amp; Subject (UI) when composing an email</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>UI-only header scaffolding is clear; future recipient logic will land in HRREC-91990/92030—avoid duplicating full validation here.</p></td>
+<td><p>Visual-only dropdowns should not trap keyboard users—quick accessibility check even for UI milestone.</p></td>
+<td><p>SUV XO lookup errored in this session; ask engineering which bindings or layout classes own the behaviour described for HRREC-91987 so tests map to real metadata.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Narrow UI milestone with bounded scope.</li>
+<li><strong>Recommended next step:</strong> Defer deep validation scenarios to send stories.</li>
+</ul></td>
+<td><p>Column 7 adds nothing new: existing Jira scenarios cover the stated happy and negative paths.</p></td>
+</tr>

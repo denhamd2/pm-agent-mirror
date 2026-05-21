@@ -1,0 +1,43 @@
+<h2>Executive summary (for PM)</h2>
+<ul>
+<li>Run tier: B (timeboxed)—44 product Stories under HRREC-82977; theme-based Salomon Internal Knowledge plus one Deployment Agent thread; XO MCP searches errored on the SUV this run; Peanut unavailable for merge anchor checks; not full per-key Salomon depth.</li>
+<li>Gap Likelihood reflects Verdict plus suggested missing BDD only—not a separate persona score.</li>
+</ul>
+<h3>Top 5 gaps (epic)</h3>
+<ul>
+<li>Placeholder stories (HRREC-92022, thin exploratory HRREC-92013) still lack acceptance criteria, which blocks honest sizing and regression proof.</li>
+<li>Concurrent read/unread semantics (HRREC-91999) remain an explicit “product decision” gap—align before investing in automation.</li>
+<li>Local-only drafts plus forced refresh on REST errors (HRREC-92004) create recruiter-visible data loss that copy alone may not solve.</li>
+<li>Lifecycle configuration (HRREC-92012) intersects closure UX (HRREC-92014) and opt-out “in-between” states (HRREC-92006)—copy and scheduling need a joint pass.</li>
+<li>Reporting and purge stories (HRREC-92035, HRREC-92011) span security-sensitive surfaces; milestone tests need explicit masked-reader and post-purge expectations.</li>
+</ul>
+<h3>Top 5 strengths (epic)</h3>
+<ul>
+<li>Agency isolation and direct-thread security language (HRREC-92008) is unusually explicit for a net-new channel.</li>
+<li>Bounce and delivery diagnostics (HRREC-92003) already align with translation inventory work (TRANMGMT-2499).</li>
+<li>Send path covers duplicate-click prevention and polling (HRREC-91994), reflecting lessons from other conversational channels.</li>
+<li>Opt-in, security view/send split, and agency vs non-agency compose rules form a coherent compliance spine across sibling stories.</li>
+<li>Merge-aware email change handling (HRREC-92005) calls out duplicate-management testing proactively.</li>
+</ul>
+<h2>Epic-level notes</h2>
+<ul>
+<li><strong>Salomon theme batch (this run):</strong> Internal knowledge returned candidate profile composite header security, multi-channel unread count permissions, Message Builder template lifecycle, purgeable data types under Recruiting Communications, and notification routing rules—mapped lightly per row below.</li>
+<li><strong>Deployment Agent batch:</strong> Reply-To vs tenant defaults, internal vs external routing, COI, digest vs immediate routing, and rehire email precedence—use when refining notification and compose stories together.</li>
+<li>Skipped doc-writer Stories: HRREC-90852 (AG:), HRREC-90853 (RN:)—excluded per gap-review scope rules.</li>
+<li>Jira ingest: bulk REST search in three chunks (executeApi) on 2026-05-17 captured summary+description fragments for all in-scope keys.</li>
+</ul>
+<h2>Cross-initiative pattern hints (WhatsApp — inspiration only)</h2>
+<p><strong>Hard disclaimers (verbatim intent):</strong> Same sliding-panel UX shell, different channel; consent, templates, media, delivery semantics, and failure modes differ. WhatsApp partner delivery is often Twilio-oriented in internal talk; two-way email uses Workday email integration—do not treat a WhatsApp bug as proof an email defect exists. Bugs under WhatsApp epics signal delivery pain for pattern mining only.</p>
+<p><strong>Corpus line:</strong> Frozen pattern corpus from repo companion snapshot dated 2026-05-16 (manifest-only). No live Jira pull for WhatsApp companion keys this run.</p>
+<ul>
+<li><strong>Merge / identity drift</strong> — WhatsApp merge issues (e.g., HRREC-84389, HRREC-90306 per snapshot excerpts) asked whether merged candidates show wrong senders; <em>consider for 2WE if</em> email headers or To/From lists could mis-attribute after merge.</li>
+<li><strong>Send guard / in-flight compose</strong> — HRREC-90268 / HRREC-92062 excerpts noted disabling send while in flight and stopping typing after send; <em>consider for 2WE if</em> double-send or stray keystrokes could still appear on email compose.</li>
+<li><strong>Lifecycle banners</strong> — HRREC-90243 excerpt noted late “conversation closing” visibility; <em>consider for 2WE if</em> disposition-driven closures should surface before first send where policy expects it.</li>
+<li><strong>Purge visibility</strong> — HRREC-84388 excerpt on purge UX; <em>consider for 2WE if</em> recruiters see coherent empty states after recruiting communications purge.</li>
+<li><strong>Unread / read promises</strong> — HRREC-84407 excerpt flagged read-state timing; <em>consider for 2WE if</em> “read” or delivery tags over-promise what email receipts can prove.</li>
+</ul>
+<table>
+<thead><tr>
+<th>Story</th><th>Gap Likelihood</th><th>PM lens</th><th>QA lens</th><th>Dev lens</th><th>Verdict</th><th>Suggested missing BDD (Given/When/Then)</th>
+</tr></thead>
+<tbody>

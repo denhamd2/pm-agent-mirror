@@ -1,0 +1,210 @@
+<h2>Executive summary (for PM)</h2>
+<ul>
+<li><strong>Run tier:</strong> B (timeboxed)—44 HRREC-82977 Stories with fresh <code>getTicketDetails</code> this session; Salomon KB and Deployment Agent were theme-batched (not full per-key depth); Dev lens uses honest XO outage wording.</li>
+<li><strong>Scope:</strong> Skipped doc-writer Stories <code>HRREC-90852</code> (AG:) and <code>HRREC-90853</code> (RN:) per skill exclusions. <strong>Gap Likelihood</strong> reflects Verdict + suggested missing BDD only.</li>
+<li><strong>(3) Global XO MCP outage:</strong> XO MCP <code>search</code> did not return SUV metadata this session (transport/DNS failure), so Dev lens rows are engineering follow-ups—not proof that hooks are missing.</li>
+</ul>
+<h3>Top 5 gaps (epic)</h3><ul>
+<li>Draft persistence is local-only for several compose/discard stories—align on whether any MVP server draft is required before recruiters rely on navigation guards (HRREC-91995, HRREC-91996).</li>
+<li>Merge, primary-email changes, and thread read-only states intersect across multiple keys—run one consolidated duplicate-management workshop before sizing (HRREC-92015, HRREC-92005).</li>
+<li>Notification + My Conversations + bell routing needs an explicit cross-surface contract so inbound email replies are not noisy or invisible (HRREC-91975, HRREC-92022).</li>
+<li>Agency isolation and tab lifecycles are security-sensitive—pair UX tabs with forced server scoping and negative security tests (HRREC-92007, HRREC-92008, HRREC-92009).</li>
+<li>Thin-spec reporting smoke (HRREC-92013) and lifecycle admin story (HRREC-92012) need firmer acceptance tables before milestone sign-off.</li>
+</ul>
+<h3>Top 5 strengths (epic)</h3><ul>
+<li>Broad scenario coverage for compose, send, bounce taxonomy, and REST failures shows mature recruiter-facing thinking.</li>
+<li>Explicit opt-in, read-only security, and channel-disable stories reduce accidental non-compliant sends.</li>
+<li>Purge story names concrete PDT objects (messages, participants, attachments, notification events).</li>
+<li>Agency vs candidate tabs and agency-only visibility stories state clear confidentiality intent.</li>
+<li>Attachment and validation stories distinguish client-side limits from backend enforcement.</li>
+</ul>
+<h2>Epic-level notes</h2><ul>
+<li>Overlapping panel-grow behaviour appears in HRREC-91948, HRREC-91980, HRREC-92001—consolidate grow/shrink events so email and SSP do not fork incompatible panel contracts.</li>
+<li>Unread/read stories (HRREC-91997–91999) should share one product decision on per-user vs shared read models before QA writes assertions.</li>
+<li>Send without attachments vs with attachments (HRREC-91994 vs HRREC-92036) should reuse the same disable-send and polling language to avoid divergent REST client behaviour.</li>
+</ul>
+<h2>Cross-initiative pattern hints (WhatsApp — inspiration only)</h2>
+<p><strong>Hard disclaimers (verbatim intent):</strong> Same surface, different channel—consent, templates, media, delivery semantics, and failure modes differ. Different backend/OE: WhatsApp partner delivery is not the same as Workday email. Bugs in partner epics are inspiration only, not proof 2WE is broken.</p>
+<p><strong>Frozen pattern corpus:</strong> companion snapshot dated 2026-05-16 in repo file <code>docs/initiatives/two-way-email/reference/WHATSAPP_COMPANION_CORPUS_SNAPSHOT.md</code>; <strong>no live Jira pull for WhatsApp companion this run (manifest-only).</strong></p>
+<ul>
+<li><strong>Merge / identity</strong> — WhatsApp merge pain (e.g. <code>HRREC-90306</code> excerpt) suggests asking whether email threads attribute participants correctly after duplicate resolution.</li>
+<li><strong>Preview vs send hydration</strong> — <code>HRREC-84403</code> / <code>HRREC-89856</code> excerpts remind PMs to align recruiter-visible preview with what actually sends for email tokens.</li>
+<li><strong>Composer guard rails</strong> — <code>HRREC-90268</code> / <code>HRREC-92062</code> excerpts translate to disabling double-send and in-flight typing for email compose.</li>
+<li><strong>Silent failures</strong> — <code>HRREC-89979</code> excerpt warns against errors that only surface on send; email should fail fast when limits or consent block a thread.</li>
+<li><strong>Consent chrome</strong> — <code>HRREC-89899</code> excerpt nudges email opt-in UI to hide broken terms links when tenant notifications lack configured text.</li>
+</ul>
+<table><thead><tr>
+<th>Story</th>
+<th>Gap Likelihood</th>
+<th>PM lens</th>
+<th>QA lens</th>
+<th>Dev lens</th>
+<th>Verdict</th>
+<th>Suggested missing BDD (Given/When/Then)</th>
+</tr></thead><tbody><tr><!-- gap-review HRREC-91946 --><td><a href="https://jira2.workday.com/browse/HRREC-91946">HRREC-91946</a><br/>[Initialisation] Recruiter can see Email Task on SSP (XO Only)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">High</ac:parameter><ac:parameter ac:name="colour">Yellow</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91946 — Sliding-panel growth and task ordering must stay coherent with other collaboration tasks so email does not steal focus from masked or restricted applications. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in [Initialisation] Recruiter can see Email Task on SSP (XO Only) should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91946 ([Initialisation] Recruiter can see Email Task on SSP (XO Only)) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>High</strong><ul><li><strong>Finding:</strong> HRREC-91946 leaves open questions on panel reopen state and breakpoint behaviour that UX still owes.</li><li><strong>Recommended next step:</strong> Close Scenario 4/5 style questions in Jira with UX decisions before dev branches diverge.</li></ul></td>
+<td><p><strong>Scenario: Reopen panel after navigation</strong></p>
+<p><strong>Given</strong> I grew the panel then closed it from the candidate profile<br/>
+<strong>When</strong> I reopen the email task in the same session<br/>
+<strong>Then</strong> the panel width matches the agreed default vs last-grown state per UX decision.</p></td></tr>
+<tr><!-- gap-review HRREC-91948 --><td><a href="https://jira2.workday.com/browse/HRREC-91948">HRREC-91948</a><br/>[Initialisation] Enabled SSP Growth/Expansion</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">High</ac:parameter><ac:parameter ac:name="colour">Yellow</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91948 — Sliding-panel growth and task ordering must stay coherent with other collaboration tasks so email does not steal focus from masked or restricted applications. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in [Initialisation] Enabled SSP Growth/Expansion should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91948 ([Initialisation] Enabled SSP Growth/Expansion) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>High</strong><ul><li><strong>Finding:</strong> HRREC-91948 leaves open questions on panel reopen state and breakpoint behaviour that UX still owes.</li><li><strong>Recommended next step:</strong> Close Scenario 4/5 style questions in Jira with UX decisions before dev branches diverge.</li></ul></td>
+<td><p><strong>Scenario: SSP growth state before email</strong></p>
+<p><strong>Given</strong> I used the SSP growth affordance to widen the collaboration chrome<br/>
+<strong>When</strong> I collapse to default width and then open the email task<br/>
+<strong>Then</strong> the sliding email panel starts from the agreed baseline width without inheriting a stale expanded chrome state.</p></td></tr>
+<tr><!-- gap-review HRREC-91974 --><td><a href="https://jira2.workday.com/browse/HRREC-91974">HRREC-91974</a><br/>PH: Recruiter sees Empty state of email task if opened</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91974 — For Recruiter sees Empty state of email task if opened, stress how this slice composes with opt-in, security-domain write access, and discard flows so the candidate experience stays predictable. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in Recruiter sees Empty state of email task if opened should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91974 (Recruiter sees Empty state of email task if opened) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91974 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91974; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91975 --><td><a href="https://jira2.workday.com/browse/HRREC-91975">HRREC-91975</a><br/>PH: Recruiter receives a notification</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">High</ac:parameter><ac:parameter ac:name="colour">Yellow</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91975 — Bell vs My Conversations routing and read/unread semantics should stay consistent with tenant email notification rules so recruiters are not surprised by silent drops. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in Recruiter receives a notification should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91975 (Recruiter receives a notification) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>High</strong><ul><li><strong>Finding:</strong> HRREC-91975 depends on framework routing to My Conversations vs bell without duplicating email alerts.</li><li><strong>Recommended next step:</strong> Document the exact notification type and tenant routing prerequisites beside the instantiate event note.</li></ul></td>
+<td><p><strong>Scenario: Domain lacks My Conversations modify</strong></p>
+<p><strong>Given</strong> I participate in a thread but lack My Conversations domain modify<br/>
+<strong>When</strong> a reply arrives<br/>
+<strong>Then</strong> I still receive a compliant heads-up via bell or email per routing rules.</p></td></tr>
+<tr><!-- gap-review HRREC-91978 --><td><a href="https://jira2.workday.com/browse/HRREC-91978">HRREC-91978</a><br/>PH: Admin can enable or disable 2-way email as a comms channel</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91978 — Tenant admins need auditable toggles and lifecycle windows that match how recruiters experience mid-flight disables versus historical read-only threads. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in Admin can enable or disable 2-way email as a comms channel should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91978 (Admin can enable or disable 2-way email as a comms channel) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91978 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91978; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91979 --><td><a href="https://jira2.workday.com/browse/HRREC-91979">HRREC-91979</a><br/>PH: Recruiter does not have access to the compose email task</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91979 — For Recruiter does not have access to the compose email task, stress how this slice composes with opt-in, security-domain write access, and discard flows so the candidate experience stays predictable. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in Recruiter does not have access to the compose email task should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91979 (Recruiter does not have access to the compose email task) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91979 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91979; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91980 --><td><a href="https://jira2.workday.com/browse/HRREC-91980">HRREC-91980</a><br/>PH: Recruiter sees the panel expand when clicking Add to compose an email</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91980 — For Recruiter sees the panel expand when clicking Add to compose an email, stress how this slice composes with opt-in, security-domain write access, and discard flows so the candidate experience stays predictable. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in Recruiter sees the panel expand when clicking Add to compose an email should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91980 (Recruiter sees the panel expand when clicking Add to compose an email) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91980 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91980; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91982 --><td><a href="https://jira2.workday.com/browse/HRREC-91982">HRREC-91982</a><br/>PH: Recruiter opens the message to read and reply</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91982 — For Recruiter opens the message to read and reply, stress how this slice composes with opt-in, security-domain write access, and discard flows so the candidate experience stays predictable. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in Recruiter opens the message to read and reply should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91982 (Recruiter opens the message to read and reply) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91982 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91982; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91985 --><td><a href="https://jira2.workday.com/browse/HRREC-91985">HRREC-91985</a><br/>PH: Recruiter can compose an email to non-agency candidate</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91985 — For Recruiter can compose an email to non-agency candidate, stress how this slice composes with opt-in, security-domain write access, and discard flows so the candidate experience stays predictable. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in Recruiter can compose an email to non-agency candidate should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91985 (Recruiter can compose an email to non-agency candidate) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91985 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91985; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91986 --><td><a href="https://jira2.workday.com/browse/HRREC-91986">HRREC-91986</a><br/>PH: Recruiter expands/collapses the panel to check candidate profile (context stays?)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91986 — For Recruiter expands/collapses the panel to check candidate profile (context stays?), stress how this slice composes with opt-in, security-domain write access, and discard flows so the candidate experience stays predictable. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in Recruiter expands/collapses the panel to check candidate profile (context stays?) should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91986 (Recruiter expands/collapses the panel to check candidate profile (context stays?)) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91986 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91986; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91987 --><td><a href="https://jira2.workday.com/browse/HRREC-91987">HRREC-91987</a><br/>PH: Recruiter can select To, From &amp; Subject (UI) when composing an email</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91987 — For Recruiter can select To, From &amp; Subject (UI) when composing an email, stress how this slice composes with opt-in, security-domain write access, and discard flows so the candidate experience stays predictable. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in Recruiter can select To, From &amp; Subject (UI) when composing an email should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91987 (Recruiter can select To, From &amp; Subject (UI) when composing an email) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91987 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91987; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91988 --><td><a href="https://jira2.workday.com/browse/HRREC-91988">HRREC-91988</a><br/>PH: Recruiter attaches documents (UI only)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91988 — Attachment encoding and Blobatory hand-offs can inflate payload size—align client limits with ingestion and bounce copy so recruiters see one truth. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in Recruiter attaches documents (UI only) should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91988 (Recruiter attaches documents (UI only)) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91988 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91988; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91989 --><td><a href="https://jira2.workday.com/browse/HRREC-91989">HRREC-91989</a><br/>PH: Recruiter can use the RTE &amp; see the UI of buttons</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91989 — For Recruiter can use the RTE &amp; see the UI of buttons, stress how this slice composes with opt-in, security-domain write access, and discard flows so the candidate experience stays predictable. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in Recruiter can use the RTE &amp; see the UI of buttons should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91989 (Recruiter can use the RTE &amp; see the UI of buttons) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91989 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91989; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91990 --><td><a href="https://jira2.workday.com/browse/HRREC-91990">HRREC-91990</a><br/>PH: Recruiter can select From address from list of valid email addresses</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91990 — For Recruiter can select From address from list of valid email addresses, stress how this slice composes with opt-in, security-domain write access, and discard flows so the candidate experience stays predictable. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in Recruiter can select From address from list of valid email addresses should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91990 (Recruiter can select From address from list of valid email addresses) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91990 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91990; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91991 --><td><a href="https://jira2.workday.com/browse/HRREC-91991">HRREC-91991</a><br/>PH: Recruiter does not see any tabs for non-agency candidate</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91991 — For Recruiter does not see any tabs for non-agency candidate, stress how this slice composes with opt-in, security-domain write access, and discard flows so the candidate experience stays predictable. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in Recruiter does not see any tabs for non-agency candidate should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91991 (Recruiter does not see any tabs for non-agency candidate) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91991 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91991; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91992 --><td><a href="https://jira2.workday.com/browse/HRREC-91992">HRREC-91992</a><br/>PH: Recruiter attaches non-supported files</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91992 — Attachment encoding and Blobatory hand-offs can inflate payload size—align client limits with ingestion and bounce copy so recruiters see one truth. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in Recruiter attaches non-supported files should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91992 (Recruiter attaches non-supported files) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91992 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91992; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91993 --><td><a href="https://jira2.workday.com/browse/HRREC-91993">HRREC-91993</a><br/>PH: Recruiter sees UI error validations on Send</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91993 — For Recruiter sees UI error validations on Send, stress how this slice composes with opt-in, security-domain write access, and discard flows so the candidate experience stays predictable. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in Recruiter sees UI error validations on Send should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91993 (Recruiter sees UI error validations on Send) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91993 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91993; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91994 --><td><a href="https://jira2.workday.com/browse/HRREC-91994">HRREC-91994</a><br/>PH: Send Message (No Attachments)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">High</ac:parameter><ac:parameter ac:name="colour">Yellow</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91994 — For Send Message (No Attachments), stress how this slice composes with opt-in, security-domain write access, and discard flows so the candidate experience stays predictable. [Epic scan; Salomon; DA]</td>
+<td>Mid-send security or opt-out changes plus refresh guidance must be user-visible, or recruiters copy text and refresh without understanding why Send Message (No Attachments) failed. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91994 (Send Message (No Attachments)) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>High</strong><ul><li><strong>Finding:</strong> HRREC-91994 combines optimistic UI, polling, and double-send prevention—timing bugs are likely without soak tests.</li><li><strong>Recommended next step:</strong> Add non-functional acceptance for max latency before showing retry affordances.</li></ul></td>
+<td><p><strong>Scenario: Slow thread index</strong></p>
+<p><strong>Given</strong> backend indexing lags after send<br/>
+<strong>When</strong> the recruiter waits without refreshing<br/>
+<strong>Then</strong> polling stops with clear guidance instead of duplicate sends.</p></td></tr>
+<tr><!-- gap-review HRREC-91995 --><td><a href="https://jira2.workday.com/browse/HRREC-91995">HRREC-91995</a><br/>PH: Recruiter gets discard popup by changing pages</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91995 — For Recruiter gets discard popup by changing pages, stress how this slice composes with opt-in, security-domain write access, and discard flows so the candidate experience stays predictable. [Epic scan; Salomon; DA]</td>
+<td>Local-only drafts (per Message Builder note) mean navigation prompts must cover every exit path or recruiters lose long emails silently for Recruiter gets discard popup by changing pages. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91995 (Recruiter gets discard popup by changing pages) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91995 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91995; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91996 --><td><a href="https://jira2.workday.com/browse/HRREC-91996">HRREC-91996</a><br/>PH: Recruiter gets discard popup when they click the Discard button</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91996 — For Recruiter gets discard popup when they click the Discard button, stress how this slice composes with opt-in, security-domain write access, and discard flows so the candidate experience stays predictable. [Epic scan; Salomon; DA]</td>
+<td>Local-only drafts (per Message Builder note) mean navigation prompts must cover every exit path or recruiters lose long emails silently for Recruiter gets discard popup when they click the Discard button. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91996 (Recruiter gets discard popup when they click the Discard button) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91996 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91996; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91997 --><td><a href="https://jira2.workday.com/browse/HRREC-91997">HRREC-91997</a><br/>PH: Recruiter sees list of messages with unread ones marked in blue</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91997 — Bell vs My Conversations routing and read/unread semantics should stay consistent with tenant email notification rules so recruiters are not surprised by silent drops. [Epic scan; Salomon; DA]</td>
+<td>Colour-only unread cues can fail accessibility—recruiters need a second signal if blue markers are the primary affordance for Recruiter sees list of messages with unread ones marked in blue. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91997 (Recruiter sees list of messages with unread ones marked in blue) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91997 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91997; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+<tr><!-- gap-review HRREC-91998 --><td><a href="https://jira2.workday.com/browse/HRREC-91998">HRREC-91998</a><br/>PH: Recruiter can see message threads when clicking on a message</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro></td>
+<td>HRREC-91998 — For Recruiter can see message threads when clicking on a message, stress how this slice composes with opt-in, security-domain write access, and discard flows so the candidate experience stays predictable. [Epic scan; Salomon; DA]</td>
+<td>Edge cases in Recruiter can see message threads when clicking on a message should be exercised on masked job applications, channel-off tenants, and slow networks so the UI does not lie about sent state. [Jira]</td>
+<td>XO MCP did not return SUV metadata this session; have engineering point to the binding or service area implementing HRREC-91998 (Recruiter can see message threads when clicking on a message) and confirm REST contracts against the scenarios. [XO MCP]</td>
+<td><strong>Medium</strong><ul><li><strong>Finding:</strong> HRREC-91998 scenarios are credible but still benefit from cross-story ordering checks with adjacent compose/read stories.</li><li><strong>Recommended next step:</strong> In refinement, confirm dependencies with neighbouring milestones before sprint commit.</li></ul></td>
+<td><p>No extra GWT for HRREC-91998; Jira scenarios stay the source unless refinement surfaces a new cross-row dependency.</p></td></tr>
+</tbody></table>

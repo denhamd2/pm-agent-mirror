@@ -1,0 +1,27 @@
+{
+  "run": "HRREC-82977 full Story matrix",
+  "tier": "B",
+  "tier_note": "Salomon bundle theme-batched once for the epic; per-row bullets tie Jira text to those themes without implying separate KB/Jira/Slack pulls per key.",
+  "companion": "manifest-only WHATSAPP_COMPANION_CORPUS_SNAPSHOT.md snapshot_as_of 2026-05-16; no live WhatsApp Jira this run.",
+  "salomon_kb_themes": [
+    "Message Builder admin flows (template dashboard, notification categories, email channel + notification templates) gate how recruiting email bodies and headers behave—preview vs send tooling differs by channel.",
+    "Internal Slack context: conversational SMS content lives on the conversation in the panel; outbound SMS notification reports differ; mobile vs desktop messaging parity is not guaranteed—use as channel-pattern reminder only for email UX promises.",
+    "Feature toggles and tenant environments (Internal / Preview / Production) still govern when recruiters see net-new chrome in non-prod pilots."
+  ],
+  "salomon_jira_index_keys": [
+    "HRREC-91946",
+    "HRREC-89765",
+    "HRREC-91707",
+    "HRREC-91706",
+    "HRREC-87325",
+    "HRREC-79876",
+    "HRREC-90136",
+    "HRREC-90926",
+    "HRREC-51359",
+    "HRREC-43605"
+  ],
+  "salomon_slack": "No archived Slack hits returned for simple_query_string \"HRREC-82977\" OR \"two-way email\" recruiting (Salomon ES this run).",
+  "deployment_agent_excerpt": "Compose vs read-only depends on security domains and Send Message entry points; Edit Tenant Setup - Notifications drives email routing/SMTP; confirmed opt-in and template mis-links can yield blank emails; Candidate SMS Messages notification type is often wired for two-way messaging alerts; test with redirect-all-emails and internal vs external candidates.",
+  "xo_mcp_search": "search_string conversational email — hits skewed to SMS subaccount GRAs, inbound email domain conversions, Conversation Email Tokens WNF; no single obvious class for HRREC-82977 UI—ask engineering which workset/class backs getConversationContextInstance / conversationContextInstance view.",
+  "peanut_default": "Peanut — Not queried — no per-row trigger in this batched HTML emit pass."
+}

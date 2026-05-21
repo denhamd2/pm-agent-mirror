@@ -1,0 +1,187 @@
+<!-- gap-review HRREC-91988 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91988">HRREC-91988</a><br/>PH: Recruiter attaches documents (UI only)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Client validation mirrors standard attachment limits; cumulative size story lives in HRREC-91992—cross-reference keeps tenants honest about 30MB totals.</p></td>
+<td><p>Blocked file messaging should stay consistent with HRREC-91992 server-side rejects to avoid conflicting copy.</p></td>
+<td><p>SUV XO lookup errored in this session; ask engineering which bindings or layout classes own the behaviour described for HRREC-91988 so tests map to real metadata.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> UI-only scope is explicit with three scenarios.</li>
+<li><strong>Recommended next step:</strong> Cross-test copy with HRREC-91992.</li>
+</ul></td>
+<td><p>Leaving column 7 empty of new blocks because acceptance criteria already enumerate the critical behaviours.</p></td>
+</tr>
+<!-- gap-review HRREC-91989 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91989">HRREC-91989</a><br/>PH: Recruiter can use the RTE &amp; see the UI of buttons</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>GenAI toolbar exclusion is explicit—good MVP alignment; internal Message Builder docs still mention GenAI prompts by category—ignore for this slice.</p></td>
+<td><p>Send/Discard rendered as layout-only; combined with HRREC-91994 ensure disabled state matches final wiring.</p></td>
+<td><p>HRREC-91989: no XO metadata came back from the dev SUV today; schedule a short walk-through of the conversation and notification XO surfaces this story depends on.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Toolbar exclusions are clearly stated.</li>
+<li><strong>Recommended next step:</strong> No further BDD in this pass.</li>
+</ul></td>
+<td><p>Column 7 adds nothing new: existing Jira scenarios cover the stated happy and negative paths.</p></td>
+</tr>
+<!-- gap-review HRREC-91990 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91990">HRREC-91990</a><br/>PH: Recruiter can select From address from list of valid email addresses</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>From list comes from OE configurations including no-reply; deployment notes on recruiting Reply-To vs tenant defaults mean you should confirm which address candidates actually reply to in pilot tenants.</p></td>
+<td><p>Wrong From choice breaks candidate trust; scenarios do not yet show invalid configuration fallback.</p></td>
+<td><p>HRREC-91990: no XO metadata came back from the dev SUV today; schedule a short walk-through of the conversation and notification XO surfaces this story depends on.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Backend list quality and misconfiguration handling are underspecified.</li>
+<li><strong>Recommended next step:</strong> Add a scenario for empty From list or single no-reply-only configuration.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Misconfigured From list</p><p><strong>Given</strong> OE returns no selectable From addresses<br/><strong>When</strong> I open compose<br/><strong>Then</strong> I see actionable admin-facing guidance rather than a blank dropdown</p></td>
+</tr>
+<!-- gap-review HRREC-91991 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91991">HRREC-91991</a><br/>PH: Recruiter does not see any tabs for non-agency candidate</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Tab hiding for direct applies is crisp; pair with HRREC-92007 to ensure default thread selection never shows agency chrome transiently.</p></td>
+<td><p>Flashing tabs on slow load would confuse; specify loading skeleton behaviour if not already global.</p></td>
+<td><p>HRREC-91991: no XO metadata came back from the dev SUV today; schedule a short walk-through of the conversation and notification XO surfaces this story depends on.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Clear default single-thread behaviour.</li>
+<li><strong>Recommended next step:</strong> Performance-style visual test on slow network.</li>
+</ul></td>
+<td><p>Leaving column 7 empty of new blocks because acceptance criteria already enumerate the critical behaviours.</p></td>
+</tr>
+<!-- gap-review HRREC-91992 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91992">HRREC-91992</a><br/>PH: Recruiter attaches non-supported files</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Extension and cumulative size limits align with enterprise email expectations; tenant variation on blocked extensions is called out.</p></td>
+<td><p>Total-payload rejection must surface which attachment pushed the email over limit so recruiters can fix quickly.</p></td>
+<td><p>XO evidence was not retrieved from the SUV for HRREC-91992; confirm with engineering where side-panel messaging hooks live before you freeze story points.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Three concrete negative paths.</li>
+<li><strong>Recommended next step:</strong> Align error strings with TRANMGMT-2499 translation table.</li>
+</ul></td>
+<td><p>No additive Given/When/Then drafted—Jira already lists the primary flows for this slice.</p></td>
+</tr>
+<!-- gap-review HRREC-91993 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91993">HRREC-91993</a><br/>PH: Recruiter sees UI error validations on Send</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Aggregate error banner plus field errors matches good form design; ensure screen reader order is specified outside this story if a11y is a release gate.</p></td>
+<td><p>Multiple errors should all remain visible after fixing one field—common regression.</p></td>
+<td><p>XO evidence was not retrieved from the SUV for HRREC-91993; confirm with engineering where side-panel messaging hooks live before you freeze story points.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Validation matrix is explicit.</li>
+<li><strong>Recommended next step:</strong> Accessibility review once wired for real send.</li>
+</ul></td>
+<td><p>No additive Given/When/Then drafted—Jira already lists the primary flows for this slice.</p></td>
+</tr>
+<!-- gap-review HRREC-91994 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91994">HRREC-91994</a><br/>PH: Send Message (No Attachments)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Polling for delayed GET visibility mirrors WhatsApp-style double-send guard themes—worth confirming telemetry when polling storms slow tenants (pattern inspiration only).</p></td>
+<td><p>Recruiters who tap Send twice expect zero duplicates; watch slow-network race between disable and first click.</p></td>
+<td><p>SUV XO lookup errored in this session; ask engineering which bindings or layout classes own the behaviour described for HRREC-91994 so tests map to real metadata.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Polling behaviour under load and analytics impact are not stated.</li>
+<li><strong>Recommended next step:</strong> Add non-functional note or scenario on max polling/backoff before sizing.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Slow thread index</p><p><strong>Given</strong> GET thread data is delayed beyond normal SLA<br/><strong>When</strong> I remain on the panel<br/><strong>Then</strong> polling backs off without hammering the server and the UI shows a subtle in-progress state</p></td>
+</tr>
+<!-- gap-review HRREC-91995 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91995">HRREC-91995</a><br/>PH: Recruiter gets discard popup by changing pages</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Navigation discard depends on local-only drafts; align wording with HRREC-91996 so deep links and browser back behave the same.</p></td>
+<td><p>Back button vs in-app navigation may skip the discard modal—define coverage.</p></td>
+<td><p>SUV XO lookup errored in this session; ask engineering which bindings or layout classes own the behaviour described for HRREC-91995 so tests map to real metadata.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Browser back behaviour is not referenced.</li>
+<li><strong>Recommended next step:</strong> Add explicit browser-back and deep-link leave coverage.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Browser back with unsent draft</p><p><strong>Given</strong> I edited the email body<br/><strong>When</strong> I use the browser back button<br/><strong>Then</strong> I see the same discard flow as in-app navigation away</p></td>
+</tr>
+<!-- gap-review HRREC-91996 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91996">HRREC-91996</a><br/>PH: Recruiter gets discard popup when they click the Discard button</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Escape key parity is explicit—good; still depends on local-only draft model noted in HRREC-91995.</p></td>
+<td><p>Empty editor skip of confirmation is clear; ensure whitespace-only body counts as empty.</p></td>
+<td><p>HRREC-91996: no XO metadata came back from the dev SUV today; schedule a short walk-through of the conversation and notification XO surfaces this story depends on.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Keyboard and empty-editor paths covered.</li>
+<li><strong>Recommended next step:</strong> Clarify whitespace-only editor treatment in one line.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> Whitespace-only draft</p><p><strong>Given</strong> my editor contains only spaces<br/><strong>When</strong> I click Discard<br/><strong>Then</strong> behaviour matches the empty-editor rule explicitly</p></td>
+</tr>
+<!-- gap-review HRREC-91997 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91997">HRREC-91997</a><br/>PH: Recruiter sees list of messages with unread ones marked in blue</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Medium</ac:parameter>
+<ac:parameter ac:name="colour">Blue</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Unread colour plus server refresh is stated; internal precedent on multi-channel unread grids says counts must respect channel security—email-only recruiters should not inherit SMS-only counts.</p></td>
+<td><p>Colour-blind mode requires a non-colour cue; confirm iconography with design once.</p></td>
+<td><p>SUV XO lookup errored in this session; ask engineering which bindings or layout classes own the behaviour described for HRREC-91997 so tests map to real metadata.</p></td>
+<td><p>🔵 Medium</p>
+<ul>
+<li><strong>Finding:</strong> Accessibility and cross-channel count security need explicit sign-off.</li>
+<li><strong>Recommended next step:</strong> Add design reference for non-colour unread cue.</li>
+</ul></td>
+<td><p><strong>Scenario:</strong> High-contrast unread cue</p><p><strong>Given</strong> accessibility mode removes colour reliance<br/><strong>When</strong> I view unread rows<br/><strong>Then</strong> an icon or weight treatment shows unread status in addition to colour</p></td>
+</tr>
+<!-- gap-review HRREC-91998 -->
+<tr>
+<td><a href="https://jira2.workday.com/browse/HRREC-91998">HRREC-91998</a><br/>PH: Recruiter can see message threads when clicking on a message</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1">
+<ac:parameter ac:name="title">Low</ac:parameter>
+<ac:parameter ac:name="colour">Green</ac:parameter>
+</ac:structured-macro></td>
+<td><p>Descending order and empty reply thread are explicit—good for training materials.</p></td>
+<td><p>Very long threads should still perform; optional note for virtualization if not inherited from SMS shell.</p></td>
+<td><p>For HRREC-91998, SUV XO search failed this run—have engineering name the REST domains and layouts implementing this slice before sizing.</p></td>
+<td><p>🟢 Low</p>
+<ul>
+<li><strong>Finding:</strong> Thread ordering scenarios are solid.</li>
+<li><strong>Recommended next step:</strong> No extra BDD.</li>
+</ul></td>
+<td><p>Leaving column 7 empty of new blocks because acceptance criteria already enumerate the critical behaviours.</p></td>
+</tr>

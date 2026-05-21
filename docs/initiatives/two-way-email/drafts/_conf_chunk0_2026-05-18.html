@@ -1,0 +1,288 @@
+<h2>Executive summary (for PM)</h2>
+<ul>
+<li>Run tier: B (timeboxed)—44 in-scope Stories under HRREC-82977 after excluding doc-writer AG:/RN: keys; theme-based Salomon/DA and batched Dev lens; not full per-key Salomon depth.</li>
+<li>Gap Likelihood reflects Verdict + suggested missing BDD only—not a separate persona-tension score. Skipped gap table keys: HRREC-90852 (AG:), HRREC-90853 (RN:).</li>
+<li>XO MCP did not return SUV metadata this session (transport error on search), so Dev lens rows are engineering follow-up questions, not proof of missing metadata.</li>
+</ul>
+<h3>Top 5 gaps (epic)</h3>
+<ul>
+<li>Thin-spec and cross-team spikes (notably My Conversations / OE packaging) sit beside UI-heavy stories—sequence dependencies before hard QA dates (HRREC-92022).</li>
+<li>Draft lifecycle is explicitly local-only; navigation discard and refresh stories must be trained together or recruiters will perceive data loss as bugs (HRREC-91995, HRREC-91996).</li>
+<li>Merge, email-change pause, and thread visibility interact—risk of contradictory UX if duplicate-management events arrive out of order (HRREC-92015, HRREC-92005).</li>
+<li>Reporting + purge + candidate communications visibility must agree on attachment redaction and timestamps—milestone regression story is exploratory only today (HRREC-92035, HRREC-92011, HRREC-92013).</li>
+<li>Notification entry points (My Conversations vs bell vs email prompts) need tenant-aligned language; internal KB stresses domain alignment for conversational channels (HRREC-91975).</li>
+</ul>
+<h3>Top 5 strengths (epic)</h3>
+<ul>
+<li>Most functional slices carry detailed Given/When/Then blocks already—strong refinement investment across compose, send, and error paths.</li>
+<li>Agency vs non-agency branching is explicitly split across tabs, compose, and isolation stories—reduces accidental scope bleed.</li>
+<li>Security read vs send split is called out with REST notes on HRREC-91979—good engineering handoff signal.</li>
+<li>Attachment and validation stories distinguish client vs server responsibilities—helps QA plan negative paths.</li>
+<li>Admin enable/disable and lifecycle admin stories show rollout-aware thinking for enterprise tenants.</li>
+</ul>
+<h2>Epic-level notes</h2>
+<ul>
+<li>Overlapping UI chrome: HRREC-91948, HRREC-91980, HRREC-92001, and HRREC-91982 all touch expand/grow—keep a single measurement source of truth in design specs.</li>
+<li>HRREC-91994 and HRREC-92036 should share send/polling semantics; dedupe QA matrices.</li>
+<li>HRREC-92013 is exploratory—tie to concrete report names before milestone sign-off.</li>
+</ul>
+<h2>Cross-initiative pattern hints (WhatsApp — inspiration only)</h2>
+<p><strong>Frozen pattern corpus</strong> — 2026-05-16 companion snapshot in repo; <strong>No live Jira pull for WhatsApp companion this run (manifest-only).</strong> Theme anchors below cite snapshot excerpt keys only—inspiration for email, not requirements.</p>
+<p>Same candidate profile sliding side panel UX shell as WhatsApp work; not a requirements import; channel and backend differ; do not treat WhatsApp defects as proof email is broken.</p>
+<ul>
+<li><strong>Preview vs send</strong> — HRREC-84403 / HRREC-89856: consider for 2WE if email preview hydration could diverge from what actually sends when CRF scope or processing user differs?</li>
+<li><strong>Merge / identity</strong> — HRREC-90306: consider for 2WE if merge could mis-attribute outbound email identity or threading after duplicate resolution?</li>
+<li><strong>Composer guard</strong> — HRREC-90268 / HRREC-92062: consider for 2WE if double-send or typing-while-send races need the same in-flight disable pattern on email send?</li>
+<li><strong>Lifecycle messaging</strong> — HRREC-90243: consider for 2WE if closed-thread or disposition banners should appear at the business event, not only after first outbound?</li>
+<li><strong>Reporting field naming</strong> — HRREC-84556: consider for 2WE if mixed-channel dashboards need explicit email fields so SMS-oriented labels are not reused?</li>
+</ul>
+<table>
+<thead><tr>
+<th>Story</th><th>Gap Likelihood</th><th>PM lens</th><th>QA lens</th><th>Dev lens</th><th>Verdict</th><th>Suggested missing BDD (Given/When/Then)</th>
+</tr></thead>
+<tbody><tr><!-- gap-review HRREC-91946 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91946">HRREC-91946</a><br/>[Initialisation] Recruiter can see Email Task on SSP (XO Only)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>The SSP email task should appear in the right order with icon and tooltip once other side-panel tasks are visible; confirm final header copy with design before sign-off. [Functional knowledge: CONTEXT.md; Salomon; DA]</td>
+<td>Recruiters could see the task but land on the wrong job application context if ordering drifts from other tasks—exercise ordering with SMS and notes tasks. [Jira]</td>
+<td>HRREC-91946 ([Initialisation] Recruiter can see Email Task on SSP (XO Only)): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91946: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91946 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91948 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91948">HRREC-91948</a><br/>[Initialisation] Enabled SSP Growth/Expansion</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Wide-panel growth must stay consistent with other side-panel tasks so recruiters are not surprised by width or shadow when email is not open. [Functional knowledge: CONTEXT.md; Salomon; DA]</td>
+<td>Wide panel regressions on smaller breakpoints may clip email headers—spot-check L vs M breakpoints against Figma. [Jira]</td>
+<td>HRREC-91948 ([Initialisation] Enabled SSP Growth/Expansion): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91948: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91948 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91974 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91974">HRREC-91974</a><br/>PH: Recruiter sees Empty state of email task if opened</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>First-open empty state needs clear next step and naming alignment for the conversational email header so recruiters know how to start a thread. [Functional knowledge: CONTEXT.md; Salomon; DA]</td>
+<td>If Compose and New both appear, mis-clicks could start duplicate drafts—watch empty-state focus order and keyboard traps. [Jira]</td>
+<td>HRREC-91974 (PH: Recruiter sees Empty state of email task if opened): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91974: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91974 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91975 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91975">HRREC-91975</a><br/>PH: Recruiter receives a notification</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Medium</ac:parameter><ac:parameter ac:name="colour">Blue</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Inbound replies should surface where busy recruiters already look; align story language with tenant notification routing and training so email prompts land reliably. [Salomon; DA]</td>
+<td>If My Conversations is misconfigured, recruiters may only get email prompts—verify dual routing in a tenant with mixed domain access. [Jira]</td>
+<td>HRREC-91975 (PH: Recruiter receives a notification): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>🔵 Medium</p><ul>
+<li><strong>Finding:</strong> HRREC-91975: In-app vs email prompt routing for inbound replies still depends on My Conversations domain work tracked thinly elsewhere in the epic.</li>
+<li><strong>Recommended next step:</strong> Pair with HRREC-92022 OE outcome so notification copy matches the actual entry path recruiters will use.</li>
+</ul></td>
+<td><p><strong>Scenario: Cross-surface parity (HRREC-91975)</strong><br/>
+<strong>Given</strong> related epic stories on reporting, purge, or notifications have shipped their contracts for this job application<br/>
+<strong>When</strong> recruiters complete the journey described in HRREC-91975<br/>
+<strong>Then</strong> timestamps, redaction, and notification entry points match sibling story promises without contradictory copy</p></td>
+</tr><tr><!-- gap-review HRREC-91978 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91978">HRREC-91978</a><br/>PH: Admin can enable or disable 2-way email as a comms channel</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Channel toggle should read as rollout control: document what recruiters still see mid-flight when admins flip the switch during drafts. [DA]</td>
+<td>Disabling while drafts are open could strand attachments mid-upload—capture slow-network timing in tests. [Jira]</td>
+<td>HRREC-91978 (PH: Admin can enable or disable 2-way email as a comms channel): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91978: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91978 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91979 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91979">HRREC-91979</a><br/>PH: Recruiter does not have access to the compose email task</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>View-only recruiters must never see affordances they cannot use; pair REST gate messaging with plain-language empty states for read-only paths. [DA]</td>
+<td>Read-only users might still see stale Send chrome from cache—force refresh cases after domain changes. [Jira]</td>
+<td>HRREC-91979 (PH: Recruiter does not have access to the compose email task): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91979: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91979 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91980 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91980">HRREC-91980</a><br/>PH: Recruiter sees the panel expand when clicking Add to compose an email</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Expand-on-Add should match modal shadow behaviour from the SSP growth story so two gestures do not fight. [Epic scan; DA]</td>
+<td>Double shadows or lost focus when Add fires twice quickly should be caught in UI automation. [Jira]</td>
+<td>HRREC-91980 (PH: Recruiter sees the panel expand when clicking Add to compose an emai…): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91980: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91980 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91982 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91982">HRREC-91982</a><br/>PH: Recruiter opens the message to read and reply</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Wide read/reply must preserve attribution when switching from narrow list; clarify what happens if the candidate replies while the panel is collapsed. [Epic scan; DA]</td>
+<td>Long HTML bodies in wide view need scroll anchoring so recruiters do not lose place when new inbound arrives. [Jira]</td>
+<td>HRREC-91982 (PH: Recruiter opens the message to read and reply): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91982: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91982 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91985 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91985">HRREC-91985</a><br/>PH: Recruiter can compose an email to non-agency candidate</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Opt-in and domain checks belong at send-time for agency paths elsewhere in the epic—call out how this non-agency slice stays consistent. [Epic scan; DA]</td>
+<td>Opt-in edge cases with internal candidates need explicit fixtures—risk of messaging work email addresses unintentionally. [Jira]</td>
+<td>HRREC-91985 (PH: Recruiter can compose an email to non-agency candidate): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91985: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91985 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91986 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91986">HRREC-91986</a><br/>PH: Recruiter expands/collapses the panel to check candidate profile (context stays?)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Profile peek while composing is high-risk for silent draft loss; scenarios need explicit collapse/expand timing versus discard rules. [DA]</td>
+<td>Panel collapse during autosave-less drafts is fragile—exercise rapid collapse/expand while typing throttled networks. [Jira]</td>
+<td>HRREC-91986 (PH: Recruiter expands/collapses the panel to check candidate profile (co…): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91986: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91986 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91987 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91987">HRREC-91987</a><br/>PH: Recruiter can select To, From &amp; Subject (UI) when composing an email</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Custom To/From chrome must stay in sync with future send validation and Message Builder channel limits—avoid duplicating conflicting rules in UI-only stories. [Salomon; DA]</td>
+<td>Custom dropdowns must expose screen-reader labels equivalent to visible To/From text—do not rely on colour alone. [Jira]</td>
+<td>HRREC-91987 (PH: Recruiter can select To, From &amp; Subject (UI) when composing an email): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91987: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91987 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91988 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91988">HRREC-91988</a><br/>PH: Recruiter attaches documents (UI only)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>UI-only attachment pills still need a contract for max count and failure copy when server rejects after send sibling stories wire REST. [Epic scan; DA]</td>
+<td>UI-only staging might diverge from server MIME rules—pair with send stories before declaring done. [Jira]</td>
+<td>HRREC-91988 (PH: Recruiter attaches documents (UI only)): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91988: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91988 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91989 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91989">HRREC-91989</a><br/>PH: Recruiter can use the RTE &amp; see the UI of buttons</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Toolbar scope (GenAI excluded per AC) should be mirrored in admin comms so trainers do not promise tools recruiters will not see. [Salomon; DA]</td>
+<td>Paste-from-word often injects hidden styles—add a dirty-formatting case even if out of scope for MVP polish backlog. [Jira]</td>
+<td>HRREC-91989 (PH: Recruiter can use the RTE &amp; see the UI of buttons): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91989: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91989 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91990 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91990">HRREC-91990</a><br/>PH: Recruiter can select From address from list of valid email addresses</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>From-address list drives reply routing expectations; document recruiter-facing explanation when no-reply vs personal sender is chosen. [DA]</td>
+<td>From list with only no-reply could confuse reply expectations—negative test with single option tenants. [Jira]</td>
+<td>HRREC-91990 (PH: Recruiter can select From address from list of valid email addresses): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91990: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91990 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91991 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91991">HRREC-91991</a><br/>PH: Recruiter does not see any tabs for non-agency candidate</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Hiding tabs for direct applies must not hide agency-only affordances on misclassified applications—tighten data preconditions in refinement. [Epic scan; DA]</td>
+<td>Mis-tagged agency applications could hide tabs entirely—data setup matrix in QA plan is essential. [Jira]</td>
+<td>HRREC-91991 (PH: Recruiter does not see any tabs for non-agency candidate): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91991: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91991 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91992 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91992">HRREC-91992</a><br/>PH: Recruiter attaches non-supported files</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Client blocks must line up with server-side rejection taxonomy so recruiters do not see different errors pre- vs post-send. [Epic scan; DA]</td>
+<td>Zip-with-executable inner files may bypass naive client filters—confirm server story coverage. [Jira]</td>
+<td>HRREC-91992 (PH: Recruiter attaches non-supported files): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91992: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91992 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91993 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91993">HRREC-91993</a><br/>PH: Recruiter sees UI error validations on Send</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Aggregate error banner should map cleanly to field-level fixes so recruiters are not stuck in a loop of blind retries. [DA]</td>
+<td>Multi-error banner order should map to tab order for keyboard users—WCAG check. [Jira]</td>
+<td>HRREC-91993 (PH: Recruiter sees UI error validations on Send): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91993: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91993 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91994 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91994">HRREC-91994</a><br/>PH: Send Message (No Attachments)</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Polling for delayed thread visibility should have backoff and failure copy so recruiters do not assume duplicate sends when the thread lags. [Epic scan; DA]</td>
+<td>Double-tap send race: confirm disabled state also blocks keyboard submit shortcuts. [Jira]</td>
+<td>HRREC-91994 (PH: Send Message (No Attachments)): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91994: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91994 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91995 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91995">HRREC-91995</a><br/>PH: Recruiter gets discard popup by changing pages</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Navigation discard depends on local-only drafts per notes—state the data-loss risk explicitly in release notes and training. [DA]</td>
+<td>Browser back button vs in-app navigation may not both trigger discard—document supported paths. [Jira]</td>
+<td>HRREC-91995 (PH: Recruiter gets discard popup by changing pages): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91995: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91995 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91996 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91996">HRREC-91996</a><br/>PH: Recruiter gets discard popup when they click the Discard button</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Escape-key parity with Discard must not fight browser shortcuts on certain OS layouts—capture in UX review. [DA]</td>
+<td>Empty-editor no-prompt path must ignore whitespace-only HTML from RTE. [Jira]</td>
+<td>HRREC-91996 (PH: Recruiter gets discard popup when they click the Discard button): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91996: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91996 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91997 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91997">HRREC-91997</a><br/>PH: Recruiter sees list of messages with unread ones marked in blue</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Blue unread markers need a non-colour cue per AC; align with accessibility review for dense lists. [DA]</td>
+<td>Concurrent recruiter reads should refresh counts without flicker—load test two browsers same user if model is shared. [Jira]</td>
+<td>HRREC-91997 (PH: Recruiter sees list of messages with unread ones marked in blue): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91997: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91997 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr><tr><!-- gap-review HRREC-91998 -->
+<td><a href="https://jira2.workday.com/browse/HRREC-91998">HRREC-91998</a><br/>PH: Recruiter can see message threads when clicking on a message</td>
+<td><ac:structured-macro ac:name="status" ac:schema-version="1"><ac:parameter ac:name="title">Very Low</ac:parameter><ac:parameter ac:name="colour">Grey</ac:parameter></ac:structured-macro><p>Gap Likelihood from Verdict + column 7 only.</p></td>
+<td>Empty-reply thread state should mirror bounce and error stories so the list never shows phantom inbound. [Epic scan; DA]</td>
+<td>Selecting another row mid-fetch should cancel in-flight requests to avoid wrong-thread flash. [Jira]</td>
+<td>HRREC-91998 (PH: Recruiter can see message threads when clicking on a message): XO metadata search was attempted this session but the SUV search endpoint returned a transport error, so confirm REST tasks, conversation security domains, and sliding-panel bindings on a healthy SUV before sizing. [XO MCP]</td>
+<td><p>⚪ Very Low</p><ul>
+<li><strong>Finding:</strong> HRREC-91998: Jira scenarios for this slice are detailed enough to drive build and QA for the stated MVP boundary.</li>
+<li><strong>Recommended next step:</strong> No material gap surfaced in this Tier B pass—keep Jira as source of truth unless new routing or security rules land.</li>
+</ul></td>
+<td><p>No additional BDD suggested for HRREC-91998 in this Tier B pass—Jira scenarios cover the primary path unless REST or security contracts shift.</p></td>
+</tr></tbody></table>

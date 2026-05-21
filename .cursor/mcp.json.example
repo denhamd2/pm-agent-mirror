@@ -1,5 +1,14 @@
 {
   "mcpServers": {
+    "peanut-mcp": {
+      "_comment": "Peanut collectBugData calls jira2.workday.com with Bearer JIRA_TOKEN. Placeholder YOUR_JIRA_PAT causes Failed to fetch ticket for every key. Use a real Jira PAT (same org as jira2) — often the same value you pass to jira-ghe as x-jira-token if that PAT is scoped for REST. Set GHE_TOKEN to a ghe.megaleo.com PAT for commit search. Restart Cursor after editing.",
+      "command": "node",
+      "args": ["/absolute/path/to/peanut-mcp/dist/cli.js"],
+      "env": {
+        "JIRA_TOKEN": "REPLACE_WITH_JIRA2_PAT",
+        "GHE_TOKEN": "REPLACE_WITH_GHE_PAT"
+      }
+    },
     "example-http-mcp": {
       "type": "http",
       "url": "https://REPLACE_HOST/api/v1/mcp",
