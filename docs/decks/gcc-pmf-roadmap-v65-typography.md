@@ -176,4 +176,4 @@ p = Presentation('$HOME/Downloads/GCC_Recruiting_PMF_Roadmap_v65.pptx')
 - [`.cursor/rules/120-pmf-thematic-analysis.mdc`](../.cursor/rules/120-pmf-thematic-analysis.mdc) - Research source
 
 **Archival:**
-- Generator: `scripts/build_gcc_slides_spec_v49_v65_typography.py` (outputs `docs/decks/specs/slides_spec_v49.json`)
+- The one-off generator that produced `docs/decks/specs/slides_spec_v49.json` was removed from the tree; recover from **git history** if you need the exact script again (see [`scripts/README.md`](../../scripts/README.md) “Removed one-off generators”).
