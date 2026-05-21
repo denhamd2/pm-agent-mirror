@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 """
 Cleanup script: Retain only the N most recent files (by modification time) in specified directories.
-Targets: slide specs, PRDs, story maps, prototypes, research analyses, design briefs, epic drafts, decks
+Targets: slide specs, PRDs, story maps, prototypes, research analyses, design briefs, epic decks,
+and narrow globs under docs/initiatives/two-way-email/drafts/ (Confluence/MCP chunk artefacts only).
 Saved prototypes (managed via the Prototypes dashboard) and their artefacts are excluded.
 Usage: python3 scripts/cleanup-old-artifacts.py --keep 3 --dry-run
+       python3 scripts/cleanup-old-artifacts.py --two-way-email-drafts-only --dry-run
 """
 import argparse
 import json
 import os
 from pathlib import Path
-from typing import List, Set
+from typing import List, Set, Tuple
 
 
 SAVED_FILE_NAME = os.path.join("docs", "saved-prototypes.json")
@@ -86,54 +88,83 @@ def main():
     parser = argparse.ArgumentParser(description="Cleanup old artifact files")
     parser.add_argument("--keep", type=int, default=3, help="Number of recent files to keep (default: 3)")
     parser.add_argument("--dry-run", action="store_true", help="Show what would be deleted without deleting")
+    parser.add_argument(
+        "--two-way-email-drafts-only",
+        action="store_true",
+        help="Only run narrow globs under docs/initiatives/two-way-email/drafts/ (skip PRDs, design, research, etc.)",
+    )
     args = parser.parse_args()
 
     repo_root = Path(__file__).parent.parent
     protected = load_saved_paths(repo_root)
 
-    if protected:
+    if protected and not args.two_way_email_drafts_only:
         print(f"Loaded {len(protected)} protected file(s) from saved-prototypes.json")
 
     # Define cleanup targets
-    targets = [
-        (repo_root / "docs" / "prds", "*-prd.md"),
-        (repo_root / "docs" / "story-maps", "*-story-map.md"),
-        (repo_root / "docs" / "decks" / "specs", "slides_spec*.json"),
-        (repo_root / "design", "*-v[0-9]*.tsx"),
-        (repo_root / "docs" / "downloads", "*_Roadmap_v*.pptx"),
-    ]
+    targets: List[Tuple[Path, str]] = []
 
-    # Add regional research analysis files
-    regions = ["GCC", "India", "France", "Germany", "Japan", "UK", "Canada", "Australia"]
-    for region in regions:
-        region_path = repo_root / "research" / region
-        if region_path.exists():
-            targets.extend([
-                (region_path, "strategy-context-*.md"),
-                (region_path, "pestel-analysis-*.md"),
-                (region_path, "swot-analysis-*.md"),
-                (region_path / "thematic-analysis", "*-PMF-Analysis*.md"),
-                (region_path / "brainstorm-analysis", "202*-brainstorm-analysis*.md"),
-                (region_path / "gap-analysis", "202*-gap-analysis*.md"),
-            ])
-            if (region_path / "win-loss-analysis").exists():
-                targets.append((region_path / "win-loss-analysis", "202*-win-loss-analysis*.md"))
+    if not args.two_way_email_drafts_only:
+        targets.extend(
+            [
+                (repo_root / "docs" / "prds", "*-prd.md"),
+                (repo_root / "docs" / "story-maps", "*-story-map.md"),
+                (repo_root / "docs" / "decks" / "specs", "slides_spec*.json"),
+                (repo_root / "design", "*-v[0-9]*.tsx"),
+                (repo_root / "docs" / "downloads", "*_Roadmap_v*.pptx"),
+            ]
+        )
 
-    # Add competitive intelligence files
-    comp_regions = ["gcc", "in", "fr", "de", "jp", "uk", "ca", "au"]
-    for region_code in comp_regions:
-        comp_path = repo_root / "research" / "competitive" / region_code
-        if comp_path.exists():
-            targets.extend([
-                (comp_path, "*-competitive-scan-*.md"),
-                (comp_path, "e2e-ci-brief-*.md"),
-            ])
+        # Add regional research analysis files
+        regions = ["GCC", "India", "France", "Germany", "Japan", "UK", "Canada", "Australia"]
+        for region in regions:
+            region_path = repo_root / "research" / region
+            if region_path.exists():
+                targets.extend(
+                    [
+                        (region_path, "strategy-context-*.md"),
+                        (region_path, "pestel-analysis-*.md"),
+                        (region_path, "swot-analysis-*.md"),
+                        (region_path / "thematic-analysis", "*-PMF-Analysis*.md"),
+                        (region_path / "brainstorm-analysis", "202*-brainstorm-analysis*.md"),
+                        (region_path / "gap-analysis", "202*-gap-analysis*.md"),
+                    ]
+                )
+                if (region_path / "win-loss-analysis").exists():
+                    targets.append((region_path / "win-loss-analysis", "202*-win-loss-analysis*.md"))
 
-    # Add design and epic artifacts
-    targets.extend([
-        (repo_root / "design", "*-design-brief.md"),
-        (repo_root / "docs" / "epics", "*-epic-draft.md"),
-    ])
+        # Add competitive intelligence files
+        comp_regions = ["gcc", "in", "fr", "de", "jp", "uk", "ca", "au"]
+        for region_code in comp_regions:
+            comp_path = repo_root / "research" / "competitive" / region_code
+            if comp_path.exists():
+                targets.extend(
+                    [
+                        (comp_path, "*-competitive-scan-*.md"),
+                        (comp_path, "e2e-ci-brief-*.md"),
+                    ]
+                )
+
+        # Add design and epic artifacts
+        targets.extend(
+            [
+                (repo_root / "design", "*-design-brief.md"),
+                (repo_root / "docs" / "epics", "*-epic-draft.md"),
+            ]
+        )
+
+    total_deleted = 0
+    tw_drafts = repo_root / "docs" / "initiatives" / "two-way-email" / "drafts"
+    if tw_drafts.exists():
+        targets.extend(
+            [
+                (tw_drafts, "_mcp_*.json"),
+                (tw_drafts, "_conf_*.html"),
+                (tw_drafts, "gap_review_chunk*.html"),
+                (tw_drafts, "gap_review_chunk*.html.json"),
+                (tw_drafts, "confluence_args_*.json"),
+            ]
+        )
 
     total_deleted = 0
 
@@ -141,12 +172,20 @@ def main():
         if not directory.exists():
             continue
 
-        deleted = cleanup_directory(directory, pattern, args.keep, args.dry_run, protected)
+        deleted = cleanup_directory(
+            directory,
+            pattern,
+            args.keep,
+            args.dry_run,
+            protected if not args.two_way_email_drafts_only else set(),
+        )
         total_deleted += len(deleted)
 
     # Special: cleanup scratch files (keep 0)
-    scratch_deleted = cleanup_scratch_files(repo_root, regions, args.dry_run)
-    total_deleted += scratch_deleted
+    scratch_deleted = 0
+    if not args.two_way_email_drafts_only:
+        scratch_deleted = cleanup_scratch_files(repo_root, regions, args.dry_run)
+        total_deleted += scratch_deleted
 
     action = "Would delete" if args.dry_run else "Deleted"
     print(f"\n{action} {total_deleted} total files (kept {args.keep} most recent in each directory)")

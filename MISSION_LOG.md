@@ -9,7 +9,7 @@ This log tracks the state of all active product initiatives, decisions, and hand
 
 ## Current Status
 **Status:** OPERATIONAL — agents, skills, and rules catalogue aligned (May 2026 doc pass)
-**Last Updated:** 14 May 2026 (user-story-gap-review skill: Tier A/B, Publish pipeline, MISSION_LOG run log)
+**Last Updated:** 21 May 2026 (safe cleanup: `drafts/README`, scoped `cleanup-old-artifacts`; user-story-gap-review run log through 2026-05-18)
 **Workspace Version:** 1.5
 **Active Agents:** 10+ (Orchestrator + specialists incl. **@pmf-analyst** report + **130** PMF deck + Functional Knowledge Authority)
 

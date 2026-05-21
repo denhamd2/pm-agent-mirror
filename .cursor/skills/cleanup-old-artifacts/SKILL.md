@@ -17,6 +17,7 @@ Run the Python script `scripts/cleanup-old-artifacts.py` via the Shell tool.
 ### Arguments
 - `--keep N`: (Optional) Number of newest files to keep per pattern (default: 3).
 - `--dry-run`: (Optional) Show what would be deleted without actually deleting anything.
+- `--two-way-email-drafts-only`: (Optional) Only prune narrow globs under `docs/initiatives/two-way-email/drafts/`; skips PRDs, `design/`, `research/`, and scratch cleanup.
 
 ### Examples
 
@@ -35,6 +36,15 @@ python3 scripts/cleanup-old-artifacts.py --keep 1
 python3 scripts/cleanup-old-artifacts.py --dry-run
 ```
 
+**Dry-run first:** For any new directory (especially `two-way-email/drafts`), always run with `--dry-run` once and skim the file list before deleting.
+
+**Scoped prune (recommended for gap-review chunks only):** use `--two-way-email-drafts-only` so PRDs, `design/`, and `research/` are untouched:
+
+```bash
+python3 scripts/cleanup-old-artifacts.py --two-way-email-drafts-only --dry-run
+python3 scripts/cleanup-old-artifacts.py --two-way-email-drafts-only --keep 3
+```
+
 ## Cleanup Targets
 - Prototypes: `design/*-v[0-9]*.tsx`
 - PRDs: `docs/prds/*-prd.md`
@@ -46,8 +56,9 @@ python3 scripts/cleanup-old-artifacts.py --dry-run
 - Regional research analyses (strategy, PESTEL, SWOT, PMF, brainstorm, gap)
 - Competitive intelligence scans and briefs
 - Scratch files (always deleted, no retention)
+- **Two-way email gap-review drafts** (top-level [`docs/initiatives/two-way-email/drafts/`](../../../docs/initiatives/two-way-email/drafts/) only): narrow globs `_mcp_*.json`, `_conf_*.html`, `gap_review_chunk*.html`, `gap_review_chunk*.html.json`, `confluence_args_*.json` — see [`drafts/README.md`](../../../docs/initiatives/two-way-email/drafts/README.md) for what is regenerable vs canonical tooling. Does **not** recurse into `conf_chunks/` or delete broad `*.html` / `*.json`.
 
 ## Execution Steps
-1. Determine if the user requested a specific `--keep` count or a `--dry-run`.
+1. Determine if the user requested a specific `--keep` count, `--dry-run`, and/or **`--two-way-email-drafts-only`** (recommended when trimming gap-review chunk payloads only).
 2. Execute the `python3 scripts/cleanup-old-artifacts.py` command with the appropriate flags using the Shell tool.
 3. Report back to the user with a summary of what was deleted (or what would be deleted, in the case of a dry run), based on the script's output. Note any files that were protected by save status.
