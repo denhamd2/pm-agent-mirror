@@ -471,7 +471,7 @@ workday-pm-skills/ (GitHub repo)
 
 ### For This Workspace
 
-**Canonical inventory** (19 project skills, each with `SKILL.md`):
+**Canonical inventory** (18 project skills, each with `SKILL.md`):
 
 | Folder | Typical trigger / notes |
 |--------|-------------------------|
@@ -483,7 +483,6 @@ workday-pm-skills/ (GitHub repo)
 | `editorial-guidelines` | `/editorial` |
 | `jira-recruiting-story-description` | HRREC Jira Story description layout (points to **430** + golden draft) |
 | `jtbd-analysis` | `/jtbd` |
-| `modulr-prototype` | Redirect stub → `xo-builder` modulr mode |
 | `morning-roundup` | `/morning-roundup` |
 | `pharos-analytics` | Pharos / analytics patterns for `@data-scientist` |
 | `slide-writer` | `/slide-writer` (110/130) |
@@ -494,6 +493,17 @@ workday-pm-skills/ (GitHub repo)
 | `write-prd` | `/write-prd` (200-prd-template) |
 | `xo-builder` | Explicit XO / REST / ModulR triggers |
 | `xo-pr-comment-triage` | PR comment triage workflow |
+
+**ModulR / Maestro:** the former `modulr-prototype` skill folder was removed; all ModulR work is **`xo-builder`** → `modulr-page`. Legacy slash and natural-language triggers (including `/modulr-prototype`) are documented in [`xo-builder/SKILL.md`](xo-builder/SKILL.md). Old GHE deep links to `.../modulr-prototype/SKILL.md` will 404—update bookmarks to the paths below.
+
+**Bookmarking** (Confluence, Notion, Slack pins): use the canonical paths (or equivalent GHE `blob/...` URLs).
+
+| Use case | Canonical path (from repo root) |
+|----------|----------------------------------|
+| Umbrella skill (all XO / REST / ModulR modes) | `.cursor/skills/xo-builder/SKILL.md` |
+| ModulR page / Maestro workflow only | `.cursor/skills/xo-builder/modes/modulr-page.md` |
+
+On GitHub Enterprise, the matching web URL is `https://<host>/<owner>/<repo>/blob/<branch>/<path-from-repo-root>` (for example `https://ghe.megaleo.com/david-denham/pm-agent/blob/main/.cursor/skills/xo-builder/SKILL.md`).
 
 **Not implemented as skills** (by design today): dedicated `/rice` and `/thematic` folders; use **092**, **`/value-metrics`**, and **`@pmf-analyst`** instead (see Examples above).
 

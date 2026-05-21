@@ -12,8 +12,9 @@ description: >-
   tools; three modes switch workspace to ~/contexto and hand off to Contexto
   workflows or slash commands. Every write mode enforces a
   diff-approve-apply-verify HITL checkpoint. Activate ONLY on explicit trigger
-  phrases. Legacy modulr-prototype triggers still work and route into this
-  skill's modulr-page mode.
+  phrases. Includes /modulr-prototype, "build a ModulR page on my SUV", "run
+  the Maestro workflow on my SUV", and related legacy ModulR phrases; all route
+  into this skill's modulr-page mode (see Legacy section in body).
 ---
 
 # XO Builder (Standalone Umbrella Skill)

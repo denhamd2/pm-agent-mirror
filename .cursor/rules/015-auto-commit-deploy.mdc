@@ -1,92 +1,59 @@
 ---
-description: Standing permission to auto-commit and push file edits in this workspace
+description: Localhost dashboard vs GHE Pages public scope; git only on explicit user request
 alwaysApply: true
 ---
 
-# Auto-Commit (Standing Permission)
+# Dashboard scope and deploy context
 
-The Product Manager has granted **standing, explicit permission** to auto-commit and push file edits in this workspace without asking each time. This overrides the default "never commit unless explicitly asked" rule **for this repository only** (`/Users/david.denham/product-manager-agent`).
+**Git (commits and pushes):** Follow the PM's **global Cursor user rules** for this repository. Do **not** create commits or push to the remote unless they **explicitly ask** in the conversation for that batch of work (for example: "commit and push", "deploy to GitHub"). Completing edits alone is not permission to commit.
+
+When they **do** ask you to commit and push, use the same care as always: `git status`, scan the staged diff for real credentials (not the word "token" in slide copy), `git add` only intentional paths, message in repo style (HEREDOC for multi-line), `git push origin main` without `--force`, never skip hooks.
 
 **Localhost is the canonical full dashboard.** Run `cd design && npm run dev` (Vite on `http://localhost:5199/`) for the complete experience: data-backed dashboards (IUM metrics, customer scorecards, business-process durations, value realisation), all 27 prototypes, the morning roundup, and the saved-prototypes / agent-flow / design-system tabs. Treat anything inside the localhost dashboard as internal-only.
 
 **Public scope on GHE Pages: catalogue + 13 UI-exploration prototypes only.** A separate workflow (`.github/workflows/deploy-dashboard-public.yml`) builds a scoped bundle from `design/main-public.tsx` and publishes the prototype catalogue plus the 13 safe UI-exploration prototypes listed in `design/public-catalogue.ts`. The build is gated by `design/vite-plugin-forbidden-imports.ts`, a hardcoded substring guardrail that fails the build if any module reaches a forbidden file (`data-*.ts`, `*-dashboard.tsx`, `pm-agent-dashboard`, `value-realization-metrics`, `recruiting-metric-tree`, the offers playgrounds, `BottleneckFlowStrip`, or sensitive JSON files). **No data-backed surface ships to Pages.**
 
-## When to auto-commit
+## Extra caution before commit (when the user asked you to commit)
 
-After you complete a logical unit of work that touches files on disk, commit and push. A "logical unit" means:
+Ask the PM before committing if any of these apply (even if they said "commit"):
 
-- A plan's todo list is fully completed, OR
-- A user request that produced file edits has finished, OR
-- A set of related edits that belong together conceptually (one feature, one fix, one doc update).
-
-**Do NOT auto-commit:**
-- Mid-workflow, between todos (wait until the overall request is done).
-- After purely read-only work (grep, analysis, reports) that didn't change any tracked files.
-- If `git status` shows zero changes.
-- If the user explicitly said "don't commit yet" or "hold off on the push".
-
-## Commit flow (mandatory steps, in order)
-
-1. **Status check**: `git status` to see the actual change surface.
-2. **Secret scan** (blocking): run `git diff --cached --no-color | rg -i 'token|secret|password|api[_-]key|bearer [a-z0-9]|-----BEGIN|aws_access_key|aws_secret|sk-[a-z0-9]{20,}'` (or equivalent grep). If any hit looks like a real credential, **STOP**, tell the PM what was detected, and let them decide. Do not auto-commit secrets. Previous incident on 21 April 2026: a Confluence PAT was pushed and had to be rotated - do not repeat.
-3. **Stage explicitly**: `git add <specific files>` - never `git add -A` or `git add .` blindly, because that picks up `.env`, temp files, and anything you weren't intentionally editing.
-4. **Commit message**: follow the existing repo style (see `git log --oneline -10`). Imperative mood, one-line summary ~60-72 chars, optional body explaining the "why" in 2-5 bullet lines. Always use a HEREDOC (see example below) so markdown survives.
-5. **Push to main**: `git push origin main`. Never `--force` against main.
-6. **Report back**: tell the PM in one line what was committed (short SHA + summary). If the diff touches anything in the public-build chain (`design/main-public.tsx`, `design/public-catalogue.ts`, `design/public-prototypes-catalogue.tsx`, `design/public.html`, `design/vite.config.public.ts`, `design/tsconfig.public.json`, `design/vite-plugin-forbidden-imports.ts`, the 13 allowlisted prototype `.tsx` files, or `.github/workflows/deploy-dashboard-public.yml`), mention that the public Pages workflow will rebuild from the change. Otherwise, no deploy step to mention.
-
-## Guardrails (hard rules)
-
-- **Never** force-push, force-push-with-lease, or rewrite history on `main`. If you broke something, fix forward with a new commit.
-- **Never** skip hooks (`--no-verify`, `--no-gpg-sign`).
-- **Never** amend a commit that has already been pushed to origin. If a pre-commit hook auto-modifies files after your commit, amend is allowed (see `/Users/david.denham/.cursor/rules/git-safety.md` or standard guidance).
-- **Never** commit files matching `.env`, `*.token`, `credentials*`, `secrets*`, or anything under `docs/*auth*.md` (already in `.gitignore` - treat as a belt-and-braces check).
-- **Never** auto-commit if the diff touches `~/.cursor/mcp.json` or any `mcp.json` - those live outside the repo but if they somehow got staged, stop immediately.
-- **Do not batch unrelated changes** into one commit just because they happened in the same session. Split into two commits if two logically distinct things changed.
-- If `git push` fails (auth, network, conflict), surface the error to the PM in plain English and ask how to proceed. Do not retry blindly.
-- If the pre-push hook rejects the push, fix the reported issue and push again with a new commit (not `--no-verify`).
-
-## When to ask first (not auto-commit)
-
-Ask the PM before committing if any of these apply:
 - The change deletes more than ~20 tracked files.
-- The change modifies a file under `.github/workflows/` (CI/CD behaviour change - deserves conscious approval).
-- The change weakens or removes entries from `design/vite-plugin-forbidden-imports.ts` (data-governance gate - any loosening of the guardrail must be PM-approved).
-- The change adds a new prototype to `design/public-catalogue.ts` (new public surface - even if the build passes, the PM should consciously decide what ships to Pages).
+- The change modifies a file under `.github/workflows/` (CI/CD behaviour change).
+- The change weakens or removes entries from `design/vite-plugin-forbidden-imports.ts` (data-governance gate).
+- The change adds a new prototype to `design/public-catalogue.ts` (new public surface).
 - The change touches `MISSION_LOG.md` in ways that would erase active mission state.
-- The diff includes a file the PM didn't ask you to touch (you wandered).
-- You're about to commit generated artefacts (`.pptx`, `dashboard-dist/`, `design/dist/`, `design/dashboard-public-dist/`) that aren't typically committed - check `.gitignore` first.
+- The diff includes files they did not ask you to change.
+- The diff would commit generated artefacts that belong in `.gitignore` (`.pptx`, `dashboard-dist/`, etc.).
 
-## Standard commit message format
+## Guardrails when committing (if explicitly requested)
 
-Use this HEREDOC pattern (mirrors Cursor's standard git commit guidance):
+- **Never** force-push or rewrite history on `main`. Fix forward with a new commit.
+- **Never** skip hooks (`--no-verify`, `--no-gpg-sign`).
+- **Never** amend a commit that has already been pushed to origin (unless their rules allow a narrow amend case).
+- **Never** stage `.env`, `*.token`, `credentials*`, `secrets*`, or `mcp.json` with secrets.
+
+## Standard commit message format (when committing)
 
 ```bash
 git commit -m "$(cat <<'EOF'
 Short imperative summary (~60-72 chars)
 
 - Bullet explaining the why or the first key change.
-- Second bullet if needed.
-- Third bullet if needed.
 EOF
 )"
 ```
-
-Example recent commits from this repo (mirror this style):
-- `Fix XO Developer ecosystem consistency drift`
-- `Add customer-issue-triage skill with Salomon, Deployment Agent, and XO analysis`
-- `Streamline Salomon analysis output in customer issue triage`
 
 ## What happens after push
 
 After `git push origin main`:
 
 1. GHE stores the commit.
-2. If the diff touches any file in the public-build chain (the path filter in `.github/workflows/deploy-dashboard-public.yml`), Actions builds the public prototype catalogue (allowlist in `design/public-catalogue.ts`), runs the forbidden-imports plugin and the Python belt-and-braces grep, then publishes the bundle to the `gh-pages` branch root via `peaceiris/actions-gh-pages@v3`. Anything else (data-`*.ts` files, full dashboard, internal docs) does **not** trigger the workflow because it isn't in the path filter.
-3. The dashboard's full canonical experience is served locally only. Run `cd design && npm run dev` and open `http://localhost:5199/`.
-4. Pages must be re-enabled in repo Settings -> Pages (source = `gh-pages` branch / root) for the workflow output to actually serve. The PM is responsible for that one-time manual step.
+2. If the diff touches any file in the public-build chain (the path filter in `.github/workflows/deploy-dashboard-public.yml`), Actions builds the public prototype catalogue (allowlist in `design/public-catalogue.ts`), runs the forbidden-imports plugin and the Python belt-and-braces grep, then publishes the bundle to the `gh-pages` branch root via `peaceiris/actions-gh-pages@v3`. Anything else does **not** trigger that workflow.
+3. The dashboard's full canonical experience is served locally only (`npm run dev` on port 5199).
+4. Pages must be enabled in repo Settings → Pages (source = `gh-pages` branch / root) for the workflow output to serve.
 
-If you need to share a data-backed dashboard (anything beyond the public catalogue allowlist in `design/public-catalogue.ts`), hand the PM a path / file / screenshot. The forbidden-imports plugin will block any attempt to ship data-backed surfaces via the public bundle.
+If you need to share a data-backed dashboard beyond the public catalogue allowlist, hand the PM a path, file, or screenshot. The forbidden-imports plugin blocks shipping those surfaces via the public bundle.
 
 ## One-line summary
 
-**Complete the work -> secret-scan -> stage explicitly -> commit with a meaningful message -> push to main. Localhost is canonical; Pages serves the public prototype catalogue only via `deploy-dashboard-public.yml` and the forbidden-imports guardrail.**
+**Localhost is canonical; Pages serves the allowlisted prototype catalogue only. Commits and pushes only when the PM explicitly asks—otherwise leave `git` alone.**

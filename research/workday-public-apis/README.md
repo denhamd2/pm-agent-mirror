@@ -1,6 +1,6 @@
 # Workday Public API Specs
 
-Dated snapshots of Workday's publicly documented REST API specs. Used as ground truth by the [xo-builder skill](../../.cursor/skills/xo-builder/SKILL.md) (and its legacy entry point [modulr-prototype](../../.cursor/skills/modulr-prototype/SKILL.md)) for PRD grounding, Canvas Kit prototype fixtures, internal-vs-public gap analysis, WQL-backed fixtures, and competitive-intelligence grounding.
+Dated snapshots of Workday's publicly documented REST API specs. Used as ground truth by the [xo-builder skill](../../.cursor/skills/xo-builder/SKILL.md) for PRD grounding, Canvas Kit prototype fixtures, internal-vs-public gap analysis, WQL-backed fixtures, and competitive-intelligence grounding.
 
 Most specs are OAS 2.0 (`oas2.json`); Prism Analytics is OAS 3.0 (`oas3.json`). The `api-catalogue` mode handles both.
 

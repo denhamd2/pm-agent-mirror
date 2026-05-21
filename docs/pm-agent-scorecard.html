@@ -317,7 +317,7 @@ canvas { max-height: 260px; }
         </thead>
         <tbody>
           <tr class="table-row"><td class="py-2 px-3">AlwaysApply lines</td><td class="text-right py-2 px-3 mono text-xs">662</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--warn);">791</td><td class="text-right py-2 px-3 delta delta-flat">+129 (015 counted)</td></tr>
-          <tr class="table-row"><td class="py-2 px-3">AlwaysApply rules</td><td class="text-right py-2 px-3 mono text-xs">2</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--laptop);">3</td><td class="text-right py-2 px-3 delta delta-flat">+015-auto-commit</td></tr>
+          <tr class="table-row"><td class="py-2 px-3">AlwaysApply rules</td><td class="text-right py-2 px-3 mono text-xs">2</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--laptop);">3</td><td class="text-right py-2 px-3 delta delta-flat">+015 pages/git rule</td></tr>
           <tr class="table-row"><td class="py-2 px-3">Workspace skills (SKILL.md)</td><td class="text-right py-2 px-3 mono text-xs">5</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">18</td><td class="text-right py-2 px-3 delta delta-up">inventory sync</td></tr>
           <tr class="table-row"><td class="py-2 px-3">Orphan docs in rules/</td><td class="text-right py-2 px-3 mono text-xs">4</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--pass);">0</td><td class="text-right py-2 px-3 delta delta-up">&darr; 4</td></tr>
           <tr class="table-row"><td class="py-2 px-3">Active missions</td><td class="text-right py-2 px-3 mono text-xs">6</td><td class="text-right py-2 px-3 mono text-xs font-bold" style="color: var(--laptop);">10</td><td class="text-right py-2 px-3 delta delta-flat">current MISSION_LOG</td></tr>
@@ -345,7 +345,7 @@ canvas { max-height: 260px; }
         <span class="badge grade-d mt-0.5" style="white-space: nowrap;">WARN</span>
         <div>
           <div class="font-semibold">AlwaysApply 58% over target (791/500)</div>
-          <div class="text-xs" style="color: var(--laptop);">Three files: 000-orchestrator, 010-style-guide, 015-auto-commit-deploy. Splitting routing further is deferred.</div>
+          <div class="text-xs" style="color: var(--laptop);">Three files: 000-orchestrator, 010-style-guide, 015-auto-commit-deploy (localhost vs Pages; git only when PM explicitly asks). Splitting routing further is deferred.</div>
         </div>
       </div>
       <div class="table-row flex items-start gap-3 p-2 rounded">
@@ -463,9 +463,9 @@ new Chart(document.getElementById('radarChart'), {
 new Chart(document.getElementById('budgetChart'), {
   type: 'doughnut',
   data: {
-    labels: ['000-orchestrator (456)', '010-style-guide (243)', '015-auto-commit (92)'],
+    labels: ['000-orchestrator (456)', '010-style-guide (243)', '015-pages-git (59)'],
     datasets: [{
-      data: [456, 243, 92],
+      data: [456, 243, 59],
       backgroundColor: [WATER, PENCIL, '#e2ddd7'],
       borderWidth: 0
     }]

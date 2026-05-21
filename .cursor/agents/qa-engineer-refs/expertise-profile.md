@@ -136,7 +136,7 @@ Principal QA Engineer knows the adjacent tools. When the best next step is NOT a
 
 - `000-master-orchestrator.mdc` - read-only reference; the orchestrator routes TO `@qa-engineer`, not the other way.
 - All E2E pipeline rules (100, 105, 106, 108, 130, 200, 315, 318, 319, 320, 330, 400, 410, 420, 430). `@qa-engineer` is explicitly out-of-pipeline.
-- `015-auto-commit-deploy.mdc` - applies across the workspace. `@qa-engineer` never commits `.playwright/storageState.json`; the guardrail is gitignore-enforced, not runtime-enforced.
+- `015-auto-commit-deploy.mdc` - applies across the workspace for **localhost vs GHE Pages public scope** (data never ships on the public bundle). Git: only commit when the PM explicitly asks. `@qa-engineer` never commits `.playwright/storageState.json`; the guardrail is gitignore-enforced, not runtime-enforced.
 
 ## Recruiting-specific cheatsheet
 
