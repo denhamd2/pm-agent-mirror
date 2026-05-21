@@ -7,21 +7,19 @@ This is a modular, agentic workspace for Senior Product Managers built for Curso
 
 ### 🎯 Core Functions
 
-Rules live under [`.cursor/rules/`](.cursor/rules/); reusable **workflows** live as **skills** under [`.cursor/skills/`](.cursor/skills/) (full inventory: [`.cursor/skills/README.md`](.cursor/skills/README.md)). Some of the main ones wired into this workspace:
+**Rules** steer how the AI behaves; **skills** are packaged workflows you can run on demand. Every skill has a short guide under `.cursor/skills/`; which tools plug in where is spelled out in `.cursor/rules/000-master-orchestrator.mdc`.
 
-- **Net-new story gap review** — **`/user-story-gap-review`**: Jira-scoped pre-build gap analysis with Salomon (internal KB + Jira index + Slack archive), Deployment Agent, read-only **XO MCP**, and signal-gated **Peanut** for the Dev lens; publishes a **seven-column** Confluence Storage report (exec summary, verdicts, suggested missing BDD). See [`user-story-gap-review/SKILL.md`](.cursor/skills/user-story-gap-review/SKILL.md).
-- **Customer issue triage** — Classify customer-reported Jiras (WAD vs config vs bug) with evidence, XO grounding, optional Peanut, and batch closure guidance. See [`customer-issue-triage/SKILL.md`](.cursor/skills/customer-issue-triage/SKILL.md).
-- **HRREC Jira story descriptions** — Standard recruiting story body layout and golden-draft alignment. See [`jira-recruiting-story-description/SKILL.md`](.cursor/skills/jira-recruiting-story-description/SKILL.md).
-- **PRDs & specs** — **`/write-prd`**: structured PRDs under `docs/prds/` using the **200** template rule; Confluence when MCPs allow. See [`write-prd/SKILL.md`](.cursor/skills/write-prd/SKILL.md).
-- **Market intelligence & framing** — Research and competitive analysis (**100–199** rules); **`/jtbd`** ([`jtbd-analysis`](.cursor/skills/jtbd-analysis/SKILL.md)) and **`/value-metrics`** ([`value-metrics`](.cursor/skills/value-metrics/SKILL.md)); Six-Hats / sequential thinking MCPs where enabled.
-- **Data & dashboards** — Pharos-oriented SQL patterns and dashboard scaffolding for **@data-scientist**. See [`pharos-analytics`](.cursor/skills/pharos-analytics/SKILL.md) and [`create-dashboard`](.cursor/skills/create-dashboard/SKILL.md).
-- **Design & slides** — Figma and Canvas Kit flows in **`design/`** (**300–499** rules); branded Workday decks via **`/slide-writer`**. See [`slide-writer/SKILL.md`](.cursor/skills/slide-writer/SKILL.md).
-- **Workday XO / SUV engineering** — Guarded XO, ModulR, and REST work on a dev SUV (**`xo-builder`**); PR comment triage for XO branches (**`xo-pr-comment-triage`**); post-edit UI smoke via **`@qa-engineer`** and [`suv-smoke-test`](.cursor/skills/suv-smoke-test/SKILL.md).
-- **Rituals & comms** — **`/morning-roundup`** ([`morning-roundup`](.cursor/skills/morning-roundup/SKILL.md)); Slack drafting / triage (**500** rules); deep internal Q&A patterns via [`ask-consultant`](.cursor/skills/ask-consultant/SKILL.md) where Salomon is configured.
-- **Backlog & execution** — Story mapping, backlog refinement, story validation, and Jira/PR automation (**400–499** rules + MCPs when connected).
-- **Workspace hygiene** — **`/workspace-audit`** and **`/cleanup`** for repo health and stale artefacts. See [`workspace-audit`](.cursor/skills/workspace-audit/SKILL.md) and [`cleanup-old-artifacts`](.cursor/skills/cleanup-old-artifacts/SKILL.md).
-
-**Orchestration**: MCP roster and agent routing are defined in [`.cursor/rules/000-master-orchestrator.mdc`](.cursor/rules/000-master-orchestrator.mdc).
+- **Pre-build story gap review** — Stress-test a batch of Jira stories before engineering commits and get a plain-language Confluence write-up (what is strong, what is risky, what tests are missing).
+- **Customer issue triage** — Decide whether an incoming customer ticket is a real bug, a setup issue, or expected behaviour, and get suggested next steps for support or engineering.
+- **Recruiting story descriptions** — Keep HRREC Jira stories in a consistent, recruiter-friendly format so delivery teams get the same quality of brief.
+- **PRDs and specs** — Turn decisions into structured product requirement documents stored under `docs/prds/`.
+- **Market and opportunity framing** — Competitive scans, jobs-to-be-done, and outcome-style metrics when you size or defend a bet.
+- **Data and dashboards** — Recruiting analytics patterns and dashboard scaffolds when you need charts backed by internal data.
+- **Design and slides** — Prototypes in the `design/` workspace and on-brand decks for stakeholder reviews.
+- **Product config on a test tenant** — Careful, guarded changes to Workday configuration on a personal dev tenant, help closing out XO pull-request comments, and a quick browser smoke check after small UI or metadata edits.
+- **Daily rhythm and Slack** — Morning roundups, drafted Slack replies, and “ask our internal knowledge base” style Q&A when those integrations are switched on.
+- **Backlog and delivery** — Story mapping, backlog refinement, story quality checks, and Jira or GitHub automation when your integrations are connected.
+- **Workspace housekeeping** — Optional health audit and cleanup of old generated files so the repo stays easy to navigate.
 
 ### 🔌 MCPs
 The **Master Orchestrator** lists the active MCP roster (currently **21** integrated servers). Unsupported or optional plugins are not documented here—refer to `000-master-orchestrator.mdc` for names, purposes, and routing.
@@ -52,6 +50,7 @@ Handbooks and setup guides live under **[docs/onboarding/](docs/onboarding/READM
 ## Sharing with colleagues (MCP and secrets)
 
 - **MCP passwords and tokens** belong in your user-level Cursor config (`~/.cursor/mcp.json`), not in this repository. The file [`.cursor/mcp.json`](.cursor/mcp.json) is gitignored so it is never pushed if you add a project-local copy.
+- **Cursor IDE data (not in this repo):** under `~/.cursor/projects/<project-id>/`, folders such as `agent-tools/` may appear. They hold **ephemeral agent/shell output** for the IDE. You can delete an empty `agent-tools` folder locally; Cursor may recreate it. Do not treat that path as part of version control.
 - Use [`.cursor/mcp.json.example`](.cursor/mcp.json.example) as a shape reference; copy to `~/.cursor/mcp.json`, fill in real values locally, and **never commit** secrets.
 - See [docs/onboarding/INSTALLATION_NOTES.md](docs/onboarding/INSTALLATION_NOTES.md) and [docs/figma-official-mcp-setup.md](docs/figma-official-mcp-setup.md) for server-specific setup.
 

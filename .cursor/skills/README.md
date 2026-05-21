@@ -12,6 +12,8 @@ Skills are **reusable workflows** that can be invoked by you or by agents to per
 > Skills = how to park (reusable workflows, methods)  
 > Sub-agents = valet parking (independent execution)"
 
+**This repo:** Cursor **commands** (palette markdown) are indexed in [`.cursor/commands/README.md`](../commands/README.md). Use **skills** for maintained, multi-step PM workflows; commands stay useful for short, fixed prompts (see that README for overlap notes, including archived `prd-draft`).
+
 ## When to Create a Skill
 
 ### Decision Tree

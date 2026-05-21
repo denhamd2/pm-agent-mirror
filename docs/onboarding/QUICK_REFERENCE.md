@@ -75,6 +75,10 @@
 - `MISSION_LOG.md` - Mission state tracking
 - `scratchpad.md` - Sequential thinking workspace
 
+## Cursor local data (not in git)
+
+Under `~/.cursor/projects/<project-id>/`, the IDE may create folders such as **`agent-tools/`** for ephemeral agent or shell output. That tree is **not** part of this repository. An empty `agent-tools` folder can be deleted locally; Cursor may recreate it. See the root [README.md](../../README.md) (Sharing with colleagues).
+
 ## MCP Quick Reference
 
 | MCP | Server Name | Primary Use |
