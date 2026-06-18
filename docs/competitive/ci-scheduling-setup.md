@@ -23,22 +23,28 @@ Manual runs: **Actions → workflow → Run workflow** (`workflow_dispatch`).
 
 ## Required GHE secrets
 
-Configure at **repo or org** level (Settings → Secrets and variables → Actions). Confirm with Workday security before adding.
+Configure at **repo or org** level on **github.com** (`denhamd2/pm-agent-mirror` → Settings → Secrets and variables → Actions). Confirm with Workday security before adding tokens to corporate GHE.
 
-| Secret | Required | Purpose |
-|--------|----------|---------|
-| `TELEGRAM_BOT_TOKEN` | Yes (for notifications) | Bot token from [@BotFather](https://t.me/BotFather); used by HTTP API, not MCP |
-| `TELEGRAM_CHAT_ID` | Yes | Target chat: your numeric user id (Saved Messages via bot) or private channel id |
-| `SERPAPI_KEY` | No | Optional richer web search; daily script uses Google News RSS without it |
-| `ANTHROPIC_API_KEY` | No | Weekly deep synthesis; without it, weekly job produces a deterministic rollup from daily briefs |
+**Quick setup (requires [GitHub CLI](https://cli.github.com/)):**
+
+```bash
+export TELEGRAM_BOT_TOKEN='your-rotated-token-from-botfather'
+./scripts/ci_setup_github_secrets.sh
+gh workflow run competitive-intel-daily.yml --repo denhamd2/pm-agent-mirror
+```
+
+| Secret | Required | Value |
+|--------|----------|-------|
+| `TELEGRAM_BOT_TOKEN` | Yes | Bot token from [@BotFather](https://t.me/BotFather) |
+| `TELEGRAM_CHAT_ID` | Yes | `8046765892` (David — Saved Messages via bot) |
+| `SERPAPI_KEY` | No | Optional richer web search |
+| `ANTHROPIC_API_KEY` | No | Weekly deep synthesis |
 
 **Never commit tokens.** Rotate any token that appeared in chat logs or local settings files.
 
-### Finding `TELEGRAM_CHAT_ID`
+### Finding `TELEGRAM_CHAT_ID` (already resolved)
 
-1. Message your bot once from the account that should receive digests.
-2. Open `https://api.telegram.org/bot<TOKEN>/getUpdates` and read `message.chat.id`.
-3. Store that id as `TELEGRAM_CHAT_ID`.
+Chat id **`8046765892`** — use this as `TELEGRAM_CHAT_ID` unless you prefer a private channel.
 
 ## Security / policy checklist (confirm with IT)
 
