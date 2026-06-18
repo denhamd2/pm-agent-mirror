@@ -1,0 +1,52 @@
+name: Competitive intel weekly deep
+
+# Weekly rollup from daily BRIEF reports. Optional Anthropic synthesis.
+# Setup: docs/competitive/ci-scheduling-setup.md
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: competitive-intel-weekly
+  cancel-in-progress: false
+
+jobs:
+  weekly-deep:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run weekly deep rollup
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CI_WEEKLY_ANTHROPIC_MODEL: ${{ vars.CI_WEEKLY_ANTHROPIC_MODEL }}
+        run: python3 scripts/ci_weekly_deep.py
+
+      - name: Commit weekly report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/competitive/.ci-last-run.json
+          git add research/competitive/global/global-competitive-scan-*-WEEKLY-CI-*.md 2>/dev/null || true
+          git add research/competitive/matrices/global-competitive-matrix.md 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "No file changes to commit."
+          else
+            git commit -m "$(cat <<'EOF'
+ci: weekly competitive deep rollup
+
+Synthesises last 7 days of DAILY-CI briefs; see research/competitive/global/.
+EOF
+)"
+            git push
+          fi

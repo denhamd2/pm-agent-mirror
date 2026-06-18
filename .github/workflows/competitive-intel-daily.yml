@@ -1,0 +1,51 @@
+name: Competitive intel daily brief
+
+# Unattended daily BRIEF monitor (public RSS). Does not trigger public Pages deploy.
+# Setup: docs/competitive/ci-scheduling-setup.md
+
+on:
+  schedule:
+    - cron: '0 7 * * 1-5'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: competitive-intel-daily
+  cancel-in-progress: false
+
+jobs:
+  daily-brief:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run daily BRIEF script
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+        run: python3 scripts/ci_daily_brief.py
+
+      - name: Commit report and state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/competitive/.ci-last-run.json
+          git add research/competitive/global/global-competitive-scan-*-DAILY-CI-*.md 2>/dev/null || true
+          git add research/competitive/matrices/global-competitive-matrix.md 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "No file changes to commit."
+          else
+            git commit -m "$(cat <<'EOF'
+ci: daily competitive BRIEF monitor
+
+Automated signal detection from public RSS feeds; see research/competitive/global/.
+EOF
+)"
+            git push
+          fi
