@@ -1,5 +1,27 @@
 # Global Competitive Matrix
-**Last Updated**: 2026-03-22 | **Version**: v1.0 | **Maintainer**: Agent 101
+**Last Updated**: 2026-06-19 | **Version**: v1.1 | **Maintainer**: Agent 101
+
+## Changelog: 2026-06-19 — CI-GLOBAL-2026-06-19 — Global Brief Scan
+
+**Key updates from ~10-search brief scan (last 30 days):**
+
+1. **SAP SuccessFactors → SmartRecruiters structural shift (MAJOR)**: SmartRecruiters is now SAP's standard next-gen recruiting engine replacing the legacy SuccessFactors Recruiting module, effective March 2026. Phase 1 integration complete (SSO, unified UI); Phase 2 (candidate → new hire in Employee Central) on roadmap. Customers not required to migrate but new sales will point to SmartRecruiters. Battle card update required.
+
+2. **Oracle: 2026 Gartner MQ Leader confirmed** (June 9, 2026). Launched Oracle Career Coach (agentic AI for job matching), expanded AI Agents across Fusion Cloud HCM. Direct parity challenge to Workday Recruiting Agent.
+
+3. **Greenhouse: Ezra AI Labs acquisition** (closed May 27, 2026) adds voice AI interviewing; MCP launch (May 7) adds governed AI-tool connection protocol. Named #1 ATS G2 Summer 2026 (46 reports). High threat in mid-market tech segment.
+
+4. **iCIMS: Frontline AI** (Spring 2026 release) targets high-volume frontline hiring — a segment Workday underweights. Healthcare focus (NAHCR 2026 presence). June Workforce Report signals AI-driven hiring demand surge.
+
+5. **SmartRecruiters: June 2026 release** — Applicant Data Transferability controls; Winston Match upgraded to prioritize candidate-verified profile data. Fosway 2026 Strategic Leader.
+
+6. **Lever**: No material product news in June 2026. Under Employ Inc. (with Jobvite, JazzHR). Editorial/SEO positioning only in scan window.
+
+7. **Workday**: Confirmed 2026 Gartner MQ Leader. HiredScore AI + Paradox + Recruiting Agent positioned as unified AI stack. Customers: 54% recruiter capacity increase, 35% reduction in hiring manager review time.
+
+**Full scan report**: `research/competitive/global/global-competitive-scan-2026-06-19-CI-GLOBAL-2026-06-19.md`
+
+---
 
 ## Executive Summary
 
