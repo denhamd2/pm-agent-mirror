@@ -1,5 +1,27 @@
 # Global Competitive Matrix
-**Last Updated**: 2026-06-19 | **Version**: v1.1 | **Maintainer**: Agent 101
+**Last Updated**: 2026-06-20 | **Version**: v1.2 | **Maintainer**: Agent 101
+
+## Changelog: 2026-06-20 — CI-GLOBAL-2026-06-20 — Global Brief Scan
+
+**Key updates from ~12-search brief scan (last 30 days), all confirmed via fresh web search 2026-06-20:**
+
+1. **SAP SuccessFactors 1H 2026 release formalizes SmartRecruiters Winston on career sites**: Winston Chat now embeddable in SuccessFactors Career Site Builder. Phase 1 integration (User Sync, Config Data Sync, initial Job Sync) live. Phase 2 (Hire Sync — candidate-to-new-hire in Employee Central) on H1 2026 roadmap. SAP now has a coherent "connected agent" story: Joule + Winston as dual AI co-pilots across HCM + recruiting.
+
+2. **Oracle named 2026 Gartner MQ Leader for TA Suites** (June 9, 2026). Ranked 2nd in Core ATS and 3rd in Extended AI Critical Capabilities use cases. New agentic capabilities: 12+ specialized AI agents + Oracle AI Studio for custom agent workflows. $50B US infrastructure announcement underpins enterprise CIO confidence narrative.
+
+3. **Greenhouse dual move (30-day window)**: Ezra AI Labs acquisition closed May 27 (voice AI interviewing); MCP governance protocol launched May 7 (first ATS with governed AI-tool connection). G2 Summer 2026 #1 ATS across 46 categories. This is the most active single competitor in the scan window.
+
+4. **iCIMS Spring 2026 release: Frontline AI** (March 16, 2026). Mobile-first SMS/WhatsApp hiring AI; reported 75% time-to-fill reduction. Targeting retail, healthcare, logistics. New source attribution analytics in iCIMS CXM. April 2026: 3rd consecutive Lighthouse Research Best Comprehensive TA Solution; G2 Enterprise Leader Spring 2026.
+
+5. **SmartRecruiters June 2026 release**: Applicant Data Transferability controls (admin-managed); Winston Match prioritizes candidate-verified profile data. SmartRecruiters 3.0 UI (January 2026) broadly available.
+
+6. **Lever**: No material product news in May–June 2026. IBM watsonx.governance for AI bias/compliance remains Lever's primary AI governance differentiator. Employ Inc. multi-brand context unchanged.
+
+7. **Workday**: Confirmed 2026 Gartner MQ Leader (May 13, 2026). HiredScore AI + Paradox + Recruiting Agent as unified embedded AI stack — differentiated from competitors assembling AI via acquisition patchwork.
+
+**Full scan report**: `research/competitive/global/global-competitive-scan-2026-06-20.md`
+
+---
 
 ## Changelog: 2026-06-19 — CI-GLOBAL-2026-06-19 — Global Brief Scan
 
