@@ -1,5 +1,27 @@
 # Global Competitive Matrix
-**Last Updated**: 2026-06-19 | **Version**: v1.1 | **Maintainer**: Agent 101
+**Last Updated**: 2026-06-21 | **Version**: v1.2 | **Maintainer**: Agent 101
+
+## Changelog: 2026-06-21 — CI-GLOBAL-2026-06-21 — Global Brief Scan
+
+**Key updates from 12-search brief scan (last 30 days):**
+
+1. **SAP-SmartRecruiters Phase 2 shipping June 2026 (URGENT)**: Hire Sync (candidate → Employee Central new-hire record) and internal-hire pass-through to Onboarding now in market. SAP internal IT confirmed running SmartRecruiters ("SAP Runs SmartRecruiters" — SAP News, June 2026). The end-to-end integration story is now complete for new enterprise deals. Battle card refresh required immediately.
+
+2. **Oracle confirmed 2026 Gartner MQ Leader (June 9, 2026)**: MQ now shows Workday + Oracle + Avature as Leaders — the "only suite Leader" narrative is obsolete. Oracle 26B Hiring Workspace (agentic AI for recruiting) and Oracle Career Coach (AI job matching) are direct parity challenges to Workday Recruiting Agent and HiredScore career pathing.
+
+3. **Greenhouse MCP (Model Context Protocol) rolling to customers June 2026**: Governed open-AI-plugin layer — only product in global ATS market with this capability. Workday has no equivalent. G2 Summer 2026 #1 ATS ranking. Mid-market AI-forward buyers are a churn risk.
+
+4. **iCIMS Frontline AI (Spring 2026, still active in deals)**: Purpose-built for high-volume frontline hiring (healthcare, logistics, retail). Direct challenge to Workday + Paradox in these verticals. iCIMS also released June 2026 Workforce Report signalling AI-hiring demand surge.
+
+5. **SmartRecruiters June 2026 release**: Applicant Data Transferability controls + Winston Match improvements (prioritises candidate-verified profile data). Fosway 2026 Strategic Leader designation.
+
+6. **Lever**: No material product news June 2026. New CEO (Jerry Jao) and CTO (Patrick Jean) onboarded Feb 2026 with AI mandate — H2 2026 announcement expected. Monitor.
+
+7. **EU AI Act — August 2026 deadline (⚠ Flag)**: General Purpose AI obligations begin Aug 2026. Workday should proactively communicate compliance posture in EMEA before competitors do.
+
+**Full scan report**: `research/competitive/global/global-competitive-scan-2026-06-21-CI-GLOBAL-2026-06-21.md`
+
+---
 
 ## Changelog: 2026-06-19 — CI-GLOBAL-2026-06-19 — Global Brief Scan
 
