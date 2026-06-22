@@ -1,5 +1,27 @@
 # Global Competitive Matrix
-**Last Updated**: 2026-06-19 | **Version**: v1.1 | **Maintainer**: Agent 101
+**Last Updated**: 2026-06-22 | **Version**: v1.2 | **Maintainer**: Agent 101
+
+## Changelog: 2026-06-22 — CI-GLOBAL-2026-06-22 — Global Brief Scan
+
+**Key updates from ~12-search brief scan (last 30 days):**
+
+1. **SAP/SmartRecruiters Phase 2 integration landing now** (~June 2026): Hire Sync (auto-converts candidate to new hire in Employee Central + Onboarding), internal hire support, Story Reports. Side-by-side migration mode confirmed. Battle card update required — SAP dual-engine complexity is now Workday's key counter-positioning angle.
+
+2. **Oracle 26B agentic AI wave**: 8 new agentic HCM apps including Hiring Workspace for Store Managers and Oracle AI Agent Studio (custom agent builder, no-code). Direct parity challenge to Workday Illuminate/Flex Credits model. Monitor 26B final release notes for recruiting-specific agent templates.
+
+3. **Greenhouse Real Talent now GA** (Spring 2026): Fraud detection + CLEAR identity verification + AI talent matching in one suite. ISO/IEC 42001 AI governance certified — first ATS to do so. #1 ATS G2 Spring AND Summer 2026. Identity verification is a True Gap for Workday (unvalidated vs Dep. Agent).
+
+4. **iCIMS Frontline AI** (March 16, 2026): WhatsApp + SMS + web conversational hiring for frontline/hourly roles. Claims 75% TTF reduction, 10x hires per recruiter. P1 gap for Workday in healthcare/retail segments — native WhatsApp not confirmed in Paradox.
+
+5. **SmartRecruiters April 2026 release**: Winston Match Swedish language, SmartAnalytics Pro launch, Winston Chat application status, SmartRecruiters 3.0 agentic architecture announced. Fosway 2026 Strategic Leader.
+
+6. **Lever/Employ**: New CEO Jerry Jao + CTO Patrick Jean (Feb 2026) with AI innovation mandates. No product launches in scan window. Monitor for H2 2026 AI announcement.
+
+7. **Workday**: 2026 Gartner MQ Leader confirmed May 13, 2026. Paradox stats: 95% candidate CSAT, 70% application completion rate, 3.5-day avg time-to-hire. HiredScore Recruiter Agent: 25% recruiter capacity increase. Flex Credits consumption model in all subscriptions.
+
+**Full scan report**: `research/competitive/global/global-competitive-scan-2026-06-22-CI-GLOBAL-2026-06-22.md`
+
+---
 
 ## Changelog: 2026-06-19 — CI-GLOBAL-2026-06-19 — Global Brief Scan
 
