@@ -1,5 +1,27 @@
 # Global Competitive Matrix
-**Last Updated**: 2026-06-22 | **Version**: v1.2 | **Maintainer**: Agent 101
+**Last Updated**: 2026-06-23 | **Version**: v1.3 | **Maintainer**: Agent 101
+
+## Changelog: 2026-06-23 — CI-GLOBAL-2026-06-23 — Global Brief Scan
+
+**Key updates from ~12-search brief scan (last 30 days, delta from June 22):**
+
+1. **⚠️ M&A ALERT — Greenhouse acquires Ezra AI Labs** (completed May 27, 2026): Voice AI interviewing platform now integrated into Greenhouse. Applications per recruiter on Greenhouse up 412% since 2023; Ezra counters AI-generated application flood with structured voice screening. Founded 2024, backed by a16z Speedrun. Greenhouse now has a 3-layer AI funnel strategy: Real Talent (fraud/identity) → Ezra (voice screening) → MCP (AI tool integration). **Voice AI interviewing is a True Gap for Workday** — flag to PM team for acquisition/partnership evaluation.
+
+2. **⚠️ Greenhouse MCP now GA (June 2026)**: Greenhouse is the first ATS to ship Model Context Protocol support — customers plug any foundation model (Claude, ChatGPT, etc.) into Greenhouse via governed, permission-aware access. Counter-narrative: Workday's unified platform eliminates the need for external AI piping. Design partners: StubHub, Komodo Health.
+
+3. **Oracle 26B final details — multi-agent orchestration confirmed**: Career Coach replatformed to parent/router multi-agent architecture — first production multi-agent hierarchy in enterprise HCM. New Recruiting Inbox Response Agent autonomously handles candidate email inquiries from org policy docs. AI Agent Studio adds "Edit in Playground" and "Expose to Agentic Apps" toggle for composable agent building.
+
+4. **iCIMS Agents confirmed Q3 2026 GA**: Sourcing Pipeline Agent (autonomous database-to-engagement sourcing) showcased at iCIMS Next (June 17). iCIMS simultaneously rebranded as AI-for-recruiting company. Agentic sourcing launch precedes Workday R2 (September) — field alert required.
+
+5. **SmartRecruiters June 2026 release**: Applicant Data Transferability controls (GDPR/AI Act compliance tooling) + Winston Match upgrades. Agentic CRM roadmap in active execution. SAP Phase 2 (Hire Sync) still targeted June 2026 — no explicit GA confirmation found in scan.
+
+6. **Lever AI upgraded from LOW to MEDIUM signal**: AI innovations in execution — Talent Fit, Smart Screening (40% burden reduction), AI Interview Companion. Built on IBM watsonx.governance — potential RFP differentiator in regulated industries (financial services, healthcare). First of Employ's multi-product AI Companion rollout.
+
+7. **Workday**: Between R1 (March) and R2 (September). No June product announcements. Paradox stats (3.5d TTF, 95% CSAT) and HiredScore Recruiter Agent (25% recruiter capacity) remain primary battle card anchors. Josh Bersin "Reinvention of Workday" narrative (April 2026) highlights Paradox + Sana acquisitions.
+
+**Full scan report**: `research/competitive/global/global-competitive-scan-2026-06-23-CI-GLOBAL-2026-06-23.md`
+
+---
 
 ## Changelog: 2026-06-22 — CI-GLOBAL-2026-06-22 — Global Brief Scan
 
