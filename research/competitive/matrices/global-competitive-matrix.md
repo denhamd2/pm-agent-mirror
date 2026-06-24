@@ -1,5 +1,29 @@
 # Global Competitive Matrix
-**Last Updated**: 2026-06-23 | **Version**: v1.3 | **Maintainer**: Agent 101
+**Last Updated**: 2026-06-24 | **Version**: v1.4 | **Maintainer**: Agent 101
+
+## Changelog: 2026-06-24 — MANUAL-GLOBAL-2026-06-24 — Global Brief Scan
+
+**Key updates from ~12-search brief scan (last 30 days, delta from June 23):**
+
+1. **Greenhouse AI wave — June 2026 GA and H2 pipeline confirmed**: Analytics Chart Agent (June GA — NL-to-visualization analytics), Greenhouse Notetaker (mid-July — auto-transcription + scorecard mapping), Candidate Insights Agent (Q3 — source-linked candidate Q&A), AI Report Insights (August — NL dashboard summaries). Greenhouse MCP broad GA confirmed for July 6, 2026. This is the highest volume of AI feature launches in a single window by any competitor this cycle. **NEW True Gap added: Interview Auto-Notetaker (P0, RICE 128). NEW True Gap: NL-to-Analytics Chart Agent (P1, RICE 112).**
+
+2. **Greenhouse G2 Summer 2026 — #1 ATS (4th consecutive cycle)**: 46 #1 reports, 96 badges, top-3 in 82 of 226 total reports. Expanded enterprise and EMEA regional #1 positions. This is the strongest consecutive G2 dominance by any enterprise ATS in the past 4 cycles.
+
+3. **SAP Joule Recruiting Assistant GA (June 2026)**: Announced at SAP Sapphire 2026. Dedicated Joule Assistant for Recruiting — intelligent matching, interview coordination, real-time guidance for recruiters and hiring managers. Connects SmartRecruiters and SuccessFactors HCM. Skills unification in Interview Central combines AI-extracted skills with Talent Intelligence Hub. Winston Chat now embeddable on SAP SuccessFactors Career Site Builder. SAP now has a confirmed "recruiting agent" story to match Workday's HiredScore Recruiter Agent. SAP Phase 2 Hire Sync: still targeted for June 2026 but **no explicit GA confirmation found** — remain on watch list.
+
+4. **SAP Fosway Strategic Leader 2026 (June 10)**: 6th consecutive year. Listed under SAP (post-acquisition of SmartRecruiters). SAP articulated "recruiting is 80% admin" as autonomous HCM strategic framing at Sapphire. SAP sets 3–5 year migration window for legacy SuccessFactors Recruiting customers to SmartRecruiters — reduces urgency of competitive displacement but reduces the SAP switching opportunity for Workday.
+
+5. **Oracle confirmed Gartner MQ Leader — Talent Acquisition Recruiting Suites (June 9, 2026)**: Both Oracle and Workday are now confirmed Leaders in the same 2026 report. Oracle 26B in production with Career Coach parent/router multi-agent architecture and Recruiting Inbox Response Agent live. **Update battle card: Workday is "a" MQ Leader (not sole Leader) — differentiate on Critical Capabilities score for high-volume hiring.**
+
+6. **iCIMS June 2026 Workforce Report (June 11)**: Healthcare tech hiring +8% YoY, manufacturing tech hiring +4% YoY — AI-driven demand accelerating outside Big Tech. This is market intelligence iCIMS will use in RFPs in healthcare and manufacturing verticals where Workday competes.
+
+7. **Workday + Randstad Alliance (February 2025 — newly captured)**: Workday Recruiting Agent (Illuminate-powered) now draws from Randstad's global talent network. 700,000+ requisitions processed in 2024. Available to U.S. customers. This is an uncaptured Workday strength — **add to all field battle cards as a sourcing network differentiator**.
+
+8. **Lever**: "AI You Can Trust" capabilities (February 2026) confirmed sustained — Quality of Hire analytics (early attrition, offer acceptance correlation, source-quality, interviewer effectiveness) now in production. No new June 2026 launches. IBM watsonx.governance foundation continues as regulated-industry differentiator.
+
+**Full scan report**: `research/competitive/global/global-competitive-scan-2026-06-24-MANUAL-GLOBAL.md`
+
+---
 
 ## Changelog: 2026-06-23 — CI-GLOBAL-2026-06-23 — Global Brief Scan
 
@@ -251,17 +275,31 @@ Workday competes as a unified HCM platform with strength in enterprise complianc
 
 ## Feature Gap Analysis Summary
 
-*[Agent 101: After completing all 6 competitor profiles and feature parity tables, generate gap analysis summary table]*
+*Last updated: 2026-06-24 by MANUAL-GLOBAL-2026-06-24 scan*
 
 | Gap Type | Count | Severity | Recommended Actions |
 |---------|-------|----------|---------------------|
-| **Native Support** | TBD | N/A | Continue marketing/sales enablement; highlight in battle cards |
-| **Workaround Available** | TBD | Low-Medium | Document workarounds; consider native implementation for high-RICE items (>500) |
-| **True Gaps** | TBD | High | Prioritise for roadmap; focus on gaps with RICE >500 and validated customer demand |
+| **Native Support** | ~12 capabilities | N/A | Continue marketing/sales enablement; highlight in battle cards |
+| **Workaround Available** | ~4 capabilities | Low-Medium | Document workarounds; consider native implementation for high-RICE items |
+| **True Gaps** | 6 confirmed | High | Prioritise for roadmap; focus on RICE >100 items |
 
-**True Gaps by Priority**:
+**True Gaps by Priority (as of June 24, 2026)**:
 
-*[Agent 101: Populate with prioritised true gaps after gap analysis scan]*
+| Gap | vs. Competitor | RICE Score | Priority | Status |
+|-----|----------------|------------|----------|--------|
+| Interview Auto-Notetaker | Greenhouse (Notetaker, July 2026), Lever (AI Interview Companion) | 128 | **P0** | NEW June 24 |
+| NL-to-Analytics / Chart Agent | Greenhouse (Analytics Chart Agent, June 2026 GA) | 112 | **P1** | NEW June 24 |
+| AI Governance / ISO 42001 or equiv. | Greenhouse (ISO certified), Lever (watsonx.governance) | 112 | **P1** | Confirmed |
+| Frontline WhatsApp/SMS native | iCIMS Frontline AI | 84 | **P1** | Confirmed |
+| MCP / Open AI Tool Protocol | Greenhouse MCP (broad GA July 6, 2026) | 78 | **P1** | Confirmed — urgency increased |
+| Voice AI Interviewing | Greenhouse/Ezra (GA H2 2026) | 72 | **P1** | Confirmed |
+| Candidate Identity Verification | Greenhouse Real Talent + CLEAR | 35 | **P2** | Confirmed (unvalidated vs Dep. Agent) |
+
+**Confirmed Workday Strengths to Activate**:
+- Workday + Randstad Alliance (sourcing network — add to all field kits, P0 activation)
+- Gartner MQ Critical Capabilities — Highest-Scoring for High-Volume Hiring (vs. Oracle)
+- Unified HCM (Recruiting + Core HR + Finance) — no integration complexity vs. Greenhouse/iCIMS API-based
+- Global compliance depth (GDPR purge logic, works council, Japan two-step) — strongest in class
 
 ---
 
