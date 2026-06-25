@@ -1,5 +1,27 @@
 # Global Competitive Matrix
-**Last Updated**: 2026-06-24 | **Version**: v1.4 | **Maintainer**: Agent 101
+**Last Updated**: 2026-06-25 | **Version**: v1.5 | **Maintainer**: Agent 101
+
+## Changelog: 2026-06-25 — GLOBAL-CI-2026-06-25 — Global Brief Scan
+
+**Key updates from ~10-search brief scan (last 30 days, delta from June 24):**
+
+1. **SAP Phase 2 Hire Sync in scope for June 2026**: SmartRecruiters → Employee Central auto-convert on hire confirmed as targeted deliverable. SAP Sapphire confirmed Joule Recruiting Assistant GA with intelligent matching and interview coordination. Phase 3 Joule+Winston connected agents confirmed for H2 2026. SAP is closing the AI-agent integration gap with Workday's HiredScore + Paradox stack at platform scale. 3–5 year migration window for legacy SF Recruiting customers to SmartRecruiters reduces near-term switching opportunity for Workday.
+
+2. **Greenhouse Ezra AI Labs acquisition closed (May 27) + MCP GA rollout June 2026**: Greenhouse now has a confirmed 3-layer AI funnel (Real Talent fraud detection → Ezra voice screening → MCP AI-tool integration). MCP customer rollout began June 2026. Design partners: StubHub, Komodo Health. **NEW True Gap confirmed: Voice AI Screening (vs Ezra). NEW True Gap confirmed: MCP/AI Tool Integration Protocol.** Both unvalidated against Deployment Agent.
+
+3. **Oracle confirmed 2026 Gartner MQ Leader (June 9) + Cognizant enterprise win (June 11)**: Oracle and Workday are co-Leaders in the 2026 MQ; Avature is the third Leader. Oracle's 26B multi-agent production architecture (Career Coach parent/router, Recruiting Inbox Response Agent) is live. Workday is "a" MQ Leader, not sole Leader — **field battle cards must update immediately.** Counter with Gartner Critical Capabilities sub-scores on high-volume hiring and global compliance where Workday outperforms.
+
+4. **iCIMS Frontline AI GA (Spring 2026) + Sourcing Pipeline Agent Q3 2026**: Frontline AI confirmed live — WhatsApp + SMS + web conversational hiring, 75% TTF reduction claim. Sourcing Pipeline Agent (autonomous DB-to-engagement sourcing) showcased at iCIMS Next (June 17), Q3 GA target — launches before Workday R2. **Field alert required**: counter with Randstad Alliance stats (700K+ requisitions) before Q3.
+
+5. **SmartRecruiters June 2026 release**: Applicant Data Transferability controls (GDPR/AI Act compliance tooling) + Winston Match prioritizes candidate-verified data over resume parsing. SAP runs SmartRecruiters internally for global hiring — published as proof-of-capability signal (SAP News, June 2026).
+
+6. **Lever**: No material product announcements June 2026. Spring 2026 release focused on signal quality, not new AI launches. IBM watsonx.governance foundation remains regulated-industry differentiator. Lever signal remains MEDIUM.
+
+7. **Workday**: Between R1 (March) and R2 (September). 2026 Gartner MQ Leader confirmed. HiredScore Recruiter Agent + Paradox + Randstad Alliance sourcing network remain primary battle card anchors. Randstad Alliance (700K+ requisitions) not yet added to all field battle cards — **action required**.
+
+**Full scan report**: `research/competitive/global/global-competitive-scan-2026-06-25-GLOBAL-CI-2026-06-25.md`
+
+---
 
 ## Changelog: 2026-06-24 — MANUAL-GLOBAL-2026-06-24 — Global Brief Scan
 
