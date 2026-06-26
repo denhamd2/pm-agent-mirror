@@ -1,5 +1,30 @@
 # Global Competitive Matrix
-**Last Updated**: 2026-06-25 | **Version**: v1.5 | **Maintainer**: Agent 101
+**Last Updated**: 2026-06-26 | **Version**: v1.6 | **Maintainer**: Agent 101
+
+## Changelog: 2026-06-26 - CI-GLOBAL-2026-06-26 - Global Brief Scan
+
+**Key updates from ~12-search brief scan (last 30 days, delta from June 25):**
+
+1. **SAP Joule Recruiting Assistant GA (June 2026)**: All 13 SAP SuccessFactors Joule Assistants reached general availability in June 2026, including the dedicated Recruiting Assistant (intelligent matching, interview coordination, real-time guidance), Onboarding Assistant, and 11 other HCM assistants. Joule now bridges SmartRecruiters and SuccessFactors HCM as a production agentic layer — matching Workday's HiredScore Recruiter Agent in positioning if not in ML depth. SAP Phase 3 (Joule+Winston networked agents) confirmed for H2 2026. **Update SAP battle card immediately to distinguish Joule's conversational guidance layer from HiredScore's screening ML depth.**
+
+2. **Greenhouse six-feature AI wave announced (June 2026)**: Coordinated AI launch across six features: (a) Analytics Chart Agent — GA June 2026 (NL-to-chart, no manual setup); (b) MCP — GA rollout June 2026; (c) Greenhouse Notetaker — mid-July 2026 (auto-transcription + scorecard mapping); (d) AI Report Insights — August 2026; (e) Job Kickoff Agent — Q3 2026; (f) Candidate Insights Agent — Q3 2026. Greenhouse is executing a feature-per-month AI cadence that no single competitor matches in volume. **Notetaker mid-July confirms P0 gap (RICE ~128) is now imminent — 6-week window to issue counter-narrative.**
+
+3. **Greenhouse G2 Summer 2026 — #1 ATS (4th consecutive cycle)**: 46 #1 reports, 96 badges, top-3 in 82 of 226 reports. Spans Overall, Enterprise, Mid-Market, and EMEA Regional grids. Four consecutive G2 #1 cycles constitutes a durable positioning risk in mid-market tech procurement evaluations. Counter with Gartner Critical Capabilities enterprise benchmark (Workday #1 High-Volume Hiring) rather than contesting G2 rankings directly.
+
+4. **Oracle Gartner Critical Capabilities detail confirmed (NEW)**: Oracle ranked 2nd in Core ATS use case, 3rd in Extended AI, 3rd in Extended CRM, 4th in High-Volume Hiring. **Workday #1 in High-Volume Hiring sub-score is the strongest counter to Oracle's "also a Gartner Leader" positioning in healthcare/retail/logistics deals.**
+
+5. **iCIMS Sourcing Pipeline Agent — Q3 2026 GA confirmed via iCIMS Next (June 17)**: iCIMS Next virtual conference showcased the Sourcing Pipeline Agent (autonomous DB-to-engagement sourcing) from the Coalesce AI fleet. First agents targeting Q3 GA via enterprise advisory board rollout. iCIMS attending NAHCR26 (July 15-17) — healthcare vertical push intensifies. **Counter with Workday Recruiting Agent + Randstad Alliance (700K+ requisitions) before Q3.**
+
+6. **Lever — No material new signals**: No product announcements or executive changes in scan window. Spring 2026 release ("reduce hiring noise, real connections") remains the most recent milestone. Lever signal remains MEDIUM.
+
+7. **No new M&A or funding events** in last 30 days. All prior cycle items (Greenhouse/Ezra, SAP/SmartRecruiters) remain on matrix unchanged.
+
+**True Gap table delta (additions since June 25):**
+- No new True Gaps added this cycle. Existing gap table (from June 24-25 scans) stands with updated urgency: Interview Auto-Notetaker upgraded to "imminent" (mid-July Greenhouse Notetaker GA).
+
+**Full scan report**: `research/competitive/global/global-competitive-scan-2026-06-26-CI-GLOBAL-2026-06-26.md`
+
+---
 
 ## Changelog: 2026-06-25 — GLOBAL-CI-2026-06-25 — Global Brief Scan
 
