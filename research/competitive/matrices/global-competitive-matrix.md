@@ -1,5 +1,27 @@
 # Global Competitive Matrix
-**Last Updated**: 2026-06-26 | **Version**: v1.6 | **Maintainer**: Agent 101
+**Last Updated**: 2026-06-27 | **Version**: v1.7 | **Maintainer**: Agent 101
+
+## Changelog: 2026-06-27 - CI-GLOBAL-2026-06-27 - Global Brief Scan
+
+**Key updates from ~10-search brief scan (last 30 days, delta from June 26):**
+
+1. **PRIORITY FLAG — Workday HiredScore California FEHA ruling (June 22, 2026)**: California federal judge allowed state-law discrimination claims (FEHA) and a disability bias claim to proceed against Workday on June 22. Court found "sufficient nexus to California" given Workday HQ and HiredScore tools designed/maintained there. Age (ADEA), disability (FEHA), and race claims now all active in Mobley v. Workday. Separately, court ordered production of EEO-1/OFCCP documents and a customer list of employers who enabled HiredScore AI. **Action required: issue legal-approved RFP talking points on AI bias governance, explainability, and litigation context within 48 hours.** Sources: [HR Dive FEHA ruling](https://www.hrdive.com/news/workday-california-AI-bias-lawsuit-feha/823555/); [HR Dive customer list](https://www.hrdive.com/news/workday-must-supply-list-of-employers-who-enabled-hiredscore-ai/756506/)
+
+2. **SmartRecruiters — Winston Interviewer confirmed GA (June 2026)**: New AI-led structured interview product that generates consistent evaluation evidence at scale. When paired with Applicant Fraud Detection (behavioral signals + device intelligence + network indicators), SmartRecruiters now has a three-layer pre-hire AI stack: Winston Match → Winston Interviewer → Applicant Fraud Detection. This closes a previous gap vs. Greenhouse Notetaker and directly competes with Paradox's interview scheduling + feedback loop. **Update SAP/SmartRecruiters battle card: Winston Interviewer closes the structured-interview narrative gap. Validate Workday/Paradox parity before next field use.** Source: [SmartRecruiters June 2026 release](https://www.smartrecruiters.com/resources/article/june-2026-product-release-highlights-more-control-confidence-in-hiring-workflows/)
+
+3. **SAP SF 1H 2026 — additional detail confirmed**: OnChange business rules now available (status-triggered alerts/messages in Recruiting Management); People Intelligence Recruiting Insights enhanced with new data products. Source: [Clarity Solutions SAP 1H 2026](https://clarity-solutions.de/en/insight/sap-successfactors-1h-2026-recruiting-updates-key-changes/)
+
+4. **All June 26 signals stand unchanged**: SAP Joule Recruiting Assistant GA, Greenhouse six-feature AI wave (Analytics Chart Agent GA + MCP GA + Notetaker mid-July + Q3 pipeline), Oracle Gartner MQ Leader + Cognizant win, iCIMS Sourcing Pipeline Agent Q3 GA target, Lever no material signals. No new M&A, funding, or regional expansion events.
+
+**True Gap table delta (additions since June 26):**
+- **NEW**: Structured AI Interview / Winston Interviewer parity — True Gap vs. SmartRecruiters (P1, RICE ~85, unvalidated against Deployment Agent)
+- **NEW**: Applicant Fraud Detection (behavioral/device/network) — True Gap vs. SmartRecruiters (P2, RICE ~45, unvalidated against Deployment Agent)
+- **NEW**: AI Bias Litigation Response / Governance Differentiator — Strategic Risk (P0 internal; not a product gap but a positioning and sales-readiness gap)
+- Existing gap table from June 24-26 scans stands: Interview Auto-Notetaker P0 RICE ~128, NL-to-Analytics P1 RICE ~112, MCP P1 RICE ~78, Voice AI Screening P1 RICE ~40
+
+**Full scan report**: `research/competitive/global/global-competitive-scan-2026-06-27-CI-GLOBAL-2026-06-27.md`
+
+---
 
 ## Changelog: 2026-06-26 - CI-GLOBAL-2026-06-26 - Global Brief Scan
 
