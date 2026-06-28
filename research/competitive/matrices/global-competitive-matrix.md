@@ -1,5 +1,30 @@
 # Global Competitive Matrix
-**Last Updated**: 2026-06-26 | **Version**: v1.6 | **Maintainer**: Agent 101
+**Last Updated**: 2026-06-28 | **Version**: v1.7 | **Maintainer**: Agent 101
+
+## Changelog: 2026-06-28 - CI-GLOBAL-2026-06-28 - Global Brief Scan
+
+**Key updates from ~12-search brief scan (last 30 days, delta from June 26):**
+
+1. **SAP eats its own dog food — "SAP Runs SmartRecruiters" (June 8, 2026)**: SAP published an internal case study confirming it uses SmartRecruiters + Joule Recruiting Assistant for its own global recruiting. This is SAP's most powerful enterprise proof point since the acquisition closed. Expect this story to appear in every competitive displacement starting Q3 2026. **Update SAP battle card: add "SAP = reference customer" rebuttal and differentiation on HCM integration depth and HiredScore ML depth vs. Joule conversational layer.**
+
+2. **iCIMS Frontline AI (Spring 2026, GA confirmed) — 75% TTF reduction claim**: iCIMS Frontline AI is live for frontline/high-volume hiring via SMS/WhatsApp/Web. Published benchmark: 75% reduction in time-to-fill; 90% reduction in manual tasks. Combined with Coalesce AI rebrand (March 2026) and Sourcing Pipeline Agent (Q3 GA), iCIMS is executing the fastest AI consolidation of any competitor this cycle. **Field alert: Retail/logistics/healthcare AEs must have iCIMS TTF counter-narrative using Paradox + Workday Frontline stats before Q3.**
+
+3. **Workday — HiredScore AI Bias Lawsuit (court order for customer disclosure)**: A US court ordered Workday to name customers who enabled HiredScore AI screening, in connection with an employment bias lawsuit. Live legal and procurement risk. Counterpoint: Workday proactively published Secretariat third-party bias audit. **Enable sales with responsible-AI differentiation narrative: "only vendor publishing independent third-party AI bias audits."**
+
+4. **Greenhouse Notetaker remains imminent (mid-July 2026)**: Confirmed carrying forward — Notetaker launches in ~2 weeks. Interview Intelligence True Gap becomes a live field objection in every Greenhouse competitive deal from mid-July. **6-week response window closes July 15-ish. Brief product on accelerating Workday interview intelligence or partner positioning (Metaview/Noota).**
+
+5. **Oracle 26B — AI Agent Studio + Generative AI features**: Oracle 26B delivers AI-assisted job descriptions, job fit scoring, targeted outreach drafts, and the Oracle AI Agent Studio (custom agent builder, no-code/low-code) to production customers. Cognizant enterprise win (June 11) validates Oracle at 50K+ employee global scale. **No new True Gaps from Oracle in this cycle; Workday Critical Capabilities leadership (High-Volume #1) stands.**
+
+6. **Lever — still quiet**: No new product announcements June 2026. New CEO Jerry Jao + CTO Patrick Jean (February 2026) have AI acceleration mandates; expect a Q3 2026 announcement. Signal remains MEDIUM.
+
+7. **No new M&A or funding events** in last 30 days. All prior items (Greenhouse/Ezra closed May 27; SAP/SmartRecruiters integration executing) carry forward unchanged.
+
+**True Gap table delta (additions since June 26):**
+- No new True Gaps added this cycle. Interview Auto-Notetaker remains P0 / imminent. NL-to-Analytics Chart Agent remains P1. MCP/AI Tool Integration Protocol remains True Gap.
+
+**Full scan report**: `research/competitive/global/global-competitive-scan-2026-06-28-CI-GLOBAL-2026-06-28.md`
+
+---
 
 ## Changelog: 2026-06-26 - CI-GLOBAL-2026-06-26 - Global Brief Scan
 
