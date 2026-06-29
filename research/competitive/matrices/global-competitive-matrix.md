@@ -1,5 +1,30 @@
 # Global Competitive Matrix
-**Last Updated**: 2026-06-28 | **Version**: v1.7 | **Maintainer**: Agent 101
+**Last Updated**: 2026-06-29 | **Version**: v1.8 | **Maintainer**: Agent 101
+
+## Changelog: 2026-06-29 - CI-GLOBAL-2026-06-29 - Global Brief Scan
+
+**Key updates from ~11-search brief scan (last 30 days, delta from June 28):**
+
+1. **Oracle 26C (July 2026) — agentic recruiting loop closes**: Oracle's 26C quarterly release (634 changes across 86 modules, Oracle's largest 2026 release) wires AI agents directly to Recruiting, Sourcing, and Interview Activity Centers with automatic trigger + retry logic. Oracle AI Agent Studio expanded March 24 with Agentic Applications Builder (no-code agent composition). Cognizant (~300K+ employees) win validates Oracle at global enterprise scale. **Update Oracle battle card: reframe 26C agentic triggers as admin-configured complexity vs. Workday's ML-informed native intelligence (HiredScore). Lead with Gartner Critical Capabilities High-Volume #1 in Oracle deals.**
+
+2. **Lever breaks silence — AI trifecta + IBM governance confirmed**: Three GA features confirmed: Talent Fit (AI matching with transparent explanations), AI Interview Companion (structured guides + automated notetaking, formerly Pillar), AI Fraud Prevention (flags AI-generated mass applications). IBM watsonx.governance backs all three for regulated-industry compliance. **First substantive Lever feature set in multiple scan cycles — update Lever battle card; counter IBM governance with Workday's published Secretariat third-party bias audit.**
+
+3. **SAP Fosway 2026 — 'Accelerating' trajectory, listed under SAP brand**: SmartRecruiters now appears as SAP on the Fosway 9-Grid (6th consecutive Strategic Leader, first under SAP parent brand). 'Accelerating' trajectory. Direct EMEA enterprise positioning threat. **Counter with Gartner Critical Capabilities #1 High-Volume (Gartner > Fosway for most global enterprises). Lead with SAP financial risk: stock down ~29% YTD.**
+
+4. **SAP stock -29% YTD — use as procurement counter-narrative**: Despite Sapphire 2026 AI announcements (JPMorgan win, AI Agent Hub Q3 GA, n8n investment at $5.2B), SAP equity near 52-week low. Market skeptical on AI monetization. **Factual procurement wedge for AEs in enterprise deals where finance teams scrutinize vendor stability. Do not use in external marketing materials.**
+
+5. **EU AI Act Annex III deadline extended to December 2027**: Digital Omnibus (provisional agreement May 7, 2026) extended the high-risk compliance deadline 16 months. All ATS vendors (Workday, Greenhouse, iCIMS, Lever, Oracle) face the same deadline. Draft classification guidelines published May 19; consultation closed June 23. **Removes compliance urgency as short-term sales differentiator but positions Workday's Secretariat audit as ahead-of-deadline transparency proof point.**
+
+6. **Lever EU AI Act Annex III classified high-risk**: Lever/LeverTRM officially classified as Annex III Category 4(a) for AI sourcing recommendations. IBM watsonx.governance is Lever's compliance readiness narrative. (Applies to virtually all AI-enabled ATS vendors, not uniquely Lever.)
+
+7. **Greenhouse Notetaker still imminent (mid-July 2026)**: Confirmed carrying forward — approximately 2–3 weeks to launch. **Interview Intelligence True Gap (P0, RICE 128) is live in every Greenhouse competitive deal starting mid-July. Immediate field alert required.**
+
+**True Gap table delta (additions since June 28):**
+- No new True Gaps added this cycle. MCP/AI Tool Integration (P1) reinforced as Greenhouse MCP GA date confirmed July 6. Interview Auto-Notetaker (P0) urgency confirmed with ~2-week window.
+
+**Full scan report**: `research/competitive/global/global-competitive-scan-2026-06-29-CI-GLOBAL-2026-06-29.md`
+
+---
 
 ## Changelog: 2026-06-28 - CI-GLOBAL-2026-06-28 - Global Brief Scan
 
