@@ -1,5 +1,24 @@
 # Global Competitive Matrix
-**Last Updated**: 2026-06-29 | **Version**: v1.8 | **Maintainer**: Agent 101
+**Last Updated**: 2026-06-30 | **Version**: v1.9 | **Maintainer**: Agent 101
+
+## Changelog: 2026-06-30 - CI-GLOBAL-2026-06-30 - Global Brief Scan
+
+**Key updates from ~10-search brief scan (last 30 days, delta from June 29):**
+
+1. **Mobley v. Workday escalates — June 16 "agent theory" ruling + June 22 order largely upholding FEHA/ADA claims**: Net-new this cycle. A June 16, 2026 ruling held Workday can face FEHA liability for AI hiring discrimination even for employers operating outside California, establishing an "agent theory" of AI-vendor liability. A June 22, 2026 order from Judge Rita F. Lin (N.D. Cal.) largely upheld FEHA/ADA claims in the collective action (1.1B rejected applications), dismissing some race-based claims only on procedural grounds. This builds on — and is more severe than — the customer-disclosure order already tracked since June 28. **Update legal/compliance sales enablement immediately: brief AEs and sales engineers on the ruling, pair with the existing Secretariat third-party bias audit as the affirmative counter-narrative. This is now the top Black Hat risk on the matrix, surpassing the disclosure order alone.**
+
+2. **iCIMS confirms 5th consecutive Fosway Strategic Leader + RecFest UK headline sponsorship (event July 2, 2026)**: iCIMS returns to RecFest UK at Knebworth Park as headline sponsor, showcasing frontline hiring innovations and a childcare-sector customer ROI story. Confirms iCIMS's continued UK/EMEA frontline vertical push (consistent with prior Frontline AI / Coalesce AI tracking). **Minor positioning update — reuse existing Randstad Alliance + Workday Frontline counter-narrative; no new content development required.**
+
+3. **SAP stock decline continues — now -30% to -35% YTD (vs. -29% cited June 29), fresh 52-week low ~EUR 130.82**: Confirmed continuation of the trend already on the matrix, not a new event. SAP's June Patch Tuesday (June 9, 4 critical CVEs in NetWeaver/ABAP/Commerce Cloud) is routine monthly security maintenance, not a breach — evaluated and explicitly not flagged as a competitive signal. **No battle card change required; existing SAP financial-stability counter-narrative stands, with updated figure.**
+
+4. **No new M&A, funding, pricing, partnership, or feature-GA signals** for SAP/SmartRecruiters, Oracle, Greenhouse, iCIMS, or Lever beyond what the June 29 report already captured. Greenhouse/hipages TIARA ANZ award (June 29) is a minor regional customer-success PR item, consistent with ongoing cadence — not a new strategic signal.
+
+**True Gap table delta (additions since June 29):**
+- No new True Gaps added this cycle. All Native/Workaround/True Gap classifications carried forward unchanged from June 29 (Interview Auto-Notetaker P0 remains top priority, ~2-week window to Greenhouse Notetaker GA; Greenhouse MCP broad GA July 6 is 1 week out).
+
+**Full scan report**: `research/competitive/global/global-competitive-scan-2026-06-30-CI-GLOBAL-2026-06-30.md`
+
+---
 
 ## Changelog: 2026-06-29 - CI-GLOBAL-2026-06-29 - Global Brief Scan
 
