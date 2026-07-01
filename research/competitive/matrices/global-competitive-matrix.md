@@ -1,5 +1,24 @@
 # Global Competitive Matrix
-**Last Updated**: 2026-06-30 | **Version**: v1.9 | **Maintainer**: Agent 101
+**Last Updated**: 2026-07-01 | **Version**: v1.10 | **Maintainer**: Agent 101
+
+## Changelog: 2026-07-01 - CI-GLOBAL-2026-07-01 - Global Brief Scan
+
+**Key updates from 11-search brief scan (last 30 days, delta from June 30):**
+
+1. **NEW — SAP announces dated customer migration roundtables for SmartRecruiters (July 21 NA/EMEA, July 22 APAC)**: First concrete, proactive GTM motion confirming SAP is actively campaigning legacy SuccessFactors Recruiting customers toward SmartRecruiters, ahead of the previously-tracked passive "3-5 year migration window." Raises near-term displacement stakes in SAP-embedded accounts — both a threat (faster conversion of the installed base) and an opportunity (dual-product migration friction is a live objection-handling angle for Workday AEs). **Add a light "SAP dual-product migration friction" talking point to sales enablement ahead of July 21.**
+
+2. **CORRECTION — SAP stock-decline talking point needs refresh; stock has rebounded, not continued sliding**: Since the June 30 report cited "SAP stock down -30% to -35% YTD, fresh 52-week low ~EUR 130.82," fresh research shows SAP shares rebounding: +4.88% June 26, +7.41% June 1, trading ~EUR 140.88 (~$160, market cap ~$157B) as of July 1. Analyst commentary describes SAP as "edging higher ahead of July earnings, analyst consensus stays constructive." **Update AE talking points immediately: the YTD decline is still real and citable, but "ongoing slide" framing is now inaccurate and creates credibility risk if a well-informed procurement/finance stakeholder pushes back. Do not lead with 52-week-low framing without the rebound caveat.**
+
+3. **Clarification — SAP/Celonis antitrust matter is NOT a June 2026 event**: A secondary source misdated a June 2025 SAP/Celonis data-access stipulation as "mid-June 2026." Corrected: Celonis sued SAP in March 2025 (process-mining antitrust); trial is scheduled for December 7, 2026. Unrelated to Recruiting — logged as background context only, not a Recruiting-relevant signal.
+
+4. **No new M&A, funding, pricing, partnership, feature-GA, or Mobley v. Workday rulings** for SAP/SmartRecruiters, Oracle, Greenhouse, iCIMS, or Lever beyond what the June 30 report already captured. iCIMS RecFest UK (July 2, tomorrow) session logistics now public — routine confirmation, not a new signal. Two minor Greenhouse status-page incidents (DocuSign dependency June 11, SMTP/M365 delivery June 19), both resolved same/next-day — not a stability trend, not escalated.
+
+**True Gap table delta (additions since June 30):**
+- No new True Gaps added this cycle. All Native/Workaround/True Gap classifications carried forward unchanged (Interview Auto-Notetaker P0 remains top priority, ~1-2 week window to Greenhouse Notetaker GA; Greenhouse MCP broad GA July 6 is 5 days out).
+
+**Full scan report**: `research/competitive/global/global-competitive-scan-2026-07-01-CI-GLOBAL-2026-07-01.md`
+
+---
 
 ## Changelog: 2026-06-30 - CI-GLOBAL-2026-06-30 - Global Brief Scan
 
